@@ -1,0 +1,968 @@
+﻿using EmulatorLauncher;
+using EmulatorLauncher.Common;
+using EmulatorLauncher.Common.EmulationStation;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Xml.Linq;
+
+namespace EmulatorLauncher
+{
+    partial class Mame64Generator : Generator
+    {
+        public Mame64Generator()
+        {
+            DependsOnDesktopResolution = true;
+        }
+
+        private bool _multigun = false;
+        private bool _mouseGun = false;
+        private bool _separatecfg = false;
+        private bool _groovy = false;
+
+        public override System.Diagnostics.ProcessStartInfo Generate(string system, string emulator, string core, string rom, string playersControllers, ScreenResolution resolution)
+        {
+            // Always kill any existing MameHook process at startup
+            SimpleLogger.Instance.Info("[INFO] Checking for existing MameHook process");
+            try
+            {
+                var existingProcess = Process.GetProcessesByName("mamehook").FirstOrDefault();
+                if (existingProcess != null)
+                {
+                    existingProcess.Kill();
+                    existingProcess.WaitForExit(1000);
+                }
+            }
+            catch (Exception ex)
+            {
+                SimpleLogger.Instance.Error($"[ERROR] Failed to stop existing MameHooker: {ex.Message}");
+            }
+
+            bool hbmame = emulator == "hbmame";
+            _groovy = emulator == "groovymame";
+
+            _separatecfg = SystemConfig.getOptBoolean("mame_separate_cfg");
+
+            // Get MAME executable path
+            string path = AppConfig.GetFullPath(emulator);
+            if (string.IsNullOrEmpty(path))
+                path = AppConfig.GetFullPath("mame");
+            if (string.IsNullOrEmpty(path) && Environment.Is64BitOperatingSystem)
+                path = AppConfig.GetFullPath("mame64");
+
+            string exe = Path.Combine(path, "mame.exe");
+            if (!File.Exists(exe) && Environment.Is64BitOperatingSystem)
+                exe = Path.Combine(path, "mame64.exe");
+            if (!File.Exists(exe))
+                exe = Path.Combine(path, "mame32.exe");
+
+            if (hbmame)
+            {
+                exe = Path.Combine(path, "hbmameui.exe");
+            }
+
+            if (!File.Exists(exe))
+                return null;
+
+            // Configure MameHooker first if enabled and wait for it to be ready
+            bool mamehookStarted = false;
+            if (SystemConfig.isOptSet("use_mamehooker") && SystemConfig.getOptBoolean("use_mamehooker"))
+            {
+                SimpleLogger.Instance.Info("[INFO] MameHooker option enabled for Mame64");
+                string romName = Path.GetFileNameWithoutExtension(rom).ToLowerInvariant();
+                mamehookStarted = MameHooker.Mame64.ConfigureMame64(romName);
+                
+                if (!mamehookStarted)
+                    SimpleLogger.Instance.Warning("[WARNING] Failed to start MameHooker, continuing without it");
+            }
+
+            // For GroovyMAME, do not put default bezel
+            if (_groovy && !SystemConfig.isOptSet("bezel"))
+                SystemConfig["bezel"] = "none";
+
+            // Inipath
+            string iniPath = hbmame ? Path.Combine(AppConfig.GetFullPath("bios"), "hbmame", "ini") : Path.Combine(AppConfig.GetFullPath("bios"), "mame", "ini");
+            if (_groovy)
+                iniPath = Path.Combine(AppConfig.GetFullPath("bios"), "groovymame", "ini");
+
+            // Then configure MAME
+            ConfigureBezels(Path.Combine(AppConfig.GetFullPath("bios"), "mame", "artwork"), system, rom, resolution, emulator);
+            ConfigureUIini(iniPath);
+            ConfigureMameini(iniPath);
+
+            string args;
+
+            MessSystem messMode = MessSystem.GetMessSystem(system, core);
+            if (messMode == null || messMode.Name == "mame" || messMode.Name == "hbmame")
+            {
+                List<string> commandArray = new List<string>
+                {
+                    "-skip_gameinfo",
+
+                    // rompath
+                    "-rp"
+                };
+                if (!string.IsNullOrEmpty(AppConfig["bios"]) && Directory.Exists(AppConfig["bios"]))
+                    commandArray.Add(AppConfig.GetFullPath("bios") + ";" + Path.GetDirectoryName(rom));
+                else
+                    commandArray.Add(Path.GetDirectoryName(rom));
+
+                // Sample Path
+                string samplePath = hbmame? Path.Combine(AppConfig.GetFullPath("bios"), "hbmame", "samples") : Path.Combine(AppConfig.GetFullPath("bios"), "mame", "samples");
+                if (!Directory.Exists(samplePath)) try { Directory.CreateDirectory(samplePath); }
+                    catch { }
+                if (!string.IsNullOrEmpty(samplePath) && Directory.Exists(samplePath))
+                {
+                    commandArray.Add("-sp");
+                    commandArray.Add(samplePath);
+                }
+
+                // Artwork Path
+                string artPath = Path.Combine(AppConfig.GetFullPath("bios"), "mame", "artwork");
+                string artPath2 = hbmame? Path.Combine(AppConfig.GetFullPath("saves"), "hbmame", "artwork") : Path.Combine(AppConfig.GetFullPath("saves"), "mame", "artwork");
+                if (!Directory.Exists(artPath)) try { Directory.CreateDirectory(artPath); }
+                    catch { }
+
+                if (!string.IsNullOrEmpty(artPath) && Directory.Exists(artPath))
+                {
+                    commandArray.Add("-artpath");
+                    if (SystemConfig.isOptSet("disable_artwork") && SystemConfig.getOptBoolean("disable_artwork"))
+                        commandArray.Add(artPath);
+                    else
+                        commandArray.Add(artPath + ";" + Path.Combine(path, "artwork") + ";" + artPath2);
+                }
+
+                // Snapshots
+                if (!string.IsNullOrEmpty(AppConfig["screenshots"]) && Directory.Exists(AppConfig.GetFullPath("screenshots")))
+                {
+                    commandArray.Add("-snapshot_directory");
+                    commandArray.Add(AppConfig.GetFullPath("screenshots"));
+                }
+
+                // Cheats
+                if (SystemConfig.isOptSet("mame_cheats") && SystemConfig.getOptBoolean("mame_cheats"))
+                {
+                    string cheatPath = hbmame ? Path.Combine(AppConfig.GetFullPath("cheats"), "hbmame") : Path.Combine(AppConfig.GetFullPath("cheats"), "mame");
+                    if (!string.IsNullOrEmpty(cheatPath) && Directory.Exists(cheatPath))
+                    {
+                        commandArray.Add("-c");
+                        commandArray.Add("-cheatpath");
+                        commandArray.Add(cheatPath);
+                    }
+                }
+
+                // cfg directory
+                string cfgPath = _separatecfg ? Path.Combine(AppConfig.GetFullPath("saves"), "mame", "cfg64") : Path.Combine(AppConfig.GetFullPath("saves"), "mame", "cfg");
+
+                if (hbmame)
+                    cfgPath = Path.Combine(AppConfig.GetFullPath("saves"), "hbmame", "cfg");
+
+                if (!Directory.Exists(cfgPath)) try { Directory.CreateDirectory(cfgPath); }
+                    catch { }
+                if (!string.IsNullOrEmpty(cfgPath) && Directory.Exists(cfgPath))
+                {
+                    commandArray.Add("-cfg_directory");
+                    commandArray.Add(cfgPath);
+                }
+
+                // Update or create cfg file for the game
+                string romName = Path.GetFileNameWithoutExtension(rom);
+                UpdateOrCreateMameConfigFiles(Path.Combine(cfgPath, romName + ".cfg"), romName);
+
+                // Ini path
+                if (!Directory.Exists(iniPath)) try { Directory.CreateDirectory(iniPath); }
+                    catch { }
+                if (!string.IsNullOrEmpty(iniPath) && Directory.Exists(iniPath))
+                {
+                    commandArray.Add("-inipath");
+                    commandArray.Add(iniPath);
+                }
+
+                // Hash path
+                string hashPath = hbmame ? Path.Combine(AppConfig.GetFullPath("bios"), "hbmame", "hash") : Path.Combine(AppConfig.GetFullPath("bios"), "mame", "hash");
+                if (!Directory.Exists(hashPath)) try { Directory.CreateDirectory(hashPath); }
+                    catch { }
+                if (!string.IsNullOrEmpty(hashPath) && Directory.Exists(hashPath))
+                {
+                    commandArray.Add("-hash");
+                    commandArray.Add(hashPath);
+                }
+
+                /// other available paths:
+                /// -input_directory
+                /// -diff_directory
+                /// -comment_directory
+                /// -homepath
+                /// -crosshairpath
+                /// -swpath
+
+                commandArray.AddRange(GetCommonMame64Arguments(rom, hbmame, system, resolution));
+
+                // Unknown system, try to run with rom name only
+                commandArray.Add(Path.GetFileNameWithoutExtension(rom));
+
+                args = commandArray.JoinArguments();
+            }
+            else
+            {
+                var commandArray = messMode.GetMameCommandLineArguments(system, rom, true);
+                commandArray.AddRange(GetCommonMame64Arguments(rom, hbmame, system, resolution));
+
+                args = commandArray.JoinArguments();
+            }
+
+            return new ProcessStartInfo()
+            {
+                FileName = exe,
+                WorkingDirectory = path,
+                Arguments = args,
+                WindowStyle = ProcessWindowStyle.Minimized,
+            };
+        }
+
+        private List<string> GetCommonMame64Arguments(string rom, bool hbmame, string system, ScreenResolution resolution = null)
+        {
+            var retList = new List<string>();
+
+            if (!_groovy && SystemConfig.isOptSet("noread_ini") && SystemConfig.getOptBoolean("noread_ini"))
+                retList.Add("-norc");
+
+            string sstatePath = Path.Combine(AppConfig.GetFullPath("saves"), "mame", "states");
+            if (!Directory.Exists(sstatePath)) try { Directory.CreateDirectory(sstatePath); }
+                catch { }
+            if (!string.IsNullOrEmpty(sstatePath) && Directory.Exists(sstatePath))
+            {
+                retList.Add("-state_directory");
+                retList.Add(sstatePath);
+            }
+
+            string nvramPath = Path.Combine(AppConfig.GetFullPath("saves"), "mame", "nvram");
+            if (!Directory.Exists(nvramPath)) try { Directory.CreateDirectory(nvramPath); }
+                catch { }
+            if (Directory.Exists(nvramPath))
+            {
+                retList.Add("-nvram_directory");
+                retList.Add(nvramPath);
+            }
+
+            string ctrlrPath = hbmame? Path.Combine(AppConfig.GetFullPath("saves"), "hbmame", "ctrlr") : Path.Combine(AppConfig.GetFullPath("saves"), "mame", "ctrlr");
+            if (!Directory.Exists(ctrlrPath)) try { Directory.CreateDirectory(ctrlrPath); }
+                catch { }
+            if (!string.IsNullOrEmpty(ctrlrPath) && Directory.Exists(ctrlrPath))
+            {
+                retList.Add("-ctrlrpath");
+                retList.Add(ctrlrPath);
+            }
+
+            if (!SystemConfig.isOptSet("smooth") || !SystemConfig.getOptBoolean("smooth"))
+                retList.Add("-noflt");
+
+            retList.Add("-v");
+
+            // Throttle
+            if (SystemConfig.isOptSet("mame_throttle") && SystemConfig.getOptBoolean("mame_throttle"))
+                retList.Add("-nothrottle");
+            else
+                retList.Add("-throttle");
+
+            // Autosave and rewind
+            if (SystemConfig.isOptSet("autosave") && SystemConfig.getOptBoolean("autosave"))
+                retList.Add("-autosave");
+
+            if (SystemConfig.isOptSet("rewind") && SystemConfig.getOptBoolean("rewind"))
+                retList.Add("-rewind");
+
+            // Audio driver
+            retList.Add("-sound");
+            if (SystemConfig.isOptSet("mame_audio_driver") && !string.IsNullOrEmpty(SystemConfig["mame_audio_driver"]))
+                retList.Add(SystemConfig["mame_audio_driver"]);
+            else
+                retList.Add("dsound");
+
+            // Video driver
+            retList.Add("-video");
+            if (SystemConfig.isOptSet("mame_video_driver") && !string.IsNullOrEmpty(SystemConfig["mame_video_driver"]))
+            {
+                if (_groovy && (SystemConfig["mame_video_driver"] == "gdi" || SystemConfig["mame_video_driver"] == "bgfx"))
+                    retList.Add("d3d");
+                else
+                    retList.Add(SystemConfig["mame_video_driver"]);
+            }
+            else
+                retList.Add("d3d");
+
+            // Resolution
+            if (_groovy)
+            {
+                retList.Add("-switchres");
+            }
+            else
+            {
+                if (resolution != null)
+                {
+                    if (SystemConfig["mame_video_driver"] != "gdi" && SystemConfig["mame_video_driver"] != "bgfx")
+                        retList.Add("-switchres");
+
+                    retList.Add("-resolution");
+                    retList.Add(resolution.Width + "x" + resolution.Height + "@" + resolution.DisplayFrequency);
+                }
+                else
+                {
+                    retList.Add("-resolution");
+                    retList.Add("auto");
+                }
+
+                // Aspect ratio
+                if (SystemConfig.isOptSet("mame_ratio"))
+                {
+                    if (SystemConfig["mame_ratio"] == "stretch")
+                        retList.Add("-noka");
+                    else
+                        retList.Add("-ka");
+                }
+                else
+                    retList.Add("-ka");
+            }
+            
+            // Monitor index
+            if (SystemConfig.isOptSet("MonitorIndex") && !string.IsNullOrEmpty(SystemConfig["MonitorIndex"]))
+            {
+                string mameMonitor = "\\" + "\\" + ".\\" + "DISPLAY" + SystemConfig["MonitorIndex"];
+                retList.Add("-screen");
+                retList.Add(mameMonitor);
+            }
+
+            // Screen rotation
+            if (SystemConfig.isOptSet("mame_rotate") && SystemConfig["mame_rotate"] != "off")
+                retList.Add("-" + SystemConfig["mame_rotate"]);
+
+            // Other video options
+            if (SystemConfig.isOptSet("triplebuffer") && SystemConfig.getOptBoolean("triplebuffer") && SystemConfig["mame_video_driver"] != "gdi")
+                retList.Add("-tb");
+
+            if ((!SystemConfig.isOptSet("vsync") || SystemConfig.getOptBoolean("vsync")) && SystemConfig["mame_video_driver"] != "gdi")
+                retList.Add(_groovy ? "-syncrefresh" : "-waitvsync");
+
+            /// Effects and shaders
+            /// Currently support: BGFX, OpenGL (GLSL) or simple effects
+
+            // BGFX Shaders (only for bgfx driver)
+            if (!_groovy)
+            {
+                if (SystemConfig.isOptSet("bgfxshaders") && !string.IsNullOrEmpty(SystemConfig["bgfxshaders"]) && (SystemConfig["mame_video_driver"] == "bgfx"))
+                {
+                    if (SystemConfig.isOptSet("bgfxbackend") && !string.IsNullOrEmpty(SystemConfig["bgfxbackend"]))
+                    {
+                        retList.Add("-bgfx_backend");
+                        retList.Add(SystemConfig["bgfxbackend"]);
+                    }
+
+                    retList.Add("-bgfx_screen_chains");
+                    retList.Add(SystemConfig["bgfxshaders"]);
+                }
+
+                else if (SystemConfig.isOptSet("glslshaders") && !string.IsNullOrEmpty(SystemConfig["glslshaders"]) && (SystemConfig["mame_video_driver"] == "opengl"))
+                {
+                    retList.Add("-gl_glsl");
+                    retList.AddRange(Getglslshaderchain());
+                }
+
+                else if (SystemConfig.isOptSet("effect") && !string.IsNullOrEmpty(SystemConfig["effect"]))
+                {
+                    retList.Add("-effect");
+                    retList.Add(SystemConfig["effect"]);
+                }
+            }
+
+            // Adjust gamma, brightness and contrast
+            if (SystemConfig["mame_video_driver"] != "gdi")
+            {
+                if (SystemConfig.isOptSet("brightness") && !string.IsNullOrEmpty(SystemConfig["brightness"]))
+                {
+                    string brightness = SystemConfig["brightness"].Substring(0, 3);
+                    retList.Add("-brightness");
+                    retList.Add(brightness);
+                }
+
+                if (SystemConfig.isOptSet("gamma") && !string.IsNullOrEmpty(SystemConfig["gamma"]))
+                {
+                    string gamma = SystemConfig["gamma"].Substring(0, 3);
+                    retList.Add("-gamma");
+                    retList.Add(gamma);
+                }
+
+                if (SystemConfig.isOptSet("contrast") && !string.IsNullOrEmpty(SystemConfig["contrast"]))
+                {
+                    string contrast = SystemConfig["contrast"].Substring(0, 3);
+                    retList.Add("-contrast");
+                    retList.Add(contrast);
+                }
+            }
+
+            // Add plugins
+
+            List<string> pluginList = new List<string>();
+            if (SystemConfig.isOptSet("mame_autofire") && SystemConfig.getOptBoolean("mame_autofire"))
+                pluginList.Add("autofire");
+            if (SystemConfig.isOptSet("mame_cheats") && SystemConfig.getOptBoolean("mame_cheats"))
+                pluginList.Add("cheat");
+            if (SystemConfig.isOptSet("mame_hiscore") && SystemConfig.getOptBoolean("mame_hiscore"))
+                pluginList.Add("hiscore");
+            if (SystemConfig.isOptSet("layout_enable") && SystemConfig.getOptBoolean("layout_enable"))
+                pluginList.Add("layout");
+            if (SystemConfig.isOptSet("mame_offscreenreload") && SystemConfig.getOptBoolean("mame_offscreenreload"))
+                pluginList.Add("offscreenreload");
+
+            if (pluginList.Count > 0)
+            {
+                string pluginJoin = string.Join<string>(",", pluginList);
+                retList.Add("-plugin");
+                retList.Add(pluginJoin);
+            }
+
+            // BIOS
+            if (SystemConfig.isOptSet("mame_bios") && !string.IsNullOrEmpty(SystemConfig["mame_bios"]))
+            {
+                retList.Add("-bios");
+                retList.Add(SystemConfig["mame_bios"]);
+            }
+
+            // DEVICES
+            // Mouse
+            if (SystemConfig.isOptSet("mame_mouse") && SystemConfig["mame_mouse"] == "none")
+                retList.Add("-nomouse");
+            else if (SystemConfig.isOptSet("mame_mouse") && !string.IsNullOrEmpty(SystemConfig["mame_mouse"]))
+            {
+                retList.Add("-mouse_device");
+                retList.Add(SystemConfig["mame_mouse"]);
+                retList.Add("-ui_mouse");
+            }
+            else
+            {
+                retList.Add("-mouse_device");
+                retList.Add("mouse");
+                retList.Add("-ui_mouse");
+            }
+
+            // Pedal
+            if (SystemConfig.isOptSet("mame_pedal") && !string.IsNullOrEmpty(SystemConfig["mame_pedal"]))
+            {
+                retList.Add("-pedal_device");
+                retList.Add(SystemConfig["mame_pedal"]);
+            }
+            else
+            {
+                retList.Add("-pedal_device");
+                retList.Add("joystick");
+            }
+
+            // Lightgun
+            if (SystemConfig.isOptSet("mame_lightgun") && SystemConfig["mame_lightgun"] == "none")
+                retList.Add("-nogun");
+            else if (SystemConfig.isOptSet("mame_lightgun") && !string.IsNullOrEmpty(SystemConfig["mame_lightgun"]))
+            {
+                retList.Add("-lightgun_device");
+                retList.Add(SystemConfig["mame_lightgun"]);
+                if (SystemConfig["mame_lightgun"] == "lightgun")
+                {
+                    retList.Add("-gun");
+                }
+                else if (SystemConfig["mame_lightgun"] == "mouse")
+                {
+                    retList.Add("-mouse");
+                    _mouseGun = true;
+                }
+            }
+            else if (SystemConfig.getOptBoolean("use_guns"))
+            {
+                retList.Add("-lightgun_device");
+                retList.Add("lightgun");
+                retList.Add("-gun");
+            }
+            else
+            {
+                retList.Add("-lightgun_device");
+                retList.Add("mouse");
+                retList.Add("-mouse");
+                _mouseGun = true;
+            }
+
+            // Paddle
+            if (SystemConfig.isOptSet("mame_paddle") && !string.IsNullOrEmpty(SystemConfig["mame_paddle"]))
+            {
+                retList.Add("-paddle_device");
+                retList.Add(SystemConfig["mame_paddle"]);
+            }
+            else
+            {
+                retList.Add("-paddle_device");
+                retList.Add("none");
+            }
+
+            // Adstick
+            if (SystemConfig.isOptSet("mame_adstick") && !string.IsNullOrEmpty(SystemConfig["mame_adstick"]))
+            {
+                retList.Add("-adstick_device");
+                retList.Add(SystemConfig["mame_adstick"]);
+            }
+            else
+            {
+                retList.Add("-adstick_device");
+                retList.Add("joystick");
+            }
+
+            // Positional Device
+            if (SystemConfig.isOptSet("mame_positional") && !string.IsNullOrEmpty(SystemConfig["mame_positional"]))
+            {
+                retList.Add("-positional_device");
+                retList.Add(SystemConfig["mame_positional"]);
+            }
+            else
+            {
+                retList.Add("-positional_device");
+                retList.Add("none");
+            }
+
+            // Trackball
+            if (SystemConfig.isOptSet("mame_trackball") && !string.IsNullOrEmpty(SystemConfig["mame_trackball"]))
+            {
+                retList.Add("-trackball_device");
+                retList.Add(SystemConfig["mame_trackball"]);
+            }
+            else
+            {
+                retList.Add("-trackball_device");
+                retList.Add("none");
+            }
+
+            // Dial device
+            if (SystemConfig.isOptSet("mame_dial") && !string.IsNullOrEmpty(SystemConfig["mame_dial"]))
+            {
+                retList.Add("-dial_device");
+                retList.Add(SystemConfig["mame_dial"]);
+            }
+            else
+            {
+                retList.Add("-dial_device");
+                retList.Add("none");
+            }
+
+            if (SystemConfig.isOptSet("mame_offscreen_reload") && SystemConfig.getOptBoolean("mame_offscreen_reload") && SystemConfig["mame_lightgun"] != "none")
+                retList.Add("-reload");
+
+            // Gamepad driver
+            retList.Add("-joystickprovider");
+            if (SystemConfig.isOptSet("mame_joystick_driver") && !string.IsNullOrEmpty(SystemConfig["mame_joystick_driver"]))
+                retList.Add(SystemConfig["mame_joystick_driver"]);
+            else
+                retList.Add("winhybrid");
+
+            if (SystemConfig.isOptSet("mame_ctrlr_profile") && SystemConfig["mame_ctrlr_profile"] != "none" && SystemConfig["mame_ctrlr_profile"] != "retrobat_auto")
+            {
+                string ctrlrProfile = hbmame? 
+                    Path.Combine(AppConfig.GetFullPath("saves"), "hbmame", "ctrlr", SystemConfig["mame_ctrlr_profile"] + ".cfg") 
+                    : Path.Combine(AppConfig.GetFullPath("saves"), "mame", "ctrlr", SystemConfig["mame_ctrlr_profile"] + ".cfg");
+
+                if (File.Exists(ctrlrProfile) && SystemConfig["mame_ctrlr_profile"] != "per_game")
+                {
+                    retList.Add("-ctrlr");
+                    retList.Add(SystemConfig["mame_ctrlr_profile"]);
+                }
+                else if (SystemConfig["mame_ctrlr_profile"] == "per_game")
+                {
+                    string romName = Path.GetFileNameWithoutExtension(rom);
+                    ctrlrProfile = Path.Combine(AppConfig.GetFullPath("saves"), "mame", "ctrlr", romName + ".cfg");
+                    if (File.Exists(ctrlrProfile))
+                    {
+                        retList.Add("-ctrlr");
+                        retList.Add(romName);
+                    }
+                }
+            }
+            
+            else if (!SystemConfig.isOptSet("mame_ctrlr_profile") || SystemConfig["mame_ctrlr_profile"] == "retrobat_auto")
+            {
+                if (ConfigureMameControllers(ctrlrPath, hbmame, rom, system))
+                {
+                    retList.Add("-ctrlr");
+                    retList.Add("retrobat_auto");
+                }
+            }
+
+            if (SystemConfig.isOptSet("mame_multimouse") && !SystemConfig.getOptBoolean("mame_multimouse"))
+                SimpleLogger.Instance.Info("[INFO] Multimouse disabled");
+
+            else
+                retList.Add("-multimouse");
+
+            if (!SystemConfig.isOptSet("GameFocus") || !SystemConfig.getOptBoolean("Gamefocus"))
+                        retList.Add("-ui_active");
+
+            return retList;
+        }
+
+        private List<string> Getglslshaderchain()
+        {
+            var shaderlist = new List<string>();
+            var ext = new List<string> { "vsh" };
+
+            string path = AppConfig.GetFullPath("mame");
+            if (string.IsNullOrEmpty(path) && Environment.Is64BitOperatingSystem)
+                path = AppConfig.GetFullPath("mame64");
+
+            string glslPath = Path.Combine(path, "glsl");
+
+            if (Directory.Exists(glslPath))
+            {
+                string shaderPath = Path.Combine(glslPath, SystemConfig["glslshaders"]);
+                if (Directory.Exists(shaderPath))
+                {
+                    List<string> shaderFiles = Directory.GetFiles(shaderPath, "*.*", SearchOption.AllDirectories)
+                      .Where(file => new string[] { ".vsh" }
+                      .Contains(Path.GetExtension(file)))
+                      .ToList();
+
+                    if (shaderFiles.Count != 0)
+                    {
+                        int shadernb = 0;
+                        foreach (var shader in shaderFiles)
+                        {
+                            string shaderName = "." + "\\" + "glsl\\" + SystemConfig["glslshaders"] + "\\" + Path.GetFileNameWithoutExtension(shader);
+                            shaderlist.Add("-glsl_shader_mame" + shadernb);
+                            shaderlist.Add(shaderName);
+                            shadernb += 1;
+                        }
+                    }
+                }
+            }
+
+            return shaderlist;
+        }
+
+        private void ConfigureUIini(string path) 
+        {
+            if (!Directory.Exists(path))
+                try { Directory.CreateDirectory(path); } catch { }
+
+            try
+            {
+                var uiIni = MameIniFile.FromFile(Path.Combine(path, "ui.ini"));
+                if (uiIni["skip_warnings"] != "1")
+                {
+                    uiIni["skip_warnings"] = "1";
+                    uiIni.Save();
+                }
+            }
+            catch { }
+        }
+
+        private void ConfigureMameini(string path)
+        {
+            // MAME.ini
+            var ini = MameIniFile.FromFile(Path.Combine(path, "mame.ini"));
+
+            if (ini["writeconfig"] != "0")
+            {
+                ini["writeconfig"] = "0";
+            }
+
+            if (SystemConfig.isOptSet("mame_output") && !string.IsNullOrEmpty(SystemConfig["mame_output"]))
+                ini["output"] = SystemConfig["mame_output"];
+            else
+                ini["output"] = "auto";
+
+            if (_groovy)
+            {
+                GroovyMameProfile.GroovyProfileType type = GroovyMameProfile.GroovyProfileType.LCD_ARCADE;
+
+                if (SystemConfig.isOptSet("groovy_profile") && !string.IsNullOrEmpty(SystemConfig["groovy_profile"]))
+                {
+                    string profile = SystemConfig["groovy_profile"].ToLowerInvariant();
+                    if (!Enum.TryParse(profile, true, out type))
+                    {
+                        SimpleLogger.Instance.Warning("[GROOVYMAME] Invalid GroovyMame profile specified: " + profile);
+                        type = GroovyMameProfile.GroovyProfileType.LCD_ARCADE;
+                    }
+
+                    foreach (var item in GroovyMameProfile.GroovyTypes)
+                    {
+                        if (item.GetValue(type) != null)
+                            ini[item.Name] = item.GetValue(type);
+                        else
+                            ini[item.Name] = "";
+                    }
+                }
+            }
+
+            ini.Save();
+
+            // Plugin.ini
+            var pluginsIni = MameIniFile.FromFile(Path.Combine(path, "plugin.ini"));
+
+            if (SystemConfig.isOptSet("mame_autofire") && SystemConfig.getOptBoolean("mame_autofire"))
+                pluginsIni["autofire"] = "1";
+            else
+                pluginsIni["autofire"] = "0";
+
+            if (SystemConfig.isOptSet("mame_cheats") && SystemConfig.getOptBoolean("mame_cheats"))
+                pluginsIni["cheat"] = "1";
+            else
+                pluginsIni["cheat"] = "0";
+
+            if (SystemConfig.isOptSet("mame_hiscore") && SystemConfig.getOptBoolean("mame_hiscore"))
+                pluginsIni["hiscore"] = "1";
+            else
+                pluginsIni["hiscore"] = "0";
+
+            if (SystemConfig.isOptSet("layout_enable") && SystemConfig.getOptBoolean("layout_enable"))
+                pluginsIni["layout"] = "1";
+            else
+                pluginsIni["layout"] = "0";
+
+            if (SystemConfig.isOptSet("mame_offscreenreload") && SystemConfig.getOptBoolean("mame_offscreenreload"))
+                pluginsIni["offscreenreload"] = "1";
+            else
+                pluginsIni["offscreenreload"] = "0";
+
+            pluginsIni.Save();
+        }
+
+        private void UpdateOrCreateMameConfigFiles(string cfgFile, string romName)
+        {
+            if (!File.Exists(cfgFile))
+            {
+                try
+                {
+                    var doc = new XDocument(
+                        new XDeclaration("1.0", "utf-8", null),
+                        new XComment(" This file is autogenerated; comments and unknown tags will be stripped "),
+                        new XElement("mameconfig",
+                            new XAttribute("version", "10"),
+                            new XElement("system",
+                                new XAttribute("name", romName)
+                            )
+                        )
+                    );
+
+                    var system = doc.Root?.Element("system");
+
+                    if (SystemConfig.getOptBoolean("mame_remove_crosshair") && system != null)
+                    {
+                        system.Add(
+                            new XElement("crosshairs",
+                                new XElement("crosshair",
+                                    new XAttribute("player", "0"),
+                                    new XAttribute("mode", "0")
+                                ), new XElement("crosshair",
+                                    new XAttribute("player", "1"),
+                                    new XAttribute("mode", "0")
+                                    )
+                            )
+                        );
+                    }
+
+                    doc.Save(cfgFile);
+                }
+                catch { }
+            }
+            else
+            {
+                try
+                {
+                    var doc = XDocument.Load(cfgFile);
+                    var system = doc.Root?.Element("system");
+
+                    if (SystemConfig.getOptBoolean("mame_remove_crosshair") && system != null)
+                    {
+                        system.Add(
+                            new XElement("crosshairs",
+                                new XElement("crosshair",
+                                    new XAttribute("player", "0"),
+                                    new XAttribute("mode", "0")
+                                ), new XElement("crosshair",
+                                    new XAttribute("player", "1"),
+                                    new XAttribute("mode", "0")
+                                    )
+                            )
+                        );
+                    }
+                    else
+                        system?.Element("crosshairs")?.Remove();
+
+                    doc.Save(cfgFile);
+                }
+                catch { }
+            }
+        }
+
+        public override void Cleanup()
+        {
+            if (_sindenSoft)
+                Guns.KillSindenSoftware();
+
+            if (_filesToRestore != null)
+            {
+                foreach (var f in _filesToRestore)
+                {
+                    string backupFile = f + ".backup";
+
+                    if (File.Exists(backupFile))
+                    {
+                        try
+                        {
+                            string cfgBackupPath = Path.Combine(AppConfig.GetFullPath("saves"), "mame", "cfgbackupmame64");
+                            if (!Directory.Exists(cfgBackupPath))
+                                try { Directory.CreateDirectory(cfgBackupPath); } catch { }
+                            string filename = Path.GetFileName(f);
+                            string target = Path.Combine(cfgBackupPath, filename);
+
+                            File.Copy(f, target, true);
+                            File.Copy(backupFile, f, true);
+                            File.Delete(backupFile);
+                        }
+                        catch { }
+                    }
+                }
+            }
+
+            base.Cleanup();
+        }
+
+        class GroovyMameProfile
+        {
+            private readonly string[] _values;
+
+            public GroovyMameProfile(string name, params string[] values)
+            {
+                Name = name;
+
+                int expected = Enum.GetValues(typeof(GroovyProfileType)).Length;
+
+                if (values.Length != expected)
+                    SimpleLogger.Instance.Error("[GROOVYMAME] Invalid number of values for profile " + name + ", expected " + expected + " but got " + values.Length);
+
+                _values = values;
+            }
+
+            public string Name { get; }
+
+            public string GetValue(GroovyProfileType type)
+            {
+                return _values[(int)type];
+            }
+
+            public enum GroovyProfileType
+            {
+                CRT_TV_15,
+                CRT_ARCADE_15,
+                CRT_ARCADE_25,
+                CRT_ARCADE_31,
+                CRT_15_25,
+                CRT_15_25_31,
+                CRT_31_120,
+                PVM_BVM,
+                CRT_TV_PAL,
+                LCD_ARCADE,
+                LCD_ARCADE_VERTICAL
+            }
+
+            public static GroovyMameProfile[] GroovyTypes = new GroovyMameProfile[]
+            {
+                new GroovyMameProfile
+                (
+                    "monitor", 
+                    "generic_15", "arcade_15", "arcade_25", "arcade_31", "arcade_15_25", "arcade_15_25_31", "pc_31_120", "ntsc", "pal", "lcd", "lcd"
+                ),
+                new GroovyMameProfile("aspect", "4:3", "4:3", "4:3", "4:3", "4:3", "4:3", "4:3", "4:3", "4:3", "16:9", null),
+                new GroovyMameProfile("super_width", "2560", "2560", "2560", "1920", "2560", "2560", "1920", "2560", "2560", "1920", null),
+                new GroovyMameProfile("modeline_generation", "1", "1", "1", "1", "1", "1", "1", "1", "1", "0", "0"),
+                new GroovyMameProfile("scale_proportional", "0", "0", "0", "1", "0", "0", "1", "0", "0", "1", "1"),
+                new GroovyMameProfile("sync_refresh_tolerance", "2.0", "2.0", "2.0", "2.0", "2.0", "2.0", "2.0", "2.0", "2.0", "2.0", "2.0"),
+                new GroovyMameProfile("lock_unsupported_modes", "1", "1", "1", "1", "1", "1", "1", "1", "1", "0", "0"),
+                new GroovyMameProfile("interlace", "1", "0", "0", "0", "0", "0", "0", "1", "1", "0", "0"),
+                new GroovyMameProfile("lcd_range", null, null, null, null, null, null, null, null, null, "auto", "auto")
+            };
+        }
+    }
+
+    class MameIniFile
+    {
+        private string _fileName;
+        private List<string> _lines;
+
+        public static MameIniFile FromFile(string file)
+        {
+            var ret = new MameIniFile
+            {
+                _fileName = file
+            };
+
+            try
+            {
+                if (File.Exists(file))
+                    ret._lines = File.ReadAllLines(file).ToList();
+            }
+            catch { }
+
+            if (ret._lines == null)
+                ret._lines = new List<string>();
+
+            return ret;
+        }
+
+        public string this[string key]
+        {
+            get
+            {
+                int spaceLength = 26 - key.Length;
+                string space = new string(' ', spaceLength);
+                int idx = _lines.FindIndex(l => !string.IsNullOrEmpty(l) && l[0] != '#' && l.StartsWith(key + space));
+                if (idx >= 0)
+                {
+                    int split = _lines[idx].IndexOf(" ");
+                    if (split >= 0)
+                        return _lines[idx].Substring(split + spaceLength).Trim();
+                }
+
+                return string.Empty;
+            }
+            set
+            {
+                if (this[key] == value)
+                    return;
+
+                int spaceLength = 26 - key.Length;
+                string space = new string(' ', spaceLength);
+
+                int idx = _lines.FindIndex(l => !string.IsNullOrEmpty(l) && l[0] != '#' && l.StartsWith(key + space));
+                if (idx >= 0)
+                {
+                    _lines.RemoveAt(idx);
+
+                    if (!string.IsNullOrEmpty(value))
+                        _lines.Insert(idx, key + space + value);
+                }
+                else if (!string.IsNullOrEmpty(value))
+                {
+                    _lines.Add(key + space + value);
+                    _lines.Add("");
+                }
+
+                IsDirty = true;
+            }
+        }
+
+        public bool IsDirty { get; private set; }
+
+        public void Save()
+        {
+            if (!IsDirty)
+                return;
+
+            File.WriteAllLines(_fileName, _lines);
+            IsDirty = false;
+        }
+    }
+}

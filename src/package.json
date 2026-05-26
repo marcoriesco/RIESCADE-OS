@@ -1,0 +1,58 @@
+{
+  "name": "riescade",
+  "version": "2.0.0",
+  "description": "RIESCADE Frontend",
+  "main": "./out/main/index.js",
+  "author": "Marco Riesco",
+  "scripts": {
+    "dev": "electron-vite dev",
+    "build": "electron-vite build",
+    "dist": "npm run build && electron-builder --win --dir",
+    "deploy": "npm run dist && node scripts/deploy.js",
+    "preview": "electron-vite preview"
+  },
+  "dependencies": {
+    "@electron-toolkit/preload": "^3.0.0",
+    "@electron-toolkit/utils": "^3.0.0",
+    "@tailwindcss/vite": "^4.3.0",
+    "fast-xml-parser": "^4.4.0",
+    "lucide-react": "^1.16.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "tailwindcss": "^4.3.0"
+  },
+  "devDependencies": {
+    "@electron-toolkit/eslint-config-prettier": "^2.0.0",
+    "@electron-toolkit/eslint-config-ts": "^2.0.0",
+    "@electron-toolkit/tsconfig": "^1.0.1",
+    "@types/node": "^20.14.8",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^4.3.1",
+    "chokidar": "^5.0.0",
+    "electron": "^31.0.2",
+    "electron-builder": "^24.13.3",
+    "electron-vite": "^2.3.0",
+    "eslint": "^8.57.0",
+    "prettier": "^3.3.2",
+    "sass": "^1.99.0",
+    "typescript": "^5.5.2",
+    "vite": "^5.3.1"
+  },
+  "build": {
+    "appId": "com.riescade.frontend",
+    "productName": "RIESCADE",
+    "directories": {
+      "output": "dist"
+    },
+    "win": {
+      "target": "dir",
+      "artifactName": "${productName}.${ext}",
+      "icon": "src/main/theme_default/assets/_parts/riescade.ico"
+    },
+    "files": [
+      "out/**/*"
+    ],
+    "extraResources": []
+  }
+}

@@ -1,0 +1,491 @@
+﻿using System;
+using System.Linq;
+using System.Text;
+using System.Diagnostics;
+using System.IO;
+using System.Management;
+using System.Runtime.InteropServices;
+using System.IO.Compression;
+using System.Security.Cryptography;
+
+namespace EmulatorLauncher.Common
+{
+    public static class FileTools
+    {
+        public static string ReadFirstValidLine(string file)
+        {
+            try
+            {
+                var lines = File.ReadAllLines(file);
+                if (lines == null || lines.Length == 0)
+                    return null;
+
+                foreach (var l in lines)
+                {
+                    if (string.IsNullOrWhiteSpace(l))
+                        continue;
+                    var t = l.Trim();
+                    if (t.StartsWith("#"))
+                        continue;
+                    return t;
+                }
+            }
+            catch (Exception ex)
+            {
+                SimpleLogger.Instance.Warning("[FILETOOLS] Error reading file " + file + " : " + ex.Message);
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Check if path is a full path (not a relative path)
+        /// </summary>
+        /// <param name="path"></param>
+        public static bool IsPathFullyQualified(string path)
+        {
+            if (string.IsNullOrEmpty(path))
+                return false;
+
+            // Must be rooted first
+            if (!Path.IsPathRooted(path))
+                return false;
+
+            // Reject paths like "\folder\file.txt"
+            if (path.StartsWith("\\") && !path.StartsWith("\\\\"))
+                return false;
+
+            // Handle UNC paths (\\server\share)
+            if (path.StartsWith("\\\\"))
+                return true;
+
+            // Check for drive letter (C:\...)
+            return path.Length > 2 &&
+                   char.IsLetter(path[0]) &&
+                   path[1] == ':' &&
+                   (path[2] == '\\' || path[2] == '/');
+        }
+
+        /// <summary>
+        /// Check if path is a root path
+        /// </summary>
+        /// <param name="path"></param>
+        public static bool IsRootPath(string path)
+        {
+            if (string.IsNullOrEmpty(path))
+                return false;
+
+            string root = Path.GetPathRoot(path);
+            return string.Equals(path, root, StringComparison.OrdinalIgnoreCase);
+        }
+
+        /// <summary>
+        /// Get MD5 hash
+        /// </summary>
+        /// <param name="file"></param>
+        public static string GetMD5(string file)
+        {
+            if (!File.Exists(file))
+                return null;
+
+            using (var md5 = MD5.Create())
+                using (var stream = File.OpenRead(file))
+                    return BitConverter.ToString(md5.ComputeHash(stream)).Replace("-", string.Empty).ToLower();
+        }
+
+        /// <summary>
+        /// Get SHA-1 hash
+        /// </summary>
+        /// <param name="file"></param>
+        public static string GetSHA1(string file)
+        {
+            if (!File.Exists(file))
+                return null;
+
+            using (FileStream fs = File.OpenRead(file))
+            {
+                SHA1 sha = new SHA1Managed();
+                return BitConverter.ToString(sha.ComputeHash(fs)).Replace("-", string.Empty).ToLower();
+            }
+        }
+
+        /// <summary>
+        /// Get File size
+        /// </summary>
+        /// <param name="file"></param>
+        public static long GetFileSize(string file)
+        {
+            if (!File.Exists(file))
+                return 0;
+
+            return new FileInfo(file).Length;            
+        }
+
+        public static bool ExtractGZipBytes(byte[] bytes, string fileName)
+        {
+            try
+            {
+                using (var reader = new MemoryStream(bytes))
+                {
+                    using (var decompressedStream = new FileStream(fileName, FileMode.Create, FileAccess.Write))
+                    {
+                        using (GZipStream decompressionStream = new GZipStream(reader, CompressionMode.Decompress))
+                        {
+                            decompressionStream.CopyTo(decompressedStream);
+                            return true;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                SimpleLogger.Instance.Error("[ReadGZipStream] Failed " + ex.Message, ex);
+            }
+
+            return false;
+        }
+
+        public static string GetRelativePath(string basePath, string targetPath)
+        {
+            Uri baseUri = new Uri(basePath);
+            Uri targetUri = new Uri(targetPath);
+
+            Uri relativeUri = baseUri.MakeRelativeUri(targetUri);
+            string relativePath = Uri.UnescapeDataString(relativeUri.ToString());
+
+            return relativePath.Replace('/', '\\');
+        }
+
+        public static string FindFreeDriveLetter()
+        {
+            var drives = DriveInfo.GetDrives();
+
+            for (char letter = 'Z'; letter >= 'D'; letter--)
+                if (!drives.Any(d => d.Name == letter + ":\\"))
+                    return letter + ":\\";
+
+            return null;
+        }
+
+        private static void TryMoveFile(string sourceFileName, string destFileName)
+        {
+            if (File.Exists(sourceFileName))
+            {
+                if (File.Exists(destFileName))
+                {
+                    try { File.Delete(destFileName); }
+                    catch { }
+                }
+
+                try { File.Move(sourceFileName, destFileName); }
+                catch { }
+            }
+        }
+
+        /// <summary>
+        /// Returns true if the directory exists or was created
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public static bool TryCreateDirectory(string path)
+        {
+            if (Directory.Exists(path))
+                return true;
+
+            try { Directory.CreateDirectory(path); }
+            catch { return false; }
+
+            return true;
+        }
+
+        public static void TryDeleteFile(string path)
+        {
+            if (!File.Exists(path))
+                return;
+
+            try { File.Delete(path); }
+            catch { }
+        }
+
+        public static void TryCopyFile(string sourceFileName, string destFileName, bool overwrite = true)
+        {
+            if (!File.Exists(sourceFileName))
+                return;
+
+            try { File.Copy(sourceFileName, destFileName, overwrite); }
+            catch { }
+        }
+
+        #region Apis
+        const uint GENERIC_READ = 0x80000000;
+        const uint GENERIC_WRITE = 0x40000000;
+        const uint OPEN_EXISTING = 3;
+        const uint FILE_SHARE_READ = 1;
+        const uint FILE_SHARE_WRITE = 2;
+
+        static readonly IntPtr INVALID_HANDLE_VALUE = new IntPtr(-1);
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        static extern IntPtr CreateFile(
+            string lpFileName,
+            uint dwDesiredAccess,
+            uint dwShareMode,
+            IntPtr lpSecurityAttributes,
+            uint dwCreationDisposition,
+            uint dwFlagsAndAttributes,
+            IntPtr hTemplateFile
+        );
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        static extern bool CloseHandle(IntPtr hObject);
+        #endregion
+
+        public static bool IsFileLocked(string path)
+        {
+            if (!File.Exists(path))
+                return false;
+
+            IntPtr handle = CreateFile(path, GENERIC_READ | GENERIC_WRITE, FILE_SHARE_READ | FILE_SHARE_WRITE, IntPtr.Zero, OPEN_EXISTING, 0, IntPtr.Zero);
+            if (handle == INVALID_HANDLE_VALUE)
+                return true;
+
+            CloseHandle(handle);
+            return false;
+        }
+
+        public static void CopyDirectory(string sourceDir, string destinationDir, bool recursive, bool overwrite = false)
+        {
+            // Get information about the source directory
+            var dir = new DirectoryInfo(sourceDir);
+
+            // Check if the source directory exists
+            if (!dir.Exists)
+                throw new DirectoryNotFoundException("Source directory not found: " + dir.FullName);
+
+            // Cache directories before we start copying
+            DirectoryInfo[] dirs = dir.GetDirectories();
+
+            // Create the destination directory
+            Directory.CreateDirectory(destinationDir);
+
+            // Get the files in the source directory and copy to the destination directory
+            foreach (FileInfo file in dir.GetFiles())
+            {
+                string targetFilePath = Path.Combine(destinationDir, file.Name);
+                file.CopyTo(targetFilePath, overwrite);
+            }
+
+            // If recursive and copying subdirectories, recursively call this method
+            if (recursive)
+            {
+                foreach (DirectoryInfo subDir in dirs)
+                {
+                    string newDestinationDir = Path.Combine(destinationDir, subDir.Name);
+                    CopyDirectory(subDir.FullName, newDestinationDir, true, overwrite);
+                }
+            }
+        }
+
+        public static void CreateSymlink(string destinationLink, string pathToLink, bool directory = true)
+        {
+            string workingDirectory = Path.GetDirectoryName(destinationLink);
+            string directoryName = Path.GetFileName(destinationLink);
+
+            var psi = new ProcessStartInfo("cmd.exe", directory ?
+                "/C mklink /J \"" + directoryName + "\" \"" + pathToLink + "\"" :
+                "/C mklink \"" + directoryName + "\" \"" + pathToLink + "\"");
+            psi.WorkingDirectory = workingDirectory;
+            psi.CreateNoWindow = true;
+            psi.UseShellExecute = false;
+            Process.Start(psi).WaitForExit();
+        }
+
+        public static void CompressDirectory(string _outputFolder)
+        {
+            var dir = new DirectoryInfo(_outputFolder);
+
+            if (!dir.Exists)
+            {
+                dir.Create();
+            }
+
+            if ((dir.Attributes & FileAttributes.Compressed) == 0)
+            {
+                try
+                {
+                    // Enable compression for the output folder
+                    // (this will save a ton of disk space)
+
+                    string objPath = "Win32_Directory.Name=" + "'" + dir.FullName.Replace("\\", @"\\").TrimEnd('\\') + "'";
+
+                    using (ManagementObject obj = new ManagementObject(objPath))
+                    {
+                        using (obj.InvokeMethod("Compress", null, null))
+                        {
+                            // I don't really care about the return value, 
+                            // if we enabled it great but it can also be done manually
+                            // if really needed
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Trace.WriteLine("Cannot enable compression for folder '" + dir.FullName + "': " + ex.Message, "WMI");
+                }
+            }
+        }
+
+        [DllImport("shell32.dll")]
+        public static extern bool SHGetSpecialFolderPath(IntPtr hwndOwner, [Out]StringBuilder lpszPath, int nFolder, bool fCreate);
+
+        public static string GetSystemDirectory(RegistryViewEx view = RegistryViewEx.Default)
+        {
+            if (view == RegistryViewEx.Default && Environment.Is64BitOperatingSystem || view == RegistryViewEx.Registry32)
+            {
+                StringBuilder path = new StringBuilder(260);
+                SHGetSpecialFolderPath(IntPtr.Zero, path, 0x0029, false); // CSIDL_SYSTEMX86
+                return path.ToString();
+            }
+
+            return Environment.SystemDirectory;
+        }
+
+        public static string GetShortcutTarget(string file)
+        {
+            try
+            {
+                if (System.IO.Path.GetExtension(file).ToLower() != ".lnk")
+                {
+                    throw new Exception("Supplied file must be a .LNK file");
+                }
+
+                FileStream fileStream = File.Open(file, FileMode.Open, FileAccess.Read);
+                using (System.IO.BinaryReader fileReader = new BinaryReader(fileStream))
+                {
+                    fileStream.Seek(0x14, SeekOrigin.Begin);     // Seek to flags
+                    uint flags = fileReader.ReadUInt32();        // Read flags
+                    if ((flags & 1) == 1)
+                    {                      // Bit 1 set means we have to
+                                           // skip the shell item ID list
+                        fileStream.Seek(0x4c, SeekOrigin.Begin); // Seek to the end of the header
+                        uint offset = fileReader.ReadUInt16();   // Read the length of the Shell item ID list
+                        fileStream.Seek(offset, SeekOrigin.Current); // Seek past it (to the file locator info)
+                    }
+
+                    long fileInfoStartsAt = fileStream.Position; // Store the offset where the file info
+                                                                 // structure begins
+                    uint totalStructLength = fileReader.ReadUInt32(); // read the length of the whole struct
+                    fileStream.Seek(0xc, SeekOrigin.Current); // seek to offset to base pathname
+                    uint fileOffset = fileReader.ReadUInt32(); // read offset to base pathname
+                                                               // the offset is from the beginning of the file info struct (fileInfoStartsAt)
+                    fileStream.Seek((fileInfoStartsAt + fileOffset), SeekOrigin.Begin); // Seek to beginning of
+                                                                                        // base pathname (target)
+                    long pathLength = (totalStructLength + fileInfoStartsAt) - fileStream.Position - 2; // read
+                                                                                                        // the base pathname. I don't need the 2 terminating nulls.
+                    char[] linkTarget = fileReader.ReadChars((int)pathLength); // should be unicode safe
+                    var link = new string(linkTarget);
+
+                    int begin = link.IndexOf("\0\0");
+                    if (begin > -1)
+                    {
+                        int end = link.IndexOf("\\\\", begin + 2) + 2;
+                        end = link.IndexOf('\0', end) + 1;
+
+                        string firstPart = link.Substring(0, begin);
+                        string secondPart = link.Substring(end);
+
+                        SimpleLogger.Instance.Info("[INFO] link target found : " + firstPart + secondPart);
+                        return firstPart + secondPart;
+                    }
+                    else
+                    {
+                        SimpleLogger.Instance.Info("[INFO] link target found : " + link);
+                        return link;
+                    }
+                }
+            }
+            catch
+            {
+                SimpleLogger.Instance.Info("[INFO] Impossible to find link: returning empty");
+                return "";
+            }
+        }
+
+        public static string GetShortcutTargetwsh(string shortcutFile)
+        {
+            if (!System.IO.File.Exists(shortcutFile))
+                throw new System.IO.FileNotFoundException("Shortcut file not found", shortcutFile);
+
+            object shell = null;
+            object shortcut = null;
+
+            try
+            {
+                shell = Activator.CreateInstance(Type.GetTypeFromProgID("WScript.Shell"));
+                shortcut = shell.GetType().InvokeMember("CreateShortcut",
+                    System.Reflection.BindingFlags.InvokeMethod, null, shell, new object[] { shortcutFile });
+
+                var targetPath = (string)shortcut.GetType().InvokeMember("TargetPath",
+                    System.Reflection.BindingFlags.GetProperty, null, shortcut, null);
+
+                return targetPath;
+            }
+            finally
+            {
+                if (shortcut != null)
+                    System.Runtime.InteropServices.Marshal.FinalReleaseComObject(shortcut);
+                if (shell != null)
+                    System.Runtime.InteropServices.Marshal.FinalReleaseComObject(shell);
+            }
+        }
+
+        public static string GetShortcutArgswsh(string shortcutFile)
+        {
+            if (!System.IO.File.Exists(shortcutFile))
+                throw new System.IO.FileNotFoundException("Shortcut file not found", shortcutFile);
+
+            try
+            {
+                // Create a Windows Script Host Shell object
+                dynamic shell = Activator.CreateInstance(Type.GetTypeFromProgID("WScript.Shell"));
+                dynamic shortcut = shell.CreateShortcut(shortcutFile);
+                string args = shortcut.Arguments;
+                System.Runtime.InteropServices.Marshal.FinalReleaseComObject(shortcut);
+                System.Runtime.InteropServices.Marshal.FinalReleaseComObject(shell);
+                return args;
+            }
+            catch
+            {
+                return "";
+            }
+        }
+
+        public static bool IsExtension(string filename, string ext)
+        {
+            if (string.IsNullOrEmpty(filename))
+                return false;
+            try { return string.Equals(Path.GetExtension(filename), ext, StringComparison.OrdinalIgnoreCase); }
+            catch { return false; }
+        }
+
+        public static void EnsureDirectoryExists(string path)
+        {
+            try
+            {
+                if (!Directory.Exists(path))
+                    Directory.CreateDirectory(path);
+            }
+            catch (Exception ex)
+            {
+                SimpleLogger.Instance.Warning("[FileTools] Unable to create directory " + path + " : " + ex.Message);
+            }
+        }
+
+        public static string CleanupName(string x)
+        {
+            x = x.Replace(":", " -");
+            var invalidChars = Path.GetInvalidFileNameChars();
+            return new string(x.Where(c => !invalidChars.Contains(c)).ToArray());
+        }
+    }
+}

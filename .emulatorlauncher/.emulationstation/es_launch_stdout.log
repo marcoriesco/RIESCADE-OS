@@ -1,0 +1,69 @@
+[WARN] [Config] "savefile_directory" is not a directory, ignoring...
+[INFO] RetroArch 1.22.2 (Git 69a4f0e)
+[INFO] === Build =======================================
+[INFO] CPU Model Name: AMD Ryzen 7 7800X3D 8-Core Processor           
+[INFO] Capacidades: MMX MMXEXT SSE SSE2 SSE3 SSSE3 SSE4 SSE42 AES AVX AVX2 
+[INFO] Version: 1.22.2
+[INFO] Git: 69a4f0e
+[INFO] Built: Nov 20 2025
+[INFO] =================================================
+[INFO] [Input] Found input driver: "dinput".
+[INFO] [Environ] SET_SUBSYSTEM_INFO.
+[INFO] [Core] Loading dynamic libretro core from: "C:\tmp\RIESCADE OS\emulators\retroarch\cores\snes9x_libretro.dll".
+[INFO] [Override] Redirecionando arquivo dados da memória do jogo em "C:\tmp\RIESCADE OS\emulators\retroarch\saves\Aaahh!!! Real Monsters (USA).srm".
+[INFO] [Override] Redirecionando ponto de save para "C:\tmp\RIESCADE_SYSTEM\saves\AAE\libretro.mame2003_plus\Aaahh!!! Real Monsters (USA).state".
+[INFO] [Environ] SET_SUBSYSTEM_INFO.
+[INFO] [Environ] GET_CORE_OPTIONS_VERSION.
+[INFO] [Environ] GET_LANGUAGE: "7".
+[INFO] [Environ] SET_CORE_OPTIONS_V2_INTL.
+[INFO] [Environ] SET_CONTROLLER_INFO.
+[INFO] [Remap] Core-specific remap found at "C:\tmp\RIESCADE OS\emulators\retroarch\config\remaps\Snes9x\Snes9x.rmp".
+[INFO] [Environ] GET_LOG_INTERFACE.
+[INFO] [Environ] GET_SYSTEM_DIRECTORY: "C:\tmp\RIESCADE_SYSTEM\bios".
+[INFO] [Environ] GET_SAVE_DIRECTORY: "C:\tmp\RIESCADE OS\emulators\retroarch\saves".
+[INFO] [Environ] SET_SUPPORT_ACHIEVEMENTS: yes.
+[INFO] [Environ] SET_PERFORMANCE_LEVEL: 12.
+[INFO] [Content] Carregando arquivo de conteúdo: "C:\tmp\RIESCADE OS\roms\snes\Aaahh!!! Real Monsters (USA).zip#Aaahh!!! Real Monsters (USA).sfc".
+[INFO] [Content] CRC32: 0x27ff5ba1.
+[INFO] [Environ] SET_INPUT_DESCRIPTORS.
+[libretro INFO] "REAL MONSTERS" (NTSC) version 1.0
+ROM: LoROM: 16 Mbit, SRAM: 0 Kbit
+ID: ANNE, CRC32: 27ff5ba1, Checksum OK
+[INFO] [Environ] SET_PIXEL_FORMAT: RGB565.
+[INFO] [State] Encontrada último compartimento de jogo salvo: #0.
+[INFO] [SRAM] Ignorando carregamento da SRAM.
+[INFO] [Core] Versão da API libretro: 1, Compilado contra a API: 1
+[INFO] [Core] Geometry: 256x224, Aspect: 1.333, FPS: 60.10, Sample rate: 32040.00 Hz.
+[INFO] [Video] Set video size to: 1920x1080.
+[INFO] [Vulkan] Vulkan dynamic library loaded.
+[INFO] [Vulkan] Found GPU at index 0: "NVIDIA GeForce RTX 2060 SUPER".
+[INFO] [Vulkan] Using GPU index 0.
+[INFO] [Vulkan] Using GPU: "NVIDIA GeForce RTX 2060 SUPER".
+[INFO] [Vulkan] Queue family 0 supports 16 sub-queues.
+[INFO] [Vulkan] Got 3 swapchain images.
+[INFO] [Vulkan] Using resolution 1920x1080.
+[INFO] [Vulkan] Using RGB565 format.
+[INFO] [Vulkan] Loading stock shader.
+[INFO] [Input] Found joypad driver: "sdl2".
+[INFO] [Video] Found display server: "win32".
+[INFO] [Audio] Set audio input rate to: 32040.00 Hz.
+[INFO] [XAudio2] Requesting 64 ms latency, using 64 ms latency.
+[INFO] [Audio] Started synchronous audio driver.
+[INFO] [Microphone] Initialized microphone driver.
+[INFO] [Display] Found display driver: "vulkan".
+[INFO] [Environ] SET_SUBSYSTEM_INFO.
+[INFO] [Rewind] Inicializando o buffer de rebobinamento com tamanho: 20 MB
+[INFO] [Playlist] Carregando o arquivo de favoritos: "C:\tmp\RIESCADE OS\emulators\retroarch\playlists\builtin\content_favorites.lpl".
+[INFO] [Playlist] Carregando arquivo de histórico: "C:\tmp\RIESCADE OS\emulators\retroarch\playlists\builtin\content_history.lpl".
+[INFO] [Playlist] Carregando arquivo de histórico: "C:\tmp\RIESCADE OS\emulators\retroarch\playlists\builtin\content_image_history.lpl".
+[INFO] [Playlist] Carregando arquivo de histórico: "C:\tmp\RIESCADE OS\emulators\retroarch\playlists\builtin\content_music_history.lpl".
+[INFO] [Playlist] Carregando arquivo de histórico: "C:\tmp\RIESCADE OS\emulators\retroarch\playlists\builtin\content_video_history.lpl".
+[INFO] [Playlist] Written to file: "C:\tmp\RIESCADE OS\emulators\retroarch\playlists\builtin\content_history.lpl".
+[INFO] [Environ] SET_GEOMETRY.
+[INFO] [Config] Configuração salva em "C:\tmp\RIESCADE OS\emulators\retroarch\retroarch.cfg".
+[INFO] [Runtime] Content ran for a total of: 00 hours, 00 minutes, 11 seconds.
+[INFO] [Runtime] Saving runtime log file: "C:\tmp\RIESCADE OS\emulators\retroarch\playlists\logs\Snes9x\Aaahh!!! Real Monsters (USA).lrtl".
+[INFO] [Core] Unloading game...
+[INFO] [Core] Unloading core...
+[INFO] [Core] Unloading core symbols...
+[INFO] [Core] Saved core options file to "C:\tmp\RIESCADE OS\emulators\retroarch\retroarch-core-options.cfg".

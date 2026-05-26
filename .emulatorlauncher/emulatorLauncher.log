@@ -1,0 +1,454 @@
+﻿2026-05-25 17:46:05.003 [INFO]      --------------------------------------------------------------
+2026-05-25 17:46:05.005 [INFO]      [Startup] "C:\tmp\RIESCADE OS\.emulatorlauncher\emulatorLauncher.exe"  -gameinfo "C:\Users\MARCOR~1\AppData\Local\Temp\riescade.tmp\game.xml" -system arcade -emulator mame64 -core  -rom "C:\tmp\RIESCADE OS\roms\arcade\88games.zip"
+2026-05-25 17:46:05.005 [INFO]      [Startup] Loading configuration.
+2026-05-25 17:46:05.009 [INFO]      [Startup] Loading ES settings.
+2026-05-25 17:46:05.013 [INFO]      [Startup] Retrobat version : not found
+2026-05-25 17:46:05.159 [INFO]      [Startup] Emulator version: 0.287.0.0
+2026-05-25 17:46:05.165 [INFO]      [Generator] Screen[0]: L=0 T=0 W=1920 H=1080 Primary=True
+2026-05-25 17:46:05.165 [INFO]      [Generator] Screen[1]: L=-1920 T=0 W=1920 H=1080 Primary=False
+2026-05-25 17:46:05.247 [INFO]      [Startup] Loading Controller configuration.
+2026-05-25 17:46:05.719 [INFO]      [Generator] Using Mame64Generator
+2026-05-25 17:46:05.790 [INFO]      [Generator] Loading features.
+2026-05-25 17:46:05.796 [INFO]      [INFO] Checking for existing MameHook process
+2026-05-25 17:46:05.849 [INFO]      [INFO] Creating controller configuration for MAME
+2026-05-25 17:46:05.975 [INFO]      [RawLightGun] -> Gaming Keyboard (Mouse) -> Priority : 1000
+2026-05-25 17:46:05.976 [INFO]      [RawLightGun] ->  (Mouse) -> Priority : 1001
+2026-05-25 17:46:05.986 [INFO]      [Generator] Cleanup.
+2026-05-25 17:46:05.987 [ERROR]     [Error] Não é possível carregar a DLL 'SDL2': Não foi possível encontrar o módulo especificado. (Exceção de HRESULT: 0x8007007E)
+2026-05-25 17:46:05.988 [ERROR]     [Generator] Exception : Não é possível carregar a DLL 'SDL2': Não foi possível encontrar o módulo especificado. (Exceção de HRESULT: 0x8007007E)
+2026-05-25 17:46:05.988 [EXCEPTION] [DllNotFoundException] Não é possível carregar a DLL 'SDL2': Não foi possível encontrar o módulo especificado. (Exceção de HRESULT: 0x8007007E)
+2026-05-25 17:46:05.996 [STACK]     [StackTrace] em EmulatorLauncher.Common.SDL.INTERNAL_SDL_SetHint(Byte[] name, Byte[] value)
+   em EmulatorLauncher.Common.Joysticks.SdlGameController.ReloadWithHints(String hints)
+   em EmulatorLauncher.Mame64Generator.UpdateSdlControllersWithHints()
+   em EmulatorLauncher.Mame64Generator.ConfigureMameControllers(String path, Boolean hbmame, String rom, String messSystem)
+   em EmulatorLauncher.Mame64Generator.GetCommonMame64Arguments(String rom, Boolean hbmame, String system, ScreenResolution resolution)
+   em EmulatorLauncher.Mame64Generator.Generate(String system, String emulator, String core, String rom, String playersControllers, ScreenResolution resolution)
+   em EmulatorLauncher.Program.Main(String[] args)
+2026-05-25 18:00:41.979 [INFO]      --------------------------------------------------------------
+2026-05-25 18:00:41.980 [INFO]      [Startup] "C:\tmp\RIESCADE OS\.emulatorlauncher\emulatorLauncher.exe"  -gameinfo "C:\Users\MARCOR~1\AppData\Local\Temp\riescade.tmp\game.xml" -system arcade -emulator mame64 -core  -rom "C:\tmp\RIESCADE OS\roms\arcade\88games.zip"
+2026-05-25 18:00:41.981 [INFO]      [Startup] Loading configuration.
+2026-05-25 18:00:41.984 [INFO]      [Startup] Loading ES settings.
+2026-05-25 18:00:41.987 [INFO]      [Startup] Retrobat version : not found
+2026-05-25 18:00:42.034 [INFO]      [Startup] Emulator version: 0.287.0.0
+2026-05-25 18:00:42.037 [INFO]      [Generator] Screen[0]: L=0 T=0 W=1920 H=1080 Primary=True
+2026-05-25 18:00:42.037 [INFO]      [Generator] Screen[1]: L=-1920 T=0 W=1920 H=1080 Primary=False
+2026-05-25 18:00:42.088 [INFO]      [Startup] Loading Controller configuration.
+2026-05-25 18:00:42.573 [INFO]      [Generator] Using Mame64Generator
+2026-05-25 18:00:42.639 [INFO]      [Generator] Loading features.
+2026-05-25 18:00:42.645 [INFO]      [INFO] Checking for existing MameHook process
+2026-05-25 18:00:42.681 [INFO]      [INFO] Creating controller configuration for MAME
+2026-05-25 18:00:42.818 [INFO]      [RawLightGun] -> Gaming Keyboard (Mouse) -> Priority : 1000
+2026-05-25 18:00:42.818 [INFO]      [RawLightGun] ->  (Mouse) -> Priority : 1001
+2026-05-25 18:00:42.926 [INFO]      [SdlGameController] 1 SDL controller(s) connected
+2026-05-25 18:00:42.933 [INFO]      [SdlGameController] Loading SDL controller mapping : 0 => 0300B9695E0400008E02000000007200, Xbox 360 Controller, USB\VID_045E&PID_028E&IG_00\2&DEE0F28&0&00
+2026-05-25 18:00:43.025 [INFO]      [INFO] gamecontrollerdb.txt file not found in tools folder.
+2026-05-25 18:00:43.045 [INFO]      [PadToKey] Loaded C:\tmp\RIESCADE OS\.emulatorlauncher\.emulationstation\es_padtokey.cfg
+2026-05-25 18:00:43.051 [INFO]      [Running] C:\tmp\RIESCADE OS\emulators\mame\mame.exe -skip_gameinfo -rp "C:\tmp\RIESCADE OS\roms\arcade" -sp "C:\tmp\RIESCADE OS\bios\mame\samples" -artpath "C:\tmp\RIESCADE OS\bios\mame\artwork;C:\tmp\RIESCADE OS\emulators\mame\artwork;mame\artwork" -cfg_directory mame\cfg -inipath "C:\tmp\RIESCADE OS\bios\mame\ini" -hash "C:\tmp\RIESCADE OS\bios\mame\hash" -state_directory mame\states -nvram_directory mame\nvram -ctrlrpath mame\ctrlr -noflt -v -throttle -sound dsound -video d3d -resolution auto -ka -waitvsync -mouse_device mouse -ui_mouse -pedal_device joystick -lightgun_device mouse -mouse -paddle_device none -adstick_device joystick -positional_device none -trackball_device none -dial_device none -joystickprovider winhybrid -ctrlr retrobat_auto -multimouse -ui_active 88games
+2026-05-25 18:00:47.911 [INFO]      [Generator] Process exited with code 3
+2026-05-25 18:00:47.937 [INFO]      [Generator] Cleanup.
+2026-05-25 18:00:47.937 [ERROR]     [Generator] Exit code 200
+2026-05-25 18:02:45.653 [INFO]      --------------------------------------------------------------
+2026-05-25 18:02:45.654 [INFO]      [Startup] "C:\tmp\RIESCADE OS\.emulatorlauncher\emulatorLauncher.exe"  -gameinfo "C:\Users\MARCOR~1\AppData\Local\Temp\riescade.tmp\game.xml" -system arcade -emulator mame64 -core  -rom "C:\tmp\RIESCADE OS\roms\arcade\88games.zip"
+2026-05-25 18:02:45.654 [INFO]      [Startup] Loading configuration.
+2026-05-25 18:02:45.657 [INFO]      [Startup] Loading ES settings.
+2026-05-25 18:02:45.661 [INFO]      [Startup] Retrobat version : not found
+2026-05-25 18:02:45.709 [INFO]      [Startup] Emulator version: 0.287.0.0
+2026-05-25 18:02:45.710 [INFO]      [Generator] Screen[0]: L=0 T=0 W=1920 H=1080 Primary=True
+2026-05-25 18:02:45.711 [INFO]      [Generator] Screen[1]: L=-1920 T=0 W=1920 H=1080 Primary=False
+2026-05-25 18:02:45.765 [INFO]      [Startup] Loading Controller configuration.
+2026-05-25 18:02:46.226 [INFO]      [Generator] Using Mame64Generator
+2026-05-25 18:02:46.282 [INFO]      [Generator] Loading features.
+2026-05-25 18:02:46.288 [INFO]      [INFO] Checking for existing MameHook process
+2026-05-25 18:02:46.325 [INFO]      [INFO] Creating controller configuration for MAME
+2026-05-25 18:02:46.452 [INFO]      [RawLightGun] -> Gaming Keyboard (Mouse) -> Priority : 1000
+2026-05-25 18:02:46.452 [INFO]      [RawLightGun] ->  (Mouse) -> Priority : 1001
+2026-05-25 18:02:46.530 [INFO]      [SdlGameController] 1 SDL controller(s) connected
+2026-05-25 18:02:46.537 [INFO]      [SdlGameController] Loading SDL controller mapping : 0 => 0300B9695E0400008E02000000007200, Xbox 360 Controller, USB\VID_045E&PID_028E&IG_00\2&DEE0F28&0&00
+2026-05-25 18:02:46.622 [INFO]      [INFO] gamecontrollerdb.txt file not found in tools folder.
+2026-05-25 18:02:46.638 [INFO]      [PadToKey] Loaded C:\tmp\RIESCADE OS\.emulatorlauncher\.emulationstation\es_padtokey.cfg
+2026-05-25 18:02:46.642 [INFO]      [Running] C:\tmp\RIESCADE OS\emulators\mame\mame.exe -skip_gameinfo -rp "C:\tmp\RIESCADE OS\roms\arcade" -sp "C:\tmp\RIESCADE OS\bios\mame\samples" -artpath "C:\tmp\RIESCADE OS\bios\mame\artwork;C:\tmp\RIESCADE OS\emulators\mame\artwork;mame\artwork" -cfg_directory mame\cfg -inipath "C:\tmp\RIESCADE OS\bios\mame\ini" -hash "C:\tmp\RIESCADE OS\bios\mame\hash" -state_directory mame\states -nvram_directory mame\nvram -ctrlrpath mame\ctrlr -noflt -v -throttle -sound dsound -video d3d -resolution auto -ka -waitvsync -mouse_device mouse -ui_mouse -pedal_device joystick -lightgun_device mouse -mouse -paddle_device none -adstick_device joystick -positional_device none -trackball_device none -dial_device none -joystickprovider winhybrid -ctrlr retrobat_auto -multimouse -ui_active 88games
+2026-05-25 18:02:47.816 [INFO]      [Generator] Process exited with code 3
+2026-05-25 18:02:47.829 [INFO]      [Generator] Cleanup.
+2026-05-25 18:02:47.829 [ERROR]     [Generator] Exit code 200
+2026-05-25 18:02:52.944 [INFO]      --------------------------------------------------------------
+2026-05-25 18:02:52.945 [INFO]      [Startup] "C:\tmp\RIESCADE OS\.emulatorlauncher\emulatorLauncher.exe"  -gameinfo "C:\Users\MARCOR~1\AppData\Local\Temp\riescade.tmp\game.xml" -system arcade -emulator libretro -core mame -rom "C:\tmp\RIESCADE OS\roms\arcade\10yard.zip"
+2026-05-25 18:02:52.946 [INFO]      [Startup] Loading configuration.
+2026-05-25 18:02:52.949 [INFO]      [Startup] Loading ES settings.
+2026-05-25 18:02:52.955 [INFO]      [Startup] Retrobat version : not found
+2026-05-25 18:02:53.028 [INFO]      [Startup] Emulator version: 1.22.2.0
+2026-05-25 18:02:53.031 [INFO]      [Generator] Screen[0]: L=0 T=0 W=1920 H=1080 Primary=True
+2026-05-25 18:02:53.031 [INFO]      [Generator] Screen[1]: L=-1920 T=0 W=1920 H=1080 Primary=False
+2026-05-25 18:02:53.055 [INFO]      [Game] 10-Yard Fight
+2026-05-25 18:02:53.060 [INFO]      [Startup] Loading Controller configuration.
+2026-05-25 18:02:53.538 [INFO]      [Generator] Using LibRetroGenerator
+2026-05-25 18:02:53.606 [INFO]      [Generator] Loading features.
+2026-05-25 18:02:53.634 [INFO]      [INFO] Checking core update availability
+2026-05-25 18:02:54.585 [INFO]      [INFO] Configuring core options in retroarch-core-options file.
+2026-05-25 18:02:54.726 [INFO]      [INFO] Configuring Input Remap file in retroarch\config\remaps\MAME
+2026-05-25 18:02:54.835 [INFO]      [Running] C:\tmp\RIESCADE OS\emulators\retroarch\retroarch.exe --log-file "C:\tmp\RIESCADE OS\.emulatorlauncher\.emulationstation\es_launch_stdout.log" -verbose -L "C:\tmp\RIESCADE OS\emulators\retroarch\cores\mame_libretro.dll" "C:\tmp\RIESCADE OS\roms\arcade\10yard.zip"
+2026-05-25 18:03:10.091 [INFO]      [Generator] Process exited with code 0
+2026-05-25 18:03:10.097 [INFO]      [Generator] Cleanup.
+2026-05-25 18:03:17.316 [INFO]      --------------------------------------------------------------
+2026-05-25 18:03:17.317 [INFO]      [Startup] "C:\tmp\RIESCADE OS\.emulatorlauncher\emulatorLauncher.exe"  -gameinfo "C:\Users\MARCOR~1\AppData\Local\Temp\riescade.tmp\game.xml" -system arcade -emulator mame64 -core  -rom "C:\tmp\RIESCADE OS\roms\arcade\88games.zip"
+2026-05-25 18:03:17.318 [INFO]      [Startup] Loading configuration.
+2026-05-25 18:03:17.321 [INFO]      [Startup] Loading ES settings.
+2026-05-25 18:03:17.325 [INFO]      [Startup] Retrobat version : not found
+2026-05-25 18:03:17.374 [INFO]      [Startup] Emulator version: 0.287.0.0
+2026-05-25 18:03:17.377 [INFO]      [Generator] Screen[0]: L=0 T=0 W=1920 H=1080 Primary=True
+2026-05-25 18:03:17.378 [INFO]      [Generator] Screen[1]: L=-1920 T=0 W=1920 H=1080 Primary=False
+2026-05-25 18:03:17.433 [INFO]      [Startup] Loading Controller configuration.
+2026-05-25 18:03:17.920 [INFO]      [Generator] Using Mame64Generator
+2026-05-25 18:03:17.968 [INFO]      [Generator] Loading features.
+2026-05-25 18:03:17.973 [INFO]      [INFO] Checking for existing MameHook process
+2026-05-25 18:03:18.012 [INFO]      [INFO] Creating controller configuration for MAME
+2026-05-25 18:03:18.138 [INFO]      [RawLightGun] -> Gaming Keyboard (Mouse) -> Priority : 1000
+2026-05-25 18:03:18.139 [INFO]      [RawLightGun] ->  (Mouse) -> Priority : 1001
+2026-05-25 18:03:18.226 [INFO]      [SdlGameController] 1 SDL controller(s) connected
+2026-05-25 18:03:18.233 [INFO]      [SdlGameController] Loading SDL controller mapping : 0 => 0300B9695E0400008E02000000007200, Xbox 360 Controller, USB\VID_045E&PID_028E&IG_00\2&DEE0F28&0&00
+2026-05-25 18:03:18.328 [INFO]      [INFO] gamecontrollerdb.txt file not found in tools folder.
+2026-05-25 18:03:18.340 [INFO]      [PadToKey] Loaded C:\tmp\RIESCADE OS\.emulatorlauncher\.emulationstation\es_padtokey.cfg
+2026-05-25 18:03:18.343 [INFO]      [Running] C:\tmp\RIESCADE OS\emulators\mame\mame.exe -skip_gameinfo -rp "C:\tmp\RIESCADE OS\roms\arcade" -sp "C:\tmp\RIESCADE OS\bios\mame\samples" -artpath "C:\tmp\RIESCADE OS\bios\mame\artwork;C:\tmp\RIESCADE OS\emulators\mame\artwork;mame\artwork" -cfg_directory mame\cfg -inipath "C:\tmp\RIESCADE OS\bios\mame\ini" -hash "C:\tmp\RIESCADE OS\bios\mame\hash" -state_directory mame\states -nvram_directory mame\nvram -ctrlrpath mame\ctrlr -noflt -v -throttle -sound dsound -video d3d -resolution auto -ka -waitvsync -mouse_device mouse -ui_mouse -pedal_device joystick -lightgun_device mouse -mouse -paddle_device none -adstick_device joystick -positional_device none -trackball_device none -dial_device none -joystickprovider winhybrid -ctrlr retrobat_auto -multimouse -ui_active 88games
+2026-05-25 18:03:19.536 [INFO]      [Generator] Process exited with code 3
+2026-05-25 18:03:19.568 [INFO]      [Generator] Cleanup.
+2026-05-25 18:03:19.568 [ERROR]     [Generator] Exit code 200
+2026-05-25 18:05:20.064 [INFO]      --------------------------------------------------------------
+2026-05-25 18:05:20.065 [INFO]      [Startup] "C:\tmp\RIESCADE OS\.emulatorlauncher\emulatorLauncher.exe"  -gameinfo "C:\Users\MARCOR~1\AppData\Local\Temp\riescade.tmp\game.xml" -system arcade -emulator libretro -core mame -rom "C:\tmp\RIESCADE OS\roms\arcade\10yard.zip"
+2026-05-25 18:05:20.065 [INFO]      [Startup] Loading configuration.
+2026-05-25 18:05:20.068 [INFO]      [Startup] Loading ES settings.
+2026-05-25 18:05:20.072 [INFO]      [Startup] Retrobat version : not found
+2026-05-25 18:05:20.109 [INFO]      [Startup] Emulator version: 1.22.2.0
+2026-05-25 18:05:20.111 [INFO]      [Generator] Screen[0]: L=0 T=0 W=1920 H=1080 Primary=True
+2026-05-25 18:05:20.111 [INFO]      [Generator] Screen[1]: L=-1920 T=0 W=1920 H=1080 Primary=False
+2026-05-25 18:05:20.131 [INFO]      [Game] 10-Yard Fight
+2026-05-25 18:05:20.135 [INFO]      [Startup] Loading Controller configuration.
+2026-05-25 18:05:20.598 [INFO]      [Generator] Using LibRetroGenerator
+2026-05-25 18:05:20.661 [INFO]      [Generator] Loading features.
+2026-05-25 18:05:20.669 [INFO]      [INFO] Checking core update availability
+2026-05-25 18:05:20.836 [INFO]      [INFO] Configuring core options in retroarch-core-options file.
+2026-05-25 18:05:20.977 [INFO]      [INFO] Configuring Input Remap file in retroarch\config\remaps\MAME
+2026-05-25 18:05:21.060 [INFO]      [Running] C:\tmp\RIESCADE OS\emulators\retroarch\retroarch.exe --log-file "C:\tmp\RIESCADE OS\.emulatorlauncher\.emulationstation\es_launch_stdout.log" -verbose -L "C:\tmp\RIESCADE OS\emulators\retroarch\cores\mame_libretro.dll" "C:\tmp\RIESCADE OS\roms\arcade\10yard.zip"
+2026-05-25 18:05:34.030 [INFO]      [Generator] Process exited with code 0
+2026-05-25 18:05:34.042 [INFO]      [Generator] Cleanup.
+2026-05-25 18:05:57.656 [INFO]      --------------------------------------------------------------
+2026-05-25 18:05:57.657 [INFO]      [Startup] "C:\tmp\RIESCADE OS\.emulatorlauncher\emulatorLauncher.exe"  -gameinfo "C:\Users\MARCOR~1\AppData\Local\Temp\riescade.tmp\game.xml" -system arcade -emulator libretro -core mame -rom "C:\tmp\RIESCADE OS\roms\arcade\10yard.zip"
+2026-05-25 18:05:57.657 [INFO]      [Startup] Loading configuration.
+2026-05-25 18:05:57.660 [INFO]      [Startup] Loading ES settings.
+2026-05-25 18:05:57.665 [INFO]      [Startup] Retrobat version : not found
+2026-05-25 18:05:57.705 [INFO]      [Startup] Emulator version: 1.22.2.0
+2026-05-25 18:05:57.707 [INFO]      [Generator] Screen[0]: L=0 T=0 W=1920 H=1080 Primary=True
+2026-05-25 18:05:57.707 [INFO]      [Generator] Screen[1]: L=-1920 T=0 W=1920 H=1080 Primary=False
+2026-05-25 18:05:57.730 [INFO]      [Game] 10-Yard Fight
+2026-05-25 18:05:57.733 [INFO]      [Startup] Loading Controller configuration.
+2026-05-25 18:05:58.188 [INFO]      [Generator] Using LibRetroGenerator
+2026-05-25 18:05:58.253 [INFO]      [Generator] Loading features.
+2026-05-25 18:05:58.262 [INFO]      [INFO] Checking core update availability
+2026-05-25 18:05:58.434 [INFO]      [INFO] Configuring core options in retroarch-core-options file.
+2026-05-25 18:05:58.577 [INFO]      [INFO] Configuring Input Remap file in retroarch\config\remaps\MAME
+2026-05-25 18:05:58.623 [INFO]      [Running] C:\tmp\RIESCADE OS\emulators\retroarch\retroarch.exe --log-file "C:\tmp\RIESCADE OS\.emulatorlauncher\.emulationstation\es_launch_stdout.log" -verbose -L "C:\tmp\RIESCADE OS\emulators\retroarch\cores\mame_libretro.dll" "C:\tmp\RIESCADE OS\roms\arcade\10yard.zip"
+2026-05-25 18:06:02.284 [INFO]      [Generator] Process exited with code 0
+2026-05-25 18:06:02.301 [INFO]      [Generator] Cleanup.
+2026-05-25 18:46:47.338 [INFO]      --------------------------------------------------------------
+2026-05-25 18:46:47.338 [INFO]      [Startup] "C:\tmp\RIESCADE OS\.emulatorlauncher\emulatorLauncher.exe"  -gameinfo "C:\Users\MARCOR~1\AppData\Local\Temp\riescade.tmp\game.xml" -system switch -emulator citron -core  -rom "C:\tmp\RIESCADE OS\roms\switch\The Legend of Zelda Tears of the Kingdom.xci"
+2026-05-25 18:46:47.339 [INFO]      [Startup] Loading configuration.
+2026-05-25 18:46:47.343 [INFO]      [Startup] Loading ES settings.
+2026-05-25 18:46:47.347 [INFO]      [Startup] Retrobat version : not found
+2026-05-25 18:46:47.422 [INFO]      [Startup] Emulator version: 0.26.04.07
+2026-05-25 18:46:47.424 [INFO]      [Generator] Screen[0]: L=0 T=0 W=1920 H=1080 Primary=True
+2026-05-25 18:46:47.425 [INFO]      [Generator] Screen[1]: L=-1920 T=0 W=1920 H=1080 Primary=False
+2026-05-25 18:46:47.445 [INFO]      [Game] The Legend of Zelda: Tears of the Kingdom
+2026-05-25 18:46:47.449 [INFO]      [Startup] Loading Controller configuration.
+2026-05-25 18:46:48.862 [INFO]      [Generator] Using CitronGenerator
+2026-05-25 18:46:48.932 [INFO]      [Generator] Loading features.
+2026-05-25 18:46:48.937 [INFO]      [Generator] Getting citron path and executable name.
+2026-05-25 18:46:49.050 [INFO]      [INFO] Creating controller configuration for Citron
+2026-05-25 18:46:49.193 [INFO]      [SdlGameController] 1 SDL controller(s) connected
+2026-05-25 18:46:49.201 [INFO]      [SdlGameController] Loading SDL controller mapping : 0 => 0300B9695E0400008E02000000007200, Xbox 360 Controller, USB\VID_045E&PID_028E&IG_00\2&DEE0F28&0&00
+2026-05-25 18:46:52.841 [INFO]      [PadToKey] Loaded C:\tmp\RIESCADE OS\.emulatorlauncher\.emulationstation\es_padtokey.cfg
+2026-05-25 18:46:52.844 [INFO]      [Running] C:\tmp\RIESCADE OS\emulators\citron\citron.exe -f -g "C:\tmp\RIESCADE OS\roms\switch\The Legend of Zelda Tears of the Kingdom.xci"
+2026-05-25 18:47:05.108 [INFO]      [Generator] Cleanup.
+2026-05-25 18:48:07.262 [INFO]      --------------------------------------------------------------
+2026-05-25 18:48:07.264 [INFO]      [Startup] "C:\tmp\RIESCADE OS\.emulatorlauncher\emulatorLauncher.exe"  -gameinfo "C:\Users\MARCOR~1\AppData\Local\Temp\riescade.tmp\game.xml" -system switch -emulator eden -core  -rom "C:\tmp\RIESCADE OS\roms\switch\The Legend of Zelda Tears of the Kingdom.xci"
+2026-05-25 18:48:07.264 [INFO]      [Startup] Loading configuration.
+2026-05-25 18:48:07.270 [INFO]      [Startup] Loading ES settings.
+2026-05-25 18:48:07.277 [INFO]      [Startup] Retrobat version : not found
+2026-05-25 18:48:07.528 [INFO]      [Generator] Screen[0]: L=0 T=0 W=1920 H=1080 Primary=True
+2026-05-25 18:48:07.528 [INFO]      [Generator] Screen[1]: L=-1920 T=0 W=1920 H=1080 Primary=False
+2026-05-25 18:48:07.548 [INFO]      [Game] The Legend of Zelda: Tears of the Kingdom
+2026-05-25 18:48:07.551 [INFO]      [Startup] Loading Controller configuration.
+2026-05-25 18:48:08.496 [INFO]      [Generator] Using EdenGenerator
+2026-05-25 18:48:08.546 [INFO]      [Generator] Loading features.
+2026-05-25 18:48:08.551 [INFO]      [Generator] Getting eden path and executable name.
+2026-05-25 18:48:08.678 [INFO]      [INFO] Creating controller configuration for Eden
+2026-05-25 18:48:08.828 [INFO]      [SdlGameController] 1 SDL controller(s) connected
+2026-05-25 18:48:08.836 [INFO]      [SdlGameController] Loading SDL controller mapping : 0 => 0300B9695E0400008E02000000007200, Xbox 360 Controller, USB\VID_045E&PID_028E&IG_00\2&DEE0F28&0&00
+2026-05-25 18:48:12.450 [INFO]      [PadToKey] Loaded C:\tmp\RIESCADE OS\.emulatorlauncher\.emulationstation\es_padtokey.cfg
+2026-05-25 18:48:12.454 [INFO]      [Running] C:\tmp\RIESCADE OS\emulators\eden\eden.exe -f -g "C:\tmp\RIESCADE OS\roms\switch\The Legend of Zelda Tears of the Kingdom.xci"
+2026-05-25 18:48:57.342 [INFO]      [Generator] Cleanup.
+2026-05-25 19:02:35.837 [INFO]      --------------------------------------------------------------
+2026-05-25 19:02:35.838 [INFO]      [Startup] "C:\tmp\RIESCADE OS\.emulatorlauncher\emulatorLauncher.exe"  -gameinfo "C:\Users\MARCOR~1\AppData\Local\Temp\riescade.tmp\game.xml" -system arcade -emulator libretro -core mame -rom "C:\tmp\RIESCADE OS\roms\arcade\sonicwi3.zip"
+2026-05-25 19:02:35.838 [INFO]      [Startup] Loading configuration.
+2026-05-25 19:02:35.840 [INFO]      [Startup] Loading ES settings.
+2026-05-25 19:02:35.844 [INFO]      [Startup] Retrobat version : not found
+2026-05-25 19:02:35.897 [INFO]      [Startup] Emulator version: 1.22.2.0
+2026-05-25 19:02:35.901 [INFO]      [Generator] Screen[0]: L=0 T=0 W=1920 H=1080 Primary=True
+2026-05-25 19:02:35.902 [INFO]      [Generator] Screen[1]: L=-1920 T=0 W=1920 H=1080 Primary=False
+2026-05-25 19:02:35.919 [INFO]      [Game] Aero Fighters 3
+2026-05-25 19:02:35.925 [INFO]      [Startup] Loading Controller configuration.
+2026-05-25 19:02:36.399 [INFO]      [Generator] Using LibRetroGenerator
+2026-05-25 19:02:36.446 [INFO]      [Generator] Loading features.
+2026-05-25 19:02:36.459 [INFO]      [INFO] Checking core update availability
+2026-05-25 19:02:36.646 [INFO]      [INFO] Configuring core options in retroarch-core-options file.
+2026-05-25 19:02:36.786 [INFO]      [INFO] Configuring Input Remap file in retroarch\config\remaps\MAME
+2026-05-25 19:02:36.847 [INFO]      [Running] C:\tmp\RIESCADE OS\emulators\retroarch\retroarch.exe --log-file "C:\tmp\RIESCADE OS\.emulatorlauncher\.emulationstation\es_launch_stdout.log" -verbose -L "C:\tmp\RIESCADE OS\emulators\retroarch\cores\mame_libretro.dll" "C:\tmp\RIESCADE OS\roms\arcade\sonicwi3.zip"
+2026-05-25 19:02:42.033 [INFO]      [Generator] Process exited with code 0
+2026-05-25 19:02:42.036 [INFO]      [Generator] Cleanup.
+2026-05-25 19:05:23.027 [INFO]      --------------------------------------------------------------
+2026-05-25 19:05:23.027 [INFO]      [Startup] "C:\tmp\RIESCADE OS\.emulatorlauncher\emulatorLauncher.exe"  -gameinfo "C:\Users\MARCOR~1\AppData\Local\Temp\riescade.tmp\game.xml" -system Windows -emulator windows -core  -rom "C:\tmp\RIESCADE OS\roms\Windows\Army of Ruin.wsquashfs"
+2026-05-25 19:05:23.027 [INFO]      [Startup] Loading configuration.
+2026-05-25 19:05:23.034 [INFO]      [Startup] Loading ES settings.
+2026-05-25 19:05:23.038 [INFO]      [Startup] Retrobat version : not found
+2026-05-25 19:05:23.105 [INFO]      [Generator] Screen[0]: L=0 T=0 W=1920 H=1080 Primary=True
+2026-05-25 19:05:23.105 [INFO]      [Generator] Screen[1]: L=-1920 T=0 W=1920 H=1080 Primary=False
+2026-05-25 19:05:23.125 [INFO]      [Game] Army of Ruin
+2026-05-25 19:05:23.129 [INFO]      [Startup] Loading Controller configuration.
+2026-05-25 19:05:23.141 [INFO]      [Generator] Using ExeLauncherGenerator
+2026-05-25 19:05:23.184 [INFO]      [Generator] Loading features.
+2026-05-25 19:05:23.195 [INFO]      [GENERATOR] winfsp not found, using dokan for mounting drive.
+2026-05-25 19:05:23.668 [INFO]      [INFO] Executable name : ArmyOfRuin
+2026-05-25 19:05:23.683 [INFO]      [PadToKey] Loaded C:\tmp\RIESCADE OS\.emulatorlauncher\.emulationstation\es_padtokey.cfg
+2026-05-25 19:05:23.687 [INFO]      [Running] Z:\ArmyOfRuin.exe 
+2026-05-25 19:05:23.741 [INFO]      [INFO] Starting process, waiting 30 seconds for the game to run before returning to Game List
+2026-05-25 19:05:23.856 [INFO]      Process started : ArmyOfRuin
+2026-05-25 19:05:27.874 [INFO]      Process : ArmyOfRuin found, waiting to exit
+2026-05-25 19:10:11.344 [INFO]      [Generator] Cleanup.
+2026-05-25 19:10:11.344 [INFO]      [Generator] Directory.Delete(C:\Users\marcoriesco\AppData\Local\Temp\.uncompressed\Army of Ruin.wsquashfs, true)
+2026-05-25 20:13:45.775 [INFO]      --------------------------------------------------------------
+2026-05-25 20:13:45.776 [INFO]      [Startup] "C:\tmp\RIESCADE OS\.emulatorlauncher\emulatorLauncher.exe"  -gameinfo "C:\Users\MARCOR~1\AppData\Local\Temp\riescade.tmp\game.xml" -system arcade -emulator libretro -core mame -rom "C:\tmp\RIESCADE OS\roms\arcade\88games.zip"
+2026-05-25 20:13:45.776 [INFO]      [Startup] Loading configuration.
+2026-05-25 20:13:45.779 [INFO]      [Startup] Loading ES settings.
+2026-05-25 20:13:45.784 [INFO]      [Startup] Retrobat version : not found
+2026-05-25 20:13:45.821 [INFO]      [Startup] Emulator version: 1.22.2.0
+2026-05-25 20:13:45.823 [INFO]      [Generator] Screen[0]: L=0 T=0 W=1920 H=1080 Primary=True
+2026-05-25 20:13:45.823 [INFO]      [Generator] Screen[1]: L=-1920 T=0 W=1920 H=1080 Primary=False
+2026-05-25 20:13:45.876 [INFO]      [Startup] Loading Controller configuration.
+2026-05-25 20:13:46.387 [INFO]      [Generator] Using LibRetroGenerator
+2026-05-25 20:13:46.471 [INFO]      [Generator] Loading features.
+2026-05-25 20:13:46.481 [INFO]      [INFO] Checking core update availability
+2026-05-25 20:13:46.682 [INFO]      [INFO] Configuring core options in retroarch-core-options file.
+2026-05-25 20:13:46.847 [INFO]      [INFO] Configuring Input Remap file in retroarch\config\remaps\MAME
+2026-05-25 20:13:46.902 [INFO]      [Running] C:\tmp\RIESCADE OS\emulators\retroarch\retroarch.exe --log-file "C:\tmp\RIESCADE OS\.emulatorlauncher\.emulationstation\es_launch_stdout.log" -verbose -L "C:\tmp\RIESCADE OS\emulators\retroarch\cores\mame_libretro.dll" "C:\tmp\RIESCADE OS\roms\arcade\88games.zip"
+2026-05-25 20:13:51.639 [INFO]      [Generator] Process exited with code 0
+2026-05-25 20:13:51.686 [INFO]      [Generator] Cleanup.
+2026-05-25 20:39:27.161 [INFO]      --------------------------------------------------------------
+2026-05-25 20:39:27.162 [INFO]      [Startup] "C:\tmp\RIESCADE OS\.emulatorlauncher\emulatorLauncher.exe"  -gameinfo "C:\Users\MARCOR~1\AppData\Local\Temp\riescade.tmp\game.xml" -system switch -emulator eden -core  -rom "C:\tmp\RIESCADE OS\roms\switch\Crash Team Racing Nitro-Fueled.xci"
+2026-05-25 20:39:27.163 [INFO]      [Startup] Loading configuration.
+2026-05-25 20:39:27.166 [INFO]      [Startup] Loading ES settings.
+2026-05-25 20:39:27.171 [INFO]      [Startup] Retrobat version : not found
+2026-05-25 20:39:27.339 [INFO]      [Startup] Emulator version: 0.2.0
+2026-05-25 20:39:27.341 [INFO]      [Generator] Screen[0]: L=0 T=0 W=1920 H=1080 Primary=True
+2026-05-25 20:39:27.341 [INFO]      [Generator] Screen[1]: L=-1920 T=0 W=1920 H=1080 Primary=False
+2026-05-25 20:39:27.362 [INFO]      [Game] Crash Team Racing Nitro-Fueled
+2026-05-25 20:39:27.366 [INFO]      [Startup] Loading Controller configuration.
+2026-05-25 20:39:28.893 [INFO]      [Generator] Using EdenGenerator
+2026-05-25 20:39:28.952 [INFO]      [Generator] Loading features.
+2026-05-25 20:39:28.956 [INFO]      [Generator] Getting eden path and executable name.
+2026-05-25 20:39:29.060 [INFO]      [INFO] Creating controller configuration for Eden
+2026-05-25 20:39:29.232 [INFO]      [SdlGameController] 1 SDL controller(s) connected
+2026-05-25 20:39:29.239 [INFO]      [SdlGameController] Loading SDL controller mapping : 0 => 0300B9695E0400008E02000000007200, Xbox 360 Controller, USB\VID_045E&PID_028E&IG_01\2&DEE0F28&0&01
+2026-05-25 20:39:29.389 [INFO]      [PadToKey] Loaded C:\tmp\RIESCADE OS\.emulatorlauncher\.emulationstation\es_padtokey.cfg
+2026-05-25 20:39:29.395 [INFO]      [Running] C:\tmp\RIESCADE OS\emulators\eden\eden.exe -f -g "C:\tmp\RIESCADE OS\roms\switch\Crash Team Racing Nitro-Fueled.xci"
+2026-05-25 20:41:28.866 [INFO]      [Generator] Cleanup.
+2026-05-25 21:03:50.022 [INFO]      --------------------------------------------------------------
+2026-05-25 21:03:50.023 [INFO]      [Startup] "C:\tmp\RIESCADE OS\.emulatorlauncher\emulatorLauncher.exe"  -gameinfo "C:\Users\MARCOR~1\AppData\Local\Temp\riescade.tmp\game.xml" -system xbox360 -emulator xenia-canary -core  -rom "C:\tmp\RIESCADE OS\roms\xbox360\DarkSiders 2.iso"
+2026-05-25 21:03:50.024 [INFO]      [Startup] Loading configuration.
+2026-05-25 21:03:50.026 [INFO]      [Startup] Loading ES settings.
+2026-05-25 21:03:50.030 [INFO]      [Startup] Retrobat version : not found
+2026-05-25 21:03:50.079 [INFO]      [Startup] Emulator version: 0.26.05.19
+2026-05-25 21:03:50.081 [INFO]      [Generator] Screen[0]: L=0 T=0 W=1920 H=1080 Primary=True
+2026-05-25 21:03:50.081 [INFO]      [Generator] Screen[1]: L=-1920 T=0 W=1920 H=1080 Primary=False
+2026-05-25 21:03:50.099 [INFO]      [Game] Darksiders II
+2026-05-25 21:03:50.102 [INFO]      [Startup] Loading Controller configuration.
+2026-05-25 21:03:50.553 [INFO]      [Generator] Using XeniaGenerator
+2026-05-25 21:03:50.622 [INFO]      [Generator] Loading features.
+2026-05-25 21:03:50.626 [INFO]      [Generator] Getting xenia-canary path and executable name.
+2026-05-25 21:03:51.065 [INFO]      [Generator] Writing RetroBat configuration to .toml config file.
+2026-05-25 21:03:51.098 [INFO]      [Generator] Setting 'C:\tmp\RIESCADE OS\emulators\xenia-canary\content' as content path for the emulator
+2026-05-25 21:03:51.109 [INFO]      [PadToKey] Loaded C:\tmp\RIESCADE OS\.emulatorlauncher\.emulationstation\es_padtokey.cfg
+2026-05-25 21:03:51.112 [INFO]      [Running] C:\tmp\RIESCADE OS\emulators\xenia-canary\xenia_canary.exe --fullscreen "C:\tmp\RIESCADE OS\roms\xbox360\DarkSiders 2.iso"
+2026-05-25 21:04:04.509 [INFO]      [Generator] Process exited with code 0
+2026-05-25 21:04:04.560 [INFO]      [Generator] Cleanup.
+2026-05-25 21:04:26.875 [INFO]      --------------------------------------------------------------
+2026-05-25 21:04:26.877 [INFO]      [Startup] "C:\tmp\RIESCADE OS\.emulatorlauncher\emulatorLauncher.exe"  -gameinfo "C:\Users\MARCOR~1\AppData\Local\Temp\riescade.tmp\game.xml" -system arcade -emulator libretro -core mame -rom "C:\tmp\RIESCADE OS\roms\arcade\avsp.zip"
+2026-05-25 21:04:26.877 [INFO]      [Startup] Loading configuration.
+2026-05-25 21:04:26.880 [INFO]      [Startup] Loading ES settings.
+2026-05-25 21:04:26.883 [INFO]      [Startup] Retrobat version : not found
+2026-05-25 21:04:26.939 [INFO]      [Startup] Emulator version: 1.22.2.0
+2026-05-25 21:04:26.940 [INFO]      [Generator] Screen[0]: L=0 T=0 W=1920 H=1080 Primary=True
+2026-05-25 21:04:26.941 [INFO]      [Generator] Screen[1]: L=-1920 T=0 W=1920 H=1080 Primary=False
+2026-05-25 21:04:26.960 [INFO]      [Game] Alien vs. Predator
+2026-05-25 21:04:26.965 [INFO]      [Startup] Loading Controller configuration.
+2026-05-25 21:04:27.439 [INFO]      [Generator] Using LibRetroGenerator
+2026-05-25 21:04:27.517 [INFO]      [Generator] Loading features.
+2026-05-25 21:04:27.525 [INFO]      [INFO] Checking core update availability
+2026-05-25 21:04:27.695 [INFO]      [INFO] Configuring core options in retroarch-core-options file.
+2026-05-25 21:04:27.852 [INFO]      [INFO] Configuring Input Remap file in retroarch\config\remaps\MAME
+2026-05-25 21:04:27.915 [INFO]      [Running] C:\tmp\RIESCADE OS\emulators\retroarch\retroarch.exe --log-file "C:\tmp\RIESCADE OS\.emulatorlauncher\.emulationstation\es_launch_stdout.log" -verbose -L "C:\tmp\RIESCADE OS\emulators\retroarch\cores\mame_libretro.dll" "C:\tmp\RIESCADE OS\roms\arcade\avsp.zip"
+2026-05-25 21:04:53.537 [INFO]      [Generator] Process exited with code 0
+2026-05-25 21:04:53.550 [INFO]      [Generator] Cleanup.
+2026-05-25 21:09:39.245 [INFO]      --------------------------------------------------------------
+2026-05-25 21:09:39.245 [INFO]      [Startup] "C:\tmp\RIESCADE OS\.emulatorlauncher\emulatorLauncher.exe"  -gameinfo "C:\Users\MARCOR~1\AppData\Local\Temp\riescade.tmp\game.xml" -system arcade -emulator libretro -core mame -rom "C:\tmp\RIESCADE OS\roms\arcade\gtmrusa.zip"
+2026-05-25 21:09:39.247 [INFO]      [Startup] Loading configuration.
+2026-05-25 21:09:39.251 [INFO]      [Startup] Loading ES settings.
+2026-05-25 21:09:39.256 [INFO]      [Startup] Retrobat version : not found
+2026-05-25 21:09:39.434 [INFO]      [Startup] Emulator version: 1.22.2.0
+2026-05-25 21:09:39.436 [INFO]      [Generator] Screen[0]: L=0 T=0 W=1920 H=1080 Primary=True
+2026-05-25 21:09:39.436 [INFO]      [Generator] Screen[1]: L=-1920 T=0 W=1920 H=1080 Primary=False
+2026-05-25 21:09:39.461 [INFO]      [Game] 1000 Miglia : Great 1000 Miles Rally
+2026-05-25 21:09:39.465 [INFO]      [Startup] Loading Controller configuration.
+2026-05-25 21:09:39.934 [INFO]      [Generator] Using LibRetroGenerator
+2026-05-25 21:09:39.992 [INFO]      [Generator] Loading features.
+2026-05-25 21:09:40.000 [INFO]      [INFO] Checking core update availability
+2026-05-25 21:09:40.184 [INFO]      [INFO] Configuring core options in retroarch-core-options file.
+2026-05-25 21:09:40.324 [INFO]      [INFO] Configuring Input Remap file in retroarch\config\remaps\MAME
+2026-05-25 21:09:40.369 [INFO]      [Running] C:\tmp\RIESCADE OS\emulators\retroarch\retroarch.exe --log-file "C:\tmp\RIESCADE OS\.emulatorlauncher\.emulationstation\es_launch_stdout.log" -verbose -L "C:\tmp\RIESCADE OS\emulators\retroarch\cores\mame_libretro.dll" "C:\tmp\RIESCADE OS\roms\arcade\gtmrusa.zip"
+2026-05-25 21:09:53.764 [INFO]      [Generator] Process exited with code 0
+2026-05-25 21:09:53.794 [INFO]      [Generator] Cleanup.
+2026-05-25 21:10:15.090 [INFO]      --------------------------------------------------------------
+2026-05-25 21:10:15.091 [INFO]      [Startup] "C:\tmp\RIESCADE OS\.emulatorlauncher\emulatorLauncher.exe"  -gameinfo "C:\Users\MARCOR~1\AppData\Local\Temp\riescade.tmp\game.xml" -system arcade -emulator libretro -core mame -rom "C:\tmp\RIESCADE OS\roms\arcade\10yard.zip"
+2026-05-25 21:10:15.091 [INFO]      [Startup] Loading configuration.
+2026-05-25 21:10:15.095 [INFO]      [Startup] Loading ES settings.
+2026-05-25 21:10:15.099 [INFO]      [Startup] Retrobat version : not found
+2026-05-25 21:10:15.140 [INFO]      [Startup] Emulator version: 1.22.2.0
+2026-05-25 21:10:15.141 [INFO]      [Generator] Screen[0]: L=0 T=0 W=1920 H=1080 Primary=True
+2026-05-25 21:10:15.142 [INFO]      [Generator] Screen[1]: L=-1920 T=0 W=1920 H=1080 Primary=False
+2026-05-25 21:10:15.162 [INFO]      [Game] 10-Yard Fight
+2026-05-25 21:10:15.166 [INFO]      [Startup] Loading Controller configuration.
+2026-05-25 21:10:15.623 [INFO]      [Generator] Using LibRetroGenerator
+2026-05-25 21:10:15.672 [INFO]      [Generator] Loading features.
+2026-05-25 21:10:15.680 [INFO]      [INFO] Checking core update availability
+2026-05-25 21:10:15.835 [INFO]      [INFO] Configuring core options in retroarch-core-options file.
+2026-05-25 21:10:15.985 [INFO]      [INFO] Configuring Input Remap file in retroarch\config\remaps\MAME
+2026-05-25 21:10:16.029 [INFO]      [Running] C:\tmp\RIESCADE OS\emulators\retroarch\retroarch.exe --log-file "C:\tmp\RIESCADE OS\.emulatorlauncher\.emulationstation\es_launch_stdout.log" -verbose -L "C:\tmp\RIESCADE OS\emulators\retroarch\cores\mame_libretro.dll" "C:\tmp\RIESCADE OS\roms\arcade\10yard.zip"
+2026-05-25 21:10:35.901 [INFO]      [Generator] Process exited with code 0
+2026-05-25 21:10:35.933 [INFO]      [Generator] Cleanup.
+2026-05-25 21:21:32.775 [INFO]      --------------------------------------------------------------
+2026-05-25 21:21:32.778 [INFO]      [Startup] "C:\tmp\RIESCADE OS\.emulatorlauncher\emulatorLauncher.exe"  -gameinfo "C:\Users\MARCOR~1\AppData\Local\Temp\riescade.tmp\game.xml" -system arcade -emulator libretro -core mame -rom "C:\tmp\RIESCADE OS\roms\arcade\1941.zip"
+2026-05-25 21:21:32.779 [INFO]      [Startup] Loading configuration.
+2026-05-25 21:21:32.782 [INFO]      [Startup] Loading ES settings.
+2026-05-25 21:21:32.788 [INFO]      [Startup] Retrobat version : not found
+2026-05-25 21:21:32.829 [INFO]      [Startup] Emulator version: 1.22.2.0
+2026-05-25 21:21:32.830 [INFO]      [Generator] Screen[0]: L=0 T=0 W=1920 H=1080 Primary=True
+2026-05-25 21:21:32.830 [INFO]      [Generator] Screen[1]: L=-1920 T=0 W=1920 H=1080 Primary=False
+2026-05-25 21:21:32.851 [INFO]      [Game] 1941: Counter Attack
+2026-05-25 21:21:32.854 [INFO]      [Startup] Loading Controller configuration.
+2026-05-25 21:21:33.332 [INFO]      [Generator] Using LibRetroGenerator
+2026-05-25 21:21:33.391 [INFO]      [Generator] Loading features.
+2026-05-25 21:21:33.400 [INFO]      [INFO] Checking core update availability
+2026-05-25 21:21:33.591 [INFO]      [INFO] Configuring core options in retroarch-core-options file.
+2026-05-25 21:21:33.731 [INFO]      [INFO] Configuring Input Remap file in retroarch\config\remaps\MAME
+2026-05-25 21:21:33.776 [INFO]      [Running] C:\tmp\RIESCADE OS\emulators\retroarch\retroarch.exe --log-file "C:\tmp\RIESCADE OS\.emulatorlauncher\.emulationstation\es_launch_stdout.log" -verbose -L "C:\tmp\RIESCADE OS\emulators\retroarch\cores\mame_libretro.dll" "C:\tmp\RIESCADE OS\roms\arcade\1941.zip"
+2026-05-25 21:21:56.723 [INFO]      [Generator] Process exited with code 0
+2026-05-25 21:21:56.738 [INFO]      [Generator] Cleanup.
+2026-05-25 21:22:13.687 [INFO]      --------------------------------------------------------------
+2026-05-25 21:22:13.688 [INFO]      [Startup] "C:\tmp\RIESCADE OS\.emulatorlauncher\emulatorLauncher.exe"  -gameinfo "C:\Users\MARCOR~1\AppData\Local\Temp\riescade.tmp\game.xml" -p1index 0 -p1guid 030000005e0400008e02000000007200 -p1name "Xbox 360 Controller" -p1nbbuttons 17 -p1nbaxes 4 -p1nbhats 1 -p1path "USB\VID_045E&PID_028E\01" -system arcade -emulator libretro -core mame -rom "C:\tmp\RIESCADE OS\roms\arcade\1941.zip"
+2026-05-25 21:22:13.688 [INFO]      [Startup] Loading configuration.
+2026-05-25 21:22:13.692 [INFO]      [Startup] Loading ES settings.
+2026-05-25 21:22:13.697 [INFO]      [Startup] Retrobat version : not found
+2026-05-25 21:22:13.735 [INFO]      [Startup] Emulator version: 1.22.2.0
+2026-05-25 21:22:13.737 [INFO]      [Generator] Screen[0]: L=0 T=0 W=1920 H=1080 Primary=True
+2026-05-25 21:22:13.737 [INFO]      [Generator] Screen[1]: L=-1920 T=0 W=1920 H=1080 Primary=False
+2026-05-25 21:22:13.758 [INFO]      [Game] 1941: Counter Attack
+2026-05-25 21:22:13.762 [INFO]      [Startup] Loading Controller configuration.
+2026-05-25 21:22:14.367 [INFO]      [Generator] Using LibRetroGenerator
+2026-05-25 21:22:14.429 [INFO]      [Generator] Loading features.
+2026-05-25 21:22:14.437 [INFO]      [INFO] Checking core update availability
+2026-05-25 21:22:14.644 [INFO]      [SdlGameController] 1 SDL controller(s) connected
+2026-05-25 21:22:14.650 [INFO]      [SdlGameController] Loading SDL controller mapping : 0 => 0300B9695E0400008E02000000007200, Xbox 360 Controller, USB\VID_045E&PID_028E&IG_01\2&DEE0F28&0&01
+2026-05-25 21:22:14.686 [INFO]      [INFO] Configuring core options in retroarch-core-options file.
+2026-05-25 21:22:14.830 [INFO]      [INFO] Configuring Input Remap file in retroarch\config\remaps\MAME
+2026-05-25 21:22:14.873 [INFO]      [Running] C:\tmp\RIESCADE OS\emulators\retroarch\retroarch.exe --log-file "C:\tmp\RIESCADE OS\.emulatorlauncher\.emulationstation\es_launch_stdout.log" -verbose -L "C:\tmp\RIESCADE OS\emulators\retroarch\cores\mame_libretro.dll" "C:\tmp\RIESCADE OS\roms\arcade\1941.zip"
+2026-05-25 21:22:14.959 [INFO]      [PadToKey] Add joystick Xbox 360 Controller - Device:0, Player:1, Path:USB\VID_045E&PID_028E\01
+2026-05-25 21:22:14.959 [INFO]      [PadToKey] Start listening
+2026-05-25 21:25:06.573 [INFO]      [Generator] Process exited with code 0
+2026-05-25 21:25:06.575 [INFO]      Xbox 360 Controller - Device:0, Player:1, Path:USB\VID_045E&PID_028E\01
+2026-05-25 21:25:06.576 [INFO]      [PadToKey] Exit listening
+2026-05-25 21:25:06.609 [INFO]      [Generator] Cleanup.
+2026-05-26 01:42:17.637 [INFO]      --------------------------------------------------------------
+2026-05-26 01:42:17.639 [INFO]      [Startup] "C:\tmp\RIESCADE OS\.emulatorlauncher\emulatorLauncher.exe"  -gameinfo "C:\Users\MARCOR~1\AppData\Local\Temp\riescade.tmp\game.xml" -system teknoparrot -emulator teknoparrot -core  -rom "C:\tmp\RIESCADE OS\roms\teknoparrot\AkaiKatanaShinNesica.teknoparrot"
+2026-05-26 01:42:17.639 [INFO]      [Startup] Loading configuration.
+2026-05-26 01:42:17.642 [INFO]      [Startup] Loading ES settings.
+2026-05-26 01:42:17.651 [INFO]      [Startup] Retrobat version : not found
+2026-05-26 01:42:19.547 [INFO]      [Startup] Emulator version: 1.0.0.1954
+2026-05-26 01:42:19.550 [INFO]      [Generator] Screen[0]: L=0 T=0 W=1920 H=1080 Primary=True
+2026-05-26 01:42:19.550 [INFO]      [Generator] Screen[1]: L=-1920 T=0 W=1920 H=1080 Primary=False
+2026-05-26 01:42:19.616 [INFO]      [Game] Akai Katana Shin for NESiCAxLive
+2026-05-26 01:42:19.622 [INFO]      [Startup] Loading Controller configuration.
+2026-05-26 01:42:21.797 [INFO]      [Generator] Using TeknoParrotGenerator
+2026-05-26 01:42:21.907 [INFO]      [Generator] Loading features.
+2026-05-26 01:42:22.054 [INFO]      [INFO] Game name : AkaiKatanaShinNesica
+2026-05-26 01:42:24.340 [INFO]      [INFO] Setting up ParrotData.xml
+2026-05-26 01:42:25.345 [INFO]      [INFO] Checking if userprofile exists.
+2026-05-26 01:42:27.024 [INFO]      [INFO] UserProfile already exists.
+2026-05-26 01:42:27.214 [INFO]      [INFO] Check if Gun configuration is required.
+2026-05-26 01:42:27.229 [INFO]      [INFO] Gun configuration not required, configuring controller.
+2026-05-26 01:42:27.760 [INFO]      [PadToKey] Loaded C:\tmp\RIESCADE OS\.emulatorlauncher\.emulationstation\es_padtokey.cfg
+2026-05-26 01:42:28.128 [INFO]      [Running] C:\tmp\RIESCADE OS\emulators\TeknoParrot\TeknoParrotUi.exe --profile=AkaiKatanaShinNesica.xml --startMinimized
+2026-05-26 01:43:04.824 [INFO]      [Generator] Process exited with code 0
+2026-05-26 01:43:04.891 [INFO]      [Generator] Cleanup.
+2026-05-26 01:43:56.158 [INFO]      --------------------------------------------------------------
+2026-05-26 01:43:56.160 [INFO]      [Startup] "C:\tmp\RIESCADE OS\.emulatorlauncher\emulatorLauncher.exe"  -gameinfo "C:\Users\MARCOR~1\AppData\Local\Temp\riescade.tmp\game.xml" -system snes -emulator libretro -core snes9x -rom "C:\tmp\RIESCADE OS\roms\snes\Aaahh!!! Real Monsters (USA).zip"
+2026-05-26 01:43:56.160 [INFO]      [Startup] Loading configuration.
+2026-05-26 01:43:56.163 [INFO]      [Startup] Loading ES settings.
+2026-05-26 01:43:56.171 [INFO]      [Startup] Retrobat version : not found
+2026-05-26 01:43:57.241 [INFO]      [Startup] Emulator version: 1.22.2.0
+2026-05-26 01:43:57.243 [INFO]      [Generator] Screen[0]: L=0 T=0 W=1920 H=1080 Primary=True
+2026-05-26 01:43:57.244 [INFO]      [Generator] Screen[1]: L=-1920 T=0 W=1920 H=1080 Primary=False
+2026-05-26 01:43:57.262 [INFO]      [Game] Aaahh!!! Real Monsters
+2026-05-26 01:43:57.266 [INFO]      [Startup] Loading Controller configuration.
+2026-05-26 01:43:57.732 [INFO]      [Generator] Using LibRetroGenerator
+2026-05-26 01:43:57.781 [INFO]      [Generator] Loading features.
+2026-05-26 01:43:58.760 [INFO]      [INFO] Checking core update availability
+2026-05-26 01:44:01.350 [INFO]      [INFO] Configuring core options in retroarch-core-options file.
+2026-05-26 01:44:01.480 [INFO]      [INFO] Configuring Input Remap file in retroarch\config\remaps\Snes9x
+2026-05-26 01:44:01.524 [INFO]      [Running] C:\tmp\RIESCADE OS\emulators\retroarch\retroarch.exe --log-file "C:\tmp\RIESCADE OS\.emulatorlauncher\.emulationstation\es_launch_stdout.log" -verbose -L "C:\tmp\RIESCADE OS\emulators\retroarch\cores\snes9x_libretro.dll" "C:\tmp\RIESCADE OS\roms\snes\Aaahh!!! Real Monsters (USA).zip"
+2026-05-26 01:45:46.305 [INFO]      [Generator] Process exited with code 0
+2026-05-26 01:45:46.333 [INFO]      [Generator] Cleanup.
+2026-05-26 02:35:28.782 [INFO]      --------------------------------------------------------------
+2026-05-26 02:35:28.783 [INFO]      [Startup] "C:\tmp\RIESCADE OS\.emulatorlauncher\emulatorLauncher.exe"  -gameinfo "C:\Users\MARCOR~1\AppData\Local\Temp\riescade.tmp\game.xml" -system ps2 -emulator pcsx2 -core pcsx2 -rom "C:\tmp\RIESCADE OS\roms\ps2\God of War.chd"
+2026-05-26 02:35:28.783 [INFO]      [Startup] Loading configuration.
+2026-05-26 02:35:28.786 [INFO]      [Startup] Loading ES settings.
+2026-05-26 02:35:28.796 [INFO]      [Startup] Retrobat version : not found
+2026-05-26 02:35:33.584 [INFO]      [Startup] Emulator version: 2.6.3.0
+2026-05-26 02:35:33.587 [INFO]      [Generator] Screen[0]: L=0 T=0 W=1920 H=1080 Primary=True
+2026-05-26 02:35:33.587 [INFO]      [Generator] Screen[1]: L=-1920 T=0 W=1920 H=1080 Primary=False
+2026-05-26 02:35:33.634 [INFO]      [Game] God of War
+2026-05-26 02:35:33.639 [INFO]      [Startup] Loading Controller configuration.
+2026-05-26 02:35:34.148 [INFO]      [Generator] Using Pcsx2Generator
+2026-05-26 02:35:34.236 [INFO]      [Generator] Loading features.
+2026-05-26 02:35:34.242 [INFO]      [Generator] Getting pcsx2 path and executable name.
+2026-05-26 02:35:36.690 [INFO]      [INFO] Creating controller configuration for PCSX2
+2026-05-26 02:35:36.989 [INFO]      [SdlGameController] 0 SDL controller(s) connected
+2026-05-26 02:35:37.011 [WARNING]   [WARNING] SDL3.dll not found.
+2026-05-26 02:35:38.232 [INFO]      [PadToKey] Loaded C:\tmp\RIESCADE OS\.emulatorlauncher\.emulationstation\es_padtokey.cfg
+2026-05-26 02:35:38.238 [INFO]      [Running] C:\tmp\RIESCADE OS\emulators\pcsx2\pcsx2-qt.exe -batch -nogui -fullscreen "C:\tmp\RIESCADE OS\roms\ps2\God of War.chd"
+2026-05-26 02:38:23.373 [INFO]      [Generator] Cleanup.
+2026-05-26 02:50:29.699 [INFO]      --------------------------------------------------------------
+2026-05-26 02:50:29.701 [INFO]      [Startup] "C:\tmp\RIESCADE OS\.emulatorlauncher\emulatorLauncher.exe"  -gameinfo "C:\Users\MARCOR~1\AppData\Local\Temp\riescade.tmp\game.xml" -system teknoparrot -emulator teknoparrot -core  -rom "C:\tmp\RIESCADE OS\roms\teknoparrot\CSNEO.teknoparrot"
+2026-05-26 02:50:29.701 [INFO]      [Startup] Loading configuration.
+2026-05-26 02:50:29.704 [INFO]      [Startup] Loading ES settings.
+2026-05-26 02:50:29.712 [INFO]      [Startup] Retrobat version : not found
+2026-05-26 02:50:30.685 [INFO]      [Startup] Emulator version: 1.0.0.1954
+2026-05-26 02:50:30.688 [INFO]      [Generator] Screen[0]: L=0 T=0 W=1920 H=1080 Primary=True
+2026-05-26 02:50:30.688 [INFO]      [Generator] Screen[1]: L=-1920 T=0 W=1920 H=1080 Primary=False
+2026-05-26 02:50:30.725 [INFO]      [Game] Counter-Strike Neo
+2026-05-26 02:50:30.730 [INFO]      [Startup] Loading Controller configuration.
+2026-05-26 02:50:32.498 [INFO]      [Generator] Using TeknoParrotGenerator
+2026-05-26 02:50:32.574 [INFO]      [Generator] Loading features.
+2026-05-26 02:50:32.718 [INFO]      [INFO] Game name : CSNEO
+2026-05-26 02:50:34.575 [INFO]      [INFO] Setting up ParrotData.xml
+2026-05-26 02:50:37.009 [INFO]      [INFO] Checking if userprofile exists.
+2026-05-26 02:50:38.758 [INFO]      [INFO] UserProfile already exists.
+2026-05-26 02:50:39.906 [INFO]      [INFO] Check if Gun configuration is required.
+2026-05-26 02:50:39.922 [INFO]      [INFO] Gun configuration not required, configuring controller.
+2026-05-26 02:50:40.520 [INFO]      [PadToKey] Loaded C:\tmp\RIESCADE OS\.emulatorlauncher\.emulationstation\es_padtokey.cfg
+2026-05-26 02:50:40.526 [INFO]      [Running] C:\tmp\RIESCADE OS\emulators\TeknoParrot\TeknoParrotUi.exe --profile=CSNEO.xml --startMinimized

@@ -1,0 +1,1134 @@
+﻿using EmulatorLauncher.Common;
+using EmulatorLauncher.Common.Compression;
+using EmulatorLauncher.Common.Compression.Wrappers;
+using EmulatorLauncher.Common.FileFormats;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Xml.Linq;
+using System.Xml.Serialization;
+
+namespace EmulatorLauncher
+{
+    public class Installer
+    {
+        static List<Installer> installers = new List<Installer>
+        {            
+            // emulator / installation folder(s) / executable(s)
+            // the 7z filename on the website must be the first installation folder name
+            { new Installer("2ship", "2ship", "2ship.exe") },
+            { new Installer("altirra", "altirra", "Altirra64.exe") },
+            { new Installer("angle", "retroarch" ) },
+            { new Installer("apple2", "applewin") },
+            { new Installer("apple2gs", "gsplus") },
+            { new Installer("applewin") },
+            { new Installer("arcadeflashweb") },
+            { new Installer("ares", "ares", "ares.exe") },
+            { new Installer("azahar", "azahar", "azahar.exe") },
+            { new Installer("bam", "fpinball", "Future Pinball.exe") },
+            { new Installer("bigpemu", "bigpemu", "BigPEmu.exe") },
+            { new Installer("bizhawk", "bizhawk", "EmuHawk.exe") },
+            { new Installer("bstone", "bstone", "bstone.exe") },
+            { new Installer("bsyndrome", "bsyndrome", "bs.exe") },
+            { new Installer("capriceforever", "capriceforever", "Caprice64.exe") },
+            { new Installer("cdogs", new string[] { "cdogs", "cdogs/bin" }, "cdogs-sdl.exe") },
+            { new Installer("cemu", "cemu", "Cemu.exe") },
+            { new Installer("cgenius", "cgenius", "CGenius.exe") },
+            { new Installer("chihiro", "chihiro", "cxbx.exe") },
+            { new Installer("chihiro-gun", "chihiro-ds", "cxbx.exe") },
+            { new Installer("citra", "citra", "citra-qt.exe") },
+            { new Installer("citron", "citron", "citron.exe") },
+            { new Installer("corsixth", "corsixth", "CorsixTH.exe") },
+            { new Installer("cxbx", new string[] { "cxbx-reloaded", "cxbx-r" }, "cxbx.exe") },
+            { new Installer("daphne") },
+            { new Installer("demul") },
+            { new Installer("demul-old", "demul-old", "demul.exe") },
+            { new Installer("desmume", "desmume", "DeSmuME-VS2022-x64-Release.exe") },
+            { new Installer("devilutionx", "devilutionx", "devilutionx.exe") },
+            { new Installer("dhewm3", "dhewm3", "dhewm3.exe") },
+            { new Installer("dolphin", "dolphin-emu", "Dolphin.exe") },
+            { new Installer("dosbox") },
+            { new Installer("dosbox-pure", "dosbox-pure", "DOSBoxPure.exe") },
+            { new Installer("dosbox-staging", "dosbox-staging", "dosbox.exe") },
+            { new Installer("duckstation", new string[] { "duckstation"}, new string[] { "duckstation-qt-x64-ReleaseLTCG.exe" }) },
+            { new Installer("dusklight", "dusklight", "dusklight.exe") },
+            { new Installer("eden", "eden", "eden.exe") },
+            { new Installer("eduke32", "eduke32", "eduke32.exe") },
+            { new Installer("eka2l1", "eka2l1", "eka2l1_qt.exe") },
+            { new Installer("fbneo", "fbneo", "fbneo64.exe") },
+            { new Installer("flycast", "flycast", "flycast.exe") },
+            { new Installer("fpinball", "fpinball", "Future Pinball.exe") },
+            { new Installer("gemrb", "gemrb", "gemrb.exe") },
+            { new Installer("ghostship", "ghostship", "Ghostship.exe") },
+            { new Installer("gopher64", "gopher64", "gopher64-windows-x86_64.exe") },
+            { new Installer("groovymame", "groovymame" , "mame.exe") },
+            { new Installer("gsplus") },
+            { new Installer("gzdoom", "gzdoom", "gzdoom.exe") },
+            { new Installer("hatari", "hatari", "hatari.exe") },
+            { new Installer("hbmame", "hbmame", "hbmameui.exe") },
+            { new Installer("hypseus", "hypseus", "hypseus.exe") },
+            { new Installer("jgenesis", "jgenesis", "jgenesis-gui.exe") },
+            { new Installer("jynx", "jynx", "Jynx-Windows-64bit.exe") },
+            { new Installer("jzintv", "jzintv", "jzintv.exe") },
+            { new Installer("kega-fusion", "kega-fusion", "Fusion.exe") },
+            { new Installer("kronos", "kronos", "kronos.exe") },
+            { new Installer("libretro", "retroarch" ) },
+            { new Installer("lime3ds", "lime3ds", "lime3ds.exe") },
+            { new Installer("linuxloader", "linuxloader", "linuxloader.exe") },
+            { new Installer("love") },
+            { new Installer("m2emulator", "m2emulator", "emulator_multicpu.exe") },
+            { new Installer("magicengine", "magicengine", "pce.exe") },
+            { new Installer("mame64", new string[] { "mame", "mame64" }, new string[] { "mame.exe", "mame64.exe", "mame32.exe" }) },
+            { new Installer("mandarine", "mandarine", "mandarine.exe") },
+            { new Installer("mednafen", "mednafen") },
+            { new Installer("melonds", "melonds", "melonDS.exe") },
+            { new Installer("mesen") },
+            { new Installer("mgba", "mgba", "mGBA.exe") },
+            { new Installer("model3", "supermodel", "supermodel.exe") },
+            { new Installer("mupen64", "mupen64", "RMG.exe") },
+            { new Installer("n64recomplauncher", "n64recomplauncher", "N64RecompLauncher.exe") },
+            { new Installer("nosgba", "nosgba", "no$gba.exe") },
+            { new Installer("openbor") },
+            { new Installer("opengoal", "opengoal", "gk.exe") },
+            { new Installer("openjazz", "openjazz", "OpenJazz.exe") },
+            { new Installer("openmsx", "openmsx", "openmsx.exe") },
+            { new Installer("oricutron") },
+            { new Installer("pcsx2", "pcsx2", "pcsx2-qt.exe") },
+            { new Installer("pcsx2-16", "pcsx2-16", "pcsx2.exe") },
+            { new Installer("pdark", "pdark", "pd.x86_64.exe") },
+            { new Installer("phoenix", "phoenix", "PhoenixEmuProject.exe") },
+            { new Installer("play", "play", "Play.exe") },
+            { new Installer("powerbomberman", "powerbomberman", "Power Bomberman.exe", "700MO") },
+            { new Installer("ppsspp", "ppsspp", "PPSSPPWindows64.exe") },
+            { new Installer("project64", "project64") },
+            { new Installer("ps3", "rpcs3") },
+            { new Installer("psxmame", "psxmame", "mame.exe") },
+            { new Installer("raine") },
+            { new Installer("raze", "raze", "raze.exe") },
+            { new Installer("redream") },
+            { new Installer("rpcs3") },
+            { new Installer("rtcw", "rtcw", "RealRTCW.x64.exe") },
+            { new Installer("ruffle", "ruffle", "ruffle.exe") },
+            { new Installer("ryujinx", "ryujinx", "Ryujinx.exe") },
+            { new Installer("scummvm") },
+            { new Installer("shadps4", new string[] { "shadps4"}, new string[] { "shadPS4QtLauncher.exe", "shadPS4.exe" }) },
+            { new Installer("simcoupe") },
+            { new Installer("simple64", "simple64", "simple64-gui.exe") },
+            { new Installer("singe2", "singe2", "Singe-v2.10-Windows-x86_64.exe") },
+            { new Installer("snes9x", "snes9x", "snes9x-x64.exe") },
+            { new Installer("soh", "soh", "soh.exe") },
+            { new Installer("solarus", "solarus", "solarus-run.exe") },
+            { new Installer("solarus2", "solarus2", "solarus-run.exe") },
+            { new Installer("sonic3air", "sonic3air", "Sonic3AIR.exe") },
+            { new Installer("sonicmania", "sonicmania", "RSDKv5U_x64.exe") },
+            { new Installer("sonicretro", "sonicretro", "RSDKv4_64.exe") },
+            { new Installer("sonicretrocd", "sonicretrocd", "RSDKv3_64.exe") },
+            { new Installer("ssf", "ssf", "SSF.exe") },
+            { new Installer("starship", "starship", "Starship.exe") },
+            { new Installer("stella", "stella", "Stella.exe") },
+            { new Installer("sudachi", "sudachi", "sudachi.exe") },
+            { new Installer("supermodel") },
+            { new Installer("suyu", "suyu", "suyu.exe") },
+            { new Installer("teknoparrot", "teknoparrot", "TeknoParrotUi.exe") },
+            { new Installer("theforceengine", "theforceengine", "TheForceEngine.exe") },
+            { new Installer("triforce", new string[] { "dolphin-triforce"}, new string[] { "dolphinWX.exe", "dolphin.exe" }) },
+            { new Installer("tsugaru", "tsugaru", "tsugaru_cui.exe") },
+            { new Installer("vita3k", "vita3k", "Vita3K.exe") },
+            { new Installer("vkquake", "vkquake", "vkQuake.exe") },
+            { new Installer("vkquake2", "vkquake2", "quake2.exe") },
+            { new Installer("vpinball", new string[] {"vpinball" }, new string[] { "VPinballX.exe", "vpinballx.exe", "VPinballX64.exe" }, "900MO" )},
+            { new Installer("winarcadia", "winarcadia", "WinArcadia.exe") },
+            { new Installer("winuae", "winuae", "winuae64.exe") },
+            { new Installer("xash3d", "xash3d", "xash3d.exe") },
+            { new Installer("xbox", new string[] { "cxbx-reloaded", "cxbx-r" }, "cxbx.exe") },
+            { new Installer("xemu", "xemu") },
+            { new Installer("xenia", "xenia", "xenia.exe") },
+            { new Installer("xenia-canary", "xenia-canary", "xenia_canary.exe" ) },
+            { new Installer("xenia-edge", "xenia-edge", "xenia_edge.exe" ) },
+            { new Installer("xenia-manager", "xenia-manager", "XeniaManager.exe") },
+            { new Installer("xm6pro", "xm6pro", "XM6.exe") },
+            { new Installer("xroar", "xroar", "xroar.exe") },
+            { new Installer("yabasanshiro", "yabasanshiro", "yabasanshiro.exe") },
+            { new Installer("ymir", "ymir", "ymir-sdl3.exe") },
+            { new Installer("yuzu", "yuzu", "yuzu.exe") },
+            { new Installer("yuzu-early-access", "yuzu-early-access", "yuzu.exe") },
+            { new Installer("zesarux", "zesarux", "zesarux.exe") },
+            { new Installer("zinc", "zinc", "ZiNc.exe") } 
+        };
+
+        // Some emulators do not set correctly version in executable and require specific treatment !
+        static readonly List<string>noVersionExe = new List<string> { "eduke32", "fbneo", "fbneo64", "flycast", "melonds", "N64RecompLauncher", "play", "rmg", "xash3d" };
+
+        #region Properties
+        public string Emulator { get; private set; }
+        public string[] Folders { get; private set; }
+        public string[] Executables { get; private set; }
+        public string EmulatorSize { get; set; }
+        public string DefaultFolderName { get { return Folders[0]; } }
+        public string ServerVersion { get; private set; }
+        public string ServerFileName { get; set; }
+        
+        public string PackageUrl
+        {
+            get
+            {
+                if (!string.IsNullOrEmpty(ServerFileName))
+                    return GetUpdateUrl(ServerFileName);
+
+                return GetUpdateUrl(DefaultFolderName + ".7z");
+            }
+        }
+
+        public static string GetUpdateUrl(string fileName)
+        {
+            string installerUrlNew = RegistryKeyEx.GetRegistryValue(
+                RegistryKeyEx.CurrentUser,
+                @"SOFTWARE\RetroBat",
+                "InstallRootUrlNew") as string;
+
+            string installerUrl = RegistryKeyEx.GetRegistryValue(
+                RegistryKeyEx.CurrentUser,
+                @"SOFTWARE\RetroBat",
+                "InstallRootUrl") as string;
+
+            if (!string.IsNullOrEmpty(installerUrlNew))
+            {
+                string newUrl = BuildUrl(installerUrlNew, fileName);
+
+                if (WebTools.UrlExists(newUrl))
+                    return newUrl;
+            }
+
+            if (!string.IsNullOrEmpty(installerUrl))
+            {
+                string oldUrl = BuildUrl(installerUrl, fileName);
+
+                if (WebTools.UrlExists(oldUrl))
+                    return oldUrl;
+            }
+
+            return string.Empty;
+        }
+
+        private static string BuildUrl(string baseUrl, string fileName)
+        {
+            if (baseUrl.EndsWith("/"))
+                return baseUrl + UpdatesType + "/emulators/" + fileName;
+
+            return baseUrl + "/" + UpdatesType + "/emulators/" + fileName;
+        }
+
+        public static string GetUpdateUrlCores(string fileName)
+        {
+            string installerUrl = RegistryKeyEx.GetRegistryValue(
+                RegistryKeyEx.CurrentUser,
+                @"SOFTWARE\RetroBat",
+                "InstallRootUrl") as string;
+
+            if (string.IsNullOrEmpty(installerUrl))
+                return string.Empty;
+
+            if (installerUrl.EndsWith("/"))
+                installerUrl = installerUrl + UpdatesType + "/emulators/cores/" + fileName;
+            else
+                installerUrl = installerUrl + "/" + UpdatesType + "/emulators/cores/" + fileName;
+
+            return installerUrl;
+        }
+
+        public static string UpdatesType
+        {
+            get
+            {
+                string ret = Program.SystemConfig["updates.type"];
+                if (string.IsNullOrEmpty(ret))
+                    return "stable";
+
+                return ret;
+            }
+        }
+
+        public override string ToString()
+        {
+            return Emulator;
+        }
+
+        #endregion
+
+        #region Constructors
+        private Installer(string emulator)
+        {
+            Emulator = emulator;
+            Folders = new string[] { emulator };
+            Executables = new string[] {  emulator + ".exe" };
+        }
+
+        private Installer(string emulator, string folder, string exe = null)
+        {
+            Emulator = emulator;
+            Folders = new string[] { folder };
+            Executables = new string[] { exe == null ? folder + ".exe" : exe };
+        }
+
+        private Installer(string emulator, string folder, string exe, string size = null)
+        {
+            Emulator = emulator;
+            Folders = new string[] { folder };
+            Executables = new string[] { exe == null ? folder + ".exe" : exe };
+            EmulatorSize = size;
+        }
+
+        private Installer(string emulator, string[] folders, string exe = null)
+        {
+            Emulator = emulator;
+            Folders = folders;
+            Executables = new string[] { exe == null ? folders.First() + ".exe" : exe };
+        }
+
+        private Installer(string emulator, string[] folders, string[] executables)
+        {
+            Emulator = emulator;
+            Folders = folders.ToArray();
+            Executables = executables;
+        }
+
+        private Installer(string emulator, string[] folders, string[] executables, string size = null)
+        {
+            Emulator = emulator;
+            Folders = folders.ToArray();
+            Executables = executables;
+            EmulatorSize = size;
+        }
+        #endregion
+
+        #region Factory
+        public static Installer GetInstaller(string emulator = null, bool getLocal = false)
+        {
+            if (!Misc.IsAvailableNetworkActive() && !getLocal)
+                return null;
+
+            if (!SevenZipArchive.IsSevenZipAvailable && !getLocal)
+                return null;
+
+            if (emulator == null)
+                emulator = Program.SystemConfig["emulator"];
+
+            if (string.IsNullOrEmpty(emulator))
+                return null;
+
+            Installer installer = installers.Where(g => g.Emulator == emulator).FirstOrDefault();
+            if (installer == null && emulator.StartsWith("lr-"))
+                installer = installers.Where(g => g.Emulator == "libretro").FirstOrDefault();
+            if (installer == null)
+                installer = installers.Where(g => g.Emulator == emulator).FirstOrDefault();
+            if (installer == null)
+                installer = installers.Where(g => g.Folders != null && g.Folders.Any(f => f == emulator)).FirstOrDefault();
+
+            if (getLocal)
+            {
+                return installer;
+            }
+
+            if (installer != null && string.IsNullOrEmpty(installer.PackageUrl))
+                return null;
+
+            return installer;
+        }
+        #endregion
+
+        private bool GetVersionFromVerFile(string exe, out string ret)
+        {
+            string verFile = Path.ChangeExtension(exe, ".ver");
+            if (File.Exists(verFile) && new FileInfo(verFile).LastWriteTimeUtc == new FileInfo(exe).LastWriteTimeUtc)
+            {
+                var version = StringExtensions.FormatVersionString(File.ReadAllText(verFile));
+                var tmp = new Version(1, 0, 0, 0);
+                if (Version.TryParse(version, out tmp))
+                {
+                    ret = tmp.ToString();
+                    return true;
+                }
+            }
+            
+            ret = null;
+            return false;
+        }
+
+        private bool GetVersionFromInfoFile(string exe, out string ret)
+        {
+            string verFile = Path.Combine(Path.GetDirectoryName(exe), "rbversioninfo.txt");
+            if (File.Exists(verFile))
+            {
+                var version = StringExtensions.FormatVersionString(File.ReadAllText(verFile));
+                var tmp = new Version(1, 0, 0, 0);
+                if (Version.TryParse(version, out tmp))
+                {
+                    ret = tmp.ToString();
+                    return true;
+                }
+            }
+
+            ret = null;
+            return false;
+        }
+
+        private void SetVersionToVerFile(string exe, Version ver)
+        {
+            string verFile = Path.ChangeExtension(exe, ".ver");
+
+            File.WriteAllText(verFile, ver.ToString());
+            new FileInfo(verFile).LastWriteTimeUtc = new FileInfo(exe).LastWriteTimeUtc;
+        }
+
+        public string GetInstalledVersion(bool versionCheck = false)
+        {
+            try
+            {
+                string exe = GetInstalledExecutable();
+                if (string.IsNullOrEmpty(exe))
+                    return null;
+
+                string shortExe = Path.GetFileNameWithoutExtension(exe).ToLower();
+                if (string.IsNullOrEmpty(exe))
+                    return null;
+
+                var versionInfo = FileVersionInfo.GetVersionInfo(exe);
+
+                if (GetVersionFromInfoFile(exe, out string fileVersion))
+                    return fileVersion;
+
+                string version = versionInfo.FileMajorPart + "." + versionInfo.FileMinorPart + "." + versionInfo.FileBuildPart + "." + versionInfo.FilePrivatePart;
+                if (version != "0.0.0.0" && !noVersionExe.Contains(shortExe))
+                    return version;
+
+                // Retroarch specific
+                if (Path.GetFileNameWithoutExtension(exe).ToLower() == "retroarch")
+                {
+                    if (GetVersionFromVerFile(exe, out string vf))
+                        return vf;
+
+                    var output = ProcessExtensions.RunWithOutput(exe, "--version");
+
+                    string ret = output.ExtractString("Version:", " ("); 
+                    if (string.IsNullOrEmpty(ret))
+                        ret = output.ExtractString(" -- v", " -- "); // Format before 1.16
+
+                    output = StringExtensions.FormatVersionString(ret);
+
+                    Version ver = new Version();
+                    if (Version.TryParse(output, out ver))
+                    {
+                        SetVersionToVerFile(exe, ver);
+                        return ver.ToString();
+                    }
+                }
+                /*else if (Path.GetFileNameWithoutExtension(exe).ToLower() == "demul")
+                {
+                    var output = ProcessExtensions.RunWithOutput(exe, "--help");
+                    output = StringExtensions.FormatVersionString(output.ExtractString(") v", "\r"));
+
+                    Version ver = new Version();
+                    if (Version.TryParse(output, out ver))
+                    {
+                        return ver.ToString();
+                    }
+                }*/
+
+                // Dolphin uses letters, so we convert them to numbers (e.g. 2603a becomes 2603.1, 2603b becomes 2603.2, etc.)
+                else if (Path.GetFileNameWithoutExtension(exe).ToLower() == "dolphin")
+                {
+                    var output = ProcessExtensions.RunWithOutput(exe, "--version");
+                    output = StringExtensions.FormatVersionString(output.ExtractString("Dolphin ", "\r"));
+                    
+                    if (output != null && versionCheck)
+                        SimpleLogger.Instance.Info("[INFO] Uncleaned Dolphin version: " + output);
+
+                    string[] parts = output.Split('.');
+                    string majorPart = parts[0];
+                    
+                    Match majorMatch = Regex.Match(majorPart, @"\d+");
+                    int major = majorMatch.Success ? int.Parse(majorMatch.Value) : 0;
+
+                    Match letterMatch = Regex.Match(majorPart, @"([a-zA-Z])$");
+                    int minor = 0;
+                    if (letterMatch.Success)
+                        minor = char.ToLower(letterMatch.Value[0]) - 'a' + 1;
+
+                    string cleaned = $"{major}.{minor}";
+
+                    Version ver = new Version();
+                    if (Version.TryParse(cleaned, out ver))
+                    {
+                        return ver.ToString();
+                    }
+                }
+                else if (Path.GetFileNameWithoutExtension(exe).ToLower() == "eden")
+                {
+                    string versionExe = Path.Combine(Path.GetDirectoryName(exe), "eden-cli.exe");
+                    if (versionExe != null)
+                    {
+                        try
+                        {
+                            var p = new ProcessStartInfo
+                            {
+                                FileName = versionExe,
+                                Arguments = "--version",
+                                RedirectStandardOutput = true,
+                                RedirectStandardInput = true,
+                                RedirectStandardError = true,
+                                UseShellExecute = false,
+                                CreateNoWindow = true,
+                            };
+                            using (var process = Process.Start(p))
+                            {
+                                process.StartInfo = p;
+
+                                var output = new StringBuilder();
+                                process.OutputDataReceived += (s, e) =>
+                                {
+                                    if (e.Data != null)
+                                        output.AppendLine(e.Data);
+                                };
+
+                                process.Start();
+                                process.BeginOutputReadLine();
+
+                                if (!process.WaitForExit(100))
+                                    process.Kill();
+
+                                if (output.Length > 0)
+                                {
+                                    string outputString = output.ToString();
+                                    var match = Regex.Match(outputString, @"v([\d]+\.[\d]+\.[\d]+(-[a-z0-9]+)?)");
+                                    if (match.Success)
+                                    {
+                                        string versionEden = match.Groups[1].Value;
+
+                                        string numericVersion = versionEden.Split('-')[0];
+
+                                        Version ver = new Version();
+                                        if (Version.TryParse(numericVersion, out ver))
+                                        {
+                                            return ver.ToString();
+                                        }
+                                        else
+                                        {
+                                            var date = File.GetLastWriteTime(exe).ToUniversalTime().ToString("0.yy.MM.dd");
+                                            return date;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        catch 
+                        {
+                            var date = File.GetLastWriteTime(exe).ToUniversalTime().ToString("0.yy.MM.dd");
+                            return date;
+                        }
+                    }
+                    else
+                    {
+                        var date = File.GetLastWriteTime(exe).ToUniversalTime().ToString("0.yy.MM.dd");
+                        return date;
+                    }
+                }
+                else if (Path.GetFileNameWithoutExtension(exe).ToLower() == "jzintv")
+                {
+                    var output = ProcessExtensions.RunWithOutput(exe, "-l");
+                    Match versionMatch = Regex.Match(output, @"jzIntv v(\d+\.\d+)");
+                    Match svnMatch = Regex.Match(output, @"SVN Revision (\d+)");
+
+                    if (versionMatch.Success && svnMatch.Success)
+                    {
+                        string versionjz = versionMatch.Groups[1].Value;
+                        string svn = svnMatch.Groups[1].Value;
+                        string combined = $"{versionjz}.{svn}";
+                        var finalversionjz = StringExtensions.FormatVersionString(combined);
+
+                        Version ver = new Version();
+                        if (Version.TryParse(finalversionjz, out ver))
+                        {
+                            return ver.ToString();
+                        }
+                    }
+
+                }
+                else if (Path.GetFileNameWithoutExtension(exe).ToLower() == "flycast")
+                {
+                    var output = versionInfo.FileVersion.Substring(1);
+                    Version ver = new Version();
+                    int firstDashIndex = output.IndexOf('-');
+                    if (firstDashIndex == -1 || output.IndexOf('-', firstDashIndex + 1) == -1)
+                    {
+                        output = StringExtensions.FormatVersionString(output);
+                        
+                        if (Version.TryParse(output, out ver))
+                            return ver.ToString();
+                    }
+
+                    int secondDashIndex = output.IndexOf('-', firstDashIndex + 1);
+                    output = output.Substring(0, secondDashIndex).Replace('-', '.');
+                    string[] parts = output.Split('.');
+                    if (parts.Length == 4)
+                    {
+                        if (Version.TryParse(output, out ver))
+                        {
+                            return ver.ToString();
+                        }
+                    }
+                    else if (parts.Length == 3)
+                    {
+                        output = parts[0] + "." + parts[1] + ".0" + "." + parts[2];
+                        if (Version.TryParse(output, out ver))
+                        {
+                            return ver.ToString();
+                        }
+                    }
+                    else if (parts.Length == 2)
+                    {
+                        output = parts[0] + "." + parts[1] + ".0" + ".0";
+                        if (Version.TryParse(output, out ver))
+                        {
+                            return ver.ToString();
+                        }
+                    }
+                    else if (parts.Length == 1)
+                    {
+                        output = parts[0] + ".0" + ".0" + ".0";
+                        if (Version.TryParse(output, out ver))
+                        {
+                            return ver.ToString();
+                        }
+                    }
+                    else if (parts.Length > 4)
+                    {
+                        output = parts[0] + "." + parts[1] + "." + parts[2] + "." + parts[3];
+                        if (Version.TryParse(output, out ver))
+                        {
+                            return ver.ToString();
+                        }
+                    }
+
+                    if (Version.TryParse(output, out ver))
+                    {
+                        return ver.ToString();
+                    }
+                }
+                else if (Path.GetFileNameWithoutExtension(exe).ToLower() == "gsplus")
+                {
+                    var output = ProcessExtensions.RunWithOutput(exe, "--help");
+                    output = StringExtensions.FormatVersionString(output.ExtractString("GSplus v", " "));
+
+                    Version ver = new Version();
+                    if (Version.TryParse(output, out ver))
+                    {
+                        return ver.ToString();
+                    }
+                }
+                else if (Path.GetFileNameWithoutExtension(exe).ToLower() == "rmg")
+                {
+                    var output = ProcessExtensions.RunWithOutput(exe, "-v");
+                    output = StringExtensions.FormatVersionString(output.ExtractString("Rosalie's Mupen GUI v", "\r"));
+
+                    Version ver = new Version();
+                    if (Version.TryParse(output, out ver))
+                    {
+                        return ver.ToString();
+                    }
+                }
+                /*else if (Path.GetFileNameWithoutExtension(exe).ToLower() == "play")
+                {
+                    var output = versionInfo.ProductVersion.Substring(0, 7);
+                    output = StringExtensions.FormatVersionString(output);
+
+                    Version ver = new Version();
+                    if (Version.TryParse(output, out ver))
+                        return ver.ToString();
+                }*/
+                else
+                {
+                    // Fake version number based on last write time
+                    var date = File.GetLastWriteTime(exe).ToUniversalTime().ToString("0.yy.MM.dd");
+                    return date;
+                }
+            }
+            catch { }
+
+            return null;
+        }
+
+        private static string _customInstallFolder;
+
+        public string GetInstalledExecutable()
+        {
+            foreach (var folder in Folders)
+            {
+                string otherFolder = Program.AppConfig.GetFullPath(folder);
+                if (string.IsNullOrEmpty(otherFolder))
+                    continue;
+                
+                foreach (var executable in Executables)
+                {
+                    string exe = Path.Combine(otherFolder, executable);
+                    if (File.Exists(exe))
+                        return exe;
+                }                
+            }
+
+            return null;
+        }
+
+        public string GetInstallFolder(bool checkRootPath = true)
+        {
+            if (!string.IsNullOrEmpty(_customInstallFolder))
+                return Path.Combine(_customInstallFolder, DefaultFolderName);
+
+            string folder = null;
+
+            // If already installed
+            string exe = GetInstalledExecutable();
+            if (!string.IsNullOrEmpty(exe))
+                folder = Path.GetDirectoryName(exe);
+
+            if (checkRootPath && string.IsNullOrEmpty(folder))
+            {
+                foreach (var inst in installers)
+                {
+                    if (inst == this)
+                        continue;
+
+                    // Find another emulator folder - retroarch should always be there
+                    string curr = inst.GetInstallFolder(false);
+                    if (!string.IsNullOrEmpty(curr))
+                    {
+                        if (curr.EndsWith("\\"))
+                            curr = curr.Substring(0, curr.Length-1);
+                        
+                        if (Directory.Exists(curr))
+                            return Path.Combine(Path.GetDirectoryName(curr), DefaultFolderName);
+                    }
+                }
+            }
+
+            if (!checkRootPath && folder == null)
+            {
+                var retroarchDefault = Program.SystemConfig.GetFullPath("retroarch");
+                if (!string.IsNullOrEmpty(retroarchDefault))
+                    folder = Path.Combine(Path.GetDirectoryName(retroarchDefault), DefaultFolderName);
+            }
+
+            return folder;
+        }
+
+        public bool IsInstalled()
+        {
+            return !string.IsNullOrEmpty(GetInstalledExecutable());
+        }
+
+        public bool HasUpdateAvailable()
+        {
+            if (!IsInstalled())
+                return false;
+
+            string versionFileName = "versions.xml";
+            if (UpdatesType == "beta")
+                versionFileName = "versions-beta.xml";
+
+            try
+            {               
+                string xml = null;
+
+                string cachedFile = Path.Combine(GetTempPath(), versionFileName);
+
+                if (File.Exists(cachedFile) && DateTime.Now - File.GetCreationTime(cachedFile) <= new TimeSpan(1, 0, 0, 0))
+                {
+                    xml = File.ReadAllText(cachedFile);
+                }
+                else
+                {
+                    string url = Installer.GetUpdateUrl(versionFileName);
+                    if (string.IsNullOrEmpty(url))
+                        return false;
+
+                    xml = WebTools.DownloadString(url);
+
+                    if (!string.IsNullOrEmpty(xml))
+                    {
+                        try
+                        {
+                            string dir = Path.GetDirectoryName(cachedFile);
+                            if (!Directory.Exists(dir))
+                                Directory.CreateDirectory(dir);
+
+                            if (File.Exists(cachedFile)) 
+                                File.Delete(cachedFile);
+                        }
+                        catch { }
+
+                        File.WriteAllText(cachedFile, xml);
+                        File.SetCreationTime(cachedFile, DateTime.Now);
+                    }
+                }
+
+                if (string.IsNullOrEmpty(xml))
+                    return false;
+                
+                var settings = XDocument.Parse(xml);
+                if (settings == null)
+                    return false;
+
+                // Do not propose emulator update on stable channel if RetroBat is not up to date
+                bool isStableChannel = string.Equals(UpdatesType, "stable", StringComparison.OrdinalIgnoreCase);
+                if (isStableChannel && !isRetroBatUpToDate(settings))
+                    return false;
+
+                var serverVersion = settings
+                    .Descendants()
+                    .Where(d => d.Name == "system" && d.Attribute("name") != null && d.Attribute("version") != null && d.Attribute("name").Value == DefaultFolderName)
+                    .Select(d => new { Version = d.Attribute("version").Value, Path = d.Attribute("file") == null ? null : d.Attribute("file").Value })
+                    .FirstOrDefault();
+
+                if (serverVersion == null)
+                    return false;
+
+                Version local = new Version();
+                Version server = new Version();
+                if (Version.TryParse(GetInstalledVersion(), out local) && Version.TryParse(serverVersion.Version, out server))
+                {
+                    if (local < server)
+                    {
+                        ServerFileName = serverVersion.Path;
+                        ServerVersion = server.ToString();
+                        return true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                SimpleLogger.Instance.Error(ex.Message);
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Check if RetroBat is up to date by comparing its version in the versions.xml with the local version.
+        /// Assume it is up to date unless check returns false, to avoid blocking emulator updates if there is an issue with the version check.
+        /// </summary>
+        /// <param name="versionsXml"></param>
+        /// <returns></returns>
+        private static bool isRetroBatUpToDate(XDocument versionsXml)
+        {
+            bool ret = true;
+
+            try
+            {
+                var serverVersion = versionsXml
+                        .Descendants()
+                        .Where(d => d.Name == "system" && d.Attribute("name") != null && d.Attribute("version") != null && d.Attribute("name").Value == "retrobat")
+                        .Select(d => new
+                        {
+                            Name = (string)d.Attribute("name"),
+                            Version = (string)d.Attribute("version"),
+                            Path = (string)d.Attribute("file")
+                        })
+                        .FirstOrDefault(d => d.Name == "retrobat" && d.Version != null);
+
+                if (serverVersion == null)
+                    return true;
+
+                Version local = GetRetroBatVersion();
+
+                if (local == null)
+                    return true;
+
+                Version server;
+                if (!Version.TryParse(serverVersion.Version, out server))
+                    return true;
+
+                if (local < server)
+                {
+                    SimpleLogger.Instance.Warning("[EMULATOR] RetroBat not up to date, emulator update check cancelled.");
+                    return false;
+                }
+            }
+            catch { }
+            
+            return ret;
+        }
+
+        private static Version GetRetroBatVersion()
+        {
+            try
+            {
+                string versionFile = Path.Combine(Program.AppConfig.GetFullPath("retrobat"), "system", "version.info");
+
+                if (!File.Exists(versionFile))
+                    return null;
+
+                string line = File.ReadLines(versionFile).FirstOrDefault()?.Trim();
+
+                if (string.IsNullOrEmpty(line))
+                    return null;
+
+                var match = Regex.Match(line, @"\d+(\.\d+)*");
+
+                if (!match.Success)
+                    return null;
+
+                Version ver;
+                return Version.TryParse(match.Value, out ver) ? ver : null;
+            }
+            catch { }
+            return null;
+        }
+
+        public static bool CoreHasUpdateAvailable(string core, string date, string version, out string ServerVersion)
+        {
+            ServerVersion = "";
+
+            if (version == "0.0.0.0")
+                version = date;
+
+            string versionFileName = "coreversions.xml";
+            if (UpdatesType == "beta")
+                versionFileName = "coreversions-beta.xml";
+
+            try
+            {
+                string xml = null;
+                
+                string cachedFile = Path.Combine(GetTempPath(), versionFileName);
+
+                if (File.Exists(cachedFile) && DateTime.Now - File.GetCreationTime(cachedFile) <= new TimeSpan(1, 0, 0, 0))
+                {
+                    xml = File.ReadAllText(cachedFile);
+                }
+                else
+                {
+                    string url = Installer.GetUpdateUrlCores(versionFileName);
+                    if (string.IsNullOrEmpty(url))
+                        return false;
+
+                    xml = WebTools.DownloadString(url);
+
+                    if (!string.IsNullOrEmpty(xml))
+                    {
+                        try
+                        {
+                            string dir = Path.GetDirectoryName(cachedFile);
+                            if (!Directory.Exists(dir))
+                                Directory.CreateDirectory(dir);
+
+                            if (File.Exists(cachedFile))
+                                File.Delete(cachedFile);
+                        }
+                        catch { }
+
+                        File.WriteAllText(cachedFile, xml);
+                        File.SetCreationTime(cachedFile, DateTime.Now);
+                    }
+                }
+
+                if (string.IsNullOrEmpty(xml))
+                    return false;
+
+                var settings = XDocument.Parse(xml);
+                if (settings == null)
+                    return false;
+
+                var serverVersion = settings
+                    .Descendants()
+                    .Where(d => d.Name == "system" && d.Attribute("name") != null && d.Attribute("version") != null && d.Attribute("name").Value == core)
+                    .Select(d => new { Version = d.Attribute("version").Value, Path = d.Attribute("file") == null ? null : d.Attribute("file").Value })
+                    .FirstOrDefault();
+
+                if (serverVersion == null)
+                    return false;
+
+                Version local = new Version();
+                Version server = new Version();
+                if (Version.TryParse(version, out local) && Version.TryParse(serverVersion.Version, out server))
+                {
+                    if (local < server)
+                    {
+                        string ServerFileName = serverVersion.Path;
+                        ServerVersion = server.ToString();
+                        return true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                SimpleLogger.Instance.Error(ex.Message);
+            }
+
+            return false;
+        }
+
+        public bool CanInstall()
+        {
+            return WebTools.UrlExists(PackageUrl);
+        }
+
+        public static string GetTempPath()
+        {
+            string ret = Path.Combine(Path.GetTempPath(), "emulationstation.tmp");
+            if (!Directory.Exists(ret))
+                Directory.CreateDirectory(ret);
+
+            return ret;
+        }
+
+        public static void DownloadAndInstall(string url, string installFolder, ProgressChangedEventHandler progress = null)
+        {
+            string localFile = Path.GetFileName(url);
+            string fn = Path.Combine(GetTempPath(), localFile);
+
+            try { if (File.Exists(fn)) File.Delete(fn); }
+            catch { }
+
+            try
+            {
+                using (FileStream fileStream = new FileStream(fn, FileMode.Create))
+                    WebTools.DownloadToStream(fileStream, url, progress);
+
+                if (progress != null)
+                    progress(null, new ProgressChangedEventArgs(100, null));
+
+                Zip.Extract(fn, installFolder);                
+            }
+            finally
+            {
+                try { if (File.Exists(fn)) File.Delete(fn); }
+                catch { }
+            }
+        }
+
+        public void DownloadAndInstall(ProgressChangedEventHandler progress = null)
+        {
+            DownloadAndInstall(PackageUrl, GetInstallFolder(), progress);           
+        }
+
+        #region CollectVersions
+        public static void CollectVersions()
+        {
+            List<systeminfo> sys = new List<systeminfo>();
+
+            foreach (var inst in installers)
+            {
+                if (sys.Any(s => s.name == inst.DefaultFolderName))
+                    continue;
+
+                sys.Add(new systeminfo()
+                {
+                    name = inst.DefaultFolderName,
+                    version = inst.GetInstalledVersion()
+                });
+            }
+
+            var xml = sys
+                .OrderBy(s => s.name)
+                .ToArray().ToXml().Replace("ArrayOfSystem>", "systems>");
+
+            string fn = Path.Combine(Path.GetTempPath(), "systems.xml");
+            File.WriteAllText(fn, xml);
+            Process.Start(fn);
+        }
+
+        public static void InstallAllAndCollect(string customFolder)
+        {
+            _customInstallFolder = customFolder;
+
+            try { Directory.CreateDirectory(_customInstallFolder); }
+            catch { }
+
+            HashSet<string> sys = new HashSet<string>();
+
+            Kernel32.AllocConsole();
+
+            foreach (var installer in installers)
+            {
+                if (sys.Contains(installer.DefaultFolderName))
+                    continue;
+
+                Console.WriteLine(installer.DefaultFolderName);
+
+                try
+                {
+                    installer.DownloadAndInstall();
+                    sys.Add(installer.DefaultFolderName);
+                }
+                catch(Exception ex) 
+                {
+                    Console.WriteLine("failed " + ex.Message);
+                }
+            }
+
+            Kernel32.FreeConsole();
+
+            CollectVersions();
+
+            try { Directory.Delete(_customInstallFolder, true); }
+            catch { }
+
+            _customInstallFolder = null;
+        }
+        #endregion        
+
+        public static void UpdateAll(ProgressChangedEventHandler progress = null)
+        {
+            HashSet<string> sys = new HashSet<string>();
+
+            List<Installer> toInstall = new List<Installer>();
+            foreach (var installer in installers)
+            {
+                if (sys.Contains(installer.DefaultFolderName))
+                    continue;
+
+                if (!installer.IsInstalled())
+                    continue;
+
+                if (!installer.HasUpdateAvailable())
+                    continue;
+
+                toInstall.Add(installer);
+            }
+
+            int pos = 0;
+
+            foreach (var installer in toInstall)
+            {
+                int cur = pos;
+
+                installer.DownloadAndInstall((o, pe) =>
+                    {
+                        int globalPercentage = (cur + pe.ProgressPercentage) / toInstall.Count;
+
+                        if (progress != null)
+                            progress(o, new ProgressChangedEventArgs(globalPercentage, installer.Emulator));
+                    });
+                
+                pos += 100;
+            }
+        }
+    }
+
+    [XmlType("system")]
+    public class systeminfo
+    {
+        [XmlAttribute]
+        public string name { get; set; }
+
+        [XmlAttribute]
+        public string version { get; set; }
+
+        [XmlAttribute]
+        public string date { get; set; }
+    };
+}

@@ -1,0 +1,406 @@
+﻿using System.Linq;
+using System.IO;
+using EmulatorLauncher.Common.FileFormats;
+using EmulatorLauncher.Common.EmulationStation;
+using EmulatorLauncher.Common.Joysticks;
+using EmulatorLauncher.Common;
+using System.Collections.Generic;
+
+namespace EmulatorLauncher
+{
+    partial class AzaharGenerator : Generator
+    {
+        private void CreateControllerConfiguration(IniFile ini)
+        {
+            if (Program.SystemConfig.isOptSet("disableautocontrollers") && Program.SystemConfig["disableautocontrollers"] == "1")
+            {
+                SimpleLogger.Instance.Info("[INFO] Auto controller configuration disabled, just configuring shortcuts.");
+                ConfigureShortcuts(ini);
+                ini.WriteValue("Controls", "profiles\\1\\button_gpio14\\default", "false");
+                ini.WriteValue("Controls", "profiles\\1\\button_gpio14", "\"" + "code:16777233,engine:keyboard" + "\"");
+                ini.WriteValue("Controls", "profiles\\1\\button_home\\default", "false");
+                ini.WriteValue("Controls", "profiles\\1\\button_home", "\"" + "code:16777232,engine:keyboard" + "\"");
+                return;
+            }
+
+            SimpleLogger.Instance.Info("[INFO] Creating controller configuration for Azahar");
+
+            var c1 = Program.Controllers.FirstOrDefault(c => c.PlayerIndex == 1);
+
+            if (c1.IsKeyboard)
+                ConfigureKeyboard(c1, ini);
+            else
+                ConfigureJoystick(c1, ini);
+
+            ConfigureShortcuts(ini);
+        }
+
+        private void ConfigureJoystick(Controller controller, IniFile ini)
+        {
+            if (controller == null)
+                return;
+
+            var cfg = controller.Config;
+            if (cfg == null)
+                return;
+
+            var guid = controller.GetSdlGuid(_sdlVersion, true);
+            var azaharGuid = guid.ToString().ToLowerInvariant();
+            string newGuidPath = Path.Combine(AppConfig.GetFullPath("tools"), "controllerinfo.yml");
+            string batPath = Path.Combine(AppConfig.GetFullPath("retrobat"));
+            string newGuid = SdlJoystickGuid.GetGuidFromFile(newGuidPath, controller.SdlController, controller.Guid, "azahar", 0, batPath);
+            if (newGuid != null)
+                azaharGuid = newGuid;
+
+            //only 1 player so profile is fixed to 1
+            ini.WriteValue("Controls", "profile\\default", "true");
+            ini.WriteValue("Controls", "profile", "0");
+            ini.WriteValue("Controls", "profiles\\1\\name\\default", "true");
+            ini.WriteValue("Controls", "profiles\\1\\name", "default");
+
+            string profile = "profiles\\1\\";
+
+            if (Program.SystemConfig.isOptSet("gamepadbuttons") && Program.SystemConfig.getOptBoolean("gamepadbuttons"))
+            {
+                Mapping[InputKey.b] = "button_b";
+                Mapping[InputKey.a] = "button_a";
+                Mapping[InputKey.x] = "button_y";
+                Mapping[InputKey.y] = "button_x";
+            }
+
+            //manage buttons and directions
+            foreach (var map in Mapping)
+            {
+                string name = profile + map.Value;
+
+                string cvalue = FromInput(controller, cfg[map.Key], azaharGuid);
+
+                if (string.IsNullOrEmpty(cvalue))
+                {
+                    ini.WriteValue("Controls", name + "\\default", "false");
+                    ini.WriteValue("Controls", name, "[empty]");
+                }
+                else
+                {
+                    ini.WriteValue("Controls", name + "\\default", "false");
+                    ini.WriteValue("Controls", name, "\"" + cvalue + "\"");
+                }
+            }
+
+            //Keep default keyboard buttons for debug and gpio14
+            ini.WriteValue("Controls", profile + "button_debug" + "\\default", "true");
+            ini.WriteValue("Controls", profile + "button_debug", "\"" + "code:79,engine:keyboard" + "\"");
+            ini.WriteValue("Controls", profile + "button_gpio14" + "\\default", "false");
+            ini.WriteValue("Controls", profile + "button_gpio14", "\"" + "code:16777233,engine:keyboard" + "\"");
+            ini.WriteValue("Controls", profile + "button_home" + "\\default", "false");
+            ini.WriteValue("Controls", profile + "button_home", "\"" + "code:16777232,engine:keyboard" + "\"");
+
+            //Manage mapping of triggers ZL and ZR
+            foreach (var map in Zmapping)
+            {
+                string name = profile + map.Value;
+
+                string cvalue = FromInput(controller, cfg[map.Key], azaharGuid);
+
+                if (string.IsNullOrEmpty(cvalue))
+                {
+                    ini.WriteValue("Controls", name + "\\default", "false");
+                    ini.WriteValue("Controls", name, "[empty]");
+                }
+                else
+                {
+                    ini.WriteValue("Controls", name + "\\default", "false");
+                    ini.WriteValue("Controls", name, "\"" + cvalue + "\"");
+                }
+            }
+
+            //Manage sticks
+            //left stick = circle pad
+            //right stick = c-stick
+            ProcessStick(controller, profile, "circle_pad", ini, azaharGuid);
+            ProcessStick(controller, profile, "c_stick", ini, azaharGuid);
+            
+            //motion
+            if (SystemConfig.isOptSet("n3ds_motion") && !string.IsNullOrEmpty(SystemConfig["n3ds_motion"]))
+            {
+                switch (SystemConfig["n3ds_motion"])
+                {
+                    case "cemuhook":
+                        ini.WriteValue("Controls", profile + "motion_device" + "\\default", "false");
+                        ini.WriteValue("Controls", profile + "motion_device", "\"engine:cemuhookudp\"");
+                        break;
+                    case "mouse":
+                        ini.WriteValue("Controls", profile + "motion_device" + "\\default", "true");
+                        ini.WriteValue("Controls", profile + "motion_device", "\"engine:motion_emu,update_period:100,sensitivity:0.01,tilt_clamp:90.0\"");
+                        break;
+                    case "sdl":
+                        ini.WriteValue("Controls", profile + "motion_device" + "\\default", "false");
+                        ini.WriteValue("Controls", profile + "motion_device", "\"engine:sdl,guid:" + azaharGuid + ",port:0\"");
+                        break;
+                }
+            }
+            else
+            {
+                ini.WriteValue("Controls", profile + "motion_device" + "\\default", "true");
+                ini.WriteValue("Controls", profile + "motion_device", "\"engine:motion_emu,update_period:100,sensitivity:0.01,tilt_clamp:90.0\"");
+            }
+
+            if (SystemConfig.isOptSet("n3ds_touchdevice") && SystemConfig["n3ds_touchdevice"] == "cemuhook")
+            {
+                ini.WriteValue("Controls", profile + "touch_device" + "\\default", "false");
+                ini.WriteValue("Controls", profile + "touch_device", "\"engine:cemuhookudp,max_x:1800,max_y:850,min_x:100,min_y:50\"");
+            }
+            else
+            {
+                ini.WriteValue("Controls", profile + "touch_device" + "\\default", "true");
+                ini.WriteValue("Controls", profile + "touch_device", "\"engine:emu_window\"");
+            }
+
+            // Use custom touch from button
+            if (Program.SystemConfig.isOptSet("azahar_touchprofile") && !string.IsNullOrEmpty(Program.SystemConfig["azahar_touchprofile"]))
+            {
+                string touch_profile = Program.SystemConfig["azahar_touchprofile"];
+                Dictionary<string, int> touchProfile = new Dictionary<string, int>();
+                var touchProfileStr = ini.EnumerateKeys("Controls").Where(k => k.StartsWith("touch_from_button_maps") && k.EndsWith("name")).ToList();
+                foreach (var tp in touchProfileStr)
+                {
+                    string[] parts = tp.Split('\\');
+                    if (parts.Length >= 3 && int.TryParse(parts[1], out int extractedNumber))
+                        touchProfile.Add(ini.GetValue("Controls", tp), extractedNumber);
+                }
+                int profileToUse = 0;
+                if (touchProfile.ContainsKey(touch_profile))
+                    profileToUse = touchProfile[touch_profile] - 1;
+
+                ini.WriteValue("Controls", profile + "use_touch_from_button\\default", "false");
+                ini.WriteValue("Controls", profile + "use_touch_from_button", "true");
+
+                if (profileToUse == 0)
+                {
+                    ini.WriteValue("Controls", profile + "touch_from_button_map" + "\\default", "true");
+                    ini.WriteValue("Controls", profile + "touch_from_button_map", "0");
+                }
+                else
+                {
+                    ini.WriteValue("Controls", profile + "touch_from_button_map\\default", "false");
+                    ini.WriteValue("Controls", profile + "touch_from_button_map", profileToUse.ToString());
+                }
+            }
+            else
+            {
+                ini.WriteValue("Controls", profile + "use_touch_from_button" + "\\default", "true");
+                ini.WriteValue("Controls", profile + "use_touch_from_button", "false");
+                ini.WriteValue("Controls", profile + "touch_from_button_map" + "\\default", "true");
+                ini.WriteValue("Controls", profile + "touch_from_button_map", "0");
+            }
+
+            //udp information
+            ini.WriteValue("Controls", profile + "udp_input_address" + "\\default", "true");
+            ini.WriteValue("Controls", profile + "udp_input_address", "127.0.0.1");
+            ini.WriteValue("Controls", profile + "udp_input_port" + "\\default", "true");
+            ini.WriteValue("Controls", profile + "udp_input_port", "26760");
+            ini.WriteValue("Controls", profile + "udp_pad_index" + "\\default", "true");
+            ini.WriteValue("Controls", profile + "udp_pad_index", "0");
+
+            ini.WriteValue("Controls", "profiles\\size", "1");
+
+            SimpleLogger.Instance.Info("[INFO] Assigned controller " + controller.DevicePath + " to player : " + controller.PlayerIndex.ToString());
+        }
+
+        private string FromInput(Controller controller, Input input, string guid)
+        {
+            if (input == null)
+                return null;
+
+            string value = "";
+
+            if (input.Type == "button")
+                value = "button:" + input.Id + ",engine:sdl,guid:" + guid + ",port:0";
+            
+            else if (input.Type == "hat")
+                value = "direction:" + input.Name.ToString() + ",engine:sdl,guid:" + guid + ",hat:0,port:0";
+            else if (input.Type == "axis")
+                value = "axis:" + input.Id + ",direction:+,engine:sdl,guid:" + guid + ",port:0,threshold:0.5";
+
+            return value;
+        }
+
+        private void ProcessStick(Controller controller, string profile, string stickName, IniFile ini, string guid)
+        {
+            var cfg = controller.Config;
+
+            string name = profile + stickName;
+
+            var leftVal = cfg[stickName == "circle_pad" ? InputKey.joystick1left : InputKey.joystick2left];
+            var topVal = cfg[stickName == "circle_pad" ? InputKey.joystick1up : InputKey.joystick2up];
+
+            if (leftVal != null && topVal != null && leftVal.Type == topVal.Type && leftVal.Type == "axis")
+            {
+                long azleftval = leftVal.Id;
+                long aztopval = topVal.Id;
+
+                string value = "axis_x:" + azleftval + ",axis_y:" + aztopval + ",deadzone:0.100000,engine:sdl,guid:" + guid + ",port:0";
+
+                ini.WriteValue("Controls", name + "\\default", "false");
+                ini.WriteValue("Controls", name, "\"" + value + "\"");
+            }
+
+            else
+            {
+                ini.WriteValue("Controls", name + "\\default", "false");
+                ini.WriteValue("Controls", name, "[empty]");
+            }
+        }
+
+        private static void ConfigureKeyboard(Controller controller, IniFile ini)
+        {
+            if (controller == null)
+                return;
+
+            InputConfig keyboard = controller.Config;
+            if (keyboard == null)
+                return;
+
+            string profile = "profiles\\1\\";
+
+            ini.WriteValue("Controls", "profile\\default", "true");
+            ini.WriteValue("Controls", "profile", "0");
+            ini.WriteValue("Controls", profile + "button_a\\default", "true");
+            ini.WriteValue("Controls", profile + "button_a", "\"" + "code:65,engine:keyboard" + "\"");
+            ini.WriteValue("Controls", profile + "button_b\\default", "true");
+            ini.WriteValue("Controls", profile + "button_b", "\"" + "code:83,engine:keyboard" + "\"");
+            ini.WriteValue("Controls", profile + "button_x\\default", "true");
+            ini.WriteValue("Controls", profile + "button_x", "\"" + "code:90,engine:keyboard" + "\"");
+            ini.WriteValue("Controls", profile + "button_y\\default", "true");
+            ini.WriteValue("Controls", profile + "button_y", "\"" + "code:88,engine:keyboard" + "\"");
+            ini.WriteValue("Controls", profile + "button_up\\default", "true");
+            ini.WriteValue("Controls", profile + "button_up", "\"" + "code:84,engine:keyboard" + "\"");
+            ini.WriteValue("Controls", profile + "button_down\\default", "true");
+            ini.WriteValue("Controls", profile + "button_down", "\"" + "code:71,engine:keyboard" + "\"");
+            ini.WriteValue("Controls", profile + "button_left\\default", "true");
+            ini.WriteValue("Controls", profile + "button_left", "\"" + "code:70,engine:keyboard" + "\"");
+            ini.WriteValue("Controls", profile + "button_right\\default", "true");
+            ini.WriteValue("Controls", profile + "button_right", "\"" + "code:72,engine:keyboard" + "\"");
+            ini.WriteValue("Controls", profile + "button_l\\default", "true");
+            ini.WriteValue("Controls", profile + "button_l", "\"" + "code:81,engine:keyboard" + "\"");
+            ini.WriteValue("Controls", profile + "button_r\\default", "true");
+            ini.WriteValue("Controls", profile + "button_r", "\"" + "code:87,engine:keyboard" + "\"");
+            ini.WriteValue("Controls", profile + "button_start\\default", "true");
+            ini.WriteValue("Controls", profile + "button_start", "\"" + "code:77,engine:keyboard" + "\"");
+            ini.WriteValue("Controls", profile + "button_select\\default", "true");
+            ini.WriteValue("Controls", profile + "button_select", "\"" + "code:78,engine:keyboard" + "\"");
+            ini.WriteValue("Controls", profile + "button_debug\\default", "true");
+            ini.WriteValue("Controls", profile + "button_debug", "\"" + "code:79,engine:keyboard" + "\"");
+            ini.WriteValue("Controls", profile + "button_gpio14\\default", "false");
+            ini.WriteValue("Controls", profile + "button_gpio14", "\"" + "code:16777233,engine:keyboard" + "\"");
+            ini.WriteValue("Controls", profile + "button_zl\\default", "true");
+            ini.WriteValue("Controls", profile + "button_zl", "\"" + "code:49,engine:keyboard" + "\"");
+            ini.WriteValue("Controls", profile + "button_zr\\default", "true");
+            ini.WriteValue("Controls", profile + "button_zr", "\"" + "code:50,engine:keyboard" + "\"");
+            ini.WriteValue("Controls", profile + "button_home\\default", "false");
+            ini.WriteValue("Controls", profile + "button_home", "\"" + "code:16777232,engine:keyboard" + "\"");
+            ini.WriteValue("Controls", profile + "circle_pad\\default", "true");
+            ini.WriteValue("Controls", profile + "circle_pad", "\"" + "down:code$016777237$1engine$0keyboard,engine:analog_from_button,left:code$016777234$1engine$0keyboard,modifier:code$068$1engine$0keyboard,modifier_scale:0.500000,right:code$016777236$1engine$0keyboard,up:code$016777235$1engine$0keyboard" + "\"");
+            ini.WriteValue("Controls", profile + "c_stick\\default", "true");
+            ini.WriteValue("Controls", profile + "c_stick", "\"" + "down:code$075$1engine$0keyboard,engine:analog_from_button,left:code$074$1engine$0keyboard,modifier:code$068$1engine$0keyboard,modifier_scale:0.500000,right:code$076$1engine$0keyboard,up:code$073$1engine$0keyboard" + "\"");
+            ini.WriteValue("Controls", profile + "motion_device\\default", "true");
+            ini.WriteValue("Controls", profile + "motion_device", "\"" + "engine:motion_emu,update_period:100,sensitivity:0.01,tilt_clamp:90.0" + "\"");
+            ini.WriteValue("Controls", profile + "touch_device\\default", "true");
+            ini.WriteValue("Controls", profile + "touch_device", "\"" + "engine:emu_window" + "\"");
+
+            // Use custom touch from button
+            if (Program.SystemConfig.isOptSet("azahar_touchprofile") && !string.IsNullOrEmpty(Program.SystemConfig["azahar_touchprofile"]))
+            {
+                string touch_profile = Program.SystemConfig["azahar_touchprofile"];
+                Dictionary<string, int> touchProfile = new Dictionary<string, int>();
+                var touchProfileStr = ini.EnumerateKeys("Controls").Where(k => k.StartsWith("touch_from_button_maps") && k.EndsWith("name")).ToList();
+                foreach (var tp in touchProfileStr)
+                {
+                    string[] parts = tp.Split('\\');
+                    if (parts.Length >= 3 && int.TryParse(parts[1], out int extractedNumber))
+                        touchProfile.Add(ini.GetValue("Controls", tp), extractedNumber);
+                }
+                int profileToUse = 0;
+                if (touchProfile.ContainsKey(touch_profile))
+                    profileToUse = touchProfile[touch_profile] - 1;
+
+                ini.WriteValue("Controls", profile + "use_touch_from_button" + "\\default", "false");
+                ini.WriteValue("Controls", profile + "use_touch_from_button", "true");
+
+                if (profileToUse == 0)
+                {
+                    ini.WriteValue("Controls", profile + "touch_from_button_map" + "\\default", "true");
+                    ini.WriteValue("Controls", profile + "touch_from_button_map", "0");
+                }
+                else
+                {
+                    ini.WriteValue("Controls", profile + "touch_from_button_map\\default", "false");
+                    ini.WriteValue("Controls", profile + "touch_from_button_map", profileToUse.ToString());
+                }
+            }
+            else
+            {
+                ini.WriteValue("Controls", profile + "use_touch_from_button" + "\\default", "true");
+                ini.WriteValue("Controls", profile + "use_touch_from_button", "false");
+                ini.WriteValue("Controls", profile + "touch_from_button_map" + "\\default", "true");
+                ini.WriteValue("Controls", profile + "touch_from_button_map", "0");
+            }
+
+            ini.WriteValue("Controls", profile + "udp_input_address\\default", "true");
+            ini.WriteValue("Controls", profile + "udp_input_address", "127.0.0.1");
+            ini.WriteValue("Controls", profile + "udp_input_port\\default", "true");
+            ini.WriteValue("Controls", profile + "udp_input_port", "26760");
+            ini.WriteValue("Controls", profile + "udp_pad_index\\default", "true");
+            ini.WriteValue("Controls", profile + "udp_pad_index", "0");
+            ini.WriteValue("Controls", "profiles\\size", "1");
+        }
+
+        private void ConfigureShortcuts(IniFile ini)
+        {
+            ini.WriteValue("UI", "Shortcuts\\Main%20Window\\Capture%20Screenshot\\KeySeq\\default", "false");
+            ini.WriteValue("UI", "Shortcuts\\Main%20Window\\Capture%20Screenshot\\KeySeq", "F8");
+            ini.WriteValue("UI", "Shortcuts\\Main%20Window\\Continue\\Pause%20Emulation\\KeySeq\\default", "false");
+            ini.WriteValue("UI", "Shortcuts\\Main%20Window\\Continue\\Pause%20Emulation\\KeySeq", "P");
+            ini.WriteValue("UI", "Shortcuts\\Main%20Window\\Exit%20Azahar\\KeySeq\\default", "false");
+            ini.WriteValue("UI", "Shortcuts\\Main%20Window\\Exit%20Azahar\\KeySeq", "Esc");
+            ini.WriteValue("UI", "Shortcuts\\Main%20Window\\Exit%20Fullscreen\\KeySeq\\default", "false");
+            ini.WriteValue("UI", "Shortcuts\\Main%20Window\\Exit%20Fullscreen\\KeySeq", "Tab");
+            ini.WriteValue("UI", "Shortcuts\\Main%20Window\\Fullscreen\\KeySeq\\default", "false");
+            ini.WriteValue("UI", "Shortcuts\\Main%20Window\\Fullscreen\\KeySeq", "F1");
+            ini.WriteValue("UI", "Shortcuts\\Main%20Window\\Load%20Amiibo\\KeySeq\\default", "false");
+            ini.WriteValue("UI", "Shortcuts\\Main%20Window\\Load%20Amiibo\\KeySeq", "Ctrl+F2");
+            ini.WriteValue("UI", "Shortcuts\\Main%20Window\\Remove%20Amiibo\\KeySeq\\default", "false");
+            ini.WriteValue("UI", "Shortcuts\\Main%20Window\\Remove%20Amiibo\\KeySeq", "Ctrl+F3");
+            ini.WriteValue("UI", "Shortcuts\\Main%20Window\\Quick%20Save\\KeySeq\\default", "false");
+            ini.WriteValue("UI", "Shortcuts\\Main%20Window\\Quick%20Save\\KeySeq", "F2");
+            ini.WriteValue("UI", "Shortcuts\\Main%20Window\\Quick%20Load\\KeySeq\\default", "false");
+            ini.WriteValue("UI", "Shortcuts\\Main%20Window\\Quick%20Load\\KeySeq", "F4");
+            ini.WriteValue("UI", "Shortcuts\\Main%20Window\\Restart%20Emulation\\KeySeq\\default", "false");
+            ini.WriteValue("UI", "Shortcuts\\Main%20Window\\Restart%20Emulation\\KeySeq", "Ctrl+F6");
+            ini.WriteValue("UI", "Shortcuts\\Main%20Window\\Rotate%20Screens%20Upright\\KeySeq\\default", "false");
+            ini.WriteValue("UI", "Shortcuts\\Main%20Window\\Rotate%20Screens%20Upright\\KeySeq", "Ctrl+F8");
+        }
+
+        static InputKeyMapping Mapping = new InputKeyMapping()
+        {
+            { InputKey.b,               "button_a" },
+            { InputKey.a,               "button_b" },
+            { InputKey.x,               "button_x" },
+            { InputKey.y,               "button_y" },
+            { InputKey.up,              "button_up" },
+            { InputKey.down,            "button_down" },
+            { InputKey.left,            "button_left" },
+            { InputKey.right,           "button_right" },
+            { InputKey.pageup,          "button_l" },
+            { InputKey.pagedown,        "button_r" },
+            { InputKey.start,           "button_start" },
+            { InputKey.select,          "button_select" },
+        };
+
+        static readonly InputKeyMapping Zmapping = new InputKeyMapping()
+        {
+            { InputKey.l2,               "button_zl" },
+            { InputKey.r2,               "button_zr" },
+        };
+    }
+}

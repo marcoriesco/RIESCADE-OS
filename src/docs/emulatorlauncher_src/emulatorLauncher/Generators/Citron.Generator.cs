@@ -1,0 +1,353 @@
+﻿using EmulatorLauncher.Common;
+using EmulatorLauncher.Common.FileFormats;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Threading;
+
+namespace EmulatorLauncher
+{
+    partial class CitronGenerator : Generator
+    {
+        public CitronGenerator()
+        {
+            DependsOnDesktopResolution = true;
+        }
+
+        private string _gamedirsIniPath;
+        private string _gamedirsSize;
+
+        public override System.Diagnostics.ProcessStartInfo Generate(string system, string emulator, string core, string rom, string playersControllers, ScreenResolution resolution)
+        {
+            SimpleLogger.Instance.Info("[Generator] Getting " + emulator + " path and executable name.");
+
+            string path = AppConfig.GetFullPath(emulator);
+
+            string exe = Path.Combine(path, "citron.exe");
+            if (!File.Exists(exe))
+                return null;
+
+            // Ensure user folder exists
+            string userFolder = Path.Combine(path, "user");
+            if (!Directory.Exists(userFolder)) try { Directory.CreateDirectory(userFolder); }
+                catch { }
+
+            bool fullscreen = ShouldRunFullscreen();
+
+            SetupConfigurationCitron(path, rom, fullscreen);
+
+            var commandArray = new List<string>();
+
+            if (fullscreen)
+                commandArray.Add("-f");
+
+            commandArray.Add("-g");
+            commandArray.Add("\"" + rom + "\"");
+
+            string args = string.Join(" ", commandArray);
+
+            return new ProcessStartInfo()
+            {
+                FileName = exe,
+                WorkingDirectory = path,
+                Arguments = args,
+            };
+        }
+
+        private void SetupConfigurationCitron(string path, string rom, bool fullscreen)
+        {
+            string conf = Path.Combine(path, "user", "config", "qt-config.ini");
+
+            using (var ini = new IniFile(conf, IniOptions.KeepEmptyValues))
+            {
+                ini.WriteValue("UI", "check_for_updates_on_start\\default", "false");
+                ini.WriteValue("UI", "check_for_updates_on_start", "false");
+                ini.WriteValue("UI", "firstStart\\default", "true");
+                ini.WriteValue("UI", "firstStart", "false");
+
+                // Set up paths
+                bool mutualize = SystemConfig.getOptBoolean("yuzu_mutualize");
+                if (mutualize)
+                {
+                    var sharedSavesPath = Path.Combine(AppConfig.GetFullPath("saves"), "switch");
+                    FileTools.TryCreateDirectory(sharedSavesPath);
+
+                    ini.WriteValue("Data%20Storage", "global_custom_save_path_enabled\\default", "false");
+                    ini.WriteValue("Data%20Storage", "global_custom_save_path_enabled", "true");
+                    ini.WriteValue("Data%20Storage", "global_custom_save_path\\default", "false");
+                    ini.WriteValue("Data%20Storage", "global_custom_save_path", sharedSavesPath.Replace("\\", "/") + "/");
+                }
+                else
+                {
+                    ini.WriteValue("Data%20Storage", "global_custom_save_path_enabled\\default", "true");
+                    ini.WriteValue("Data%20Storage", "global_custom_save_path_enabled", "false");
+                    ini.WriteValue("Data%20Storage", "global_custom_save_path\\default", "true");
+                    ini.WriteValue("Data%20Storage", "global_custom_save_path", "");
+                }
+
+                ini.WriteValue("System", "language_index\\default", "false");
+                if (SystemConfig.isOptSet("citron_language") && !string.IsNullOrEmpty(SystemConfig["citron_language"]))
+                    ini.WriteValue("System", "language_index", SystemConfig["citron_language"]);
+                else
+                    ini.WriteValue("System", "language_index", GetDefaultswitchLanguage());
+
+                if (SystemConfig.isOptSet("citron_region_value") && !string.IsNullOrEmpty(SystemConfig["citron_region_value"]) && SystemConfig["citron_region_value"] != "1")
+                {
+                    ini.WriteValue("System", "region_index\\default", "false");
+                    ini.WriteValue("System", "region_index", SystemConfig["citron_region_value"]);
+                }
+                else if (Features.IsSupported("citron_region_value"))
+                {
+                    ini.WriteValue("System", "region_index\\default", "true");
+                    ini.WriteValue("System", "region_index", "1");
+                }
+
+                if (SystemConfig.isOptSet("discord") && SystemConfig.getOptBoolean("discord"))
+                {
+                    ini.WriteValue("UI", "enable_discord_presence\\default", "true");
+                    ini.WriteValue("UI", "enable_discord_presence", "true");
+                }
+                else
+                {
+                    ini.WriteValue("UI", "enable_discord_presence\\default", "false");
+                    ini.WriteValue("UI", "enable_discord_presence", "false");
+                }
+
+                ini.WriteValue("UI", "fullscreen\\default", fullscreen ? "false" : "true");
+                ini.WriteValue("UI", "fullscreen", fullscreen ? "true" : "false");
+                ini.WriteValue("Renderer", "fullscreen_mode\\default", SystemConfig.getOptBoolean("exclusivefs") ? "false" : "true");
+                ini.WriteValue("Renderer", "fullscreen_mode", SystemConfig.getOptBoolean("exclusivefs") ? "1" : "0");
+
+                ini.WriteValue("UI", "hideInactiveMouse\\default", "true");
+                ini.WriteValue("UI", "hideInactiveMouse", "true");
+
+                ini.WriteValue("UI", "pauseWhenInBackground\\default", SystemConfig.getOptBoolean("nopauseonlostfocus") ? "true" : "false");
+                ini.WriteValue("UI", "pauseWhenInBackground", SystemConfig.getOptBoolean("nopauseonlostfocus") ? "false" : "true");
+
+                if (SystemConfig.isOptSet("citron_controller_applet") && !SystemConfig.getOptBoolean("citron_controller_applet"))
+                {
+                    ini.WriteValue("UI", "disableControllerApplet\\default", "true");
+                    ini.WriteValue("UI", "disableControllerApplet", "false");
+                }
+                else if (Features.IsSupported("citron_controller_applet"))
+                {
+                    ini.WriteValue("UI", "disableControllerApplet\\default", "false");
+                    ini.WriteValue("UI", "disableControllerApplet", "true");
+                }
+
+                if (SystemConfig.isOptSet("citron_undock") && SystemConfig.getOptBoolean("citron_undock"))
+                {
+                    ini.WriteValue("System", "use_docked_mode\\default", "false");
+                    ini.WriteValue("System", "use_docked_mode", "0");
+                }
+                else if (Features.IsSupported("citron_undock"))
+                {
+                    ini.WriteValue("System", "use_docked_mode\\default", "true");
+                    ini.WriteValue("System", "use_docked_mode", "1");
+                }
+
+                ini.WriteValue("WebService", "enable_telemetry\\default", "true");
+                ini.WriteValue("WebService", "enable_telemetry", "false");
+                ini.WriteValue("WebService", "enable_auto_update_check\\default", "false");
+                ini.WriteValue("WebService", "enable_auto_update_check", "false");
+                ini.WriteValue("UI", "confirmStop\\default", "false");
+                ini.WriteValue("UI", "confirmStop", "2");
+
+                string romPath = Path.GetDirectoryName(rom);
+                ini.WriteValue("UI", "Paths\\gamedirs\\4\\path", romPath.Replace("\\", "/"));
+
+                // Set gamedirs count to 4
+                var gameDirsSize = ini.GetValue("UI", "Paths\\gamedirs\\size");
+                if (gameDirsSize.ToInteger() != 4)
+                {
+                    _gamedirsIniPath = conf;
+                    _gamedirsSize = gameDirsSize;
+                    ini.WriteValue("UI", "Paths\\gamedirs\\size", "4");
+                }
+
+                // Set path for updates and dlc
+                string extraContentPath = Path.Combine(AppConfig.GetFullPath("roms"), "switchupdates").TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+                if (!Directory.Exists(extraContentPath)) try { Directory.CreateDirectory(extraContentPath); }
+                    catch { }
+                var extraContentDirSize = ini.GetValue("UI", "Paths\\external_content_dirs\\size");
+                if (!string.IsNullOrEmpty(extraContentDirSize) && extraContentDirSize.ToInteger() > 0)
+                {
+                    bool pathDefined = false;
+                    try
+                    {
+                        for (int i = 0; i < extraContentDirSize.ToInteger(); i++)
+                        {
+                            int p = i + 1;
+                            string extraPath = ini.GetValue("UI", "Paths\\external_content_dirs\\" + p + "\\path");
+
+                            if (string.IsNullOrEmpty(extraPath))
+                                continue;
+
+                            string normalizedPath = Path.GetFullPath(extraPath).TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+
+                            if (normalizedPath == extraContentPath)
+                                pathDefined = true;
+                        }
+
+                        if (!pathDefined)
+                        {
+                            int newIndex = extraContentDirSize.ToInteger() + 1;
+                            ini.WriteValue("UI", "Paths\\external_content_dirs\\" + newIndex + "\\path", extraContentPath.Replace("\\", "/"));
+                            ini.WriteValue("UI", "Paths\\external_content_dirs\\size", newIndex.ToString());
+                        }
+                    }
+                    catch { }
+                }
+                else
+                {
+                    ini.WriteValue("UI", "Paths\\external_content_dirs\\" + 1 + "\\path", extraContentPath.Replace("\\", "/"));
+                    ini.WriteValue("UI", "Paths\\external_content_dirs\\size", "1");
+                }
+
+                string screenshotpath = AppConfig.GetFullPath("screenshots").Replace("\\", "/") + "/citron";
+                if (!Directory.Exists(screenshotpath)) try { Directory.CreateDirectory(screenshotpath); }
+                    catch { }
+                if (!string.IsNullOrEmpty(AppConfig["screenshots"]) && Directory.Exists(AppConfig.GetFullPath("screenshots")))
+                {
+                    ini.WriteValue("UI", "Screenshots\\enable_screenshot_save_as\\default", "false");
+                    ini.WriteValue("UI", "Screenshots\\enable_screenshot_save_as", "false");
+                    ini.WriteValue("UI", "Screenshots\\screenshot_path", screenshotpath);
+                }
+
+                BindQtIniFeature(ini, "Audio", "output_engine", "citron_audio_backend", "auto");
+                BindQtIniFeature(ini, "System", "sound_index", "citron_sound_index", "1");            
+                //BindQtIniFeature(ini, "Renderer", "backend", "citron_backend", "0");
+                BindQtIniFeature(ini, "Renderer", "resolution_setup", "citron_resolution_setup", "3");
+                BindQtIniFeature(ini, "Renderer", "aspect_ratio", "citron_ratio", "0");
+                BindQtIniFeature(ini, "Renderer", "max_anisotropy", "citron_anisotropy", "0");
+                BindQtIniFeature(ini, "Renderer", "use_vsync", "citron_use_vsync", "2");
+                BindQtIniFeature(ini, "Renderer", "anti_aliasing", "citron_anti_aliasing", "0");
+                BindQtIniFeature(ini, "Renderer", "scaling_filter", "citron_scaling_filter", "1");
+                BindQtIniFeature(ini, "Renderer", "gpu_accuracy", "citron_gpu_accuracy", "2");
+                
+                if (SystemConfig.isOptSet("citron_use_asynchronous_shaders") && !SystemConfig.getOptBoolean("citron_use_asynchronous_shaders"))
+                {
+                    ini.WriteValue("Renderer", "use_asynchronous_shaders\\default", "true");
+                    ini.WriteValue("Renderer", "use_asynchronous_shaders", "false");
+                }
+                else
+                {
+                    ini.WriteValue("Renderer", "use_asynchronous_shaders\\default", "false");
+                    ini.WriteValue("Renderer", "use_asynchronous_shaders", "true");
+                }
+
+                BindQtIniFeature(ini, "Renderer", "astc_recompression", "citron_astc_recompression", "0");
+                BindQtBoolIniFeature(ini, "Core", "use_multi_core", "citron_multicore", "true", "false", "true");
+                BindQtIniFeature(ini, "Core", "memory_layout_mode", "citron_memory", "0");
+                BindQtIniFeature(ini, "Cpu", "cpu_accuracy", "citron_cpu_accuracy", "0");
+
+                CreateControllerConfiguration(ini);
+            }
+        }
+
+        private string GetDefaultswitchLanguage()
+        {
+            Dictionary<string, string> availableLanguages = new Dictionary<string, string>()
+            {
+                { "jp", "0" },
+                { "ja", "0" },
+                { "en", "1" },
+                { "fr", "2" },
+                { "de", "3" },
+                { "it", "4" },
+                { "es", "5" },
+                { "zh", "6" },
+                { "ko", "7" },
+                { "nl", "8" },
+                { "pt", "9" },
+                { "ru", "10" },
+                { "tw", "11" }
+            };
+
+            // Special cases
+            if (SystemConfig["Language"] == "zh_TW")
+                return "11";
+            if (SystemConfig["Language"] == "pt_BR")
+                return "17";
+            if (SystemConfig["Language"] == "en_GB")
+                return "12";
+            if (SystemConfig["Language"] == "es_MX")
+                return "14";
+
+            string lang = GetCurrentLanguage();
+            if (!string.IsNullOrEmpty(lang))
+            {
+                if (availableLanguages.TryGetValue(lang, out string ret))
+                    return ret;
+            }
+
+            return "1";
+        }
+
+        public override int RunAndWait(ProcessStartInfo path)
+        {
+            Process.Start(path);
+
+            Process citron = null;
+            var timeout = DateTime.UtcNow.AddSeconds(10);
+
+            while (DateTime.UtcNow < timeout)
+            {
+                citron = Process.GetProcessesByName("citron")
+                                .FirstOrDefault(p => !p.HasExited);
+                if (citron != null)
+                    break;
+                Thread.Sleep(500);
+            }
+
+            if (citron != null)
+            {
+                var hwndTimeout = DateTime.UtcNow.AddSeconds(10);
+                IntPtr hwnd = IntPtr.Zero;
+                while (DateTime.UtcNow < hwndTimeout)
+                {
+                    hwnd = User32.FindHwnds(citron.Id).FirstOrDefault();
+                    if (hwnd != IntPtr.Zero)
+                        break;
+                    Thread.Sleep(200);
+                }
+
+                if (hwnd != IntPtr.Zero)
+                    User32.ForceForegroundWindow(hwnd);
+
+                citron.WaitForExit();
+
+                int exitCode = 0;
+                try { exitCode = citron.ExitCode; }
+                catch { exitCode = 0; }
+
+                if (exitCode == unchecked((int)0xc0000005))
+                    return 0;
+                return exitCode;
+            }
+
+            return 0;
+        }
+
+        public override void Cleanup()
+        {
+            base.Cleanup();
+
+            // Restore value for Paths\\gamedirs\\size
+            // As it's faster to launch a citron game when there's no folder set            
+
+            if (!_norawinput)
+            {
+                try { Environment.SetEnvironmentVariable("SDL_JOYSTICK_RAWINPUT", null, EnvironmentVariableTarget.User); } catch { }
+            }
+
+            if (string.IsNullOrEmpty(_gamedirsIniPath) || string.IsNullOrEmpty(_gamedirsSize))
+                return;
+
+            using (var ini = new IniFile(_gamedirsIniPath))
+                ini.WriteValue("UI", "Paths\\gamedirs\\size", _gamedirsSize);
+        }
+    }
+}

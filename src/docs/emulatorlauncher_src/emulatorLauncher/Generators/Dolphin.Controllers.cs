@@ -1,0 +1,782 @@
+﻿using EmulatorLauncher.Common;
+using EmulatorLauncher.Common.EmulationStation;
+using EmulatorLauncher.Common.FileFormats;
+using EmulatorLauncher.Common.Joysticks;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.Design;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using static EmulatorLauncher.PadToKeyboard.SendKey;
+
+namespace EmulatorLauncher
+{
+    partial class DolphinControllers
+    {
+        private static int _p1sdlindex = 0;
+        /// <summary>
+        /// Cf. https://github.com/dolphin-emu/dolphin/blob/master/Source/Core/InputCommon/ControllerInterface/SDL/SDL.cpp#L191
+        /// </summary>
+        private static void UpdateSdlControllersWithHints()
+        {
+            var hints = new List<string>();
+            
+            if (Program.SystemConfig.getOptBoolean("ps_controller_enhanced"))
+            {
+                hints.Add("SDL_HINT_JOYSTICK_HIDAPI_PS4_RUMBLE = 1");
+                hints.Add("SDL_HINT_JOYSTICK_HIDAPI_PS5_RUMBLE = 1");
+            }
+
+            SdlGameController.ReloadWithHints(string.Join(",", hints));
+            Program.Controllers.ForEach(c => c.ResetSdlController());
+        }
+
+        private static Dictionary<string, string> _gcSpecialHotkeys = new Dictionary<string, string>();
+        private static string _emulator;
+
+        public static bool WriteControllersConfig(string path, IniFile ini, string system, string emulator, string rom, bool triforce, bool crediar, TriforceGame triforceGame, string region, out bool sindenSoft)
+        {
+            sindenSoft = false;
+            _emulator = emulator;
+
+            if (Program.SystemConfig.isOptSet("disableautocontrollers") && Program.SystemConfig["disableautocontrollers"] == "1")
+            {
+                SimpleLogger.Instance.Info("[INFO] Auto controller configuration disabled.");
+                return false;
+            }
+
+            SimpleLogger.Instance.Info("[INFO] Creating controller configuration for Dolphin");
+
+            // Set SID devices (controllers)
+            if (!triforce)
+                SetSIDDevices(ini, system);
+
+            UpdateSdlControllersWithHints();
+
+            #region wii
+            if (system == "wii")
+            {
+                // Guns
+                if (Program.SystemConfig.getOptBoolean("use_guns"))
+                {
+                    GenerateControllerConfig_wiilightgun(path, sindenSoft);
+                    return true;
+                }
+
+                // Emulated wiimotes
+                else if (Program.SystemConfig.isOptSet("emulatedwiimotes") && Program.SystemConfig.getOptBoolean("emulatedwiimotes"))
+                {
+                    GenerateControllerConfig_emulatedwiimotes(path, rom);
+
+                    // Remove gamecube mapping because pads will already be used as emulated wiimotes
+                    RemoveControllerConfig_gamecube(path, ini);
+                    return true;
+                }
+
+                // use real wiimote as emulated
+                else if (Program.SystemConfig.isOptSet("emulatedwiimotes") && Program.SystemConfig["emulatedwiimotes"] != "0" && Program.SystemConfig["emulatedwiimotes"] != "1")
+                {
+                    GenerateControllerConfig_realEmulatedwiimotes(path);
+                    return true;
+                }
+
+                // Real wiimotes (default)
+                else
+                    GenerateControllerConfig_realwiimotes(path);
+
+                // Additionnaly : configure gamecube pad (except if wii_gamecube is forced to OFF)
+                if (Program.SystemConfig.isOptSet("wii_gamecube") && Program.SystemConfig["wii_gamecube"] == "0")
+                    RemoveControllerConfig_gamecube(path, ini);
+
+                GenerateControllerConfig_gc(path, gamecubeMapping);
+            }
+            #endregion
+
+            #region triforce
+            // Special mapping for triforce games to remove Z button from R1 (as this is used to access service menu and will be mapped to R3+L3)
+            else if (triforce)
+                GenerateControllerConfig_triforce(path, triforceGame, region, crediar);
+            #endregion
+
+            #region gamecube
+            else
+            {
+                GenerateControllerConfig_gc(path, gamecubeMapping);
+
+                // GBA controller for integrated GBA emulator linked to GameCube
+                bool gbaConf = false;
+                for (int i = 0; i < 4; i++)
+                {
+                    string gbaPad = "gamecubepad" + i.ToString();
+
+                    if (Program.SystemConfig[gbaPad] == "13")
+                    {
+                        gbaConf = true;
+                        continue;
+                    }
+                }
+
+                if (gbaConf)
+                    GenerateControllerConfig_gba(path, gbaMapping, gamecubeReverseAxes);
+            }
+            #endregion
+
+            return true;
+        }
+
+        private static void ResetHotkeysToDefault(string iniFile, Dictionary<string, string> specialHK = null, SdlToDirectInput sdlCtrl = null)
+        {
+            if (Program.Controllers.Count == 0)
+                return;
+
+            bool forceSDL = false;
+            if (Program.SystemConfig.isOptSet("input_forceSDL") && Program.SystemConfig.getOptBoolean("input_forceSDL"))
+                forceSDL = true;
+
+            using (IniFile ini = new IniFile(iniFile, IniOptions.UseSpaces))
+            {
+                ini.ClearSection("Hotkeys");
+
+                if (specialHK != null && specialHK.Count > 1)
+                {
+                    foreach (var hk in specialHK)
+                    {
+                        ini.WriteValue("Hotkeys", hk.Key, hk.Value);
+                    }
+
+                    return;
+                }
+
+                var c1 = Program.Controllers.FirstOrDefault(c => c.PlayerIndex == 1);
+
+                string tech = "XInput";
+                string deviceName = "Gamepad";
+                int xIndex = 0;
+                bool xinputAsSdl = false;
+
+                if (c1 != null && c1.IsXInputDevice)
+                    xIndex = c1.XInput != null ? c1.XInput.DeviceIndex : c1.DeviceIndex;
+
+                if (c1.Config.Type == "keyboard")
+                {
+                    tech = "DInput";
+                    deviceName = "Keyboard Mouse";
+                }
+                else if (!c1.IsXInputDevice || forceSDL)
+                {
+                    if (c1.IsXInputDevice && forceSDL)
+                    {
+                        xinputAsSdl = true;
+                    }
+
+                    var s = c1.SdlController;
+                    if (s != null)
+                    {
+                        tech = "SDL";
+                        deviceName = s.Name;
+                    }
+                    else
+                    {
+                        tech = "DInput";
+                        deviceName = c1.dinputCtrl != null ? c1.dinputCtrl.Name : c1.Name;
+                    }
+
+                    string newNamePath = Path.Combine(Program.AppConfig.GetFullPath("tools"), "controllerinfo.yml");
+                    string newName = SdlJoystickGuid.GetNameFromFile(newNamePath, c1.Guid, "dolphin");
+
+                    if (newName != null)
+                        deviceName = newName;
+                }
+
+                if (c1.Config.Type != "keyboard") // Controller + Keyboard
+                {
+                    Dictionary<string, string> padHKMapping = new Dictionary<string, string>()
+                    {
+                        { "General/Exit", "start" },
+                        { "General/Toggle Pause", "a" },
+                        { "General/Toggle Fullscreen", "l3" },
+                        { "Emulation Speed/Increase Emulation Speed", "right" },
+                        { "Emulation Speed/Decrease Emulation Speed", "left" },
+                        { "Save State/Save to Selected Slot", "y" },
+                        { "Load State/Load from Selected Slot", "x" },
+                        { "General/Take Screenshot", "r3" },
+                        { "Other State Hotkeys/Increase Selected State Slot", "up" },
+                        { "Other State Hotkeys/Decrease Selected State Slot", "down" },
+                        { "General/Eject Disc", "pageup" },
+                        { "General/Change Disc", "l2" },
+                    };
+
+                    if (Hotkeys.GetPadHKFromFile("dolphin", "", out var padHKDic))
+                    {
+                        SimpleLogger.Instance.Info("Applying pad hotkeys from override file...");
+                        padHKMapping = padHKDic;
+                    }
+
+                    if (xinputAsSdl)
+                        ini.WriteValue("Hotkeys", "Device", "SDL" + "/" + _p1sdlindex + "/" + deviceName);
+                    else
+                        ini.WriteValue("Hotkeys", "Device", tech + "/" + xIndex + "/" + deviceName);
+
+                    WriteKBHotkeys(ini, true);
+
+                    if (tech == "DInput" && sdlCtrl != null && sdlCtrl.ButtonMappings.Count > 0)
+                    {
+                        foreach (var hk in padHKMapping)
+                        {
+                            string value = hk.Value;
+
+                            string hotkeyButton = "";
+                            if (sdlCtrl.ButtonMappings.ContainsKey("back"))
+                            {
+                                string targetSDLButton = sdlCtrl.ButtonMappings["back"];
+                                hotkeyButton = GetDInputCode(targetSDLButton, sdlCtrl);
+
+                            }
+                            if (string.IsNullOrEmpty(hotkeyButton))
+                            {
+                                SimpleLogger.Instance.Warning("[HOTKEYS] Failed to get DInput code for Back button. Hotkeys will not be set.");
+                                return;
+                            }
+
+                            // Special case for screenshot to use same button as SaveState
+                            if (hk.Key == "General/Take Screenshot")
+                            {
+                                if (padHKMapping.ContainsKey("Save State/Save to Selected Slot"))
+                                {
+                                    value = padHKMapping["Save State/Save to Selected Slot"];
+                                }
+                            }
+
+                            // Dinput specifics
+                            if (value == "l3")
+                                value = "leftstick";
+                            else if (value == "r3")
+                                value = "rightstick";
+                            else if (value == "up")
+                                value = "dpup";
+                            else if (value == "down")
+                                value = "dpdown";
+                            else if (value == "left")
+                                value = "dpleft";
+                            else if (value == "right")
+                                value = "dpright";
+                            else if (value == "pageup")
+                                value = "leftshoulder";
+                            else if (value == "pagedown")
+                                value = "rightshoulder";
+                            else if (value == "l2")
+                                value = "lefttrigger";
+                            else if (value == "r2")
+                                value = "righttrigger";
+
+                            string kbKey = "";
+                            if (!string.IsNullOrEmpty(ini.GetValue("Hotkeys", hk.Key)))
+                                kbKey = "|" + ini.GetValue("Hotkeys", hk.Key);
+
+                            string targetKey = "";
+                            if (sdlCtrl.ButtonMappings.ContainsKey(value))
+                            {
+                                string sdlTargetButton = sdlCtrl.ButtonMappings[value];
+                                targetKey = GetDInputCode(sdlTargetButton, sdlCtrl);
+                            }
+
+                            if (!string.IsNullOrEmpty(targetKey))
+                                ini.WriteValue("Hotkeys", hk.Key, hotkeyButton + "&" + targetKey + kbKey);
+                        }
+                    }
+
+                    else if (tech == "SDL" && _triforcectrl)
+                    {
+                        Func<Input, bool, string> axisValue = (inp, revertAxis) =>
+                        {
+                            string axis = "`Axis ";
+
+                            if (inp.Id == 0 || inp.Id == 1 || inp.Id == 2 || inp.Id == 3)
+                                axis += inp.Id;
+
+                            if ((!revertAxis && inp.Value > 0) || (revertAxis && inp.Value < 0))
+                                axis += "+";
+                            else
+                                axis += "-";
+
+                            if (inp.Id == 4 || inp.Id == 5)
+                                axis = "`Full Axis " + inp.Id + "+";
+
+                            return axis + "`";
+                        };
+
+                        // Get hotkey button text
+                        var hkinput = c1.Config[InputKey.hotkey];
+                        string hkvalue = "";
+
+                        if (hkinput == null)
+                            return;
+
+                        if (hkinput.Type == "button")
+                            hkvalue = "`Button " + hkinput.Id.ToString() + "`";
+
+                        else if (hkinput.Type == "axis")
+                            hkvalue = axisValue(hkinput, false);
+
+                        try
+                        {
+                            // Loop through hotkeys
+                            foreach (var hk in padHKMapping)
+                            {
+                                string value = hk.Value;
+
+                                // Special case for screenshot to use same button as SaveState
+                                if (hk.Key == "General/Take Screenshot")
+                                {
+                                    if (padHKMapping.ContainsKey("Save State/Save to Selected Slot"))
+                                    {
+                                        value = padHKMapping["Save State/Save to Selected Slot"];
+                                    }
+                                }
+
+                                // a and b reversed for dolphin
+                                if (value == "a")
+                                    value = "b";
+
+                                if (!Enum.TryParse<InputKey>(value, ignoreCase: true, out var targetKey))
+                                    continue;
+
+                                string kbKey = "";
+                                if (!string.IsNullOrEmpty(ini.GetValue("Hotkeys", hk.Key)))
+                                    kbKey = "|" + ini.GetValue("Hotkeys", hk.Key);
+
+                                var hkButton = xinputAsSdl ? c1.Config[targetKey] : c1.GetSdlMapping(targetKey);
+
+                                if (hkButton != null)
+                                {
+                                    string hkvalueOther = "";
+                                    if (hkButton.Type == "button")
+                                        hkvalueOther = "`Button " + hkButton.Id.ToString() + "`";
+                                    else if (hkButton.Type == "axis")
+                                        hkvalueOther = axisValue(hkButton, false);
+
+                                    // ini.WriteValue("Hotkeys", "General/Toggle Pause", "@(" + hkvalue + "+" + hkvalueOther + ")");
+                                    ini.WriteValue("Hotkeys", hk.Key, hkvalue + "+" + hkvalueOther + "|" + kbKey);
+                                }
+                            }
+                        }
+                        catch
+                        {
+                            SimpleLogger.Instance.Error("Error while setting triforce hotkeys.");
+                        }
+                    }
+
+                    else  // General case (non-triforce or triforce with XInput)
+                    {
+                        // Loop through hotkeys
+                        foreach (var hk in padHKMapping)
+                        {
+                            string value = hk.Value;
+
+                            // Special case for screenshot to use same button as SaveState
+                            if (hk.Key == "General/Take Screenshot")
+                            {
+                                if (padHKMapping.ContainsKey("Save State/Save to Selected Slot"))
+                                {
+                                    value = padHKMapping["Save State/Save to Selected Slot"];
+                                }
+                            }
+
+                            // a and b reversed for dolphin
+                            if (value == "a")
+                                value = "b";
+
+                            if (!Enum.TryParse<InputKey>(value, ignoreCase: true, out var targetKey))
+                                continue;
+
+                            string kbKey = "";
+                            if (!string.IsNullOrEmpty(ini.GetValue("Hotkeys", hk.Key)))
+                                kbKey = "|" + ini.GetValue("Hotkeys", hk.Key);
+
+                            if (tech != "XInput" && dolphinSDLMapping.ContainsKey(targetKey))
+                            {
+                                string sdlKey = dolphinSDLMapping[targetKey];
+                                ini.WriteValue("Hotkeys", hk.Key, "Back&" + sdlKey + kbKey);
+                            }
+                            else
+                            {
+                                var xKey = c1.GetXInputMapping(targetKey);
+                                if (xKey != XINPUTMAPPING.UNKNOWN && xInputMapping.ContainsKey(xKey))
+                                {
+                                    string xinputKey = xInputMapping[xKey];
+                                    ini.WriteValue("Hotkeys", hk.Key, "Back&" + xinputKey + kbKey);
+                                }
+                            }
+                        }
+
+                        // OLD forced values for history sake
+                        /* ini.WriteValue("Hotkeys", "General/Toggle Pause", tech == "XInput" ? "@(Back+`Button B`)" : "@(Back+`Button E`)");
+                        ini.WriteValue("Hotkeys", "General/Toggle Pause", "");
+                        ini.WriteValue("Hotkeys", "General/Toggle Fullscreen", tech == "XInput" ? "@(Back+`Button A`)" : "@(Back+`Button S`)");
+                        ini.WriteValue("Hotkeys", "General/Exit", "@(Back+Start)");
+
+                        // SaveStates
+                        ini.WriteValue("Hotkeys", "General/Take Screenshot", tech == "XInput" ? "@(Back+`Button X`)" : "@(Back+`Button W`)"); // Use Same value as SaveState....
+                        ini.WriteValue("Hotkeys", "Save State/Save to Selected Slot", tech == "XInput" ? "@(Back+`Button X`)" : "@(Back+`Button W`)");
+                        ini.WriteValue("Hotkeys", "Load State/Load from Selected Slot", tech == "XInput" ? "@(Back+`Button Y`)" : "@(Back+`Button N`)");
+                        ini.WriteValue("Hotkeys", "Other State Hotkeys/Increase Selected State Slot", "@(Back+`Pad N`)");
+                        ini.WriteValue("Hotkeys", "Other State Hotkeys/Decrease Selected State Slot", "@(Back+`Pad S`)");
+
+                        ini.WriteValue("Hotkeys", "Emulation Speed/Decrease Emulation Speed", "@(Back+`Shoulder L`)");
+                        ini.WriteValue("Hotkeys", "Emulation Speed/Increase Emulation Speed", "@(Back+`Shoulder R`)");*/
+                    }
+                }
+                else // Keyboard only
+                {
+                    ini.WriteValue("Hotkeys", "Device", "DInput/0/Keyboard Mouse");
+                    WriteKBHotkeys(ini);
+                }
+            }
+        }
+
+        private static void WriteKBHotkeys(IniFile ini, bool controller = false)
+        {
+            if (Hotkeys.GetHotKeysFromFile("dolphin", "", out Dictionary<string, HotkeyResult> hotkeys))
+            {
+                var test = hotkeys;
+                foreach (var h in hotkeys)
+                {
+                    string value = h.Value.EmulatorValue;
+                    if (controller)
+                        value = "`DInput/0/Keyboard Mouse:" + h.Value.EmulatorValue + "`";
+                    
+                    ini.WriteValue("Hotkeys", h.Value.EmulatorKey, value);
+                }
+            }
+            else if (controller)
+            {
+                ini.WriteValue("Hotkeys", "General/Toggle Pause", "`DInput/0/Keyboard Mouse:P`");
+                ini.WriteValue("Hotkeys", "General/Exit", "`DInput/0/Keyboard Mouse:ESCAPE`");
+                ini.WriteValue("Hotkeys", "Emulation Speed/Increase Emulation Speed", "`DInput/0/Keyboard Mouse:L`");
+                ini.WriteValue("Hotkeys", "Emulation Speed/Decrease Emulation Speed", "`DInput/0/Keyboard Mouse:BACK`");
+                ini.WriteValue("Hotkeys", "Save State/Save to Selected Slot", "`DInput/0/Keyboard Mouse:F2`");
+                ini.WriteValue("Hotkeys", "Load State/Load from Selected Slot", "`DInput/0/Keyboard Mouse:F4`");
+                ini.WriteValue("Hotkeys", "General/Take Screenshot", "`DInput/0/Keyboard Mouse:F8`");
+                ini.WriteValue("Hotkeys", "Other State Hotkeys/Increase Selected State Slot", "`DInput/0/Keyboard Mouse:F7`");
+                ini.WriteValue("Hotkeys", "Other State Hotkeys/Decrease Selected State Slot", "`DInput/0/Keyboard Mouse:F6`");
+                ini.WriteValue("Hotkeys", "General/Toggle Fullscreen", "`DInput/0/Keyboard Mouse:F`");
+                ini.WriteValue("Hotkeys", "Frame Advance/Frame Advance", "`DInput/0/Keyboard Mouse:K`");
+                ini.WriteValue("Hotkeys", "General/Eject Disc", "`DInput/0/Keyboard Mouse:F11`");
+                ini.WriteValue("Hotkeys", "General/Change Disc", "`DInput/0/Keyboard Mouse:F9`");
+            }
+
+            else
+            {
+                ini.WriteValue("Hotkeys", "General/Toggle Pause", "P");
+                ini.WriteValue("Hotkeys", "General/Exit", "ESCAPE");
+                ini.WriteValue("Hotkeys", "Emulation Speed/Increase Emulation Speed", "L");
+                ini.WriteValue("Hotkeys", "Emulation Speed/Decrease Emulation Speed", "BACK");
+                ini.WriteValue("Hotkeys", "Save State/Save to Selected Slot", "`F2`");
+                ini.WriteValue("Hotkeys", "Load State/Load from Selected Slot", "`F4`");
+                ini.WriteValue("Hotkeys", "General/Take Screenshot", "`F8`");
+                ini.WriteValue("Hotkeys", "Other State Hotkeys/Increase Selected State Slot", "`F7`");
+                ini.WriteValue("Hotkeys", "Other State Hotkeys/Decrease Selected State Slot", "`F6`");
+                ini.WriteValue("Hotkeys", "General/Toggle Fullscreen", "F");
+                ini.WriteValue("Hotkeys", "Frame Advance/Frame Advance", "K");
+                ini.WriteValue("Hotkeys", "General/Eject Disc", "`F11`");
+                ini.WriteValue("Hotkeys", "General/Change Disc", "`F9`");
+            }
+        }
+
+        private static void SetSIDDevices(IniFile ini, string system)
+        {
+            bool wiiGCPad = system == "wii" && Program.SystemConfig.isOptSet("wii_gamecube") && Program.SystemConfig.getOptBoolean("wii_gamecube");
+            for (int i = 0; i < 4; i++)
+            {
+                var ctl = Program.Controllers.FirstOrDefault(c => c.PlayerIndex == i + 1);
+                bool gcPad = (system == "gamecube" && Program.SystemConfig.isOptSet("gamecubepad" + i) && Program.SystemConfig["gamecubepad" + i] == "12");
+                bool gbaPad = (system == "gamecube" && Program.SystemConfig.isOptSet("gamecubepad" + i) && Program.SystemConfig["gamecubepad" + i] == "13");
+
+                if (wiiGCPad || gcPad)
+                    ini.WriteValue("Core", "SIDevice" + i, "12");
+
+                else if (gbaPad)
+                    ini.WriteValue("Core", "SIDevice" + i, "13");
+
+                else if (ctl != null && ctl.Config != null)
+                    ini.WriteValue("Core", "SIDevice" + i, "6");
+
+                else
+                    ini.WriteValue("Core", "SIDevice" + i, "0");
+            }
+        }
+
+        static readonly InputKeyMapping DInputMapping = new InputKeyMapping()
+        {
+            { InputKey.l3,              "leftstick"},
+            { InputKey.r3,              "rightstick"},
+            { InputKey.l2,              "lefttrigger" },
+            { InputKey.r2,              "righttrigger"},
+            { InputKey.y,               "y" },
+            { InputKey.b,               "a" },
+            { InputKey.x,               "x" },
+            { InputKey.a,               "b" },
+            { InputKey.start,           "start" },
+            { InputKey.pagedown,        "rightshoulder" },
+            { InputKey.pageup,          "leftshoulder" },
+            { InputKey.up,              "dpup" },
+            { InputKey.down,            "dpdown" },
+            { InputKey.left,            "dpleft" },
+            { InputKey.right,           "dpright" },
+            { InputKey.joystick1up,     "lefty" },
+            { InputKey.joystick1left,   "leftx" },
+            { InputKey.joystick2up,     "righty" },
+            { InputKey.joystick2left,   "rightx"},
+            { InputKey.select,          "back" },
+        };
+
+        private static string GetDInputCode(string button, SdlToDirectInput ctrl, bool revertAxis = false)
+        {
+            if (button.StartsWith("h"))
+            {
+                int hatID = button.Substring(3).ToInteger();
+                switch (hatID)
+                {
+                    case 1: return "`Hat 0 N`";
+                    case 2: return "`Hat 0 E`";
+                    case 4: return "`Hat 0 S`";
+                    case 8: return "`Hat 0 W`";
+                }
+                ;
+            }
+
+            else if (button.StartsWith("b"))
+            {
+                var test = button.Substring(1).ToLower();
+                int buttonID = button.Substring(1).ToInteger();
+                return "`Button " + buttonID + "`";
+            }
+
+            else if (button.StartsWith("a") || button.StartsWith("-a") || button.StartsWith("+a"))
+            {
+                int axisID = button.Substring(1).ToInteger();
+
+                if (button.StartsWith("-a") || button.StartsWith("+a"))
+                    axisID = button.Substring(2).ToInteger();
+
+                else if (button.StartsWith("a"))
+                    axisID = button.Substring(1).ToInteger();
+
+                switch (axisID)
+                {
+                    case 0:
+                        return "`Axis X" + (revertAxis ? "+" : "-") + "`";
+                    case 1:
+                        return "`Axis Y" + (revertAxis ? "+" : "-") + "`";
+                    case 2:
+                        return "`Axis Z" + (revertAxis ? "+" : "-") + "`";
+                    case 3:
+                        return "`Axis Xr" + (revertAxis ? "+" : "-") + "`";
+                    case 4:
+                        return "`Axis Yr" + (revertAxis ? "+" : "-") + "`";
+                    case 5:
+                        return "`Axis Zr" + (revertAxis ? "+" : "-") + "`";
+                }
+            }
+
+            return "";
+        }
+
+        private static string GetSDLMappingName(Controller pad, InputKey key)
+        {
+            var input = pad.GetSdlMapping(key);
+            if (input == null)
+                return null;
+
+            if (input.Type == "button")
+            {
+                if (input.Id == 0) // invert A&B
+                    return "`Button 1`";
+
+                if (input.Id == 1) // invert A&B
+                    return "`Button 0`";
+
+                return "`Button " + input.Id.ToString() + "`";
+            }
+
+            if (input.Type == "axis")
+            {
+                Func<Input, bool, string> axisValue = (inp, revertAxis) =>
+                {
+                    string axis = "`Axis ";
+
+                    if (inp.Id == 0 || inp.Id == 1 || inp.Id == 2 || inp.Id == 3)
+                        axis += inp.Id;
+
+                    if ((!revertAxis && inp.Value > 0) || (revertAxis && inp.Value < 0))
+                        axis += "+";
+                    else
+                        axis += "-";
+
+                    if (inp.Id == 4 || inp.Id == 5)
+                        axis = "`Full Axis " + inp.Id + "+";
+
+                    return axis + "`";
+                };
+
+                return axisValue(input, false);
+                /*
+                string reverseAxis;
+                if (anyReverseAxes.TryGetValue(value, out reverseAxis))
+                    ini.WriteValue(gcpad, reverseAxis, axisValue(input, true));*/
+            }
+
+            return null;
+        }
+
+        private static string ToDolphinKey(long id)
+        {
+            if (id >= 97 && id <= 122)
+            {
+                List<int> azertyLayouts = new List<int>() { 1036, 2060, 3084, 5132, 4108 };
+                if (azertyLayouts.Contains(CultureInfo.CurrentCulture.KeyboardLayoutId))
+                {
+                    if (id == 'a')
+                        id = 'q';
+                    else if (id == 'q')
+                        id = 'a';
+                    else if (id == 'w')
+                        id = 'z';
+                    else if (id == 'z')
+                        id = 'w';
+                }
+                return ((char)id).ToString().ToUpper();
+            }
+
+            switch (id)
+            {
+                case 32: return "SPACE";
+                case 13:
+                case 0x4000009e: return "RETURN"; // Return2
+
+                case 0x400000e1: return "LSHIFT"; // Shift = 
+                case 0x400000e0: return "LCONTROL"; // Ctrl = 
+                case 0x400000e2: return "LMENU"; // Alt = 
+
+                case 0x4000004b: return "PRIOR"; // PageUp = ,
+                case 0x4000004e: return "NEXT"; // PageDown = ,
+                case 0x4000004d: return "END"; // End = ,
+                case 0x4000004a: return "HOME"; // Home = ,
+                case 0x40000050: return "LEFT"; // Left = ,
+                case 0x40000052: return "UP"; // Up = ,
+                case 0x4000004f: return "RIGHT"; // Right = ,
+                case 0x40000051: return "DOWN"; // Down = 0x40000051,
+
+                case 0x40000049: return "INSERT"; // Insert = 0x40000049,
+                case 0x0000007f: return "DELETE"; // Delete = 0x0000007f,
+
+                case 0x40000059: return "NUMPAD1";  //KP_1 = 0x40000059,
+                case 0X4000005A: return "NUMPAD2";  //KP_2 = 0X4000005A,
+                case 0x4000005b: return "NUMPAD3";  // KP_3 = ,
+                case 0x4000005c: return "NUMPAD4"; // KP_4 = ,
+                case 0x4000005d: return "NUMPAD5"; // KP_5 = ,
+                case 0x4000005e: return "NUMPAD6"; // KP_6 = ,
+                case 0x4000005f: return "NUMPAD7"; // KP_7 = ,
+                case 0x40000060: return "NUMPAD8"; // KP_8 = ,
+                case 0x40000061: return "NUMPAD9"; // KP_9 = ,
+                case 0x40000062: return "NUMPAD0";  // KP_0 = 0x40000062,
+                case 0x40000055: return "MULTIPLY"; // KP_Multiply
+                case 0x40000057: return "ADD"; // KP_Plus
+                case 0x40000056: return "SUBSTRACT"; // KP_Minus
+
+                case 0x4000003a: return "F1"; // F1
+                case 0x4000003b: return "F2"; // F2
+                case 0x4000003c: return "F3"; // F3
+                case 0x4000003d: return "F4"; // F4
+                case 0x4000003e: return "F5"; // F5
+                case 0x4000003f: return "F6"; // F6
+                case 0x40000040: return "F7"; // F7
+                case 0x40000041: return "F8"; // F8
+                case 0x40000042: return "F9"; // F9
+                case 0x40000043: return "F10"; // F10
+                case 0x40000044: return "F11"; // F11
+                case 0x40000045: return "F12"; // F12
+                case 0x400000e6: return "RMENU"; // RightAlt
+                case 0x400000e4: return "RCONTROL"; // RightCtrl
+                case 0x400000e5: return "RSHIFT"; // RightShift
+                case 0x40000058: return "NUMPADENTER"; // Kp_ENTER
+                    /*        
+                    KP_Period = 0x40000063,
+                    KP_Divide = 0x40000054,
+
+                    NumlockClear = 0x40000053,
+                    ScrollLock = 0x40000047,                
+                     * //Select = 0x40000077,
+                    //PrintScreen = 0x40000046,
+                    //LeftGui = 0x400000e3,
+                    //RightGui = 0x400000e7,
+                    //Application = 0x40000065,            
+                    //Gui = 0x400000e3,
+                    //Pause = 0x40000048,
+                    //Capslock = 0x40000039,
+
+                     */
+            }
+
+            return null;
+        }
+
+        static Dictionary<InputKey, string> dolphinSDLMapping = new Dictionary<InputKey, string>()
+        {
+            { InputKey.l3,              "`Thumb L`"},
+            { InputKey.r3,              "`Thumb R`"},
+            { InputKey.l2,              "`Trigger L`" },
+            { InputKey.r2,              "`Trigger R`"},
+            { InputKey.y,               "`Button W`" },
+            { InputKey.b,               "`Button S`" },
+            { InputKey.x,               "`Button N`" },
+            { InputKey.a,               "`Button E`" },
+            { InputKey.start,           "Start" },
+            { InputKey.pagedown,        "`Shoulder R`" },
+            { InputKey.pageup,          "`Shoulder L`" },
+            { InputKey.up,              "`Pad N`" },
+            { InputKey.down,            "`Pad S`" },
+            { InputKey.left,            "`Pad W`" },
+            { InputKey.right,           "`Pad E`" },
+            { InputKey.joystick1up,     "`Left Y+`" },
+            { InputKey.joystick1left,   "`Left X-`" },
+            { InputKey.joystick1down,   "`Left Y-`" },
+            { InputKey.joystick1right,  "`Left X+`" },
+            { InputKey.joystick2up,     "`Right Y+`" },
+            { InputKey.joystick2left,   "`Right X-`"},
+            { InputKey.joystick2down,   "`Right Y-`" },
+            { InputKey.joystick2right,  "`Right X+`" },
+            { InputKey.hotkey,          "Back" },
+            { InputKey.select,          "Back" }
+        };
+
+        static readonly Dictionary<XINPUTMAPPING, string> xInputMapping = new Dictionary<XINPUTMAPPING, string>()
+        {
+            { XINPUTMAPPING.X,                  "`Button Y`" },
+            { XINPUTMAPPING.B,                  "`Button A`" },
+            { XINPUTMAPPING.Y,                  "`Button X`" },
+            { XINPUTMAPPING.A,                  "`Button B`" },
+            { XINPUTMAPPING.BACK,               "Back" },
+            { XINPUTMAPPING.START,              "Start" },
+            { XINPUTMAPPING.LEFTSHOULDER,       "`Shoulder L`" },
+            { XINPUTMAPPING.RIGHTSHOULDER,      "`Shoulder R`" },
+            { XINPUTMAPPING.DPAD_UP,            "`Pad N`" },
+            { XINPUTMAPPING.DPAD_DOWN,          "`Pad S`" },
+            { XINPUTMAPPING.DPAD_LEFT,          "`Pad W`" },
+            { XINPUTMAPPING.DPAD_RIGHT,         "`Pad E`" },
+            { XINPUTMAPPING.LEFTANALOG_UP,      "`Left Y+`" },
+            { XINPUTMAPPING.LEFTANALOG_DOWN,    "`Left Y-`" },
+            { XINPUTMAPPING.LEFTANALOG_LEFT,    "`Left X-`" },
+            { XINPUTMAPPING.LEFTANALOG_RIGHT,   "`Left X+`"},
+            { XINPUTMAPPING.RIGHTANALOG_UP,     "`Right Y+`" },
+            { XINPUTMAPPING.RIGHTANALOG_DOWN,   "`Right Y-`" },
+            { XINPUTMAPPING.RIGHTANALOG_LEFT,   "`Right X-`" },
+            { XINPUTMAPPING.RIGHTANALOG_RIGHT,  "`Right X+`"},
+            { XINPUTMAPPING.LEFTSTICK,          "`Thumb L`" },
+            { XINPUTMAPPING.RIGHTSTICK,         "`Thumb R`" },
+            { XINPUTMAPPING.LEFTTRIGGER,        "`Trigger L`" },
+            { XINPUTMAPPING.RIGHTTRIGGER,       "`Trigger R`" }
+        };
+    }
+}
