@@ -58,3 +58,8 @@ export function getArtsPath(): string {
 export function getFontsPath(): string {
   return join(getResourcesPath(), 'fonts')
 }
+
+export function getLogsPath(): string {
+  return join(getRiescadePath(), 'logs')
+}
+

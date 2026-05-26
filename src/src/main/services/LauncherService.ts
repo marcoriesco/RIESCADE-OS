@@ -3,7 +3,7 @@ import { join, resolve, dirname } from 'path'
 import { writeFileSync, existsSync, mkdirSync, appendFileSync } from 'fs'
 import { tmpdir } from 'os'
 import { Game, System } from '../../shared/types'
-import { getRetroBatPath, getRiescadePath } from '../utils/paths'
+import { getRetroBatPath, getRiescadePath, getLogsPath } from '../utils/paths'
 import { SettingsParser } from '../parsers/SettingsParser'
 
 interface ControllerInfo {
@@ -17,7 +17,7 @@ interface ControllerInfo {
 
 function writeLog(msg: string): void {
   try {
-    const logDir = join(getRiescadePath(), 'src')
+    const logDir = getLogsPath()
     if (!existsSync(logDir)) {
       mkdirSync(logDir, { recursive: true })
     }
@@ -28,6 +28,7 @@ function writeLog(msg: string): void {
     console.error('[LauncherService] Failed to write to debug_launcher.log:', e)
   }
 }
+
 
 export class LauncherService {
   public launch(game: Game, system: System, activeControllers: ControllerInfo[] = [], saveStateSlot?: number): Promise<void> {

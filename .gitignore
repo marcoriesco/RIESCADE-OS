@@ -1,0 +1,11 @@
+roms/
+bios/
+emulators/
+
+src/node_modules/
+src/dist/
+src/out/
+
+.riescade/
+
+*.log

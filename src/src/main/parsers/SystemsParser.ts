@@ -2,7 +2,7 @@ import { XMLParser } from 'fast-xml-parser'
 import { readFileSync, writeFileSync, existsSync, readdirSync, opendirSync } from 'fs'
 import { join, resolve, dirname } from 'path'
 import { System } from '../../shared/types'
-import { getConfigPath, getRomsPath, getLogosPath, getArtsPath } from '../utils/paths'
+import { getConfigPath, getRomsPath, getLogosPath, getArtsPath, getLogsPath } from '../utils/paths'
 import { SettingsParser } from './SettingsParser'
 
 export class SystemsParser {
@@ -136,8 +136,8 @@ export class SystemsParser {
 
     try {
       const debugContent = resolvedSystems.map(s => `System: ${s.name}, Path: ${s.path}, Exists: ${s._pathExists}`).join('\n')
-      const debugPath = join(configPath, '..', '.riescade', 'src', 'debug_systems.log')
-      const debugDir = dirname(debugPath)
+      const debugDir = getLogsPath()
+      const debugPath = join(debugDir, 'debug_systems.log')
       const fs = require('fs')
       if (!fs.existsSync(debugDir)) {
         fs.mkdirSync(debugDir, { recursive: true })

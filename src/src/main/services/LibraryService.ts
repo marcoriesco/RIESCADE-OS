@@ -3,7 +3,7 @@ import { existsSync, readdirSync, readFileSync, statSync } from 'fs'
 import { SystemsParser } from '../parsers/SystemsParser'
 import { GamelistParser } from '../parsers/GamelistParser'
 import { SettingsParser } from '../parsers/SettingsParser'
-import { getConfigPath, getRomsPath, getRetroBatPath } from '../utils/paths'
+import { getConfigPath, getRomsPath, getRetroBatPath, getLogsPath } from '../utils/paths'
 import { System, Game } from '../../shared/types'
 
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
@@ -292,16 +292,15 @@ export class LibraryService {
     }
 
     try {
-      const logStr = `getGames systemName: ${systemName}\n  systemFound: ${!!system}\n  systemPath: ${system ? system.path : 'N/A'}\n  gamelistPath: ${gamelistPath} (exists: ${existsSync(gamelistPath)})\n  romsGamelistPath: ${romsGamelistPath} (exists: ${romsGamelistPath ? existsSync(romsGamelistPath) : false})\n  systemGamelistPath: ${systemGamelistPath} (exists: ${systemGamelistPath ? existsSync(systemGamelistPath) : false})\n  finalSource: ${source}\n  gamesCount: ${games.length}\n\n`
-      readFileSync(join(configPath, '..', '.riescade', 'src', 'debug_games.log')) // Force dependency
+      const logDir = getLogsPath()
       const fs = require('fs')
-      fs.appendFileSync(join(configPath, '..', '.riescade', 'src', 'debug_games.log'), logStr, 'utf-8')
+      if (!fs.existsSync(logDir)) {
+        fs.mkdirSync(logDir, { recursive: true })
+      }
+      const logStr = `getGames systemName: ${systemName}\n  systemFound: ${!!system}\n  systemPath: ${system ? system.path : 'N/A'}\n  gamelistPath: ${gamelistPath} (exists: ${existsSync(gamelistPath)})\n  romsGamelistPath: ${romsGamelistPath} (exists: ${romsGamelistPath ? existsSync(romsGamelistPath) : false})\n  systemGamelistPath: ${systemGamelistPath} (exists: ${systemGamelistPath ? existsSync(systemGamelistPath) : false})\n  finalSource: ${source}\n  gamesCount: ${games.length}\n\n`
+      fs.appendFileSync(join(logDir, 'debug_games.log'), logStr, 'utf-8')
     } catch(e) {
-      try {
-        const fs = require('fs')
-        const logStr = `getGames systemName: ${systemName}\n  systemFound: ${!!system}\n  systemPath: ${system ? system.path : 'N/A'}\n  finalSource: ${source}\n  gamesCount: ${games.length}\n\n`
-        fs.appendFileSync(join(configPath, '..', '.riescade', 'src', 'debug_games.log'), logStr, 'utf-8')
-      } catch (err) {}
+      console.error('Failed to write debug_games.log:', e)
     }
 
     const processedGames = games.map(g => {
