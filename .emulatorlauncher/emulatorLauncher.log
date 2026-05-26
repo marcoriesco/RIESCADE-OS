@@ -452,3 +452,5 @@
 2026-05-26 02:50:39.922 [INFO]      [INFO] Gun configuration not required, configuring controller.
 2026-05-26 02:50:40.520 [INFO]      [PadToKey] Loaded C:\tmp\RIESCADE OS\.emulatorlauncher\.emulationstation\es_padtokey.cfg
 2026-05-26 02:50:40.526 [INFO]      [Running] C:\tmp\RIESCADE OS\emulators\TeknoParrot\TeknoParrotUi.exe --profile=CSNEO.xml --startMinimized
+2026-05-26 02:55:26.865 [INFO]      [Generator] Process exited with code 0
+2026-05-26 02:55:26.954 [INFO]      [Generator] Cleanup.
