@@ -1,6 +1,6 @@
-roms/
-bios/
-emulators/
+roms
+bios
+emulators
 
 src/node_modules/
 src/dist/
