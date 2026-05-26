@@ -19,6 +19,8 @@ type System = {
   command: string;
   platform: string;
   theme: string;
+  logo: string;
+  art: string;
   hardware?: string;
   gamecount?: number;
   emulators?: any[];
@@ -45,6 +47,7 @@ type Game = {
   system: string;
   fanart?: string;
   wheel?: string;
+  emulator?: string;
 };
 
 type WinState = {
