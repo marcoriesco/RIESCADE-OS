@@ -94,18 +94,18 @@ export class SystemsParser {
       const pathExists = existsSync(fullPath)
       
       const nameLower = s.name.toLowerCase()
-      let logoFile = join(getLogosPath(), `${s.name}.png`)
+      let logoFile = join(getLogosPath(), `${s.theme}.png`)
       if (!existsSync(logoFile)) {
         logoFile = join(getLogosPath(), `${nameLower}.png`)
       }
       const finalLogo = existsSync(logoFile) ? `file:///${logoFile.replace(/\\/g, '/')}` : ''
 
-      let artFile = join(getArtsPath(), `${s.name}.jpg`)
+      let artFile = join(getArtsPath(), `${s.theme}.jpg`)
       if (!existsSync(artFile)) {
         artFile = join(getArtsPath(), `${nameLower}.jpg`)
       }
       if (!existsSync(artFile)) {
-        artFile = join(getArtsPath(), `${s.name}.png`)
+        artFile = join(getArtsPath(), `${s.theme}.png`)
       }
       if (!existsSync(artFile)) {
         artFile = join(getArtsPath(), `${nameLower}.png`)

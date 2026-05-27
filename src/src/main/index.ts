@@ -1,4 +1,4 @@
-import { app, shell, BrowserWindow, ipcMain } from 'electron'
+import { app, shell, BrowserWindow, ipcMain, dialog } from 'electron'
 import { join, dirname, extname, basename } from 'path'
 import { exec } from 'child_process'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
@@ -10,7 +10,7 @@ import { SystemService } from './services/SystemService'
 import { ScraperService } from './services/ScraperService'
 import { Game, System } from '../shared/types'
 import { watch, FSWatcher, readFileSync, existsSync, writeFileSync, mkdirSync } from 'fs'
-import { getRetroBatPath, getConfigPath, getResourcesPath } from './utils/paths'
+import { getRetroBatPath, getConfigPath, getResourcesPath, getRiescadePath } from './utils/paths'
 import { XMLParser, XMLBuilder } from 'fast-xml-parser'
 import { SYSTEM_TO_SCREENSCRAPER_PLATFORM } from './services/ScraperService'
 
@@ -37,6 +37,8 @@ function sendToMainWindow(channel: string, ...args: any[]): void {
 
 function saveWindowConfig(): void {
   if (!mainWindow || mainWindow.isDestroyed()) return
+  const shouldSave = settingsParser.getSetting('RIESCADE.SaveWindowPositions', 'bool') !== 'false'
+  if (!shouldSave) return
 
   try {
     const isFullScreen = mainWindow.isFullScreen()
@@ -66,16 +68,17 @@ function saveWindowConfig(): void {
 }
 
 function createWindow(): void {
-  const isFullScreen = settingsParser.getSetting('Window.FullScreen', 'bool') === 'true'
-  const isMaximized = settingsParser.getSetting('Window.Maximized', 'bool') === 'true'
+  const shouldSave = settingsParser.getSetting('RIESCADE.SaveWindowPositions', 'bool') !== 'false'
+  const isFullScreen = shouldSave && settingsParser.getSetting('Window.FullScreen', 'bool') === 'true'
+  const isMaximized = shouldSave && settingsParser.getSetting('Window.Maximized', 'bool') === 'true'
   
   const defaultWidth = 1280
   const defaultHeight = 720
   
-  const savedWidth = settingsParser.getSetting('Window.Width', 'int')
-  const savedHeight = settingsParser.getSetting('Window.Height', 'int')
-  const savedX = settingsParser.getSetting('Window.X', 'int')
-  const savedY = settingsParser.getSetting('Window.Y', 'int')
+  const savedWidth = shouldSave ? settingsParser.getSetting('Window.Width', 'int') : null
+  const savedHeight = shouldSave ? settingsParser.getSetting('Window.Height', 'int') : null
+  const savedX = shouldSave ? settingsParser.getSetting('Window.X', 'int') : null
+  const savedY = shouldSave ? settingsParser.getSetting('Window.Y', 'int') : null
   
   const width = savedWidth !== null ? parseInt(savedWidth, 10) : defaultWidth
   const height = savedHeight !== null ? parseInt(savedHeight, 10) : defaultHeight
@@ -112,6 +115,11 @@ function createWindow(): void {
 
   mainWindow.on('close', () => {
     saveWindowConfig()
+    activeSubWindows.forEach((win) => {
+      if (win && !win.isDestroyed()) {
+        win.close()
+      }
+    })
   })
 
   mainWindow.webContents.setWindowOpenHandler((details) => {
@@ -148,7 +156,6 @@ function createAppWindow(type: 'system' | 'tool', id: string): void {
     if (id === 'library') { width = 980; height = 620; title = 'Biblioteca Gamer'; }
     else if (id === 'saves') { width = 760; height = 540; title = 'Gerenciador de Saves'; }
     else if (id === 'achievements') { width = 720; height = 520; title = 'Conquistas'; }
-    else if (id === 'files') { width = 820; height = 560; title = 'Arquivos'; }
     else if (id === 'settings') { width = 820; height = 560; title = 'Configurações'; }
   } else {
     try {
@@ -157,20 +164,37 @@ function createAppWindow(type: 'system' | 'tool', id: string): void {
     } catch {}
   }
 
-  const subWindow = new BrowserWindow({
-    width,
-    height,
+  const shouldSave = settingsParser.getSetting('RIESCADE.SaveWindowPositions', 'bool') !== 'false'
+  const savedWidth = shouldSave ? settingsParser.getSetting(`Window.${winKey}.Width`, 'int') : null
+  const savedHeight = shouldSave ? settingsParser.getSetting(`Window.${winKey}.Height`, 'int') : null
+  const savedX = shouldSave ? settingsParser.getSetting(`Window.${winKey}.X`, 'int') : null
+  const savedY = shouldSave ? settingsParser.getSetting(`Window.${winKey}.Y`, 'int') : null
+  const savedMaximized = shouldSave && settingsParser.getSetting(`Window.${winKey}.Maximized`, 'bool') === 'true'
+
+  const subWindowOptions: any = {
+    width: savedWidth !== null ? parseInt(savedWidth, 10) : width,
+    height: savedHeight !== null ? parseInt(savedHeight, 10) : height,
     show: false,
-    frame: type !== 'system', // Spotify-like frameless window for system platforms
+    frame: false,
     autoHideMenuBar: true,
-    parent: mainWindow || undefined,
     title: `RIESCADE OS - ${title}`,
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
       sandbox: false,
       webSecurity: false
     }
-  })
+  }
+
+  if (savedX !== null && savedY !== null) {
+    subWindowOptions.x = parseInt(savedX, 10)
+    subWindowOptions.y = parseInt(savedY, 10)
+  }
+
+  const subWindow = new BrowserWindow(subWindowOptions)
+
+  if (savedMaximized) {
+    subWindow.maximize()
+  }
 
   activeSubWindows.set(winKey, subWindow)
 
@@ -192,6 +216,34 @@ function createAppWindow(type: 'system' | 'tool', id: string): void {
 
   subWindow.on('blur', () => {
     sendToMainWindow('subwindow-state-changed', { type, id, state: 'blurred' })
+  })
+
+  subWindow.on('close', () => {
+    const shouldSave = settingsParser.getSetting('RIESCADE.SaveWindowPositions', 'bool') !== 'false'
+    if (shouldSave) {
+      try {
+        const isMaximized = subWindow.isMaximized()
+        settingsParser.saveSetting(`Window.${winKey}.Maximized`, isMaximized, 'bool')
+        
+        let bounds = { x: 0, y: 0, width, height }
+        if (isMaximized) {
+          try {
+            bounds = subWindow.getNormalBounds()
+          } catch (e) {
+            bounds = subWindow.getBounds()
+          }
+        } else {
+          bounds = subWindow.getBounds()
+        }
+
+        settingsParser.saveSetting(`Window.${winKey}.X`, bounds.x, 'int')
+        settingsParser.saveSetting(`Window.${winKey}.Y`, bounds.y, 'int')
+        settingsParser.saveSetting(`Window.${winKey}.Width`, bounds.width, 'int')
+        settingsParser.saveSetting(`Window.${winKey}.Height`, bounds.height, 'int')
+      } catch (err) {
+        console.error(`[saveWindowConfig] Failed to save subwindow bounds for ${winKey}:`, err)
+      }
+    }
   })
 
   subWindow.on('closed', () => {
@@ -391,7 +443,27 @@ app.whenReady().then(() => {
       }
     }
     
-    return res
+  })
+
+  ipcMain.handle('select-bg-image', async (event) => {
+    try {
+      console.log('[select-bg-image] Opening file dialog...')
+      const win = BrowserWindow.fromWebContents(event.sender) || mainWindow
+      const result = await dialog.showOpenDialog(win!, {
+        properties: ['openFile'],
+        filters: [
+          { name: 'Images', extensions: ['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp'] }
+        ]
+      })
+      console.log('[select-bg-image] Dialog finished. Canceled:', result.canceled, 'Paths:', result.filePaths)
+      if (!result.canceled && result.filePaths.length > 0) {
+        const filePath = result.filePaths[0]
+        return `file:///${filePath.replace(/\\/g, '/')}`
+      }
+    } catch (err) {
+      console.error('[select-bg-image] Error in file dialog handler:', err)
+    }
+    return null
   })
 
   // ─── IPC: Theme Settings (Stubbed for RIESCADE OS) ───
@@ -641,6 +713,11 @@ app.whenReady().then(() => {
 
   ipcMain.handle('get-overlay-path', async (_, name: string) => {
     const file = join(getResourcesPath(), 'overlay', name)
+    return existsSync(file) ? `file:///${file.replace(/\\/g, '/')}` : ''
+  })
+
+  ipcMain.handle('get-riescade-logo-path', async () => {
+    const file = join(getRiescadePath(), 'resources', 'riescade.png')
     return existsSync(file) ? `file:///${file.replace(/\\/g, '/')}` : ''
   })
 

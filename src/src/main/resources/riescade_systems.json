@@ -5465,42 +5465,6 @@
     ]
   },
   {
-    "name": "library",
-    "fullname": "Library",
-    "extension": ".jpg .jpeg .png .bmp .psd .tga .gif .hdr .pic .ppm .pgm .mkv .avi .mp4 .pdf .cbz .cbr",
-    "platform": "imageviewer",
-    "theme": "library",
-    "hardware": "system",
-    "emulators": [],
-    "command": "\"%HOME%\\emulatorLauncher.exe\" -gameinfo %GAMEINFOXML% %CONTROLLERSCONFIG% -system %SYSTEM% -emulator %EMULATOR% -core %CORE% -rom %ROM%"
-  },
-  {
-    "name": "retrobat",
-    "fullname": "RetroBat",
-    "extension": ".menu",
-    "platform": "retrobat",
-    "theme": "retrobat",
-    "hardware": "console",
-    "emulators": [],
-    "command": "\"%HOME%\\emulatorLauncher.exe\" -system retrobat -rom %ROM%"
-  },
-  {
-    "name": "screenshots",
-    "fullname": "Screenshots",
-    "extension": ".jpg .jpeg .png .bmp .psd .tga .gif .hdr .pic .ppm .pgm",
-    "platform": "imageviewer",
-    "theme": "screenshots",
-    "hardware": "console",
-    "emulators": [
-      {
-        "name": "libretro",
-        "cores": [
-          "imageviewer"
-        ]
-      }
-    ]
-  },
-  {
     "name": "mess",
     "fullname": "MESS",
     "extension": ".fake",

@@ -25,6 +25,7 @@ const api = {
   getSettings: () => ipcRenderer.invoke('get-settings'),
   saveSetting: (name: string, value: any, type: 'string' | 'bool' | 'int' | 'float') =>
     ipcRenderer.invoke('save-setting', name, value, type),
+  selectBgImage: () => ipcRenderer.invoke('select-bg-image'),
   getHostname: () => ipcRenderer.invoke('get-hostname'),
   getBiosInformation: () => ipcRenderer.invoke('get-bios-information'),
   cleanGamelists: () => ipcRenderer.invoke('clean-gamelists'),
@@ -58,6 +59,7 @@ const api = {
   searchGameMedia: (systemName: string, gameName: string, databases: string[], gamePath?: string) => ipcRenderer.invoke('search-game-media', systemName, gameName, databases, gamePath),
   downloadGameMedia: (systemName: string, gamePath: string, matchData: any) => ipcRenderer.invoke('download-game-media', systemName, gamePath, matchData),
   downloadTempMedia: (url: string) => ipcRenderer.invoke('download-temp-media', url),
+  getRiescadeLogoPath: () => ipcRenderer.invoke('get-riescade-logo-path'),
 
   // Events
   on: (channel: string, callback: (...args: any[]) => void) => {

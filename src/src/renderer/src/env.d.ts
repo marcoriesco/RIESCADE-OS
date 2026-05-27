@@ -19,6 +19,7 @@ declare global {
       loadTheme: (themeName: string) => Promise<any>
       getSettings: () => Promise<any>
       saveSetting: (name: string, value: any, type: string) => Promise<any>
+      selectBgImage: () => Promise<string | null>
       getThemeSettings: (themeName: string) => Promise<any>
       saveThemeSetting: (themeName: string, key: string, value: string) => Promise<any>
       getConfiguredControllers: () => Promise<any>
@@ -47,6 +48,7 @@ declare global {
       searchGameMedia: (systemName: string, gameName: string, databases: string[], gamePath?: string) => Promise<any[]>
       downloadGameMedia: (systemName: string, gamePath: string, matchData: any) => Promise<any>
       downloadTempMedia: (url: string) => Promise<string>
+      getRiescadeLogoPath: () => Promise<string>
       on: (channel: string, callback: (...args: any[]) => void) => () => void
     }
   }
