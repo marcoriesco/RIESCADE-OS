@@ -1,0 +1,6 @@
+## MEGA BEZEL
+default:
+  # shader affects retroarch shaders
+  shader: crt/crt-geom
+  # scanline affect fba2x
+  scanline: true

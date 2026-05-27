@@ -1,0 +1,76 @@
+# SUPERMODEL INPUT REMAPS FOR RETROARCH
+#
+# This file is provided with RetroBat
+#
+# It is used to automatically generate input remaps for Retroarch for Supermodel core (MODEL3 games)
+# Each container must be named exactly the same as your game rom file (without the extension)
+#
+# The elements listed are the buttons for which you want the function to be remapped
+# The key represents the RetroArch button code
+# The value represents the original button ID for the specific system/game
+# you can use the -1 value to unmap a button
+#
+daytona2:
+  btn_a: 13
+  btn_b: 11
+  btn_x: 10
+  btn_y: 12
+  btn_down: -1
+  btn_left: -1
+  btn_right: -1
+  btn_up: 1
+  btn_l: -1
+  btn_r: -1
+  btn_l2: 18
+  btn_r2: 19
+  stk_l_y+: -1
+  stk_l_y-: -1
+  stk_r_x+: -1
+  stk_r_x-: -1
+scud:
+  btn_a: 13
+  btn_b: 11
+  btn_x: 10
+  btn_y: 12
+  btn_down: -1
+  btn_left: -1
+  btn_right: -1
+  btn_up: 1
+  btn_l: -1
+  btn_r: -1
+  btn_l2: 18
+  btn_r2: 19
+  stk_l_y+: -1
+  stk_l_y-: -1
+  stk_r_x+: -1
+  stk_r_x-: -1
+fvipers2:
+  btn_a: 1
+  btn_b: 8
+  btn_y: 0
+  stk_r_x+: -1
+  stk_r_x-: -1
+spikeofe:
+  btn_a: 0
+  btn_b: 8
+  btn_l: -1
+  btn_r: 0
+  btn_l2: -1
+  btn_r2: -1
+  stk_r_x+: -1
+  stk_r_x-: -1
+spikeout:
+  btn_a: 0
+  btn_b: 8
+  btn_l: -1
+  btn_r: 0
+  btn_l2: -1
+  btn_r2: -1
+  stk_r_x+: -1
+  stk_r_x-: -1
+vf3:
+  btn_a: 1
+  btn_b: 8
+  btn_y: 0
+  stk_r_x+: -1
+  stk_r_x-: -1

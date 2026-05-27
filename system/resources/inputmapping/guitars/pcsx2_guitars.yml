@@ -1,0 +1,22 @@
+# This file is provided with RetroBat
+# It can be used to automatically generate Mapping automatically for your guitar in PCSX2
+# Each container must be named with the Guitar Type of your guitar controller (new types must be added by RetroBat team)
+# The elements listed are the keys and values of the mapping to set in pcsx2.ini file.
+#
+# You can configure your guitar once in pcsx2 directly, note the values and share them with the RetroBat team
+#
+CRKD_Guitar_XP:
+  inputdriver: xinput
+  Up: DPadUp
+  Down: DPadDown
+  Left: Hat0West
+  Right: Hat0East
+  Select: Back
+  Start: Start
+  Green: A
+  Red: B
+  Yellow: Y
+  Blue: X
+  Orange: LeftShoulder
+  Whammy: +RightX
+  Tilt: -RightY

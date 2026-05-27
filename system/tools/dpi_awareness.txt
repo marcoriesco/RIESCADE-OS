@@ -1,0 +1,5 @@
+emulators\gsplus\gsplus.exe
+emulators\raine\raine.exe
+emulators\retroarch\retroarch.exe
+emulators\supermodel\supermodel.exe
+emulators\zinc\ZiNc.exe

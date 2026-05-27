@@ -1,0 +1,226 @@
+[
+  {
+    "GameName": "F-ZeroAX",
+    "GameId": "GGGE6E",
+    "GameIdCrediar": "SBGG",
+    "Patches": [
+      {
+        "PatchFeature": "fzeroax_motor_revd",
+        "PatchName": "$Disable Motor Setup (Rev. D)",
+        "isGecko": false,
+        "Lines": [
+          "0x8024E034:dword:0x80180D5C",
+          "0x8024E038:dword:0x80180BC0"
+        ]
+      },
+      {
+        "PatchFeature": "fzeroax_motor_reve",
+        "PatchName": "$Disable Motor Setup (Rev. E)",
+        "isGecko": false,
+        "Lines": [
+          "0x8024E4B4:dword:0x801812E8",
+          "0x8024E4B8:dword:0x8018114C"
+        ]
+      }
+    ]
+  },
+  {
+    "GameName": "F-ZeroAX_Monster_Ride",
+    "GameId": "GHAE6E",
+    "GameIdCrediar": "SBHA",
+    "Patches": [
+      {
+        "PatchFeature": "fzeroaxmr_motor",
+        "PatchName": "$Disable Motor Setup",
+        "isGecko": false,
+        "Lines": [
+          "0x8023A0F4:dword:0x8016B4EC",
+          "0x8023A0F8:dword:0x8016B350"
+        ]
+      },
+      {
+        "PatchFeature": "fzeroaxmr_cycraft",
+        "PatchName": "$Bypass cycraft",
+        "isGecko": true,
+        "Lines": [
+          "0043137B 00000086"
+        ]
+      },
+      {
+        "PatchFeature": "fzeroaxmr_slowdown",
+        "PatchName": "$Slowdown fix",
+        "isGecko": true,
+        "Lines": [
+          "0043137E 00000000"
+        ]
+      }
+    ]
+  },
+  {
+    "GameName": "Mario_Kart_GP",
+    "GameId": "GKPJ6E",
+    "GameIdCrediar": "SBKP",
+    "Patches": [
+      {
+        "PatchFeature": "mkgp_namcam",
+        "PatchName": "$Disable NAMCAM",
+        "isGecko": false,
+        "Lines": [
+          "0x800790A0:dword:0x98650025"
+        ]
+      },
+      {
+        "PatchFeature": "mkgp_loopfix",
+        "PatchName": "$Loop Fix",
+        "isGecko": false,
+        "Lines": [
+          "0x8003226C:dword:0x60000000",
+          "0x80032278:dword:0x41820158"
+        ]
+      },
+      {
+        "PatchFeature": "mkgp_linkcheck",
+        "PatchName": "$Link Check Skip (Optional)",
+        "isGecko": true,
+        "Lines": [
+          "04032410 60000000"
+        ]
+      },
+      {
+        "PatchFeature": "mkgp_slowfix",
+        "PatchName": "$Slowdowns Fix (Required)",
+        "isGecko": true,
+        "Lines": [
+          "041b2238 60000000"
+        ]
+      }
+    ]
+  },
+  {
+    "GameName": "Mario_Kart_GP2",
+    "GameId": "GNLJ82",
+    "GameIdCrediar": "SBNL",
+    "Patches": [
+      {
+        "PatchFeature": "mkgp2_namcam",
+        "PatchName": "$Disable NAMCAM",
+        "isGecko": false,
+        "Lines": [
+          "0x805986E5:byte:0x00000000",
+          "0x80073BD8:dword:0x98650025"
+        ]
+      },
+      {
+        "PatchFeature": "mkgp2_loopfix",
+        "PatchName": "$Loop Fix",
+        "isGecko": false,
+        "Lines": [
+          "0x8002E9C8:dword:0x60000000",
+          "0x8002E9D4:dword:0x41820158"
+        ]
+      },
+      {
+        "PatchFeature": "mkgp2_loopfix_jpn",
+        "PatchName": "$Loop Fix (JPN)",
+        "isGecko": false,
+        "Lines": [
+          "0x8002EA28:dword:0x60000000",
+          "0x8002EA34:dword:0x41820158"
+        ]
+      },
+      {
+        "PatchFeature": "mkgp2_slowdownfix_us",
+        "PatchName": "$Slowdowns Fix (US - Required)",
+        "isGecko": true,
+        "Lines": [
+          "04086150 60000000"
+        ]
+      },
+      {
+        "PatchFeature": "mkgp2_slowdownfix_jp",
+        "PatchName": "$Slowdowns Fix (JPN - Required)",
+        "isGecko": true,
+        "Lines": [
+          "04086768 60000000"
+        ]
+      },
+      {
+        "PatchFeature": "mkgp2_linkcheck_us",
+        "PatchName": "$Link Check Skip (US - Optional)",
+        "isGecko": true,
+        "Lines": [
+          "0402eb6c 60000000"
+        ]
+      },
+      {
+        "PatchFeature": "mkgp2_linkcheck_jp",
+        "PatchName": "$Link Check Skip (JPN - Optional)",
+        "isGecko": true,
+        "Lines": [
+          "0402ebcc 60000000"
+        ]
+      },
+      {
+        "PatchFeature": "mkgp2_bootcheck_us",
+        "PatchName": "$Skip boot checks (US - Optional)",
+        "isGecko": true,
+        "Lines": [
+          "0402e858 60000000"
+        ]
+      },
+      {
+        "PatchFeature": "mkgp2_bootcheck_jp",
+        "PatchName": "$Skip boot checks (JPN - Optional)",
+        "isGecko": true,
+        "Lines": [
+          "0402e8b8 60000000"
+        ]
+      }
+    ]
+  },
+  {
+    "GameName": "VS4",
+    "GameId": "GJAP6E",
+    "GameIdCrediar": "SBJA",
+    "Patches": [
+      {
+        "PatchFeature": "vs4_bypass_code",
+        "PatchName": "$bypass code",
+        "isGecko": true,
+        "Lines": [
+          "0405214c 60000000"
+        ]
+      }
+    ]
+  },
+  {
+    "GameName": "VS4_2006_JAP",
+    "GameId": "GLKJ6E",
+    "GameIdCrediar": "SBLK",
+    "Patches": [
+      {
+        "PatchFeature": "vs42006jap_bypass_boot",
+        "PatchName": "$Bypass boot",
+        "isGecko": true,
+        "Lines": [
+          "040568D8 60000000"
+        ]
+      }
+    ]
+  },
+  {
+    "GameName": "VS4_2006",
+    "GameId": "GLLP6E",
+    "GameIdCrediar": "SBLL",
+    "Patches": [
+      {
+        "PatchFeature": "vs42006_bypass_code",
+        "PatchName": "$bypass code",
+        "isGecko": false,
+        "Lines": [
+          "0x80414CE8:byte:0x00000005"
+        ]
+      }
+    ]
+  }
+]

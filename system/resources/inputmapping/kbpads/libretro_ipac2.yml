@@ -1,0 +1,54 @@
+# This file is provided with RetroBat
+# It is used to automatically generate the RetroArch mapping for the IPAC2 controller.
+# Each container must be named exactly the same as either your game rom file (without the extension), the core or the system you want the mapping to be applied to.
+# It works like an override, you just need to enter what is different from default, the override order is "default" => "system" => "core" => "game"
+# The elements listed are the buttons that will be mapped in RetroArch.
+default:
+  input_player1_select: num5
+  input_player1_start: num1
+  input_player1_left: left
+  input_player1_right: right
+  input_player1_up: up
+  input_player1_down: down
+  input_player1_a: ctrl
+  input_player1_b: alt
+  input_player1_x: space
+  input_player1_y: shift
+  input_player1_l: z
+  input_player1_r: x
+  input_player1_l2: c
+  input_player1_r2: v
+  input_player1_l3: j
+  input_player1_r3: l
+  input_player2_select: num6
+  input_player2_start: num2
+  input_player2_left: d
+  input_player2_right: g
+  input_player2_up: r
+  input_player2_down: f
+  input_player2_a: a
+  input_player2_b: s
+  input_player2_x: q
+  input_player2_y: w
+  input_player2_l: i
+  input_player2_r: k
+  input_player2_l2: o
+  input_player2_r2: l
+  input_enable_hotkey: nul
+  input_exit_emulator: escape
+  input_menu_toggle: tab
+  input_pause_toggle: p
+  input_toggle_fullscreen: nul
+  input_shader_prev: nul
+  input_shader_next: nul
+  input_reset: nul
+  input_rewind: nul
+  input_hold_slowmotion: nul
+  input_frame_advance: nul
+  input_toggle_fast_forward: nul
+  input_hold_fast_forward: nul
+  input_cheat_index_minus: nul
+  input_cheat_index_plus: nul
+  input_cheat_toggle: nul
+  input_audio_mute: nul
+  input_netplay_game_watch: nul

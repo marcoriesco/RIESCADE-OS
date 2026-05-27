@@ -1,0 +1,1252 @@
+<?xml version="1.0"?>
+<filter name="Test">
+	<genre>ACTION</genre>
+	<genre>ADULTE</genre>
+	<genre>AVENTURE</genre>
+	<genre>BEAT'EM ALL</genre>
+	<genre>CASINO / COURSE</genre>
+	<genre>CASINO</genre>
+	<genre>CASUAL GAME</genre>
+	<genre>COMBAT / VERSUS</genre>
+	<genre>COMBAT</genre>
+	<genre>COMPILATION</genre>
+	<genre>COURSE, CONDUITE</genre>
+	<genre>DIVERS</genre>
+	<genre>FLIPPER</genre>
+	<genre>JEU DE CARTES</genre>
+	<genre>JEU DE RÔLES</genre>
+	<genre>JEU DE SOCIETE / PLATEAU</genre>
+	<genre>LUDO-EDUCATIF</genre>
+	<genre>PLATEFORME / FIGHTER SCROLLING</genre>
+	<genre>PLATEFORME / RUN JUMP</genre>
+	<genre>PLATEFORME</genre>
+	<genre>PUZZLE-GAME</genre>
+	<genre>QUIZ</genre>
+	<genre>RÉFLEXION</genre>
+	<genre>SHOOT'EM UP / HORIZONTAL</genre>
+	<genre>SHOOT'EM UP</genre>
+	<genre>SIMULATION</genre>
+	<genre>SPORT / BASEBALL</genre>
+	<genre>SPORT / FOOTBALL</genre>
+	<genre>SPORT / GOLF</genre>
+	<genre>SPORT / HOCKEY</genre>
+	<genre>SPORT / LUTTE</genre>
+	<genre>SPORT / TENNIS</genre>
+	<genre>SPORT</genre>
+	<genre>STRATÉGIE</genre>
+	<genre>TIR / 3EME PERSONNE</genre>
+	<genre>TIR / RUN AND GUN</genre>
+	<genre>TIR / SPACE INVADERS LIKE</genre>
+	<genre>TIR AVEC ACCESSOIRE</genre>
+	<genre>TIR</genre>
+	<players>1</players>
+	<players>2</players>
+	<players>3</players>
+	<players>4</players>
+	<players>5</players>
+	<players>6</players>
+	<players>7</players>
+	<players>8</players>
+	<players>9</players>
+	<pubDev>16 BLITZ MASTERTRONIC</pubDev>
+	<pubDev>2008</pubDev>
+	<pubDev>20TH CENTURY FOX</pubDev>
+	<pubDev>21ST CENTURY</pubDev>
+	<pubDev>221B SOFTWARE DEVELOPMENT</pubDev>
+	<pubDev>5TH DIMENSION</pubDev>
+	<pubDev>A&amp;F SOFTWARE</pubDev>
+	<pubDev>AARDVARK SOFTWARE</pubDev>
+	<pubDev>ABERSOFT</pubDev>
+	<pubDev>ABSOLUTE ENTERTAINMENT</pubDev>
+	<pubDev>ABSTRACT CONCEPTS</pubDev>
+	<pubDev>ACCESS - U.S. GOLD</pubDev>
+	<pubDev>ACCESS GAMES</pubDev>
+	<pubDev>ACCESS</pubDev>
+	<pubDev>ACCLAIM ENTERTAINMENT</pubDev>
+	<pubDev>ACCLAIM</pubDev>
+	<pubDev>ACCOLADE</pubDev>
+	<pubDev>ACCROSOFT</pubDev>
+	<pubDev>ACE</pubDev>
+	<pubDev>ACID</pubDev>
+	<pubDev>ACTION GRAPHICS</pubDev>
+	<pubDev>ACTION</pubDev>
+	<pubDev>ACTIONWARE CORPORATION</pubDev>
+	<pubDev>ACTIONWORKS</pubDev>
+	<pubDev>ACTIVISION</pubDev>
+	<pubDev>ADDICTIVE GAMES</pubDev>
+	<pubDev>ADDICTIVE</pubDev>
+	<pubDev>ADK</pubDev>
+	<pubDev>ADVANTEC SOFTWARE</pubDev>
+	<pubDev>ADVENTURE SOFT</pubDev>
+	<pubDev>AEGIS</pubDev>
+	<pubDev>AKAIDO ARCADE SYSTEMS</pubDev>
+	<pubDev>AL BAKER &amp; ASSOCIATES</pubDev>
+	<pubDev>ALCATRAZ PRODUCTION</pubDev>
+	<pubDev>ALIVE</pubDev>
+	<pubDev>ALMATHERA SYSTEMS</pubDev>
+	<pubDev>ALTERNATIVE SOFTWARE</pubDev>
+	<pubDev>ALTERNATIVE</pubDev>
+	<pubDev>AM R&amp;D DEPT. #2</pubDev>
+	<pubDev>AM2</pubDev>
+	<pubDev>AMIGA FUN</pubDev>
+	<pubDev>AMIGA POWER</pubDev>
+	<pubDev>AMIGO!</pubDev>
+	<pubDev>AMNESTY DESIGN</pubDev>
+	<pubDev>AMSOFT</pubDev>
+	<pubDev>ANCIENT</pubDev>
+	<pubDev>ANCO</pubDev>
+	<pubDev>ANDROMEDA SOFTWARE</pubDev>
+	<pubDev>ANIMATORS</pubDev>
+	<pubDev>APACHE</pubDev>
+	<pubDev>APC &amp; TCP</pubDev>
+	<pubDev>APC&amp;TCP</pubDev>
+	<pubDev>APE STUDIOS</pubDev>
+	<pubDev>APEX DESIGNS</pubDev>
+	<pubDev>APPLIED COMPUTING SERVICES, INC.|THREE-SIXTY PACIFIC, INC.</pubDev>
+	<pubDev>ARC DEVELOPMENTS</pubDev>
+	<pubDev>ARC SYSTEM WORKS</pubDev>
+	<pubDev>ARC</pubDev>
+	<pubDev>ARCADIA SYSTEMS</pubDev>
+	<pubDev>ARCADIA</pubDev>
+	<pubDev>ARCANA SOFTWARE DESIGN</pubDev>
+	<pubDev>ARCANA</pubDev>
+	<pubDev>ARCHER MACLEAN</pubDev>
+	<pubDev>ARENA ENTERTAINMENT</pubDev>
+	<pubDev>ARENA</pubDev>
+	<pubDev>ARGONAUT SOFTWARE</pubDev>
+	<pubDev>ARGONAUT</pubDev>
+	<pubDev>ARIOLASOFT</pubDev>
+	<pubDev>ARRAKIS</pubDev>
+	<pubDev>ART &amp; MAGIC</pubDev>
+	<pubDev>ART OF DREAMS</pubDev>
+	<pubDev>ART4 COMP GROUP</pubDev>
+	<pubDev>ARTDINK</pubDev>
+	<pubDev>ARTE</pubDev>
+	<pubDev>ARTECH STUDIOS</pubDev>
+	<pubDev>ARTGAME</pubDev>
+	<pubDev>ARTIFACTORY</pubDev>
+	<pubDev>ARTIFICIAL INTELLIGENCE DESIGN</pubDev>
+	<pubDev>ARTONIC</pubDev>
+	<pubDev>ARTRONIC</pubDev>
+	<pubDev>ARTWORX</pubDev>
+	<pubDev>ASCON</pubDev>
+	<pubDev>ASMIK</pubDev>
+	<pubDev>ASPECT CO</pubDev>
+	<pubDev>ASPECT</pubDev>
+	<pubDev>ASTONISHING ANIMATIONS</pubDev>
+	<pubDev>ASTRAL SOFTWARE</pubDev>
+	<pubDev>ATARI</pubDev>
+	<pubDev>ATLANTIS SOFTWARE</pubDev>
+	<pubDev>ATLANTIS</pubDev>
+	<pubDev>ATLUS</pubDev>
+	<pubDev>ATOD AB</pubDev>
+	<pubDev>ATREID CONCEPT SA</pubDev>
+	<pubDev>ATREID CONCEPT</pubDev>
+	<pubDev>ATTENTION TO DETAIL</pubDev>
+	<pubDev>ATTIC</pubDev>
+	<pubDev>AUDIO VISUAL MAGIC</pubDev>
+	<pubDev>AUDIOGENIC</pubDev>
+	<pubDev>AUGENBLICK DESIGNS</pubDev>
+	<pubDev>AVALON HILL</pubDev>
+	<pubDev>AVALON INTERACTIVE</pubDev>
+	<pubDev>AVANT GARDE</pubDev>
+	<pubDev>AVATAR</pubDev>
+	<pubDev>AVENTURAS AD</pubDev>
+	<pubDev>AVENTURE</pubDev>
+	<pubDev>AVESOFT</pubDev>
+	<pubDev>AXE TO GRIND</pubDev>
+	<pubDev>AXXIOM</pubDev>
+	<pubDev>B.I.T.S.</pubDev>
+	<pubDev>BALLY MIDWAY</pubDev>
+	<pubDev>BARRETT &amp; SMITH ENTERPRISES</pubDev>
+	<pubDev>BAUDEVILLE</pubDev>
+	<pubDev>BEAT'EM ALL</pubDev>
+	<pubDev>BEDROCK SOFTWARE</pubDev>
+	<pubDev>BETHESDA SOFTWORKS</pubDev>
+	<pubDev>BETOP</pubDev>
+	<pubDev>BIG RED SOFTWARE</pubDev>
+	<pubDev>BIG RED</pubDev>
+	<pubDev>BIGNONIA</pubDev>
+	<pubDev>BILL WILLIAMS</pubDev>
+	<pubDev>BINARY ASYLUM</pubDev>
+	<pubDev>BINARY DESIGN</pubDev>
+	<pubDev>BINARY EMOTIONS</pubDev>
+	<pubDev>BINARY SYSTEMS</pubDev>
+	<pubDev>BIT MANAGERS</pubDev>
+	<pubDev>BITFUSION VIRTUAL REALITIES</pubDev>
+	<pubDev>BITMAP BROTHERS</pubDev>
+	<pubDev>BITS OF MAGIC</pubDev>
+	<pubDev>BIZARRE CREATIONS</pubDev>
+	<pubDev>BLACK INC.</pubDev>
+	<pubDev>BLACK LEGEND - KOMPART</pubDev>
+	<pubDev>BLACK LEGEND</pubDev>
+	<pubDev>BLACK MAGIC SOFTWARE</pubDev>
+	<pubDev>BLACK PEARL SOFTWARE</pubDev>
+	<pubDev>BLADE</pubDev>
+	<pubDev>BLOODHOUSE LTD.</pubDev>
+	<pubDev>BLOODHOUSE</pubDev>
+	<pubDev>BLUE BALL SOFTWORKS</pubDev>
+	<pubDev>BLUE BYTE STUDIO GMBH</pubDev>
+	<pubDev>BLUE BYTE</pubDev>
+	<pubDev>BLUESKY SOFTWARE, INC.</pubDev>
+	<pubDev>BOEDER</pubDev>
+	<pubDev>BOMICO ENTERTAINMENT SOFTWARE</pubDev>
+	<pubDev>BOMICO</pubDev>
+	<pubDev>BOYS WITHOUT BRAINS</pubDev>
+	<pubDev>BRAIN.LEGO</pubDev>
+	<pubDev>BRAINWAVE CREATIONS</pubDev>
+	<pubDev>BREADLINE</pubDev>
+	<pubDev>BRODERBUND SOFTWARE</pubDev>
+	<pubDev>BRODERBUND</pubDev>
+	<pubDev>BUENA VISTA INTERACTIVE</pubDev>
+	<pubDev>BULLET PROOF SOFTWARE</pubDev>
+	<pubDev>BULLFROG SOFTWARE</pubDev>
+	<pubDev>BULLFROG</pubDev>
+	<pubDev>BYTE BACK</pubDev>
+	<pubDev>BYTE ENGINEERS</pubDev>
+	<pubDev>CALIFORNIA DREAMS</pubDev>
+	<pubDev>CAMELOT SOFTWARE</pubDev>
+	<pubDev>CAPCOM - GO!</pubDev>
+	<pubDev>CAPCOM - U.S. GOLD</pubDev>
+	<pubDev>CAPCOM</pubDev>
+	<pubDev>CAPSTONE SOFTWARE</pubDev>
+	<pubDev>CAPSTONE</pubDev>
+	<pubDev>CARE BEARS</pubDev>
+	<pubDev>CDS</pubDev>
+	<pubDev>CELEBRITY SOFTWARE</pubDev>
+	<pubDev>CENTAUR</pubDev>
+	<pubDev>CHAMELEON</pubDev>
+	<pubDev>CHICKEN POX</pubDev>
+	<pubDev>CHIP</pubDev>
+	<pubDev>CHOICE SOFTWARE</pubDev>
+	<pubDev>CHRIS GRAY ENTERPRISES</pubDev>
+	<pubDev>CHRYSALIS</pubDev>
+	<pubDev>CINEMAWARE CORPORATION</pubDev>
+	<pubDev>CINEMAWARE</pubDev>
+	<pubDev>CIRRUS</pubDev>
+	<pubDev>CISTAR</pubDev>
+	<pubDev>CITIZEN SOFTWARE</pubDev>
+	<pubDev>CLAUDIO BURAGLIO</pubDev>
+	<pubDev>CLOCKWORKS ENTERTAINMENT</pubDev>
+	<pubDev>CLOUD NINE DEVELOPMENTS</pubDev>
+	<pubDev>CLOUD NINE</pubDev>
+	<pubDev>CLOVER</pubDev>
+	<pubDev>COCONUTS JAPAN</pubDev>
+	<pubDev>CODE MASTERS</pubDev>
+	<pubDev>CODE MONKEYS</pubDev>
+	<pubDev>CODEMASTERS</pubDev>
+	<pubDev>COINAGE</pubDev>
+	<pubDev>COKTEL VISION</pubDev>
+	<pubDev>COKTEL</pubDev>
+	<pubDev>COLGATE</pubDev>
+	<pubDev>COMAD</pubDev>
+	<pubDev>COMMODORE ELECTRONICS LTD.</pubDev>
+	<pubDev>COMMODORE</pubDev>
+	<pubDev>COMPILE</pubDev>
+	<pubDev>COMPUTEC VERLAG GMBH &amp; CO. KG</pubDev>
+	<pubDev>COMPUTEC VERLAG</pubDev>
+	<pubDev>COMPUTER SIGHT</pubDev>
+	<pubDev>COMPUTER'S DREAM</pubDev>
+	<pubDev>COMTEC</pubDev>
+	<pubDev>CONFUSED PELICAN</pubDev>
+	<pubDev>CONSPIRACY</pubDev>
+	<pubDev>CONSULT SOFTWARE</pubDev>
+	<pubDev>CORE DESIGN</pubDev>
+	<pubDev>COURBOIS</pubDev>
+	<pubDev>COURSE</pubDev>
+	<pubDev>CREAM</pubDev>
+	<pubDev>CREATIVE EDGE SOFTWARE</pubDev>
+	<pubDev>CREATIVE GAME DESIGN</pubDev>
+	<pubDev>CREATIVE MATERIALS</pubDev>
+	<pubDev>CREATIVE REALITY</pubDev>
+	<pubDev>CREATIVE VISION</pubDev>
+	<pubDev>CREEPSOFT</pubDev>
+	<pubDev>CRITICAL MASS INTERACTIVE</pubDev>
+	<pubDev>CRL</pubDev>
+	<pubDev>CROSSTECHNICS</pubDev>
+	<pubDev>CROTEAM</pubDev>
+	<pubDev>CRYO INTERACTIVE ENTERTAINMENT</pubDev>
+	<pubDev>CRYO INTERACTIVE</pubDev>
+	<pubDev>CU AMIGA</pubDev>
+	<pubDev>CUMMING, GLEN - JEFFERY, MYLES</pubDev>
+	<pubDev>CYBERARTS LTD.</pubDev>
+	<pubDev>CYBERDREAMS</pubDev>
+	<pubDev>CYBERSOFT</pubDev>
+	<pubDev>CYCLETECH</pubDev>
+	<pubDev>CYGNUS CYBERNETICS CORPORATION</pubDev>
+	<pubDev>D &amp; H GAMES</pubDev>
+	<pubDev>D-LITE</pubDev>
+	<pubDev>D. GOTTLIEB &amp; CO.</pubDev>
+	<pubDev>D. J. CRUICKSHANK</pubDev>
+	<pubDev>DAISY SOFTWARE</pubDev>
+	<pubDev>DALALI</pubDev>
+	<pubDev>DAOU INFOSYS</pubDev>
+	<pubDev>DATA DESIGN INTERACTIVE</pubDev>
+	<pubDev>DATA DESIGN</pubDev>
+	<pubDev>DATA EAST USA, INC.</pubDev>
+	<pubDev>DATA EAST</pubDev>
+	<pubDev>DATA SOFT</pubDev>
+	<pubDev>DATABYTE / MINDSCAPE</pubDev>
+	<pubDev>DATASOFT, INC.</pubDev>
+	<pubDev>DATASOFT</pubDev>
+	<pubDev>DAVID BRABEN</pubDev>
+	<pubDev>DAVID PAPWORTH</pubDev>
+	<pubDev>DELPHINE SOFTWARE INTERNATIONAL</pubDev>
+	<pubDev>DELPHINE SOFTWARE</pubDev>
+	<pubDev>DELTA 4 INTERACTIVE</pubDev>
+	<pubDev>DELTA KONZEPT</pubDev>
+	<pubDev>DEMONWARE</pubDev>
+	<pubDev>DENTON DESIGNS</pubDev>
+	<pubDev>DENTONS</pubDev>
+	<pubDev>DESIGNER SOFTWARE</pubDev>
+	<pubDev>DESIGNSTAR</pubDev>
+	<pubDev>DIAMOND SOFTWARE</pubDev>
+	<pubDev>DIAMOND</pubDev>
+	<pubDev>DIGITAL CONCEPTS</pubDev>
+	<pubDev>DIGITAL DREAMS</pubDev>
+	<pubDev>DIGITAL ILLUSIONS</pubDev>
+	<pubDev>DIGITAL IMAGE</pubDev>
+	<pubDev>DIGITAL INTEGRATION</pubDev>
+	<pubDev>DIGITAL MAGIC</pubDev>
+	<pubDev>DIGITAL MARKETING</pubDev>
+	<pubDev>DIGITEAM</pubDev>
+	<pubDev>DIGITEK SOFTWARE</pubDev>
+	<pubDev>DIGITEK</pubDev>
+	<pubDev>DINAMIC SOFTWARE</pubDev>
+	<pubDev>DINO DINI</pubDev>
+	<pubDev>DISCOVERY SOFTWARE</pubDev>
+	<pubDev>DISNEY</pubDev>
+	<pubDev>DISTINCTIVE SOFTWARE</pubDev>
+	<pubDev>DIVIDE BY ZERO, LTD.</pubDev>
+	<pubDev>DJL SOFTWARE</pubDev>
+	<pubDev>DMA DESIGN</pubDev>
+	<pubDev>DOGP</pubDev>
+	<pubDev>DOKA|SPHERE, INC.</pubDev>
+	<pubDev>DOMARK SOFTWARE LTD.</pubDev>
+	<pubDev>DOMARK SOFTWARE, INC.</pubDev>
+	<pubDev>DOMARK SOFTWARE</pubDev>
+	<pubDev>DOMARK</pubDev>
+	<pubDev>DOME SOFTWARE DEVELOPMENTS</pubDev>
+	<pubDev>DONGLEWARE</pubDev>
+	<pubDev>DRAGONWARE</pubDev>
+	<pubDev>DYNABYTE</pubDev>
+	<pubDev>DYNAFIELD SYSTEMS INTERNATIONAL</pubDev>
+	<pubDev>DYNAFIELD</pubDev>
+	<pubDev>DYNAMIX, INC.</pubDev>
+	<pubDev>DYNAMIX</pubDev>
+	<pubDev>EA SPORTS</pubDev>
+	<pubDev>EAGLE TREE</pubDev>
+	<pubDev>EAS</pubDev>
+	<pubDev>ECLIPSE SOFTWARE</pubDev>
+	<pubDev>ECLIPSE</pubDev>
+	<pubDev>ECP</pubDev>
+	<pubDev>EDEN ENTERTAINMENT SOFTWARE</pubDev>
+	<pubDev>EDGE, THE</pubDev>
+	<pubDev>EFECTO CAOS</pubDev>
+	<pubDev>EFFIGY</pubDev>
+	<pubDev>EGOSOFT</pubDev>
+	<pubDev>EIDERSOFT</pubDev>
+	<pubDev>ELDRITCH THE CAT LTD</pubDev>
+	<pubDev>ELECTRALYTE</pubDev>
+	<pubDev>ELECTRIC DREAMS SOFTWARE</pubDev>
+	<pubDev>ELECTRIC DREAMS</pubDev>
+	<pubDev>ELECTRO BRAIN</pubDev>
+	<pubDev>ELECTRO MAGNETIC</pubDev>
+	<pubDev>ELECTROCOIN</pubDev>
+	<pubDev>ELECTRONIC ARTS</pubDev>
+	<pubDev>ELECTRONIC DESIGN</pubDev>
+	<pubDev>ELECTRONIC ZOO</pubDev>
+	<pubDev>ELITE SYSTEMS</pubDev>
+	<pubDev>ELITE</pubDev>
+	<pubDev>ELORG</pubDev>
+	<pubDev>EMERALD SOFTWARE</pubDev>
+	<pubDev>EMOTIONAL PICTURES</pubDev>
+	<pubDev>EMPIRE INTERACTIVE ENTERTAINMENT</pubDev>
+	<pubDev>EMPIRE INTERACTIVE</pubDev>
+	<pubDev>EMPIRE SOFTWARE</pubDev>
+	<pubDev>EMPIRE</pubDev>
+	<pubDev>EMPIRE SOFTWARE</pubDev>
+	<pubDev>ENDURANCE GAMES LTD.</pubDev>
+	<pubDev>ENERGIZE</pubDev>
+	<pubDev>ENGLISH SOFTWARE</pubDev>
+	<pubDev>ENIGMA SOFTWARE</pubDev>
+	<pubDev>ENIGMA VARIATIONS</pubDev>
+	<pubDev>ENIX</pubDev>
+	<pubDev>EPIC GAMES</pubDev>
+	<pubDev>EPS/ELECTRONIC ZOO</pubDev>
+	<pubDev>EPYX - THALAMUS</pubDev>
+	<pubDev>EPYX - U.S. GOLD</pubDev>
+	<pubDev>EPYX</pubDev>
+	<pubDev>ERE INFORMATIQUE</pubDev>
+	<pubDev>ERE INFORMATIQUE|EXXOS</pubDev>
+	<pubDev>ERE</pubDev>
+	<pubDev>ESP SOFTWARE</pubDev>
+	<pubDev>EUPHORIA</pubDev>
+	<pubDev>EUROCOM</pubDev>
+	<pubDev>EUROGOLD</pubDev>
+	<pubDev>EUROLINE</pubDev>
+	<pubDev>EUROPRESS</pubDev>
+	<pubDev>EVENT HORIZON SOFTWARE, INC.</pubDev>
+	<pubDev>EVRYWARE</pubDev>
+	<pubDev>EX ANIMO</pubDev>
+	<pubDev>EXOCET</pubDev>
+	<pubDev>EXPLOSIVE SOFTWARE</pubDev>
+	<pubDev>EXPONENTIA</pubDev>
+	<pubDev>EXPOSE</pubDev>
+	<pubDev>EXTENDED PLAY PRODUCTIONS</pubDev>
+	<pubDev>EXXOS</pubDev>
+	<pubDev>F1 LICENCEWARE</pubDev>
+	<pubDev>FA SOFT</pubDev>
+	<pubDev>FACTOR 5</pubDev>
+	<pubDev>FIN SOFT</pubDev>
+	<pubDev>FIREBIRD SOFTWARE LTD.</pubDev>
+	<pubDev>FIREBIRD</pubDev>
+	<pubDev>FIRELINE INTERACTIVE</pubDev>
+	<pubDev>FIRST STAR SOFTWARE</pubDev>
+	<pubDev>FISSIONCHIP SOFTWARE</pubDev>
+	<pubDev>FLAGSHIP STUDIOS</pubDev>
+	<pubDev>FLAIR SOFTWARE</pubDev>
+	<pubDev>FLAIR</pubDev>
+	<pubDev>FLYING EDGE</pubDev>
+	<pubDev>FORTRESS</pubDev>
+	<pubDev>FOURSFIELD</pubDev>
+	<pubDev>FOX INTERACTIVE</pubDev>
+	<pubDev>FOX WILLIAMS</pubDev>
+	<pubDev>FRAMES</pubDev>
+	<pubDev>FREE FALL ASSOCIATES</pubDev>
+	<pubDev>FREE SPIRIT SOFTWARE</pubDev>
+	<pubDev>FREESTYLE GAMES</pubDev>
+	<pubDev>FRESH FISHES</pubDev>
+	<pubDev>FRM</pubDev>
+	<pubDev>FTL GAMES</pubDev>
+	<pubDev>FTL SOFTWARE</pubDev>
+	<pubDev>FULLSPEED</pubDev>
+	<pubDev>FUN FACTORY</pubDev>
+	<pubDev>FUTURA - U.S. GOLD</pubDev>
+	<pubDev>FUTURA</pubDev>
+	<pubDev>FUTURE</pubDev>
+	<pubDev>GAINSTAR</pubDev>
+	<pubDev>GALLICA</pubDev>
+	<pubDev>GAMART</pubDev>
+	<pubDev>GAME FREAK</pubDev>
+	<pubDev>GAMELINE</pubDev>
+	<pubDev>GAMESTAR</pubDev>
+	<pubDev>GAMETEC</pubDev>
+	<pubDev>GAMETEK, INC.</pubDev>
+	<pubDev>GAMETEK</pubDev>
+	<pubDev>GAMOS LTD.</pubDev>
+	<pubDev>GANG OF FIVE</pubDev>
+	<pubDev>GENESIS SOFT</pubDev>
+	<pubDev>GENESIS SOFTWARE</pubDev>
+	<pubDev>GENIAS</pubDev>
+	<pubDev>GLOBAL SOFTWARE</pubDev>
+	<pubDev>GO!</pubDev>
+	<pubDev>GOLDEN GATE</pubDev>
+	<pubDev>GOLDEN GOBLINS</pubDev>
+	<pubDev>GOLDEN SECTOR</pubDev>
+	<pubDev>GOLIATH GAMES</pubDev>
+	<pubDev>GONZO GAMES</pubDev>
+	<pubDev>GRAFTGOLD CREATIVE SOFTWARE</pubDev>
+	<pubDev>GRAFTGOLD LTD.</pubDev>
+	<pubDev>GRAFTGOLD</pubDev>
+	<pubDev>GRANDSLAM ENTERTAINMENT LTD.</pubDev>
+	<pubDev>GRANDSLAM ENTERTAINMENTS LTD.</pubDev>
+	<pubDev>GRANDSLAM VIDEO LTD.</pubDev>
+	<pubDev>GRANDSLAM</pubDev>
+	<pubDev>GRAPHIC EXPRESSIONS</pubDev>
+	<pubDev>GRAY MATTER</pubDev>
+	<pubDev>GREMLIN GRAPHICS SOFTWARE LIMITED</pubDev>
+	<pubDev>GREMLIN GRAPHICS</pubDev>
+	<pubDev>GREMLIN INTERACTIVE</pubDev>
+	<pubDev>GREMLIN</pubDev>
+	<pubDev>GUILDHALL LEISURE SERVICE</pubDev>
+	<pubDev>GUILDHALL LEISURE SERVICES LTD.</pubDev>
+	<pubDev>GUILDHALL LEISURE SERVICES</pubDev>
+	<pubDev>GUILDHALL</pubDev>
+	<pubDev>H&amp;H SOFTWARE</pubDev>
+	<pubDev>HACK AND SLAY</pubDev>
+	<pubDev>HARLEQUIN</pubDev>
+	<pubDev>HAWK</pubDev>
+	<pubDev>HEWSON CONSULTANTS LTD</pubDev>
+	<pubDev>HEWSON</pubDev>
+	<pubDev>HEX</pubDev>
+	<pubDev>HI-TEC SOFTWARE</pubDev>
+	<pubDev>HI-TEC</pubDev>
+	<pubDev>HICOM</pubDev>
+	<pubDev>HIDDEN TREASURES</pubDev>
+	<pubDev>HIGH SCORE PRODUCTIONS</pubDev>
+	<pubDev>HIT SQUAD, THE</pubDev>
+	<pubDev>HITEC PRODUCTIONS</pubDev>
+	<pubDev>HITECH PRODUCTIONS</pubDev>
+	<pubDev>HITMEN PRODUCTIONS</pubDev>
+	<pubDev>HITSOFT</pubDev>
+	<pubDev>HOLLYWARE</pubDev>
+	<pubDev>HOME ENTERTAINMENT SUPPLIERS</pubDev>
+	<pubDev>HORROR SOFT</pubDev>
+	<pubDev>HORRORSOFT</pubDev>
+	<pubDev>HUDSON</pubDev>
+	<pubDev>HUMAN CLUB</pubDev>
+	<pubDev>HUMAN</pubDev>
+	<pubDev>I'MAX</pubDev>
+	<pubDev>I.C.E.</pubDev>
+	<pubDev>IAM</pubDev>
+	<pubDev>ICE</pubDev>
+	<pubDev>ICOM SIMULATIONS</pubDev>
+	<pubDev>ICOM</pubDev>
+	<pubDev>IDEA GAMES</pubDev>
+	<pubDev>IDEA SOFTWARE</pubDev>
+	<pubDev>IDEA</pubDev>
+	<pubDev>IDIGICON</pubDev>
+	<pubDev>IDOL MINDS</pubDev>
+	<pubDev>IGUANA ENTERTAINMENT</pubDev>
+	<pubDev>IKOS</pubDev>
+	<pubDev>IMAGE TECH</pubDev>
+	<pubDev>IMAGE WORKS</pubDev>
+	<pubDev>IMAGES SOFTWARE LTD.</pubDev>
+	<pubDev>IMAGEWORKS</pubDev>
+	<pubDev>IMAGINE SOFTWARE</pubDev>
+	<pubDev>IMAGINE STUDIOS</pubDev>
+	<pubDev>IMAGINEER</pubDev>
+	<pubDev>IMAGINEERING INC</pubDev>
+	<pubDev>IMAGITEC DESIGN</pubDev>
+	<pubDev>IMAGITEC</pubDev>
+	<pubDev>IMPACT SOFTWARE DEVELOPMENT</pubDev>
+	<pubDev>IMPRESSIONS GAMES</pubDev>
+	<pubDev>IMPRESSIONS</pubDev>
+	<pubDev>IMPULZE</pubDev>
+	<pubDev>INCAL PRODUCT</pubDev>
+	<pubDev>INCENTIVE SOFTWARE</pubDev>
+	<pubDev>INCREDIBLE TECHNOLOGIES</pubDev>
+	<pubDev>INFERNAL BYTE SYSTEMS</pubDev>
+	<pubDev>INFOCOM</pubDev>
+	<pubDev>INFOGRAMES</pubDev>
+	<pubDev>INFOMEDIA DIFFUSION</pubDev>
+	<pubDev>INFOMEDIA</pubDev>
+	<pubDev>INNOVATION TECH</pubDev>
+	<pubDev>INRAC CORPORATION</pubDev>
+	<pubDev>INSOMNIAC GAMES</pubDev>
+	<pubDev>INTELLIGENT DESIGN</pubDev>
+	<pubDev>INTELLIGENT MEMORY</pubDev>
+	<pubDev>INTELLIGENT SOFT</pubDev>
+	<pubDev>INTELLIGENT SYSTEMS</pubDev>
+	<pubDev>INTER STATE</pubDev>
+	<pubDev>INTERACTIVE DESIGN</pubDev>
+	<pubDev>INTERACTIVISION A/S</pubDev>
+	<pubDev>INTERACTIVISION</pubDev>
+	<pubDev>INTERCEPTOR SOFTWARE</pubDev>
+	<pubDev>INTERNECINE</pubDev>
+	<pubDev>INTERPLAY PRODUCTIONS, INC.</pubDev>
+	<pubDev>INTERPLAY PRODUCTIONS</pubDev>
+	<pubDev>INTERPLAY</pubDev>
+	<pubDev>IREM</pubDev>
+	<pubDev>IRON BYTE</pubDev>
+	<pubDev>ISLONA</pubDev>
+	<pubDev>ITE MEDIA APS (INTERACTIVE TELEVISION ENTERTAINMENT)</pubDev>
+	<pubDev>ITE MEDIA</pubDev>
+	<pubDev>ITE</pubDev>
+	<pubDev>JAEGER</pubDev>
+	<pubDev>JALECO</pubDev>
+	<pubDev>JAM SOFTWARE</pubDev>
+	<pubDev>JAPAN SYSTEM HOUSE</pubDev>
+	<pubDev>JERRI</pubDev>
+	<pubDev>JUSTIN LECK</pubDev>
+	<pubDev>JVC</pubDev>
+	<pubDev>KAIKO</pubDev>
+	<pubDev>KAITSU SOFTWARE</pubDev>
+	<pubDev>KALISTO</pubDev>
+	<pubDev>KARMASOFT</pubDev>
+	<pubDev>KEMCO</pubDev>
+	<pubDev>KINETICA</pubDev>
+	<pubDev>KINGSLEY HARRISON</pubDev>
+	<pubDev>KINGSOFT GMBH</pubDev>
+	<pubDev>KINGSOFT</pubDev>
+	<pubDev>KIRK MORENO MULTIMEDIA</pubDev>
+	<pubDev>KIXX</pubDev>
+	<pubDev>KOEI - INFOGRAMES</pubDev>
+	<pubDev>KOMPART</pubDev>
+	<pubDev>KONAMI</pubDev>
+	<pubDev>KREMLIN</pubDev>
+	<pubDev>KRISALIS SOFTWARE LTD.</pubDev>
+	<pubDev>KRISALIS SOFTWARE</pubDev>
+	<pubDev>KRISALIS</pubDev>
+	<pubDev>KRON SIMULATION SOFTWARE</pubDev>
+	<pubDev>L.K. AVALON</pubDev>
+	<pubDev>LANKHOR</pubDev>
+	<pubDev>LEGEND SOFTWARE</pubDev>
+	<pubDev>LEISURE GENIUS</pubDev>
+	<pubDev>LEISURESOFT</pubDev>
+	<pubDev>LELAND INTERACTIVE MEDIA</pubDev>
+	<pubDev>LEVEL 9 COMPUTING</pubDev>
+	<pubDev>LEVEL ONE ENTERTAINMENT</pubDev>
+	<pubDev>LIGHT SHOCK SOFTWARE</pubDev>
+	<pubDev>LINEL</pubDev>
+	<pubDev>LIONHEART - WORLDWIDE</pubDev>
+	<pubDev>LIVE STUDIOS, INC.</pubDev>
+	<pubDev>LJN</pubDev>
+	<pubDev>LLAMASOFT LTD.</pubDev>
+	<pubDev>LLAMASOFT</pubDev>
+	<pubDev>LOCOMALITO</pubDev>
+	<pubDev>LOCOMOTIVE CORPORATION</pubDev>
+	<pubDev>LOGOTRON ENTERTAINMENT</pubDev>
+	<pubDev>LOGOTRON</pubDev>
+	<pubDev>LORICIEL SA</pubDev>
+	<pubDev>LORICIEL</pubDev>
+	<pubDev>LORICIELS</pubDev>
+	<pubDev>LUCASARTS - U.S. GOLD</pubDev>
+	<pubDev>LUCASARTS</pubDev>
+	<pubDev>LUCASFILM GAMES</pubDev>
+	<pubDev>LUCASFILM</pubDev>
+	<pubDev>LUNATIC SOFTWARE</pubDev>
+	<pubDev>M.C. LOTHLORIEN</pubDev>
+	<pubDev>MAELSTROM GAMES</pubDev>
+	<pubDev>MAELSTROM</pubDev>
+	<pubDev>MAGIC BYTES</pubDev>
+	<pubDev>MAGIC SOFT</pubDev>
+	<pubDev>MAGNETIC FIELDS</pubDev>
+	<pubDev>MAGNETIC IMAGES</pubDev>
+	<pubDev>MAGNETIC SCROLLS</pubDev>
+	<pubDev>MAITAI ENTERTAINMENT</pubDev>
+	<pubDev>MAJOR DEVELOPMENTS</pubDev>
+	<pubDev>MALIBU GAMES</pubDev>
+	<pubDev>MANDARIN SOFTWARE</pubDev>
+	<pubDev>MANYK</pubDev>
+	<pubDev>MARKSOFT</pubDev>
+	<pubDev>MARTECH</pubDev>
+	<pubDev>MARVELOUS INTERACTIVE</pubDev>
+	<pubDev>MASAYA GAMES</pubDev>
+	<pubDev>MASTER DESIGNER SOFTWARE, INC.</pubDev>
+	<pubDev>MASTER DESIGNER SOFTWARE</pubDev>
+	<pubDev>MASTERS OF STRATEGY</pubDev>
+	<pubDev>MASTERTRONIC</pubDev>
+	<pubDev>MAX DESIGN GESMBH</pubDev>
+	<pubDev>MAX DESIGN</pubDev>
+	<pubDev>MAXIS SOFTWARE INC.</pubDev>
+	<pubDev>MAXIS</pubDev>
+	<pubDev>MAXWELL TECHNOLOGY</pubDev>
+	<pubDev>MEDIA VERLAGSGESELLSCHAFT</pubDev>
+	<pubDev>MEDIAGENIC</pubDev>
+	<pubDev>MEDIAGOGO</pubDev>
+	<pubDev>MEGARTS</pubDev>
+	<pubDev>MELBOURNE HOUSE</pubDev>
+	<pubDev>MELON DEZIGN</pubDev>
+	<pubDev>MENTAL IMAGES</pubDev>
+	<pubDev>MENTAL</pubDev>
+	<pubDev>MERIT</pubDev>
+	<pubDev>MICHAEL POWELL</pubDev>
+	<pubDev>MICRO STYLE</pubDev>
+	<pubDev>MICRO WISH</pubDev>
+	<pubDev>MICRO-PARTNER SOFTWARE GMBH</pubDev>
+	<pubDev>MICRO-PARTNER</pubDev>
+	<pubDev>MICRODEAL</pubDev>
+	<pubDev>MICROILLUSIONS</pubDev>
+	<pubDev>MICROMAGIC, INC.</pubDev>
+	<pubDev>MICROMAGIC</pubDev>
+	<pubDev>MICROMANIA</pubDev>
+	<pubDev>MICROPLAY SOFTWARE</pubDev>
+	<pubDev>MICROPROSE LTD.</pubDev>
+	<pubDev>MICROPROSE SOFTWARE, INC.</pubDev>
+	<pubDev>MICROPROSE</pubDev>
+	<pubDev>MICROSOFT</pubDev>
+	<pubDev>MICROSTYLE</pubDev>
+	<pubDev>MICROTEC</pubDev>
+	<pubDev>MICROVALUE</pubDev>
+	<pubDev>MICROÏDS</pubDev>
+	<pubDev>MIDNIGHT</pubDev>
+	<pubDev>MIDWAY</pubDev>
+	<pubDev>MIKEY DESIGN</pubDev>
+	<pubDev>MIKRO-GEN LTD</pubDev>
+	<pubDev>MILES COMPUTING</pubDev>
+	<pubDev>MILLENIUM INTERACTIVE</pubDev>
+	<pubDev>MILLENIUM</pubDev>
+	<pubDev>MILLENNIUM INTERACTIVE LTD.</pubDev>
+	<pubDev>MILLENNIUM INTERACTIVE</pubDev>
+	<pubDev>MILLENNIUM</pubDev>
+	<pubDev>MINATO GIKEN</pubDev>
+	<pubDev>MINDCRAFT SOFTWARE, INC.</pubDev>
+	<pubDev>MINDCRAFT</pubDev>
+	<pubDev>MINDS I</pubDev>
+	<pubDev>MINDSCAPE - MAXIS</pubDev>
+	<pubDev>MINDSCAPE INC.</pubDev>
+	<pubDev>MINDSCAPE</pubDev>
+	<pubDev>MINDWARE LIMITED</pubDev>
+	<pubDev>MINDWARE STUDIOS</pubDev>
+	<pubDev>MIRACLE GAMES</pubDev>
+	<pubDev>MIRAGE - TIME WARNER</pubDev>
+	<pubDev>MIRAGE MEDIA</pubDev>
+	<pubDev>MIRAGE SOFTWARE</pubDev>
+	<pubDev>MIRAGE TECHNOLOGIES</pubDev>
+	<pubDev>MIRAGE</pubDev>
+	<pubDev>MIRRORSOFT LTD.</pubDev>
+	<pubDev>MIRRORSOFT</pubDev>
+	<pubDev>MITCHELL CORPORATION</pubDev>
+	<pubDev>MONARCH DEVELOPMENT</pubDev>
+	<pubDev>MOONSTRUCK</pubDev>
+	<pubDev>MORBID VISIONS</pubDev>
+	<pubDev>MOULINSART MULTIMEDIA</pubDev>
+	<pubDev>MPH</pubDev>
+	<pubDev>MPS LABS</pubDev>
+	<pubDev>MR CHIP SOFTWARE</pubDev>
+	<pubDev>MUTATION SOFTWARE</pubDev>
+	<pubDev>MVP SOFTWARE</pubDev>
+	<pubDev>MYOMANTIC</pubDev>
+	<pubDev>MYSTERY MACHINE, THE</pubDev>
+	<pubDev>MYTHOS GAME</pubDev>
+	<pubDev>NAMCO</pubDev>
+	<pubDev>NAPS TEAM</pubDev>
+	<pubDev>NATSUME</pubDev>
+	<pubDev>NAUGHTY DOG</pubDev>
+	<pubDev>NAXAT SOFT</pubDev>
+	<pubDev>NBG EDV HANDELS- UND VERLAGS GMBH</pubDev>
+	<pubDev>NCS CORPORATION</pubDev>
+	<pubDev>NEC</pubDev>
+	<pubDev>NEO SOFTWARE PRODUKTIONS GMBH</pubDev>
+	<pubDev>NEO SOFTWARE PRODUKTIONS</pubDev>
+	<pubDev>NEO</pubDev>
+	<pubDev>NEON STUDIOS</pubDev>
+	<pubDev>NESTLE</pubDev>
+	<pubDev>NEW BITS ON THE RAM</pubDev>
+	<pubDev>NEW DEAL PRODUCTIONS</pubDev>
+	<pubDev>NEW WORLD COMPUTING</pubDev>
+	<pubDev>NEXA CORPORATION</pubDev>
+	<pubDev>NEXA</pubDev>
+	<pubDev>NEXT GENERATION</pubDev>
+	<pubDev>NEXUS</pubDev>
+	<pubDev>NINTENDO EAD</pubDev>
+	<pubDev>NINTENDO</pubDev>
+	<pubDev>NITE TIME GAMES</pubDev>
+	<pubDev>NITE TIME</pubDev>
+	<pubDev>NMK</pubDev>
+	<pubDev>NMS SOFTWARE</pubDev>
+	<pubDev>NOVAGEN SOFTWARE LTD</pubDev>
+	<pubDev>NOVAGEN</pubDev>
+	<pubDev>NOVALOGIC, INC.</pubDev>
+	<pubDev>NOVOTRADE INTERNATIONAL</pubDev>
+	<pubDev>NOVOTRADE</pubDev>
+	<pubDev>NRC</pubDev>
+	<pubDev>OCEAN - MAXIS</pubDev>
+	<pubDev>OCEAN</pubDev>
+	<pubDev>OMEGA TEAM</pubDev>
+	<pubDev>OMNITREND SOFTWARE, INC.</pubDev>
+	<pubDev>ON-LINE INTERACTIVE</pubDev>
+	<pubDev>ON-LINE</pubDev>
+	<pubDev>OPEN CORP.</pubDev>
+	<pubDev>OPEN CORP</pubDev>
+	<pubDev>OPERA HOUSE</pubDev>
+	<pubDev>OPERA SOFT</pubDev>
+	<pubDev>OPTIMUS SOFTWARE</pubDev>
+	<pubDev>ORDILOGIC SYSTEMS</pubDev>
+	<pubDev>ORIGIN SYSTEMS, INC.</pubDev>
+	<pubDev>ORIGIN SYSTEMS</pubDev>
+	<pubDev>ORIGIN</pubDev>
+	<pubDev>OTM PUBLICATIONS &amp; PROMOTIONS LTD.</pubDev>
+	<pubDev>OUTLAW PRODUCTIONS</pubDev>
+	<pubDev>OXFORD DIGITAL ENTERPRISES</pubDev>
+	<pubDev>OXFORD MOBIUS</pubDev>
+	<pubDev>OXFORD SOFTWORKS</pubDev>
+	<pubDev>OZI SOFT</pubDev>
+	<pubDev>P.O.F. CORPORATION</pubDev>
+	<pubDev>P.Z.KAREN CO. DEVELOPMENT GROUP</pubDev>
+	<pubDev>PACK IN VIDEO</pubDev>
+	<pubDev>PAL DEVELOPMENTS</pubDev>
+	<pubDev>PAL</pubDev>
+	<pubDev>PALACE SOFTWARE</pubDev>
+	<pubDev>PALACE</pubDev>
+	<pubDev>PANDA SOFTWARE</pubDev>
+	<pubDev>PANDAMONIUM ENTERTAINMENT</pubDev>
+	<pubDev>PANDORA BOX</pubDev>
+	<pubDev>PANDORA</pubDev>
+	<pubDev>PANTHER GAMES</pubDev>
+	<pubDev>PAPYRUS DESIGN</pubDev>
+	<pubDev>PAPYRUS</pubDev>
+	<pubDev>PARADOX SOFTWARE</pubDev>
+	<pubDev>PARADOX</pubDev>
+	<pubDev>PARAGON SOFTWARE</pubDev>
+	<pubDev>PARAGON STUDIOS</pubDev>
+	<pubDev>PARKER BROTHERS</pubDev>
+	<pubDev>PARSEC</pubDev>
+	<pubDev>PARTICLE SYSTEMS LTD.</pubDev>
+	<pubDev>PARTICLE SYSTEMS</pubDev>
+	<pubDev>PARYS TECHNOGRAFX</pubDev>
+	<pubDev>PEAKSTAR SOFTWARE</pubDev>
+	<pubDev>PERSONAL SOFTWARE SERVICES</pubDev>
+	<pubDev>PETER MASON</pubDev>
+	<pubDev>PHOENICS</pubDev>
+	<pubDev>PICK &amp; CHOOSE</pubDev>
+	<pubDev>PINNACLE</pubDev>
+	<pubDev>PIXEL BLUE</pubDev>
+	<pubDev>PIXEL STUDIOS</pubDev>
+	<pubDev>PLATE-FORME</pubDev>
+	<pubDev>PLAY BYTE</pubDev>
+	<pubDev>PLAYERS SOFTWARE</pubDev>
+	<pubDev>PLAYERS</pubDev>
+	<pubDev>PM ENTERTAINMENT</pubDev>
+	<pubDev>POLYGAMES</pubDev>
+	<pubDev>POWER COMPUTING</pubDev>
+	<pubDev>PRESTIGE SOFTWARE</pubDev>
+	<pubDev>PRISM LEISURE</pubDev>
+	<pubDev>PROBE ENTERTAINMENT LIMITED</pubDev>
+	<pubDev>PROBE ENTERTAINMENT</pubDev>
+	<pubDev>PROBE SOFTWARE LTD.</pubDev>
+	<pubDev>PROBE SOFTWARE</pubDev>
+	<pubDev>PROBE</pubDev>
+	<pubDev>PSI SOFTWARE DESIGNERS</pubDev>
+	<pubDev>PSI SOFTWARE</pubDev>
+	<pubDev>PSIONIC SYSTEMS</pubDev>
+	<pubDev>PSS</pubDev>
+	<pubDev>PSYCLAPSE</pubDev>
+	<pubDev>PSYGNOSIS</pubDev>
+	<pubDev>PUMPKINSOFT</pubDev>
+	<pubDev>PUNK DEVELOPMENT</pubDev>
+	<pubDev>PUZZLE-GAME</pubDev>
+	<pubDev>PXL</pubDev>
+	<pubDev>PZK</pubDev>
+	<pubDev>QUEX</pubDev>
+	<pubDev>QUICKSILVA LTD.</pubDev>
+	<pubDev>QUICKSILVER</pubDev>
+	<pubDev>QUINTET</pubDev>
+	<pubDev>QUIXEL</pubDev>
+	<pubDev>RADIANCE SOFTWARE</pubDev>
+	<pubDev>RAGE SOFTWARE</pubDev>
+	<pubDev>RAINBIRD SOFTWARE</pubDev>
+	<pubDev>RAINBIRD</pubDev>
+	<pubDev>RAINBOW ARTS SOFTWARE GMBH</pubDev>
+	<pubDev>RAINBOW ARTS SOFTWARE</pubDev>
+	<pubDev>RAINBOW ARTS</pubDev>
+	<pubDev>RAINBOW STUDIOS</pubDev>
+	<pubDev>RANDOM ACCESS</pubDev>
+	<pubDev>RARE, LTD.</pubDev>
+	<pubDev>RAREWARE</pubDev>
+	<pubDev>RASPUTIN SOFTWARE</pubDev>
+	<pubDev>RATSOFT</pubDev>
+	<pubDev>RAVEN SOFTWARE</pubDev>
+	<pubDev>RAYMOND E. TOBEY</pubDev>
+	<pubDev>RAZORSOFT</pubDev>
+	<pubDev>REACTION</pubDev>
+	<pubDev>READYSOFT INCORPORATED</pubDev>
+	<pubDev>READYSOFT</pubDev>
+	<pubDev>REALMS OF FANTASY</pubDev>
+	<pubDev>REALMS</pubDev>
+	<pubDev>REALTIME ASSOCIATES</pubDev>
+	<pubDev>REALTIME GAMES SOFTWARE</pubDev>
+	<pubDev>REBELLION</pubDev>
+	<pubDev>RED COMPANY</pubDev>
+	<pubDev>RED RAT SOFTWARE</pubDev>
+	<pubDev>REDOCTANE</pubDev>
+	<pubDev>REFLECTIONS INTERACTIVE LIMITED</pubDev>
+	<pubDev>REFLECTIONS INTERACTIVE</pubDev>
+	<pubDev>REFLECTIONS</pubDev>
+	<pubDev>REFLECTIVE DESIGNS</pubDev>
+	<pubDev>RELINE SOFTWARE</pubDev>
+	<pubDev>RELINE</pubDev>
+	<pubDev>RENEGADE KID</pubDev>
+	<pubDev>RENEGADE SOFTWARE</pubDev>
+	<pubDev>RENEGADE</pubDev>
+	<pubDev>REVOLUTION SOFTWARE</pubDev>
+	<pubDev>RISC</pubDev>
+	<pubDev>RJC</pubDev>
+	<pubDev>ROMAN WERNER</pubDev>
+	<pubDev>ROWAN SOFTWARE</pubDev>
+	<pubDev>RSP</pubDev>
+	<pubDev>RUSTON, PHILLIP - F1 LICENCEWARE</pubDev>
+	<pubDev>RUSTON, PHILLIP</pubDev>
+	<pubDev>RÉFLEXION</pubDev>
+	<pubDev>SAFFIRE CORPORATION</pubDev>
+	<pubDev>SAGA</pubDev>
+	<pubDev>SALIO</pubDev>
+	<pubDev>SANDCASTLE</pubDev>
+	<pubDev>SANRITSU DENKI</pubDev>
+	<pubDev>SANRITSU</pubDev>
+	<pubDev>SCENARIO DEVELOPMENTS</pubDev>
+	<pubDev>SCHOOL SOFTWARE</pubDev>
+	<pubDev>SCIPIO</pubDev>
+	<pubDev>SCORPIUS</pubDev>
+	<pubDev>SCREEN 7</pubDev>
+	<pubDev>SCULPTURED SOFTWARE</pubDev>
+	<pubDev>SEGA - U.S. GOLD</pubDev>
+	<pubDev>SEGA OZISOFT</pubDev>
+	<pubDev>SEGA</pubDev>
+	<pubDev>SENSIBLE SOFTWARE</pubDev>
+	<pubDev>SENSIBLE</pubDev>
+	<pubDev>SENTIENT SOFTWARE</pubDev>
+	<pubDev>SERIO-COMIC</pubDev>
+	<pubDev>SEVEN STARS MULTIMEDIA</pubDev>
+	<pubDev>SHADES (GRANDSLAM)</pubDev>
+	<pubDev>SHADOW DEVELOPMENT</pubDev>
+	<pubDev>SHADOW SOFTWARE</pubDev>
+	<pubDev>SHADOWSOFT</pubDev>
+	<pubDev>SHIMADA KIKAKU</pubDev>
+	<pubDev>SHINY ENTERTAINMENT</pubDev>
+	<pubDev>SHOOT'EM UP</pubDev>
+	<pubDev>SIECO</pubDev>
+	<pubDev>SIERRA - DISNEY</pubDev>
+	<pubDev>SIERRA</pubDev>
+	<pubDev>SILENT SOFTWARE</pubDev>
+	<pubDev>SILENT SOFTWARE|THALAMUS LTD</pubDev>
+	<pubDev>SILICON &amp; SYNAPSE</pubDev>
+	<pubDev>SILICON BEACH SOFTWARE</pubDev>
+	<pubDev>SILICON KNIGHTS</pubDev>
+	<pubDev>SILICON WARRIORS</pubDev>
+	<pubDev>SILLTUNNA</pubDev>
+	<pubDev>SILMARILS - GAINSTAR</pubDev>
+	<pubDev>SILMARILS</pubDev>
+	<pubDev>SILVERROCK PRODUCTIONS</pubDev>
+	<pubDev>SILVERROCK</pubDev>
+	<pubDev>SIMIS</pubDev>
+	<pubDev>SIMS</pubDev>
+	<pubDev>SIMULATION</pubDev>
+	<pubDev>SIMULMOMDO</pubDev>
+	<pubDev>SIMULMONDO</pubDev>
+	<pubDev>SIR-TECH</pubDev>
+	<pubDev>SIS CO</pubDev>
+	<pubDev>SKILES, ART</pubDev>
+	<pubDev>SKILL ART</pubDev>
+	<pubDev>SKULL ARMY</pubDev>
+	<pubDev>SMASH 16</pubDev>
+	<pubDev>SMITH, STEVE - CLR LICENCEWARE</pubDev>
+	<pubDev>SNAKESOFT - F1 LICENCEWARE</pubDev>
+	<pubDev>SNK</pubDev>
+	<pubDev>SOFT TOUCH</pubDev>
+	<pubDev>SOFTEK</pubDev>
+	<pubDev>SOFTEYES</pubDev>
+	<pubDev>SOFTGANG</pubDev>
+	<pubDev>SOFTGOLD</pubDev>
+	<pubDev>SOFTLIGHT</pubDev>
+	<pubDev>SOFTWARE 2000</pubDev>
+	<pubDev>SOFTWARE CIRCUS</pubDev>
+	<pubDev>SOFTWARE CREATIONS</pubDev>
+	<pubDev>SOFTWARE HORIZONS</pubDev>
+	<pubDev>SOFTWARE PROJECTS</pubDev>
+	<pubDev>SOFTWARE RESOURCES INTERNATIONAL</pubDev>
+	<pubDev>SOFTWARE STUDIOS</pubDev>
+	<pubDev>SOFTWARE TOOLWORKS</pubDev>
+	<pubDev>SOFTWORX</pubDev>
+	<pubDev>SONIC TEAM</pubDev>
+	<pubDev>SONY IMAGESOFT</pubDev>
+	<pubDev>SONY</pubDev>
+	<pubDev>SOREN GRONBECH</pubDev>
+	<pubDev>SPA</pubDev>
+	<pubDev>SPECIAL FX LTD.</pubDev>
+	<pubDev>SPECIAL FX SOFTWARE LTD.</pubDev>
+	<pubDev>SPECTRUM HOLOBYTE - MICROPROSE</pubDev>
+	<pubDev>SPECTRUM HOLOBYTE</pubDev>
+	<pubDev>SPECTRUM HOLOBYTE, INC.</pubDev>
+	<pubDev>SPHINX</pubDev>
+	<pubDev>SPIDERSOFT SOFTWARE</pubDev>
+	<pubDev>SPORT</pubDev>
+	<pubDev>SPOTLIGHT SOFTWARE</pubDev>
+	<pubDev>SQUARE ENIX</pubDev>
+	<pubDev>SQUARE</pubDev>
+	<pubDev>SSG STRATEGIC STUDIES GROUP PTY LTD.</pubDev>
+	<pubDev>SSI</pubDev>
+	<pubDev>STARBYTE SOFTWARE</pubDev>
+	<pubDev>STARBYTE</pubDev>
+	<pubDev>STERLING SILVER SOFTWARE</pubDev>
+	<pubDev>STEVENS, SELWYN</pubDev>
+	<pubDev>STONEHENGE SOFT ART</pubDev>
+	<pubDev>STORM</pubDev>
+	<pubDev>STRATEGIC SIMULATIONS, INC.</pubDev>
+	<pubDev>STRATEGIC SIMULATIONS, INC.</pubDev>
+	<pubDev>STRATÉGIE</pubDev>
+	<pubDev>STUART LAW, GLEN CUMMING</pubDev>
+	<pubDev>STUDIO 33</pubDev>
+	<pubDev>STYWOX</pubDev>
+	<pubDev>SUBLOGIC</pubDev>
+	<pubDev>SUBWAY SOFTWARE</pubDev>
+	<pubDev>SUBWAY SOFTWARE|TYNESOFT COMPUTER SOFTWARE</pubDev>
+	<pubDev>SULLIVAN BLUTH INTERACTIVE MEDIA</pubDev>
+	<pubDev>SUMMIT SOFTWARE</pubDev>
+	<pubDev>SUNFLOWERS INTERACTIVE</pubDev>
+	<pubDev>SUNFLOWERS</pubDev>
+	<pubDev>SUNSOFT</pubDev>
+	<pubDev>SUOMI-PELI</pubDev>
+	<pubDev>SUPERSONIC SOFTWARE</pubDev>
+	<pubDev>SUPERVISION ENTERTAINMENT</pubDev>
+	<pubDev>SVENSKA OTA AB</pubDev>
+	<pubDev>SWEDISH SOFTWARE</pubDev>
+	<pubDev>SWING! ENTERTAINMENT</pubDev>
+	<pubDev>SWISS COMPUTER ARTS</pubDev>
+	<pubDev>SYNERGISTIC SOFTWARE, INC.</pubDev>
+	<pubDev>SYNERGISTIC SOFTWARE</pubDev>
+	<pubDev>SYNERGY</pubDev>
+	<pubDev>SYNTHETIC DIMENSIONS</pubDev>
+	<pubDev>SYROX DEVELOPMENTS</pubDev>
+	<pubDev>SYSTEM 3 SOFTWARE, LTD.</pubDev>
+	<pubDev>SYSTEM 3 SOFTWARE</pubDev>
+	<pubDev>SYSTEM 3</pubDev>
+	<pubDev>SYSTEMATICS</pubDev>
+	<pubDev>T&amp;E SOFT</pubDev>
+	<pubDev>TAD CORPORATION</pubDev>
+	<pubDev>TAITO</pubDev>
+	<pubDev>TAKE TWO</pubDev>
+	<pubDev>TALE SOFTWARE</pubDev>
+	<pubDev>TALE</pubDev>
+	<pubDev>TALESOFT</pubDev>
+	<pubDev>TARGET GAMES</pubDev>
+	<pubDev>TATSUMI ELECTRONICS</pubDev>
+	<pubDev>TDK</pubDev>
+	<pubDev>TEAM 17 - OCEAN</pubDev>
+	<pubDev>TEAM 17</pubDev>
+	<pubDev>TEAM HOI</pubDev>
+	<pubDev>TEAM17 SOFTWARE LIMITED</pubDev>
+	<pubDev>TEAM17 SOFTWARE</pubDev>
+	<pubDev>TEC TOY</pubDev>
+	<pubDev>TECH-NOIR</pubDev>
+	<pubDev>TECHNICAL ENGINEERING SUPPORT</pubDev>
+	<pubDev>TECHNOPOP</pubDev>
+	<pubDev>TECHNOS JAPAN CORP.</pubDev>
+	<pubDev>TECMAGIK</pubDev>
+	<pubDev>TECMO</pubDev>
+	<pubDev>TECTOY</pubDev>
+	<pubDev>TEENY WEENY GAMES</pubDev>
+	<pubDev>TEHKAN</pubDev>
+	<pubDev>TENGEN - DOMARK</pubDev>
+	<pubDev>TENGEN</pubDev>
+	<pubDev>TEQUE LONDON LTD.</pubDev>
+	<pubDev>TEQUE LONDON</pubDev>
+	<pubDev>TEQUE SOFTWARE DEVELOPMENT</pubDev>
+	<pubDev>TEQUE SOFTWARE</pubDev>
+	<pubDev>TEQUE</pubDev>
+	<pubDev>TERRA NOVA DEVELOPMENT</pubDev>
+	<pubDev>TERRAGLYPH INTERACTIVE STUDIOS</pubDev>
+	<pubDev>TERRAMARQUE LTD.</pubDev>
+	<pubDev>THALAMUS</pubDev>
+	<pubDev>THALEAN SOFTWARE</pubDev>
+	<pubDev>THALION SOFTWARE</pubDev>
+	<pubDev>THALION</pubDev>
+	<pubDev>THE 8TH DAY</pubDev>
+	<pubDev>THE ALGORITHM GUILD</pubDev>
+	<pubDev>THE ASSEMBLY LINE</pubDev>
+	<pubDev>THE ATTIC</pubDev>
+	<pubDev>THE BITMAP BROTHERS</pubDev>
+	<pubDev>THE BLACK TEAM</pubDev>
+	<pubDev>THE CARE BEARS</pubDev>
+	<pubDev>THE COMPANY</pubDev>
+	<pubDev>THE DOME SOFTWARE DEVELOPMENTS</pubDev>
+	<pubDev>THE DREAMER'S GUILD</pubDev>
+	<pubDev>THE EDGE</pubDev>
+	<pubDev>THE EVIL 3</pubDev>
+	<pubDev>THE GANG OF FIVE</pubDev>
+	<pubDev>THE HIDDEN</pubDev>
+	<pubDev>THE KREMLIN</pubDev>
+	<pubDev>THE ONE</pubDev>
+	<pubDev>THE POKÉMON COMPANY</pubDev>
+	<pubDev>THE SALES CURVE</pubDev>
+	<pubDev>THE SHAW BROTHERS</pubDev>
+	<pubDev>THE SOFTWARE BUSINESS LIMITED</pubDev>
+	<pubDev>THE WARP FACTORY</pubDev>
+	<pubDev>THE WHIZ KIDZ</pubDev>
+	<pubDev>THINK!WARE DEVELOPMENT</pubDev>
+	<pubDev>THIRD MILLENNIUM SOFTWARE</pubDev>
+	<pubDev>THQ</pubDev>
+	<pubDev>THUNDER MOUNTAIN</pubDev>
+	<pubDev>TIERTEX DESIGN STUDIOS</pubDev>
+	<pubDev>TIERTEX</pubDev>
+	<pubDev>TIME WARNER INTERACTIVE</pubDev>
+	<pubDev>TIME WARP PRODUCTIONS</pubDev>
+	<pubDev>TIME WARP SOFTWARE GMBH</pubDev>
+	<pubDev>TIME WARP</pubDev>
+	<pubDev>TIMSOFT</pubDev>
+	<pubDev>TIR</pubDev>
+	<pubDev>TITAN COMPUTER</pubDev>
+	<pubDev>TITUS</pubDev>
+	<pubDev>TM GAMES</pubDev>
+	<pubDev>TOAST DEPT.</pubDev>
+	<pubDev>TOKAI ENGINEERING</pubDev>
+	<pubDev>TOMAHAWK</pubDev>
+	<pubDev>TOMCAT SYSTEM</pubDev>
+	<pubDev>TOP SHOTS</pubDev>
+	<pubDev>TOPDOWN DEVELOPMENT</pubDev>
+	<pubDev>TOPO SOFT</pubDev>
+	<pubDev>TOYS FOR BOB</pubDev>
+	<pubDev>TRADEWEST</pubDev>
+	<pubDev>TRASH</pubDev>
+	<pubDev>TRAVELING BITS</pubDev>
+	<pubDev>TRAVELLER'S TALES</pubDev>
+	<pubDev>TRAVELLERS TALES</pubDev>
+	<pubDev>TRECISION S.P.A.</pubDev>
+	<pubDev>TROJAN</pubDev>
+	<pubDev>TROYAN</pubDev>
+	<pubDev>TURBO TECHNOLOGIES, INC.</pubDev>
+	<pubDev>TURCAN RESEARCH SYSTEMS LIMITED</pubDev>
+	<pubDev>TWILIGHT GAMES</pubDev>
+	<pubDev>TWILIGHT</pubDev>
+	<pubDev>TWIN EAGLES</pubDev>
+	<pubDev>TWIN SPARK SOFT</pubDev>
+	<pubDev>TYNESOFT COMPUTER SOFTWARE</pubDev>
+	<pubDev>TYNESOFT</pubDev>
+	<pubDev>U.S. GOLD - WORLDWIDE</pubDev>
+	<pubDev>U.S. GOLD</pubDev>
+	<pubDev>UBI SOFT</pubDev>
+	<pubDev>UBISOFT</pubDev>
+	<pubDev>UKIYOTEI</pubDev>
+	<pubDev>ULTRA GRAPHIX</pubDev>
+	<pubDev>ULTRA SOFTWARE CORPORATION</pubDev>
+	<pubDev>UNCONSCIOUS MINDS</pubDev>
+	<pubDev>UNIQUE DEVELOPMENT STUDIOS SWEDEN</pubDev>
+	<pubDev>UNIQUE ENTERTAINMENT</pubDev>
+	<pubDev>UPL</pubDev>
+	<pubDev>US ACTION</pubDev>
+	<pubDev>V.A.K.</pubDev>
+	<pubDev>VATICAL ENTERTAINMENT</pubDev>
+	<pubDev>VECTORDEAN LTD.</pubDev>
+	<pubDev>VECTORDEAN</pubDev>
+	<pubDev>VEKTOR GRAFIX LIMITED</pubDev>
+	<pubDev>VEKTOR GRAFIX</pubDev>
+	<pubDev>VELEZ &amp; DUBAIL</pubDev>
+	<pubDev>VENTURE TECHNOLOGIES</pubDev>
+	<pubDev>VERTICAL DEVELOPMENTS</pubDev>
+	<pubDev>VICARIOUS VISION</pubDev>
+	<pubDev>VIDEOBIONICS</pubDev>
+	<pubDev>VIGDAL, EDGAR</pubDev>
+	<pubDev>VIRGIN GAMES</pubDev>
+	<pubDev>VIRGIN INTERACTIVE ENTERTAINMENT</pubDev>
+	<pubDev>VIRGIN MASTERTRONIC</pubDev>
+	<pubDev>VIRGIN</pubDev>
+	<pubDev>VIRTUAL DESIGN</pubDev>
+	<pubDev>VIRTUAL DREAMS</pubDev>
+	<pubDev>VIRTUAL STUDIO</pubDev>
+	<pubDev>VISION GAMES</pubDev>
+	<pubDev>VISION SOFTWARE</pubDev>
+	<pubDev>VISION</pubDev>
+	<pubDev>VISIONARY DESIGN</pubDev>
+	<pubDev>VISUAL CONCEPTS</pubDev>
+	<pubDev>VIVID IMAGE</pubDev>
+	<pubDev>VOODOO</pubDev>
+	<pubDev>VORTEX SOFTWARE</pubDev>
+	<pubDev>VTO PICTURES</pubDev>
+	<pubDev>VU GAMES</pubDev>
+	<pubDev>VULCAN</pubDev>
+	<pubDev>VULTURE</pubDev>
+	<pubDev>WALKING CIRCLES</pubDev>
+	<pubDev>WALT DISNEY COMPUTER SOFTWARE</pubDev>
+	<pubDev>WARGAME</pubDev>
+	<pubDev>WARTHOG</pubDev>
+	<pubDev>WEATHERMINE SOFTWARE</pubDev>
+	<pubDev>WEATHERMINE</pubDev>
+	<pubDev>WEST ONE</pubDev>
+	<pubDev>WESTONE CO., LTD.</pubDev>
+	<pubDev>WESTONE</pubDev>
+	<pubDev>WESTWOOD ASSOCIATES</pubDev>
+	<pubDev>WESTWOOD STUDIOS</pubDev>
+	<pubDev>WHIZ KIDZ, THE</pubDev>
+	<pubDev>WICKED SOFTWARE</pubDev>
+	<pubDev>WICKED STUDIOS</pubDev>
+	<pubDev>WILLIAMS ELECTRONICS</pubDev>
+	<pubDev>WISE OWL SOFTWARE</pubDev>
+	<pubDev>WJS DESIGN</pubDev>
+	<pubDev>WORLD SOFTWARE</pubDev>
+	<pubDev>WUNDERKIND</pubDev>
+	<pubDev>XYZ</pubDev>
+	<pubDev>ZAP CORPORATION</pubDev>
+	<pubDev>ZEICHI</pubDev>
+	<pubDev>ZEICHIGAMES</pubDev>
+	<pubDev>ZEMINA</pubDev>
+	<pubDev>ZEPPELIN GAMES LIMITED</pubDev>
+	<pubDev>ZEPPELIN GAMES</pubDev>
+	<pubDev>ZEPPELIN PLATINUM</pubDev>
+	<pubDev>ZEPPELIN</pubDev>
+	<pubDev>ZERET</pubDev>
+	<pubDev>ZERO HOUR SOFTWARE</pubDev>
+	<ratings>1 STAR</ratings>
+	<ratings>2 STARS</ratings>
+	<ratings>3 STARS</ratings>
+	<ratings>4 STARS</ratings>
+	<ratings>5 STARS</ratings>
+	<year>1983</year>
+	<year>1984</year>
+	<year>1985</year>
+	<year>1986</year>
+	<year>1987</year>
+	<year>1988</year>
+	<year>1989</year>
+	<year>1990</year>
+	<year>1991</year>
+	<year>1992</year>
+	<year>1993</year>
+	<year>1994</year>
+	<year>1995</year>
+	<year>1996</year>
+	<year>1997</year>
+	<year>1998</year>
+	<year>1999</year>
+	<year>2000</year>
+	<year>2001</year>
+	<year>2002</year>
+	<year>2003</year>
+	<year>2004</year>
+	<year>2005</year>
+	<year>2008</year>
+	<year>2012</year>
+	<year>2013</year>
+	<year>2017</year>
+	<year>2022</year>
+	<year>2023</year>
+	<favorites>FALSE</favorites>
+	<favorites>TRUE</favorites>
+	<kidGame>FALSE</kidGame>
+	<kidGame>TRUE</kidGame>
+	<played>FALSE</played>
+	<played>TRUE</played>
+	<lang>BR</lang>
+	<lang>DE</lang>
+	<lang>EN</lang>
+	<lang>ES</lang>
+	<lang>FR</lang>
+	<lang>IT</lang>
+	<lang>JP</lang>
+	<lang>KR</lang>
+	<lang>NL</lang>
+	<lang>NO</lang>
+	<lang>PL</lang>
+	<lang>PT</lang>
+	<lang>UNKNOWN</lang>
+	<region>BR</region>
+	<region>JP</region>
+	<region>EU</region>
+	<region>KR</region>
+	<region>US</region>
+	<region>UNKNOWN</region>
+	<region>WR</region>
+	<cheevos>FALSE</cheevos>
+	<cheevos>TRUE</cheevos>
+	<vertical>FALSE</vertical>
+	<vertical>TRUE</vertical>
+	<lightgun>FALSE</lightgun>
+	<lightgun>TRUE</lightgun>
+	<wheel>FALSE</wheel>
+	<wheel>TRUE</wheel>
+	<trackball>FALSE</trackball>
+	<trackball>TRUE</trackball>
+	<spinner>FALSE</spinner>
+	<spinner>TRUE</spinner>
+	<hasMedia>boxart</hasMedia>
+	<hasMedia>fanart</hasMedia>
+	<hasMedia>bezel</hasMedia>
+	<hasMedia>boxback</hasMedia>
+	<hasMedia>cartridge</hasMedia>
+	<hasMedia>image</hasMedia>
+	<hasMedia>magazine</hasMedia>
+	<hasMedia>manual</hasMedia>
+	<hasMedia>map</hasMedia>
+	<hasMedia>marquee</hasMedia>
+	<hasMedia>mix</hasMedia>
+	<hasMedia>thumbnail</hasMedia>
+	<hasMedia>titleshot</hasMedia>
+	<hasMedia>video</hasMedia>
+	<hasMedia>wheel</hasMedia>
+	<missingMedia>boxart</missingMedia>
+	<missingMedia>fanart</missingMedia>
+	<missingMedia>bezel</missingMedia>
+	<missingMedia>boxback</missingMedia>
+	<missingMedia>cartridge</missingMedia>
+	<missingMedia>image</missingMedia>
+	<missingMedia>magazine</missingMedia>
+	<missingMedia>manual</missingMedia>
+	<missingMedia>map</missingMedia>
+	<missingMedia>marquee</missingMedia>
+	<missingMedia>mix</missingMedia>
+	<missingMedia>thumbnail</missingMedia>
+	<missingMedia>titleshot</missingMedia>
+	<missingMedia>video</missingMedia>
+	<missingMedia>wheel</missingMedia>
+</filter>
