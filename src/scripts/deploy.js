@@ -113,8 +113,9 @@ public static class RiescadeLauncher
   {
     try
     {
-      string targetExe = @"${escapePs(targetExe)}";
-      string workDir = @"${escapePs(distDest)}";
+      string baseDir = AppDomain.CurrentDomain.BaseDirectory;
+      string targetExe = Path.Combine(baseDir, @".riescade\\RIESCADE.exe");
+      string workDir = Path.Combine(baseDir, @".riescade");
 
       if (!File.Exists(targetExe))
       {
