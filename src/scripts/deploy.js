@@ -92,6 +92,7 @@ $ErrorActionPreference = 'Stop'
 $outExe = "${escapePs(rootExe)}"
 $targetExe = "${escapePs(targetExe)}"
 $workDir = "${escapePs(distDest)}"
+$iconPath = "${escapePs(iconIcoSource)}"
 
 if (Test-Path $outExe) { Remove-Item -Force $outExe }
 
@@ -146,6 +147,7 @@ $args = @(
   "/nologo",
   "/target:winexe",
   "/optimize+",
+  "/win32icon:$iconPath",
   "/out:$outExe",
   $src
 )

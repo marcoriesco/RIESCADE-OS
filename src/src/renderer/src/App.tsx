@@ -22,6 +22,7 @@ export default function App() {
   const [settings, setSettings] = useState<any>({});
   const [nativeWins, setNativeWins] = useState<{ type: string; appId: string; minimized: boolean }[]>([]);
   const [overlaySystemUrl, setOverlaySystemUrl] = useState<string>("");
+  const [riescadeLogoUrl, setRiescadeLogoUrl] = useState<string>("");
   const [activeSubWindowId, setActiveSubWindowId] = useState<string | null>(null);
   const [activeGameArt, setActiveGameArt] = useState<string | null>(null);
   const [controllers, setControllers] = useState<any[]>([]);
@@ -30,6 +31,9 @@ export default function App() {
   useEffect(() => {
     window.api.getOverlayPath("overlay-system.png").then((url: string) => {
       setOverlaySystemUrl(url);
+    });
+    window.api.getRiescadeLogoPath().then((url: string) => {
+      setRiescadeLogoUrl(url);
     });
   }, []);
 
@@ -670,7 +674,11 @@ export default function App() {
       >
         {/* Left Side: App Title/Logo */}
         <div className="flex items-center gap-2" style={{ WebkitAppRegion: 'no-drag' } as any}>
-          <Gamepad2 className="w-5 h-5 text-accent" />
+          {riescadeLogoUrl ? (
+            <img src={riescadeLogoUrl} alt="RIESCADE OS" className="w-5 h-5 object-contain" />
+          ) : (
+            <Gamepad2 className="w-5 h-5 text-accent" />
+          )}
           <span className="text-sm font-bold tracking-wider text-white">RIESCADE OS</span>
         </div>
 

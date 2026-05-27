@@ -89,6 +89,7 @@ function createWindow(): void {
     show: false,
     frame: false,
     autoHideMenuBar: true,
+    icon: join(getResourcesPath(), 'riescade.ico'),
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
       sandbox: false,
@@ -178,6 +179,7 @@ function createAppWindow(type: 'system' | 'tool', id: string): void {
     frame: false,
     autoHideMenuBar: true,
     title: `RIESCADE OS - ${title}`,
+    icon: join(getResourcesPath(), 'riescade.ico'),
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
       sandbox: false,
