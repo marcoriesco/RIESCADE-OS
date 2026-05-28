@@ -1,11 +1,22 @@
 import React, { useState } from "react";
-import { ChevronRight, Search, Folder, Trophy, Star } from "lucide-react";
+import { ChevronRight, Search, Folder, Trophy, Star, User, Shield, Settings, Palette, Gamepad2, Volume2, Cpu, Info } from "lucide-react";
 import { System, SettingsCtx } from "../types";
 import { TOOL_APPS, getSystemTheme } from "../constants";
 import {
   SettingGroup, SettingToggle, SettingSelect, SettingSlider, SettingInput, SettingInfo
 } from "./SettingsComponents";
 import { ScrollArea } from "./ScrollArea";
+
+const SETTINGS_TABS = [
+  { id: "conta", name: "Minha Conta", icon: User },
+  { id: "jogos", name: "Jogos", icon: Gamepad2 },
+  { id: "interface", name: "Interface", icon: Settings },
+  { id: "personalizacao", name: "Personalização", icon: Palette },
+  { id: "controles", name: "Controles", icon: Gamepad2 },
+  { id: "audio", name: "Áudio", icon: Volume2 },
+  { id: "avancado", name: "Avançado", icon: Cpu },
+  { id: "sobre", name: "Sobre", icon: Info }
+];
 
 export default function ToolAppContent({
   appId, systems, onOpenSystem, settings, onSaveSetting
@@ -16,7 +27,7 @@ export default function ToolAppContent({
   settings?: any;
   onSaveSetting?: (name: string, value: any, type: "string" | "bool" | "int" | "float") => void;
 }) {
-  const [activeSettingsTab, setActiveSettingsTab] = useState("jogos");
+  const [activeSettingsTab, setActiveSettingsTab] = useState("conta");
   const [settingsSearch, setSettingsSearch] = useState("");
   const [settingsCategory, setSettingsCategory] = useState<"all" | "tools" | "systems">("all");
 
@@ -156,42 +167,173 @@ export default function ToolAppContent({
     };
 
     // --- Settings tabs definition ---
-    const settingsTabs = [
-      { id: "jogos", name: "Jogos" },
-      { id: "interface", name: "Interface" },
-      { id: "personalizacao", name: "Personalização" },
-      { id: "controles", name: "Controles" },
-      { id: "audio", name: "Áudio" },
-      { id: "avancado", name: "Avançado" },
-      { id: "sobre", name: "Sobre" }
-    ];
+    const settingsTabs = SETTINGS_TABS;
 
     return (
       <div className="flex h-full text-white">
-        {/* Sidebar */}
-        <aside className="w-48 bg-black/20 border-r border-white/5 p-3 flex flex-col gap-1 select-none shrink-0">
-          {settingsTabs.map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => setActiveSettingsTab(tab.id)}
-              className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-xs transition cursor-pointer ${
-                activeSettingsTab === tab.id 
-                  ? "bg-accent-light text-accent font-semibold border-l-2 border-accent rounded-l-none pl-2.5" 
-                  : "text-white/60 hover:bg-white/5 hover:text-white"
-              }`}
-            >
-              <span>{tab.name}</span>
-            </button>
-          ))}
+        {/* Discord-like Sidebar - extends to top, merges with titlebar */}
+        <aside className="w-[240px] bg-black/40 border-r border-white/5 flex flex-col shrink-0 select-none">
+          {/* Branding Section - top padding accounts for drag region */}
+          <div className="pt-8 px-4 pb-3 shrink-0">
+            <div className="flex items-center gap-3 mb-4">
+              <div 
+                className="w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold shadow-lg shrink-0"
+                style={{ background: 'linear-gradient(135deg, var(--accent-color), rgb(79, 70, 229))' }}
+              >
+                R
+              </div>
+              <div className="flex flex-col min-w-0">
+                <span className="text-sm font-bold text-white tracking-wide">RIESCADE OS</span>
+                <span className="text-[10px] text-white/40 font-medium">v2.0.0-Beta</span>
+              </div>
+            </div>
+            {/* Search */}
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-white/35" />
+              <input 
+                placeholder="Buscar configurações..."
+                className="w-full bg-white/5 border border-white/5 rounded-md pl-9 pr-3 py-2 text-xs text-white placeholder:text-white/30 focus:outline-none focus:border-white/15 focus:bg-white/[0.07] transition duration-200"
+              />
+            </div>
+          </div>
+
+          {/* Navigation */}
+          <div className="flex-1 overflow-y-auto px-2 pb-4">
+            <div className="text-[10px] font-bold uppercase text-white/25 tracking-widest px-3 py-2 mt-1">Configurações</div>
+            <div className="flex flex-col gap-0.5">
+              {settingsTabs.map((tab) => {
+                const TabIcon = tab.icon;
+                const isActive = activeSettingsTab === tab.id;
+                return (
+                  <button
+                    key={tab.id}
+                    onClick={() => setActiveSettingsTab(tab.id)}
+                    className={`w-full flex items-center gap-2.5 px-3 py-[7px] rounded-md text-[13px] transition-all cursor-pointer relative ${
+                      isActive 
+                        ? "bg-white/[0.08] text-white font-medium" 
+                        : "text-white/50 hover:bg-white/[0.04] hover:text-white/80"
+                    }`}
+                  >
+                    {isActive && (
+                      <div className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-4 bg-white rounded-r-full" />
+                    )}
+                    <TabIcon className="w-4 h-4 shrink-0 opacity-60" />
+                    <span>{tab.name}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Bottom Profile (Static) */}
+          <div className="p-3 border-t border-white/5 shrink-0">
+            <div className="flex items-center gap-2.5 px-2 py-1.5">
+              <div 
+                className="w-8 h-8 rounded-full flex items-center justify-center text-[10px] font-bold shadow-md shrink-0"
+                style={{ background: 'linear-gradient(135deg, var(--accent-color), rgb(79, 70, 229))' }}
+              >
+                RC
+              </div>
+              <div className="flex flex-col min-w-0">
+                <span className="text-xs font-semibold text-white/90 truncate">RIESCADE Player</span>
+                <span className="text-[10px] text-white/35">Online</span>
+              </div>
+            </div>
+          </div>
         </aside>
         
-        <div className="flex-1 p-5 flex flex-col h-full overflow-hidden">
+        {/* Main Content Area */}
+        <div className="flex-1 flex flex-col h-full overflow-hidden bg-black/10">
+          {/* Section Header (Discord-like: section name at top, X reserved for controls overlay) */}
+          <div className="shrink-0 h-8 flex items-center px-6 border-b border-white/5">
+            <span className="text-sm font-semibold text-white/80">{SETTINGS_TABS.find(t => t.id === activeSettingsTab)?.name || "Configurações"}</span>
+          </div>
+
+          {/* ===== TAB: CONTA (Account - Static) ===== */}
+          {activeSettingsTab === "conta" && (
+            <ScrollArea className="flex-1">
+              <div className="p-6 max-w-[740px]">
+                <h2 className="text-xl font-bold text-white mb-1">Minha Conta</h2>
+                <p className="text-sm text-white/40 mb-6">Gerencie suas informações pessoais e configurações de conta.</p>
+
+                {/* Account Info Section */}
+                <div className="mb-8">
+                  <h3 className="text-base font-bold text-white mb-4">Informações da conta</h3>
+                  <div className="space-y-3">
+                    {[
+                      { label: "Nome de usuário", value: "RIESCADE Player", action: "Editar" },
+                      { label: "E-mail", value: "**************@gmail.com", action: "Editar", link: "Mostrar" },
+                      { label: "Telefone", value: "*******8182", action: "Editar", link: "Mostrar" },
+                      { label: "Grupo Etário", value: "Não confirmado", action: "Confirmar" }
+                    ].map((field, i) => (
+                      <div key={i} className="flex items-center justify-between bg-black/20 border border-white/5 rounded-lg px-4 py-3">
+                        <div className="flex flex-col">
+                          <span className="text-xs text-white/40 font-medium">{field.label}</span>
+                          <span className="text-sm text-white/90">{field.value}</span>
+                        </div>
+                        <div className="flex items-center gap-3">
+                          {field.link && (
+                            <button className="text-xs text-blue-400 hover:text-blue-300 transition cursor-pointer font-medium">
+                              {field.link}
+                            </button>
+                          )}
+                          <button className="px-3 py-1.5 rounded-md bg-white/[0.06] hover:bg-white/[0.1] text-xs text-white/80 font-medium transition cursor-pointer">
+                            {field.action}
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Password & Security Section */}
+                <div className="mb-8">
+                  <h3 className="text-base font-bold text-white mb-4">Senha e segurança</h3>
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between bg-black/20 border border-white/5 rounded-lg px-4 py-3">
+                      <div className="flex flex-col">
+                        <span className="text-xs text-white/40 font-medium">Senha</span>
+                        <span className="text-sm text-white/90">Senha</span>
+                      </div>
+                      <button className="px-3 py-1.5 rounded-md bg-white/[0.06] hover:bg-white/[0.1] text-xs text-white/80 font-medium transition cursor-pointer">
+                        Editar
+                      </button>
+                    </div>
+                    <div className="flex items-center justify-between bg-black/20 border border-white/5 rounded-lg px-4 py-3 hover:bg-white/[0.03] transition cursor-pointer">
+                      <div className="flex flex-col">
+                        <span className="text-xs text-white/40 font-medium">Autenticação Multifatorial</span>
+                        <span className="text-sm text-white/90">Ativada</span>
+                      </div>
+                      <ChevronRight className="w-4 h-4 text-white/30" />
+                    </div>
+                    <div className="flex items-center justify-between bg-black/20 border border-white/5 rounded-lg px-4 py-3 hover:bg-white/[0.03] transition cursor-pointer">
+                      <div className="flex flex-col">
+                        <span className="text-xs text-white/40 font-medium">Dispositivos conectados</span>
+                        <span className="text-sm text-white/90">0 dispositivos</span>
+                      </div>
+                      <ChevronRight className="w-4 h-4 text-white/30" />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Account Status Section */}
+                <div>
+                  <h3 className="text-base font-bold text-white mb-4">Status da Conta</h3>
+                  <div className="flex items-center gap-2.5 bg-black/20 border border-white/5 rounded-lg px-4 py-3">
+                    <div className="w-2 h-2 rounded-full bg-emerald-500 shrink-0" />
+                    <span className="text-sm text-white/70">Sua conta está toda em ordem</span>
+                  </div>
+                </div>
+              </div>
+            </ScrollArea>
+          )}
+
           {/* ===== TAB: JOGOS ===== */}
           {activeSettingsTab === "jogos" && (
-            <ScrollArea className="flex-1 pr-2">
-              <div className="space-y-2">
-              <h2 className="text-lg font-bold mb-1 shrink-0">Configurações de Jogos</h2>
-              <p className="text-xs text-white/50 mb-4">Configurações globais de emulação, vídeo, shaders e mais.</p>
+            <ScrollArea className="flex-1">
+              <div className="p-6 max-w-[740px] space-y-2">
+              <h2 className="text-xl font-bold text-white mb-1">Configurações de Jogos</h2>
+              <p className="text-sm text-white/40 mb-4">Configurações globais de emulação, vídeo, shaders e mais.</p>
 
               <SettingGroup label="RetroAchievements" />
               <SettingToggle label="RetroAchievements" name="global.cheevos" desc="Ativar conquistas retrô durante a emulação." ctx={ctx} />
@@ -268,13 +410,13 @@ export default function ToolAppContent({
           {/* ===== TAB: INTERFACE ===== */}
           {activeSettingsTab === "interface" && (
             <div className="flex flex-col h-full overflow-hidden">
-              <div className="shrink-0 mb-4">
-                <h2 className="text-lg font-bold mb-1">Interface</h2>
-                <p className="text-xs text-white/50">Aparência, ícones do desktop/taskbar, tema e idioma.</p>
+              <div className="shrink-0 px-6 pt-6 pb-2">
+                <h2 className="text-xl font-bold text-white mb-1">Interface</h2>
+                <p className="text-sm text-white/40">Aparência, ícones do desktop/taskbar, tema e idioma.</p>
               </div>
 
-              <ScrollArea className="flex-1 pr-2">
-                <div className="space-y-2">
+              <ScrollArea className="flex-1">
+                <div className="px-6 pb-6 space-y-2">
                 <SettingGroup label="Ícones do Desktop e Taskbar" />
 
                 {/* Search & Category Filter */}
@@ -372,10 +514,10 @@ export default function ToolAppContent({
 
           {/* ===== TAB: PERSONALIZAÇÃO ===== */}
           {activeSettingsTab === "personalizacao" && (
-            <ScrollArea className="flex-1 pr-2">
-              <div className="space-y-2">
-              <h2 className="text-lg font-bold mb-1">Personalização</h2>
-              <p className="text-xs text-white/50 mb-4">Escolha a cor de destaque para os menus, botões e barras do sistema.</p>
+            <ScrollArea className="flex-1">
+              <div className="p-6 max-w-[740px] space-y-2">
+              <h2 className="text-xl font-bold text-white mb-1">Personalização</h2>
+              <p className="text-sm text-white/40 mb-4">Escolha a cor de destaque para os menus, botões e barras do sistema.</p>
 
               <SettingGroup label="Cor de Destaque" />
               
@@ -507,10 +649,10 @@ export default function ToolAppContent({
 
           {/* ===== TAB: CONTROLES ===== */}
           {activeSettingsTab === "controles" && (
-            <ScrollArea className="flex-1 pr-2">
-              <div className="space-y-2">
-              <h2 className="text-lg font-bold mb-1">Controles</h2>
-              <p className="text-xs text-white/50 mb-4">Configurações de controles, bluetooth e armas lightgun.</p>
+            <ScrollArea className="flex-1">
+              <div className="p-6 max-w-[740px] space-y-2">
+              <h2 className="text-xl font-bold text-white mb-1">Controles</h2>
+              <p className="text-sm text-white/40 mb-4">Configurações de controles, bluetooth e armas lightgun.</p>
 
               <SettingGroup label="Exibição" />
               <SettingToggle label="Mostrar Notificações de Controle" name="ShowControllerNotifications" ctx={ctx} />
@@ -558,10 +700,10 @@ export default function ToolAppContent({
 
           {/* ===== TAB: ÁUDIO ===== */}
           {activeSettingsTab === "audio" && (
-            <ScrollArea className="flex-1 pr-2">
-              <div className="space-y-2">
-              <h2 className="text-lg font-bold mb-1">Áudio</h2>
-              <p className="text-xs text-white/50 mb-4">Volume, música de fundo e sons de navegação.</p>
+            <ScrollArea className="flex-1">
+              <div className="p-6 max-w-[740px] space-y-2">
+              <h2 className="text-xl font-bold text-white mb-1">Áudio</h2>
+              <p className="text-sm text-white/40 mb-4">Volume, música de fundo e sons de navegação.</p>
 
               <SettingGroup label="Volume" />
               <SettingSlider label="Volume do Sistema" name="Volume" min={0} max={100} step={1} suffix="%" ctx={ctx} />
@@ -605,10 +747,10 @@ export default function ToolAppContent({
 
           {/* ===== TAB: AVANÇADO ===== */}
           {activeSettingsTab === "avancado" && (
-            <ScrollArea className="flex-1 pr-2">
-              <div className="space-y-2">
-              <h2 className="text-lg font-bold mb-1">Configurações Avançadas</h2>
-              <p className="text-xs text-white/50 mb-4">Drivers, latência, opções de desenvolvedor e otimizações.</p>
+            <ScrollArea className="flex-1">
+              <div className="p-6 max-w-[740px] space-y-2">
+              <h2 className="text-xl font-bold text-white mb-1">Configurações Avançadas</h2>
+              <p className="text-sm text-white/40 mb-4">Drivers, latência, opções de desenvolvedor e otimizações.</p>
 
               <SettingGroup label="Drivers" />
               <SettingSelect label="Driver de Vídeo" name="video_driver" desc="Vulkan oferece melhor desempenho em hardware compatível." options={[
@@ -686,10 +828,10 @@ export default function ToolAppContent({
 
           {/* ===== TAB: SOBRE ===== */}
           {activeSettingsTab === "sobre" && (
-            <ScrollArea className="flex-1 pr-2">
-              <div className="space-y-2">
-              <h2 className="text-lg font-bold mb-1">Sobre o Sistema</h2>
-              <p className="text-xs text-white/50 mb-4">Informações do RIESCADE OS e hardware.</p>
+            <ScrollArea className="flex-1">
+              <div className="p-6 max-w-[740px] space-y-2">
+              <h2 className="text-xl font-bold text-white mb-1">Sobre o Sistema</h2>
+              <p className="text-sm text-white/40 mb-4">Informações do RIESCADE OS e hardware.</p>
 
               <SettingGroup label="Sistema" />
               <SettingInfo label="Versão" value="RIESCADE OS v2.0.0-Beta" />

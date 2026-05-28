@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState, useMemo } from "react";
-import { Gamepad2, Heart, Loader2, Star, Play, ChevronRight, Maximize2, X } from "lucide-react";
+import { Gamepad2, Heart, Loader2, Star, Play, ChevronRight, Maximize2, X, Search } from "lucide-react";
 import { System, Game } from "../types";
 import { ScrollArea } from "./ScrollArea";
 import { OverlayScrollbarsComponentRef } from "overlayscrollbars-react";
@@ -51,15 +51,6 @@ export default function SystemAppContent({
       viewport.scrollTop = 0;
     }
   }, [system, search, filter, selectedGenre, selectedYear, selectedPlayers, selectedMinRating]);
-
-  const handleScroll = (instance: any) => {
-    const { viewport } = instance.elements();
-    if (viewport.scrollHeight - viewport.scrollTop <= viewport.clientHeight * 1.5) {
-      if (displayLimit < filteredGames.length) {
-        setDisplayLimit(prev => Math.min(filteredGames.length, prev + 40));
-      }
-    }
-  };
 
   // Load Games of Platform & Reset Filters
   useEffect(() => {
@@ -167,6 +158,38 @@ export default function SystemAppContent({
     });
   }, [games, search, filter, selectedGenre, selectedYear, selectedPlayers, selectedMinRating]);
 
+  // Attach scroll listener for infinite scroll
+  useEffect(() => {
+    let cleanupFn: (() => void) | null = null;
+    let cancelled = false;
+
+    const tryAttach = () => {
+      if (cancelled) return;
+      const osRef = gridContainerRef.current;
+      if (!osRef) { setTimeout(tryAttach, 150); return; }
+      const inst = osRef.osInstance();
+      if (!inst) { setTimeout(tryAttach, 150); return; }
+
+      const viewport = inst.elements().viewport;
+      if (!viewport) { setTimeout(tryAttach, 150); return; }
+
+      const onScroll = () => {
+        if (viewport.scrollHeight - viewport.scrollTop <= viewport.clientHeight * 1.5) {
+          setDisplayLimit(prev => Math.min(filteredGames.length, prev + 40));
+        }
+      };
+      viewport.addEventListener('scroll', onScroll, { passive: true });
+      cleanupFn = () => { viewport.removeEventListener('scroll', onScroll); };
+    };
+
+    tryAttach();
+
+    return () => {
+      cancelled = true;
+      cleanupFn?.();
+    };
+  }, [filteredGames.length]);
+
   const selectedGame = filteredGames[selectedIdx];
 
   // Reset image error and fullscreen video when switching games
@@ -272,128 +295,192 @@ export default function SystemAppContent({
   return (
     <div className="h-full flex text-white overflow-hidden relative w-full bg-transparent">
       <div className="relative z-10 flex w-full h-full overflow-hidden">
-      <ScrollArea className="w-[14vw] min-w-[200px] bg-black/25 p-3 select-none shrink-0">
-        <div className="flex flex-col gap-1.5">
-          <div className="text-[10px] font-bold uppercase text-white/35 tracking-wider px-2 py-1">Filtros</div>
-        
-        <button
-          onClick={() => { setFilter("all"); setSelectedIdx(0); }}
-          className={`flex items-center gap-2 text-left text-sm px-3 py-2 rounded-lg transition ${filter === "all" ? "bg-white/10 text-white font-medium" : "text-white/60 hover:bg-white/5"}`}
-        >
-          <Gamepad2 className="w-4 h-4" />
-          <span>Todos</span>
-        </button>
-        
-        <button
-          onClick={() => { setFilter("favorites"); setSelectedIdx(0); }}
-          className={`flex items-center gap-2 text-left text-sm px-3 py-2 rounded-lg transition ${filter === "favorites" ? "bg-white/10 text-white font-medium" : "text-white/60 hover:bg-white/5"}`}
-        >
-          <Heart className="w-4 h-4" />
-          <span>Favoritos</span>
-        </button>
-
-        <div className="w-full h-px bg-white/5 my-1.5" />
-
-        <div className="text-[10px] font-bold uppercase text-white/35 tracking-wider px-2 py-1">Avançados</div>
-
-        {/* Genre Filter */}
-        <div className="flex flex-col gap-1 px-2 py-1">
-          <span className="text-[10px] text-white/40 font-medium">Gênero</span>
-          <select
-            value={selectedGenre}
-            onChange={(e) => { setSelectedGenre(e.target.value); setSelectedIdx(0); }}
-            className="w-full bg-white/5 border border-white/10 rounded-md px-2 py-1 text-[11px] text-white focus:outline-none cursor-pointer hover:bg-white/10"
-          >
-            <option value="all" className="bg-[#121212]">Todos</option>
-            {filterOptions.genres.map(g => (
-              <option key={g} value={g} className="bg-[#121212]">{g}</option>
-            ))}
-          </select>
+      {/* Discord-like Sidebar: Logo + Search + Filters - extends to top */}
+      <aside className="w-[240px] bg-black/40 border-r border-white/5 flex flex-col shrink-0 select-none">
+        {/* System Logo Section - top padding for drag region */}
+        <div className="pt-8 px-4 pb-3 shrink-0">
+          <div className="flex items-center gap-3 mb-4">
+            {system.logo ? (
+              <img src={system.logo} alt={system.fullname} className="h-9 object-contain filter drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]" />
+            ) : (
+              <div className="w-10 h-10 rounded-xl flex items-center justify-center shadow-lg" style={{ background: `linear-gradient(135deg, ${color}, rgb(30,30,30))` }}>
+                <Icon className="w-5 h-5 text-white" />
+              </div>
+            )}
+            <div className="flex flex-col min-w-0">
+              <span className="text-sm font-bold text-white truncate">{system.fullname}</span>
+              <span className="text-[10px] text-white/40 font-medium">{games.length} jogos</span>
+            </div>
+          </div>
+          {/* Search */}
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-white/35" />
+            <input 
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder={`Buscar em ${system.fullname}...`}
+              className="w-full bg-white/5 border border-white/5 rounded-md pl-9 pr-3 py-2 text-xs text-white placeholder:text-white/30 focus:outline-none focus:border-white/15 focus:bg-white/[0.07] transition duration-200"
+            />
+          </div>
         </div>
 
-        {/* Year Filter */}
-        <div className="flex flex-col gap-1 px-2 py-1">
-          <span className="text-[10px] text-white/40 font-medium">Ano</span>
-          <select
-            value={selectedYear}
-            onChange={(e) => { setSelectedYear(e.target.value); setSelectedIdx(0); }}
-            className="w-full bg-white/5 border border-white/10 rounded-md px-2 py-1 text-[11px] text-white focus:outline-none cursor-pointer hover:bg-white/10"
-          >
-            <option value="all" className="bg-[#121212]">Todos</option>
-            {filterOptions.years.map(y => (
-              <option key={y} value={y} className="bg-[#121212]">{y}</option>
-            ))}
-          </select>
+        {/* Filters Navigation */}
+        <ScrollArea className="flex-1 px-2 pb-4">
+          <div className="text-[10px] font-bold uppercase text-white/25 tracking-widest px-3 py-2 mt-1">Filtros</div>
+          <div className="flex flex-col gap-0.5">
+            <button
+              onClick={() => { setFilter("all"); setSelectedIdx(0); }}
+              className={`w-full flex items-center gap-2.5 px-3 py-[7px] rounded-md text-[13px] transition-all cursor-pointer relative ${
+                filter === "all" 
+                  ? "bg-white/[0.08] text-white font-medium" 
+                  : "text-white/50 hover:bg-white/[0.04] hover:text-white/80"
+              }`}
+            >
+              {filter === "all" && (
+                <div className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-4 bg-white rounded-r-full" />
+              )}
+              <Gamepad2 className="w-4 h-4 shrink-0 opacity-60" />
+              <span>Todos</span>
+            </button>
+            
+            <button
+              onClick={() => { setFilter("favorites"); setSelectedIdx(0); }}
+              className={`w-full flex items-center gap-2.5 px-3 py-[7px] rounded-md text-[13px] transition-all cursor-pointer relative ${
+                filter === "favorites" 
+                  ? "bg-white/[0.08] text-white font-medium" 
+                  : "text-white/50 hover:bg-white/[0.04] hover:text-white/80"
+              }`}
+            >
+              {filter === "favorites" && (
+                <div className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-4 bg-white rounded-r-full" />
+              )}
+              <Heart className={`w-4 h-4 shrink-0 ${filter === "favorites" ? "fill-red-500 text-red-500" : "opacity-60"}`} />
+              <span>Favoritos</span>
+            </button>
+          </div>
+
+          <div className="w-full h-px bg-white/5 my-3 mx-2" />
+
+          <div className="text-[10px] font-bold uppercase text-white/25 tracking-widest px-3 py-2">Avançados</div>
+          <div className="flex flex-col gap-2 px-2">
+
+            {/* Genre Filter */}
+            <div className="flex flex-col gap-1">
+              <span className="text-[10px] text-white/35 font-semibold px-1">Gênero</span>
+          <div className="relative">
+            <select
+              value={selectedGenre}
+              onChange={(e) => { setSelectedGenre(e.target.value); setSelectedIdx(0); }}
+              className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-xs text-white/90 focus:outline-none focus-border-accent hover:bg-white/10 transition appearance-none cursor-pointer"
+            >
+              <option value="all" className="bg-[#121212]">Todos</option>
+              {filterOptions.genres.map(g => (
+                <option key={g} value={g} className="bg-[#121212]">{g}</option>
+              ))}
+            </select>
+            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-white/40">
+              <ChevronRight className="w-3.5 h-3.5 rotate-90" />
+            </div>
+          </div>
         </div>
 
-        {/* Players Filter */}
-        <div className="flex flex-col gap-1 px-2 py-1">
-          <span className="text-[10px] text-white/40 font-medium">Jogadores</span>
-          <select
-            value={selectedPlayers}
-            onChange={(e) => { setSelectedPlayers(e.target.value); setSelectedIdx(0); }}
-            className="w-full bg-white/5 border border-white/10 rounded-md px-2 py-1 text-[11px] text-white focus:outline-none cursor-pointer hover:bg-white/10"
-          >
-            <option value="all" className="bg-[#121212]">Todos</option>
-            {filterOptions.players.map(p => (
-              <option key={p} value={p} className="bg-[#121212]">{p === "1" ? "1 Jogador" : p === "2" ? "2 Jogadores" : `${p} Jogadores`}</option>
-            ))}
-          </select>
+            {/* Year Filter */}
+            <div className="flex flex-col gap-1">
+              <span className="text-[10px] text-white/35 font-semibold px-1">Ano</span>
+          <div className="relative">
+            <select
+              value={selectedYear}
+              onChange={(e) => { setSelectedYear(e.target.value); setSelectedIdx(0); }}
+              className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-xs text-white/90 focus:outline-none focus-border-accent hover:bg-white/10 transition appearance-none cursor-pointer"
+            >
+              <option value="all" className="bg-[#121212]">Todos</option>
+              {filterOptions.years.map(y => (
+                <option key={y} value={y} className="bg-[#121212]">{y}</option>
+              ))}
+            </select>
+            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-white/40">
+              <ChevronRight className="w-3.5 h-3.5 rotate-90" />
+            </div>
+          </div>
         </div>
 
-        {/* Rating Filter */}
-        <div className="flex flex-col gap-1 px-2 py-1">
-          <span className="text-[10px] text-white/40 font-medium">Avaliação</span>
-          <select
-            value={selectedMinRating}
-            onChange={(e) => { setSelectedMinRating(e.target.value); setSelectedIdx(0); }}
-            className="w-full bg-white/5 border border-white/10 rounded-md px-2 py-1 text-[11px] text-white focus:outline-none cursor-pointer hover:bg-white/10"
-          >
-            <option value="all" className="bg-[#121212]">Todas</option>
-            {filterOptions.ratings.map(r => (
-              <option key={r.value} value={r.value} className="bg-[#121212]">{r.label}</option>
-            ))}
-          </select>
+            {/* Players Filter */}
+            <div className="flex flex-col gap-1">
+              <span className="text-[10px] text-white/35 font-semibold px-1">Jogadores</span>
+          <div className="relative">
+            <select
+              value={selectedPlayers}
+              onChange={(e) => { setSelectedPlayers(e.target.value); setSelectedIdx(0); }}
+              className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-xs text-white/90 focus:outline-none focus-border-accent hover:bg-white/10 transition appearance-none cursor-pointer"
+            >
+              <option value="all" className="bg-[#121212]">Todos</option>
+              {filterOptions.players.map(p => (
+                <option key={p} value={p} className="bg-[#121212]">{p === "1" ? "1 Jogador" : p === "2" ? "2 Jogadores" : `${p} Jogadores`}</option>
+              ))}
+            </select>
+            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-white/40">
+              <ChevronRight className="w-3.5 h-3.5 rotate-90" />
+            </div>
+          </div>
         </div>
 
-        {/* Clear Filters Button */}
-        {(selectedGenre !== "all" || selectedYear !== "all" || selectedPlayers !== "all" || selectedMinRating !== "all") && (
-          <button
-            onClick={() => {
-              setSelectedGenre("all");
-              setSelectedYear("all");
-              setSelectedPlayers("all");
-              setSelectedMinRating("all");
-              setSelectedIdx(0);
-            }}
-            className="mt-2 text-[10px] text-accent text-accent-hover font-semibold text-center py-1 transition cursor-pointer"
-          >
-            Limpar Filtros
-          </button>
-        )}
+            {/* Rating Filter */}
+            <div className="flex flex-col gap-1">
+              <span className="text-[10px] text-white/35 font-semibold px-1">Avaliação</span>
+          <div className="relative">
+            <select
+              value={selectedMinRating}
+              onChange={(e) => { setSelectedMinRating(e.target.value); setSelectedIdx(0); }}
+              className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-xs text-white/90 focus:outline-none focus-border-accent hover:bg-white/10 transition appearance-none cursor-pointer"
+            >
+              <option value="all" className="bg-[#121212]">Todas</option>
+              {filterOptions.ratings.map(r => (
+                <option key={r.value} value={r.value} className="bg-[#121212]">{r.label}</option>
+              ))}
+            </select>
+            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-white/40">
+              <ChevronRight className="w-3.5 h-3.5 rotate-90" />
+            </div>
+          </div>
         </div>
-      </ScrollArea>
+
+          {/* Clear Filters Button */}
+          {(selectedGenre !== "all" || selectedYear !== "all" || selectedPlayers !== "all" || selectedMinRating !== "all") && (
+            <button
+              onClick={() => {
+                setSelectedGenre("all");
+                setSelectedYear("all");
+                setSelectedPlayers("all");
+                setSelectedMinRating("all");
+                setSelectedIdx(0);
+              }}
+              className="mt-3 mx-2 w-[calc(100%-16px)] text-[11px] text-accent hover:text-accent-hover font-semibold text-center py-2 rounded-md bg-accent/10 hover:bg-accent/20 transition cursor-pointer"
+            >
+              Limpar Filtros
+            </button>
+          )}
+          </div>
+        </ScrollArea>
+      </aside>
 
       {/* Main List */}
-      <div className="flex-1 flex overflow-hidden">
+      <div className="flex-1 flex overflow-hidden bg-black/10">
         {loading ? (
           <div className="flex-1 flex items-center justify-center">
             <Loader2 className="w-8 h-8 text-white/20 animate-spin" />
           </div>
         ) : (
-          <div className="flex-1 flex flex-col p-4 overflow-hidden">
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex flex-col">
-                <h2 className="text-lg font-bold tracking-wide">{system.fullname}</h2>
-                <span className="text-xs text-white/40">{filteredGames.length} jogos</span>
-              </div>
+          <div className="flex-1 flex flex-col overflow-hidden">
+            {/* Header with system name + game count */}
+            <div className="shrink-0 px-6 pt-8 pb-3 border-b border-white/5">
+              <h2 className="text-xl font-bold text-white tracking-wide">{system.fullname}</h2>
+              <span className="text-xs text-white/40">{filteredGames.length} jogos encontrados</span>
             </div>
 
             {/* Grid display of Games */}
             <ScrollArea 
               ref={gridContainerRef}
-              events={{ scroll: handleScroll }}
-              className="flex-1 pr-1"
+              className="flex-1 px-6 py-4"
             >
               {filteredGames.length === 0 ? (
                 <div className="h-full flex items-center justify-center text-xs text-white/30 uppercase tracking-widest">Nenhum jogo encontrado</div>

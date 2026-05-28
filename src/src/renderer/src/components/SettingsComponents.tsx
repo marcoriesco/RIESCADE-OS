@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { SettingsCtx } from "../types";
+import { ChevronRight } from "lucide-react";
 
 export const SettingGroup = ({ label }: { label: string }) => (
   <div className="text-[10px] text-white/35 uppercase tracking-widest font-semibold mt-6 mb-2.5 first:mt-0 select-none">
@@ -52,17 +53,22 @@ export const SettingSelect = ({ label, name, options, desc, type = "string", ctx
       <span className="font-medium text-white/90">{label}</span>
       {desc && <span className="text-[10px] text-white/40 leading-relaxed font-sans">{desc}</span>}
     </div>
-    <select
-      value={ctx.getSetting(name)}
-      onChange={e => { e.stopPropagation(); ctx.saveSetting(name, e.target.value, type); }}
-      className="bg-[#121212] border border-white/10 rounded-lg px-3 py-1.5 text-xs text-white/90 focus:outline-none focus-border-accent hover:border-white/20 transition cursor-pointer max-w-[220px] shrink-0 font-sans"
-    >
-      {options.map(opt => (
-        <option key={opt.value} value={opt.value} className="bg-[#121212] text-white/90">
-          {opt.label}
-        </option>
-      ))}
-    </select>
+    <div className="relative max-w-[220px] shrink-0">
+      <select
+        value={ctx.getSetting(name)}
+        onChange={e => { e.stopPropagation(); ctx.saveSetting(name, e.target.value, type); }}
+        className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-xs text-white/90 focus:outline-none focus-border-accent hover:bg-white/10 transition appearance-none cursor-pointer"
+      >
+        {options.map(opt => (
+          <option key={opt.value} value={opt.value} className="bg-[#121212] text-white/90">
+            {opt.label}
+          </option>
+        ))}
+      </select>
+      <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-white/40">
+        <ChevronRight className="w-3.5 h-3.5 rotate-90" />
+      </div>
+    </div>
   </div>
 );
 
@@ -108,7 +114,7 @@ export const SettingInput = ({ label, name, desc, isPassword = false, ctx }: {
       value={ctx.getSetting(name)}
       onChange={e => { e.stopPropagation(); ctx.saveSetting(name, e.target.value, "string"); }}
       onBlur={e => ctx.saveSetting(name, e.target.value, "string")}
-      className="bg-[#121212] border border-white/10 rounded-lg px-3 py-1.5 text-xs text-white/95 placeholder:text-white/20 focus:outline-none focus-border-accent transition w-48 shrink-0 font-sans"
+      className="bg-white/5 border border-white/10 rounded-lg px-3 py-2 pr-8 text-xs text-white/90 placeholder:text-white/20 focus:outline-none focus-border-accent hover:bg-white/10 transition appearance-none cursor-pointer font-sans"
       placeholder="Digite aqui..."
     />
   </div>

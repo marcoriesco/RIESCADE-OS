@@ -398,7 +398,7 @@ export default function App() {
     return (
       <div 
         key={`system-${systemName}`} 
-        className="w-screen h-screen overflow-hidden select-none flex flex-col relative" 
+        className="w-screen h-screen overflow-hidden select-none flex relative" 
         style={{ 
           background: theme.bg
         }}
@@ -411,157 +411,143 @@ export default function App() {
           />
         )}
 
-        {/* Spotify-like premium draggable custom titlebar */}
+        {/* Draggable region at top - merged with sidebar */}
         <div 
-          className="h-14 px-4 pr-0 flex items-center justify-between select-none shrink-0 relative z-30 bg-black/60 backdrop-blur-xl border-b border-white/5" 
+          className="absolute top-0 left-0 right-0 h-8 z-10"
           style={{ WebkitAppRegion: 'drag' } as any}
+        />
+
+        {/* Three-dot Menu Overlay (top-left) */}
+        <div 
+          className="absolute top-0 left-0 z-20 flex items-center h-8 px-2"
+          style={{ WebkitAppRegion: 'no-drag' } as any}
         >
-          {/* Left Side: Three dots menu & Console Logo */}
-          <div className="flex items-center gap-4" style={{ WebkitAppRegion: 'no-drag' } as any}>
-            <div className="relative">
-              <button 
-                onClick={(e) => { e.stopPropagation(); setMenuOpen(v => !v); }}
-                className={`text-white/60 hover:text-white transition cursor-pointer flex items-center justify-center p-1 rounded ${menuOpen ? "text-white bg-white/10" : ""}`}
-              >
-                <MoreHorizontal className="w-5 h-5" />
-              </button>
-              {menuOpen && (
-                <>
-                  <div className="fixed inset-0 z-40" onClick={() => setMenuOpen(false)} />
-                  <div className="absolute left-0 mt-2 w-64 bg-[#0d0d0d]/95 backdrop-blur-md border border-white/10 rounded-xl shadow-2xl p-2 z-50 text-white animate-in fade-in slide-in-from-top-2 duration-150">
-                    <button 
-                      onClick={() => { handleToggleDesktop(); setMenuOpen(false); }}
-                      className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs hover:bg-white/10 text-left transition"
-                    >
-                      <Monitor className="w-4 h-4 text-accent" />
-                      <span>{isDesktop ? "Remover do Desktop" : "Adicionar ao Desktop"}</span>
-                    </button>
+          <div className="relative">
+            <button 
+              onClick={(e) => { e.stopPropagation(); setMenuOpen(v => !v); }}
+              className={`text-white/60 hover:text-white transition cursor-pointer flex items-center justify-center p-1 rounded ${menuOpen ? "text-white bg-white/10" : ""}`}
+            >
+              <MoreHorizontal className="w-5 h-5" />
+            </button>
+            {menuOpen && (
+              <>
+                <div className="fixed inset-0 z-40" onClick={() => setMenuOpen(false)} />
+                <div className="absolute left-0 mt-2 w-64 bg-[#0d0d0d]/95 backdrop-blur-md border border-white/10 rounded-xl shadow-2xl p-2 z-50 text-white animate-in fade-in slide-in-from-top-2 duration-150">
+                  <button 
+                    onClick={() => { handleToggleDesktop(); setMenuOpen(false); }}
+                    className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs hover:bg-white/10 text-left transition"
+                  >
+                    <Monitor className="w-4 h-4 text-accent" />
+                    <span>{isDesktop ? "Remover do Desktop" : "Adicionar ao Desktop"}</span>
+                  </button>
 
-                    <button 
-                      onClick={() => { handleToggleTaskbar(); setMenuOpen(false); }}
-                      className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs hover:bg-white/10 text-left transition"
-                    >
-                      <Grid3x3 className="w-4 h-4 text-cyan-400" />
-                      <span>{isTaskbar ? "Remover da Taskbar" : "Adicionar à Taskbar"}</span>
-                    </button>
+                  <button 
+                    onClick={() => { handleToggleTaskbar(); setMenuOpen(false); }}
+                    className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs hover:bg-white/10 text-left transition"
+                  >
+                    <Grid3x3 className="w-4 h-4 text-cyan-400" />
+                    <span>{isTaskbar ? "Remover da Taskbar" : "Adicionar à Taskbar"}</span>
+                  </button>
 
-                    <div className="h-px bg-white/10 my-1.5" />
+                  <div className="h-px bg-white/10 my-1.5" />
 
-                    <div className="px-3 py-1 text-[10px] text-white/40 uppercase font-semibold tracking-wider">
-                      Emuladores
-                    </div>
+                  <div className="px-3 py-1 text-[10px] text-white/40 uppercase font-semibold tracking-wider">
+                    Emuladores
+                  </div>
 
-                    <button
-                      onClick={() => {
-                        handleSaveSetting(`${systemName}.emulator`, "auto", "string");
-                        handleSaveSetting(`${systemName}.core`, "auto", "string");
-                        setMenuOpen(false);
-                      }}
-                      className={`w-full flex items-center justify-between px-3 py-1.5 rounded-lg text-xs hover:bg-white/10 text-left transition ${
-                        (settings[`${systemName}.emulator`]?.value === "auto" || !settings[`${systemName}.emulator`]?.value)
-                          ? "text-accent font-semibold"
-                          : "text-white/80"
-                      }`}
-                    >
-                      <span>Padrão (Auto)</span>
-                      {(settings[`${systemName}.emulator`]?.value === "auto" || !settings[`${systemName}.emulator`]?.value) && <span className="text-[10px]">●</span>}
-                    </button>
+                  <button
+                    onClick={() => {
+                      handleSaveSetting(`${systemName}.emulator`, "auto", "string");
+                      handleSaveSetting(`${systemName}.core`, "auto", "string");
+                      setMenuOpen(false);
+                    }}
+                    className={`w-full flex items-center justify-between px-3 py-1.5 rounded-lg text-xs hover:bg-white/10 text-left transition ${
+                      (settings[`${systemName}.emulator`]?.value === "auto" || !settings[`${systemName}.emulator`]?.value)
+                        ? "text-accent font-semibold"
+                        : "text-white/80"
+                    }`}
+                  >
+                    <span>Padrão (Auto)</span>
+                    {(settings[`${systemName}.emulator`]?.value === "auto" || !settings[`${systemName}.emulator`]?.value) && <span className="text-[10px]">●</span>}
+                  </button>
 
-                    {system?.emulators?.map((emu: any) => {
-                      if (emu.cores && emu.cores.length > 0) {
-                        return emu.cores.map((core: string) => {
-                          const isSelected = settings[`${systemName}.emulator`]?.value === emu.name && settings[`${systemName}.core`]?.value === core;
-                          return (
-                            <button
-                              key={`${emu.name}:${core}`}
-                              onClick={() => {
-                                handleSaveSetting(`${systemName}.emulator`, emu.name, "string");
-                                handleSaveSetting(`${systemName}.core`, core, "string");
-                                setMenuOpen(false);
-                              }}
-                              className={`w-full flex items-center justify-between px-3 py-1.5 rounded-lg text-xs hover:bg-white/10 text-left transition ${
-                                isSelected ? "text-accent font-semibold" : "text-white/80"
-                              }`}
-                            >
-                              <span className="truncate uppercase">{emu.name} ({core})</span>
-                              {isSelected && <span className="text-[10px]">●</span>}
-                            </button>
-                          );
-                        });
-                      } else {
-                        const isSelected = settings[`${systemName}.emulator`]?.value === emu.name && (!settings[`${systemName}.core`]?.value || settings[`${systemName}.core`]?.value === "auto");
+                  {system?.emulators?.map((emu: any) => {
+                    if (emu.cores && emu.cores.length > 0) {
+                      return emu.cores.map((core: string) => {
+                        const isSelected = settings[`${systemName}.emulator`]?.value === emu.name && settings[`${systemName}.core`]?.value === core;
                         return (
                           <button
-                            key={emu.name}
+                            key={`${emu.name}:${core}`}
                             onClick={() => {
                               handleSaveSetting(`${systemName}.emulator`, emu.name, "string");
-                              handleSaveSetting(`${systemName}.core`, "", "string");
+                              handleSaveSetting(`${systemName}.core`, core, "string");
                               setMenuOpen(false);
                             }}
                             className={`w-full flex items-center justify-between px-3 py-1.5 rounded-lg text-xs hover:bg-white/10 text-left transition ${
                               isSelected ? "text-accent font-semibold" : "text-white/80"
                             }`}
                           >
-                            <span className="truncate uppercase">{emu.name}</span>
+                            <span className="truncate uppercase">{emu.name} ({core})</span>
                             {isSelected && <span className="text-[10px]">●</span>}
                           </button>
                         );
-                      }
-                    })}
-                  </div>
-                </>
-              )}
-            </div>
-            <div className="flex items-center gap-2">
-              {system.logo ? (
-                <img src={system.logo} alt={system.fullname} className="h-7 object-contain filter drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]" />
-              ) : (
-                <span className="text-[10px] font-extrabold tracking-wider text-white/40 uppercase">{system.fullname}</span>
-              )}
-            </div>
-          </div>
-
-          {/* Center: Spotify-Style Pill Search Bar */}
-          <div className="flex-1 max-w-[440px] mx-auto" style={{ WebkitAppRegion: 'no-drag' } as any}>
-            <div className="relative flex items-center bg-white/5 border border-transparent rounded-full px-3 py-1.5 focus-within:border-accent focus-within:bg-white/20 transition-all duration-200">
-              <Search className="w-4 h-4 text-white/55 shrink-0 mr-2" />
-              <input
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                placeholder={`O que você quer jogar no ${system.fullname}?`}
-                className="w-full bg-transparent border-none text-md text-white placeholder:text-white/40 focus:outline-none"
-              />
-            </div>
-          </div>
-
-          {/* Right Side: Native Window Controls (Windows styled) */}
-          <div className="flex items-center h-full shrink-0" style={{ WebkitAppRegion: 'no-drag' } as any}>
-            <button 
-              onClick={() => window.api.minimizeWindow()} 
-              className="w-11 h-full hover:bg-white/10 flex items-center justify-center text-white/60 hover:text-white transition cursor-pointer"
-              title="Minimizar"
-            >
-              <Minus className="w-4 h-4" />
-            </button>
-            <button 
-              onClick={() => window.api.maximizeWindow()} 
-              className="w-11 h-full hover:bg-white/10 flex items-center justify-center text-white/60 hover:text-white transition cursor-pointer"
-              title="Maximizar"
-            >
-              <Square className="w-3 h-3" />
-            </button>
-            <button 
-              onClick={() => window.api.closeWindow()} 
-              className="w-11 h-full hover:bg-red-600 flex items-center justify-center text-white/60 hover:text-white transition cursor-pointer"
-              title="Fechar"
-            >
-              <X className="w-4 h-4" />
-            </button>
+                      });
+                    } else {
+                      const isSelected = settings[`${systemName}.emulator`]?.value === emu.name && (!settings[`${systemName}.core`]?.value || settings[`${systemName}.core`]?.value === "auto");
+                      return (
+                        <button
+                          key={emu.name}
+                          onClick={() => {
+                            handleSaveSetting(`${systemName}.emulator`, emu.name, "string");
+                            handleSaveSetting(`${systemName}.core`, "", "string");
+                            setMenuOpen(false);
+                          }}
+                          className={`w-full flex items-center justify-between px-3 py-1.5 rounded-lg text-xs hover:bg-white/10 text-left transition ${
+                            isSelected ? "text-accent font-semibold" : "text-white/80"
+                          }`}
+                        >
+                          <span className="truncate uppercase">{emu.name}</span>
+                          {isSelected && <span className="text-[10px]">●</span>}
+                        </button>
+                      );
+                    }
+                  })}
+                </div>
+              </>
+            )}
           </div>
         </div>
 
-        {/* Content */}
-        <div className="flex-1 overflow-hidden relative z-10">
+        {/* Window Controls Overlay (top-right) */}
+        <div 
+          className="absolute top-0 right-0 z-20 flex items-center h-8"
+          style={{ WebkitAppRegion: 'no-drag' } as any}
+        >
+          <button 
+            onClick={() => window.api.minimizeWindow()} 
+            className="w-11 h-8 hover:bg-white/10 flex items-center justify-center text-white/60 hover:text-white transition cursor-pointer"
+            title="Minimizar"
+          >
+            <Minus className="w-4 h-4" />
+          </button>
+          <button 
+            onClick={() => window.api.maximizeWindow()} 
+            className="w-11 h-8 hover:bg-white/10 flex items-center justify-center text-white/60 hover:text-white transition cursor-pointer"
+            title="Maximizar"
+          >
+            <Square className="w-3 h-3" />
+          </button>
+          <button 
+            onClick={() => window.api.closeWindow()} 
+            className="w-11 h-8 hover:bg-red-600 flex items-center justify-center text-white/60 hover:text-white transition cursor-pointer"
+            title="Fechar"
+          >
+            <X className="w-4 h-4" />
+          </button>
+        </div>
+
+        {/* Content - fills entire window, sidebar merges with titlebar */}
+        <div className="flex-1 overflow-hidden relative z-0">
           <div className="relative z-10 h-full">
             <SystemAppContent
               systemName={systemName}
@@ -598,58 +584,48 @@ export default function App() {
 
   // Standalone Tool Window
   if (windowType === "tool" && toolId) {
-    const tool = TOOL_APPS.find(t => t.id === toolId);
-    const ToolIcon = tool?.icon;
-    const toolName = tool?.name || "Ferramenta";
-    const toolColor = tool?.color || "from-indigo-500 to-violet-600";
-
     return (
       <div 
         key={`tool-${toolId}`} 
-        className="w-screen h-screen overflow-hidden select-none flex flex-col relative" 
+        className="w-screen h-screen overflow-hidden select-none flex relative" 
         style={{ background: DEFAULT_SYSTEM_BG }}
       >
-        {/* Premium draggable custom titlebar */}
+        {/* Draggable region at top - merged with sidebar */}
         <div 
-          className="h-14 px-4 pr-0 flex items-center justify-between select-none shrink-0 relative z-30 bg-black/60 backdrop-blur-xl border-b border-white/5" 
+          className="absolute top-0 left-0 right-0 h-8 z-10"
           style={{ WebkitAppRegion: 'drag' } as any}
-        >
-          {/* Left Side: Tool Icon & Tool Name */}
-          <div className="flex items-center gap-3" style={{ WebkitAppRegion: 'no-drag' } as any}>
-            <div className={`w-8 h-8 rounded-lg bg-gradient-to-br ${toolColor} flex items-center justify-center shadow-md`}>
-              {ToolIcon && <ToolIcon className="w-4 h-4 text-white" />}
-            </div>
-            <span className="text-xs font-bold tracking-wider text-white uppercase">{toolName}</span>
-          </div>
+        />
 
-          {/* Right Side: Native Window Controls (Windows styled) */}
-          <div className="flex items-center h-full shrink-0" style={{ WebkitAppRegion: 'no-drag' } as any}>
-            <button 
-              onClick={() => window.api.minimizeWindow()} 
-              className="w-11 h-full hover:bg-white/10 flex items-center justify-center text-white/60 hover:text-white transition cursor-pointer"
-              title="Minimizar"
-            >
-              <Minus className="w-4 h-4" />
-            </button>
-            <button 
-              onClick={() => window.api.maximizeWindow()} 
-              className="w-11 h-full hover:bg-white/10 flex items-center justify-center text-white/60 hover:text-white transition cursor-pointer"
-              title="Maximizar"
-            >
-              <Square className="w-3 h-3" />
-            </button>
-            <button 
-              onClick={() => window.api.closeWindow()} 
-              className="w-11 h-full hover:bg-red-600 flex items-center justify-center text-white/60 hover:text-white transition cursor-pointer"
-              title="Fechar"
-            >
-              <X className="w-4 h-4" />
-            </button>
-          </div>
+        {/* Window Controls Overlay (top-right) */}
+        <div 
+          className="absolute top-0 right-0 z-20 flex items-center h-8"
+          style={{ WebkitAppRegion: 'no-drag' } as any}
+        >
+          <button 
+            onClick={() => window.api.minimizeWindow()} 
+            className="w-11 h-8 hover:bg-white/10 flex items-center justify-center text-white/60 hover:text-white transition cursor-pointer"
+            title="Minimizar"
+          >
+            <Minus className="w-4 h-4" />
+          </button>
+          <button 
+            onClick={() => window.api.maximizeWindow()} 
+            className="w-11 h-8 hover:bg-white/10 flex items-center justify-center text-white/60 hover:text-white transition cursor-pointer"
+            title="Maximizar"
+          >
+            <Square className="w-3 h-3" />
+          </button>
+          <button 
+            onClick={() => window.api.closeWindow()} 
+            className="w-11 h-8 hover:bg-red-600 flex items-center justify-center text-white/60 hover:text-white transition cursor-pointer"
+            title="Fechar"
+          >
+            <X className="w-4 h-4" />
+          </button>
         </div>
 
-        {/* Content */}
-        <div className="flex-1 overflow-hidden relative z-10">
+        {/* Content - fills entire window, sidebar merges with titlebar */}
+        <div className="flex-1 overflow-hidden relative z-0">
           <ToolAppContent
             appId={toolId}
             systems={systems}
