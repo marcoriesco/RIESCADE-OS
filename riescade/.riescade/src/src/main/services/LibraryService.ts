@@ -813,9 +813,7 @@ export class LibraryService {
     const sortMode = settings.getSetting('SortSystems', 'string') || 'hardware'
 
     // Add collections virtual system
-    const customSetting = settings.getSetting('CollectionSystemsCustom', 'string') || ''
-    const enabledCols = String(customSetting).split(',').map(s => s.trim()).filter(s => s.length > 0)
-    const gamecount = enabledCols.length
+    const gamecount = this.getCustomCollections().length
 
     if (!systems.some(s => s.name === 'collections')) {
       systems.push({
@@ -849,8 +847,7 @@ export class LibraryService {
       }
 
       if (s.name === 'collections') {
-        const customSetting = settings.getSetting('CollectionSystemsCustom', 'string') || ''
-        s.gamecount = String(customSetting).split(',').map(str => str.trim()).filter(str => str.length > 0).length
+        s.gamecount = this.getCustomCollections().length
         return
       }
 
@@ -886,36 +883,18 @@ export class LibraryService {
     return systems.sort((sys1, sys2) => {
       const getPriority = (sys: System) => {
         const name = sys.name.toLowerCase()
-        const isAuto = sys.hardware === 'auto collection'
-        
-        // 5. Coleções (Custom Collections)
-        if (name === 'collections') return 5
-
-        // 1. Arcade Manufacturers (z*)
-        if (isAuto && name.startsWith('z')) return 1
-        
-        // 2. All other Auto Collections
-        if (isAuto) return 2
-        
-        // 3. Real Game Systems (The rest)
-        const isSpecial = ['library', 'magazine', 'manuals', 'retrobat', 'emulators', 'screenshots'].includes(name) || sys.hardware === 'system'
-        if (!isSpecial) return 3
-
-        // 4. Special / Maintenance Systems
-        return 4
+        if (name === 'all') return 1
+        if (name === 'favorites') return 2
+        if (name === 'collections') return 3
+        if (name === 'retrobat') return 4
+        if (name === 'screenshots') return 5
+        return 6
       }
 
       const p1 = getPriority(sys1)
       const p2 = getPriority(sys2)
 
       if (p1 !== p2) return p1 - p2
-
-      // Within the same priority (especially priority 3), sort by hardware THEN name
-      if (p1 === 3) {
-        const hw1 = (sys1.hardware || 'console').toLowerCase()
-        const hw2 = (sys2.hardware || 'console').toLowerCase()
-        if (hw1 !== hw2) return hw1.localeCompare(hw2)
-      }
 
       const name1 = (sys1.fullname || sys1.name).toUpperCase()
       const name2 = (sys2.fullname || sys2.name).toUpperCase()
@@ -991,9 +970,7 @@ export class LibraryService {
     const nameLower = systemName.toLowerCase()
 
     if (nameLower === 'collections') {
-      const settings = new SettingsParser()
-      const customSetting = settings.getSetting('CollectionSystemsCustom', 'string') || ''
-      const enabledCols = String(customSetting).split(',').map(s => s.trim()).filter(s => s.length > 0)
+      const enabledCols = this.getCustomCollections()
       
       return enabledCols.map(colName => ({
         id: `collection_${colName}`,
@@ -1418,9 +1395,13 @@ export class LibraryService {
   }
 
   public getCustomCollections(): string[] {
+    if (LibraryService.isDbMode() && LibraryService.databaseService.isOpen()) {
+      return LibraryService.databaseService.getCustomCollections()
+    }
+    
+    // Fallback if DB not open
     const collectionsDir = getCollectionsPath()
     if (!existsSync(collectionsDir)) return []
-    
     try {
       const files = readdirSync(collectionsDir)
       const collections: string[] = []
@@ -1438,51 +1419,43 @@ export class LibraryService {
   }
 
   public getCollectionGames(collectionName: string): Game[] {
+    if (LibraryService.isDbMode() && LibraryService.databaseService.isOpen()) {
+      return LibraryService.databaseService.getCollectionGames(collectionName)
+    }
+
+    // Fallback if DB not open
     const cfgPath = join(getCollectionsPath(), `custom-${collectionName}.cfg`)
     if (!existsSync(cfgPath)) return []
-
     try {
       const content = readFileSync(cfgPath, 'utf-8')
       const lines = content.split(/\r?\n/).map(line => line.trim()).filter(line => line.length > 0)
-
       const allSystems = this.getSystems()
       const collectionGames: Game[] = []
       const parsedSystemsGames = new Map<string, Game[]>()
-
       for (const line of lines) {
         let resolvedRomPath = line.replace(/^\.\//, '')
         const absoluteRomPath = resolve(getRetroBatPath(), resolvedRomPath).replace(/\\/g, '/')
-
         const normalized = absoluteRomPath.toLowerCase()
         const match = normalized.match(/\/roms\/([^/]+)\//)
         const systemName = match ? match[1] : ''
-
         if (!systemName) continue
-
         const sysKey = systemName.toLowerCase()
         if (!parsedSystemsGames.has(sysKey)) {
           parsedSystemsGames.set(sysKey, this.getGames(systemName))
         }
         const systemGames = parsedSystemsGames.get(sysKey) || []
-
         const systemObj = allSystems.find(s => s.name.toLowerCase() === sysKey)
         const systemRomDir = systemObj ? systemObj.path : join(getRomsPath(), systemName)
-
         const foundGame = systemGames.find(g => {
           const gameAbsPath = resolve(systemRomDir, g.path).replace(/\\/g, '/')
           return gameAbsPath.toLowerCase() === absoluteRomPath.toLowerCase()
         })
-
         if (foundGame) {
-          collectionGames.push({
-            ...foundGame,
-          })
+          collectionGames.push({ ...foundGame })
         } else {
           const filename = absoluteRomPath.split('/').pop() || ''
           const displayName = filename.replace(/\.[^/.]+$/, '')
-          
           const relativeRomPath = './' + relative(systemRomDir, absoluteRomPath).replace(/\\/g, '/')
-
           collectionGames.push({
             id: absoluteRomPath,
             name: displayName,
@@ -1491,10 +1464,9 @@ export class LibraryService {
             favorite: false,
             hidden: false,
             playcount: 0
-          })
+          } as any)
         }
       }
-
       return collectionGames.sort((a, b) => String(a.name || '').localeCompare(String(b.name || '')))
     } catch (e) {
       console.error(`Failed to read games for collection ${collectionName}:`, e)
@@ -1643,13 +1615,16 @@ export class LibraryService {
   }
 
   public getCollectionsForGame(systemName: string, gamePath: string): string[] {
+    if (LibraryService.isDbMode() && LibraryService.databaseService.isOpen()) {
+      return LibraryService.databaseService.getCollectionsForGame(systemName, gamePath)
+    }
+
+    // Fallback if DB not open
     const collections = this.getCustomCollections()
     const cleanGamePath = gamePath.replace(/^\.\//, '')
     const targetLine = `./roms/${systemName}/${cleanGamePath}`.toLowerCase()
-
     const fs = require('fs')
     const matching: string[] = []
-
     for (const col of collections) {
       const cfgPath = join(getCollectionsPath(), `custom-${col}.cfg`)
       if (fs.existsSync(cfgPath)) {
@@ -1660,31 +1635,29 @@ export class LibraryService {
         }
       }
     }
-
     return matching
   }
 
   public toggleGameInCollection(collectionName: string, systemName: string, gamePath: string, action: 'add' | 'remove'): boolean {
+    if (LibraryService.isDbMode() && LibraryService.databaseService.isOpen()) {
+      return LibraryService.databaseService.toggleGameInCollection(collectionName, systemName, gamePath, action)
+    }
+
+    // Fallback if DB not open
     const collectionsDir = getCollectionsPath()
     const fs = require('fs')
     if (!fs.existsSync(collectionsDir)) {
       fs.mkdirSync(collectionsDir, { recursive: true })
     }
-
     const cfgPath = join(collectionsDir, `custom-${collectionName}.cfg`)
-    
-    // Read existing lines
     let lines: string[] = []
     if (fs.existsSync(cfgPath)) {
       const content = fs.readFileSync(cfgPath, 'utf-8')
       lines = content.split(/\r?\n/).map((l: string) => l.trim()).filter((l: string) => l.length > 0)
     }
-
     const cleanGamePath = gamePath.replace(/^\.\//, '')
     const targetLine = `./roms/${systemName}/${cleanGamePath}`
-
     const exists = lines.some(l => l.toLowerCase() === targetLine.toLowerCase())
-
     if (action === 'add') {
       if (!exists) {
         lines.push(targetLine)

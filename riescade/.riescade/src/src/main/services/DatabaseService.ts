@@ -1,7 +1,7 @@
 import Database from 'better-sqlite3'
 import { existsSync, statSync, readdirSync, mkdirSync } from 'fs'
 import { join, dirname, relative, resolve, isAbsolute } from 'path'
-import { getDatabasePath, getRomsPath, getConfigPath } from '../utils/paths'
+import { getDatabasePath, getRomsPath, getConfigPath, getCollectionsPath } from '../utils/paths'
 import { GamelistParser } from '../parsers/GamelistParser'
 import { Game, System } from '../../shared/types'
 
@@ -229,6 +229,60 @@ export class DatabaseService {
       }
     }
 
+    // Create Collections and Collection Games Tables
+    db.exec(`
+      CREATE TABLE IF NOT EXISTS collections (
+        name          TEXT PRIMARY KEY
+      );
+
+      CREATE TABLE IF NOT EXISTS collection_games (
+        collection_name TEXT,
+        game_system     TEXT,
+        game_path       TEXT,
+        PRIMARY KEY (collection_name, game_system, game_path),
+        FOREIGN KEY (collection_name) REFERENCES collections(name) ON DELETE CASCADE
+      );
+    `)
+
+    // Migrate custom collection .cfg files to SQLite if collections table is empty
+    try {
+      const collectionsCount = db.prepare('SELECT COUNT(*) as count FROM collections').get() as any
+      if (collectionsCount && collectionsCount.count === 0) {
+        const collectionsDir = getCollectionsPath()
+        if (existsSync(collectionsDir)) {
+          const files = readdirSync(collectionsDir)
+          const insertCol = db.prepare('INSERT OR IGNORE INTO collections (name) VALUES (?)')
+          const insertColGame = db.prepare('INSERT OR IGNORE INTO collection_games (collection_name, game_system, game_path) VALUES (?, ?, ?)')
+          
+          files.forEach(f => {
+            if (f.startsWith('custom-') && f.endsWith('.cfg')) {
+              const colName = f.substring(7, f.length - 4)
+              insertCol.run(colName)
+              
+              try {
+                const fs = require('fs')
+                const content = fs.readFileSync(join(collectionsDir, f), 'utf-8')
+                const lines = content.split(/\r?\n/).map(line => line.trim()).filter(line => line.length > 0)
+                
+                lines.forEach(line => {
+                  const match = line.match(/^\.\/roms\/([^/]+)\/(.+)$/)
+                  if (match) {
+                    const systemName = match[1]
+                    const gamePath = './' + match[2]
+                    insertColGame.run(colName, systemName, gamePath)
+                  }
+                })
+                console.log(`Migrated collection '${colName}' with ${lines.length} items from .cfg to SQLite database.`)
+              } catch (e) {
+                console.error(`Failed to read/migrate custom collection file ${f}:`, e)
+              }
+            }
+          })
+        }
+      }
+    } catch (err) {
+      console.error('Failed to migrate custom collections to DB:', err)
+    }
   }
 
   // ─── Sync Detection ─────────────────────────────────────────
@@ -982,6 +1036,7 @@ export class DatabaseService {
   public deleteGameFromDb(systemName: string, gamePath: string): void {
     const db = this.ensureOpen()
     db.prepare('DELETE FROM games WHERE system = ? AND path = ?').run(systemName, gamePath)
+    db.prepare('DELETE FROM collection_games WHERE game_system = ? AND game_path = ?').run(systemName, gamePath)
   }
 
   // ─── Maintenance ─────────────────────────────────────────────
@@ -1252,9 +1307,6 @@ export class DatabaseService {
     }
   }
 
-  /**
-   * Get sync metadata (mtime and file count) for all systems except __es_systems.cfg.
-   */
   public getAllSystemsSyncMetadata(): { name: string; path: string; folder_mtime: number; file_count: number }[] {
     const db = this.ensureOpen()
     try {
@@ -1279,4 +1331,79 @@ export class DatabaseService {
       }
     }
   }
+
+  // ─── Custom Collection Operations ─────────────────────────────
+
+  public getCustomCollections(): string[] {
+    const db = this.ensureOpen()
+    try {
+      const rows = db.prepare('SELECT name FROM collections ORDER BY name COLLATE NOCASE').all() as any[]
+      return rows.map(r => r.name)
+    } catch (e) {
+      console.error('Failed to query custom collections from DB:', e)
+      return []
+    }
+  }
+
+  public getCollectionGames(collectionName: string): Game[] {
+    const db = this.ensureOpen()
+    try {
+      const rows = db.prepare(`
+        SELECT g.*
+        FROM collection_games cg
+        JOIN games g ON cg.game_system = g.system AND cg.game_path = g.path
+        WHERE cg.collection_name = ?
+        ORDER BY COALESCE(g.sortname, g.name) COLLATE NOCASE
+      `).all(collectionName) as any[]
+      return rows.map(r => this.rowToGame(r))
+    } catch (e) {
+      console.error(`Failed to query games for collection ${collectionName} from DB:`, e)
+      return []
+    }
+  }
+
+  public getCollectionsForGame(systemName: string, gamePath: string): string[] {
+    const db = this.ensureOpen()
+    try {
+      const rows = db.prepare(`
+        SELECT collection_name
+        FROM collection_games
+        WHERE game_system = ? AND game_path = ?
+        ORDER BY collection_name COLLATE NOCASE
+      `).all(systemName, gamePath) as any[]
+      return rows.map(r => r.collection_name)
+    } catch (e) {
+      console.error('Failed to query collections for game:', e)
+      return []
+    }
+  }
+
+  public toggleGameInCollection(collectionName: string, systemName: string, gamePath: string, action: 'add' | 'remove'): boolean {
+    const db = this.ensureOpen()
+    try {
+      if (action === 'add') {
+        // Ensure collection exists
+        db.prepare('INSERT OR IGNORE INTO collections (name) VALUES (?)').run(collectionName)
+        
+        // Insert association
+        const res = db.prepare(`
+          INSERT OR IGNORE INTO collection_games (collection_name, game_system, game_path)
+          VALUES (?, ?, ?)
+        `).run(collectionName, systemName, gamePath)
+        
+        return res.changes > 0
+      } else {
+        const res = db.prepare(`
+          DELETE FROM collection_games
+          WHERE collection_name = ? AND game_system = ? AND game_path = ?
+        `).run(collectionName, systemName, gamePath)
+        
+        return res.changes > 0
+      }
+    } catch (e) {
+      console.error('Failed to toggle game in collection:', e)
+      return false
+    }
+  }
 }
+

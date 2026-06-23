@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState, useMemo } from "react";
-import { Gamepad2, Heart, Loader2, Star, Play, ChevronRight, Maximize2, X, Search } from "lucide-react";
+import { Gamepad2, Heart, Loader2, Star, Play, ChevronRight, Maximize2, X, Search, Folder, ChevronLeft, HardDrive } from "lucide-react";
 import { System, Game } from "../types";
 import { ScrollArea } from "./ScrollArea";
 import { OverlayScrollbarsComponentRef } from "overlayscrollbars-react";
@@ -12,7 +12,7 @@ export default function SystemAppContent({
   system: System;
   color: string;
   Icon: any;
-  onLaunchGame: (game: Game, system: System) => void;
+  onLaunchGame: (game: Game, system: System, saveStateSlot?: number) => void;
   search: string;
   setSearch: (s: string) => void;
   onActiveGameArtChanged?: (art: string | null) => void;
@@ -35,6 +35,15 @@ export default function SystemAppContent({
   const [imageError, setImageError] = useState(false);
   const [logoPath, setLogoPath] = useState<string>("");
   const [failedImages, setFailedImages] = useState<Record<string, boolean>>({});
+
+  // Collection and Save States states
+  const [activeCollection, setActiveCollection] = useState<string | null>(null);
+  const [collectionGames, setCollectionGames] = useState<Game[]>([]);
+  const [colLoading, setColLoading] = useState(false);
+  const [saveStates, setSaveStates] = useState<any[]>([]);
+  const [gameCollections, setGameCollections] = useState<string[]>([]);
+  const [allCollections, setAllCollections] = useState<string[]>([]);
+  const [newColName, setNewColName] = useState("");
 
   // Load Riescade black-and-white fallback logo path once on mount
   useEffect(() => {
@@ -60,12 +69,42 @@ export default function SystemAppContent({
     setSelectedPlayers("all");
     setSelectedMinRating("all");
     setFailedImages({});
+    setActiveCollection(null);
     window.api.getGames(system.name).then((gameList: Game[]) => {
       setGames(gameList || []);
       setSelectedIdx(0);
       setLoading(false);
     });
   }, [system]);
+
+  // Load Collection Games when activeCollection changes
+  useEffect(() => {
+    if (system.name === 'collections') {
+      if (activeCollection !== null) {
+        setColLoading(true);
+        window.api.getCollectionGames(activeCollection).then((gameList: Game[]) => {
+          setCollectionGames(gameList || []);
+          setSelectedIdx(0);
+          setColLoading(false);
+        });
+      } else {
+        setCollectionGames([]);
+        setLoading(true);
+        window.api.getGames(system.name).then((gameList: Game[]) => {
+          setGames(gameList || []);
+          setSelectedIdx(0);
+          setLoading(false);
+        });
+      }
+    }
+  }, [activeCollection, system]);
+
+  const targetGamesForFiltering = useMemo(() => {
+    if (system.name === 'collections' && activeCollection !== null) {
+      return collectionGames;
+    }
+    return games;
+  }, [system.name, activeCollection, collectionGames, games]);
 
   // Extract unique genres, years, player options, and ratings from games dynamically
   const filterOptions = useMemo(() => {
@@ -74,7 +113,7 @@ export default function SystemAppContent({
     const playersSet = new Set<string>();
     const ratingsSet = new Set<number>();
 
-    games.forEach(g => {
+    targetGamesForFiltering.forEach(g => {
       // Robust case-insensitive tag fallback
       const genre = g.genre || (g as any).Genre;
       const releasedate = g.releasedate || (g as any).ReleaseDate;
@@ -120,11 +159,11 @@ export default function SystemAppContent({
       players: Array.from(playersSet).sort((a, b) => a.localeCompare(b, undefined, { numeric: true })),
       ratings: availableRatings
     };
-  }, [games]);
+  }, [targetGamesForFiltering]);
 
   // Apply filters including genre, release year, players, and rating dynamically
   const filteredGames = useMemo(() => {
-    return games.filter(g => {
+    return targetGamesForFiltering.filter(g => {
       const gName = String(g.name || "");
       const matchSearch = gName.toLowerCase().includes(search.toLowerCase());
       const matchFilter = filter === "all" || g.favorite;
@@ -156,7 +195,7 @@ export default function SystemAppContent({
       
       return matchSearch && matchFilter && matchGenre && matchYear && matchPlayers && matchRating;
     });
-  }, [games, search, filter, selectedGenre, selectedYear, selectedPlayers, selectedMinRating]);
+  }, [targetGamesForFiltering, search, filter, selectedGenre, selectedYear, selectedPlayers, selectedMinRating]);
 
   // Attach scroll listener for infinite scroll
   useEffect(() => {
@@ -197,6 +236,90 @@ export default function SystemAppContent({
     setImageError(false);
     setFullVideo(false);
   }, [selectedGame]);
+
+  // Load save states and collections for the selected game
+  useEffect(() => {
+    if (selectedGame && !selectedGame.isCollectionFolder) {
+      window.api.scanSaveStates(selectedGame.system, selectedGame.path).then((states: any[]) => {
+        setSaveStates(states || []);
+      });
+      window.api.getCollectionsForGame(selectedGame.system, selectedGame.path).then((cols: string[]) => {
+        setGameCollections(cols || []);
+      });
+      window.api.getCustomCollections().then((cols: string[]) => {
+        setAllCollections(cols || []);
+      });
+    } else {
+      setSaveStates([]);
+      setGameCollections([]);
+      setAllCollections([]);
+    }
+  }, [selectedGame]);
+
+  const handleAddToCollection = (colName: string) => {
+    if (!selectedGame) return;
+    window.api.toggleGameInCollection(colName, selectedGame.system, selectedGame.path, 'add').then((success: boolean) => {
+      if (success) {
+        setGameCollections(prev => [...prev, colName].sort());
+        window.dispatchEvent(
+          new CustomEvent("show-toast", {
+            detail: {
+              title: "Adicionado à Coleção",
+              description: `${selectedGame.name} -> ${colName}`,
+              type: "collection"
+            }
+          })
+        );
+      }
+    });
+  };
+
+  const handleRemoveFromCollection = (colName: string) => {
+    if (!selectedGame) return;
+    window.api.toggleGameInCollection(colName, selectedGame.system, selectedGame.path, 'remove').then((success: boolean) => {
+      if (success) {
+        setGameCollections(prev => prev.filter(c => c !== colName));
+        if (system.name === 'collections' && activeCollection === colName) {
+          setCollectionGames(prev => prev.filter(g => g.path !== selectedGame.path));
+        }
+        window.dispatchEvent(
+          new CustomEvent("show-toast", {
+            detail: {
+              title: "Removido da Coleção",
+              description: `${selectedGame.name} <- ${colName}`,
+              type: "collection"
+            }
+          })
+        );
+      }
+    });
+  };
+
+  const handleCreateAndAddToCollection = () => {
+    const trimmed = newColName.trim();
+    if (!trimmed || !selectedGame) return;
+    window.api.toggleGameInCollection(trimmed, selectedGame.system, selectedGame.path, 'add').then((success: boolean) => {
+      if (success) {
+        setGameCollections(prev => [...prev, trimmed].sort());
+        setAllCollections(prev => {
+          if (!prev.includes(trimmed)) {
+            return [...prev, trimmed].sort();
+          }
+          return prev;
+        });
+        setNewColName("");
+        window.dispatchEvent(
+          new CustomEvent("show-toast", {
+            detail: {
+              title: "Coleção Criada e Jogo Adicionado",
+              description: `${selectedGame.name} -> ${trimmed}`,
+              type: "collection"
+            }
+          })
+        );
+      }
+    });
+  };
 
   const videoUrl = useMemo(() => {
     if (!selectedGame || !selectedGame.video) return "";
@@ -465,16 +588,31 @@ export default function SystemAppContent({
 
       {/* Main List */}
       <div className="flex-1 flex overflow-hidden bg-black/10">
-        {loading ? (
+        {(loading || colLoading) ? (
           <div className="flex-1 flex items-center justify-center">
             <Loader2 className="w-8 h-8 text-white/20 animate-spin" />
           </div>
         ) : (
           <div className="flex-1 flex flex-col overflow-hidden">
             {/* Header with system name + game count */}
-            <div className="shrink-0 px-6 pt-8 pb-3 border-b border-white/5">
-              <h2 className="text-xl font-bold text-white tracking-wide">{system.fullname}</h2>
-              <span className="text-xs text-white/40">{filteredGames.length} jogos encontrados</span>
+            <div className="shrink-0 px-6 pt-8 pb-3 border-b border-white/5 flex items-center justify-between">
+              <div>
+                <div className="flex items-center gap-2">
+                  {system.name === 'collections' && activeCollection !== null && (
+                    <button
+                      onClick={() => setActiveCollection(null)}
+                      className="mr-2 bg-white/5 hover:bg-white/10 text-white px-2.5 py-1 rounded-lg transition flex items-center gap-1 text-xs cursor-pointer"
+                    >
+                      <ChevronLeft className="w-4 h-4" />
+                      Voltar
+                    </button>
+                  )}
+                  <h2 className="text-xl font-bold text-white tracking-wide">
+                    {system.name === 'collections' && activeCollection !== null ? `${system.fullname} > ${activeCollection}` : system.fullname}
+                  </h2>
+                </div>
+                <span className="text-xs text-white/40">{filteredGames.length} {system.name === 'collections' && activeCollection === null ? 'coleções encontradas' : 'jogos encontrados'}</span>
+              </div>
             </div>
 
             {/* Grid display of Games */}
@@ -483,10 +621,32 @@ export default function SystemAppContent({
               className="flex-1 px-6 py-4"
             >
               {filteredGames.length === 0 ? (
-                <div className="h-full flex items-center justify-center text-xs text-white uppercase tracking-widest">Nenhum jogo encontrado</div>
+                <div className="h-full flex items-center justify-center text-xs text-white uppercase tracking-widest">
+                  {system.name === 'collections' && activeCollection === null ? 'Nenhuma coleção encontrada' : 'Nenhum jogo encontrado'}
+                </div>
               ) : (
                 <div className="grid grid-cols-5 gap-3">
                   {filteredGames.slice(0, displayLimit).map((g, idx) => {
+                    if (g.isCollectionFolder) {
+                      return (
+                        <button
+                          key={g.path}
+                          onClick={() => setSelectedIdx(idx)}
+                          onDoubleClick={() => setActiveCollection(g.name)}
+                          className={`group flex flex-col w-full rounded-xl overflow-hidden text-left transition-all border-4 relative bg-black/40 ${
+                            idx === selectedIdx
+                              ? "border-accent shadow-[0_0_15px_var(--accent-color-glass)] z-10"
+                              : "border-white/5 hover:border-white/10"
+                          }`}
+                        >
+                          <div className="flex flex-col items-center justify-center bg-black/50 text-white/30 p-4 text-center w-full h-full select-none min-h-[160px]">
+                            <Folder className="w-14 h-14 text-accent mb-3 group-hover:scale-105 transition-all duration-300 opacity-80" />
+                            <span className="text-[11px] font-bold text-white/80 line-clamp-2 uppercase tracking-wider">{g.name}</span>
+                          </div>
+                        </button>
+                      );
+                    }
+
                     const boxArt = g.thumbnail || g.image || g.marquee;
                     const finalImage = boxArt ? (boxArt.startsWith("http") || boxArt.startsWith("file://") ? boxArt : `file:///${boxArt}`) : "";
                     
@@ -537,159 +697,291 @@ export default function SystemAppContent({
         {/* Right Details Panel */}
         {selectedGame && (
           <ScrollArea className="w-[20vw] min-w-[300px] bg-black/50 p-6 pt-14 select-none">
-            <div className="flex flex-col gap-4">
-              {selectedGame.marquee && !imageError && (
-                <div className="w-full flex items-center justify-center overflow-hidden relative shrink-0">
-                  <img 
-                    src={(() => {
-                      const logo = selectedGame.marquee || "";
-                      return logo.startsWith("http") || logo.startsWith("file://") ? logo : `file:///${logo.replace(/\\/g, '/')}`;
-                    })()} 
-                    alt={selectedGame.name} 
-                    onError={() => setImageError(true)}
-                    className="w-full max-h-40 object-contain filter drop-shadow-[0_4px_8px_rgba(0,0,0,0.5)]" 
-                  />
+            {selectedGame.isCollectionFolder ? (
+              <div className="flex flex-col gap-4 h-full">
+                <div className="w-full flex flex-col items-center justify-center py-8 bg-white/5 rounded-xl border border-white/5 shadow-md">
+                  <Folder className="w-20 h-20 text-accent mb-4 opacity-80" />
+                  <h3 className="font-bold text-lg text-white/95 text-center px-4 leading-tight">{selectedGame.name}</h3>
+                  <span className="text-[10px] text-white/40 mt-1 uppercase tracking-wider font-semibold">Pasta de Coleção</span>
                 </div>
-              )}
+                <div className="text-xs leading-relaxed text-white/60">
+                  {selectedGame.desc || "Esta é uma coleção personalizada de jogos."}
+                </div>
+                <div className="flex flex-col gap-2 mt-auto">
+                  <button
+                    onClick={() => setActiveCollection(selectedGame.name)}
+                    className="w-full bg-accent bg-accent-hover hover:scale-[1.02] hover:shadow-lg transition-all rounded-lg py-2.5 text-md font-bold flex items-center justify-center gap-2 cursor-pointer text-white"
+                  >
+                    <Folder className="w-4 h-4" />
+                    Abrir Coleção
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div className="flex flex-col gap-4">
+                {selectedGame.marquee && !imageError && (
+                  <div className="w-full flex items-center justify-center overflow-hidden relative shrink-0">
+                    <img 
+                      src={(() => {
+                        const logo = selectedGame.marquee || "";
+                        return logo.startsWith("http") || logo.startsWith("file://") ? logo : `file:///${logo.replace(/\\/g, '/')}`;
+                      })()} 
+                      alt={selectedGame.name} 
+                      onError={() => setImageError(true)}
+                      className="w-full max-h-40 object-contain filter drop-shadow-[0_4px_8px_rgba(0,0,0,0.5)]" 
+                    />
+                  </div>
+                )}
 
-            {/* Game Playback Video Preview */}
-            {videoUrl && (
-              <div className="relative group w-full aspect-video rounded-xl overflow-hidden bg-black/50 border border-white/5 shadow-md shrink-0">
-                <video 
-                  src={videoUrl} 
-                  autoPlay 
-                  loop 
-                  muted 
-                  playsInline
-                  className="w-full h-full object-cover" 
-                />
-                <button
-                  onClick={() => setFullVideo(true)}
-                  className="absolute bottom-2 right-2 bg-black/70 hover:bg-[var(--accent-color-hover)] text-white p-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-all flex items-center justify-center shadow-lg cursor-pointer"
-                  title="Maximizar Vídeo"
-                >
-                  <Maximize2 className="w-3.5 h-3.5" />
-                </button>
+                {/* Game Playback Video Preview */}
+                {videoUrl && (
+                  <div className="relative group w-full aspect-video rounded-xl overflow-hidden bg-black/50 border border-white/5 shadow-md shrink-0">
+                    <video 
+                      src={videoUrl} 
+                      autoPlay 
+                      loop 
+                      muted 
+                      playsInline
+                      className="w-full h-full object-cover" 
+                    />
+                    <button
+                      onClick={() => setFullVideo(true)}
+                      className="absolute bottom-2 right-2 bg-black/70 hover:bg-[var(--accent-color-hover)] text-white p-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-all flex items-center justify-center shadow-lg cursor-pointer"
+                      title="Maximizar Vídeo"
+                    >
+                      <Maximize2 className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                )}
+                
+                <div className="flex flex-col">
+                  <h3 className="font-bold text-base leading-snug text-white/95">{selectedGame.name}</h3>
+                  <div className="text-[10px] text-white/40 mt-1 uppercase tracking-wider font-semibold">
+                    {(() => {
+                      const relDate = selectedGame.releasedate || (selectedGame as any).ReleaseDate;
+                      return relDate ? String(relDate).substring(0, 4) : "Lançamento N/A";
+                    })()} · {system.fullname}
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-4 text-xs">
+                  <button
+                    onClick={handleToggleFavorite}
+                    className="flex items-center gap-1.5 hover:text-red-400 transition-colors font-bold cursor-pointer text-white/70"
+                  >
+                    <Heart className={`w-4 h-4 ${selectedGame.favorite ? "fill-red-500 text-red-500" : "text-white/60"}`} />
+                    <span>{selectedGame.favorite ? "Favorito" : "Favoritar"}</span>
+                  </button>
+
+                  <div className="flex items-center gap-1.5">
+                    <Star className="w-4 h-4 fill-amber-500 text-amber-500" />
+                    <span className="font-bold text-amber-400">
+                      {(() => {
+                        const rating = selectedGame.rating !== undefined ? selectedGame.rating : (selectedGame as any).Rating;
+                        if (rating === undefined || rating === null) return "N/A";
+                        let numRating = parseFloat(String(rating));
+                        if (numRating > 1) {
+                          numRating = numRating / 10;
+                        }
+                        return (numRating * 10).toFixed(1);
+                      })()}
+                    </span>
+                  </div>
+                  {selectedGame.playcount ? (
+                    <div className="text-white/50 text-[10px]">
+                      Jogado <span className="text-white/80 font-bold">{selectedGame.playcount}</span> vezes
+                    </div>
+                  ) : null}
+                </div>
+
+                <ScrollArea className="text-xs leading-relaxed text-white/60 h-28 pr-1">
+                  <p>
+                    {selectedGame.desc || "Nenhuma descrição disponível para este jogo."}
+                  </p>
+                </ScrollArea>
+
+                {/* Game Info Details (Developer, Publisher, Genre, Players) */}
+                {(() => {
+                  const genre = selectedGame.genre || (selectedGame as any).Genre;
+                  const players = selectedGame.players || (selectedGame as any).Players;
+                  const developer = selectedGame.developer || (selectedGame as any).Developer;
+                  const publisher = selectedGame.publisher || (selectedGame as any).Publisher;
+
+                  return (
+                    <div className="flex flex-col gap-2 bg-white/5 rounded-lg p-3 text-[11px] text-white/70">
+                      {genre && (
+                        <div className="flex justify-between items-center border-b border-white/5 pb-1 last:border-none last:pb-0">
+                          <span className="text-white/40">Gênero</span>
+                          <span className="font-semibold text-white/90 text-right truncate max-w-[150px]" title={String(genre)}>{String(genre)}</span>
+                        </div>
+                      )}
+                      {players && (
+                        <div className="flex justify-between items-center border-b border-white/5 pb-1 last:border-none last:pb-0">
+                          <span className="text-white/40">Jogadores</span>
+                          <span className="font-semibold text-white/90 text-right">
+                            {String(players) === "1" ? "1 Jogador" : String(players) === "2" ? "2 Jogadores" : `${String(players)} Jogadores`}
+                          </span>
+                        </div>
+                      )}
+                      {developer && (
+                        <div className="flex justify-between items-center border-b border-white/5 pb-1 last:border-none last:pb-0">
+                          <span className="text-white/40">Desenvolvedor</span>
+                          <span className="font-semibold text-white/90 text-right truncate max-w-[150px]" title={String(developer)}>{String(developer)}</span>
+                        </div>
+                      )}
+                      {publisher && (
+                        <div className="flex justify-between items-center border-b border-white/5 pb-1 last:border-none last:pb-0">
+                          <span className="text-white/40">Distribuidora</span>
+                          <span className="font-semibold text-white/90 text-right truncate max-w-[150px]" title={String(publisher)}>{String(publisher)}</span>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })()}
+
+                {/* Emulator/Core Select Option */}
+                <div className="flex flex-col gap-1.5">
+                  <span className="text-[10px] text-white/40 uppercase tracking-wider font-semibold">Emulador / Core</span>
+                  <div className="relative group">
+                    <select
+                      value={selectValue}
+                      onChange={handleEmulatorChange}
+                      className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-xs text-white/90 focus:outline-none focus-border-accent hover:bg-white/10 transition appearance-none cursor-pointer"
+                    >
+                      {emulatorChoices.map(choice => (
+                        <option key={choice.value} value={choice.value} className="bg-[#121212] text-white/90">
+                          {choice.label}
+                        </option>
+                      ))}
+                    </select>
+                    <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-white/40 group-focus-within:text-accent transition duration-200">
+                      <ChevronRight className="w-3.5 h-3.5 rotate-90" />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Save States Section */}
+                <div className="flex flex-col gap-1.5 mt-2 border-t border-white/5 pt-3">
+                  <span className="text-[10px] text-white/40 uppercase tracking-wider font-semibold">Save States</span>
+                  {saveStates.length === 0 ? (
+                    <div className="text-xs text-white/30 italic px-1">Nenhum save state encontrado</div>
+                  ) : (
+                    <div className="flex flex-col gap-2 max-h-48 overflow-y-auto pr-1">
+                      {saveStates.map(state => (
+                        <button
+                          key={state.path}
+                          onClick={() => onLaunchGame(selectedGame, system, state.slot)}
+                          className="w-full flex items-center gap-3 bg-white/5 hover:bg-white/10 border border-white/5 hover:border-white/10 p-2 rounded-lg transition text-left cursor-pointer group animate-in fade-in duration-200"
+                        >
+                          {state.screenshotUrl ? (
+                            <img src={state.screenshotUrl} alt={`Slot ${state.slot}`} className="w-16 h-10 object-cover rounded border border-white/10 shrink-0" />
+                          ) : (
+                            <div className="w-16 h-10 bg-black/40 border border-white/5 rounded flex items-center justify-center shrink-0">
+                              <HardDrive className="w-4 h-4 text-white/30" />
+                            </div>
+                          )}
+                          <div className="flex-1 min-w-0">
+                            <div className="text-xs font-bold text-white/90 group-hover:text-accent transition-colors">
+                              {state.slot === -1 ? 'Autosave' : `Slot ${state.slot}`}
+                            </div>
+                            <div className="text-[10px] text-white/40 truncate">
+                              {new Date(state.date).toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' })}
+                            </div>
+                          </div>
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                {/* Collections Section */}
+                <div className="flex flex-col gap-2 mt-2 border-t border-white/5 pt-3">
+                  <span className="text-[10px] text-white/40 uppercase tracking-wider font-semibold">Coleções do Jogo</span>
+                  
+                  {/* Tag List */}
+                  <div className="flex flex-wrap gap-1.5">
+                    {gameCollections.length === 0 ? (
+                      <span className="text-xs text-white/30 italic px-1">Este jogo não está em nenhuma coleção</span>
+                    ) : (
+                      gameCollections.map(col => (
+                        <span key={col} className="inline-flex items-center gap-1 bg-accent/20 border border-accent/20 text-accent text-[11px] font-bold px-2 py-0.5 rounded-full">
+                          {col}
+                          <button
+                            onClick={() => handleRemoveFromCollection(col)}
+                            className="hover:text-red-400 font-bold ml-0.5 text-xs focus:outline-none cursor-pointer"
+                            title="Remover da Coleção"
+                          >
+                            &times;
+                          </button>
+                        </span>
+                      ))
+                    )}
+                  </div>
+
+                  {/* Add to Existing Collection Dropdown */}
+                  {allCollections.filter(c => !gameCollections.includes(c)).length > 0 && (
+                    <div className="relative group mt-1">
+                      <select
+                        value=""
+                        onChange={(e) => {
+                          if (e.target.value) {
+                            handleAddToCollection(e.target.value);
+                          }
+                        }}
+                        className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-1.5 text-xs text-white/70 focus:outline-none focus:border-accent hover:bg-white/10 transition appearance-none cursor-pointer"
+                      >
+                        <option value="" className="bg-[#121212] text-white/40">Adicionar à Coleção...</option>
+                        {allCollections
+                          .filter(c => !gameCollections.includes(c))
+                          .map(col => (
+                            <option key={col} value={col} className="bg-[#121212] text-white/90">
+                              {col}
+                            </option>
+                          ))}
+                      </select>
+                      <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-white/40 group-focus-within:text-accent transition duration-200">
+                        <ChevronRight className="w-3.5 h-3.5 rotate-90" />
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Create New Collection input */}
+                  <div className="flex gap-1.5 mt-1">
+                    <input
+                      type="text"
+                      value={newColName}
+                      onChange={(e) => setNewColName(e.target.value)}
+                      placeholder="Nova Coleção..."
+                      className="flex-1 bg-white/5 border border-white/10 rounded-lg px-3 py-1.5 text-xs text-white placeholder:text-white/30 focus:outline-none focus:border-accent focus:bg-white/[0.07] transition"
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                          handleCreateAndAddToCollection();
+                        }
+                      }}
+                    />
+                    <button
+                      onClick={handleCreateAndAddToCollection}
+                      disabled={!newColName.trim()}
+                      className="bg-accent hover:bg-accent-hover disabled:bg-white/5 disabled:text-white/20 disabled:hover:scale-100 text-white px-3 rounded-lg text-xs font-bold transition-all hover:scale-[1.02] flex items-center justify-center cursor-pointer"
+                      title="Criar e Adicionar"
+                    >
+                      +
+                    </button>
+                  </div>
+                </div>
+
+                <div className="flex flex-col gap-2 mt-auto pt-3">
+                  <button
+                    onClick={() => onLaunchGame(selectedGame, system)}
+                    className="w-full bg-accent bg-accent-hover hover:scale-[1.02] hover:shadow-lg transition-all rounded-lg py-2.5 text-md font-bold flex items-center justify-center gap-2 cursor-pointer"
+                  >
+                    <Play className="w-3.5 h-3.5 fill-white" />
+                    Jogar
+                  </button>
+                </div>
               </div>
             )}
-            
-            <div className="flex flex-col">
-              <h3 className="font-bold text-base leading-snug text-white/95">{selectedGame.name}</h3>
-              <div className="text-[10px] text-white/40 mt-1 uppercase tracking-wider font-semibold">
-                {(() => {
-                  const relDate = selectedGame.releasedate || (selectedGame as any).ReleaseDate;
-                  return relDate ? String(relDate).substring(0, 4) : "Lançamento N/A";
-                })()} · {system.fullname}
-              </div>
-            </div>
-
-            <div className="flex items-center gap-4 text-xs">
-              <button
-                onClick={handleToggleFavorite}
-                className="flex items-center gap-1.5 hover:text-red-400 transition-colors font-bold cursor-pointer text-white/70"
-              >
-                <Heart className={`w-4 h-4 ${selectedGame.favorite ? "fill-red-500 text-red-500" : "text-white/60"}`} />
-                <span>{selectedGame.favorite ? "Favorito" : "Favoritar"}</span>
-              </button>
-
-              <div className="flex items-center gap-1.5">
-                <Star className="w-4 h-4 fill-amber-500 text-amber-500" />
-                <span className="font-bold text-amber-400">
-                  {(() => {
-                    const rating = selectedGame.rating !== undefined ? selectedGame.rating : (selectedGame as any).Rating;
-                    if (rating === undefined || rating === null) return "N/A";
-                    let numRating = parseFloat(String(rating));
-                    if (numRating > 1) {
-                      numRating = numRating / 10;
-                    }
-                    return (numRating * 10).toFixed(1);
-                  })()}
-                </span>
-              </div>
-              {selectedGame.playcount ? (
-                <div className="text-white/50 text-[10px]">
-                  Jogado <span className="text-white/80 font-bold">{selectedGame.playcount}</span> vezes
-                </div>
-              ) : null}
-            </div>
-
-            <ScrollArea className="text-xs leading-relaxed text-white/60 h-28 pr-1">
-              <p>
-                {selectedGame.desc || "Nenhuma descrição disponível para este jogo."}
-              </p>
-            </ScrollArea>
-
-            {/* Game Info Details (Developer, Publisher, Genre, Players) */}
-            {(() => {
-              const genre = selectedGame.genre || (selectedGame as any).Genre;
-              const players = selectedGame.players || (selectedGame as any).Players;
-              const developer = selectedGame.developer || (selectedGame as any).Developer;
-              const publisher = selectedGame.publisher || (selectedGame as any).Publisher;
-
-              return (
-                <div className="flex flex-col gap-2 bg-white/5 rounded-lg p-3 text-[11px] text-white/70">
-                  {genre && (
-                    <div className="flex justify-between items-center border-b border-white/5 pb-1 last:border-none last:pb-0">
-                      <span className="text-white/40">Gênero</span>
-                      <span className="font-semibold text-white/90 text-right truncate max-w-[150px]" title={String(genre)}>{String(genre)}</span>
-                    </div>
-                  )}
-                  {players && (
-                    <div className="flex justify-between items-center border-b border-white/5 pb-1 last:border-none last:pb-0">
-                      <span className="text-white/40">Jogadores</span>
-                      <span className="font-semibold text-white/90 text-right">
-                        {String(players) === "1" ? "1 Jogador" : String(players) === "2" ? "2 Jogadores" : `${String(players)} Jogadores`}
-                      </span>
-                    </div>
-                  )}
-                  {developer && (
-                    <div className="flex justify-between items-center border-b border-white/5 pb-1 last:border-none last:pb-0">
-                      <span className="text-white/40">Desenvolvedor</span>
-                      <span className="font-semibold text-white/90 text-right truncate max-w-[150px]" title={String(developer)}>{String(developer)}</span>
-                    </div>
-                  )}
-                  {publisher && (
-                    <div className="flex justify-between items-center border-b border-white/5 pb-1 last:border-none last:pb-0">
-                      <span className="text-white/40">Distribuidora</span>
-                      <span className="font-semibold text-white/90 text-right truncate max-w-[150px]" title={String(publisher)}>{String(publisher)}</span>
-                    </div>
-                  )}
-                </div>
-              );
-            })()}
-
-            {/* Emulator/Core Select Option */}
-            <div className="flex flex-col gap-1.5">
-              <span className="text-[10px] text-white/40 uppercase tracking-wider font-semibold">Emulador / Core</span>
-              <div className="relative group">
-                <select
-                  value={selectValue}
-                  onChange={handleEmulatorChange}
-                  className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-xs text-white/90 focus:outline-none focus-border-accent hover:bg-white/10 transition appearance-none cursor-pointer"
-                >
-                  {emulatorChoices.map(choice => (
-                    <option key={choice.value} value={choice.value} className="bg-[#121212] text-white/90">
-                      {choice.label}
-                    </option>
-                  ))}
-                </select>
-                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-white/40 group-focus-within:text-accent transition duration-200">
-                  <ChevronRight className="w-3.5 h-3.5 rotate-90" />
-                </div>
-              </div>
-            </div>
-
-            <div className="flex flex-col gap-2 mt-auto">
-              <button
-                onClick={() => onLaunchGame(selectedGame, system)}
-                className="w-full bg-accent bg-accent-hover hover:scale-[1.02] hover:shadow-lg transition-all rounded-lg py-2.5 text-md font-bold flex items-center justify-center gap-2 cursor-pointer"
-              >
-                <Play className="w-3.5 h-3.5 fill-white" />
-                Jogar
-              </button>
-            </div>
-          </div>
-        </ScrollArea>
+          </ScrollArea>
         )}
       </div>
 

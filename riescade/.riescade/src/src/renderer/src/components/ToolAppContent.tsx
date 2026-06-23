@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { ChevronRight, Search, Folder, Trophy, Star, User, Shield, Settings, Palette, Gamepad2, Volume2, Cpu, Info, Database, Trash2, Edit3, X, ChevronLeft, Filter, HardDrive, RefreshCw, Eye, EyeOff, Save } from "lucide-react";
+import { ChevronRight, Search, Folder, Star, User, Shield, Settings, Palette, Gamepad2, Volume2, Cpu, Info, Database, Trash2, Edit3, X, ChevronLeft, Filter, HardDrive, RefreshCw, Eye, EyeOff } from "lucide-react";
 import { System, SettingsCtx } from "../types";
 import { TOOL_APPS, getSystemTheme } from "../constants";
 import {
@@ -133,32 +133,6 @@ export default function ToolAppContent({
     );
   }
 
-  if (appId === "saves") {
-    return (
-      <ScrollArea className="p-5 h-full text-white">
-        <h2 className="text-lg font-bold mb-1">Gerenciador de Saves</h2>
-        <p className="text-xs text-white/50 mb-4">Sincronização local automática de slots de emuladores</p>
-        
-        <div className="grid grid-cols-3 gap-3">
-          {Array.from({ length: 6 }).map((_, i) => (
-            <div key={i} className="rounded-xl border border-white/5 bg-white/5 overflow-hidden">
-              <div 
-                className="aspect-video flex items-center justify-center text-white/30 text-xs font-semibold"
-                style={{ background: 'linear-gradient(135deg, rgba(67, 56, 202, 0.25), var(--accent-color-light))' }}
-              >
-                Slot {i + 1}
-              </div>
-              <div className="p-3 text-xs flex flex-col gap-1 bg-black/20">
-                <span className="font-semibold text-white/90">Slot de Backup {i + 1}</span>
-                <span className="text-[10px] text-white/40">Há {i + 1} horas atrás · Automático</span>
-              </div>
-            </div>
-          ))}
-        </div>
-      </ScrollArea>
-    );
-  }
-
   if (appId === "settings") {
     // --- Helper: read a setting value ---
     const getSetting = (name: string, fallback: any = ""): string => {
@@ -210,12 +184,12 @@ export default function ToolAppContent({
     const getDesktopIcons = () => {
       const raw = settings?.["Desktop.Icons"]?.value;
       if (raw !== undefined) return String(raw).split(",").filter(Boolean);
-      return ["tool:library", "tool:saves", "tool:achievements"];
+      return ["tool:library"];
     };
     const getTaskbarIcons = () => {
       const raw = settings?.["Taskbar.Icons"]?.value;
       if (raw !== undefined) return String(raw).split(",").filter(Boolean);
-      return ["tool:library", "tool:saves", "tool:achievements", "tool:settings"];
+      return ["tool:library", "tool:settings"];
     };
     const desktopIcons = getDesktopIcons();
     const taskbarIcons = getTaskbarIcons();
@@ -394,7 +368,7 @@ export default function ToolAppContent({
           {/* ===== TAB: JOGOS ===== */}
           {activeSettingsTab === "jogos" && (
             <ScrollArea className="flex-1">
-              <div className="p-6 max-w-[740px] space-y-2">
+              <div className="pt-8 p-6 max-w-[740px] space-y-2">
               <h2 className="text-xl font-bold text-white mb-1">Configurações de Jogos</h2>
               <p className="text-sm text-white/40 mb-4">Configurações globais de emulação, vídeo, shaders e mais.</p>
 
@@ -578,7 +552,7 @@ export default function ToolAppContent({
           {/* ===== TAB: PERSONALIZAÇÃO ===== */}
           {activeSettingsTab === "personalizacao" && (
             <ScrollArea className="flex-1">
-              <div className="p-6 max-w-[740px] space-y-2">
+              <div className="pt-8 p-6 max-w-[740px] space-y-2">
               <h2 className="text-xl font-bold text-white mb-1">Personalização</h2>
               <p className="text-sm text-white/40 mb-4">Escolha a cor de destaque para os menus, botões e barras do sistema.</p>
 
@@ -593,7 +567,7 @@ export default function ToolAppContent({
                     { name: "Ciano", hex: "#06b6d4" },
                     { name: "Esmeralda", hex: "#10b981" },
                     { name: "Laranja", hex: "#f97316" },
-                    { name: "Rosa", hex: "#ec4899" },
+                    { name: "Rosa", hex: "#9f0043" },
                     { name: "Vermelho", hex: "#ef4444" },
                     { name: "Teal", hex: "#14b8a6" }
                   ].map(preset => {

@@ -294,7 +294,7 @@ export default function App() {
     if (raw !== undefined) {
       return String(raw).split(",").filter(Boolean);
     }
-    return ["tool:library", "tool:saves", "tool:achievements"];
+    return ["tool:library"];
   }, [settings]);
 
   const getTaskbarIcons = useCallback(() => {
@@ -302,7 +302,7 @@ export default function App() {
     if (raw !== undefined) {
       return String(raw).split(",").filter(Boolean);
     }
-    return ["tool:library", "tool:saves", "tool:achievements", "tool:settings"];
+    return ["tool:library", "tool:settings"];
   }, [settings]);
 
   const resolveIconItem = useCallback((itemKey: string) => {
@@ -424,10 +424,10 @@ export default function App() {
   }, [activeSubWindowId, systems]);
 
   // Launch Game Handler
-  const handleLaunchGame = (game: Game, system: System) => {
+  const handleLaunchGame = (game: Game, system: System, saveStateSlot?: number) => {
     setIsLaunching(true);
     setLaunchingGame(game);
-    window.api.launchGame(game, system).then(() => {
+    window.api.launchGame(game, system, saveStateSlot).then(() => {
       setIsLaunching(false);
       setLaunchingGame(null);
     }).catch(() => {

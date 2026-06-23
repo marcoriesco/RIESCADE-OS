@@ -168,62 +168,30 @@ export class SystemsParser {
       return rest
     })
 
-    // Inject Auto Collections
-    const autoColsString = settings.getSetting('CollectionSystemsAuto', 'string') || ''
-    if (autoColsString) {
-      const enabledCols = autoColsString.split(',').filter(c => c.trim() !== '' && c.trim().toLowerCase() !== 'arcade')
-      
-      // Map specific collection names to their ES theme folders
-      const specificThemes: Record<string, string> = {
-        'all': 'auto-allgames',
-        'recent': 'auto-lastplayed',
-        'favorites': 'auto-favorites',
-        '2players': 'auto-at2players',
-        '4players': 'auto-at4players',
-        'neverplayed': 'auto-neverplayed',
-        'retroachievements': 'auto-retroachievements',
-        'vertical': 'auto-verticalarcade',
-        'lightgun': 'auto-lightgun',
-        'wheel': 'auto-wheel',
-        'trackball': 'auto-trackball',
-        'spinner': 'auto-spinner'
-      }
-
-      enabledCols.forEach(col => {
-        let themeName = specificThemes[col] || col
-        let displayName = col
-
-        if (col.startsWith('_')) {
-          // Genre collection: _action -> theme: auto-action
-          themeName = `auto-${col.substring(1)}`
-          displayName = col.substring(1)
-        } else if (col.startsWith('z') && !specificThemes[col]) {
-          // Arcade collection: znamco -> theme: namco
-          themeName = col.substring(1)
-          displayName = col.substring(1)
-        } else if (!specificThemes[col]) {
-          themeName = `auto-${col}`
-          displayName = col
-        }
-
-        // Avoid duplicate system names if possible (e.g. arcade conflict)
-        const isDuplicate = filteredSystems.some(s => s.name === col)
-        const systemName = isDuplicate ? `auto-${col}` : col
-
-        filteredSystems.push({
-          name: systemName,
-          fullname: displayName.toUpperCase(),
-          path: `virtual://${col}`,
-          extension: '',
-          command: '',
-          platform: 'pc',
-          theme: themeName,
-          hardware: 'auto collection',
-          emulators: [],
-          gamecount: 0
-        })
-      })
+    // Inject Auto Collections - Only 'all' and 'favorites' are allowed as virtual systems
+    const enabledCols = ['all', 'favorites']
+    const specificThemes: Record<string, string> = {
+      'all': 'auto-allgames',
+      'favorites': 'auto-favorites'
     }
+
+    enabledCols.forEach(col => {
+      const themeName = specificThemes[col] || col
+      const displayName = col === 'all' ? 'Todos os Jogos' : 'Favoritos'
+
+      filteredSystems.push({
+        name: col,
+        fullname: displayName,
+        path: `virtual://${col}`,
+        extension: '',
+        command: '',
+        platform: 'pc',
+        theme: themeName,
+        hardware: 'auto collection',
+        emulators: [],
+        gamecount: 0
+      })
+    })
 
     SystemsParser.cachedSystems = filteredSystems
     return filteredSystems
