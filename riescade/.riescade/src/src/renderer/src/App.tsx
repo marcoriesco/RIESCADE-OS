@@ -5,6 +5,7 @@ import {
   MoreHorizontal, Heart
 } from "lucide-react";
 import * as Toast from '@radix-ui/react-toast';
+import * as Tooltip from '@radix-ui/react-tooltip';
 import { System, Game, WinState } from "./types";
 import { TOOL_APPS, getSystemTheme } from "./constants";
 import SystemAppContent from "./components/SystemAppContent";
@@ -29,6 +30,8 @@ export default function App() {
   const [controllers, setControllers] = useState<any[]>([]);
   const [menuOpen, setMenuOpen] = useState(false);
   const [toasts, setToasts] = useState<{ id: string; title: string; description: string; type: "favorite" | "controller"; favorite?: boolean; open: boolean }[]>([]);
+  const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
+  const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
 
   useEffect(() => {
     const handleShowToast = (e: Event) => {
@@ -966,126 +969,209 @@ export default function App() {
       )}
 
       {/* Taskbar inferior flutuante */}
-      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-[90]" onClick={(e) => e.stopPropagation()}>
-        <div className="glass-strong rounded-2xl px-3 py-2 flex items-center gap-2 shadow-2xl">
-          
-          {/* Start Menu button */}
-          <button
-            onClick={() => setLauncherOpen(v => !v)}
-            className={`w-11 h-11 rounded-xl flex items-center justify-center transition-all ${launcherOpen ? "bg-accent-glass" : "hover:scale-105"}`}
-            style={!launcherOpen ? { background: 'linear-gradient(135deg, var(--accent-color), rgb(67, 56, 202))' } : {}}
-            title="RIESCADE OS"
-          >
-            <Grid3x3 className="w-5 h-5 text-white" />
-          </button>
+      <Tooltip.Provider delayDuration={400}>
+        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-[90]" onClick={(e) => e.stopPropagation()}>
+          <div className="glass-strong rounded-2xl px-3 py-2 flex items-center gap-2 shadow-2xl">
+            
+            {/* Start Menu button */}
+            <Tooltip.Root>
+              <Tooltip.Trigger asChild>
+                <button
+                  onClick={() => setLauncherOpen(v => !v)}
+                  className={`w-11 h-11 rounded-xl flex items-center justify-center transition-all ${launcherOpen ? "bg-accent-glass" : "hover:scale-105"}`}
+                  style={!launcherOpen ? { background: 'linear-gradient(135deg, var(--accent-color), rgb(67, 56, 202))' } : {}}
+                >
+                  <Grid3x3 className="w-5 h-5 text-white" />
+                </button>
+              </Tooltip.Trigger>
+              <Tooltip.Portal>
+                <Tooltip.Content className="tooltip-content" side="top" sideOffset={8}>
+                  Menu RIESCADE
+                  <Tooltip.Arrow className="tooltip-arrow" width={10} height={5} />
+                </Tooltip.Content>
+              </Tooltip.Portal>
+            </Tooltip.Root>
 
-          <div className="w-px h-8 bg-white/15 mx-1" />
+            <div className="w-px h-8 bg-white/15 mx-1" />
 
-          {/* Pinned Apps */}
-          {getTaskbarIcons()
-            .map(resolveIconItem)
-            .filter((item): item is NonNullable<typeof item> => item !== null)
-            .map(item => {
-              const Icon = item.icon;
-              const isOpen = nativeWins.some(w => w.appId === item.appId && w.type === item.type);
-              const isMinimized = nativeWins.find(w => w.appId === item.appId && w.type === item.type)?.minimized ?? false;
+            {/* Pinned Apps */}
+            {(() => {
+              const pinnedList = getTaskbarIcons()
+                .map(resolveIconItem)
+                .filter((item): item is NonNullable<typeof item> => item !== null);
+
+              return pinnedList.map((item, idx) => {
+                const Icon = item.icon;
+                const isOpen = nativeWins.some(w => w.appId === item.appId && w.type === item.type);
+                const isMinimized = nativeWins.find(w => w.appId === item.appId && w.type === item.type)?.minimized ?? false;
+
+                return (
+                  <Tooltip.Root key={item.id} open={draggedIndex === null ? undefined : false}>
+                    <Tooltip.Trigger asChild>
+                      <button
+                        draggable
+                        onDragStart={(e) => {
+                          e.dataTransfer.effectAllowed = "move";
+                          setDraggedIndex(idx);
+                        }}
+                        onDragOver={(e) => {
+                          e.preventDefault();
+                        }}
+                        onDragEnter={() => {
+                          setDragOverIndex(idx);
+                        }}
+                        onDragEnd={() => {
+                          setDraggedIndex(null);
+                          setDragOverIndex(null);
+                        }}
+                        onDrop={(e) => {
+                          e.preventDefault();
+                          if (draggedIndex !== null && draggedIndex !== idx) {
+                            const list = getTaskbarIcons();
+                            const resolvedList = list
+                              .map(resolveIconItem)
+                              .filter((x): x is NonNullable<typeof x> => x !== null);
+                            
+                            const draggedItem = resolvedList[draggedIndex];
+                            const dropItem = resolvedList[idx];
+                            if (draggedItem && dropItem) {
+                              const nextList = [...list];
+                              const dIndex = nextList.indexOf(draggedItem.id);
+                              const tIndex = nextList.indexOf(dropItem.id);
+                              if (dIndex !== -1 && tIndex !== -1) {
+                                const [removed] = nextList.splice(dIndex, 1);
+                                nextList.splice(tIndex, 0, removed);
+                                handleSaveSetting("Taskbar.Icons", nextList.join(","), "string");
+                              }
+                            }
+                          }
+                          setDraggedIndex(null);
+                          setDragOverIndex(null);
+                        }}
+                        onClick={() => openApp(item.type, item.appId)}
+                        className={`relative w-11 h-11 rounded-xl bg-white/5 hover:bg-white/10 flex items-center justify-center transition-all group cursor-pointer ${
+                          draggedIndex === idx ? "opacity-40" : ""
+                        } ${
+                          dragOverIndex === idx && draggedIndex !== idx ? "border border-accent scale-105" : ""
+                        }`}
+                      >
+                        <div className="w-7 h-7 flex items-center justify-center pointer-events-none">
+                          {item.logo ? (
+                            <img src={item.logo} alt={item.name} className="h-full object-contain max-w-full" />
+                          ) : (
+                            <div className={`w-7 h-7 rounded-lg bg-gradient-to-br ${item.color} flex items-center justify-center`}>
+                              <Icon className="w-4 h-4 text-white" />
+                            </div>
+                          )}
+                        </div>
+                        {isOpen && (
+                          <span className={`absolute bottom-0.5 left-1/2 -translate-x-1/2 h-1 rounded-full transition-all pointer-events-none ${isMinimized ? "w-1 bg-white/40" : "w-5 bg-accent"}`} />
+                        )}
+                      </button>
+                    </Tooltip.Trigger>
+                    <Tooltip.Portal>
+                      <Tooltip.Content className="tooltip-content" side="top" sideOffset={8}>
+                        {item.name}
+                        <Tooltip.Arrow className="tooltip-arrow" width={10} height={5} />
+                      </Tooltip.Content>
+                    </Tooltip.Portal>
+                  </Tooltip.Root>
+                );
+              });
+            })()}
+
+            {/* Dynamic Running Apps Separator & Icons */}
+            {(() => {
+              const pinnedKeys = getTaskbarIcons();
+              const runningTools = nativeWins
+                .filter(w => w.type === "tool" && !pinnedKeys.includes(`tool:${w.appId}`))
+                .map(w => {
+                  const resolved = resolveIconItem(`tool:${w.appId}`);
+                  return resolved ? { ...resolved, isMinimized: w.minimized } : null;
+                })
+                .filter((x): x is NonNullable<typeof x> => x !== null);
+
+              const runningSystems = nativeWins
+                .filter(w => !pinnedKeys.includes(`system:${w.appId}`))
+                .map(w => {
+                  const resolved = resolveIconItem(`system:${w.appId}`);
+                  return resolved ? { ...resolved, isMinimized: w.minimized } : null;
+                })
+                .filter((x): x is NonNullable<typeof x> => x !== null);
+
+              const dynamicRunning = [...runningTools, ...runningSystems];
+
+              if (dynamicRunning.length === 0) return null;
 
               return (
-                <button
-                  key={item.id}
-                  onClick={() => openApp(item.type, item.appId)}
-                  className="relative w-11 h-11 rounded-xl bg-white/5 hover:bg-white/10 flex items-center justify-center transition group cursor-pointer"
-                  title={item.name}
-                >
-                  <div className="w-7 h-7 flex items-center justify-center">
-                    {item.logo ? (
-                      <img src={item.logo} alt={item.name} className="h-full object-contain max-w-full" />
-                    ) : (
-                      <div className={`w-7 h-7 rounded-lg bg-gradient-to-br ${item.color} flex items-center justify-center`}>
-                        <Icon className="w-4 h-4 text-white" />
-                      </div>
-                    )}
-                  </div>
-                  {isOpen && (
-                    <span className={`absolute bottom-0.5 left-1/2 -translate-x-1/2 h-1 rounded-full transition-all ${isMinimized ? "w-1 bg-white/40" : "w-5 bg-accent"}`} />
-                  )}
-                </button>
+                <>
+                  <div className="w-px h-8 bg-white/15 mx-1" />
+                  {dynamicRunning.map(item => {
+                    const Icon = item.icon;
+                    return (
+                      <Tooltip.Root key={item.id}>
+                        <Tooltip.Trigger asChild>
+                          <button
+                            onClick={() => openApp(item.type, item.appId)}
+                            className="relative w-11 h-11 rounded-xl bg-white/5 hover:bg-white/10 flex items-center justify-center transition group animate-in zoom-in-95 duration-200 cursor-pointer"
+                          >
+                            <div className="w-7 h-7 flex items-center justify-center pointer-events-none">
+                              {item.logo ? (
+                                <img src={item.logo} alt={item.name} className="h-full object-contain max-w-full" />
+                              ) : (
+                                <div className={`w-7 h-7 rounded-lg bg-gradient-to-br ${item.color} flex items-center justify-center`}>
+                                  <Icon className="w-4 h-4 text-white" />
+                                </div>
+                              )}
+                            </div>
+                            <span className={`absolute bottom-0.5 left-1/2 -translate-x-1/2 h-1 rounded-full transition-all pointer-events-none ${item.isMinimized ? "w-1 bg-white/40" : "w-5 bg-accent"}`} />
+                          </button>
+                        </Tooltip.Trigger>
+                        <Tooltip.Portal>
+                          <Tooltip.Content className="tooltip-content" side="top" sideOffset={8}>
+                            {item.name}
+                            <Tooltip.Arrow className="tooltip-arrow" width={10} height={5} />
+                          </Tooltip.Content>
+                        </Tooltip.Portal>
+                      </Tooltip.Root>
+                    );
+                  })}
+                </>
               );
-            })}
+            })()}
 
-          {/* Dynamic Running Apps Separator & Icons */}
-          {(() => {
-            const pinnedKeys = getTaskbarIcons();
-            const runningTools = nativeWins
-              .filter(w => w.type === "tool" && !pinnedKeys.includes(`tool:${w.appId}`))
-              .map(w => {
-                const resolved = resolveIconItem(`tool:${w.appId}`);
-                return resolved ? { ...resolved, isMinimized: w.minimized } : null;
-              })
-              .filter((x): x is NonNullable<typeof x> => x !== null);
+            <div className="w-px h-8 bg-white/15 mx-1" />
 
-            const runningSystems = nativeWins
-              .filter(w => !pinnedKeys.includes(`system:${w.appId}`))
-              .map(w => {
-                const resolved = resolveIconItem(`system:${w.appId}`);
-                return resolved ? { ...resolved, isMinimized: w.minimized } : null;
-              })
-              .filter((x): x is NonNullable<typeof x> => x !== null);
-
-            const dynamicRunning = [...runningTools, ...runningSystems];
-
-            if (dynamicRunning.length === 0) return null;
-
-            return (
-              <>
-                <div className="w-px h-8 bg-white/15 mx-1" />
-                {dynamicRunning.map(item => {
-                  const Icon = item.icon;
-                  return (
-                    <button
-                      key={item.id}
-                      onClick={() => openApp(item.type, item.appId)}
-                      className="relative w-11 h-11 rounded-xl bg-white/5 hover:bg-white/10 flex items-center justify-center transition group animate-in zoom-in-95 duration-200 cursor-pointer"
-                      title={item.name}
-                    >
-                      <div className="w-7 h-7 flex items-center justify-center">
-                        {item.logo ? (
-                          <img src={item.logo} alt={item.name} className="h-full object-contain max-w-full" />
-                        ) : (
-                          <div className={`w-7 h-7 rounded-lg bg-gradient-to-br ${item.color} flex items-center justify-center`}>
-                            <Icon className="w-4 h-4 text-white" />
-                          </div>
-                        )}
-                      </div>
-                      <span className={`absolute bottom-0.5 left-1/2 -translate-x-1/2 h-1 rounded-full transition-all ${item.isMinimized ? "w-1 bg-white/40" : "w-5 bg-accent"}`} />
-                    </button>
-                  );
-                })}
-              </>
-            );
-          })()}
-
-          <div className="w-px h-8 bg-white/15 mx-1" />
-
-          {/* System tray */}
-          <div className="flex items-center gap-2 px-3 text-white/80">
-            {controllers.length > 0 && (
-              <span title={`${controllers.length} controle(s) conectado(s)`} className="flex items-center">
-                <Gamepad2 className="w-4 h-4 text-accent mr-1 animate-pulse" />
-              </span>
-            )}
-            <Wifi className="w-4 h-4 text-white/60" />
-            <Volume2 className="w-4 h-4 text-white/60" />
-            <Battery className="w-4 h-4 text-white/60" />
-            <div className="text-xs leading-tight ml-1 flex text-right gap-1 pl-3">
-              <span className="font-semibold text-white capitalize">{now.toLocaleDateString("pt-BR", { month: "short" })}</span>
-              <span className="font-semibold text-white">{now.toLocaleDateString("pt-BR", { day: "2-digit" })}</span>
-              <span className="font-semibold text-white">{now.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}</span>
+            {/* System tray */}
+            <div className="flex items-center gap-2 px-3 text-white/80">
+              {controllers.length > 0 && (
+                <Tooltip.Root>
+                  <Tooltip.Trigger asChild>
+                    <span className="flex items-center cursor-help">
+                      <Gamepad2 className="w-4 h-4 text-accent mr-1 animate-pulse" />
+                    </span>
+                  </Tooltip.Trigger>
+                  <Tooltip.Portal>
+                    <Tooltip.Content className="tooltip-content" side="top" sideOffset={8}>
+                      {`${controllers.length} controle(s) conectado(s)`}
+                      <Tooltip.Arrow className="tooltip-arrow" width={10} height={5} />
+                    </Tooltip.Content>
+                  </Tooltip.Portal>
+                </Tooltip.Root>
+              )}
+              <Wifi className="w-4 h-4 text-white/60" />
+              <Volume2 className="w-4 h-4 text-white/60" />
+              <Battery className="w-4 h-4 text-white/60" />
+              <div className="text-xs leading-tight ml-1 flex text-right gap-1 pl-3">
+                <span className="font-semibold text-white capitalize">{now.toLocaleDateString("pt-BR", { month: "short" })}</span>
+                <span className="font-semibold text-white">{now.toLocaleDateString("pt-BR", { day: "2-digit" })}</span>
+                <span className="font-semibold text-white">{now.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}</span>
+              </div>
             </div>
-          </div>
 
+          </div>
         </div>
-      </div>
+      </Tooltip.Provider>
       </div>
       </div>
       {renderToasts()}

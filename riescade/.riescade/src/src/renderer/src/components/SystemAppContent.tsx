@@ -539,7 +539,7 @@ export default function SystemAppContent({
           <ScrollArea className="w-[20vw] min-w-[300px] bg-black/50 p-6 pt-14 select-none">
             <div className="flex flex-col gap-4">
               {selectedGame.marquee && !imageError && (
-                <div className="w-full min-h-28 flex items-center justify-center overflow-hidden relative shrink-0">
+                <div className="w-full flex items-center justify-center overflow-hidden relative shrink-0">
                   <img 
                     src={(() => {
                       const logo = selectedGame.marquee || "";
@@ -547,7 +547,7 @@ export default function SystemAppContent({
                     })()} 
                     alt={selectedGame.name} 
                     onError={() => setImageError(true)}
-                    className="max-w-full max-h-full object-contain filter drop-shadow-[0_4px_8px_rgba(0,0,0,0.5)]" 
+                    className="w-full max-h-40 object-contain filter drop-shadow-[0_4px_8px_rgba(0,0,0,0.5)]" 
                   />
                 </div>
               )}

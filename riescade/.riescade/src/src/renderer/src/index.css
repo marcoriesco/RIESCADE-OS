@@ -246,3 +246,38 @@ html, body, #root {
 .toast-root[data-state='closed'] {
   animation: toast-slide-up-fade-out 150ms ease-in forwards;
 }
+
+/* Radix Tooltip Animations & Styling */
+@keyframes tooltip-slide-up-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.tooltip-content {
+  background: rgba(20, 20, 20, 0.95);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  padding: 6px 10px;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.025em;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+  user-select: none;
+  z-index: 100;
+}
+
+.tooltip-content[data-state='delayed-open'] {
+  animation: tooltip-slide-up-fade-in 150ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.tooltip-arrow {
+  fill: rgba(20, 20, 20, 0.95);
+}

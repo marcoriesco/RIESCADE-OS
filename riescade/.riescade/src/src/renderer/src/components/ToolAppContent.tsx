@@ -297,7 +297,7 @@ export default function ToolAppContent({
             <div className="flex items-center gap-2.5 px-2 py-1.5">
               <div 
                 className="w-8 h-8 rounded-full flex items-center justify-center text-[10px] font-bold shadow-md shrink-0"
-                style={{ background: 'linear-gradient(135deg, var(--accent-color), rgb(79, 70, 229))' }}
+                style={{ background: 'linear-gradient(135deg, var(--accent-color), var(--accent-color))' }}
               >
                 RC
               </div>
@@ -311,10 +311,6 @@ export default function ToolAppContent({
         
         {/* Main Content Area */}
         <div className="flex-1 flex flex-col h-full overflow-hidden bg-black/10">
-          {/* Section Header (Discord-like: section name at top, X reserved for controls overlay) */}
-          <div className="shrink-0 h-8 flex items-center px-6 border-b border-white/5">
-            <span className="text-sm font-semibold text-white/80">{SETTINGS_TABS.find(t => t.id === activeSettingsTab)?.name || "Configurações"}</span>
-          </div>
 
           {/* ===== TAB: CONTA (Account - Static) ===== */}
           {activeSettingsTab === "conta" && (
