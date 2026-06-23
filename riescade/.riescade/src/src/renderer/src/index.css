@@ -54,6 +54,7 @@
   --color-ring: var(--ring);
   --color-neon: var(--neon);
   --color-glow: var(--glow);
+  --font-sans: "Inter Tight", system-ui, sans-serif;
   --font-display: "Inter Tight", system-ui, sans-serif;
   --font-condensed: "Roboto Condensed", sans-serif;
 }

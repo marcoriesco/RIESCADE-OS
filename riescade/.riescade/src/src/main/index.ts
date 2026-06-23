@@ -40,7 +40,7 @@ function sendToMainWindow(channel: string, ...args: any[]): void {
 
 function saveWindowConfig(): void {
   if (!mainWindow || mainWindow.isDestroyed()) return
-  const shouldSave = settingsParser.getSetting('RIESCADE.SaveWindowPositions', 'bool') !== 'false'
+  const shouldSave = settingsParser.getSetting('RIESCADE.SaveWindowPositions', 'bool') !== false
   if (!shouldSave) return
 
   try {
@@ -71,9 +71,9 @@ function saveWindowConfig(): void {
 }
 
 function createWindow(): void {
-  const shouldSave = settingsParser.getSetting('RIESCADE.SaveWindowPositions', 'bool') !== 'false'
-  const isFullScreen = shouldSave && settingsParser.getSetting('Window.FullScreen', 'bool') === 'true'
-  const isMaximized = shouldSave && settingsParser.getSetting('Window.Maximized', 'bool') === 'true'
+  const shouldSave = settingsParser.getSetting('RIESCADE.SaveWindowPositions', 'bool') !== false
+  const isFullScreen = shouldSave && settingsParser.getSetting('Window.FullScreen', 'bool') === true
+  const isMaximized = shouldSave && settingsParser.getSetting('Window.Maximized', 'bool') === true
   
   const defaultWidth = 1280
   const defaultHeight = 720
@@ -168,12 +168,12 @@ function createAppWindow(type: 'system' | 'tool', id: string): void {
     } catch {}
   }
 
-  const shouldSave = settingsParser.getSetting('RIESCADE.SaveWindowPositions', 'bool') !== 'false'
+  const shouldSave = settingsParser.getSetting('RIESCADE.SaveWindowPositions', 'bool') !== false
   const savedWidth = shouldSave ? settingsParser.getSetting(`Window.${winKey}.Width`, 'int') : null
   const savedHeight = shouldSave ? settingsParser.getSetting(`Window.${winKey}.Height`, 'int') : null
   const savedX = shouldSave ? settingsParser.getSetting(`Window.${winKey}.X`, 'int') : null
   const savedY = shouldSave ? settingsParser.getSetting(`Window.${winKey}.Y`, 'int') : null
-  const savedMaximized = shouldSave && settingsParser.getSetting(`Window.${winKey}.Maximized`, 'bool') === 'true'
+  const savedMaximized = shouldSave && settingsParser.getSetting(`Window.${winKey}.Maximized`, 'bool') === true
 
   const subWindowOptions: any = {
     width: savedWidth !== null ? parseInt(savedWidth, 10) : width,
@@ -224,7 +224,7 @@ function createAppWindow(type: 'system' | 'tool', id: string): void {
   })
 
   subWindow.on('close', () => {
-    const shouldSave = settingsParser.getSetting('RIESCADE.SaveWindowPositions', 'bool') !== 'false'
+    const shouldSave = settingsParser.getSetting('RIESCADE.SaveWindowPositions', 'bool') !== false
     if (shouldSave) {
       try {
         const isMaximized = subWindow.isMaximized()
