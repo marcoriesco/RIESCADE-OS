@@ -1,9 +1,19 @@
 import Database from 'better-sqlite3'
 import { existsSync, statSync, readdirSync, mkdirSync } from 'fs'
-import { join, dirname, relative, resolve } from 'path'
+import { join, dirname, relative, resolve, isAbsolute } from 'path'
 import { getDatabasePath, getRomsPath, getConfigPath } from '../utils/paths'
 import { GamelistParser } from '../parsers/GamelistParser'
 import { Game, System } from '../../shared/types'
+
+function normalizePathForComparison(p: string): string {
+  if (!p) return ''
+  return p
+    .replace(/\\/g, '/')          // Normalize slashes
+    .replace(/^\.\//, '')         // Remove leading ./
+    .replace(/^\//, '')           // Remove leading /
+    .trim()
+    .toLowerCase()
+}
 
 /**
  * DatabaseService - SQLite-based ROM indexing for RIESCADE.
@@ -122,10 +132,17 @@ export class DatabaseService {
         file_size     INTEGER,
         file_mtime    INTEGER,
         crc32         TEXT,
+        md5           TEXT,
+        gametime      INTEGER,
+        scrap_name    TEXT,
+        scrap_date    TEXT,
         PRIMARY KEY (system, path)
       );
 
       CREATE INDEX IF NOT EXISTS idx_games_system ON games(system);
+      CREATE INDEX IF NOT EXISTS idx_games_name ON games(name);
+      CREATE INDEX IF NOT EXISTS idx_games_releasedate ON games(releasedate);
+      CREATE INDEX IF NOT EXISTS idx_games_playcount ON games(playcount);
       CREATE INDEX IF NOT EXISTS idx_games_favorite ON games(favorite) WHERE favorite = 1;
       CREATE INDEX IF NOT EXISTS idx_games_lastplayed ON games(lastplayed) WHERE lastplayed IS NOT NULL;
       CREATE INDEX IF NOT EXISTS idx_games_genre ON games(genre);
@@ -159,6 +176,59 @@ export class DatabaseService {
         console.error("Failed to alter games table to add crc32 column:", err)
       }
     }
+
+    // Schema migration: Add md5 to games if it doesn't exist
+    try {
+      db.prepare("SELECT md5 FROM games LIMIT 1").get()
+    } catch {
+      try {
+        db.exec("ALTER TABLE games ADD COLUMN md5 TEXT")
+        console.log("Database table 'games' altered to add 'md5' column.")
+        this.migrationOccurred = true
+      } catch (err) {
+        console.error("Failed to alter games table to add md5 column:", err)
+      }
+    }
+
+    // Schema migration: Add gametime to games if it doesn't exist
+    try {
+      db.prepare("SELECT gametime FROM games LIMIT 1").get()
+    } catch {
+      try {
+        db.exec("ALTER TABLE games ADD COLUMN gametime INTEGER")
+        console.log("Database table 'games' altered to add 'gametime' column.")
+        this.migrationOccurred = true
+      } catch (err) {
+        console.error("Failed to alter games table to add gametime column:", err)
+      }
+    }
+
+    // Schema migration: Add scrap_name to games if it doesn't exist
+    try {
+      db.prepare("SELECT scrap_name FROM games LIMIT 1").get()
+    } catch {
+      try {
+        db.exec("ALTER TABLE games ADD COLUMN scrap_name TEXT")
+        console.log("Database table 'games' altered to add 'scrap_name' column.")
+        this.migrationOccurred = true
+      } catch (err) {
+        console.error("Failed to alter games table to add scrap_name column:", err)
+      }
+    }
+
+    // Schema migration: Add scrap_date to games if it doesn't exist
+    try {
+      db.prepare("SELECT scrap_date FROM games LIMIT 1").get()
+    } catch {
+      try {
+        db.exec("ALTER TABLE games ADD COLUMN scrap_date TEXT")
+        console.log("Database table 'games' altered to add 'scrap_date' column.")
+        this.migrationOccurred = true
+      } catch (err) {
+        console.error("Failed to alter games table to add scrap_date column:", err)
+      }
+    }
+
   }
 
   // ─── Sync Detection ─────────────────────────────────────────
@@ -215,7 +285,24 @@ export class DatabaseService {
       console.log(`  📂 Indexing: ${system.name} ...`)
     }
 
-    // 1. Get current folder mtime
+    // 1. Check if system is already indexed
+    const systemRow = db.prepare('SELECT last_scan_at FROM systems WHERE name = ?').get(system.name) as any
+    const isIndexed = !!systemRow
+
+    // 2. Fetch existing games from database if already indexed
+    const existingGamesMap = new Map<string, Game>()
+    if (isIndexed) {
+      try {
+        const rows = db.prepare('SELECT * FROM games WHERE system = ?').all(system.name) as any[]
+        rows.forEach(r => {
+          existingGamesMap.set(normalizePathForComparison(r.path), this.rowToGame(r))
+        })
+      } catch (err) {
+        console.error(`Failed to fetch existing games for ${system.name} from DB:`, err)
+      }
+    }
+
+    // 3. Get current folder mtime
     let folderMtime = 0
     try {
       if (existsSync(system.path)) {
@@ -231,68 +318,145 @@ export class DatabaseService {
       }
     } catch {}
 
-    // 2. Scan physical files
+    // 4. Scan physical files
     const extensions = (system.extension || '').split(/\s+/).filter(e => e.trim().length > 0)
     let physicalGames: Game[] = []
     if (existsSync(system.path)) {
       physicalGames = scanPhysicalGames(system.path, extensions, system.name)
     }
 
-    // 3. Parse gamelist.xml for metadata
-    const gamelistPaths = [
-      join(romsPath, system.name, 'gamelist.xml'),
-      join(configPath, 'gamelists', system.name, 'gamelist.xml'),
-      join(system.path, 'gamelist.xml')
+    // 5. Parse gamelist.xml ONLY if not indexed yet (first run)
+    let xmlGamesMap = new Map<string, Game>()
+    if (!isIndexed) {
+      const gamelistPaths = [
+        join(romsPath, system.name, 'gamelist.xml'),
+        join(configPath, 'gamelists', system.name, 'gamelist.xml'),
+        join(system.path, 'gamelist.xml')
+      ]
+
+      let xmlGames: Game[] = []
+      for (const gp of gamelistPaths) {
+        if (gp && existsSync(gp)) {
+          xmlGames = this.gamelistParser.parse(gp, system.name)
+          if (xmlGames.length > 0) break
+        }
+      }
+
+      xmlGames.forEach(g => {
+        xmlGamesMap.set(normalizePathForComparison(g.path), g)
+      })
+    }
+
+    // 6. Build media file cache for fast lookup
+    const mediaCache = new Map<string, Map<string, string>>()
+    const mediaDir = join(system.path, 'media')
+    const mediaSubfolders = [
+      'cover', 'video', 'logo', 'thumbnail', 'cover3d', 'fanart', 'title',
+      'wheel', 'mix', 'backcover', 'bezel', 'manual', 'magazine', 'map'
     ]
 
-    let xmlGames: Game[] = []
-    for (const gp of gamelistPaths) {
-      if (gp && existsSync(gp)) {
-        xmlGames = this.gamelistParser.parse(gp, system.name)
-        if (xmlGames.length > 0) break
+    if (existsSync(mediaDir)) {
+      for (const sub of mediaSubfolders) {
+        const subPath = join(mediaDir, sub)
+        if (existsSync(subPath)) {
+          try {
+            const files = readdirSync(subPath)
+            const fileMap = new Map<string, string>()
+            for (const file of files) {
+              const fileStem = file.includes('.') ? file.substring(0, file.lastIndexOf('.')) : file
+              fileMap.set(fileStem.toLowerCase(), file)
+            }
+            mediaCache.set(sub, fileMap)
+          } catch (e) {
+            console.error(`Failed to cache media subfolder ${sub}:`, e)
+          }
+        }
       }
     }
 
-    // 4. Merge: physical scan + XML metadata
-    const normalizePathForComparison = (p: string): string => {
-      if (!p) return ''
-      return p
-        .replace(/\\/g, '/')
-        .replace(/^\.\//, '')
-        .replace(/^\//, '')
-        .trim()
-        .toLowerCase()
+    const findLocalMedia = (stem: string, folder: string): string | null => {
+      const folderMap = mediaCache.get(folder)
+      if (folderMap) {
+        const match = folderMap.get(stem.toLowerCase())
+        if (match) {
+          return `./media/${folder}/${match}`
+        }
+      }
+      return null
     }
 
-    const xmlGamesMap = new Map<string, Game>()
-    xmlGames.forEach(g => {
-      xmlGamesMap.set(normalizePathForComparison(g.path), g)
-    })
-
+    // 7. Merge: physical scan + metadata (SQLite or XML) + local media lookup fallback
     const mergedGames: Game[] = []
 
     if (physicalGames.length > 0) {
       for (const pg of physicalGames) {
         const normPath = normalizePathForComparison(pg.path)
-        const xmlGame = xmlGamesMap.get(normPath)
-        if (xmlGame) {
+        const metadataSource = isIndexed ? existingGamesMap.get(normPath) : xmlGamesMap.get(normPath)
+        const stem = pg.path.replace(/^.*[\/\\]/, '').replace(/\.[^.]+$/, '')
+
+        const getMediaVal = (field: keyof Game, folder: string, fallbackFolder?: string): string | null => {
+          if (metadataSource && metadataSource[field]) {
+            return metadataSource[field] as string
+          }
+          let local = findLocalMedia(stem, folder)
+          if (!local && fallbackFolder) {
+            local = findLocalMedia(stem, fallbackFolder)
+          }
+          return local
+        }
+
+        if (metadataSource) {
           mergedGames.push({
             ...pg,
-            ...xmlGame,
+            ...metadataSource,
             system: system.name,
             path: pg.path,
-            id: xmlGame.id && !xmlGame.id.includes('/') && !xmlGame.id.includes('\\') ? xmlGame.id : pg.id
+            id: metadataSource.id && !metadataSource.id.includes('/') && !metadataSource.id.includes('\\') ? metadataSource.id : pg.id,
+            // Ensure media is looked up if missing in existing metadata
+            image: getMediaVal('image', 'cover'),
+            video: getMediaVal('video', 'video'),
+            marquee: getMediaVal('marquee', 'logo', 'wheel'),
+            thumbnail: getMediaVal('thumbnail', 'cover3d', 'thumbnail'),
+            fanart: getMediaVal('fanart', 'fanart'),
+            titleshot: getMediaVal('titleshot', 'title'),
+            wheel: getMediaVal('wheel', 'wheel', 'logo'),
+            mix: getMediaVal('mix', 'mix'),
+            boxback: getMediaVal('boxback', 'backcover'),
+            bezel: getMediaVal('bezel', 'bezel'),
+            manual: getMediaVal('manual', 'manual'),
+            magazine: getMediaVal('magazine', 'magazine'),
+            map: getMediaVal('map', 'map')
           })
         } else {
-          mergedGames.push(pg)
+          // New game physical scan: resolve local media fallback
+          mergedGames.push({
+            ...pg,
+            image: findLocalMedia(stem, 'cover') || undefined,
+            video: findLocalMedia(stem, 'video') || undefined,
+            marquee: findLocalMedia(stem, 'logo') || findLocalMedia(stem, 'wheel') || undefined,
+            thumbnail: findLocalMedia(stem, 'cover3d') || findLocalMedia(stem, 'thumbnail') || undefined,
+            fanart: findLocalMedia(stem, 'fanart') || undefined,
+            titleshot: findLocalMedia(stem, 'title') || undefined,
+            wheel: findLocalMedia(stem, 'wheel') || findLocalMedia(stem, 'logo') || undefined,
+            mix: findLocalMedia(stem, 'mix') || undefined,
+            boxback: findLocalMedia(stem, 'backcover') || undefined,
+            bezel: findLocalMedia(stem, 'bezel') || undefined,
+            manual: findLocalMedia(stem, 'manual') || undefined,
+            magazine: findLocalMedia(stem, 'magazine') || undefined,
+            map: findLocalMedia(stem, 'map') || undefined
+          })
         }
       }
     } else {
-      // No physical files found, use XML games only
-      mergedGames.push(...xmlGames)
+      // No physical files found, use XML or existing DB games
+      if (!isIndexed) {
+        xmlGamesMap.forEach(g => mergedGames.push(g))
+      } else {
+        existingGamesMap.forEach(g => mergedGames.push(g))
+      }
     }
 
-    // 5. Store in DB inside a transaction
+    // 8. Store in DB inside a transaction
     const insertGame = db.prepare(`
       INSERT OR REPLACE INTO games (
         id, name, path, system, desc, image, video, marquee, thumbnail,
@@ -301,7 +465,7 @@ export class DatabaseService {
         favorite, hidden, kidgame, playcount, lastplayed,
         region, lang, emulator, core, sortname, tags,
         gamefamily, arcadesystem, languages, cheevos_id, cheevos_hash,
-        file_size, file_mtime, crc32
+        file_size, file_mtime, crc32, md5, gametime, scrap_name, scrap_date
       ) VALUES (
         @id, @name, @path, @system, @desc, @image, @video, @marquee, @thumbnail,
         @fanart, @titleshot, @wheel, @mix, @boxback, @bezel, @manual, @magazine, @map,
@@ -309,7 +473,7 @@ export class DatabaseService {
         @favorite, @hidden, @kidgame, @playcount, @lastplayed,
         @region, @lang, @emulator, @core, @sortname, @tags,
         @gamefamily, @arcadesystem, @languages, @cheevos_id, @cheevos_hash,
-        @file_size, @file_mtime, @crc32
+        @file_size, @file_mtime, @crc32, @md5, @gametime, @scrap_name, @scrap_date
       )
     `)
 
@@ -329,6 +493,8 @@ export class DatabaseService {
         file_count = excluded.file_count
     `)
 
+    const makeRelative = (p?: string | null) => this.toRelativePath(system.path, p)
+
     const runTransaction = db.transaction(() => {
       // Delete existing games for this system
       db.prepare('DELETE FROM games WHERE system = ?').run(system.name)
@@ -342,19 +508,19 @@ export class DatabaseService {
           path: g.path || '',
           system: system.name,
           desc: g.desc || null,
-          image: g.image || null,
-          video: g.video || null,
-          marquee: g.marquee || null,
-          thumbnail: g.thumbnail || null,
-          fanart: g.fanart || null,
-          titleshot: g.titleshot || null,
-          wheel: g.wheel || null,
-          mix: g.mix || null,
-          boxback: g.boxback || null,
-          bezel: g.bezel || null,
-          manual: g.manual || null,
-          magazine: g.magazine || null,
-          map: g.map || null,
+          image: makeRelative(g.image),
+          video: makeRelative(g.video),
+          marquee: makeRelative(g.marquee),
+          thumbnail: makeRelative(g.thumbnail),
+          fanart: makeRelative(g.fanart),
+          titleshot: makeRelative(g.titleshot),
+          wheel: makeRelative(g.wheel),
+          mix: makeRelative(g.mix),
+          boxback: makeRelative(g.boxback),
+          bezel: makeRelative(g.bezel),
+          manual: makeRelative(g.manual),
+          magazine: makeRelative(g.magazine),
+          map: makeRelative(g.map),
           rating: g.rating != null ? g.rating : null,
           releasedate: g.releasedate || null,
           developer: g.developer || null,
@@ -379,7 +545,11 @@ export class DatabaseService {
           cheevos_hash: g.cheevosHash || null,
           file_size: null,
           file_mtime: null,
-          crc32: g.crc32 ? String(g.crc32).trim().toUpperCase() : null
+          crc32: g.crc32 ? String(g.crc32).trim().toUpperCase() : null,
+          md5: g.md5 || null,
+          gametime: g.gametime ? parseInt(String(g.gametime), 10) : null,
+          scrap_name: g.scrapName || g.scrap_name || null,
+          scrap_date: g.scrapDate || g.scrap_date || null
         })
       }
 
@@ -411,11 +581,11 @@ export class DatabaseService {
    * Sync all systems. Only systems that need re-indexing (changed mtime)
    * will be scanned. Returns the number of systems that were re-indexed.
    */
-  public syncAll(
+  public async syncAll(
     systems: System[],
     scanPhysicalGames: (systemPath: string, extensions: string[], systemName: string) => Game[],
     onProgress?: (systemName: string, current: number, total: number) => void
-  ): number {
+  ): Promise<number> {
     const db = this.ensureOpen()
     const isFirstRun = this.getIndexedSystemCount() === 0
 
@@ -446,6 +616,9 @@ export class DatabaseService {
       if (onProgress) {
         onProgress(sys.name, i + 1, total)
       }
+
+      // Yield to Electron's event loop so subwindows can load/paint and process IPC without freezing
+      await new Promise(resolve => setTimeout(resolve, 5))
     }
 
     // Sync __es_systems.cfg config metadata
@@ -733,6 +906,10 @@ export class DatabaseService {
     const db = this.ensureOpen()
     const g = game as any
 
+    const systemRow = db.prepare('SELECT path FROM systems WHERE name = ?').get(g.system) as any
+    const systemPath = systemRow ? systemRow.path : join(getRomsPath(), g.system)
+    const makeRelative = (p?: string | null) => this.toRelativePath(systemPath, p)
+
     db.prepare(`
       INSERT OR REPLACE INTO games (
         id, name, path, system, desc, image, video, marquee, thumbnail,
@@ -741,7 +918,7 @@ export class DatabaseService {
         favorite, hidden, kidgame, playcount, lastplayed,
         region, lang, emulator, core, sortname, tags,
         gamefamily, arcadesystem, languages, cheevos_id, cheevos_hash,
-        file_size, file_mtime, crc32
+        file_size, file_mtime, crc32, md5, gametime, scrap_name, scrap_date
       ) VALUES (
         @id, @name, @path, @system, @desc, @image, @video, @marquee, @thumbnail,
         @fanart, @titleshot, @wheel, @mix, @boxback, @bezel, @manual, @magazine, @map,
@@ -749,7 +926,7 @@ export class DatabaseService {
         @favorite, @hidden, @kidgame, @playcount, @lastplayed,
         @region, @lang, @emulator, @core, @sortname, @tags,
         @gamefamily, @arcadesystem, @languages, @cheevos_id, @cheevos_hash,
-        @file_size, @file_mtime, @crc32
+        @file_size, @file_mtime, @crc32, @md5, @gametime, @scrap_name, @scrap_date
       )
     `).run({
       id: g.id || g.path,
@@ -757,19 +934,19 @@ export class DatabaseService {
       path: g.path || '',
       system: g.system,
       desc: g.desc || null,
-      image: g.image || null,
-      video: g.video || null,
-      marquee: g.marquee || null,
-      thumbnail: g.thumbnail || null,
-      fanart: g.fanart || null,
-      titleshot: g.titleshot || null,
-      wheel: g.wheel || null,
-      mix: g.mix || null,
-      boxback: g.boxback || null,
-      bezel: g.bezel || null,
-      manual: g.manual || null,
-      magazine: g.magazine || null,
-      map: g.map || null,
+      image: makeRelative(g.image),
+      video: makeRelative(g.video),
+      marquee: makeRelative(g.marquee),
+      thumbnail: makeRelative(g.thumbnail),
+      fanart: makeRelative(g.fanart),
+      titleshot: makeRelative(g.titleshot),
+      wheel: makeRelative(g.wheel),
+      mix: makeRelative(g.mix),
+      boxback: makeRelative(g.boxback),
+      bezel: makeRelative(g.bezel),
+      manual: makeRelative(g.manual),
+      magazine: makeRelative(g.magazine),
+      map: makeRelative(g.map),
       rating: g.rating != null ? g.rating : null,
       releasedate: g.releasedate || null,
       developer: g.developer || null,
@@ -794,7 +971,11 @@ export class DatabaseService {
       cheevos_hash: g.cheevosHash || null,
       file_size: null,
       file_mtime: null,
-      crc32: g.crc32 ? String(g.crc32).trim().toUpperCase() : null
+      crc32: g.crc32 ? String(g.crc32).trim().toUpperCase() : null,
+      md5: g.md5 || null,
+      gametime: g.gametime ? parseInt(String(g.gametime), 10) : null,
+      scrap_name: g.scrapName || g.scrap_name || null,
+      scrap_date: g.scrapDate || g.scrap_date || null
     })
   }
 
@@ -808,18 +989,18 @@ export class DatabaseService {
   /**
    * Rebuild the entire database from scratch.
    */
-  public rebuildAll(
+  public async rebuildAll(
     systems: System[],
     scanPhysicalGames: (systemPath: string, extensions: string[], systemName: string) => Game[],
     onProgress?: (systemName: string, current: number, total: number) => void
-  ): void {
+  ): Promise<void> {
     const db = this.ensureOpen()
 
     console.log('🗑️  Clearing database for full rebuild...')
     db.exec('DELETE FROM games')
     db.exec('DELETE FROM systems')
 
-    this.syncAll(systems, scanPhysicalGames, onProgress)
+    await this.syncAll(systems, scanPhysicalGames, onProgress)
   }
 
   /**
@@ -835,17 +1016,22 @@ export class DatabaseService {
    */
   public getSystemSyncInfo(): { name: string; lastScanAt: number; gameCount: number }[] {
     const db = this.ensureOpen()
-    const rows = db.prepare(`
-      SELECT s.name, s.last_scan_at,
-             (SELECT COUNT(*) FROM games g WHERE g.system = s.name AND g.hidden = 0) as game_count
-      FROM systems s
-      ORDER BY s.name
-    `).all() as any[]
+    
+    // 1. Get all systems
+    const systems = db.prepare('SELECT name, last_scan_at FROM systems ORDER BY name').all() as any[]
+    
+    // 2. Get game counts grouped by system in one query
+    const counts = db.prepare('SELECT system, COUNT(*) as count FROM games WHERE hidden = 0 GROUP BY system').all() as any[]
+    
+    const countMap = new Map<string, number>()
+    counts.forEach(row => {
+      countMap.set(row.system, row.count)
+    })
 
-    return rows.map(r => ({
-      name: r.name,
-      lastScanAt: r.last_scan_at || 0,
-      gameCount: r.game_count || 0
+    return systems.map(s => ({
+      name: s.name,
+      lastScanAt: s.last_scan_at || 0,
+      gameCount: countMap.get(s.name) || 0
     }))
   }
 
@@ -870,24 +1056,105 @@ export class DatabaseService {
     return rows.map(r => this.rowToGame(r))
   }
 
-  // ─── Internal Helpers ────────────────────────────────────────
+  public getGamesPaginated(
+    system: string,
+    page: number,
+    pageSize: number,
+    search: string,
+    sortBy: string,
+    sortDir: string
+  ): { games: Game[]; total: number; pages: number } {
+    const db = this.ensureOpen()
+    const offset = (page - 1) * pageSize
+    
+    // Validate sort parameters to prevent SQL injection
+    const allowedSortFields = [
+      'name', 'system', 'rating', 'releasedate', 'playcount',
+      'lastplayed', 'favorite', 'hidden', 'developer', 'publisher', 'genre'
+    ]
+    const activeSortBy = allowedSortFields.includes(sortBy) ? sortBy : 'name'
+    const activeSortDir = (sortDir.toUpperCase() === 'DESC') ? 'DESC' : 'ASC'
+
+    let whereClauses: string[] = []
+    const params: any[] = []
+
+    if (system && system !== 'all') {
+      whereClauses.push('system = ?')
+      params.push(system)
+    }
+
+    if (search && search.trim().length > 0) {
+      whereClauses.push('(name LIKE ? OR desc LIKE ? OR developer LIKE ? OR publisher LIKE ? OR genre LIKE ?)')
+      const searchWildcard = `%${search.trim()}%`
+      params.push(searchWildcard, searchWildcard, searchWildcard, searchWildcard, searchWildcard)
+    }
+
+    const whereString = whereClauses.length > 0 ? `WHERE ${whereClauses.join(' AND ')}` : ''
+
+    // 1. Get total count
+    const countQuery = `SELECT COUNT(*) as count FROM games ${whereString}`
+    const countRow = db.prepare(countQuery).get(...params) as any
+    const total = countRow?.count || 0
+
+    // 2. Get paginated rows
+    const selectQuery = `
+      SELECT * FROM games 
+      ${whereString} 
+      ORDER BY ${activeSortBy === 'name' ? 'COALESCE(sortname, name)' : activeSortBy} COLLATE NOCASE ${activeSortDir} 
+      LIMIT ? OFFSET ?
+    `
+    const selectParams = [...params, pageSize, offset]
+    const rows = db.prepare(selectQuery).all(...selectParams) as any[]
+    
+    const games = rows.map(r => this.rowToGame(r))
+    const pages = Math.ceil(total / pageSize)
+
+    return { games, total, pages }
+  }
+
+
+  private toRelativePath(systemPath: string, p?: string | null): string | null {
+    if (!p || typeof p !== 'string') return null
+    if (p.startsWith('http')) return p
+    
+    // If it's already a relative path, normalize slashes
+    if (!isAbsolute(p) && !p.match(/^[a-zA-Z]:/)) {
+      return p.replace(/\\/g, '/')
+    }
+    
+    // Resolve relative path relative to systemPath
+    const rel = relative(systemPath, p)
+    const normalized = rel.replace(/\\/g, '/')
+    return normalized.startsWith('.') ? normalized : './' + normalized
+  }
+
+  private toAbsolutePath(systemPath: string, p?: string | null): string | null {
+    if (!p || typeof p !== 'string') return null
+    if (p.startsWith('http') || isAbsolute(p) || p.match(/^[a-zA-Z]:/)) {
+      return p.replace(/\\/g, '/')
+    }
+    return resolve(systemPath, p).replace(/\\/g, '/')
+  }
 
   /**
    * Convert a database row to a Game object.
    */
   private rowToGame(row: any): Game {
+    const systemPath = join(getRomsPath(), row.system)
+    const resolvePath = (p?: string | null) => this.toAbsolutePath(systemPath, p) || undefined
+
     return {
       id: row.id || row.path,
       name: row.name,
       path: row.path,
       system: row.system,
       desc: row.desc || undefined,
-      image: row.image || undefined,
-      video: row.video || undefined,
-      marquee: row.marquee || undefined,
-      thumbnail: row.thumbnail || undefined,
-      fanart: row.fanart || undefined,
-      titleshot: row.titleshot || undefined,
+      image: resolvePath(row.image),
+      video: resolvePath(row.video),
+      marquee: resolvePath(row.marquee),
+      thumbnail: resolvePath(row.thumbnail),
+      fanart: resolvePath(row.fanart),
+      titleshot: resolvePath(row.titleshot),
       rating: row.rating != null ? row.rating : undefined,
       releasedate: row.releasedate || undefined,
       developer: row.developer || undefined,
@@ -903,20 +1170,27 @@ export class DatabaseService {
       core: row.core || undefined,
       sortname: row.sortname || undefined,
       tags: row.tags || undefined,
-      boxback: row.boxback || undefined,
-      bezel: row.bezel || undefined,
-      manual: row.manual || undefined,
-      magazine: row.magazine || undefined,
-      map: row.map || undefined,
+      boxback: resolvePath(row.boxback),
+      bezel: resolvePath(row.bezel),
+      manual: resolvePath(row.manual),
+      magazine: resolvePath(row.magazine),
+      map: resolvePath(row.map),
       gamefamily: row.gamefamily || undefined,
       arcadesystem: row.arcadesystem || undefined,
       languages: row.languages || undefined,
       region: row.region || undefined,
       cheevosId: row.cheevos_id || undefined,
       cheevosHash: row.cheevos_hash || undefined,
-      crc32: row.crc32 || undefined
+      crc32: row.crc32 || undefined,
+      md5: row.md5 || undefined,
+      gametime: row.gametime || undefined,
+      scrapName: row.scrap_name || undefined,
+      scrapDate: row.scrap_date || undefined,
+      wheel: resolvePath(row.wheel),
+      mix: resolvePath(row.mix)
     } as any
   }
+
 
   public getRandomGameWithMedia(mediaType: 'video' | 'image'): Game | null {
     const db = this.ensureOpen()

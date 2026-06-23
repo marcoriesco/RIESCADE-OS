@@ -63,7 +63,19 @@ const api = {
   downloadTempMedia: (url: string) => ipcRenderer.invoke('download-temp-media', url),
   getRiescadeLogoPath: () => ipcRenderer.invoke('get-riescade-logo-path'),
 
+  // DB Manager APIs
+  dbGetGamesPaginated: (system: string, page: number, pageSize: number, search: string, sortBy: string, sortDir: string) =>
+    ipcRenderer.invoke('db-get-games-paginated', system, page, pageSize, search, sortBy, sortDir),
+  dbUpdateGame: (game: any) => ipcRenderer.invoke('db-update-game', game),
+  dbDeleteGames: (items: { system: string; path: string; deletePhysical?: boolean }[]) =>
+    ipcRenderer.invoke('db-delete-games', items),
+  dbGetSystemsInfo: () => ipcRenderer.invoke('db-get-systems-info'),
+  dbGetStats: () => ipcRenderer.invoke('db-get-stats'),
+  dbVacuum: () => ipcRenderer.invoke('db-vacuum'),
+  dbRebuild: () => ipcRenderer.invoke('db-rebuild'),
+
   // Events
+
   on: (channel: string, callback: (...args: any[]) => void) => {
     const subscription = (event: any, ...args: any[]) => callback(event, ...args)
     ipcRenderer.on(channel, subscription)

@@ -70,6 +70,14 @@ export class LauncherService {
       const tempDir = join(tmpdir(), 'riescade.tmp')
       if (!existsSync(tempDir)) mkdirSync(tempDir, { recursive: true })
       
+      const resolvePath = (p?: string | null): string => {
+        if (!p || typeof p !== 'string') return ''
+        if (p.startsWith('http') || p.match(/^[a-zA-Z]:/) || p.startsWith('/')) {
+          return p.replace(/\\/g, '/')
+        }
+        return resolve(system.path, p).replace(/\\/g, '/')
+      }
+
       const gameXmlPath = join(tempDir, 'game.xml')
       const gameXmlContent = `<?xml version="1.0"?>
 <gameList>
@@ -77,8 +85,8 @@ export class LauncherService {
     <path>${game.path}</path>
     <name>${game.name}</name>
     <desc>${game.desc || ''}</desc>
-    <image>${game.image || ''}</image>
-    <video>${game.video || ''}</video>
+    <image>${resolvePath(game.image)}</image>
+    <video>${resolvePath(game.video)}</video>
     <rating>${game.rating || 0}</rating>
     <releasedate>${game.releasedate || ''}</releasedate>
     <developer>${game.developer || ''}</developer>

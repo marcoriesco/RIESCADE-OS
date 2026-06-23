@@ -11,8 +11,8 @@ import { ScraperService } from './services/ScraperService'
 import { RomsWatcherService } from './services/RomsWatcherService'
 import { registerUpdaterIpc } from './services/UpdaterService'
 import { Game, System } from '../shared/types'
-import { watch, FSWatcher, readFileSync, existsSync, writeFileSync, mkdirSync } from 'fs'
-import { getRetroBatPath, getConfigPath, getResourcesPath, getRiescadePath } from './utils/paths'
+import { watch, FSWatcher, readFileSync, existsSync, writeFileSync, mkdirSync, statSync } from 'fs'
+import { getRetroBatPath, getConfigPath, getResourcesPath, getRiescadePath, getDatabasePath } from './utils/paths'
 import { XMLParser, XMLBuilder } from 'fast-xml-parser'
 import { SYSTEM_TO_SCREENSCRAPER_PLATFORM } from './services/ScraperService'
 
@@ -92,6 +92,7 @@ function createWindow(): void {
     show: false,
     frame: false,
     autoHideMenuBar: true,
+    backgroundColor: '#0c0e14',
     icon: join(getResourcesPath(), 'riescade.ico'),
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
@@ -157,10 +158,11 @@ function createAppWindow(type: 'system' | 'tool', id: string): void {
   let title = id.toUpperCase()
 
   if (type === 'tool') {
-    if (id === 'library') { width = 980; height = 620; title = 'Biblioteca Gamer'; }
+    if (id === 'library') { width = 980; height = 620; title = 'Biblioteca'; }
     else if (id === 'saves') { width = 760; height = 540; title = 'Gerenciador de Saves'; }
     else if (id === 'achievements') { width = 720; height = 520; title = 'Conquistas'; }
     else if (id === 'settings') { width = 820; height = 560; title = 'Configurações'; }
+    else if (id === 'database') { width = 1024; height = 680; title = 'Banco de Dados'; }
   } else {
     try {
       const sys = libraryService.getSystems().find(s => s.name.toLowerCase() === id.toLowerCase())
@@ -178,9 +180,10 @@ function createAppWindow(type: 'system' | 'tool', id: string): void {
   const subWindowOptions: any = {
     width: savedWidth !== null ? parseInt(savedWidth, 10) : width,
     height: savedHeight !== null ? parseInt(savedHeight, 10) : height,
-    show: false,
+    show: true,
     frame: false,
     autoHideMenuBar: true,
+    backgroundColor: '#0c0e14',
     title: `RIESCADE OS - ${title}`,
     icon: join(getResourcesPath(), 'riescade.ico'),
     webPreferences: {
@@ -202,10 +205,6 @@ function createAppWindow(type: 'system' | 'tool', id: string): void {
   }
 
   activeSubWindows.set(winKey, subWindow)
-
-  subWindow.on('ready-to-show', () => {
-    subWindow.show()
-  })
 
   subWindow.on('show', () => {
     sendToMainWindow('subwindow-state-changed', { type, id, state: 'visible' })
@@ -367,7 +366,7 @@ app.whenReady().then(() => {
   ipcMain.handle('rebuild-database', async () => {
     const db = LibraryService.getDatabase()
     LibraryService.clearCache()
-    libraryService.rebuildDatabase((sysName, current, total) => {
+    await libraryService.rebuildDatabase((sysName, current, total) => {
       if (mainWindow && !mainWindow.isDestroyed()) {
         mainWindow.webContents.send('systems-loading-progress', Math.round((current / total) * 100), 'INDEXING_DATABASE')
       }
@@ -378,6 +377,82 @@ app.whenReady().then(() => {
   ipcMain.handle('get-library-mode', async () => {
     return LibraryService.isDbMode() ? 'database' : 'gamelist'
   })
+
+  ipcMain.handle('db-get-games-paginated', async (_, system, page, pageSize, search, sortBy, sortDir) => {
+    const db = LibraryService.getDatabase()
+    if (db.isOpen()) {
+      return db.getGamesPaginated(system, page, pageSize, search, sortBy, sortDir)
+    }
+    return { games: [], total: 0, pages: 0 }
+  })
+
+  ipcMain.handle('db-update-game', async (_, game) => {
+    libraryService.updateGame(game.system, game)
+    return true
+  })
+
+  ipcMain.handle('db-delete-games', async (_, items: { system: string; path: string; deletePhysical?: boolean }[]) => {
+    for (const item of items) {
+      try {
+        libraryService.deleteGame(item.system, item.path, !!item.deletePhysical)
+      } catch (e) {
+        console.error(`Failed to delete game ${item.path} from system ${item.system}:`, e)
+      }
+    }
+    return true
+  })
+
+  ipcMain.handle('db-get-systems-info', async () => {
+    const db = LibraryService.getDatabase()
+    if (db.isOpen()) {
+      return db.getSystemSyncInfo()
+    }
+    return []
+  })
+
+  ipcMain.handle('db-get-stats', async () => {
+    const db = LibraryService.getDatabase()
+    if (!db.isOpen()) return { totalGames: 0, totalSystems: 0, dbSize: 0, lastSyncAt: 0 }
+    
+    const dbPath = getDatabasePath()
+    let dbSize = 0
+    try {
+      if (existsSync(dbPath)) {
+        dbSize = statSync(dbPath).size
+      }
+    } catch {}
+
+    const totalGamesRow = db.prepare('SELECT COUNT(*) as count FROM games').get() as any
+    const totalSystemsRow = db.prepare("SELECT COUNT(*) as count FROM systems WHERE name != '__es_systems.cfg'").get() as any
+    const lastSyncRow = db.prepare('SELECT MAX(last_scan_at) as last_scan FROM systems').get() as any
+
+    return {
+      totalGames: totalGamesRow?.count || 0,
+      totalSystems: totalSystemsRow?.count || 0,
+      dbSize,
+      lastSyncAt: lastSyncRow?.last_scan || 0
+    }
+  })
+
+  ipcMain.handle('db-vacuum', async () => {
+    const db = LibraryService.getDatabase()
+    if (db.isOpen()) {
+      db.vacuum()
+      return true
+    }
+    return false
+  })
+
+  ipcMain.handle('db-rebuild', async () => {
+    LibraryService.clearCache()
+    await libraryService.rebuildDatabase((sysName, current, total) => {
+      if (mainWindow && !mainWindow.isDestroyed()) {
+        mainWindow.webContents.send('systems-loading-progress', Math.round((current / total) * 100), 'INDEXING_DATABASE')
+      }
+    })
+    return true
+  })
+
 
   ipcMain.handle('get-all-media-paths', async () => {
     const db = LibraryService.getDatabase()

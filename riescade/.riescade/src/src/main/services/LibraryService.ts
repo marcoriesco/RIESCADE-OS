@@ -29,22 +29,8 @@ export class LibraryService {
     this.gamelistParser = new GamelistParser()
   }
 
-  /**
-   * Check if the library is in database mode (default) vs gamelist.xml mode.
-   */
   public static isDbMode(): boolean {
-    try {
-      const settings = new SettingsParser()
-      const parseGamelistOnly = settings.getSetting('ParseGamelistOnly', 'bool') === true
-      if (parseGamelistOnly) {
-        return false
-      }
-      const mode = settings.getSetting('LibraryMode', 'string')
-      // Default to 'database' if not set
-      return mode !== 'gamelist'
-    } catch {
-      return true // default to DB mode
-    }
+    return true // Always DB mode
   }
 
   /**
@@ -651,7 +637,7 @@ export class LibraryService {
 
       // Sync all systems (only changed ones will be re-indexed)
       const scanFn = this.scanPhysicalGames.bind(this)
-      dbService.syncAll(allSystems, scanFn, (sysName, current, total) => {
+      await dbService.syncAll(allSystems, scanFn, (sysName, current, total) => {
         const progress = 10 + Math.round((current / total) * 40)
         sendProgress(progress, initialStatusKey)
       })
@@ -778,13 +764,13 @@ export class LibraryService {
     } catch (err) {}
   }
 
-  public rebuildDatabase(onProgress?: (systemName: string, current: number, total: number) => void): void {
+  public async rebuildDatabase(onProgress?: (systemName: string, current: number, total: number) => void): Promise<void> {
     if (LibraryService.isDbMode()) {
       const dbService = LibraryService.databaseService
       dbService.open()
       const allSystems = this.systemsParser.parse()
       const scanFn = this.scanPhysicalGames.bind(this)
-      dbService.rebuildAll(allSystems, scanFn, onProgress)
+      await dbService.rebuildAll(allSystems, scanFn, onProgress)
     }
   }
 
@@ -1518,55 +1504,8 @@ export class LibraryService {
 
   public updateGame(systemName: string, gameData: Game): void {
     const targetSystem = gameData.system || systemName
-    const configPath = getConfigPath()
-    const gamelistPath = join(configPath, 'gamelists', targetSystem, 'gamelist.xml')
-    const romsGamelistPath = join(getRomsPath(), targetSystem, 'gamelist.xml')
     
-    const systems = this.getSystems()
-    const system = systems.find(s => s.name.toLowerCase() === targetSystem.toLowerCase())
-    const systemGamelistPath = system ? join(system.path, 'gamelist.xml') : ''
-
-    const targetPath = romsGamelistPath
-    if (!existsSync(targetPath)) {
-      const fs = require('fs')
-      const dir = dirname(targetPath)
-      if (!fs.existsSync(dir)) {
-        fs.mkdirSync(dir, { recursive: true })
-      }
-      // If there's an existing gamelist elsewhere, copy it to initialize targetPath
-      let initialized = false
-      if (existsSync(gamelistPath)) {
-        try {
-          fs.copyFileSync(gamelistPath, targetPath)
-          initialized = true
-        } catch (e) {
-          console.error(`Failed to copy existing gamelist from ${gamelistPath} to ${targetPath}:`, e)
-        }
-      } else if (systemGamelistPath && existsSync(systemGamelistPath)) {
-        try {
-          fs.copyFileSync(systemGamelistPath, targetPath)
-          initialized = true
-        } catch (e) {
-          console.error(`Failed to copy existing gamelist from ${systemGamelistPath} to ${targetPath}:`, e)
-        }
-      }
-      if (!initialized) {
-        fs.writeFileSync(targetPath, '<?xml version="1.0"?>\n<gameList>\n</gameList>\n', 'utf-8')
-      }
-    }
-
-    const games = this.gamelistParser.parse(targetPath, targetSystem)
-    const index = games.findIndex(g => normalizePathForComparison(g.path) === normalizePathForComparison(gameData.path))
-    
-    if (index !== -1) {
-      games[index] = { ...games[index], ...gameData }
-    } else {
-      games.push(gameData)
-    }
-
-    this.gamelistParser.save(targetPath, games)
-
-    // Dual-write: also update in SQLite database
+    // Update in SQLite database
     if (LibraryService.isDbMode() && LibraryService.databaseService.isOpen()) {
       try {
         LibraryService.databaseService.upsertGame(gameData)
@@ -1590,34 +1529,12 @@ export class LibraryService {
 
   public deleteGame(systemName: string, gamePath: string, deletePhysical: boolean): void {
     const fs = require('fs')
-    const configPath = getConfigPath()
     const targetSystem = systemName
 
-    // 1. Identify all possible gamelist.xml paths for this system
     const systems = this.getSystems()
     const system = systems.find(s => s.name.toLowerCase() === targetSystem.toLowerCase())
-    const systemGamelistPath = system ? join(system.path, 'gamelist.xml') : ''
 
-    const gamelistPaths = [
-      join(configPath, 'gamelists', targetSystem, 'gamelist.xml'),
-      join(getRomsPath(), targetSystem, 'gamelist.xml'),
-      systemGamelistPath
-    ].filter(p => p && existsSync(p))
-
-    // 2. Remove game from all existing gamelists
-    for (const gp of gamelistPaths) {
-      try {
-        const games = this.gamelistParser.parse(gp, targetSystem)
-        const filteredGames = games.filter(
-          g => normalizePathForComparison(g.path) !== normalizePathForComparison(gamePath)
-        )
-        this.gamelistParser.save(gp, filteredGames)
-      } catch (e) {
-        console.error(`Failed to delete game from gamelist ${gp}:`, e)
-      }
-    }
-
-    // 3. Remove game from custom collections
+    // 1. Remove game from custom collections
     try {
       const collections = this.getCollectionsForGame(targetSystem, gamePath)
       for (const col of collections) {
@@ -1627,7 +1544,7 @@ export class LibraryService {
       console.error(`Failed to remove game from custom collections:`, e)
     }
 
-    // 3.5 Dual-write: also delete from SQLite database
+    // 2. Delete from SQLite database
     if (LibraryService.isDbMode() && LibraryService.databaseService.isOpen()) {
       try {
         LibraryService.databaseService.deleteGameFromDb(targetSystem, gamePath)
@@ -1636,7 +1553,7 @@ export class LibraryService {
       }
     }
 
-    // 4. Update in-memory cache
+    // 3. Update in-memory cache
     const cached = LibraryService.cachedGames.get(targetSystem.toLowerCase())
     if (cached) {
       const filtered = cached.filter(
@@ -1645,7 +1562,7 @@ export class LibraryService {
       LibraryService.cachedGames.set(targetSystem.toLowerCase(), filtered)
     }
 
-    // 5. If requested, delete the physical file/folder
+    // 4. If requested, delete the physical file/folder
     if (deletePhysical && system && system.path) {
       try {
         const absRomPath = resolve(system.path, gamePath)
@@ -1663,7 +1580,7 @@ export class LibraryService {
       }
     }
 
-    // 6. Rebuild all auto-collections
+    // 5. Rebuild all auto-collections
     this.rebuildAutoCollections()
   }
 
@@ -1690,6 +1607,28 @@ export class LibraryService {
       s.name !== 'collections' && 
       !autoCollections.includes(s.name.toLowerCase())
     )
+
+    if (LibraryService.isDbMode() && LibraryService.databaseService.isOpen()) {
+      // DB Mode fast-path: invalidate cached games for auto-collections and update quick counts directly from DB
+      const displayedNames = displayed.map(s => s.name)
+      for (const col of autoCollections) {
+        const isDuplicate = physicalSystems.some(s => s.name.toLowerCase() === col.toLowerCase())
+        const cacheKey = (isDuplicate ? `auto-${col}` : col).toLowerCase()
+        LibraryService.cachedGames.delete(cacheKey)
+
+        let countKey = col
+        if (col.startsWith('_')) countKey = col.substring(1)
+        else if (col.startsWith('z')) countKey = col.substring(1)
+        try {
+          const count = LibraryService.databaseService.getAutoCollectionCount(countKey, displayedNames)
+          LibraryService.quickAutoCounts.set(countKey, count)
+        } catch (err) {
+          console.error(`Failed to update count for auto collection ${countKey} in DB mode:`, err)
+        }
+      }
+      return
+    }
+
     for (const col of autoCollections) {
       const isDuplicate = physicalSystems.some(s => s.name.toLowerCase() === col.toLowerCase())
       const cacheKey = (isDuplicate ? `auto-${col}` : col).toLowerCase()

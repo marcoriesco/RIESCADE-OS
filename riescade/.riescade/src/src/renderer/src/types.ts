@@ -1,4 +1,4 @@
-export type ToolAppId = "library" | "saves" | "settings" | "achievements";
+export type ToolAppId = "library" | "saves" | "settings" | "achievements" | "database";
 
 export type System = {
   name: string;
@@ -38,7 +38,29 @@ export type Game = {
   wheel?: string;
   emulator?: string;
   core?: string; // Appears in App.tsx line 1288
+  titleshot?: string;
+  mix?: string;
+  boxback?: string;
+  bezel?: string;
+  manual?: string;
+  magazine?: string;
+  map?: string;
+  gamefamily?: string;
+  arcadesystem?: string;
+  languages?: string;
+  region?: string;
+  lang?: string;
+  sortname?: string;
+  tags?: string;
+  crc32?: string;
+  md5?: string;
+  gametime?: number;
+  scrapName?: string;
+  scrapDate?: string;
+  hidden?: boolean;
+  kidgame?: boolean;
 };
+
 
 export type WinState = {
   id: string;

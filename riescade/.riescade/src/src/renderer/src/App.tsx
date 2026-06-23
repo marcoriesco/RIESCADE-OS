@@ -365,8 +365,12 @@ export default function App() {
 
   // Fetch Systems & Settings on Mount
   useEffect(() => {
+    const initPromise = windowType !== null 
+      ? Promise.resolve() 
+      : window.api.preloadLibrary();
+
     setLoadingMessage("Carregando banco de dados...");
-    window.api.preloadLibrary().then(() => {
+    initPromise.then(() => {
       setLoadingMessage("Sincronizando plataformas...");
       Promise.all([
         window.api.getSystems(),

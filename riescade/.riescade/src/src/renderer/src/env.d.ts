@@ -51,7 +51,15 @@ declare global {
       downloadGameMedia: (systemName: string, gamePath: string, matchData: any) => Promise<any>
       downloadTempMedia: (url: string) => Promise<string>
       getRiescadeLogoPath: () => Promise<string>
+      dbGetGamesPaginated: (system: string, page: number, pageSize: number, search: string, sortBy: string, sortDir: string) => Promise<{ games: any[]; total: number; pages: number }>
+      dbUpdateGame: (game: any) => Promise<boolean>
+      dbDeleteGames: (items: { system: string; path: string; deletePhysical?: boolean }[]) => Promise<boolean>
+      dbGetSystemsInfo: () => Promise<{ name: string; fullname: string; lastScanAt: number; gameCount: number }[]>
+      dbGetStats: () => Promise<{ totalGames: number; totalSystems: number; dbSize: number; lastSyncAt: number }>
+      dbVacuum: () => Promise<boolean>
+      dbRebuild: () => Promise<boolean>
       on: (channel: string, callback: (...args: any[]) => void) => () => void
+
     }
   }
 }
