@@ -1,6 +1,6 @@
 {
   "name": "riescade",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "RIESCADE Frontend",
   "main": "./out/main/index.js",
   "author": "Marco Riesco",
@@ -9,6 +9,7 @@
     "build": "electron-vite build && node -e \"const fs = require('fs'); const path = require('path'); const src = path.join('src', 'main', 'resources', 'riescade_systems.json'); const destDir = path.join('out', 'main', 'resources'); const dest = path.join(destDir, 'riescade_systems.json'); if (!fs.existsSync(destDir)) fs.mkdirSync(destDir, { recursive: true }); fs.copyFileSync(src, dest); console.log('Copied riescade_systems.json to out/main/resources');\"",
     "dist": "npm run build && electron-builder --win --dir",
     "deploy": "npm run dist && node scripts/deploy.js",
+    "release": "node scripts/release.js",
     "preview": "electron-vite preview"
   },
   "dependencies": {
