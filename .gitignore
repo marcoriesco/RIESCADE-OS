@@ -1,11 +1,77 @@
+# Dependencies
+node_modules/
+modern-frontend/node_modules/
+
+# Build artifacts
+dist/
+out/
+*.exe
+*.asar
+
+# Electron deployment binaries (.riescade/)
+riescade/.riescade/*.dll
+riescade/.riescade/*.pak
+riescade/.riescade/*.bin
+riescade/.riescade/*.dat
+riescade/.riescade/*.html
+riescade/.riescade/*.json
+riescade/.riescade/*.ico
+riescade/.riescade/*.txt
+riescade/.riescade/locales/*.pak
+riescade/.riescade/resources/app.asar
+riescade/.riescade/src/debug_*.log
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Logs
+*.log
+*.log.old
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Temp, Backup, and Database files
+*.tmp
+*.old
+*.db
+
+# IDEs and Tools
+.vscode/
+.idea/
+.gemini/
+*.swp
+*.swo
+
+# User Data / Gaming Assets (Keep structure but ignore content if large)
 roms
 bios
 emulators
+emulators_release
+saves/
+screenshots/
+records/
 
-src/node_modules/
-src/dist/
-src/out/
+# Local environment variables
+.env
+.env.local
 
-.riescade/
+# Release artifacts
+RIESCADE_OS.zip
+RIESCADE_OS.7z
 
-*.log
+# Isolated Emulator Launcher Development
+riescade/launcher/src/
+
+# System folders not needed in release (used by external tools: configgen, rb_gui, installer)
+system/configgen/
+system/download/
+system/modules/
+system/scripts/
+system/templates/

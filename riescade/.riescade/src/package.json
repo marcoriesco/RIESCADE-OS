@@ -1,0 +1,70 @@
+{
+  "name": "riescade",
+  "version": "2.0.0",
+  "description": "RIESCADE Frontend",
+  "main": "./out/main/index.js",
+  "author": "Marco Riesco",
+  "scripts": {
+    "dev": "electron-vite dev",
+    "build": "electron-vite build && node -e \"const fs = require('fs'); const path = require('path'); const src = path.join('src', 'main', 'resources', 'riescade_systems.json'); const destDir = path.join('out', 'main', 'resources'); const dest = path.join(destDir, 'riescade_systems.json'); if (!fs.existsSync(destDir)) fs.mkdirSync(destDir, { recursive: true }); fs.copyFileSync(src, dest); console.log('Copied riescade_systems.json to out/main/resources');\"",
+    "dist": "npm run build && electron-builder --win --dir",
+    "deploy": "npm run dist && node scripts/deploy.js",
+    "preview": "electron-vite preview"
+  },
+  "dependencies": {
+    "@electron-toolkit/preload": "^3.0.0",
+    "@electron-toolkit/utils": "^3.0.0",
+    "@radix-ui/react-toast": "^1.2.17",
+    "@tailwindcss/vite": "^4.3.0",
+    "better-sqlite3": "^12.10.0",
+    "fast-xml-parser": "^4.4.0",
+    "lucide-react": "^1.16.0",
+    "overlayscrollbars": "^2.16.0",
+    "overlayscrollbars-react": "^0.5.6",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "tailwindcss": "^4.3.0"
+  },
+  "devDependencies": {
+    "@electron-toolkit/eslint-config-prettier": "^2.0.0",
+    "@electron-toolkit/eslint-config-ts": "^2.0.0",
+    "@electron-toolkit/tsconfig": "^1.0.1",
+    "@types/better-sqlite3": "^7.6.13",
+    "@types/node": "^20.14.8",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^4.3.1",
+    "chokidar": "^5.0.0",
+    "electron": "^31.0.2",
+    "electron-builder": "^24.13.3",
+    "electron-vite": "^2.3.0",
+    "eslint": "^8.57.0",
+    "prettier": "^3.3.2",
+    "sass": "^1.99.0",
+    "typescript": "^5.5.2",
+    "vite": "^5.3.1"
+  },
+  "build": {
+    "appId": "com.riescade.frontend",
+    "productName": "RIESCADE",
+    "directories": {
+      "output": "dist"
+    },
+    "win": {
+      "target": "dir",
+      "artifactName": "${productName}.${ext}",
+      "icon": "src/main/resources/riescade.ico"
+    },
+    "files": [
+      "out/**/*",
+      "node_modules/better-sqlite3/**/*",
+      "node_modules/bindings/**/*",
+      "node_modules/file-uri-to-path/**/*",
+      "node_modules/prebuild-install/**/*"
+    ],
+    "asarUnpack": [
+      "node_modules/better-sqlite3/**/*.node"
+    ],
+    "extraResources": []
+  }
+}
