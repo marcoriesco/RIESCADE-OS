@@ -1,11 +1,55 @@
 import React, { useState, useEffect } from "react";
-import { ChevronRight, Search, Folder, Star, User, Shield, Settings, Palette, Gamepad2, Volume2, Cpu, Info, Database, Trash2, Edit3, X, ChevronLeft, Filter, HardDrive, RefreshCw, Eye, EyeOff } from "lucide-react";
+import { ChevronRight, Search, Folder, Star, User, Shield, Settings, Palette, Gamepad2, Volume2, Cpu, Info, Database, Trash2, Edit3, X, ChevronLeft, Filter, HardDrive, RefreshCw, Eye, EyeOff, Check, ChevronDown, Save } from "lucide-react";
 import { System, SettingsCtx } from "../types";
 import { TOOL_APPS, getSystemTheme } from "../constants";
 import {
   SettingGroup, SettingToggle, SettingSelect, SettingSlider, SettingInput, SettingInfo
 } from "./SettingsComponents";
 import { ScrollArea } from "./ScrollArea";
+import * as Select from "@radix-ui/react-select";
+
+function RadixSelect({
+  value,
+  onValueChange,
+  options,
+  placeholder = "Selecionar..."
+}: {
+  value: string;
+  onValueChange: (val: string) => void;
+  options: { label: string; value: string }[];
+  placeholder?: string;
+}) {
+  return (
+    <Select.Root value={value} onValueChange={onValueChange}>
+      <Select.Trigger className="flex items-center justify-between gap-1.5 bg-[#121620] border border-white/10 rounded-md px-2.5 py-1 text-xs text-white/90 hover:bg-white/5 hover:border-accent transition cursor-pointer focus:outline-none focus:border-accent">
+        <Select.Value placeholder={placeholder} />
+        <Select.Icon>
+          <ChevronDown className="w-3 h-3 text-white/40" />
+        </Select.Icon>
+      </Select.Trigger>
+      
+      <Select.Portal>
+        <Select.Content className="bg-[#121620] border border-white/10 rounded-md shadow-2xl overflow-hidden z-[9999] animate-in fade-in duration-100 min-w-[var(--radix-select-trigger-width)]">
+          <Select.Viewport className="p-1">
+            {options.map(opt => (
+              <Select.Item
+                key={opt.value}
+                value={opt.value}
+                className="relative flex items-center justify-between pl-8 pr-3 py-1.5 text-xs text-white/80 hover:text-white hover:bg-white/5 rounded-md outline-none cursor-pointer select-none data-[state=checked]:text-white data-[state=checked]:bg-white/5"
+              >
+                <Select.ItemText>{opt.label}</Select.ItemText>
+                <Select.ItemIndicator className="absolute left-2 flex items-center justify-center">
+                  <Check className="w-3 h-3 text-accent" />
+                </Select.ItemIndicator>
+              </Select.Item>
+            ))}
+          </Select.Viewport>
+        </Select.Content>
+      </Select.Portal>
+    </Select.Root>
+  );
+}
+
 
 const SETTINGS_TABS = [
   { id: "conta", name: "Minha Conta", icon: User },
@@ -100,38 +144,43 @@ export default function ToolAppContent({
 
   if (appId === "library") {
     return (
-      <ScrollArea className="p-6 h-full text-white">
-        <h2 className="text-xl font-bold mb-1">Biblioteca Gamer</h2>
-        <p className="text-xs text-white/50 mb-5">Todos os seus sistemas e emuladores sincronizados</p>
-        
-        <div className="grid grid-cols-4 gap-4">
-          {systems.map(sys => {
-            const style = getSystemTheme(sys.name);
-            const SysIcon = style.icon;
-            return (
-              <div
-                key={sys.name}
-                onClick={() => onOpenSystem(sys.name)}
-                className="rounded-2xl border border-white/5 bg-white/5 p-4 hover:bg-white/10 hover:scale-[1.02] hover:border-white/15 transition cursor-pointer select-none"
-              >
-                <div className="w-full h-12 flex items-center justify-start mb-3">
-                  {sys.logo ? (
-                    <img src={sys.logo} alt={sys.fullname} className="h-full object-contain max-w-[85%] filter drop-shadow-[0_4px_6px_rgba(0,0,0,0.5)] transition-all group-hover:scale-105" />
-                  ) : (
-                    <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${style.color} flex items-center justify-center shadow-md`}>
-                      <SysIcon className="w-6 h-6 text-white" />
-                    </div>
-                  )}
-                </div>
-                <div className="font-bold text-sm truncate">{sys.fullname}</div>
-                <div className="text-[10px] text-white/40 mt-1 uppercase tracking-wider">{sys.gamecount || 0} jogos</div>
-              </div>
-            );
-          })}
+      <div className="flex flex-col h-full text-white p-6 pb-0">
+        <div className="shrink-0 mb-5">
+          <h2 className="text-xl font-bold mb-1">Biblioteca Gamer</h2>
+          <p className="text-xs text-white/50">Todos os seus sistemas e emuladores sincronizados</p>
         </div>
-      </ScrollArea>
+        
+        <ScrollArea className="flex-1 min-h-0">
+          <div className="grid grid-cols-4 gap-4 pb-6">
+            {systems.map(sys => {
+              const style = getSystemTheme(sys.name);
+              const SysIcon = style.icon;
+              return (
+                <div
+                  key={sys.name}
+                  onClick={() => onOpenSystem(sys.name)}
+                  className="rounded-2xl border border-white/5 bg-white/5 p-4 hover:bg-white/10 hover:scale-[1.02] hover:border-white/15 transition cursor-pointer select-none"
+                >
+                  <div className="w-full h-12 flex items-center justify-start mb-3">
+                    {sys.logo ? (
+                      <img src={sys.logo} alt={sys.fullname} className="h-full object-contain max-w-[85%] filter drop-shadow-[0_4px_6px_rgba(0,0,0,0.5)] transition-all group-hover:scale-105" />
+                    ) : (
+                      <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${style.color} flex items-center justify-center shadow-md`}>
+                        <SysIcon className="w-6 h-6 text-white" />
+                      </div>
+                    )}
+                  </div>
+                  <div className="font-bold text-sm truncate">{sys.fullname}</div>
+                  <div className="text-[10px] text-white/40 mt-1 uppercase tracking-wider">{sys.gamecount || 0} jogos</div>
+                </div>
+              );
+            })}
+          </div>
+        </ScrollArea>
+      </div>
     );
   }
+
 
   if (appId === "settings") {
     // --- Helper: read a setting value ---
@@ -233,7 +282,7 @@ export default function ToolAppContent({
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-white/35" />
               <input 
                 placeholder="Buscar configurações..."
-                className="w-full bg-white/5 border border-white/5 rounded-md pl-9 pr-3 py-2 text-xs text-white placeholder:text-white/30 focus:outline-none focus:border-white/15 focus:bg-white/[0.07] transition duration-200"
+                className="w-full bg-white/5 border border-white/10 rounded-md pl-9 pr-3 py-2 text-xs text-white placeholder:text-white/30 focus:outline-none focus:border-accent hover:border-accent focus:bg-white/[0.07] transition duration-200"
               />
             </div>
           </div>
@@ -288,160 +337,166 @@ export default function ToolAppContent({
 
           {/* ===== TAB: CONTA (Account - Static) ===== */}
           {activeSettingsTab === "conta" && (
-            <ScrollArea className="flex-1">
-              <div className="pt-8 p-6 max-w-[740px]">
+            <div className="flex flex-col h-full overflow-hidden">
+              <div className="shrink-0 px-6 pt-8 pb-2 max-w-[740px]">
                 <h2 className="text-xl font-bold text-white mb-1">Minha Conta</h2>
-                <p className="text-sm text-white/40 mb-6">Gerencie suas informações pessoais e configurações de conta.</p>
-
-                {/* Account Info Section */}
-                <div className="mb-8">
-                  <h3 className="text-base font-bold text-white mb-4">Informações da conta</h3>
-                  <div className="space-y-3">
-                    {[
-                      { label: "Nome de usuário", value: "RIESCADE Player", action: "Editar" },
-                      { label: "E-mail", value: "**************@gmail.com", action: "Editar", link: "Mostrar" },
-                      { label: "Telefone", value: "*******8182", action: "Editar", link: "Mostrar" },
-                      { label: "Grupo Etário", value: "Não confirmado", action: "Confirmar" }
-                    ].map((field, i) => (
-                      <div key={i} className="flex items-center justify-between bg-black/20 border border-white/5 rounded-lg px-4 py-3">
-                        <div className="flex flex-col">
-                          <span className="text-xs text-white/40 font-medium">{field.label}</span>
-                          <span className="text-sm text-white/90">{field.value}</span>
-                        </div>
-                        <div className="flex items-center gap-3">
-                          {field.link && (
-                            <button className="text-xs text-blue-400 hover:text-blue-300 transition cursor-pointer font-medium">
-                              {field.link}
-                            </button>
-                          )}
-                          <button className="px-3 py-1.5 rounded-md bg-white/[0.06] hover:bg-white/[0.1] text-xs text-white/80 font-medium transition cursor-pointer">
-                            {field.action}
-                          </button>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Password & Security Section */}
-                <div className="mb-8">
-                  <h3 className="text-base font-bold text-white mb-4">Senha e segurança</h3>
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between bg-black/20 border border-white/5 rounded-lg px-4 py-3">
-                      <div className="flex flex-col">
-                        <span className="text-xs text-white/40 font-medium">Senha</span>
-                        <span className="text-sm text-white/90">Senha</span>
-                      </div>
-                      <button className="px-3 py-1.5 rounded-md bg-white/[0.06] hover:bg-white/[0.1] text-xs text-white/80 font-medium transition cursor-pointer">
-                        Editar
-                      </button>
-                    </div>
-                    <div className="flex items-center justify-between bg-black/20 border border-white/5 rounded-lg px-4 py-3 hover:bg-white/[0.03] transition cursor-pointer">
-                      <div className="flex flex-col">
-                        <span className="text-xs text-white/40 font-medium">Autenticação Multifatorial</span>
-                        <span className="text-sm text-white/90">Ativada</span>
-                      </div>
-                      <ChevronRight className="w-4 h-4 text-white/30" />
-                    </div>
-                    <div className="flex items-center justify-between bg-black/20 border border-white/5 rounded-lg px-4 py-3 hover:bg-white/[0.03] transition cursor-pointer">
-                      <div className="flex flex-col">
-                        <span className="text-xs text-white/40 font-medium">Dispositivos conectados</span>
-                        <span className="text-sm text-white/90">0 dispositivos</span>
-                      </div>
-                      <ChevronRight className="w-4 h-4 text-white/30" />
-                    </div>
-                  </div>
-                </div>
-
-                {/* Account Status Section */}
-                <div>
-                  <h3 className="text-base font-bold text-white mb-4">Status da Conta</h3>
-                  <div className="flex items-center gap-2.5 bg-black/20 border border-white/5 rounded-lg px-4 py-3">
-                    <div className="w-2 h-2 rounded-full bg-emerald-500 shrink-0" />
-                    <span className="text-sm text-white/70">Sua conta está toda em ordem</span>
-                  </div>
-                </div>
+                <p className="text-sm text-white/40">Gerencie suas informações pessoais e configurações de conta.</p>
               </div>
-            </ScrollArea>
+              <ScrollArea className="flex-1 min-h-0">
+                <div className="px-6 pb-6 max-w-[740px]">
+                  {/* Account Info Section */}
+                  <div className="mb-8">
+                    <h3 className="text-base font-bold text-white mb-4">Informações da conta</h3>
+                    <div className="space-y-3">
+                      {[
+                        { label: "Nome de usuário", value: "RIESCADE Player", action: "Editar" },
+                        { label: "E-mail", value: "**************@gmail.com", action: "Editar", link: "Mostrar" },
+                        { label: "Telefone", value: "*******8182", action: "Editar", link: "Mostrar" },
+                        { label: "Grupo Etário", value: "Não confirmado", action: "Confirmar" }
+                      ].map((field, i) => (
+                        <div key={i} className="flex items-center justify-between bg-black/20 border border-white/5 rounded-md px-4 py-3">
+                          <div className="flex flex-col">
+                            <span className="text-xs text-white/40 font-medium">{field.label}</span>
+                            <span className="text-sm text-white/90">{field.value}</span>
+                          </div>
+                          <div className="flex items-center gap-3">
+                            {field.link && (
+                              <button className="text-xs text-blue-400 hover:text-blue-300 transition cursor-pointer font-medium">
+                                {field.link}
+                              </button>
+                            )}
+                            <button className="px-3 py-1.5 rounded-md bg-white/[0.06] hover:bg-white/[0.1] text-xs text-white/80 font-medium transition cursor-pointer">
+                              {field.action}
+                            </button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Password & Security Section */}
+                  <div className="mb-8">
+                    <h3 className="text-base font-bold text-white mb-4">Senha e segurança</h3>
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between bg-black/20 border border-white/5 rounded-md px-4 py-3">
+                        <div className="flex flex-col">
+                          <span className="text-xs text-white/40 font-medium">Senha</span>
+                          <span className="text-sm text-white/90">Senha</span>
+                        </div>
+                        <button className="px-3 py-1.5 rounded-md bg-white/[0.06] hover:bg-white/[0.1] text-xs text-white/80 font-medium transition cursor-pointer">
+                          Editar
+                        </button>
+                      </div>
+                      <div className="flex items-center justify-between bg-black/20 border border-white/5 rounded-md px-4 py-3 hover:bg-white/[0.03] transition cursor-pointer">
+                        <div className="flex flex-col">
+                          <span className="text-xs text-white/40 font-medium">Autenticação Multifatorial</span>
+                          <span className="text-sm text-white/90">Ativada</span>
+                        </div>
+                        <ChevronRight className="w-4 h-4 text-white/30" />
+                      </div>
+                      <div className="flex items-center justify-between bg-black/20 border border-white/5 rounded-md px-4 py-3 hover:bg-white/[0.03] transition cursor-pointer">
+                        <div className="flex flex-col">
+                          <span className="text-xs text-white/40 font-medium">Dispositivos conectados</span>
+                          <span className="text-sm text-white/90">0 dispositivos</span>
+                        </div>
+                        <ChevronRight className="w-4 h-4 text-white/30" />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Account Status Section */}
+                  <div>
+                    <h3 className="text-base font-bold text-white mb-4">Status da Conta</h3>
+                    <div className="flex items-center gap-2.5 bg-black/20 border border-white/5 rounded-md px-4 py-3">
+                      <div className="w-2 h-2 rounded-full bg-emerald-500 shrink-0" />
+                      <span className="text-sm text-white/70">Sua conta está toda em ordem</span>
+                    </div>
+                  </div>
+                </div>
+              </ScrollArea>
+            </div>
           )}
 
           {/* ===== TAB: JOGOS ===== */}
           {activeSettingsTab === "jogos" && (
-            <ScrollArea className="flex-1">
-              <div className="pt-8 p-6 max-w-[740px] space-y-2">
-              <h2 className="text-xl font-bold text-white mb-1">Configurações de Jogos</h2>
-              <p className="text-sm text-white/40 mb-4">Configurações globais de emulação, vídeo, shaders e mais.</p>
-
-              <SettingGroup label="RetroAchievements" />
-              <SettingToggle label="RetroAchievements" name="global.cheevos" desc="Ativar conquistas retrô durante a emulação." ctx={ctx} />
-              <SettingInput label="Usuário" name="global.cheevos.username" ctx={ctx} />
-              <SettingInput label="Senha" name="global.cheevos.password" isPassword ctx={ctx} />
-
-              <SettingGroup label="Netplay" />
-              <SettingToggle label="Ativar Netplay" name="global.netplay" desc="Ativar jogos em rede." ctx={ctx} />
-              <SettingInput label="Apelido" name="global.netplay.nickname" ctx={ctx} />
-              <SettingInput label="Porta" name="global.netplay.port" ctx={ctx} />
-
-              <SettingGroup label="Save States" />
-              <SettingToggle label="Salvar/Carregar Automático" name="global.autosave" desc="Carrega o estado mais recente ao iniciar e salva ao sair." ctx={ctx} />
-              <SettingSelect label="Tipo de Incremento" name="global.incrementalsavestates" type="int" options={[
-                { label: "Por Save State", value: "" },
-                { label: "Por Save Slot", value: "0" },
-                { label: "Não Incrementar", value: "2" }
-              ]} ctx={ctx} />
-              <SettingSelect label="Gerenciador de States" name="global.savestates" desc="Exibe o gerenciador antes de iniciar um jogo." options={[
-                { label: "Não", value: "0" }, { label: "Sempre", value: "1" }, { label: "Se Disponível", value: "2" }
-              ]} ctx={ctx} />
-
-              <SettingGroup label="Exibição e Vídeo" />
-              <SettingSelect label="Shaders" name="global.shaderset" options={[
-                { label: "Nenhum", value: "none" }, { label: "RIESCADE", value: "[riescade]" },
-                { label: "CRT-NEW-PIXIE", value: "crt-new-pixie" }, { label: "CRT-ROYALE", value: "crt-royale" },
-                { label: "CURVATURE", value: "curvature" }, { label: "ENHANCED", value: "enhanced" },
-                { label: "FLATTEN-GLOW", value: "flatten-glow" }, { label: "HANDHELD", value: "handheld" },
-                { label: "NTSC", value: "ntsc" }, { label: "RETRO", value: "retro" },
-                { label: "SCALEFX", value: "scalefx" }, { label: "SCANLINES", value: "scanlines" },
-                { label: "TECHNICOLOR", value: "technicolor" }, { label: "VHS", value: "vhs" },
-                { label: "XBRZ-5X", value: "xbrz-5x" }, { label: "ZFAST", value: "zfast" }
-              ]} ctx={ctx} />
-              <SettingSelect label="Decorações (Bezels)" name="global.bezel" options={[
-                { label: "Nenhum", value: "none" }, { label: "Automático", value: "auto" }
-              ]} ctx={ctx} />
-              <SettingSelect label="Proporção de Tela" name="global.ratio" options={[
-                { label: "Automático", value: "auto" }, { label: "4/3", value: "4/3" }, { label: "16/9", value: "16/9" },
-                { label: "16/10", value: "16/10" }, { label: "Completo", value: "full" }
-              ]} ctx={ctx} />
-              <SettingSelect label="Modo de Vídeo" name="global.videomode" options={[
-                { label: "Automático", value: "auto" }, { label: "1080p 60Hz", value: "1920x1080@60" },
-                { label: "1080p 50Hz", value: "1920x1080@50" }, { label: "720p 60Hz", value: "1280x720@60" }
-              ]} ctx={ctx} />
-              <SettingToggle label="Forçar Tela Cheia" name="global.forcefullscreen" desc="Forçar emulador em tela cheia." ctx={ctx} />
-              <SettingToggle label="Escala Inteira (Pixel Perfect)" name="global.integerscale" ctx={ctx} />
-              <SettingToggle label="Suavizar Jogos (Bilinear)" name="global.smooth" ctx={ctx} />
-
-              <SettingGroup label="Emulação" />
-              <SettingToggle label="Rebobinar (Rewind)" name="rewind" ctx={ctx} />
-              <SettingSlider label="Taxa de Avanço Rápido" name="global.fastforward_ratio" min={0} max={50} step={1} suffix="x" ctx={ctx} />
-              <SettingToggle label="Discord Rich Presence" name="global.discord" desc="Atualiza status do Discord com o jogo atual." ctx={ctx} />
-              <SettingToggle label="Configurar Controles Automaticamente" name="global.disableautocontrollers" ctx={ctx} />
-
-              <SettingGroup label="Verificação de BIOS" />
-              <SettingToggle label="Verificar BIOS ao Iniciar Jogo" name="CheckBiosesAtLaunch" ctx={ctx} />
-
-              <SettingGroup label="Compressão" />
-              <SettingSelect label="Descompressão" name="decompressedfolders" desc="Manter ou excluir arquivos extraídos." options={[
-                { label: "Automático", value: "ask" }, { label: "Manter", value: "keep" }, { label: "Excluir", value: "delete" }
-              ]} ctx={ctx} />
-
-              <SettingGroup label="Tattoo (Sobreposição)" />
-              <SettingToggle label="Mostrar Tattoo sobre Bezel" name="global.tattoo" desc="Exibe imagem de controle sobre a moldura." ctx={ctx} />
-              <SettingSelect label="Posição do Tattoo" name="global.tattoo_corner" options={[
-                { label: "Automático", value: "auto" }, { label: "Topo Esquerda", value: "NW" },
-                { label: "Topo Direita", value: "NE" }, { label: "Baixo Direita", value: "SE" },
-                { label: "Baixo Esquerda", value: "SW" }
-              ]} ctx={ctx} />
+            <div className="flex flex-col h-full overflow-hidden">
+              <div className="shrink-0 px-6 pt-8 pb-2 max-w-[740px]">
+                <h2 className="text-xl font-bold text-white mb-1">Configurações de Jogos</h2>
+                <p className="text-sm text-white/40">Configurações globais de emulação, vídeo, shaders e mais.</p>
               </div>
-            </ScrollArea>
+              <ScrollArea className="flex-1 min-h-0">
+                <div className="px-6 pb-6 max-w-[740px] space-y-2">
+                  <SettingGroup label="RetroAchievements" />
+                  <SettingToggle label="RetroAchievements" name="global.cheevos" desc="Ativar conquistas retrô durante a emulação." ctx={ctx} />
+                  <SettingInput label="Usuário" name="global.cheevos.username" ctx={ctx} />
+                  <SettingInput label="Senha" name="global.cheevos.password" isPassword ctx={ctx} />
+
+                  <SettingGroup label="Netplay" />
+                  <SettingToggle label="Ativar Netplay" name="global.netplay" desc="Ativar jogos em rede." ctx={ctx} />
+                  <SettingInput label="Apelido" name="global.netplay.nickname" ctx={ctx} />
+                  <SettingInput label="Porta" name="global.netplay.port" ctx={ctx} />
+
+                  <SettingGroup label="Save States" />
+                  <SettingToggle label="Salvar/Carregar Automático" name="global.autosave" desc="Carrega o estado mais recente ao iniciar e salva ao sair." ctx={ctx} />
+                  <SettingSelect label="Tipo de Incremento" name="global.incrementalsavestates" type="int" options={[
+                    { label: "Por Save State", value: "" },
+                    { label: "Por Save Slot", value: "0" },
+                    { label: "Não Incrementar", value: "2" }
+                  ]} ctx={ctx} />
+                  <SettingSelect label="Gerenciador de States" name="global.savestates" desc="Exibe o gerenciador antes de iniciar um jogo." options={[
+                    { label: "Não", value: "0" }, { label: "Sempre", value: "1" }, { label: "Se Disponível", value: "2" }
+                  ]} ctx={ctx} />
+
+                  <SettingGroup label="Exibição e Vídeo" />
+                  <SettingSelect label="Shaders" name="global.shaderset" options={[
+                    { label: "Nenhum", value: "none" }, { label: "RIESCADE", value: "[riescade]" },
+                    { label: "CRT-NEW-PIXIE", value: "crt-new-pixie" }, { label: "CRT-ROYALE", value: "crt-royale" },
+                    { label: "CURVATURE", value: "curvature" }, { label: "ENHANCED", value: "enhanced" },
+                    { label: "FLATTEN-GLOW", value: "flatten-glow" }, { label: "HANDHELD", value: "handheld" },
+                    { label: "NTSC", value: "ntsc" }, { label: "RETRO", value: "retro" },
+                    { label: "SCALEFX", value: "scalefx" }, { label: "SCANLINES", value: "scanlines" },
+                    { label: "TECHNICOLOR", value: "technicolor" }, { label: "VHS", value: "vhs" },
+                    { label: "XBRZ-5X", value: "xbrz-5x" }, { label: "ZFAST", value: "zfast" }
+                  ]} ctx={ctx} />
+                  <SettingSelect label="Decorações (Bezels)" name="global.bezel" options={[
+                    { label: "Nenhum", value: "none" }, { label: "Automático", value: "auto" }
+                  ]} ctx={ctx} />
+                  <SettingSelect label="Proporção de Tela" name="global.ratio" options={[
+                    { label: "Automático", value: "auto" }, { label: "4/3", value: "4/3" }, { label: "16/9", value: "16/9" },
+                    { label: "16/10", value: "16/10" }, { label: "Completo", value: "full" }
+                  ]} ctx={ctx} />
+                  <SettingSelect label="Modo de Vídeo" name="global.videomode" options={[
+                    { label: "Automático", value: "auto" }, { label: "1080p 60Hz", value: "1920x1080@60" },
+                    { label: "1080p 50Hz", value: "1920x1080@50" }, { label: "720p 60Hz", value: "1280x720@60" }
+                  ]} ctx={ctx} />
+                  <SettingToggle label="Forçar Tela Cheia" name="global.forcefullscreen" desc="Forçar emulador em tela cheia." ctx={ctx} />
+                  <SettingToggle label="Escala Inteira (Pixel Perfect)" name="global.integerscale" ctx={ctx} />
+                  <SettingToggle label="Suavizar Jogos (Bilinear)" name="global.smooth" ctx={ctx} />
+
+                  <SettingGroup label="Emulação" />
+                  <SettingToggle label="Rebobinar (Rewind)" name="rewind" ctx={ctx} />
+                  <SettingSlider label="Taxa de Avanço Rápido" name="global.fastforward_ratio" min={0} max={50} step={1} suffix="x" ctx={ctx} />
+                  <SettingToggle label="Discord Rich Presence" name="global.discord" desc="Atualiza status do Discord com o jogo atual." ctx={ctx} />
+                  <SettingToggle label="Configurar Controles Automaticamente" name="global.disableautocontrollers" ctx={ctx} />
+
+                  <SettingGroup label="Verificação de BIOS" />
+                  <SettingToggle label="Verificar BIOS ao Iniciar Jogo" name="CheckBiosesAtLaunch" ctx={ctx} />
+
+                  <SettingGroup label="Compressão" />
+                  <SettingSelect label="Descompressão" name="decompressedfolders" desc="Manter ou excluir arquivos extraídos." options={[
+                    { label: "Automático", value: "ask" }, { label: "Manter", value: "keep" }, { label: "Excluir", value: "delete" }
+                  ]} ctx={ctx} />
+
+                  <SettingGroup label="Tattoo (Sobreposição)" />
+                  <SettingToggle label="Mostrar Tattoo sobre Bezel" name="global.tattoo" desc="Exibe imagem de controle sobre a moldura." ctx={ctx} />
+                  <SettingSelect label="Posição do Tattoo" name="global.tattoo_corner" options={[
+                    { label: "Automático", value: "auto" }, { label: "Topo Esquerda", value: "NW" },
+                    { label: "Topo Direita", value: "NE" }, { label: "Baixo Direita", value: "SE" },
+                    { label: "Baixo Esquerda", value: "SW" }
+                  ]} ctx={ctx} />
+                </div>
+              </ScrollArea>
+            </div>
           )}
 
           {/* ===== TAB: INTERFACE ===== */}
@@ -452,98 +507,98 @@ export default function ToolAppContent({
                 <p className="text-sm text-white/40">Aparência, ícones do desktop/taskbar, tema e idioma.</p>
               </div>
 
-              <ScrollArea className="flex-1">
+              <ScrollArea className="flex-1 min-h-0">
                 <div className="px-6 pb-6 space-y-2">
-                <SettingGroup label="Ícones do Desktop e Taskbar" />
+                  <SettingGroup label="Ícones do Desktop e Taskbar" />
 
-                {/* Search & Category Filter */}
-                <div className="flex items-center gap-3 mb-4 select-none">
-                  <div className="relative flex-1">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-white/40" />
-                    <input 
-                      value={settingsSearch} 
-                      onChange={(e) => setSettingsSearch(e.target.value)} 
-                      placeholder="Pesquisar ferramentas ou sistemas..."
-                      className="w-full bg-[#121212] border border-white/10 rounded-lg pl-9 pr-3 py-2 text-xs text-white placeholder:text-white/30 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition duration-200" 
-                    />
-                  </div>
-                  <div className="flex bg-black/25 p-1 rounded-lg border border-white/5 text-[10px] items-center shrink-0">
-                    {[{ id: "all", label: "Tudo" }, { id: "tools", label: "Ferramentas" }, { id: "systems", label: "Sistemas" }].map(cat => (
-                      <button 
-                        key={cat.id} 
-                        onClick={() => setSettingsCategory(cat.id as any)}
-                        className={`px-3 py-1.5 rounded-md transition cursor-pointer font-medium ${
-                          settingsCategory === cat.id 
-                            ? "bg-white/10 text-white shadow-sm font-semibold" 
-                            : "text-white/50 hover:bg-white/5 hover:text-white"
-                        }`}
-                      >
-                        {cat.label}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Icons List */}
-                {filteredToggleItems.map(item => {
-                  const ItemIcon = item.icon;
-                  const isDesk = desktopIcons.includes(item.key);
-                  const isTask = taskbarIcons.includes(item.key);
-                  return (
-                    <div key={item.key} className="flex items-center justify-between bg-black/15 border border-white/5 rounded-xl p-3 hover:bg-white/5 transition duration-200 select-none">
-                      <div className="flex items-center gap-3 min-w-0">
-                        <div className="w-10 h-10 flex items-center justify-center shrink-0">
-                          {item.logo ? (
-                            <img src={item.logo} alt={item.name} className="h-full object-contain max-w-full filter drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]" />
-                          ) : (
-                            <div className={`w-9 h-9 rounded-xl bg-gradient-to-br ${item.color} flex items-center justify-center shadow-md`}>
-                              <ItemIcon className="w-5 h-5 text-white" />
-                            </div>
-                          )}
-                        </div>
-                        <div className="flex flex-col min-w-0">
-                          <span className="font-semibold text-xs text-white/95 truncate">{item.name}</span>
-                          <span className="text-[9px] text-white/35 uppercase tracking-wider font-semibold">
-                            {item.type === "tool" ? "Ferramenta" : "Sistema de Jogos"}
-                          </span>
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-4 shrink-0 font-sans" onClick={(e) => e.stopPropagation()}>
-                        <label className="flex items-center gap-2 cursor-pointer select-none" onClick={e => e.stopPropagation()}>
-                          <span className="text-[10px] text-white/50 font-medium">Desktop</span>
-                          <input 
-                            type="checkbox" 
-                            checked={isDesk}
-                            onChange={e => { e.stopPropagation(); handleToggleDesktop(item.key); }}
-                            className="w-4 h-4 cursor-pointer accent-range" 
-                          />
-                        </label>
-                        <div className="w-px h-6 bg-white/10" />
-                        <label className="flex items-center gap-2 cursor-pointer select-none" onClick={e => e.stopPropagation()}>
-                          <span className="text-[10px] text-white/50 font-medium">Taskbar</span>
-                          <input 
-                            type="checkbox" 
-                            checked={isTask}
-                            onChange={e => { e.stopPropagation(); handleToggleTaskbar(item.key); }}
-                            className="w-4 h-4 cursor-pointer accent-range" 
-                          />
-                        </label>
-                      </div>
+                  {/* Search & Category Filter */}
+                  <div className="flex items-center gap-3 mb-4 select-none">
+                    <div className="relative flex-1">
+                      <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-white/40" />
+                      <input 
+                        value={settingsSearch} 
+                        onChange={(e) => setSettingsSearch(e.target.value)} 
+                        placeholder="Pesquisar ferramentas ou sistemas..."
+                        className="w-full bg-[#121212] border border-white/10 rounded-md pl-9 pr-3 py-2 text-xs text-white placeholder:text-white/30 focus:outline-none focus:border-accent hover:border-accent transition duration-200" 
+                      />
                     </div>
-                  );
-                })}
+                    <div className="flex bg-black/25 p-1 rounded-md border border-white/5 text-[10px] items-center shrink-0">
+                      {[{ id: "all", label: "Tudo" }, { id: "tools", label: "Ferramentas" }, { id: "systems", label: "Sistemas" }].map(cat => (
+                        <button 
+                          key={cat.id} 
+                          onClick={() => setSettingsCategory(cat.id as any)}
+                          className={`px-3 py-1.5 rounded-md transition cursor-pointer font-medium ${
+                            settingsCategory === cat.id 
+                              ? "bg-white/10 text-white shadow-sm font-semibold" 
+                              : "text-white/50 hover:bg-white/5 hover:text-white"
+                          }`}
+                        >
+                          {cat.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
 
-                <SettingGroup label="Tema e Aparência" />
-                <SettingSelect label="Protetor de Tela" name="ScreenSaverTime" options={[
-                  { label: "Desligado", value: "0" }, { label: "1 Minuto", value: "60000" }, { label: "5 Minutos", value: "300000" }
-                ]} ctx={ctx} />
-                <SettingSelect label="Modo de Economia de Energia" name="PowerSaverMode" desc="Reduz consumo quando ocioso." options={[
-                  { label: "Desativado", value: "disabled" }, { label: "Padrão", value: "default" },
-                  { label: "Melhorado", value: "enhanced" }, { label: "Instantâneo", value: "instant" }
-                ]} ctx={ctx} />
-                <SettingSelect label="Modo da Interface" name="UIMode" desc="Bloqueia menus para uso com convidados." options={[
-                  { label: "Completo", value: "Full" }, { label: "Básico", value: "Basic" }, { label: "Quiosque", value: "Kiosk" }
-                ]} ctx={ctx} />
+                  {/* Icons List */}
+                  {filteredToggleItems.map(item => {
+                    const ItemIcon = item.icon;
+                    const isDesk = desktopIcons.includes(item.key);
+                    const isTask = taskbarIcons.includes(item.key);
+                    return (
+                      <div key={item.key} className="flex items-center justify-between bg-black/15 border border-white/5 rounded-md p-3 hover:bg-white/5 transition duration-200 select-none">
+                        <div className="flex items-center gap-3 min-w-0">
+                          <div className="w-10 h-10 flex items-center justify-center shrink-0">
+                            {item.logo ? (
+                              <img src={item.logo} alt={item.name} className="h-full object-contain max-w-full filter drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]" />
+                            ) : (
+                              <div className={`w-9 h-9 rounded-md bg-gradient-to-br ${item.color} flex items-center justify-center shadow-md`}>
+                                <ItemIcon className="w-5 h-5 text-white" />
+                              </div>
+                            )}
+                          </div>
+                          <div className="flex flex-col min-w-0">
+                            <span className="font-semibold text-xs text-white/95 truncate">{item.name}</span>
+                            <span className="text-[9px] text-white/35 uppercase tracking-wider font-semibold">
+                              {item.type === "tool" ? "Ferramenta" : "Sistema de Jogos"}
+                            </span>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-4 shrink-0 font-sans" onClick={(e) => e.stopPropagation()}>
+                          <label className="flex items-center gap-2 cursor-pointer select-none" onClick={e => e.stopPropagation()}>
+                            <span className="text-[10px] text-white/50 font-medium">Desktop</span>
+                            <input 
+                              type="checkbox" 
+                              checked={isDesk}
+                              onChange={e => { e.stopPropagation(); handleToggleDesktop(item.key); }}
+                              className="w-4 h-4 cursor-pointer accent-range" 
+                            />
+                          </label>
+                          <div className="w-px h-6 bg-white/10" />
+                          <label className="flex items-center gap-2 cursor-pointer select-none" onClick={e => e.stopPropagation()}>
+                            <span className="text-[10px] text-white/50 font-medium">Taskbar</span>
+                            <input 
+                              type="checkbox" 
+                              checked={isTask}
+                              onChange={e => { e.stopPropagation(); handleToggleTaskbar(item.key); }}
+                              className="w-4 h-4 cursor-pointer accent-range" 
+                            />
+                          </label>
+                        </div>
+                      </div>
+                    );
+                  })}
+
+                  <SettingGroup label="Tema e Aparência" />
+                  <SettingSelect label="Protetor de Tela" name="ScreenSaverTime" options={[
+                    { label: "Desligado", value: "0" }, { label: "1 Minuto", value: "60000" }, { label: "5 Minutos", value: "300000" }
+                  ]} ctx={ctx} />
+                  <SettingSelect label="Modo de Economia de Energia" name="PowerSaverMode" desc="Reduz consumo quando ocioso." options={[
+                    { label: "Desativado", value: "disabled" }, { label: "Padrão", value: "default" },
+                    { label: "Melhorado", value: "enhanced" }, { label: "Instantâneo", value: "instant" }
+                  ]} ctx={ctx} />
+                  <SettingSelect label="Modo da Interface" name="UIMode" desc="Bloqueia menus para uso com convidados." options={[
+                    { label: "Completo", value: "Full" }, { label: "Básico", value: "Basic" }, { label: "Quiosque", value: "Kiosk" }
+                  ]} ctx={ctx} />
                 </div>
               </ScrollArea>
             </div>
@@ -551,427 +606,442 @@ export default function ToolAppContent({
 
           {/* ===== TAB: PERSONALIZAÇÃO ===== */}
           {activeSettingsTab === "personalizacao" && (
-            <ScrollArea className="flex-1">
-              <div className="pt-8 p-6 max-w-[740px] space-y-2">
-              <h2 className="text-xl font-bold text-white mb-1">Personalização</h2>
-              <p className="text-sm text-white/40 mb-4">Escolha a cor de destaque para os menus, botões e barras do sistema.</p>
+            <div className="flex flex-col h-full overflow-hidden">
+              <div className="shrink-0 px-6 pt-8 pb-2 max-w-[740px]">
+                <h2 className="text-xl font-bold text-white mb-1">Personalização</h2>
+                <p className="text-sm text-white/40">Escolha a cor de destaque para os menus, botões e barras do sistema.</p>
+              </div>
+              <ScrollArea className="flex-1 min-h-0">
+                <div className="px-6 pb-6 max-w-[740px] space-y-2">
+                  <SettingGroup label="Cor de Destaque" />
+                  
+                  <div className="bg-black/15 border border-white/5 rounded-md p-4 flex flex-col gap-4">
+                    <span className="font-semibold text-xs text-white/90">Cores Predefinidas</span>
+                    <div className="grid grid-cols-4 gap-3">
+                      {[
+                        { name: "Roxo (Padrão)", hex: "#8b5cf6" },
+                        { name: "Azul", hex: "#3b82f6" },
+                        { name: "Ciano", hex: "#06b6d4" },
+                        { name: "Esmeralda", hex: "#10b981" },
+                        { name: "Laranja", hex: "#f97316" },
+                        { name: "Rosa", hex: "#9f0043" },
+                        { name: "Vermelho", hex: "#ef4444" },
+                        { name: "Teal", hex: "#14b8a6" }
+                      ].map(preset => {
+                        const currentAccent = ctx.getSetting("RIESCADE.AccentColor", "#8b5cf6");
+                        const isSelected = currentAccent.toLowerCase() === preset.hex.toLowerCase();
+                        return (
+                          <button
+                            key={preset.hex}
+                            onClick={() => ctx.saveSetting("RIESCADE.AccentColor", preset.hex, "string")}
+                            className={`flex flex-col items-center gap-2 p-3 rounded-md border transition hover:bg-white/5 cursor-pointer ${
+                              isSelected 
+                                ? "border-accent bg-accent-light" 
+                                : "border-white/10 hover:border-white/20"
+                            }`}
+                          >
+                            <div 
+                              className="w-6 h-6 rounded-full border border-white/10 shadow-inner" 
+                              style={{ backgroundColor: preset.hex }}
+                            />
+                            <span className="text-[10px] text-white/60 font-medium text-center truncate w-full">{preset.name}</span>
+                          </button>
+                        );
+                      })}
+                    </div>
 
-              <SettingGroup label="Cor de Destaque" />
-              
-              <div className="bg-black/15 border border-white/5 rounded-xl p-4 flex flex-col gap-4">
-                <span className="font-semibold text-xs text-white/90">Cores Predefinidas</span>
-                <div className="grid grid-cols-4 gap-3">
-                  {[
-                    { name: "Roxo (Padrão)", hex: "#8b5cf6" },
-                    { name: "Azul", hex: "#3b82f6" },
-                    { name: "Ciano", hex: "#06b6d4" },
-                    { name: "Esmeralda", hex: "#10b981" },
-                    { name: "Laranja", hex: "#f97316" },
-                    { name: "Rosa", hex: "#9f0043" },
-                    { name: "Vermelho", hex: "#ef4444" },
-                    { name: "Teal", hex: "#14b8a6" }
-                  ].map(preset => {
-                    const currentAccent = ctx.getSetting("RIESCADE.AccentColor", "#8b5cf6");
-                    const isSelected = currentAccent.toLowerCase() === preset.hex.toLowerCase();
-                    return (
-                      <button
-                        key={preset.hex}
-                        onClick={() => ctx.saveSetting("RIESCADE.AccentColor", preset.hex, "string")}
-                        className={`flex flex-col items-center gap-2 p-3 rounded-xl border transition hover:bg-white/5 cursor-pointer ${
-                          isSelected 
-                            ? "border-accent bg-accent-light" 
-                            : "border-white/10 hover:border-white/20"
-                        }`}
-                      >
-                        <div 
-                          className="w-6 h-6 rounded-full border border-white/10 shadow-inner" 
-                          style={{ backgroundColor: preset.hex }}
+                    <div className="h-px bg-white/5 my-1" />
+
+                    <div className="flex items-center justify-between">
+                      <div className="flex flex-col gap-0.5">
+                        <span className="font-semibold text-xs text-white/90">Cor Customizada</span>
+                        <span className="text-[10px] text-white/40">Defina uma cor hexadecimal personalizada para a interface.</span>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <input 
+                          type="text" 
+                          value={ctx.getSetting("RIESCADE.AccentColor", "#8b5cf6")}
+                          onChange={(e) => ctx.saveSetting("RIESCADE.AccentColor", e.target.value, "string")}
+                          className="bg-[#121212] border border-white/10 rounded-md px-2.5 py-1 text-xs text-white/90 focus:outline-none focus:border-accent hover:border-accent w-24 text-center font-mono"
                         />
-                        <span className="text-[10px] text-white/60 font-medium text-center truncate w-full">{preset.name}</span>
-                      </button>
-                    );
-                  })}
-                </div>
-
-                <div className="h-px bg-white/5 my-1" />
-
-                <div className="flex items-center justify-between">
-                  <div className="flex flex-col gap-0.5">
-                    <span className="font-semibold text-xs text-white/90">Cor Customizada</span>
-                    <span className="text-[10px] text-white/40">Defina uma cor hexadecimal personalizada para a interface.</span>
+                        <div className="relative w-8 h-8 rounded-md overflow-hidden border border-white/15 cursor-pointer">
+                          <input 
+                            type="color" 
+                            value={ctx.getSetting("RIESCADE.AccentColor", "#8b5cf6")}
+                            onChange={(e) => ctx.saveSetting("RIESCADE.AccentColor", e.target.value, "string")}
+                            className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
+                          />
+                          <div 
+                            className="w-full h-full" 
+                            style={{ backgroundColor: ctx.getSetting("RIESCADE.AccentColor", "#8b5cf6") }}
+                          />
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                  <div className="flex items-center gap-3">
-                    <input 
-                      type="text" 
-                      value={ctx.getSetting("RIESCADE.AccentColor", "#8b5cf6")}
-                      onChange={(e) => ctx.saveSetting("RIESCADE.AccentColor", e.target.value, "string")}
-                      className="bg-[#121212] border border-white/10 rounded-lg px-2.5 py-1 text-xs text-white/90 focus:outline-none focus:border-accent w-24 text-center font-mono"
-                    />
-                    <div className="relative w-8 h-8 rounded-lg overflow-hidden border border-white/15 cursor-pointer">
-                      <input 
-                        type="color" 
-                        value={ctx.getSetting("RIESCADE.AccentColor", "#8b5cf6")}
-                        onChange={(e) => ctx.saveSetting("RIESCADE.AccentColor", e.target.value, "string")}
-                        className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
-                      />
-                      <div 
-                        className="w-full h-full" 
-                        style={{ backgroundColor: ctx.getSetting("RIESCADE.AccentColor", "#8b5cf6") }}
-                      />
+
+                  <SettingGroup label="Área de Trabalho" />
+                  
+                  <SettingToggle 
+                    label="Mostrar ícones no desktop" 
+                    name="RIESCADE.ShowDesktopIcons" 
+                    desc="Exibe os atalhos de ferramentas e plataformas diretamente na área de trabalho." 
+                    ctx={ctx} 
+                  />
+                  
+                  <SettingToggle 
+                    label="Sempre trocar background para o sistema ativo" 
+                    name="RIESCADE.DynamicBackground" 
+                    desc="Altera o papel de parede automaticamente baseado no console ou jogo em foco." 
+                    ctx={ctx} 
+                  />
+
+                  <div className="flex items-center justify-between bg-black/15 border border-white/5 rounded-md px-4 py-3 text-xs hover:bg-white/5 transition">
+                    <div className="flex flex-col gap-0.5 flex-1 min-w-0 pr-3">
+                      <span className="font-medium text-white/90">Background Personalizado</span>
+                      <span className="text-[10px] text-white/45 leading-relaxed font-sans">
+                        {ctx.getSetting("RIESCADE.CustomBackground") 
+                          ? `Arquivo selecionado: ${ctx.getSetting("RIESCADE.CustomBackground").split('/').pop()}` 
+                          : "Selecione uma imagem do seu computador para usar como papel de parede."}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-2 shrink-0 font-sans">
+                      {ctx.getSetting("RIESCADE.CustomBackground") && (
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            console.log('[Personalização] Clear background button clicked');
+                            ctx.saveSetting("RIESCADE.CustomBackground", "", "string");
+                          }}
+                          className="px-3 py-1.5 rounded-md bg-red-600/10 border border-red-500/20 text-red-400 hover:bg-red-600/20 hover:text-red-300 font-semibold transition cursor-pointer"
+                        >
+                          Remover
+                        </button>
+                      )}
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          console.log('[Personalização] Browse background button clicked');
+                          window.api.selectBgImage().then((filePath) => {
+                            console.log('[Personalização] selectBgImage returned path:', filePath);
+                            if (filePath) {
+                              ctx.saveSetting("RIESCADE.CustomBackground", filePath, "string");
+                            }
+                          }).catch((err) => {
+                            console.error('[Personalização] selectBgImage error:', err);
+                          });
+                        }}
+                        className="px-3 py-1.5 rounded-md bg-white/10 border border-white/10 hover:bg-white/15 hover:border-white/20 text-white font-semibold transition cursor-pointer"
+                      >
+                        Procurar...
+                      </button>
                     </div>
                   </div>
                 </div>
-              </div>
-
-              <SettingGroup label="Área de Trabalho" />
-              
-              <SettingToggle 
-                label="Mostrar ícones no desktop" 
-                name="RIESCADE.ShowDesktopIcons" 
-                desc="Exibe os atalhos de ferramentas e plataformas diretamente na área de trabalho." 
-                ctx={ctx} 
-              />
-              
-              <SettingToggle 
-                label="Sempre trocar background para o sistema ativo" 
-                name="RIESCADE.DynamicBackground" 
-                desc="Altera o papel de parede automaticamente baseado no console ou jogo em foco." 
-                ctx={ctx} 
-              />
-
-              <div className="flex items-center justify-between bg-black/15 border border-white/5 rounded-xl px-4 py-3 text-xs hover:bg-white/5 transition">
-                <div className="flex flex-col gap-0.5 flex-1 min-w-0 pr-3">
-                  <span className="font-medium text-white/90">Background Personalizado</span>
-                  <span className="text-[10px] text-white/45 leading-relaxed font-sans">
-                    {ctx.getSetting("RIESCADE.CustomBackground") 
-                      ? `Arquivo selecionado: ${ctx.getSetting("RIESCADE.CustomBackground").split('/').pop()}` 
-                      : "Selecione uma imagem do seu computador para usar como papel de parede."}
-                  </span>
-                </div>
-                <div className="flex items-center gap-2 shrink-0 font-sans">
-                  {ctx.getSetting("RIESCADE.CustomBackground") && (
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        console.log('[Personalização] Clear background button clicked');
-                        ctx.saveSetting("RIESCADE.CustomBackground", "", "string");
-                      }}
-                      className="px-3 py-1.5 rounded-lg bg-red-600/10 border border-red-500/20 text-red-400 hover:bg-red-600/20 hover:text-red-300 font-semibold transition cursor-pointer"
-                    >
-                      Remover
-                    </button>
-                  )}
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      console.log('[Personalização] Browse background button clicked');
-                      window.api.selectBgImage().then((filePath) => {
-                        console.log('[Personalização] selectBgImage returned path:', filePath);
-                        if (filePath) {
-                          ctx.saveSetting("RIESCADE.CustomBackground", filePath, "string");
-                        }
-                      }).catch((err) => {
-                        console.error('[Personalização] selectBgImage error:', err);
-                      });
-                    }}
-                    className="px-3 py-1.5 rounded-lg bg-white/10 border border-white/10 hover:bg-white/15 hover:border-white/20 text-white font-semibold transition cursor-pointer"
-                  >
-                    Procurar...
-                  </button>
-                </div>
-              </div>
+              </ScrollArea>
             </div>
-          </ScrollArea>
           )}
 
           {/* ===== TAB: CONTROLES ===== */}
           {activeSettingsTab === "controles" && (
-            <ScrollArea className="flex-1">
-              <div className="p-6 max-w-[740px] space-y-2">
-              <h2 className="text-xl font-bold text-white mb-1">Controles</h2>
-              <p className="text-sm text-white/40 mb-4">Configurações de controles, bluetooth e armas lightgun.</p>
-
-              <SettingGroup label="Exibição" />
-              <SettingToggle label="Mostrar Notificações de Controle" name="ShowControllerNotifications" ctx={ctx} />
-              <SettingToggle label="Mostrar Atividade do Controle" name="ShowControllerActivity" ctx={ctx} />
-              <SettingToggle label="Mostrar Notificações de Gun" name="ShowGunNotifications" ctx={ctx} />
-              <SettingToggle label="Desenhar Mira do Gun" name="DrawGunCrosshair" ctx={ctx} />
-
-              <SettingGroup label="Prioridade dos Controles" />
-              {Array.from({ length: 8 }, (_, i) => (
-                <SettingInput key={i} label={`Controle #${i + 1}`} name={`INPUT P${i + 1}NAME`} ctx={ctx} />
-              ))}
-
-              <SettingGroup label="Analógico e D-Pad" />
-              <SettingToggle label="D-Pad como Analógico" name="analogDpad" ctx={ctx} />
-              <SettingSelect label="Zona Morta do Analógico" name="analog_deadzone" desc="Ignora movimentos abaixo deste limite." options={
-                Array.from({ length: 11 }, (_, i) => ({ label: (i * 0.1).toFixed(1), value: (i * 0.1).toFixed(1) }))
-              } ctx={ctx} />
-              <SettingToggle label="Inverter Gatilhos N64" name="n64_special_trigger" desc="Usar R2 em vez de L2 como Z." ctx={ctx} />
-              <SettingToggle label="PS4/PS5 Enhanced" name="ps_controller_enhanced" desc="Ativa vibração avançada para DualSense." ctx={ctx} />
-              <SettingToggle label="Usar Botão para Gatilhos" name="buttonTrigger" desc="Força botão em vez de eixo." ctx={ctx} />
-
-              <SettingGroup label="Bluetooth" />
-              <SettingInfo label="Status" value="Gerenciamento via sistema operacional" />
-
-              <SettingGroup label="Guns e Lightguns" />
-              {Array.from({ length: 4 }, (_, i) => (
-                <SettingSelect key={i} label={`Mouse/Gun P${i + 1}`} name={`p${i + 1}_gunIndex`} desc={`Índice do mouse para jogador ${i + 1}.`}
-                  options={Array.from({ length: 9 }, (_, j) => ({ label: String(j), value: String(j) }))} ctx={ctx} />
-              ))}
-
-              <SettingGroup label="Sinden Gun" />
-              <SettingSelect label="Configuração de Botões" name="global.sindenJoyMode" options={[
-                { label: "Padrão", value: "standard" }, { label: "Modo Gamepad", value: "joypad" }, { label: "Sem Configuração", value: "none" }
-              ]} ctx={ctx} />
-              <SettingToggle label="Fechar Software Sinden ao Sair" name="sindenKill" ctx={ctx} />
-
-              <SettingGroup label="Wiimote" />
-              <SettingSelect label="Modo de Conexão" name="WiimoteMode" options={[
-                { label: "Modo 2 (Normal)", value: "normal" }, { label: "Modo 2 (Game)", value: "game" }, { label: "Modo 4 (WiimoteGun)", value: "wiimotegun" }
-              ]} ctx={ctx} />
-              <SettingToggle label="Corrigir Associação do Wiimote" name="WiimoteKbOrder" ctx={ctx} />
+            <div className="flex flex-col h-full overflow-hidden">
+              <div className="shrink-0 px-6 pt-6 pb-2 max-w-[740px]">
+                <h2 className="text-xl font-bold text-white mb-1">Controles</h2>
+                <p className="text-sm text-white/40">Configurações de controles, bluetooth e armas lightgun.</p>
               </div>
-            </ScrollArea>
+              <ScrollArea className="flex-1 min-h-0">
+                <div className="px-6 pb-6 max-w-[740px] space-y-2">
+                  <SettingGroup label="Exibição" />
+                  <SettingToggle label="Mostrar Notificações de Controle" name="ShowControllerNotifications" ctx={ctx} />
+                  <SettingToggle label="Mostrar Atividade do Controle" name="ShowControllerActivity" ctx={ctx} />
+                  <SettingToggle label="Mostrar Notificações de Gun" name="ShowGunNotifications" ctx={ctx} />
+                  <SettingToggle label="Desenhar Mira do Gun" name="DrawGunCrosshair" ctx={ctx} />
+
+                  <SettingGroup label="Prioridade dos Controles" />
+                  {Array.from({ length: 8 }, (_, i) => (
+                    <SettingInput key={i} label={`Controle #${i + 1}`} name={`INPUT P${i + 1}NAME`} ctx={ctx} />
+                  ))}
+
+                  <SettingGroup label="Analógico e D-Pad" />
+                  <SettingToggle label="D-Pad como Analógico" name="analogDpad" ctx={ctx} />
+                  <SettingSelect label="Zona Morta do Analógico" name="analog_deadzone" desc="Ignora movimentos abaixo deste limite." options={
+                    Array.from({ length: 11 }, (_, i) => ({ label: (i * 0.1).toFixed(1), value: (i * 0.1).toFixed(1) }))
+                  } ctx={ctx} />
+                  <SettingToggle label="Inverter Gatilhos N64" name="n64_special_trigger" desc="Usar R2 em vez de L2 como Z." ctx={ctx} />
+                  <SettingToggle label="PS4/PS5 Enhanced" name="ps_controller_enhanced" desc="Ativa vibração avançada para DualSense." ctx={ctx} />
+                  <SettingToggle label="Usar Botão para Gatilhos" name="buttonTrigger" desc="Força botão em vez de eixo." ctx={ctx} />
+
+                  <SettingGroup label="Bluetooth" />
+                  <SettingInfo label="Status" value="Gerenciamento via sistema operacional" />
+
+                  <SettingGroup label="Guns e Lightguns" />
+                  {Array.from({ length: 4 }, (_, i) => (
+                    <SettingSelect key={i} label={`Mouse/Gun P${i + 1}`} name={`p${i + 1}_gunIndex`} desc={`Índice do mouse para jogador ${i + 1}.`}
+                      options={Array.from({ length: 9 }, (_, j) => ({ label: String(j), value: String(j) }))} ctx={ctx} />
+                  ))}
+
+                  <SettingGroup label="Sinden Gun" />
+                  <SettingSelect label="Configuração de Botões" name="global.sindenJoyMode" options={[
+                    { label: "Padrão", value: "standard" }, { label: "Modo Gamepad", value: "joypad" }, { label: "Sem Configuração", value: "none" }
+                  ]} ctx={ctx} />
+                  <SettingToggle label="Fechar Software Sinden ao Sair" name="sindenKill" ctx={ctx} />
+
+                  <SettingGroup label="Wiimote" />
+                  <SettingSelect label="Modo de Conexão" name="WiimoteMode" options={[
+                    { label: "Modo 2 (Normal)", value: "normal" }, { label: "Modo 2 (Game)", value: "game" }, { label: "Modo 4 (WiimoteGun)", value: "wiimotegun" }
+                  ]} ctx={ctx} />
+                  <SettingToggle label="Corrigir Associação do Wiimote" name="WiimoteKbOrder" ctx={ctx} />
+                </div>
+              </ScrollArea>
+            </div>
           )}
 
           {/* ===== TAB: ÁUDIO ===== */}
           {activeSettingsTab === "audio" && (
-            <ScrollArea className="flex-1">
-              <div className="p-6 max-w-[740px] space-y-2">
-              <h2 className="text-xl font-bold text-white mb-1">Áudio</h2>
-              <p className="text-sm text-white/40 mb-4">Volume, música de fundo e sons de navegação.</p>
-
-              <SettingGroup label="Volume" />
-              <SettingSlider label="Volume do Sistema" name="Volume" min={0} max={100} step={1} suffix="%" ctx={ctx} />
-              <SettingSlider label="Volume da Música" name="MusicVolume" min={0} max={100} step={1} suffix="%" ctx={ctx} />
-              <SettingToggle label="Mostrar Popup de Volume" name="VolumePopup" ctx={ctx} />
-
-              <SettingGroup label="Música" />
-              <SettingToggle label="Música no Menu" name="audio.bgmusic" ctx={ctx} />
-              <SettingToggle label="Exibir Títulos das Músicas" name="audio.display_titles" ctx={ctx} />
-              <SettingSlider label="Tempo de Exibição do Título" name="audio.display_titles_time" min={2} max={120} step={2} suffix="s" ctx={ctx} />
-              <SettingToggle label="Música Específica por Sistema" name="audio.persystem" ctx={ctx} />
-              <SettingToggle label="Tocar Música do Tema" name="audio.thememusics" ctx={ctx} />
-              <SettingToggle label="Baixar Música ao Reproduzir Vídeo" name="VideoLowersMusic" ctx={ctx} />
-              <SettingToggle label="Tocar Apenas Favoritas" name="audio.useFavoriteMusic" ctx={ctx} />
-
-              <SettingGroup label="Sons" />
-              <SettingToggle label="Sons de Navegação" name="EnableSounds" ctx={ctx} />
-              <SettingToggle label="Áudio na Prévia de Vídeo" name="VideoAudio" ctx={ctx} />
-
-              <SettingGroup label="RetroArch Áudio" />
-              <SettingSelect label="Reamostrador" name="audio_resampler" options={[
-                { label: "sinc", value: "sinc" }, { label: "CC", value: "CC" }, { label: "nearest", value: "nearest" }, { label: "Nenhum", value: "null" }
-              ]} ctx={ctx} />
-              <SettingSelect label="Qualidade" name="audio_resampler_quality" options={[
-                { label: "Mínima", value: "1" }, { label: "Baixa", value: "2" }, { label: "Normal", value: "3" },
-                { label: "Alta", value: "4" }, { label: "Máxima", value: "5" }
-              ]} ctx={ctx} />
-              <SettingSlider label="Ganho de Volume" name="audio_volume" min={-80} max={12} step={2} suffix=" dB" ctx={ctx} />
-              <SettingSlider label="Ganho do Mixer" name="audio_mixer_volume" min={-80} max={12} step={2} suffix=" dB" ctx={ctx} />
-              <SettingToggle label="Sincronização de Áudio" name="audio_sync" ctx={ctx} />
-              <SettingSelect label="Plugin DSP" name="audio_dsp_plugin" options={[
-                { label: "Nenhum", value: "none" }, { label: "Bass Boost", value: ":\\filters\\audio\\BassBoost.dsp" },
-                { label: "Chiptune", value: ":\\filters\\audio\\ChipTuneEnhance.dsp" },
-                { label: "Echo", value: ":\\filters\\audio\\Echo.dsp" },
-                { label: "Reverb", value: ":\\filters\\audio\\Reverb.dsp" },
-                { label: "Mono", value: ":\\filters\\audio\\Mono.dsp" }
-              ]} ctx={ctx} />
+            <div className="flex flex-col h-full overflow-hidden">
+              <div className="shrink-0 px-6 pt-6 pb-2 max-w-[740px]">
+                <h2 className="text-xl font-bold text-white mb-1">Áudio</h2>
+                <p className="text-sm text-white/40">Volume, música de fundo e sons de navegação.</p>
               </div>
-            </ScrollArea>
+              <ScrollArea className="flex-1 min-h-0">
+                <div className="px-6 pb-6 max-w-[740px] space-y-2">
+                  <SettingGroup label="Volume" />
+                  <SettingSlider label="Volume do Sistema" name="Volume" min={0} max={100} step={1} suffix="%" ctx={ctx} />
+                  <SettingSlider label="Volume da Música" name="MusicVolume" min={0} max={100} step={1} suffix="%" ctx={ctx} />
+                  <SettingToggle label="Mostrar Popup de Volume" name="VolumePopup" ctx={ctx} />
+
+                  <SettingGroup label="Música" />
+                  <SettingToggle label="Música no Menu" name="audio.bgmusic" ctx={ctx} />
+                  <SettingToggle label="Exibir Títulos das Músicas" name="audio.display_titles" ctx={ctx} />
+                  <SettingSlider label="Tempo de Exibição do Título" name="audio.display_titles_time" min={2} max={120} step={2} suffix="s" ctx={ctx} />
+                  <SettingToggle label="Música Específica por Sistema" name="audio.persystem" ctx={ctx} />
+                  <SettingToggle label="Tocar Música do Tema" name="audio.thememusics" ctx={ctx} />
+                  <SettingToggle label="Baixar Música ao Reproduzir Vídeo" name="VideoLowersMusic" ctx={ctx} />
+                  <SettingToggle label="Tocar Apenas Favoritas" name="audio.useFavoriteMusic" ctx={ctx} />
+
+                  <SettingGroup label="Sons" />
+                  <SettingToggle label="Sons de Navegação" name="EnableSounds" ctx={ctx} />
+                  <SettingToggle label="Áudio na Prévia de Vídeo" name="VideoAudio" ctx={ctx} />
+
+                  <SettingGroup label="RetroArch Áudio" />
+                  <SettingSelect label="Reamostrador" name="audio_resampler" options={[
+                    { label: "sinc", value: "sinc" }, { label: "CC", value: "CC" }, { label: "nearest", value: "nearest" }, { label: "Nenhum", value: "null" }
+                  ]} ctx={ctx} />
+                  <SettingSelect label="Qualidade" name="audio_resampler_quality" options={[
+                    { label: "Mínima", value: "1" }, { label: "Baixa", value: "2" }, { label: "Normal", value: "3" },
+                    { label: "Alta", value: "4" }, { label: "Máxima", value: "5" }
+                  ]} ctx={ctx} />
+                  <SettingSlider label="Ganho de Volume" name="audio_volume" min={-80} max={12} step={2} suffix=" dB" ctx={ctx} />
+                  <SettingSlider label="Ganho do Mixer" name="audio_mixer_volume" min={-80} max={12} step={2} suffix=" dB" ctx={ctx} />
+                  <SettingToggle label="Sincronização de Áudio" name="audio_sync" ctx={ctx} />
+                  <SettingSelect label="Plugin DSP" name="audio_dsp_plugin" options={[
+                    { label: "Nenhum", value: "none" }, { label: "Bass Boost", value: ":\\filters\\audio\\BassBoost.dsp" },
+                    { label: "Chiptune", value: ":\\filters\\audio\\ChipTuneEnhance.dsp" },
+                    { label: "Echo", value: ":\\filters\\audio\\Echo.dsp" },
+                    { label: "Reverb", value: ":\\filters\\audio\\Reverb.dsp" },
+                    { label: "Mono", value: ":\\filters\\audio\\Mono.dsp" }
+                  ]} ctx={ctx} />
+                </div>
+              </ScrollArea>
+            </div>
           )}
 
           {/* ===== TAB: AVANÇADO ===== */}
           {activeSettingsTab === "avancado" && (
-            <ScrollArea className="flex-1">
-              <div className="p-6 max-w-[740px] space-y-2">
-              <h2 className="text-xl font-bold text-white mb-1">Configurações Avançadas</h2>
-              <p className="text-sm text-white/40 mb-4">Drivers, latência, opções de desenvolvedor e otimizações.</p>
-
-              <SettingGroup label="Drivers" />
-              <SettingSelect label="Driver de Vídeo" name="video_driver" desc="Vulkan oferece melhor desempenho em hardware compatível." options={[
-                { label: "OpenGL", value: "gl" }, { label: "OpenGL Core", value: "glcore" },
-                { label: "DirectX 12", value: "d3d12" }, { label: "DirectX 11", value: "d3d11" },
-                { label: "Vulkan", value: "vulkan" }
-              ]} ctx={ctx} />
-              <SettingSelect label="Driver de Áudio" name="audio_driver" options={[
-                { label: "XAudio", value: "xaudio" }, { label: "DirectSound", value: "dsound" },
-                { label: "SDL", value: "sdl2" }, { label: "WASAPI", value: "wasapi" }
-              ]} ctx={ctx} />
-              <SettingSelect label="Driver de Controles" name="input_driver" desc="XInput ativa vibração. SDL para maior compatibilidade." options={[
-                { label: "SDL", value: "sdl2" }, { label: "XInput", value: "xinput" }, { label: "DInput", value: "dinput" }
-              ]} ctx={ctx} />
-
-              <SettingGroup label="Sincronização de Tela" />
-              <SettingToggle label="G-Sync/FreeSync" name="vrr_runloop_enable" desc="Sincroniza com a taxa do jogo. Apenas para monitores VRR." ctx={ctx} />
-              <SettingSelect label="V-Sync" name="video_vsync" options={[
-                { label: "Não", value: "false" }, { label: "Sim", value: "true" }, { label: "Adaptativo", value: "adaptative" }
-              ]} ctx={ctx} />
-
-              <SettingGroup label="Redução de Latência" />
-              <SettingSlider label="Quadros de Run-Ahead" name="runahead" min={0} max={12} step={1} suffix=" f" ctx={ctx} />
-              <SettingToggle label="Usar Preemptive Frames" name="preemptive_frames" desc="Usa quadros preventivos em vez de run-ahead." ctx={ctx} />
-              <SettingToggle label="Run-Ahead Segunda Instância" name="secondinstance" ctx={ctx} />
-              <SettingToggle label="Frame Delay Automático" name="video_frame_delay_auto" desc="Diminui frame delay para evitar quedas." ctx={ctx} />
-
-              <SettingGroup label="Vídeo Avançado" />
-              <SettingSelect label="Orientação de Tela" name="RotateScreen" desc="Rotaciona a área de trabalho." options={[
-                { label: "Normal", value: "0" }, { label: "90°", value: "1" }, { label: "180°", value: "2" }, { label: "270°", value: "3" }
-              ]} ctx={ctx} />
-              <SettingSelect label="Monitor" name="MonitorIndex" options={Array.from({ length: 5 }, (_, i) => ({ label: String(i), value: String(i) }))} ctx={ctx} />
-              <SettingToggle label="HDR" name="enable_hdr" desc="Ativa HDR para telas compatíveis." ctx={ctx} />
-
-              <SettingGroup label="Opções de Desenvolvedor" />
-              <SettingSlider label="Limite de VRAM" name="MaxVRAM" min={40} max={1000} step={10} suffix=" Mb" ctx={ctx} />
-              <SettingToggle label="Exibir FPS" name="DrawFramerate" ctx={ctx} />
-              <SettingToggle label="V-Sync do Frontend" name="VSync" ctx={ctx} />
-              <SettingSelect label="Nível de Log" name="LogLevel" options={[
-                { label: "Padrão", value: "" }, { label: "Desativado", value: "disabled" },
-                { label: "Aviso", value: "warning" }, { label: "Erro", value: "error" }, { label: "Debug", value: "debug" }
-              ]} ctx={ctx} />
-
-              <SettingGroup label="Gerenciamento de Dados" />
-              <SettingToggle label="Ignorar Multi-Disco (CUE/GDI/M3U)" name="RemoveMultiDiskContent" ctx={ctx} />
-              <SettingToggle label="Filtragem de Jogos" name="ForceDisableFilters" ctx={ctx} />
-              <SettingToggle label="Salvar Metadados ao Sair" name="SaveGamelistsOnExit" ctx={ctx} />
-              <SettingToggle label="Processar Apenas Gamelists" name="ParseGamelistOnly" desc="Debug: não verifica se ROMs existem." ctx={ctx} />
-              <SettingToggle label="Buscar Artes Locais" name="LocalArt" desc="Busca mídia com o mesmo nome do arquivo." ctx={ctx} />
-
-              <SettingGroup label="Interface do Frontend" />
-              <SettingToggle label="Gravar posições das janelas" name="RIESCADE.SaveWindowPositions" desc="Gravar posições e tamanhos de todas as janelas do sistema operacional." ctx={ctx} />
-              <SettingSelect label="Menu do RetroArch" name="global.retroarch.menu_driver" options={[
-                { label: "Automático", value: "" }, { label: "RGUI", value: "rgui" },
-                { label: "XMB", value: "xmb" }, { label: "Ozone", value: "ozone" }
-              ]} ctx={ctx} />
-
-              <SettingGroup label="Otimizações" />
-              <SettingToggle label="Pré-carregar UI ao Iniciar" name="PreloadUI" ctx={ctx} />
-              <SettingToggle label="Pré-carregar Mídias ao Iniciar" name="PreloadMedias" ctx={ctx} />
-              <SettingToggle label="Carregamento em Segundo Plano" name="ThreadedLoading" ctx={ctx} />
-              <SettingToggle label="Imagens Assíncronas" name="AsyncImages" ctx={ctx} />
-              <SettingToggle label="Otimizar VRAM de Imagens" name="OptimizeVRAM" ctx={ctx} />
-              <SettingToggle label="Otimizar VRAM de Vídeos" name="OptimizeVideo" ctx={ctx} />
-              <SettingToggle label="Cache do Sistema de Arquivos" name="UseFileCache" ctx={ctx} />
-
-              <SettingGroup label="Contas do Scraper" />
-              <SettingInput label="ScreenScraper Usuário" name="ScreenScraperUser" ctx={ctx} />
-              <SettingInput label="ScreenScraper Senha" name="ScreenScraperPass" isPassword ctx={ctx} />
-              <SettingInput label="IGDB Client ID" name="IGDBClientID" ctx={ctx} />
-              <SettingInput label="IGDB Secret" name="IGDBSecret" isPassword ctx={ctx} />
+            <div className="flex flex-col h-full overflow-hidden">
+              <div className="shrink-0 px-6 pt-6 pb-2 max-w-[740px]">
+                <h2 className="text-xl font-bold text-white mb-1">Configurações Avançadas</h2>
+                <p className="text-sm text-white/40">Drivers, latência, opções de desenvolvedor e otimizações.</p>
               </div>
-            </ScrollArea>
+              <ScrollArea className="flex-1 min-h-0">
+                <div className="px-6 pb-6 max-w-[740px] space-y-2">
+                  <SettingGroup label="Drivers" />
+                  <SettingSelect label="Driver de Vídeo" name="video_driver" desc="Vulkan oferece melhor desempenho em hardware compatível." options={[
+                    { label: "OpenGL", value: "gl" }, { label: "OpenGL Core", value: "glcore" },
+                    { label: "DirectX 12", value: "d3d12" }, { label: "DirectX 11", value: "d3d11" },
+                    { label: "Vulkan", value: "vulkan" }
+                  ]} ctx={ctx} />
+                  <SettingSelect label="Driver de Áudio" name="audio_driver" options={[
+                    { label: "XAudio", value: "xaudio" }, { label: "DirectSound", value: "dsound" },
+                    { label: "SDL", value: "sdl2" }, { label: "WASAPI", value: "wasapi" }
+                  ]} ctx={ctx} />
+                  <SettingSelect label="Driver de Controles" name="input_driver" desc="XInput ativa vibração. SDL para maior compatibilidade." options={[
+                    { label: "SDL", value: "sdl2" }, { label: "XInput", value: "xinput" }, { label: "DInput", value: "dinput" }
+                  ]} ctx={ctx} />
+
+                  <SettingGroup label="Sincronização de Tela" />
+                  <SettingToggle label="G-Sync/FreeSync" name="vrr_runloop_enable" desc="Sincroniza com a taxa do jogo. Apenas para monitores VRR." ctx={ctx} />
+                  <SettingSelect label="V-Sync" name="video_vsync" options={[
+                    { label: "Não", value: "false" }, { label: "Sim", value: "true" }, { label: "Adaptativo", value: "adaptative" }
+                  ]} ctx={ctx} />
+
+                  <SettingGroup label="Redução de Latência" />
+                  <SettingSlider label="Quadros de Run-Ahead" name="runahead" min={0} max={12} step={1} suffix=" f" ctx={ctx} />
+                  <SettingToggle label="Usar Preemptive Frames" name="preemptive_frames" desc="Usa quadros preventivos em vez de run-ahead." ctx={ctx} />
+                  <SettingToggle label="Run-Ahead Segunda Instância" name="secondinstance" ctx={ctx} />
+                  <SettingToggle label="Frame Delay Automático" name="video_frame_delay_auto" desc="Diminui frame delay para evitar quedas." ctx={ctx} />
+
+                  <SettingGroup label="Vídeo Avançado" />
+                  <SettingSelect label="Orientação de Tela" name="RotateScreen" desc="Rotaciona a área de trabalho." options={[
+                    { label: "Normal", value: "0" }, { label: "90°", value: "1" }, { label: "180°", value: "2" }, { label: "270°", value: "3" }
+                  ]} ctx={ctx} />
+                  <SettingSelect label="Monitor" name="MonitorIndex" options={Array.from({ length: 5 }, (_, i) => ({ label: String(i), value: String(i) }))} ctx={ctx} />
+                  <SettingToggle label="HDR" name="enable_hdr" desc="Ativa HDR para telas compatíveis." ctx={ctx} />
+
+                  <SettingGroup label="Opções de Desenvolvedor" />
+                  <SettingSlider label="Limite de VRAM" name="MaxVRAM" min={40} max={1000} step={10} suffix=" Mb" ctx={ctx} />
+                  <SettingToggle label="Exibir FPS" name="DrawFramerate" ctx={ctx} />
+                  <SettingToggle label="V-Sync do Frontend" name="VSync" ctx={ctx} />
+                  <SettingSelect label="Nível de Log" name="LogLevel" options={[
+                    { label: "Padrão", value: "" }, { label: "Desativado", value: "disabled" },
+                    { label: "Aviso", value: "warning" }, { label: "Erro", value: "error" }, { label: "Debug", value: "debug" }
+                  ]} ctx={ctx} />
+
+                  <SettingGroup label="Gerenciamento de Dados" />
+                  <SettingToggle label="Ignorar Multi-Disco (CUE/GDI/M3U)" name="RemoveMultiDiskContent" ctx={ctx} />
+                  <SettingToggle label="Filtragem de Jogos" name="ForceDisableFilters" ctx={ctx} />
+                  <SettingToggle label="Salvar Metadados ao Sair" name="SaveGamelistsOnExit" ctx={ctx} />
+                  <SettingToggle label="Processar Apenas Gamelists" name="ParseGamelistOnly" desc="Debug: não verifica se ROMs existem." ctx={ctx} />
+                  <SettingToggle label="Buscar Artes Locais" name="LocalArt" desc="Busca mídia com o mesmo nome do arquivo." ctx={ctx} />
+
+                  <SettingGroup label="Interface do Frontend" />
+                  <SettingToggle label="Gravar posições das janelas" name="RIESCADE.SaveWindowPositions" desc="Gravar posições e tamanhos de todas as janelas do sistema operacional." ctx={ctx} />
+                  <SettingSelect label="Menu do RetroArch" name="global.retroarch.menu_driver" options={[
+                    { label: "Automático", value: "" }, { label: "RGUI", value: "rgui" },
+                    { label: "XMB", value: "xmb" }, { label: "Ozone", value: "ozone" }
+                  ]} ctx={ctx} />
+
+                  <SettingGroup label="Otimizações" />
+                  <SettingToggle label="Pré-carregar UI ao Iniciar" name="PreloadUI" ctx={ctx} />
+                  <SettingToggle label="Pré-carregar Mídias ao Iniciar" name="PreloadMedias" ctx={ctx} />
+                  <SettingToggle label="Carregamento em Segundo Plano" name="ThreadedLoading" ctx={ctx} />
+                  <SettingToggle label="Imagens Assíncronas" name="AsyncImages" ctx={ctx} />
+                  <SettingToggle label="Otimizar VRAM de Imagens" name="OptimizeVRAM" ctx={ctx} />
+                  <SettingToggle label="Otimizar VRAM de Vídeos" name="OptimizeVideo" ctx={ctx} />
+                  <SettingToggle label="Cache do Sistema de Arquivos" name="UseFileCache" ctx={ctx} />
+
+                  <SettingGroup label="Contas do Scraper" />
+                  <SettingInput label="ScreenScraper Usuário" name="ScreenScraperUser" ctx={ctx} />
+                  <SettingInput label="ScreenScraper Senha" name="ScreenScraperPass" isPassword ctx={ctx} />
+                  <SettingInput label="IGDB Client ID" name="IGDBClientID" ctx={ctx} />
+                  <SettingInput label="IGDB Secret" name="IGDBSecret" isPassword ctx={ctx} />
+                </div>
+              </ScrollArea>
+            </div>
           )}
 
           {/* ===== TAB: SOBRE ===== */}
           {activeSettingsTab === "sobre" && (
-            <ScrollArea className="flex-1">
-              <div className="p-6 max-w-[740px] space-y-2">
-              <h2 className="text-xl font-bold text-white mb-1">Sobre o Sistema</h2>
-              <p className="text-sm text-white/40 mb-4">Informações do RIESCADE OS e hardware.</p>
+            <div className="flex flex-col h-full overflow-hidden">
+              <div className="shrink-0 px-6 pt-6 pb-2 max-w-[740px]">
+                <h2 className="text-xl font-bold text-white mb-1">Sobre o Sistema</h2>
+                <p className="text-sm text-white/40">Informações do RIESCADE OS e hardware.</p>
+              </div>
+              <ScrollArea className="flex-1 min-h-0">
+                <div className="px-6 pb-6 max-w-[740px] space-y-2">
+                  <SettingGroup label="Sistema" />
+                  <SettingInfo label="Versão" value="RIESCADE OS v2.0.0-Beta" />
+                  <SettingInfo label="Motor" value="Electron + React + Vite" />
+                  <SettingInfo label="Idioma" value={getSetting("Language", "pt_BR")} />
+                  <SettingInfo label="Tema Ativo" value={getSetting("RIESCADE.ThemeSet", "default")} />
 
-              <SettingGroup label="Sistema" />
-              <SettingInfo label="Versão" value="RIESCADE OS v2.0.0-Beta" />
-              <SettingInfo label="Motor" value="Electron + React + Vite" />
-              <SettingInfo label="Idioma" value={getSetting("Language", "pt_BR")} />
-              <SettingInfo label="Tema Ativo" value={getSetting("RIESCADE.ThemeSet", "default")} />
+                  <SettingGroup label="Atualizações" />
+                  <SettingSelect label="Canal de Atualização" name="updates.type" options={[
+                    { label: "Estável", value: "stable" }, { label: "Beta", value: "beta" },
+                    { label: "Beta (Butterfly)", value: "butterfly" }, { label: "Instável", value: "unstable" }
+                  ]} ctx={ctx} />
 
-              <SettingGroup label="Atualizações" />
-              <SettingSelect label="Canal de Atualização" name="updates.type" options={[
-                { label: "Estável", value: "stable" }, { label: "Beta", value: "beta" },
-                { label: "Beta (Butterfly)", value: "butterfly" }, { label: "Instável", value: "unstable" }
-              ]} ctx={ctx} />
-
-              <div className="bg-black/15 border border-white/5 rounded-xl px-4 py-3.5 text-xs hover:bg-white/[0.03] transition duration-200 space-y-3 mt-3">
-                <div className="flex items-center justify-between">
-                  <div className="flex flex-col gap-0.5">
-                    <span className="font-semibold text-white/90">Verificar Atualizações</span>
-                    <span className="text-[10px] text-white/40 font-sans">
-                      {updateState.status === 'idle' && 'Verifique se há novas atualizações do RIESCADE OS.'}
-                      {updateState.status === 'checking' && 'Verificando atualizações no GitHub...'}
-                      {updateState.status === 'no-update' && 'O sistema está atualizado! Nenhuma atualização disponível.'}
-                      {updateState.status === 'available' && `Nova versão disponível: v${updateState.version}`}
-                      {updateState.status === 'downloading' && `Baixando atualização... (${updateState.percent}%)`}
-                      {updateState.status === 'error' && (updateState.errorMsg || 'Falha ao buscar atualizações.')}
-                    </span>
-                  </div>
-                  
-                  <div className="shrink-0 font-sans">
-                    {(updateState.status === 'idle' || updateState.status === 'no-update' || updateState.status === 'error') && (
-                      <button
-                        onClick={(e) => { e.stopPropagation(); handleCheckForUpdates(); }}
-                        className="px-3.5 py-1.5 rounded-lg bg-accent text-white hover:bg-accent/80 font-semibold transition cursor-pointer text-[11px]"
-                      >
-                        Buscar
-                      </button>
-                    )}
-                    {updateState.status === 'checking' && (
-                      <button
-                        disabled
-                        className="px-3.5 py-1.5 rounded-lg bg-white/[0.04] border border-white/10 text-white/30 font-semibold text-[11px] cursor-not-allowed"
-                      >
-                        Buscando...
-                      </button>
-                    )}
-                    {updateState.status === 'available' && (
-                      <button
-                        onClick={(e) => { e.stopPropagation(); handleInstallUpdate(); }}
-                        className="px-3.5 py-1.5 rounded-lg bg-accent text-white hover:bg-accent/80 font-semibold transition cursor-pointer text-[11px]"
-                      >
-                        Atualizar
-                      </button>
-                    )}
-                    {updateState.status === 'downloading' && (
-                      <button
-                        disabled
-                        className="px-3.5 py-1.5 rounded-lg bg-accent/30 text-accent/50 font-semibold text-[11px] cursor-not-allowed"
-                      >
-                        Instalando...
-                      </button>
-                    )}
-                  </div>
-                </div>
-
-                {updateState.status === 'available' && updateState.releaseNotes && (
-                  <div className="bg-black/35 rounded-lg p-3 border border-white/5 space-y-1.5">
-                    <div className="font-semibold text-[10px] text-white/60 uppercase tracking-wider">Notas de Lançamento:</div>
-                    <pre className="text-[10px] text-white/50 whitespace-pre-wrap font-mono leading-relaxed max-h-32 overflow-y-auto pr-1">
-                      {updateState.releaseNotes}
-                    </pre>
-                  </div>
-                )}
-
-                {updateState.status === 'downloading' && (
-                  <div className="space-y-1.5">
-                    <div className="w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
-                      <div 
-                        className="h-full bg-accent transition-all duration-300 rounded-full" 
-                        style={{ width: `${updateState.percent || 0}%` }}
-                      />
-                    </div>
-                    {updateState.downloadedBytes !== undefined && updateState.totalBytes !== undefined && (
-                      <div className="flex justify-between text-[9px] text-white/40 font-mono">
-                        <span>
-                          {((updateState.downloadedBytes) / 1024 / 1024).toFixed(1)} MB / {((updateState.totalBytes) / 1024 / 1024).toFixed(1)} MB
+                  <div className="bg-black/15 border border-white/5 rounded-md px-4 py-3.5 text-xs hover:bg-white/[0.03] transition duration-200 space-y-3 mt-3">
+                    <div className="flex items-center justify-between">
+                      <div className="flex flex-col gap-0.5">
+                        <span className="font-semibold text-white/90">Verificar Atualizações</span>
+                        <span className="text-[10px] text-white/40 font-sans">
+                          {updateState.status === 'idle' && 'Verifique se há novas atualizações do RIESCADE OS.'}
+                          {updateState.status === 'checking' && 'Verificando atualizações no GitHub...'}
+                          {updateState.status === 'no-update' && 'O sistema está atualizado! Nenhuma atualização disponível.'}
+                          {updateState.status === 'available' && `Nova versão disponível: v${updateState.version}`}
+                          {updateState.status === 'downloading' && `Baixando atualização... (${updateState.percent}%)`}
+                          {updateState.status === 'error' && (updateState.errorMsg || 'Falha ao buscar atualizações.')}
                         </span>
-                        <span>{updateState.percent}%</span>
+                      </div>
+                      
+                      <div className="shrink-0 font-sans">
+                        {(updateState.status === 'idle' || updateState.status === 'no-update' || updateState.status === 'error') && (
+                          <button
+                            onClick={(e) => { e.stopPropagation(); handleCheckForUpdates(); }}
+                            className="px-3.5 py-1.5 rounded-md bg-accent text-white hover:bg-accent/80 font-semibold transition cursor-pointer text-[11px]"
+                          >
+                            Buscar
+                          </button>
+                        )}
+                        {updateState.status === 'checking' && (
+                          <button
+                            disabled
+                            className="px-3.5 py-1.5 rounded-md bg-white/[0.04] border border-white/10 text-white/30 font-semibold text-[11px] cursor-not-allowed"
+                          >
+                            Buscando...
+                          </button>
+                        )}
+                        {updateState.status === 'available' && (
+                          <button
+                            onClick={(e) => { e.stopPropagation(); handleInstallUpdate(); }}
+                            className="px-3.5 py-1.5 rounded-md bg-accent text-white hover:bg-accent/80 font-semibold transition cursor-pointer text-[11px]"
+                          >
+                            Atualizar
+                          </button>
+                        )}
+                        {updateState.status === 'downloading' && (
+                          <button
+                            disabled
+                            className="px-3.5 py-1.5 rounded-md bg-accent/30 text-accent/50 font-semibold text-[11px] cursor-not-allowed"
+                          >
+                            Instalando...
+                          </button>
+                        )}
+                      </div>
+                    </div>
+
+                    {updateState.status === 'available' && updateState.releaseNotes && (
+                      <div className="bg-black/35 rounded-md p-3 border border-white/5 space-y-1.5">
+                        <div className="font-semibold text-[10px] text-white/60 uppercase tracking-wider">Notas de Lançamento:</div>
+                        <pre className="text-[10px] text-white/50 whitespace-pre-wrap font-mono leading-relaxed max-h-32 overflow-y-auto pr-1">
+                          {updateState.releaseNotes}
+                        </pre>
+                      </div>
+                    )}
+
+                    {updateState.status === 'downloading' && (
+                      <div className="space-y-1.5">
+                        <div className="w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
+                          <div 
+                            className="h-full bg-accent transition-all duration-300 rounded-full" 
+                            style={{ width: `${updateState.percent || 0}%` }}
+                          />
+                        </div>
+                        {updateState.downloadedBytes !== undefined && updateState.totalBytes !== undefined && (
+                          <div className="flex justify-between text-[9px] text-white/40 font-mono">
+                            <span>
+                              {((updateState.downloadedBytes) / 1024 / 1024).toFixed(1)} MB / {((updateState.totalBytes) / 1024 / 1024).toFixed(1)} MB
+                            </span>
+                            <span>{updateState.percent}%</span>
+                          </div>
+                        )}
                       </div>
                     )}
                   </div>
-                )}
-              </div>
 
-              <SettingGroup label="Tradução por IA" />
-              <SettingToggle label="Ativar Tradução por IA" name="ai_service_enabled" ctx={ctx} />
-              <SettingSelect label="Idioma de Destino" name="ai_target_lang" options={[
-                { label: "Português", value: "Pt" }, { label: "English", value: "En" }, { label: "Español", value: "Es" },
-                { label: "Français", value: "Fr" }, { label: "Deutsch", value: "De" }, { label: "Italiano", value: "It" },
-                { label: "日本語", value: "Ja" }, { label: "한국어", value: "Ko" }, { label: "中文", value: "Zh" }
-              ]} ctx={ctx} />
-              <SettingInput label="URL do Serviço" name="ai_service_url" ctx={ctx} />
-              <SettingToggle label="Pausar na Tela Traduzida" name="ai_service_pause" ctx={ctx} />
-              </div>
-            </ScrollArea>
+                  <SettingGroup label="Tradução por IA" />
+                  <SettingToggle label="Ativar Tradução por IA" name="ai_service_enabled" ctx={ctx} />
+                  <SettingSelect label="Idioma de Destino" name="ai_target_lang" options={[
+                    { label: "Português", value: "Pt" }, { label: "English", value: "En" }, { label: "Español", value: "Es" },
+                    { label: "Français", value: "Fr" }, { label: "Deutsch", value: "De" }, { label: "Italiano", value: "It" },
+                    { label: "日本語", value: "Ja" }, { label: "한국어", value: "Ko" }, { label: "中文", value: "Zh" }
+                  ]} ctx={ctx} />
+                  <SettingInput label="URL do Serviço" name="ai_service_url" ctx={ctx} />
+                  <SettingToggle label="Pausar na Tela Traduzida" name="ai_service_pause" ctx={ctx} />
+                </div>
+              </ScrollArea>
+            </div>
           )}
         </div>
       </div>
@@ -1183,7 +1253,7 @@ export default function ToolAppContent({
         {/* Navigation Sidebar */}
         <aside className="w-[200px] bg-black/30 border-r border-white/5 flex flex-col shrink-0 select-none">
           <div className="p-5 border-b border-white/5">
-            <div className="flex items-center gap-2 text-emerald-400 font-bold text-sm">
+            <div className="flex items-center gap-2 text-accent font-bold text-sm">
               <Database className="w-5 h-5" />
               <span>DB MANAGER</span>
             </div>
@@ -1193,8 +1263,10 @@ export default function ToolAppContent({
           <nav className="p-3 flex-1 flex flex-col gap-1">
             <button
               onClick={() => { setTab("games"); setDbPage(1); }}
-              className={`w-full text-left px-3.5 py-2.5 rounded-xl text-xs font-semibold flex items-center gap-2.5 transition ${
-                tab === "games" ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20" : "text-white/60 hover:bg-white/5 hover:text-white"
+              className={`w-full text-left px-3.5 py-2.5 rounded-md text-xs font-semibold flex items-center gap-2.5 border transition ${
+                tab === "games" 
+                  ? "bg-accent-light text-accent border-accent/20" 
+                  : "text-white/60 border-transparent hover:bg-white/5 hover:text-white"
               }`}
             >
               <Gamepad2 className="w-4 h-4" />
@@ -1202,8 +1274,10 @@ export default function ToolAppContent({
             </button>
             <button
               onClick={() => setTab("systems")}
-              className={`w-full text-left px-3.5 py-2.5 rounded-xl text-xs font-semibold flex items-center gap-2.5 transition ${
-                tab === "systems" ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20" : "text-white/60 hover:bg-white/5 hover:text-white"
+              className={`w-full text-left px-3.5 py-2.5 rounded-md text-xs font-semibold flex items-center gap-2.5 border transition ${
+                tab === "systems" 
+                  ? "bg-accent-light text-accent border-accent/20" 
+                  : "text-white/60 border-transparent hover:bg-white/5 hover:text-white"
               }`}
             >
               <Folder className="w-4 h-4" />
@@ -1211,8 +1285,10 @@ export default function ToolAppContent({
             </button>
             <button
               onClick={() => setTab("stats")}
-              className={`w-full text-left px-3.5 py-2.5 rounded-xl text-xs font-semibold flex items-center gap-2.5 transition ${
-                tab === "stats" ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20" : "text-white/60 hover:bg-white/5 hover:text-white"
+              className={`w-full text-left px-3.5 py-2.5 rounded-md text-xs font-semibold flex items-center gap-2.5 border transition ${
+                tab === "stats" 
+                  ? "bg-accent-light text-accent border-accent/20" 
+                  : "text-white/60 border-transparent hover:bg-white/5 hover:text-white"
               }`}
             >
               <Cpu className="w-4 h-4" />
@@ -1247,7 +1323,7 @@ export default function ToolAppContent({
                 </div>
 
                 {/* Filters/Actions Bar */}
-                <form onSubmit={handleSearchSubmit} className="flex items-center gap-2 bg-white/5 border border-white/5 rounded-xl px-3 py-1.5 w-[280px]">
+                <form onSubmit={handleSearchSubmit} className="flex items-center gap-2 bg-white/5 border border-white/10 rounded-md px-3 py-1.5 w-[280px] hover:border-accent focus-within:border-accent transition duration-200">
                   <Search className="w-3.5 h-3.5 text-white/40" />
                   <input
                     type="text"
@@ -1265,39 +1341,37 @@ export default function ToolAppContent({
               </div>
 
               {/* Filter controls row */}
-              <div className="flex items-center gap-3 mb-4 bg-white/[0.02] border border-white/5 rounded-xl p-3 text-xs">
+              <div className="flex items-center gap-3 mb-4 bg-white/[0.02] border border-white/5 rounded-md p-3 text-xs">
                 <div className="flex items-center gap-1.5">
                   <Filter className="w-3.5 h-3.5 text-emerald-400" />
                   <span className="text-white/50 font-medium">Sistema:</span>
-                  <select
+                  <RadixSelect
                     value={dbSystemFilter}
-                    onChange={(e) => { setDbSystemFilter(e.target.value); setDbPage(1); }}
-                    className="bg-[#121620] border border-white/10 rounded-lg px-2.5 py-1 text-white text-xs focus:outline-none"
-                  >
-                    <option value="all">Todos os Sistemas</option>
-                    {dbSystems.map(s => (
-                      <option key={s.name} value={s.name}>{s.fullname || s.name}</option>
-                    ))}
-                  </select>
+                    onValueChange={(val) => { setDbSystemFilter(val); setDbPage(1); }}
+                    options={[
+                      { label: "Todos os Sistemas", value: "all" },
+                      ...dbSystems.map(s => ({ label: s.fullname || s.name, value: s.name }))
+                    ]}
+                  />
                 </div>
 
                 <div className="flex items-center gap-1.5 ml-auto">
                   <span className="text-white/50 font-medium">Ordenar por:</span>
-                  <select
+                  <RadixSelect
                     value={dbSortBy}
-                    onChange={(e) => { setDbSortBy(e.target.value); setDbPage(1); }}
-                    className="bg-[#121620] border border-white/10 rounded-lg px-2.5 py-1 text-white text-xs focus:outline-none"
-                  >
-                    <option value="name">Nome</option>
-                    <option value="system">Sistema</option>
-                    <option value="rating">Avaliação</option>
-                    <option value="releasedate">Lançamento</option>
-                    <option value="playcount">Vezes Jogado</option>
-                    <option value="lastplayed">Última Vez Jogado</option>
-                  </select>
+                    onValueChange={(val) => { setDbSortBy(val); setDbPage(1); }}
+                    options={[
+                      { label: "Nome", value: "name" },
+                      { label: "Sistema", value: "system" },
+                      { label: "Avaliação", value: "rating" },
+                      { label: "Lançamento", value: "releasedate" },
+                      { label: "Vezes Jogado", value: "playcount" },
+                      { label: "Última Vez Jogado", value: "lastplayed" }
+                    ]}
+                  />
                   <button
                     onClick={() => { setDbSortDir(dbSortDir === "ASC" ? "DESC" : "ASC"); setDbPage(1); }}
-                    className="bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg px-2.5 py-1 text-emerald-400 transition"
+                    className="bg-white/5 hover:bg-white/10 hover:border-accent border border-white/10 rounded-md px-2.5 py-1 text-accent transition duration-200 cursor-pointer"
                   >
                     {dbSortDir}
                   </button>
@@ -1305,10 +1379,10 @@ export default function ToolAppContent({
               </div>
 
               {/* Grid / Table */}
-              <div className="flex-1 overflow-y-auto border border-white/5 rounded-xl bg-black/10">
+              <div className="flex-1 overflow-y-auto border border-white/5 rounded-md bg-black/10">
                 {isLoadingGames ? (
                   <div className="h-full flex items-center justify-center text-xs text-white/40 gap-2">
-                    <RefreshCw className="w-4 h-4 animate-spin text-emerald-400" />
+                    <RefreshCw className="w-4 h-4 animate-spin text-accent" />
                     <span>Carregando dados...</span>
                   </div>
                 ) : dbGames.length === 0 ? (
@@ -1347,20 +1421,20 @@ export default function ToolAppContent({
                             {game.hidden ? (
                               <EyeOff className="w-4 h-4 text-red-400 mx-auto" />
                             ) : (
-                              <Eye className="w-4 h-4 text-emerald-400 mx-auto" />
+                              <Eye className="w-4 h-4 text-accent mx-auto" />
                             )}
                           </td>
                           <td className="p-3 text-center flex items-center justify-center gap-1.5">
                             <button
                               onClick={() => handleEditGame(game)}
-                              className="p-1.5 rounded-lg bg-white/5 hover:bg-emerald-500/20 hover:text-emerald-400 text-white/60 transition"
+                              className="p-1.5 rounded-md bg-white/5 hover:bg-accent-light hover:text-accent text-white/60 transition cursor-pointer"
                               title="Editar Metadados"
                             >
                               <Edit3 className="w-3.5 h-3.5" />
                             </button>
                             <button
                               onClick={() => setDeleteConfirmGame(game)}
-                              className="p-1.5 rounded-lg bg-white/5 hover:bg-red-500/20 hover:text-red-400 text-white/60 transition"
+                              className="p-1.5 rounded-md bg-white/5 hover:bg-red-500/20 hover:text-red-400 text-white/60 transition cursor-pointer"
                               title="Excluir"
                             >
                               <Trash2 className="w-3.5 h-3.5" />
@@ -1374,11 +1448,11 @@ export default function ToolAppContent({
               </div>
 
               {/* Pagination controls */}
-              <div className="flex items-center justify-between mt-4 bg-white/[0.01] border border-white/5 rounded-xl p-3 text-xs">
+              <div className="flex items-center justify-between mt-4 bg-white/[0.01] border border-white/5 rounded-md p-3 text-xs">
                 <button
                   disabled={dbPage <= 1}
                   onClick={() => setDbPage(p => Math.max(1, p - 1))}
-                  className="px-3.5 py-1.5 rounded-lg bg-white/5 border border-white/10 text-white hover:bg-white/10 disabled:opacity-30 disabled:hover:bg-white/5 transition flex items-center gap-1 cursor-pointer"
+                  className="px-3.5 py-1.5 rounded-md bg-white/5 border border-white/10 text-white hover:bg-white/10 disabled:opacity-30 disabled:hover:bg-white/5 transition flex items-center gap-1 cursor-pointer"
                 >
                   <ChevronLeft className="w-4 h-4" />
                   <span>Anterior</span>
@@ -1387,7 +1461,7 @@ export default function ToolAppContent({
                 <button
                   disabled={dbPage >= dbPages}
                   onClick={() => setDbPage(p => Math.min(dbPages, p + 1))}
-                  className="px-3.5 py-1.5 rounded-lg bg-white/5 border border-white/10 text-white hover:bg-white/10 disabled:opacity-30 disabled:hover:bg-white/5 transition flex items-center gap-1 cursor-pointer"
+                  className="px-3.5 py-1.5 rounded-md bg-white/5 border border-white/10 text-white hover:bg-white/10 disabled:opacity-30 disabled:hover:bg-white/5 transition flex items-center gap-1 cursor-pointer"
                 >
                   <span>Próxima</span>
                   <ChevronRight className="w-4 h-4" />
@@ -1398,11 +1472,13 @@ export default function ToolAppContent({
 
           {/* TAB: SYSTEMS INDEXED */}
           {tab === "systems" && (
-            <div className="flex-1 p-6 overflow-y-auto">
-              <h2 className="text-lg font-bold mb-1">Sistemas Ativos</h2>
-              <p className="text-xs text-white/50 mb-5">Sistemas e consoles catalogados no banco de dados SQLite</p>
+            <div className="flex-1 flex flex-col overflow-hidden pt-10 p-6">
+              <div className="shrink-0 mb-5">
+                <h2 className="text-lg font-bold mb-1">Sistemas Ativos</h2>
+                <p className="text-xs text-white/50">Sistemas e consoles catalogados no banco de dados SQLite</p>
+              </div>
 
-              <div className="border border-white/5 rounded-xl bg-black/10 overflow-hidden">
+              <div className="flex-1 overflow-y-auto border border-white/5 rounded-md bg-black/10">
                 <table className="w-full text-left border-collapse text-xs">
                   <thead>
                     <tr className="bg-white/5 text-white/50 border-b border-white/5 font-semibold">
@@ -1415,7 +1491,7 @@ export default function ToolAppContent({
                   <tbody>
                     {dbSystems.filter(s => s.name !== '__es_systems.cfg').map(sys => (
                       <tr key={sys.name} className="border-b border-white/5 hover:bg-white/[0.02] transition">
-                        <td className="p-3 font-semibold text-emerald-400">{sys.name}</td>
+                        <td className="p-3 font-semibold text-accent">{sys.name}</td>
                         <td className="p-3 text-white/80">{sys.fullname}</td>
                         <td className="p-3 text-white/40">
                           {sys.lastScanAt ? new Date(sys.lastScanAt).toLocaleString('pt-BR') : "Nunca"}
@@ -1431,90 +1507,86 @@ export default function ToolAppContent({
 
           {/* TAB: MAINTENANCE & INFO */}
           {tab === "stats" && (
-            <div className="flex-1 p-6 overflow-y-auto space-y-6">
-              <div>
+            <div className="flex-1 flex flex-col overflow-hidden pt-10 p-6">
+              <div className="shrink-0 mb-5">
                 <h2 className="text-lg font-bold mb-1">Manutenção e Informações</h2>
                 <p className="text-xs text-white/50">Métricas gerais e ferramentas de manutenção do banco SQLite</p>
               </div>
 
-              {/* Statistics Cards */}
-              <div className="grid grid-cols-4 gap-4">
-                <div className="rounded-xl border border-white/5 bg-white/5 p-4 flex flex-col gap-1 backdrop-blur-sm">
-                  <div className="flex items-center justify-between text-white/40">
-                    <span className="text-[10px] uppercase font-bold tracking-wider">Jogos Catalogados</span>
-                    <Gamepad2 className="w-4 h-4 text-emerald-400" />
-                  </div>
-                  <span className="text-2xl font-black mt-2 text-white">{dbStats?.totalGames || 0}</span>
-                  <span className="text-[9px] text-white/30">ROMs indexadas no total</span>
-                </div>
-                <div className="rounded-xl border border-white/5 bg-white/5 p-4 flex flex-col gap-1 backdrop-blur-sm">
-                  <div className="flex items-center justify-between text-white/40">
-                    <span className="text-[10px] uppercase font-bold tracking-wider">Sistemas Ativos</span>
-                    <Folder className="w-4 h-4 text-emerald-400" />
-                  </div>
-                  <span className="text-2xl font-black mt-2 text-white">{dbStats?.totalSystems || 0}</span>
-                  <span className="text-[9px] text-white/30">Consoles catalogados</span>
-                </div>
-                <div className="rounded-xl border border-white/5 bg-white/5 p-4 flex flex-col gap-1 backdrop-blur-sm">
-                  <div className="flex items-center justify-between text-white/40">
-                    <span className="text-[10px] uppercase font-bold tracking-wider">Tamanho do Banco</span>
-                    <HardDrive className="w-4 h-4 text-emerald-400" />
-                  </div>
-                  <span className="text-2xl font-black mt-2 text-white">
-                    {dbStats?.dbSize ? `${(dbStats.dbSize / 1024 / 1024).toFixed(2)} MB` : "0.00 MB"}
-                  </span>
-                  <span className="text-[9px] text-white/30">Arquivo riescade.db</span>
-                </div>
-                <div className="rounded-xl border border-white/5 bg-white/5 p-4 flex flex-col gap-1 backdrop-blur-sm">
-                  <div className="flex items-center justify-between text-white/40">
-                    <span className="text-[10px] uppercase font-bold tracking-wider">Último Sync</span>
-                    <RefreshCw className="w-4 h-4 text-emerald-400" />
-                  </div>
-                  <span className="text-xs font-bold mt-4 text-white truncate">
-                    {dbStats?.lastSyncAt ? new Date(dbStats.lastSyncAt).toLocaleDateString('pt-BR') + ' ' + new Date(dbStats.lastSyncAt).toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'}) : "Nenhum"}
-                  </span>
-                  <span className="text-[9px] text-white/30">Data do último escaneamento</span>
-                </div>
-              </div>
-
-              {/* Maintenance tools block */}
-              <div className="rounded-xl border border-white/5 bg-white/5 p-5 space-y-4">
-                <h3 className="text-xs font-bold text-white/70 uppercase tracking-wider">Ferramentas de Manutenção</h3>
-                
-                <div className="flex flex-col gap-3 max-w-[600px] text-xs">
-                  <div className="flex items-center justify-between p-3.5 bg-black/20 rounded-xl border border-white/5">
-                    <div className="flex flex-col gap-0.5">
-                      <span className="font-semibold text-white/90">Vacuum (Compactar Banco)</span>
-                      <span className="text-[10px] text-white/40">Executa a limpeza física e compacta o arquivo do SQLite. Recomendado se você editou ou removeu muitos jogos.</span>
+              <div className="flex-1 overflow-y-auto space-y-6">
+                {/* Statistics Cards */}
+                <div className="grid grid-cols-4 gap-4">
+                  <div className="rounded-md border border-white/5 bg-white/5 p-4 flex flex-col gap-1 backdrop-blur-sm">
+                    <div className="flex items-center justify-between text-white/40">
+                      <span className="text-[10px] uppercase font-bold tracking-wider">Jogos Catalogados</span>
+                      <Gamepad2 className="w-4 h-4 text-accent" />
                     </div>
-                    <button
-                      onClick={handleVacuum}
-                      className="px-3.5 py-1.5 rounded-lg bg-emerald-500 text-white font-semibold hover:bg-emerald-600 transition shrink-0 cursor-pointer text-[10px]"
-                    >
-                      Executar Vacuum
-                    </button>
+                    <span className="text-2xl font-black mt-2 text-white">{dbStats?.totalGames || 0}</span>
+                    <span className="text-[9px] text-white/30">ROMs indexadas no total</span>
                   </div>
-
-                  <div className="flex items-center justify-between p-3.5 bg-black/20 rounded-xl border border-white/5">
-                    <div className="flex flex-col gap-0.5">
-                      <span className="font-semibold text-white/90 text-red-400">Reconstruir Banco (Rebuild)</span>
-                      <span className="text-[10px] text-white/40">Limpa todas as tabelas do banco de dados e reconstrói do zero varrendo os arquivos físicos e importando arquivos XML novamente.</span>
+                  <div className="rounded-md border border-white/5 bg-white/5 p-4 flex flex-col gap-1 backdrop-blur-sm">
+                    <div className="flex items-center justify-between text-white/40">
+                      <span className="text-[10px] uppercase font-bold tracking-wider">Sistemas Ativos</span>
+                      <Folder className="w-4 h-4 text-accent" />
                     </div>
-                    <button
-                      disabled={isRebuilding}
-                      onClick={handleRebuild}
-                      className="px-3.5 py-1.5 rounded-lg bg-red-500/20 hover:bg-red-500 text-red-400 hover:text-white font-semibold transition shrink-0 cursor-pointer disabled:opacity-30 text-[10px]"
-                    >
-                      {isRebuilding ? "Reconstruindo..." : "Reconstruir Banco"}
-                    </button>
+                    <span className="text-2xl font-black mt-2 text-white">{dbStats?.totalSystems || 0}</span>
+                    <span className="text-[9px] text-white/30">Consoles catalogados</span>
+                  </div>
+                  <div className="rounded-md border border-white/5 bg-white/5 p-4 flex flex-col gap-1 backdrop-blur-sm">
+                    <div className="flex items-center justify-between text-white/40">
+                      <span className="text-[10px] uppercase font-bold tracking-wider">Tamanho do Banco</span>
+                      <HardDrive className="w-4 h-4 text-accent" />
+                    </div>
+                    <span className="text-2xl font-black mt-2 text-white">
+                      {dbStats?.dbSize ? `${(dbStats.dbSize / 1024 / 1024).toFixed(2)} MB` : "0.00 MB"}
+                    </span>
+                    <span className="text-[9px] text-white/30">Arquivo riescade.db</span>
+                  </div>
+                  <div className="rounded-md border border-white/5 bg-white/5 p-4 flex flex-col gap-1 backdrop-blur-sm">
+                    <div className="flex items-center justify-between text-white/40">
+                      <span className="text-[10px] uppercase font-bold tracking-wider">Último Sync</span>
+                      <RefreshCw className="w-4 h-4 text-accent" />
+                    </div>
+                    <span className="text-xs font-bold mt-4 text-white truncate">
+                      {dbStats?.lastSyncAt ? new Date(dbStats.lastSyncAt).toLocaleDateString('pt-BR') + ' ' + new Date(dbStats.lastSyncAt).toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'}) : "Nenhum"}
+                    </span>
+                    <span className="text-[9px] text-white/30">Data do último escaneamento</span>
                   </div>
                 </div>
 
-                {maintenanceMsg && (
-                  <div className="text-xs text-emerald-400 font-mono mt-3 animate-pulse">
-                    ⚡ {maintenanceMsg}
+                {/* Maintenance tools block */}
+                <div className="rounded-md border border-white/5 bg-white/5 p-5 space-y-4">
+                  <h3 className="text-xs font-bold text-white/70 uppercase tracking-wider">Ferramentas de Manutenção</h3>
+                  
+                  <div className="flex flex-col gap-3 max-w-[600px] text-xs">
+                    <div className="flex items-center justify-between p-3.5 bg-black/20 rounded-md border border-white/5">
+                      <div className="flex flex-col gap-0.5">
+                        <span className="font-semibold text-white/90">Vacuum (Compactar Banco)</span>
+                        <span className="text-[10px] text-white/40">Executa a limpeza física e compacta o arquivo do SQLite. Recomendado se você editou ou removeu muitos jogos.</span>
+                      </div>
+                      <button
+                        onClick={handleVacuum}
+                        className="px-3.5 py-1.5 rounded-md bg-accent text-white font-semibold hover:bg-accent-hover transition shrink-0 cursor-pointer text-[10px]"
+                      >
+                        Executar Vacuum
+                      </button>
+                    </div>
+
+                    <div className="flex items-center justify-between p-3.5 bg-black/20 rounded-md border border-white/5">
+                      <div className="flex flex-col gap-0.5">
+                        <span className="font-semibold text-white/90 text-red-400">Reconstruir Banco (Rebuild)</span>
+                        <span className="text-[10px] text-white/40">Limpa todas as tabelas do banco de dados e reconstrói do zero varrendo os arquivos físicos e importando arquivos XML novamente.</span>
+                      </div>
+                      <button
+                        disabled={isRebuilding}
+                        onClick={handleRebuild}
+                        className="px-3.5 py-1.5 rounded-md bg-red-500/20 hover:bg-red-500 text-red-400 hover:text-white font-semibold transition shrink-0 cursor-pointer disabled:opacity-30 text-[10px]"
+                      >
+                        {isRebuilding ? "Reconstruindo..." : "Reconstruir Banco"}
+                      </button>
+                    </div>
                   </div>
-                )}
+                </div>
               </div>
             </div>
           )}
@@ -1527,10 +1599,10 @@ export default function ToolAppContent({
                 {/* Header */}
                 <div className="p-4 border-b border-white/5 flex items-center justify-between bg-black/10 shrink-0">
                   <div className="truncate max-w-[80%]">
-                    <span className="text-[10px] text-emerald-400 uppercase tracking-widest font-black block">{editForm.system}</span>
+                    <span className="text-[10px] text-accent uppercase tracking-widest font-black block">{editForm.system}</span>
                     <h3 className="font-bold text-sm text-white truncate">{editForm.name}</h3>
                   </div>
-                  <button onClick={() => { setSelectedGame(null); setEditForm(null); }} className="p-1 rounded-lg hover:bg-white/5 text-white/50 hover:text-white">
+                  <button onClick={() => { setSelectedGame(null); setEditForm(null); }} className="p-1 rounded-md hover:bg-white/5 text-white/50 hover:text-white transition cursor-pointer">
                     <X className="w-5 h-5" />
                   </button>
                 </div>
@@ -1546,8 +1618,8 @@ export default function ToolAppContent({
                     <button
                       key={t.id}
                       onClick={() => setEditTab(t.id as any)}
-                      className={`flex-1 py-3 text-center border-b font-semibold transition ${
-                        editTab === t.id ? "border-emerald-500 text-emerald-400" : "border-transparent text-white/50 hover:text-white"
+                      className={`flex-1 py-3 text-center border-b font-semibold transition cursor-pointer ${
+                        editTab === t.id ? "border-accent text-accent" : "border-transparent text-white/50 hover:text-white"
                       }`}
                     >
                       {t.name}
@@ -1566,7 +1638,7 @@ export default function ToolAppContent({
                           type="text"
                           value={editForm.name || ""}
                           onChange={(e) => setEditForm({ ...editForm, name: e.target.value })}
-                          className="bg-black/40 border border-white/10 rounded-lg p-2 text-white focus:outline-none focus:border-emerald-500"
+                          className="bg-black/40 border border-white/10 rounded-md p-2 text-white focus:outline-none focus:border-accent hover:border-accent transition duration-200"
                         />
                       </div>
                       <div className="flex flex-col gap-1">
@@ -1575,7 +1647,7 @@ export default function ToolAppContent({
                           rows={4}
                           value={editForm.desc || ""}
                           onChange={(e) => setEditForm({ ...editForm, desc: e.target.value })}
-                          className="bg-black/40 border border-white/10 rounded-lg p-2 text-white focus:outline-none focus:border-emerald-500 leading-normal"
+                          className="bg-black/40 border border-white/10 rounded-md p-2 text-white focus:outline-none focus:border-accent hover:border-accent transition duration-200 leading-normal"
                         />
                       </div>
                       <div className="grid grid-cols-2 gap-3">
@@ -1585,7 +1657,7 @@ export default function ToolAppContent({
                             type="text"
                             value={editForm.developer || ""}
                             onChange={(e) => setEditForm({ ...editForm, developer: e.target.value })}
-                            className="bg-black/40 border border-white/10 rounded-lg p-2 text-white focus:outline-none focus:border-emerald-500"
+                            className="bg-black/40 border border-white/10 rounded-md p-2 text-white focus:outline-none focus:border-accent hover:border-accent transition duration-200"
                           />
                         </div>
                         <div className="flex flex-col gap-1">
@@ -1594,7 +1666,7 @@ export default function ToolAppContent({
                             type="text"
                             value={editForm.publisher || ""}
                             onChange={(e) => setEditForm({ ...editForm, publisher: e.target.value })}
-                            className="bg-black/40 border border-white/10 rounded-lg p-2 text-white focus:outline-none focus:border-emerald-500"
+                            className="bg-black/40 border border-white/10 rounded-md p-2 text-white focus:outline-none focus:border-accent hover:border-accent transition duration-200"
                           />
                         </div>
                       </div>
@@ -1605,7 +1677,7 @@ export default function ToolAppContent({
                             type="text"
                             value={editForm.genre || ""}
                             onChange={(e) => setEditForm({ ...editForm, genre: e.target.value })}
-                            className="bg-black/40 border border-white/10 rounded-lg p-2 text-white focus:outline-none focus:border-emerald-500"
+                            className="bg-black/40 border border-white/10 rounded-md p-2 text-white focus:outline-none focus:border-accent hover:border-accent transition duration-200"
                           />
                         </div>
                         <div className="flex flex-col gap-1">
@@ -1614,7 +1686,7 @@ export default function ToolAppContent({
                             type="text"
                             value={editForm.players || ""}
                             onChange={(e) => setEditForm({ ...editForm, players: e.target.value })}
-                            className="bg-black/40 border border-white/10 rounded-lg p-2 text-white focus:outline-none focus:border-emerald-500"
+                            className="bg-black/40 border border-white/10 rounded-md p-2 text-white focus:outline-none focus:border-accent hover:border-accent transition duration-200"
                           />
                         </div>
                         <div className="flex flex-col gap-1">
@@ -1623,35 +1695,35 @@ export default function ToolAppContent({
                             type="text"
                             value={editForm.releasedate || ""}
                             onChange={(e) => setEditForm({ ...editForm, releasedate: e.target.value })}
-                            className="bg-black/40 border border-white/10 rounded-lg p-2 text-white focus:outline-none focus:border-emerald-500"
+                            className="bg-black/40 border border-white/10 rounded-md p-2 text-white focus:outline-none focus:border-accent hover:border-accent transition duration-200"
                           />
                         </div>
                       </div>
                       <div className="grid grid-cols-3 gap-3 pt-2">
-                        <label className="flex items-center gap-2 bg-black/20 p-2 border border-white/5 rounded-xl cursor-pointer">
+                        <label className="flex items-center gap-2 bg-black/20 p-2 border border-white/5 rounded-md cursor-pointer select-none">
                           <input
                             type="checkbox"
                             checked={editForm.favorite === true}
                             onChange={(e) => setEditForm({ ...editForm, favorite: e.target.checked })}
-                            className="accent-emerald-500"
+                            className="accent-range"
                           />
                           <span>Favorito</span>
                         </label>
-                        <label className="flex items-center gap-2 bg-black/20 p-2 border border-white/5 rounded-xl cursor-pointer">
+                        <label className="flex items-center gap-2 bg-black/20 p-2 border border-white/5 rounded-md cursor-pointer select-none">
                           <input
                             type="checkbox"
                             checked={editForm.hidden === true}
                             onChange={(e) => setEditForm({ ...editForm, hidden: e.target.checked })}
-                            className="accent-emerald-500"
+                            className="accent-range"
                           />
                           <span>Oculto</span>
                         </label>
-                        <label className="flex items-center gap-2 bg-black/20 p-2 border border-white/5 rounded-xl cursor-pointer">
+                        <label className="flex items-center gap-2 bg-black/20 p-2 border border-white/5 rounded-md cursor-pointer select-none">
                           <input
                             type="checkbox"
                             checked={editForm.kidgame === true}
                             onChange={(e) => setEditForm({ ...editForm, kidgame: e.target.checked })}
-                            className="accent-emerald-500"
+                            className="accent-range"
                           />
                           <span>Modo Criança</span>
                         </label>
@@ -1669,7 +1741,7 @@ export default function ToolAppContent({
                             type="text"
                             value={editForm.emulator || "auto"}
                             onChange={(e) => setEditForm({ ...editForm, emulator: e.target.value })}
-                            className="bg-black/40 border border-white/10 rounded-lg p-2 text-white focus:outline-none focus:border-emerald-500"
+                            className="bg-black/40 border border-white/10 rounded-md p-2 text-white focus:outline-none focus:border-accent hover:border-accent transition duration-200"
                           />
                         </div>
                         <div className="flex flex-col gap-1">
@@ -1678,7 +1750,7 @@ export default function ToolAppContent({
                             type="text"
                             value={editForm.core || "auto"}
                             onChange={(e) => setEditForm({ ...editForm, core: e.target.value })}
-                            className="bg-black/40 border border-white/10 rounded-lg p-2 text-white focus:outline-none focus:border-emerald-500"
+                            className="bg-black/40 border border-white/10 rounded-md p-2 text-white focus:outline-none focus:border-accent hover:border-accent transition duration-200"
                           />
                         </div>
                       </div>
@@ -1689,7 +1761,7 @@ export default function ToolAppContent({
                             type="text"
                             value={editForm.arcadesystem || ""}
                             onChange={(e) => setEditForm({ ...editForm, arcadesystem: e.target.value })}
-                            className="bg-black/40 border border-white/10 rounded-lg p-2 text-white focus:outline-none focus:border-emerald-500"
+                            className="bg-black/40 border border-white/10 rounded-md p-2 text-white focus:outline-none focus:border-accent hover:border-accent transition duration-200"
                           />
                         </div>
                         <div className="flex flex-col gap-1">
@@ -1698,7 +1770,7 @@ export default function ToolAppContent({
                             type="text"
                             value={editForm.gamefamily || ""}
                             onChange={(e) => setEditForm({ ...editForm, gamefamily: e.target.value })}
-                            className="bg-black/40 border border-white/10 rounded-lg p-2 text-white focus:outline-none focus:border-emerald-500"
+                            className="bg-black/40 border border-white/10 rounded-md p-2 text-white focus:outline-none focus:border-accent hover:border-accent transition duration-200"
                           />
                         </div>
                       </div>
@@ -1714,7 +1786,7 @@ export default function ToolAppContent({
                           type="text"
                           readOnly
                           value={editForm.path || ""}
-                          className="bg-white/5 border border-white/5 rounded-lg p-2 text-white/50 cursor-not-allowed select-all"
+                          className="bg-white/5 border border-white/5 rounded-md p-2 text-white/50 cursor-not-allowed select-all"
                         />
                       </div>
                       <div className="grid grid-cols-2 gap-3">
@@ -1724,7 +1796,7 @@ export default function ToolAppContent({
                             type="text"
                             value={editForm.md5 || ""}
                             onChange={(e) => setEditForm({ ...editForm, md5: e.target.value })}
-                            className="bg-black/40 border border-white/10 rounded-lg p-2 text-white focus:outline-none focus:border-emerald-500"
+                            className="bg-black/40 border border-white/10 rounded-md p-2 text-white focus:outline-none focus:border-accent hover:border-accent transition duration-200"
                           />
                         </div>
                         <div className="flex flex-col gap-1">
@@ -1733,7 +1805,7 @@ export default function ToolAppContent({
                             type="text"
                             value={editForm.crc32 || ""}
                             onChange={(e) => setEditForm({ ...editForm, crc32: e.target.value })}
-                            className="bg-black/40 border border-white/10 rounded-lg p-2 text-white focus:outline-none focus:border-emerald-500"
+                            className="bg-black/40 border border-white/10 rounded-md p-2 text-white focus:outline-none focus:border-accent hover:border-accent transition duration-200"
                           />
                         </div>
                       </div>
@@ -1744,7 +1816,7 @@ export default function ToolAppContent({
                             type="number"
                             value={editForm.gametime || 0}
                             onChange={(e) => setEditForm({ ...editForm, gametime: parseInt(e.target.value) || 0 })}
-                            className="bg-black/40 border border-white/10 rounded-lg p-2 text-white focus:outline-none focus:border-emerald-500"
+                            className="bg-black/40 border border-white/10 rounded-md p-2 text-white focus:outline-none focus:border-accent hover:border-accent transition duration-200"
                           />
                         </div>
                         <div className="flex flex-col gap-1">
@@ -1753,7 +1825,7 @@ export default function ToolAppContent({
                             type="number"
                             value={editForm.playcount || 0}
                             onChange={(e) => setEditForm({ ...editForm, playcount: parseInt(e.target.value) || 0 })}
-                            className="bg-black/40 border border-white/10 rounded-lg p-2 text-white focus:outline-none focus:border-emerald-500"
+                            className="bg-black/40 border border-white/10 rounded-md p-2 text-white focus:outline-none focus:border-accent hover:border-accent transition duration-200"
                           />
                         </div>
                       </div>
@@ -1764,7 +1836,7 @@ export default function ToolAppContent({
                             type="text"
                             value={editForm.scrapName || ""}
                             onChange={(e) => setEditForm({ ...editForm, scrapName: e.target.value })}
-                            className="bg-black/40 border border-white/10 rounded-lg p-2 text-white focus:outline-none focus:border-emerald-500"
+                            className="bg-black/40 border border-white/10 rounded-md p-2 text-white focus:outline-none focus:border-accent hover:border-accent transition duration-200"
                           />
                         </div>
                         <div className="flex flex-col gap-1">
@@ -1773,7 +1845,7 @@ export default function ToolAppContent({
                             type="text"
                             value={editForm.scrapDate || ""}
                             onChange={(e) => setEditForm({ ...editForm, scrapDate: e.target.value })}
-                            className="bg-black/40 border border-white/10 rounded-lg p-2 text-white focus:outline-none focus:border-emerald-500"
+                            className="bg-black/40 border border-white/10 rounded-md p-2 text-white focus:outline-none focus:border-accent hover:border-accent transition duration-200"
                           />
                         </div>
                       </div>
@@ -1805,7 +1877,7 @@ export default function ToolAppContent({
                             value={(editForm as any)[m.field] || ""}
                             onChange={(e) => setEditForm({ ...editForm, [m.field]: e.target.value })}
                             placeholder="Caminho do arquivo ou link URL"
-                            className="bg-black/40 border border-white/10 rounded-lg p-2 text-white focus:outline-none focus:border-emerald-500"
+                            className="bg-black/40 border border-white/10 rounded-md p-2 text-white focus:outline-none focus:border-accent hover:border-accent transition duration-200"
                           />
                         </div>
                       ))}
@@ -1818,14 +1890,14 @@ export default function ToolAppContent({
                   <button
                     onClick={() => { setSelectedGame(null); setEditForm(null); }}
                     disabled={isSaving}
-                    className="px-4 py-2 border border-white/10 rounded-xl hover:bg-white/5 disabled:opacity-30 disabled:hover:bg-transparent disabled:cursor-not-allowed transition cursor-pointer text-white/70 hover:text-white"
+                    className="px-4 py-2 border border-white/10 rounded-md hover:bg-white/5 disabled:opacity-30 disabled:hover:bg-transparent disabled:cursor-not-allowed transition cursor-pointer text-white/70 hover:text-white"
                   >
                     Cancelar
                   </button>
                   <button
                     onClick={handleSaveGame}
                     disabled={isSaving}
-                    className="px-5 py-2 bg-emerald-500 hover:bg-emerald-600 disabled:bg-emerald-500/50 disabled:cursor-not-allowed rounded-xl transition flex items-center gap-1.5 cursor-pointer text-white"
+                    className="px-5 py-2 bg-accent hover:bg-accent-hover disabled:bg-accent/50 disabled:cursor-not-allowed rounded-md transition flex items-center gap-1.5 cursor-pointer text-white"
                   >
                     {isSaving ? (
                       <>
@@ -1848,7 +1920,7 @@ export default function ToolAppContent({
           {/* DELETE CONFIRMATION MODAL */}
           {deleteConfirmGame && (
             <div className="absolute inset-0 bg-[#000000bb] backdrop-blur-sm z-50 flex items-center justify-center p-4">
-              <div className="w-[380px] bg-[#121620] border border-white/10 rounded-2xl p-6 space-y-4 shadow-2xl">
+              <div className="w-[380px] bg-[#121620] border border-white/10 rounded-md p-6 space-y-4 shadow-2xl">
                 <div className="space-y-1">
                   <h3 className="font-bold text-sm text-red-400">Excluir Jogo</h3>
                   <p className="text-xs text-white/50 leading-relaxed">
@@ -1856,7 +1928,7 @@ export default function ToolAppContent({
                   </p>
                 </div>
 
-                <div className="bg-black/20 p-3.5 border border-white/5 rounded-xl text-xs space-y-2">
+                <div className="bg-black/20 p-3.5 border border-white/5 rounded-md text-xs space-y-2">
                   <label className="flex items-center gap-2 cursor-pointer select-none">
                     <input
                       type="checkbox"
@@ -1875,14 +1947,14 @@ export default function ToolAppContent({
                   <button
                     onClick={() => { setDeleteConfirmGame(null); setDeletePhysicalFile(false); }}
                     disabled={isDeleting}
-                    className="px-4 py-2 border border-white/10 hover:bg-white/5 disabled:opacity-30 disabled:cursor-not-allowed rounded-xl transition cursor-pointer text-white/70"
+                    className="px-4 py-2 border border-white/10 hover:bg-white/5 disabled:opacity-30 disabled:cursor-not-allowed rounded-md transition cursor-pointer text-white/70"
                   >
                     Cancelar
                   </button>
                   <button
                     onClick={handleDeleteGame}
                     disabled={isDeleting}
-                    className="px-5 py-2 bg-red-500 hover:bg-red-600 disabled:bg-red-500/50 disabled:cursor-not-allowed rounded-xl transition cursor-pointer text-white flex items-center gap-1.5"
+                    className="px-5 py-2 bg-red-600 hover:bg-red-700 disabled:bg-red-600/50 disabled:cursor-not-allowed rounded-md transition cursor-pointer text-white flex items-center gap-1.5"
                   >
                     {isDeleting ? (
                       <>

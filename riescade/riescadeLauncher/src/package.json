@@ -1,0 +1,20 @@
+{
+  "name": "riescade-launcher",
+  "version": "1.0.0",
+  "description": "RIESCADE OS Emulator Launcher",
+  "main": "dist/index.js",
+  "scripts": {
+    "bundle": "node esbuild.js",
+    "package": "pkg dist/index.js -t node18-win-x64 -o ../riescadeLauncher.exe",
+    "build": "npm run bundle && npm run package"
+  },
+  "keywords": [],
+  "author": "Marco Riesco",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^26.0.0",
+    "esbuild": "^0.28.1",
+    "pkg": "^5.8.1",
+    "typescript": "^6.0.3"
+  }
+}

@@ -1,13 +1,12 @@
 import { readFileSync, writeFileSync, existsSync } from 'fs'
 import { join } from 'path'
-import { getConfigPath } from '../utils/paths'
-import { XMLParser } from 'fast-xml-parser'
+import { getRiescadePath } from '../utils/paths'
 
 export class SettingsParser {
   constructor() {}
 
   private getSettingsPath(): string {
-    return join(getConfigPath(), 'es_settings.cfg')
+    return join(getRiescadePath(), 'configs', 'settings.json')
   }
 
   public getAllSettings(): any {
@@ -16,38 +15,7 @@ export class SettingsParser {
 
     try {
       const content = readFileSync(settingsPath, 'utf-8')
-      const parser = new XMLParser({
-        ignoreAttributes: false,
-        attributeNamePrefix: '@_',
-        parseAttributeValue: true,
-        ignoreDeclaration: true
-      })
-      const xmlObj = parser.parse(content)
-      const config = xmlObj.config || {}
-      const settings: any = {}
-
-      const types: ('bool' | 'string' | 'int' | 'float')[] = ['bool', 'string', 'int', 'float']
-      for (const type of types) {
-        const elements = config[type]
-        if (elements) {
-          const list = Array.isArray(elements) ? elements : [elements]
-          list.forEach((s: any) => {
-            const name = s['@_name']
-            let value = s['@_value']
-            if (value !== undefined) {
-              if (type === 'bool') {
-                value = value === true || String(value) === 'true'
-              } else if (type === 'int') {
-                value = parseInt(value, 10)
-              } else if (type === 'float') {
-                value = parseFloat(value)
-              }
-              settings[name] = { value, type }
-            }
-          })
-        }
-      }
-      return settings
+      return JSON.parse(content)
     } catch (error) {
       console.error('Error parsing all settings:', error)
       return {}
@@ -92,16 +60,8 @@ export class SettingsParser {
     }
 
     try {
-      // Serialize settings to XML format
-      let xmlContent = '<?xml version="1.0"?>\n<config>\n'
-      for (const [key, item] of Object.entries(settings) as [string, any][]) {
-        const keyEscaped = String(key).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
-        const valueEscaped = String(item.value).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
-        xmlContent += `\t<${item.type} name="${keyEscaped}" value="${valueEscaped}" />\n`
-      }
-      xmlContent += '</config>\n'
-
-      writeFileSync(settingsPath, xmlContent, 'utf-8')
+      const jsonContent = JSON.stringify(settings, null, 2)
+      writeFileSync(settingsPath, jsonContent, 'utf-8')
 
       // Clear systems cache on settings change that might affect system configuration
       const affectingSettings = [

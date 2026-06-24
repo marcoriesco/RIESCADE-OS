@@ -623,7 +623,7 @@ export default function SystemAppContent({
         ) : (
           <div className="flex-1 flex flex-col overflow-hidden">
             {/* Header with system name + game count */}
-            <div className="shrink-0 px-6 pt-8 pb-3 flex items-center justify-between">
+            <div className="shrink-0 px-6 pt-10 pb-3 flex items-center justify-between">
               <div>
                 <div className="flex items-center gap-2">
                   {system.name === 'collections' && activeCollection !== null && (
@@ -635,11 +635,11 @@ export default function SystemAppContent({
                       Voltar
                     </button>
                   )}
-                  <h2 className="text-xl font-bold text-white tracking-wide">
+                  <h2 className="text-4xl font-bold text-white tracking-wide">
                     {system.name === 'collections' && activeCollection !== null ? `${system.fullname} > ${activeCollection}` : system.fullname}
                   </h2>
                 </div>
-                <span className="text-xs text-white/40">{filteredGames.length} {system.name === 'collections' && activeCollection === null ? 'coleções encontradas' : 'jogos encontrados'}</span>
+                <span className="text-md text-white/40">{filteredGames.length} {system.name === 'collections' && activeCollection === null ? 'coleções encontradas' : 'jogos encontrados'}</span>
               </div>
             </div>
 
@@ -683,7 +683,7 @@ export default function SystemAppContent({
                         key={g.path}
                         onClick={() => setSelectedIdx(idx)}
                         onDoubleClick={() => onLaunchGame(g, system)}
-                        className={`group flex flex-col w-full rounded-md overflow-hidden text-left transition-all border-2 relative bg-[#1a1a1a] aspect-[3/4] ${
+                        className={`group flex flex-col w-full rounded-md overflow-hidden text-left transition-all border-4 relative bg-[#1a1a1a] aspect-[3/4] ${
                           idx === selectedIdx 
                             ? "border-accent shadow-[0_0_15px_var(--accent-color-glass)] z-10" 
                             : "border-white/5 hover:border-white/10"
@@ -1074,35 +1074,12 @@ export default function SystemAppContent({
                   />
                 </div>
 
-                {/* Saves & Coleções interactive row button */}
-                <button
-                  onClick={() => {
-                    setSidebarTab("collections");
-                    setShowSavesSidebar(true);
-                  }}
-                  className="w-full bg-[#1a1a1a] hover:bg-white/5 border border-white/5 rounded-md p-3 flex items-center justify-between transition cursor-pointer text-left"
-                >
-                  <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-md bg-accent/20 flex items-center justify-center shrink-0">
-                      <Folder className="w-4 h-4 text-accent" />
-                    </div>
-                    <div className="flex flex-col">
-                      <span className="text-xs font-bold text-white/95">Saves & Coleções</span>
-                      <span className="text-[10px] text-white/40 mt-0.5">
-                        {saveStates.length} saves · {gameCollections.length} coleções
-                      </span>
-                    </div>
-                  </div>
-                  <ChevronRight className="w-4 h-4 text-white/30" />
-                </button>
-
                 {/* Play Button */}
                 <div className="flex flex-col gap-2 mt-auto pt-3">
                   <button
                     onClick={() => onLaunchGame(selectedGame, system)}
-                    className="w-full bg-accent hover:bg-accent-hover hover:scale-[1.02] hover:shadow-lg transition-all rounded-md py-3 text-sm font-bold flex items-center justify-center gap-2 cursor-pointer text-white"
-                  >
-                    <Play className="w-4 h-4 fill-white text-white" />
+                    className="w-full bg-accent hover:bg-accent-hover hover:scale-[1.02] hover:shadow-lg transition-all rounded-md py-3 text-xl font-bold flex items-center justify-center gap-2 cursor-pointer text-white bg-gradient-to-br from-[var(--accent-color)] to-[var(--accent-color-hover)] outline outline-2 outline-[var(--accent-color)] outline-offset-2">
+                    <Play className="w-6 h-6 fill-white text-white" />
                     <span>Jogar</span>
                   </button>
                 </div>

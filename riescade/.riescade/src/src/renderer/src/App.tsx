@@ -11,9 +11,9 @@ import { TOOL_APPS, getSystemTheme } from "./constants";
 import SystemAppContent from "./components/SystemAppContent";
 import ToolAppContent from "./components/ToolAppContent";
 import { ScrollArea } from "./components/ScrollArea";
+import defaultBg from '../../main/resources/default.webp';
 
 const DEFAULT_SYSTEM_BG = "radial-gradient(1200px 800px at 20% 10%, rgb(35 35 35) 0%, transparent 60%), radial-gradient(1000px 700px at 85% 90%, rgb(12 12 12) 0%, transparent 55%), linear-gradient(rgb(4 4 4) 0%, rgb(22 22 22) 100%)";
-
 export default function App() {
   const [systems, setSystems] = useState<System[]>([]);
   const [launcherOpen, setLauncherOpen] = useState(false);
@@ -120,6 +120,7 @@ export default function App() {
     const color = settings["RIESCADE.AccentColor"]?.value || "#8b5cf6";
     const root = document.documentElement;
     root.style.setProperty("--accent-color", color);
+    localStorage.setItem("accentColor", color);
     
     // Parse color to hex and calculate derived colors
     let hex = color.replace("#", "");
@@ -414,7 +415,7 @@ export default function App() {
       return `url("${customBg}")`;
     }
 
-    return DEFAULT_SYSTEM_BG;
+    return `url(${defaultBg})`;
   }, [windowType, systemName, activeSubWindowId, settings, systems]);
 
   const activeSubWindowArt = useMemo(() => {
@@ -457,7 +458,7 @@ export default function App() {
               <div className="w-full bg-white/5 h-1.5 rounded-full overflow-hidden border border-white/5">
                 <div 
                   className="h-full bg-gradient-to-r rounded-full transition-all duration-300" 
-                  style={{ width: `${loadingProgress}%`, backgroundImage: 'linear-gradient(to right, var(--accent-color), rgb(34, 211, 238))' }}
+                  style={{ width: `${loadingProgress}%`, backgroundImage: 'linear-gradient(to right, var(--accent-color), var(--accent-color-hover))' }}
                 />
               </div>
               <div className="text-[10px] text-white/40 mt-1.5 text-right font-semibold">
@@ -477,7 +478,7 @@ export default function App() {
 
     if (!system) {
       return (
-        <div key="system-not-found" className="w-screen h-screen flex items-center justify-center text-white bg-[#0a051d]">
+        <div key="system-not-found" className="w-screen h-screen flex items-center justify-center text-white bg-[#333333]">
           <span className="text-sm font-semibold text-white/60 animate-pulse">Buscando plataforma em cache...</span>
         </div>
       );
@@ -824,14 +825,7 @@ export default function App() {
           />
         )}
       {/* Floating orbs wallpaper */}
-      <div className="pointer-events-none absolute inset-0">
-        <div 
-          className="absolute top-20 left-40 w-72 h-72 rounded-full blur-3xl animate-float" 
-          style={{ backgroundColor: 'var(--accent-color)', opacity: 0.1 }}
-        />
-        <div className="absolute bottom-40 right-32 w-96 h-96 rounded-full bg-indigo-500/10 blur-3xl animate-float" style={{ animationDelay: "2s" }} />
-        <div className="absolute top-1/2 left-1/3 w-64 h-64 rounded-full bg-cyan-500/5 blur-3xl animate-float" style={{ animationDelay: "4s" }} />
-      </div>
+      <div className="pointer-events-none absolute inset-0" />
 
       {/* Desktop shortcuts */}
       {settings["RIESCADE.ShowDesktopIcons"]?.value !== "false" && (

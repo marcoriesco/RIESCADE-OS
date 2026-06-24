@@ -513,24 +513,13 @@ export class LibraryService {
     } else if (useDb && !forcePhysicalScan && dbService.getIndexedSystemCount() > 0) {
       console.log('[SyncCheck] Starting startup synchronization check...')
       
-      const configPath = getConfigPath()
-      const systemsJsonPath = join(configPath, 'es_systems.cfg')
+      const systemsJsonPath = join(getRiescadePath(), 'configs', 'systems.json')
       let currentSystemsJsonMtime = 0
       let currentEsSystemsFileCount = 0
       try {
         if (existsSync(systemsJsonPath)) {
-          currentSystemsJsonMtime += Math.round(statSync(systemsJsonPath).mtimeMs)
-          currentEsSystemsFileCount++
-        }
-        if (existsSync(configPath)) {
-          const files = readdirSync(configPath)
-          files.forEach(f => {
-            if (f.startsWith('es_systems_') && f.endsWith('.cfg')) {
-              const fPath = join(configPath, f)
-              currentSystemsJsonMtime += Math.round(statSync(fPath).mtimeMs)
-              currentEsSystemsFileCount++
-            }
-          })
+          currentSystemsJsonMtime = Math.round(statSync(systemsJsonPath).mtimeMs)
+          currentEsSystemsFileCount = 1
         }
       } catch {}
 

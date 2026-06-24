@@ -6,7 +6,7 @@
   "author": "Marco Riesco",
   "scripts": {
     "dev": "electron-vite dev",
-    "build": "electron-vite build && node -e \"const fs = require('fs'); const path = require('path'); const src = path.join('src', 'main', 'resources', 'riescade_systems.json'); const destDir = path.join('out', 'main', 'resources'); const dest = path.join(destDir, 'riescade_systems.json'); if (!fs.existsSync(destDir)) fs.mkdirSync(destDir, { recursive: true }); fs.copyFileSync(src, dest); console.log('Copied riescade_systems.json to out/main/resources');\"",
+    "build": "electron-vite build",
     "dist": "npm run build && electron-builder --win --dir",
     "deploy": "npm run dist && node scripts/deploy.js",
     "release": "node scripts/release.js",

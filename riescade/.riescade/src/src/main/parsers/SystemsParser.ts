@@ -1,9 +1,8 @@
-import { readFileSync, existsSync, opendirSync, writeFileSync, mkdirSync, readdirSync } from 'fs'
+import { readFileSync, existsSync, opendirSync, writeFileSync, mkdirSync } from 'fs'
 import { join, resolve } from 'path'
 import { System } from '../../shared/types'
-import { getConfigPath, getRiescadePath, getRetroBatPath } from '../utils/paths'
+import { getRiescadePath, getRetroBatPath } from '../utils/paths'
 import { SettingsParser } from './SettingsParser'
-import { XMLParser } from 'fast-xml-parser'
 
 export class SystemsParser {
   private static cachedSystems: System[] | null = null
@@ -19,99 +18,47 @@ export class SystemsParser {
       return SystemsParser.cachedSystems;
     }
 
-    const configPath = getConfigPath()
-    const mainSystemsPath = join(configPath, 'es_systems.cfg')
-    
-    const parser = new XMLParser({
-      ignoreAttributes: false,
-      attributeNamePrefix: '@_',
-      parseAttributeValue: true,
-      ignoreDeclaration: true
-    })
-
-    const parseSystemFile = (filePath: string): System[] => {
-      if (!existsSync(filePath)) return []
-      try {
-        const content = readFileSync(filePath, 'utf-8')
-        const xmlObj = parser.parse(content)
-        const systemList = xmlObj.systemList?.system
-        if (!systemList) return []
-        const list = Array.isArray(systemList) ? systemList : [systemList]
-        
-        return list.map((s: any) => {
-          const parseEmulators = (emulators: any) => {
-            if (!emulators || !emulators.emulator) return []
-            const emuList = Array.isArray(emulators.emulator) ? emulators.emulator : [emulators.emulator]
-            return emuList.map((e: any) => ({
-              name: String(e['@_name'] || ''),
-              cores: e.cores?.core ? (Array.isArray(e.cores.core) ? e.cores.core : [e.cores.core]).map((c: any) => {
-                if (c && typeof c === 'object') {
-                  return String(c['#text'] || '').trim()
-                }
-                return String(c).trim()
-              }) : [],
-              command: e['@_command'] ? String(e['@_command']) : undefined
-            }))
-          }
-
-          const sName = String(s.name || '').toLowerCase()
-          let sHardware = String(s.hardware || '')
-          if (!sHardware) {
-            if (['library', 'magazine', 'manuals', 'retrobat', 'emulators', 'screenshots', 'windows'].includes(sName)) {
-              sHardware = 'system'
-            } else {
-              sHardware = 'console'
-            }
-          }
-
-          return {
-            name: String(s.name || ''),
-            fullname: String(s.fullname || s.name || ''),
-            path: String(s.path || ''),
-            extension: String(s.extension || ''),
-            command: String(s.command || ''),
-            platform: String(s.platform || ''),
-            theme: String(s.theme || s.name || ''),
-            hardware: sHardware,
-            group: s.group ? String(s.group) : undefined,
-            emulators: parseEmulators(s.emulators)
-          }
-        })
-      } catch (err) {
-        console.error(`Error parsing system file ${filePath}:`, err)
-        return []
-      }
-    }
-
+    const systemsJsonPath = join(getRiescadePath(), 'configs', 'systems.json')
     let systems: System[] = []
-    const systemMap = new Map<string, System>()
 
-    if (existsSync(mainSystemsPath)) {
-      const mainSystems = parseSystemFile(mainSystemsPath)
-      mainSystems.forEach(sys => {
-        if (sys.name) {
-          systemMap.set(sys.name.toLowerCase(), sys)
-        }
-      })
-
-      // Load overrides (es_systems_*.cfg)
+    if (existsSync(systemsJsonPath)) {
       try {
-        const files = readdirSync(configPath)
-        files.forEach(f => {
-          if (f.startsWith('es_systems_') && f.endsWith('.cfg')) {
-            const overrideSystems = parseSystemFile(join(configPath, f))
-            overrideSystems.forEach(sys => {
-              if (sys.name) {
-                systemMap.set(sys.name.toLowerCase(), sys)
+        const content = readFileSync(systemsJsonPath, 'utf-8')
+        const data = JSON.parse(content)
+        if (data && Array.isArray(data.systems)) {
+          systems = data.systems.map((s: any) => {
+            const sName = String(s.name || '').toLowerCase()
+            let sHardware = String(s.hardware || '')
+            if (!sHardware) {
+              if (['library', 'magazine', 'manuals', 'retrobat', 'emulators', 'screenshots', 'windows'].includes(sName)) {
+                sHardware = 'system'
+              } else {
+                sHardware = 'console'
               }
-            })
-          }
-        })
+            }
+            return {
+              name: String(s.name || ''),
+              fullname: String(s.fullname || s.name || ''),
+              path: String(s.path || ''),
+              extension: String(s.extension || ''),
+              command: String(s.command || ''),
+              platform: String(s.platform || ''),
+              theme: String(s.theme || s.name || ''),
+              hardware: sHardware,
+              group: s.group ? String(s.group) : undefined,
+              emulators: Array.isArray(s.emulators) ? s.emulators.map((e: any) => ({
+                name: String(e.name || ''),
+                cores: Array.isArray(e.cores) ? e.cores.map((c: any) => String(c)) : [],
+                command: e.command ? String(e.command) : undefined
+              })) : []
+            }
+          })
+        }
       } catch (err) {
-        console.error('Error reading overrides in configs directory:', err)
+        console.error(`Error parsing systems.json from ${systemsJsonPath}:`, err)
       }
-
-      systems = Array.from(systemMap.values())
+    } else {
+      console.warn(`systems.json not found at ${systemsJsonPath}`)
     }
 
     const settings = new SettingsParser()
@@ -198,9 +145,8 @@ export class SystemsParser {
   }
 
   private resolveRomPath(romPath: string): string {
-    const configPath = getConfigPath()
     let path = romPath.replace('~', join(getRetroBatPath(), 'riescade'))
-    return resolve(configPath, path)
+    return resolve(path)
   }
 
   private countGames(path: string): number {

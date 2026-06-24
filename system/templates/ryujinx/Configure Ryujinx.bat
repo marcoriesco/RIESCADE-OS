@@ -1,1 +1,0 @@
-start Ryujinx.exe -r "..\..\saves\switch\ryujinx\portable"

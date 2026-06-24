@@ -728,26 +728,27 @@ app.whenReady().then(() => {
 
   ipcMain.handle('get-bluetooth-devices', async () => {
     return new Promise((resolve) => {
-      const { exec } = require('child_process')
-      // PowerShell command to query paired bluetooth devices
-      const cmd = `powershell -Command "Get-PnpDevice -Class Bluetooth | Where-Object { $_.FriendlyName -and $_.InstanceId -like '*DEV_*' } | Select-Object -Property FriendlyName, InstanceId | ConvertTo-Json"`
-      exec(cmd, (err, stdout) => {
-        if (err) {
-          console.error('Error running bluetooth command:', err)
-          resolve([])
-          return
-        }
-        try {
+      const { execFileSync } = require('child_process')
+      try {
+        const stdout = execFileSync('powershell', [
+          '-Command',
+          'Get-PnpDevice -Class Bluetooth | Where-Object { $_.FriendlyName -and $_.InstanceId -like "*DEV_*" } | Select-Object -Property FriendlyName, InstanceId | ConvertTo-Json'
+        ], { encoding: 'utf8' }).trim()
+        
+        if (stdout) {
           const parsed = JSON.parse(stdout)
           const list = Array.isArray(parsed) ? parsed : (parsed ? [parsed] : [])
           resolve(list.map((d: any) => ({
             name: d.FriendlyName || 'Unknown Bluetooth Device',
             id: d.InstanceId || ''
           })))
-        } catch (e) {
+        } else {
           resolve([])
         }
-      })
+      } catch (err) {
+        console.error('Error running bluetooth command:', err)
+        resolve([])
+      }
     })
   })
 

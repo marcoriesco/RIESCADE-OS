@@ -1,6 +1,0 @@
-## CRT-ROYALE
-default:
-  # libretro
-  shader: crt/crt-royale
-  # ares
-  ares: crt/crt-royale

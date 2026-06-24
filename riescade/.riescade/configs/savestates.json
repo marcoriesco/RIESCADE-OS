@@ -1,0 +1,95 @@
+{
+  "emulators": [
+    {
+      "name": "libretro",
+      "incremental": true,
+      "autosave": true,
+      "firstslot": 0,
+      "lastslot": 999999
+    },
+    {
+      "name": "bigpemu",
+      "incremental": false,
+      "autosave": false,
+      "firstslot": 1,
+      "lastslot": 999
+    },
+    {
+      "name": "bizhawk",
+      "incremental": false,
+      "autosave": false,
+      "firstslot": 0,
+      "lastslot": 9
+    },
+    {
+      "name": "dolphin",
+      "incremental": false,
+      "autosave": false,
+      "firstslot": 1,
+      "lastslot": 10
+    },
+    {
+      "name": "flycast",
+      "incremental": false,
+      "autosave": false,
+      "firstslot": 1,
+      "lastslot": 9
+    },
+    {
+      "name": "gopher64",
+      "incremental": false,
+      "autosave": false,
+      "firstslot": 0,
+      "lastslot": 9
+    },
+    {
+      "name": "jgenesis",
+      "incremental": false,
+      "autosave": false,
+      "firstslot": 0,
+      "lastslot": 9
+    },
+    {
+      "name": "pcsx2",
+      "incremental": true,
+      "autosave": true,
+      "firstslot": 1,
+      "lastslot": 10
+    },
+    {
+      "name": "duckstation",
+      "incremental": true,
+      "autosave": true,
+      "firstslot": 1,
+      "lastslot": 10
+    },
+    {
+      "name": "openmsx",
+      "incremental": false,
+      "autosave": false,
+      "firstslot": 0,
+      "lastslot": 9
+    },
+    {
+      "name": "ppsspp",
+      "incremental": false,
+      "autosave": false,
+      "firstslot": 0,
+      "lastslot": 4
+    },
+    {
+      "name": "mupen64",
+      "incremental": false,
+      "autosave": false,
+      "firstslot": 0,
+      "lastslot": 9
+    },
+    {
+      "name": "desmume",
+      "incremental": false,
+      "autosave": false,
+      "firstslot": 0,
+      "lastslot": 9
+    }
+  ]
+}

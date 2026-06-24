@@ -1,7 +1,7 @@
 import Database from 'better-sqlite3'
 import { existsSync, statSync, readdirSync, mkdirSync } from 'fs'
 import { join, dirname, relative, resolve, isAbsolute } from 'path'
-import { getDatabasePath, getRomsPath, getConfigPath, getCollectionsPath } from '../utils/paths'
+import { getDatabasePath, getRomsPath, getConfigPath, getCollectionsPath, getRiescadePath } from '../utils/paths'
 import { GamelistParser } from '../parsers/GamelistParser'
 import { Game, System } from '../../shared/types'
 
@@ -675,28 +675,17 @@ export class DatabaseService {
       await new Promise(resolve => setTimeout(resolve, 5))
     }
 
-    // Sync __es_systems.cfg config metadata
-    const configPath = getConfigPath()
-    const systemsJsonPath = join(configPath, 'es_systems.cfg')
+    // Sync systems.json config metadata
+    const systemsJsonPath = join(getRiescadePath(), 'configs', 'systems.json')
     let combinedMtime = 0
     let esSystemsFileCount = 0
     try {
       if (existsSync(systemsJsonPath)) {
-        combinedMtime += Math.round(statSync(systemsJsonPath).mtimeMs)
-        esSystemsFileCount++
-      }
-      if (existsSync(configPath)) {
-        const files = readdirSync(configPath)
-        files.forEach(f => {
-          if (f.startsWith('es_systems_') && f.endsWith('.cfg')) {
-            const fPath = join(configPath, f)
-            combinedMtime += Math.round(statSync(fPath).mtimeMs)
-            esSystemsFileCount++
-          }
-        })
+        combinedMtime = Math.round(statSync(systemsJsonPath).mtimeMs)
+        esSystemsFileCount = 1
       }
     } catch (err) {
-      console.error('Error calculating es_systems config mtime:', err)
+      console.error('Error calculating systems.json mtime:', err)
     }
 
     db.prepare(`

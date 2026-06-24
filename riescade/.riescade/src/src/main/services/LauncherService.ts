@@ -28,7 +28,7 @@ export class LauncherService {
       }
 
       const retroBatPath = getRetroBatPath()
-      const launcherPath = join(retroBatPath, 'riescade', 'emulatorLauncher.exe')
+      const launcherPath = join(retroBatPath, 'riescade', 'riescadeLauncher', 'riescadeLauncher.exe')
       
       // Resolve Rom Path relative to system.path instead of hardcoding roms directory
       const romPath = resolve(system.path, game.path)
@@ -214,18 +214,27 @@ export class LauncherService {
 
       let controllerArgs: string[] = []
       
-      if (activeControllers.length > 0) {
+      let finalControllers = activeControllers
+      if (!finalControllers || finalControllers.length === 0) {
+        console.log('No active controllers from renderer. Performing native detection...')
+        finalControllers = this.detectConnectedControllers()
+        console.log(`Natively detected controllers: ${finalControllers.length}`, finalControllers)
+      }
+      
+      if (finalControllers.length > 0) {
         // Try to get a list of HID device IDs to match paths
         let devicePaths: string[] = []
         try {
-          // Broaden search to find any device with VID/PID
-          const stdout = require('child_process').execSync('powershell -Command "Get-PnpDevice -Status \'OK\' | Where-Object { $_.InstanceId -like \'*VID_*\' -and $_.InstanceId -like \'*PID_*\' } | Select-Object -ExpandProperty InstanceId"', { encoding: 'utf8' })
+          const stdout = require('child_process').execFileSync('powershell', [
+            '-Command',
+            'Get-PnpDevice -Status OK | Where-Object { $_.InstanceId -like "*VID_*" -and $_.InstanceId -like "*PID_*" } | Select-Object -ExpandProperty InstanceId'
+          ], { encoding: 'utf8' })
           devicePaths = stdout.split('\n').map(s => s.trim()).filter(s => s.length > 0)
         } catch (e) {
           console.error('Failed to get device paths via PowerShell', e)
         }
 
-        activeControllers.forEach((controller, index) => {
+        finalControllers.forEach((controller, index) => {
           const p = `p${index + 1}`
           
           // Try to find the path for this controller
@@ -342,7 +351,7 @@ export class LauncherService {
       }
 
 
-      const logPath = join(retroBatPath, 'riescade', 'emulatorLauncher.log')
+      const logPath = join(retroBatPath, 'riescade', '.riescade', 'logs', 'riescadeLauncher.log')
       let hasSentRunning = false
 
       sendLauncherStatus('loading')
@@ -407,5 +416,78 @@ export class LauncherService {
         }
       })
     })
+  }
+
+  private detectConnectedControllers(): any[] {
+    const controllers: any[] = []
+    try {
+      const retroBatPath = getRetroBatPath()
+      const inputFile = join(retroBatPath, 'riescade', '.riescade', 'configs', 'input.json')
+      let configs: any[] = []
+      if (existsSync(inputFile)) {
+        try {
+          const raw = readFileSync(inputFile, 'utf8')
+          configs = JSON.parse(raw).inputConfigs || []
+        } catch (e) {
+          console.error('Failed to parse input.json in native detector', e)
+        }
+      }
+
+      // Query gamepads via PowerShell (execFileSync prevents shell variable/quote expansion issues)
+      const stdout = require('child_process').execFileSync('powershell', [
+        '-Command',
+        'Get-PnpDevice -Status OK | Where-Object { $_.FriendlyName -like "*Controlador*" -or $_.FriendlyName -like "*gamepad*" -or $_.FriendlyName -like "*joystick*" -or $_.InstanceId -like "*IG_*" } | Where-Object { $_.Class -eq "HIDClass" -or $_.Class -eq "Gamepad" -or $_.Class -eq "Xboxgip" } | Select-Object FriendlyName, InstanceId | ConvertTo-Json'
+      ], { encoding: 'utf8' }).trim()
+      if (stdout) {
+        const parsed = JSON.parse(stdout)
+        const devices = Array.isArray(parsed) ? parsed : [parsed]
+        
+        devices.forEach((device: any) => {
+          if (!device.FriendlyName || !device.InstanceId) return
+          
+          const instanceId = device.InstanceId.toUpperCase()
+          let vid = ''
+          let pid = ''
+          
+          const vidMatch = instanceId.match(/VID_([0-9A-F]{4})/)
+          const pidMatch = instanceId.match(/PID_([0-9A-F]{4})/)
+          
+          let finalGuid = ''
+          let finalName = device.FriendlyName
+          
+          if (vidMatch && pidMatch) {
+            vid = vidMatch[1].toLowerCase()
+            pid = pidMatch[1].toLowerCase()
+            
+            const vidSwapped = vid.substring(2, 4) + vid.substring(0, 2)
+            const pidSwapped = pid.substring(2, 4) + pid.substring(0, 2)
+            
+            const matchPrefix = `03000000${vidSwapped}0000${pidSwapped}0000`
+            
+            const matched = configs.find(c => c.deviceGUID?.toString().toLowerCase().startsWith(matchPrefix))
+            if (matched) {
+              finalGuid = matched.deviceGUID.toString()
+              finalName = matched.deviceName
+            } else {
+              finalGuid = `03000000${vidSwapped}0000${pidSwapped}000000007200`
+            }
+            
+            let isXbox = vid === '045e' && (pid === '028e' || pid === '02a1' || pid === '0b12' || pid === '0b20')
+            if (matched || isXbox) {
+              controllers.push({
+                name: finalName,
+                guid: finalGuid,
+                buttons: 15,
+                axes: 6,
+                hats: 1
+              })
+            }
+          }
+        })
+      }
+    } catch (err) {
+      console.error('Failed to detect controllers natively:', err)
+    }
+    return controllers
   }
 }

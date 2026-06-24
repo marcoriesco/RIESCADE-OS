@@ -1,0 +1,1922 @@
+{
+  "applications": [
+    {
+      "name": "2ship",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{CLOSE})"
+        }
+      ]
+    },
+    {
+      "name": "3dSen",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{CLOSE})"
+        }
+      ]
+    },
+    {
+      "name": "Altirra",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{CLOSE})"
+        }
+      ]
+    },
+    {
+      "name": "Altirra64",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{CLOSE})"
+        }
+      ]
+    },
+    {
+      "name": "AnimalCrossing",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{CLOSE})"
+        }
+      ]
+    },
+    {
+      "name": "ares",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "code": "KEY_ESC"
+        },
+        {
+          "name": "hotkey l3",
+          "code": "KEY_F"
+        },
+        {
+          "name": "hotkey a",
+          "code": "KEY_P"
+        },
+        {
+          "name": "hotkey x",
+          "code": "KEY_F4"
+        },
+        {
+          "name": "hotkey y",
+          "code": "KEY_F2"
+        },
+        {
+          "name": "hotkey left",
+          "code": "KEY_BACKSPACE"
+        },
+        {
+          "name": "hotkey right",
+          "code": "KEY_L"
+        },
+        {
+          "name": "hotkey up",
+          "code": "KEY_F7"
+        },
+        {
+          "name": "hotkey down",
+          "code": "KEY_F6"
+        },
+        {
+          "name": "hotkey r3",
+          "code": "KEY_F8"
+        }
+      ]
+    },
+    {
+      "name": "azahar",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{CLOSE})"
+        },
+        {
+          "name": "hotkey a",
+          "code": "KEY_P"
+        },
+        {
+          "name": "hotkey x",
+          "code": "KEY_F4"
+        },
+        {
+          "name": "hotkey y",
+          "code": "KEY_F2"
+        },
+        {
+          "name": "hotkey r3",
+          "code": "KEY_F8"
+        },
+        {
+          "name": "hotkey l3",
+          "code": "KEY_F1"
+        }
+      ]
+    },
+    {
+      "name": "BanjoRecompiled",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{CLOSE})"
+        }
+      ]
+    },
+    {
+      "name": "BigPEmu",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{CLOSE})"
+        }
+      ]
+    },
+    {
+      "name": "BM64Recompiled",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{CLOSE})"
+        }
+      ]
+    },
+    {
+      "name": "bs",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{KILL})"
+        }
+      ]
+    },
+    {
+      "name": "bstone",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{KILL})"
+        }
+      ]
+    },
+    {
+      "name": "Caprice64",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{KILL})"
+        }
+      ]
+    },
+    {
+      "name": "cdogs-sdl",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{KILL})"
+        }
+      ]
+    },
+    {
+      "name": "Cemu",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{CLOSE})"
+        }
+      ]
+    },
+    {
+      "name": "CGenius",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{CLOSE})"
+        },
+        {
+          "name": "hotkey x",
+          "code": "KEY_F4"
+        },
+        {
+          "name": "hotkey y",
+          "code": "KEY_F2"
+        }
+      ]
+    },
+    {
+      "name": "ChameleonTwistJPRecompiled",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{CLOSE})"
+        }
+      ]
+    },
+    {
+      "name": "citra",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{CLOSE})"
+        }
+      ]
+    },
+    {
+      "name": "citra-qt",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{CLOSE})"
+        }
+      ]
+    },
+    {
+      "name": "citron",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{CLOSE})"
+        }
+      ]
+    },
+    {
+      "name": "citron-cmd",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{CLOSE})"
+        }
+      ]
+    },
+    {
+      "name": "CorsixTH",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{KILL})"
+        }
+      ]
+    },
+    {
+      "name": "cxbx",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{CLOSE})"
+        }
+      ]
+    },
+    {
+      "name": "cxbxr-ldr",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{CLOSE})"
+        }
+      ]
+    },
+    {
+      "name": "daphne",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{KILL})"
+        }
+      ]
+    },
+    {
+      "name": "dbz1",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{CLOSE})"
+        }
+      ]
+    },
+    {
+      "name": "demul",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{CLOSE})"
+        },
+        {
+          "name": "hotkey l3",
+          "key": "(%{ENTER})"
+        },
+        {
+          "name": "hotkey x",
+          "code": "KEY_F4"
+        },
+        {
+          "name": "hotkey y",
+          "code": "KEY_F2"
+        }
+      ]
+    },
+    {
+      "name": "DeSmuME-VS2022-x64-Release",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{CLOSE})"
+        },
+        {
+          "name": "hotkey y",
+          "code": "KEY_F2"
+        },
+        {
+          "name": "hotkey x",
+          "code": "KEY_F4"
+        },
+        {
+          "name": "hotkey up",
+          "code": "KEY_F7"
+        },
+        {
+          "name": "hotkey down",
+          "code": "KEY_F6"
+        },
+        {
+          "name": "hotkey a",
+          "code": "KEY_P"
+        },
+        {
+          "name": "hotkey right",
+          "code": "KEY_L"
+        },
+        {
+          "name": "hotkey r3",
+          "code": "KEY_F8"
+        }
+      ]
+    },
+    {
+      "name": "devenv",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": ""
+        }
+      ]
+    },
+    {
+      "name": "dhewm3",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{CLOSE})"
+        },
+        {
+          "name": "hotkey a",
+          "code": "KEY_ESC"
+        },
+        {
+          "name": "hotkey y",
+          "code": "KEY_F2"
+        },
+        {
+          "name": "hotkey x",
+          "code": "KEY_F4"
+        },
+        {
+          "name": "hotkey r3",
+          "code": "KEY_F8"
+        }
+      ]
+    },
+    {
+      "name": "DinosaurPlanetRecompiled",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{CLOSE})"
+        }
+      ]
+    },
+    {
+      "name": "DNZHRecompiled",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{CLOSE})"
+        }
+      ]
+    },
+    {
+      "name": "Dolphin",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{CLOSE})"
+        }
+      ]
+    },
+    {
+      "name": "DolphinWX",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{CLOSE})"
+        }
+      ]
+    },
+    {
+      "name": "dosbox",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{KILL})"
+        }
+      ]
+    },
+    {
+      "name": "DOSBoxPure",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{KILL})"
+        }
+      ]
+    },
+    {
+      "name": "drmario64_recomp",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{CLOSE})"
+        }
+      ]
+    },
+    {
+      "name": "duckstation-qt-x64-ReleaseLTCG",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{CLOSE})"
+        }
+      ]
+    },
+    {
+      "name": "duckstation-sdl-x64-ReleaseLTCG",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{CLOSE})"
+        }
+      ]
+    },
+    {
+      "name": "duckstation-nogui-x64-ReleaseLTCG",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{CLOSE})"
+        }
+      ]
+    },
+    {
+      "name": "dusklight",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{CLOSE})"
+        }
+      ]
+    },
+    {
+      "name": "eduke32",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{KILL})"
+        }
+      ]
+    },
+    {
+      "name": "EmuHawk",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "code": "KEY_ESC"
+        },
+        {
+          "name": "hotkey left",
+          "code": "KEY_BACKSPACE"
+        },
+        {
+          "name": "hotkey right",
+          "code": "KEY_L"
+        },
+        {
+          "name": "hotkey a",
+          "code": "KEY_P"
+        },
+        {
+          "name": "hotkey x",
+          "code": "KEY_F4"
+        },
+        {
+          "name": "hotkey y",
+          "code": "KEY_F2"
+        },
+        {
+          "name": "hotkey r3",
+          "code": "KEY_F8"
+        },
+        {
+          "name": "hotkey down",
+          "code": "KEY_F6"
+        },
+        {
+          "name": "hotkey up",
+          "code": "KEY_F7"
+        },
+        {
+          "name": "hotkey l3",
+          "code": "KEY_F"
+        }
+      ]
+    },
+    {
+      "name": "emulator_multicpu",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{CLOSE})"
+        }
+      ]
+    },
+    {
+      "name": "explorer",
+      "inputs": [
+        {
+          "name": "a",
+          "code": "KEY_ENTER"
+        },
+        {
+          "name": "b",
+          "code": "KEY_BACKSPACE"
+        },
+        {
+          "name": "x",
+          "code": "KEY_ESC"
+        },
+        {
+          "name": "left",
+          "code": "KEY_LEFT"
+        },
+        {
+          "name": "right",
+          "code": "KEY_RIGHT"
+        },
+        {
+          "name": "down",
+          "code": "KEY_DOWN"
+        },
+        {
+          "name": "up",
+          "code": "KEY_UP"
+        }
+      ]
+    },
+    {
+      "name": "fbneo64",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{CLOSE})"
+        }
+      ]
+    },
+    {
+      "name": "flycast",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{CLOSE})"
+        }
+      ]
+    },
+    {
+      "name": "Future Pinball",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "code": "KEY_ESC"
+        }
+      ]
+    },
+    {
+      "name": "Ghostship",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{CLOSE})"
+        }
+      ]
+    },
+    {
+      "name": "gk",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{CLOSE})"
+        }
+      ]
+    },
+    {
+      "name": "Goemon64Recompiled",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{CLOSE})"
+        }
+      ]
+    },
+    {
+      "name": "gopher64-windows-x86_64",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{CLOSE})"
+        },
+        {
+          "name": "hotkey a",
+          "key": "(%{ENTER})"
+        },
+        {
+          "name": "hotkey right",
+          "key": "(%{F})"
+        },
+        {
+          "name": "hotkey y",
+          "code": "KEY_F5"
+        },
+        {
+          "name": "hotkey x",
+          "code": "KEY_F7"
+        }
+      ]
+    },
+    {
+      "name": "gsplus",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{KILL})"
+        }
+      ]
+    },
+    {
+      "name": "gzdoom",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{KILL})"
+        }
+      ]
+    },
+    {
+      "name": "hatari",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{CLOSE})"
+        },
+        {
+          "name": "hotkey a",
+          "code": "KEY_F1"
+        },
+        {
+          "name": "hotkey x",
+          "code": "KEY_F4"
+        },
+        {
+          "name": "hotkey y",
+          "code": "KEY_F2"
+        },
+        {
+          "name": "hotkey l3",
+          "code": "KEY_F11"
+        },
+        {
+          "name": "hotkey r3",
+          "code": "KEY_F8"
+        }
+      ]
+    },
+    {
+      "name": "hbmameui",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{CLOSE})"
+        }
+      ]
+    },
+    {
+      "name": "hypseus",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{KILL})"
+        }
+      ]
+    },
+    {
+      "name": "jgenesis-cli",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{CLOSE})"
+        },
+        {
+          "name": "hotkey x",
+          "code": "KEY_F4"
+        },
+        {
+          "name": "hotkey y",
+          "code": "KEY_F2"
+        },
+        {
+          "name": "hotkey left",
+          "code": "KEY_BACKSPACE"
+        },
+        {
+          "name": "hotkey right",
+          "code": "KEY_L"
+        },
+        {
+          "name": "hotkey up",
+          "code": "KEY_F7"
+        },
+        {
+          "name": "hotkey down",
+          "code": "KEY_F6"
+        },
+        {
+          "name": "hotkey l3",
+          "code": "KEY_F"
+        },
+        {
+          "name": "hotkey a",
+          "code": "KEY_P"
+        }
+      ]
+    },
+    {
+      "name": "jgenesis-gui",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{CLOSE})"
+        },
+        {
+          "name": "hotkey x",
+          "code": "KEY_F4"
+        },
+        {
+          "name": "hotkey y",
+          "code": "KEY_F2"
+        },
+        {
+          "name": "hotkey left",
+          "code": "KEY_BACKSPACE"
+        },
+        {
+          "name": "hotkey right",
+          "code": "KEY_L"
+        },
+        {
+          "name": "hotkey up",
+          "code": "KEY_F7"
+        },
+        {
+          "name": "hotkey down",
+          "code": "KEY_F6"
+        },
+        {
+          "name": "hotkey l3",
+          "code": "KEY_F"
+        },
+        {
+          "name": "hotkey a",
+          "code": "KEY_P"
+        }
+      ]
+    },
+    {
+      "name": "Jynx-Windows-64bit",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{KILL})"
+        }
+      ]
+    },
+    {
+      "name": "jzintv",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{CLOSE})"
+        }
+      ]
+    },
+    {
+      "name": "kronos",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{CLOSE})"
+        },
+        {
+          "name": "hotkey r3",
+          "code": "KEY_F8"
+        },
+        {
+          "name": "hotkey l3",
+          "key": "(%{ENTER})"
+        }
+      ]
+    },
+    {
+      "name": "lime",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{CLOSE})"
+        }
+      ]
+    },
+    {
+      "name": "lime3ds",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{CLOSE})"
+        }
+      ]
+    },
+    {
+      "name": "lime3ds-gui",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{CLOSE})"
+        }
+      ]
+    },
+    {
+      "name": "lime-qt",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{CLOSE})"
+        }
+      ]
+    },
+    {
+      "name": "linuxloader",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{CLOSE})"
+        }
+      ]
+    },
+    {
+      "name": "mame",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{CLOSE})"
+        }
+      ]
+    },
+    {
+      "name": "mame32",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{CLOSE})"
+        }
+      ]
+    },
+    {
+      "name": "mame64",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{CLOSE})"
+        }
+      ]
+    },
+    {
+      "name": "mandarine",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{CLOSE})"
+        },
+        {
+          "name": "hotkey a",
+          "code": "KEY_P"
+        },
+        {
+          "name": "hotkey r3",
+          "code": "KEY_F8"
+        },
+        {
+          "name": "hotkey l3",
+          "code": "KEY_F1"
+        }
+      ]
+    },
+    {
+      "name": "mandarine-qt",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{CLOSE})"
+        },
+        {
+          "name": "hotkey a",
+          "code": "KEY_P"
+        },
+        {
+          "name": "hotkey r3",
+          "code": "KEY_F8"
+        },
+        {
+          "name": "hotkey l3",
+          "code": "KEY_F1"
+        }
+      ]
+    },
+    {
+      "name": "MarioKart64Recompiled",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{CLOSE})"
+        }
+      ]
+    },
+    {
+      "name": "mednafen",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{CLOSE})"
+        }
+      ]
+    },
+    {
+      "name": "MegaMan64Recompiled",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{CLOSE})"
+        }
+      ]
+    },
+    {
+      "name": "melonDS",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{CLOSE})"
+        },
+        {
+          "name": "hotkey y",
+          "key": "(+{F1})"
+        },
+        {
+          "name": "hotkey x",
+          "code": "KEY_F1"
+        },
+        {
+          "name": "hotkey a",
+          "code": "KEY_P"
+        },
+        {
+          "name": "hotkey left",
+          "code": "KEY_BACKSPACE"
+        },
+        {
+          "name": "hotkey right",
+          "code": "KEY_L"
+        },
+        {
+          "name": "hotkey l3",
+          "code": "KEY_F"
+        }
+      ]
+    },
+    {
+      "name": "Mesen",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{CLOSE})"
+        }
+      ]
+    },
+    {
+      "name": "mGBA",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{KILL})"
+        }
+      ]
+    },
+    {
+      "name": "N64RecompLauncher",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{CLOSE})"
+        }
+      ]
+    },
+    {
+      "name": "no$gba",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "code": "KEY_ESC"
+        }
+      ]
+    },
+    {
+      "name": "OpenJazz",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{KILL})"
+        }
+      ]
+    },
+    {
+      "name": "openmsx",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{KILL})"
+        }
+      ]
+    },
+    {
+      "name": "oricutron",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{KILL})"
+        }
+      ]
+    },
+    {
+      "name": "pce",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "code": "KEY_ESC"
+        }
+      ]
+    },
+    {
+      "name": "pcsx2",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{CLOSE})"
+        }
+      ]
+    },
+    {
+      "name": "pcsx2-qt",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{CLOSE})"
+        }
+      ]
+    },
+    {
+      "name": "pcsx2x64",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{CLOSE})"
+        }
+      ]
+    },
+    {
+      "name": "pcsx2x64-avx2",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{CLOSE})"
+        }
+      ]
+    },
+    {
+      "name": "pcsx2-qtx64-avx2",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{CLOSE})"
+        }
+      ]
+    },
+    {
+      "name": "pcsx2-qtx64",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{CLOSE})"
+        }
+      ]
+    },
+    {
+      "name": "pd.x86_64.exe",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{CLOSE})"
+        }
+      ]
+    },
+    {
+      "name": "pd.pal.x86_64.exe",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{CLOSE})"
+        }
+      ]
+    },
+    {
+      "name": "pd.jpn.x86_64.exe",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{CLOSE})"
+        }
+      ]
+    },
+    {
+      "name": "PhoenixEmuProject",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{CLOSE})"
+        }
+      ]
+    },
+    {
+      "name": "pico8",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{KILL})"
+        }
+      ]
+    },
+    {
+      "name": "PinballFX",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{KILL})"
+        }
+      ]
+    },
+    {
+      "name": "Pinball FX2",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{KILL})"
+        }
+      ]
+    },
+    {
+      "name": "Pinball FX3",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{KILL})"
+        }
+      ]
+    },
+    {
+      "name": "PinballM",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{KILL})"
+        }
+      ]
+    },
+    {
+      "name": "Play",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{CLOSE})"
+        }
+      ]
+    },
+    {
+      "name": "Power Bomberman",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{CLOSE})"
+        }
+      ]
+    },
+    {
+      "name": "PPSSPPWindows64",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{CLOSE})"
+        }
+      ]
+    },
+    {
+      "name": "Project64",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{CLOSE})"
+        },
+        {
+          "name": "hotkey r3",
+          "code": "KEY_F8"
+        },
+        {
+          "name": "hotkey y",
+          "code": "KEY_F2"
+        },
+        {
+          "name": "hotkey x",
+          "code": "KEY_F4"
+        },
+        {
+          "name": "hotkey left",
+          "code": "KEY_BACKSPACE"
+        },
+        {
+          "name": "hotkey right",
+          "code": "KEY_L"
+        },
+        {
+          "name": "hotkey l3",
+          "code": "KEY_F"
+        },
+        {
+          "name": "hotkey a",
+          "code": "KEY_P"
+        }
+      ]
+    },
+    {
+      "name": "quake2",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{KILL})"
+        }
+      ]
+    },
+    {
+      "name": "Quest64Recompiled",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{CLOSE})"
+        }
+      ]
+    },
+    {
+      "name": "raine",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{CLOSE})"
+        },
+        {
+          "name": "hotkey l3",
+          "code": "KEY_P"
+        },
+        {
+          "name": "hotkey y",
+          "code": "KEY_F2"
+        },
+        {
+          "name": "hotkey x",
+          "code": "KEY_F4"
+        },
+        {
+          "name": "hotkey up",
+          "code": "KEY_F6"
+        },
+        {
+          "name": "hotkey down",
+          "code": "KEY_F6"
+        },
+        {
+          "name": "hotkey r3",
+          "code": "KEY_F8"
+        },
+        {
+          "name": "hotkey a",
+          "code": "KEY_F1"
+        },
+        {
+          "name": "hotkey left",
+          "code": "KEY_K"
+        }
+      ]
+    },
+    {
+      "name": "raze",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{KILL})"
+        }
+      ]
+    },
+    {
+      "name": "RealRTCW.x64",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{CLOSE})"
+        }
+      ]
+    },
+    {
+      "name": "redream",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{CLOSE})"
+        }
+      ]
+    },
+    {
+      "name": "renut-windows-x64",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{CLOSE})"
+        }
+      ]
+    },
+    {
+      "name": "RMG",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{CLOSE})"
+        }
+      ]
+    },
+    {
+      "name": "rpcs3",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{CLOSE})"
+        },
+        {
+          "name": "hotkey r3",
+          "code": "KEY_F8"
+        },
+        {
+          "name": "hotkey l3",
+          "code": "KEY_P"
+        }
+      ]
+    },
+    {
+      "name": "RSDKv3_64",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{KILL})"
+        }
+      ]
+    },
+    {
+      "name": "RSDKv4_64",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{KILL})"
+        }
+      ]
+    },
+    {
+      "name": "RSDKv5U_x64",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{KILL})"
+        }
+      ]
+    },
+    {
+      "name": "ruffle",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{KILL})"
+        }
+      ]
+    },
+    {
+      "name": "Ryujinx",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{CLOSE})"
+        },
+        {
+          "name": "hotkey a",
+          "code": "KEY_P"
+        },
+        {
+          "name": "hotkey r3",
+          "code": "KEY_F8"
+        }
+      ]
+    },
+    {
+      "name": "scummvm",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{KILL})"
+        }
+      ]
+    },
+    {
+      "name": "shadPS4",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{CLOSE})"
+        }
+      ]
+    },
+    {
+      "name": "simple64-gui",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{CLOSE})"
+        }
+      ]
+    },
+    {
+      "name": "Singe-v2.10-Windows-x86_64",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{KILL})"
+        }
+      ]
+    },
+    {
+      "name": "snes9x-x64",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{CLOSE})"
+        },
+        {
+          "name": "hotkey y",
+          "code": "KEY_F2"
+        },
+        {
+          "name": "hotkey x",
+          "code": "KEY_F4"
+        },
+        {
+          "name": "hotkey r3",
+          "code": "KEY_F8"
+        },
+        {
+          "name": "hotkey up",
+          "code": "KEY_F7"
+        },
+        {
+          "name": "hotkey down",
+          "code": "KEY_F6"
+        },
+        {
+          "name": "hotkey left",
+          "code": "KEY_BACKSPACE"
+        },
+        {
+          "name": "hotkey right",
+          "code": "KEY_L"
+        },
+        {
+          "name": "hotkey a",
+          "code": "KEY_P"
+        }
+      ]
+    },
+    {
+      "name": "soh",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{CLOSE})"
+        }
+      ]
+    },
+    {
+      "name": "solarus-run",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{KILL})"
+        }
+      ]
+    },
+    {
+      "name": "Sonic3AIR",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{KILL})"
+        }
+      ]
+    },
+    {
+      "name": "SSF",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{KILL})"
+        }
+      ]
+    },
+    {
+      "name": "SSF64",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{KILL})"
+        }
+      ]
+    },
+    {
+      "name": "Starfox64Recompiled",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{CLOSE})"
+        }
+      ]
+    },
+    {
+      "name": "Starship",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{CLOSE})"
+        }
+      ]
+    },
+    {
+      "name": "Stella",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{CLOSE})"
+        },
+        {
+          "name": "hotkey a",
+          "code": "KEY_TAB"
+        },
+        {
+          "name": "hotkey x",
+          "code": "KEY_F11"
+        },
+        {
+          "name": "hotkey y",
+          "code": "KEY_F9"
+        },
+        {
+          "name": "hotkey r3",
+          "code": "KEY_F12"
+        },
+        {
+          "name": "hotkey up",
+          "code": "KEY_F10"
+        },
+        {
+          "name": "hotkey down",
+          "key": "(+{F10})"
+        },
+        {
+          "name": "hotkey l3",
+          "key": "(%{ENTER})"
+        }
+      ]
+    },
+    {
+      "name": "sudachi",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{CLOSE})"
+        }
+      ]
+    },
+    {
+      "name": "supermodel",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{CLOSE})"
+        }
+      ]
+    },
+    {
+      "name": "suyu",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{CLOSE})"
+        }
+      ]
+    },
+    {
+      "name": "TeknoParrotUi",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{KILL})"
+        }
+      ]
+    },
+    {
+      "name": "TheForceEngine",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{KILL})"
+        }
+      ]
+    },
+    {
+      "name": "Vita3K",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{CLOSE})"
+        }
+      ]
+    },
+    {
+      "name": "vkQuake",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{KILL})"
+        }
+      ]
+    },
+    {
+      "name": "VPinballX",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "code": "KEY_ESC"
+        }
+      ]
+    },
+    {
+      "name": "VPinballX64",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "code": "KEY_ESC"
+        }
+      ]
+    },
+    {
+      "name": "WinUAE",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{CLOSE})"
+        }
+      ]
+    },
+    {
+      "name": "winuae64",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{CLOSE})"
+        }
+      ]
+    },
+    {
+      "name": "xash3d",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{CLOSE})"
+        }
+      ]
+    },
+    {
+      "name": "xemu",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{CLOSE})"
+        }
+      ]
+    },
+    {
+      "name": "xenia",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{CLOSE})"
+        }
+      ]
+    },
+    {
+      "name": "xenia_canary",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{CLOSE})"
+        }
+      ]
+    },
+    {
+      "name": "xenia_edge",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{CLOSE})"
+        }
+      ]
+    },
+    {
+      "name": "xroar",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{CLOSE})"
+        },
+        {
+          "name": "hotkey l3",
+          "code": "KEY_F11"
+        },
+        {
+          "name": "x",
+          "code": "KEY_J"
+        },
+        {
+          "name": "select",
+          "code": "KEY_1"
+        },
+        {
+          "name": "start",
+          "code": "KEY_2"
+        }
+      ]
+    },
+    {
+      "name": "yabasanshiro",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{CLOSE})"
+        },
+        {
+          "name": "hotkey r3",
+          "code": "KEY_F8"
+        },
+        {
+          "name": "hotkey l3",
+          "key": "(%{ENTER})"
+        },
+        {
+          "name": "hotkey x",
+          "key": "(%{1})"
+        },
+        {
+          "name": "hotkey y",
+          "key": "(^{1})"
+        }
+      ]
+    },
+    {
+      "name": "ymir-sdl3",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{CLOSE})"
+        },
+        {
+          "name": "hotkey a",
+          "code": "KEY_F1"
+        },
+        {
+          "name": "hotkey x",
+          "code": "KEY_F4"
+        },
+        {
+          "name": "hotkey y",
+          "code": "KEY_F2"
+        },
+        {
+          "name": "hotkey l3",
+          "code": "KEY_F"
+        },
+        {
+          "name": "hotkey left",
+          "code": "KEY_BACKSPACE"
+        },
+        {
+          "name": "hotkey right",
+          "code": "KEY_L"
+        },
+        {
+          "name": "hotkey r3",
+          "code": "KEY_F8"
+        }
+      ]
+    },
+    {
+      "name": "yuzu",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{CLOSE})"
+        }
+      ]
+    },
+    {
+      "name": "ZaccariaPinball",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{KILL})"
+        }
+      ]
+    },
+    {
+      "name": "Zelda64Recompiled",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{CLOSE})"
+        }
+      ]
+    },
+    {
+      "name": "zesarux",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{KILL})"
+        }
+      ]
+    },
+    {
+      "name": "ZiNc",
+      "inputs": [
+        {
+          "name": "hotkey start",
+          "key": "(%{KILL})"
+        }
+      ]
+    }
+  ]
+}
