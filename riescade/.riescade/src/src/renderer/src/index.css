@@ -282,3 +282,7 @@ html, body, #root {
 .tooltip-arrow {
   fill: rgba(20, 20, 20, 0.95);
 }
+
+.rounded-md {
+  border-radius: calc(var(--radius) - 2px) !important;
+}

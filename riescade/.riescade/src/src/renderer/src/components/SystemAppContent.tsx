@@ -1,8 +1,51 @@
 import React, { useEffect, useRef, useState, useMemo } from "react";
-import { Gamepad2, Heart, Loader2, Star, Play, ChevronRight, Maximize2, X, Search, Folder, ChevronLeft, HardDrive } from "lucide-react";
+import { Gamepad2, Heart, Loader2, Star, Play, ChevronRight, Maximize2, X, Search, Folder, ChevronLeft, HardDrive, ChevronDown, Check } from "lucide-react";
 import { System, Game } from "../types";
 import { ScrollArea } from "./ScrollArea";
 import { OverlayScrollbarsComponentRef } from "overlayscrollbars-react";
+import * as Select from "@radix-ui/react-select";
+
+function RadixSelect({
+  value,
+  onValueChange,
+  options,
+  placeholder = "Selecionar..."
+}: {
+  value: string;
+  onValueChange: (val: string) => void;
+  options: { label: string; value: string }[];
+  placeholder?: string;
+}) {
+  return (
+    <Select.Root value={value} onValueChange={onValueChange}>
+      <Select.Trigger className="w-full flex items-center justify-between bg-[#1a1a1a] border border-white/5 rounded-md px-3 py-2 text-xs text-white/90 hover:bg-white/5 transition cursor-pointer focus:outline-none focus:border-accent">
+        <Select.Value placeholder={placeholder} />
+        <Select.Icon>
+          <ChevronDown className="w-3.5 h-3.5 text-white/40" />
+        </Select.Icon>
+      </Select.Trigger>
+      
+      <Select.Portal>
+        <Select.Content className="bg-[#1a1a1a] border border-white/10 rounded-md shadow-2xl overflow-hidden z-[9999] animate-in fade-in duration-100 min-w-[var(--radix-select-trigger-width)]">
+          <Select.Viewport className="p-1">
+            {options.map(opt => (
+              <Select.Item
+                key={opt.value}
+                value={opt.value}
+                className="relative flex items-center justify-between pl-8 pr-3 py-2 text-xs text-white/80 hover:text-white hover:bg-white/5 rounded-md outline-none cursor-pointer select-none data-[state=checked]:text-white data-[state=checked]:bg-white/5"
+              >
+                <Select.ItemText>{opt.label}</Select.ItemText>
+                <Select.ItemIndicator className="absolute left-2 flex items-center justify-center">
+                  <Check className="w-3 h-3 text-accent" />
+                </Select.ItemIndicator>
+              </Select.Item>
+            ))}
+          </Select.Viewport>
+        </Select.Content>
+      </Select.Portal>
+    </Select.Root>
+  );
+}
 
 
 export default function SystemAppContent({
@@ -44,6 +87,11 @@ export default function SystemAppContent({
   const [gameCollections, setGameCollections] = useState<string[]>([]);
   const [allCollections, setAllCollections] = useState<string[]>([]);
   const [newColName, setNewColName] = useState("");
+
+  // New States for context menu and saves sidebar
+  const [showContextMenu, setShowContextMenu] = useState(false);
+  const [showSavesSidebar, setShowSavesSidebar] = useState(false);
+  const [sidebarTab, setSidebarTab] = useState<"collections" | "saves">("collections");
 
   // Load Riescade black-and-white fallback logo path once on mount
   useEffect(() => {
@@ -231,10 +279,12 @@ export default function SystemAppContent({
 
   const selectedGame = filteredGames[selectedIdx];
 
-  // Reset image error and fullscreen video when switching games
+  // Reset image error, fullscreen video, context menu and sidebar when switching games
   useEffect(() => {
     setImageError(false);
     setFullVideo(false);
+    setShowContextMenu(false);
+    setShowSavesSidebar(false);
   }, [selectedGame]);
 
   // Load save states and collections for the selected game
@@ -388,9 +438,8 @@ export default function SystemAppContent({
     return `${selectedGame.emulator}:${selectedGame.core || ""}`;
   }, [selectedGame]);
 
-  const handleEmulatorChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleEmulatorValueChange = (val: string) => {
     if (!selectedGame) return;
-    const val = e.target.value;
     let updatedGame = { ...selectedGame };
     
     if (val === "auto") {
@@ -429,14 +478,14 @@ export default function SystemAppContent({
     <div className="h-full flex text-white overflow-hidden relative w-full bg-transparent">
       <div className="relative z-10 flex w-full h-full overflow-hidden">
       {/* Discord-like Sidebar: Logo + Search + Filters - extends to top */}
-      <aside className="w-[240px] bg-black/40 border-r border-white/5 flex flex-col shrink-0 select-none">
+      <aside className="w-[240px] bg-black/40 flex flex-col shrink-0 select-none">
         {/* System Logo Section - top padding for drag region */}
         <div className="pt-8 px-4 pb-3 shrink-0">
           <div className="flex items-center gap-3 mb-4">
             {system.logo ? (
               <img src={system.logo} alt={system.fullname} className="w-full h-14 object-contain filter drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]" />
             ) : (
-              <div className="w-10 h-10 rounded-xl flex items-center justify-center shadow-lg" style={{ background: `linear-gradient(135deg, ${color}, rgb(30,30,30))` }}>
+              <div className="w-10 h-10 rounded-md flex items-center justify-center shadow-lg" style={{ background: `linear-gradient(135deg, ${color}, rgb(30,30,30))` }}>
                 <Icon className="w-5 h-5 text-white" />
               </div>
             )}
@@ -490,82 +539,61 @@ export default function SystemAppContent({
             {/* Genre Filter */}
             <div className="flex flex-col gap-1">
               <span className="text-[10px] text-white/35 font-semibold px-1">Gênero</span>
-          <div className="relative group">
-            <select
-              value={selectedGenre}
-              onChange={(e) => { setSelectedGenre(e.target.value); setSelectedIdx(0); }}
-              className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-xs text-white/90 focus:outline-none focus-border-accent hover:bg-white/10 transition appearance-none cursor-pointer"
-            >
-              <option value="all" className="bg-[#121212]">Todos</option>
-              {filterOptions.genres.map(g => (
-                <option key={g} value={g} className="bg-[#121212]">{g}</option>
-              ))}
-            </select>
-            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-white/40 group-focus-within:text-accent transition duration-200">
-              <ChevronRight className="w-3.5 h-3.5 rotate-90" />
+              <RadixSelect
+                value={selectedGenre}
+                onValueChange={(val) => { setSelectedGenre(val); setSelectedIdx(0); }}
+                options={[
+                  { label: "Todos", value: "all" },
+                  ...filterOptions.genres.map(g => ({ label: g, value: g }))
+                ]}
+                placeholder="Todos"
+              />
             </div>
-          </div>
-        </div>
 
             {/* Year Filter */}
             <div className="flex flex-col gap-1">
               <span className="text-[10px] text-white/35 font-semibold px-1">Ano</span>
-          <div className="relative group">
-            <select
-              value={selectedYear}
-              onChange={(e) => { setSelectedYear(e.target.value); setSelectedIdx(0); }}
-              className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-xs text-white/90 focus:outline-none focus-border-accent hover:bg-white/10 transition appearance-none cursor-pointer"
-            >
-              <option value="all" className="bg-[#121212]">Todos</option>
-              {filterOptions.years.map(y => (
-                <option key={y} value={y} className="bg-[#121212]">{y}</option>
-              ))}
-            </select>
-            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-white/40 group-focus-within:text-accent transition duration-200">
-              <ChevronRight className="w-3.5 h-3.5 rotate-90" />
+              <RadixSelect
+                value={selectedYear}
+                onValueChange={(val) => { setSelectedYear(val); setSelectedIdx(0); }}
+                options={[
+                  { label: "Todos", value: "all" },
+                  ...filterOptions.years.map(y => ({ label: y, value: y }))
+                ]}
+                placeholder="Todos"
+              />
             </div>
-          </div>
-        </div>
 
             {/* Players Filter */}
             <div className="flex flex-col gap-1">
               <span className="text-[10px] text-white/35 font-semibold px-1">Jogadores</span>
-          <div className="relative group">
-            <select
-              value={selectedPlayers}
-              onChange={(e) => { setSelectedPlayers(e.target.value); setSelectedIdx(0); }}
-              className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-xs text-white/90 focus:outline-none focus-border-accent hover:bg-white/10 transition appearance-none cursor-pointer"
-            >
-              <option value="all" className="bg-[#121212]">Todos</option>
-              {filterOptions.players.map(p => (
-                <option key={p} value={p} className="bg-[#121212]">{p === "1" ? "1 Jogador" : p === "2" ? "2 Jogadores" : `${p} Jogadores`}</option>
-              ))}
-            </select>
-            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-white/40 group-focus-within:text-accent transition duration-200">
-              <ChevronRight className="w-3.5 h-3.5 rotate-90" />
+              <RadixSelect
+                value={selectedPlayers}
+                onValueChange={(val) => { setSelectedPlayers(val); setSelectedIdx(0); }}
+                options={[
+                  { label: "Todos", value: "all" },
+                  ...filterOptions.players.map(p => ({
+                    label: p === "1" ? "1 Jogador" : p === "2" ? "2 Jogadores" : `${p} Jogadores`,
+                    value: p
+                  }))
+                ]}
+                placeholder="Todos"
+              />
             </div>
-          </div>
-        </div>
 
             {/* Rating Filter */}
             <div className="flex flex-col gap-1">
               <span className="text-[10px] text-white/35 font-semibold px-1">Avaliação</span>
-          <div className="relative group">
-            <select
-              value={selectedMinRating}
-              onChange={(e) => { setSelectedMinRating(e.target.value); setSelectedIdx(0); }}
-              className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-xs text-white/90 focus:outline-none focus-border-accent hover:bg-white/10 transition appearance-none cursor-pointer"
-            >
-              <option value="all" className="bg-[#121212]">Todas</option>
-              {filterOptions.ratings.map(r => (
-                <option key={r.value} value={r.value} className="bg-[#121212]">{r.label}</option>
-              ))}
-            </select>
-            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-white/40 group-focus-within:text-accent transition duration-200">
-              <ChevronRight className="w-3.5 h-3.5 rotate-90" />
+              <RadixSelect
+                value={selectedMinRating}
+                onValueChange={(val) => { setSelectedMinRating(val); setSelectedIdx(0); }}
+                options={[
+                  { label: "Todas", value: "all" },
+                  ...filterOptions.ratings.map(r => ({ label: r.label, value: r.value }))
+                ]}
+                placeholder="Todas"
+              />
             </div>
-          </div>
-        </div>
 
           {/* Clear Filters Button */}
           {(selectedGenre !== "all" || selectedYear !== "all" || selectedPlayers !== "all" || selectedMinRating !== "all") && (
@@ -595,13 +623,13 @@ export default function SystemAppContent({
         ) : (
           <div className="flex-1 flex flex-col overflow-hidden">
             {/* Header with system name + game count */}
-            <div className="shrink-0 px-6 pt-8 pb-3 border-b border-white/5 flex items-center justify-between">
+            <div className="shrink-0 px-6 pt-8 pb-3 flex items-center justify-between">
               <div>
                 <div className="flex items-center gap-2">
                   {system.name === 'collections' && activeCollection !== null && (
                     <button
                       onClick={() => setActiveCollection(null)}
-                      className="mr-2 bg-white/5 hover:bg-white/10 text-white px-2.5 py-1 rounded-lg transition flex items-center gap-1 text-xs cursor-pointer"
+                      className="mr-2 bg-white/5 hover:bg-white/10 text-white px-2.5 py-1 rounded-md transition flex items-center gap-1 text-xs cursor-pointer"
                     >
                       <ChevronLeft className="w-4 h-4" />
                       Voltar
@@ -633,15 +661,15 @@ export default function SystemAppContent({
                           key={g.path}
                           onClick={() => setSelectedIdx(idx)}
                           onDoubleClick={() => setActiveCollection(g.name)}
-                          className={`group flex flex-col w-full rounded-xl overflow-hidden text-left transition-all border-4 relative bg-black/40 ${
+                          className={`group flex flex-col w-full rounded-md overflow-hidden text-left transition-all border-2 relative bg-black/40 aspect-[3/4] ${
                             idx === selectedIdx
                               ? "border-accent shadow-[0_0_15px_var(--accent-color-glass)] z-10"
                               : "border-white/5 hover:border-white/10"
                           }`}
                         >
-                          <div className="flex flex-col items-center justify-center bg-black/50 text-white/30 p-4 text-center w-full h-full select-none min-h-[160px]">
-                            <Folder className="w-14 h-14 text-accent mb-3 group-hover:scale-105 transition-all duration-300 opacity-80" />
-                            <span className="text-[11px] font-bold text-white/80 line-clamp-2 uppercase tracking-wider">{g.name}</span>
+                          <div className="flex flex-col items-center justify-center bg-[#1a1a1a] text-white/30 p-4 text-center w-full h-full select-none">
+                            <Folder className="w-10 h-10 text-accent mb-3 group-hover:scale-105 transition-all duration-300 opacity-80" />
+                            <span className="text-[10px] font-bold text-white/80 line-clamp-2 uppercase tracking-wider">{g.name}</span>
                           </div>
                         </button>
                       );
@@ -655,33 +683,31 @@ export default function SystemAppContent({
                         key={g.path}
                         onClick={() => setSelectedIdx(idx)}
                         onDoubleClick={() => onLaunchGame(g, system)}
-                        className={`group flex flex-col w-full rounded-xl overflow-hidden text-left transition-all border-4 relative bg-black/40 ${
+                        className={`group flex flex-col w-full rounded-md overflow-hidden text-left transition-all border-2 relative bg-[#1a1a1a] aspect-[3/4] ${
                           idx === selectedIdx 
                             ? "border-accent shadow-[0_0_15px_var(--accent-color-glass)] z-10" 
                             : "border-white/5 hover:border-white/10"
                         }`}
                       >
-                        <div className="flex items-center justify-center overflow-hidden relative w-full h-full bg-black/20">
+                        <div className="flex items-center justify-center overflow-hidden relative w-full h-full">
                           {finalImage && !failedImages[g.path] ? (
-                            <img 
-                              src={finalImage} 
-                              alt={g.name} 
-                              onError={() => setFailedImages(prev => ({ ...prev, [g.path]: true }))}
-                              className="max-w-full max-h-full object-cover group-hover:scale-105 transition-all duration-300" 
-                            />
+                            <>
+                              <img 
+                                src={finalImage} 
+                                alt={g.name} 
+                                onError={() => setFailedImages(prev => ({ ...prev, [g.path]: true }))}
+                                className="w-full h-full object-cover group-hover:scale-105 transition-all duration-300 animate-in fade-in duration-200" 
+                              />
+                              {/* Small clean controller icon and title overlay at top left */}
+                              <div className="absolute top-2 left-2 flex items-center gap-1.5 bg-black/55 backdrop-blur-[2px] px-2 py-0.5 rounded-md text-[9px] text-white/95 font-bold uppercase tracking-wider max-w-[90%] border border-white/5 z-20">
+                                <Gamepad2 className="w-2.5 h-2.5 text-white/90 shrink-0" />
+                                <span className="truncate">{g.name}</span>
+                              </div>
+                            </>
                           ) : (
-                            <div className="flex flex-col items-center justify-center bg-black/50 text-white/30 p-4 text-center w-full h-full select-none">
-                              {logoPath ? (
-                                <img 
-                                  src={logoPath} 
-                                  alt="Riescade Logo" 
-                                  className="w-16 h-auto object-contain grayscale opacity-40 mb-3 group-hover:scale-105 transition-all duration-300"
-                                  style={{ filter: 'grayscale(100%) brightness(0.8)' }}
-                                />
-                              ) : (
-                                <Icon className="w-8 h-8 text-white/20 mb-2" />
-                              )}
-                              <span className="text-[10px] font-bold text-white/60 line-clamp-3 uppercase tracking-wider">{g.name}</span>
+                            <div className="flex flex-col items-center justify-center bg-[#1a1a1a] text-white/30 p-4 text-center w-full h-full select-none">
+                              <Gamepad2 className="w-8 h-8 text-white/20 mb-3 group-hover:scale-105 transition-all duration-300" />
+                              <span className="text-[10px] font-bold text-white/60 line-clamp-2 uppercase tracking-wider">{g.name}</span>
                             </div>
                           )}
                         </div>
@@ -697,9 +723,151 @@ export default function SystemAppContent({
         {/* Right Details Panel */}
         {selectedGame && (
           <ScrollArea className="w-[20vw] min-w-[300px] bg-black/50 p-6 pt-14 select-none">
-            {selectedGame.isCollectionFolder ? (
+            {showSavesSidebar ? (
+              /* Saves & Coleções Sidebar */
               <div className="flex flex-col gap-4 h-full">
-                <div className="w-full flex flex-col items-center justify-center py-8 bg-white/5 rounded-xl border border-white/5 shadow-md">
+                {/* Header */}
+                <div className="flex items-start justify-between">
+                  <div className="flex flex-col min-w-0 pr-6">
+                    <h3 className="font-bold text-base leading-snug text-white/95 truncate" title={selectedGame.name}>{selectedGame.name}</h3>
+                    <span className="text-[10px] text-white/40 mt-1 leading-normal">Gerencie save states e coleções deste jogo.</span>
+                  </div>
+                  {/* Close button: round filled with system color */}
+                  <button
+                    onClick={() => setShowSavesSidebar(false)}
+                    className="w-6 h-6 rounded-full flex items-center justify-center text-white bg-accent hover:bg-accent-hover hover:scale-105 transition duration-200 cursor-pointer shrink-0"
+                  >
+                    <X className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+
+                {/* Tab control (Segmented Control) */}
+                <div className="flex bg-black/30 p-1 rounded-md border border-white/5 text-[11px] items-center shrink-0">
+                  <button
+                    onClick={() => setSidebarTab("collections")}
+                    className={`flex-1 py-2 rounded-md text-center font-bold transition cursor-pointer ${
+                      sidebarTab === "collections"
+                        ? "bg-[#1a1a1a] text-white shadow-sm"
+                        : "text-white/40 hover:bg-white/5 hover:text-white/60"
+                    }`}
+                  >
+                    Coleções
+                  </button>
+                  <button
+                    onClick={() => setSidebarTab("saves")}
+                    className={`flex-1 py-2 rounded-md text-center font-bold transition cursor-pointer ${
+                      sidebarTab === "saves"
+                        ? "bg-[#1a1a1a] text-white shadow-sm"
+                        : "text-white/40 hover:bg-white/5 hover:text-white/60"
+                    }`}
+                  >
+                    Save states
+                  </button>
+                </div>
+
+                {/* Tab contents */}
+                <div className="flex-1 overflow-y-auto pr-1">
+                  {sidebarTab === "collections" ? (
+                    <div className="flex flex-col gap-2">
+                      {allCollections.map(col => {
+                        const isAdded = gameCollections.includes(col);
+                        return (
+                          <button
+                            key={col}
+                            onClick={() => {
+                              if (isAdded) {
+                                handleRemoveFromCollection(col);
+                              } else {
+                                handleAddToCollection(col);
+                              }
+                            }}
+                            className={`w-full flex items-center justify-between py-2 px-3 rounded-md border transition duration-200 text-left cursor-pointer ${
+                              isAdded
+                                ? "bg-accent-light border-accent text-white"
+                                : "bg-[#1a1a1a] border-white/5 text-white/80 hover:bg-white/5 hover:border-white/10"
+                            }`}
+                          >
+                            <div className="flex items-center gap-2.5">
+                              <Folder className={`w-4 h-4 shrink-0 ${isAdded ? "text-accent" : "text-white/40"}`} />
+                              <span className="text-xs font-bold">{col}</span>
+                            </div>
+                            <div className={`w-4 h-4 rounded-md border flex items-center justify-center shrink-0 ${
+                              isAdded
+                                ? "bg-accent border-accent text-white"
+                                : "border-white/20"
+                            }`}>
+                              {isAdded && <span className="text-[10px] font-bold">✓</span>}
+                            </div>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  ) : (
+                    /* Save states list */
+                    <div className="flex flex-col gap-2">
+                      {saveStates.length === 0 ? (
+                        <div className="text-xs text-white/30 italic py-4 text-center">
+                          Nenhum save state encontrado para este jogo.
+                        </div>
+                      ) : (
+                        saveStates.map(state => (
+                          <button
+                            key={state.path}
+                            onClick={() => onLaunchGame(selectedGame, system, state.slot)}
+                            className="w-full flex items-center gap-3 bg-[#1a1a1a] hover:bg-white/5 border border-white/5 p-2 rounded-md transition text-left cursor-pointer group"
+                          >
+                            {state.screenshotUrl ? (
+                              <img src={state.screenshotUrl} alt={`Slot ${state.slot}`} className="w-16 h-10 object-cover rounded-md border border-white/10 shrink-0" />
+                            ) : (
+                              <div className="w-16 h-10 bg-black/40 border border-white/5 rounded-md flex items-center justify-center shrink-0">
+                                <HardDrive className="w-4 h-4 text-white/30" />
+                              </div>
+                            )}
+                            <div className="flex-1 min-w-0">
+                              <div className="text-xs font-bold text-white/90 group-hover:text-accent transition-colors">
+                                {state.slot === -1 ? 'Autosave' : `Slot ${state.slot}`}
+                              </div>
+                              <div className="text-[10px] text-white/40 truncate">
+                                {new Date(state.date).toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' })}
+                              </div>
+                            </div>
+                          </button>
+                        ))
+                      )}
+                    </div>
+                  )}
+                </div>
+
+                {/* Footer action for creating collection */}
+                {sidebarTab === "collections" && (
+                  <div className="flex gap-2 mt-auto pt-3 border-t border-white/5">
+                    <input
+                      type="text"
+                      value={newColName}
+                      onChange={(e) => setNewColName(e.target.value)}
+                      placeholder="Nova coleção..."
+                      className="flex-1 bg-[#1a1a1a] border border-white/5 rounded-md px-3 py-2 text-xs text-white placeholder:text-white/30 focus:outline-none focus:border-accent transition"
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                          handleCreateAndAddToCollection();
+                        }
+                      }}
+                    />
+                    <button
+                      onClick={handleCreateAndAddToCollection}
+                      disabled={!newColName.trim()}
+                      className="bg-accent hover:bg-accent-hover hover:scale-[1.02] disabled:bg-white/5 disabled:text-white/20 disabled:hover:scale-100 text-white w-10 h-10 rounded-md text-xs font-bold transition flex items-center justify-center cursor-pointer shrink-0"
+                      title="Criar e Adicionar"
+                    >
+                      +
+                    </button>
+                  </div>
+                )}
+              </div>
+            ) : selectedGame.isCollectionFolder ? (
+              /* Collection Folder details */
+              <div className="flex flex-col gap-4 h-full">
+                <div className="w-full flex flex-col items-center justify-center py-8 bg-white/5 rounded-md border border-white/5 shadow-md">
                   <Folder className="w-20 h-20 text-accent mb-4 opacity-80" />
                   <h3 className="font-bold text-lg text-white/95 text-center px-4 leading-tight">{selectedGame.name}</h3>
                   <span className="text-[10px] text-white/40 mt-1 uppercase tracking-wider font-semibold">Pasta de Coleção</span>
@@ -710,7 +878,7 @@ export default function SystemAppContent({
                 <div className="flex flex-col gap-2 mt-auto">
                   <button
                     onClick={() => setActiveCollection(selectedGame.name)}
-                    className="w-full bg-accent bg-accent-hover hover:scale-[1.02] hover:shadow-lg transition-all rounded-lg py-2.5 text-md font-bold flex items-center justify-center gap-2 cursor-pointer text-white"
+                    className="w-full bg-accent bg-accent-hover hover:scale-[1.02] hover:shadow-lg transition-all rounded-md py-2.5 text-md font-bold flex items-center justify-center gap-2 cursor-pointer text-white"
                   >
                     <Folder className="w-4 h-4" />
                     Abrir Coleção
@@ -718,7 +886,9 @@ export default function SystemAppContent({
                 </div>
               </div>
             ) : (
+              /* Normal Game Details */
               <div className="flex flex-col gap-4">
+                {/* Game Logo/Marquee (Transparent background) */}
                 {selectedGame.marquee && !imageError && (
                   <div className="w-full flex items-center justify-center overflow-hidden relative shrink-0">
                     <img 
@@ -735,7 +905,7 @@ export default function SystemAppContent({
 
                 {/* Game Playback Video Preview */}
                 {videoUrl && (
-                  <div className="relative group w-full aspect-video rounded-xl overflow-hidden bg-black/50 border border-white/5 shadow-md shrink-0">
+                  <div className="relative group w-full aspect-video rounded-md overflow-hidden bg-black/50 border border-white/5 shadow-md shrink-0">
                     <video 
                       src={videoUrl} 
                       autoPlay 
@@ -746,7 +916,7 @@ export default function SystemAppContent({
                     />
                     <button
                       onClick={() => setFullVideo(true)}
-                      className="absolute bottom-2 right-2 bg-black/70 hover:bg-[var(--accent-color-hover)] text-white p-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-all flex items-center justify-center shadow-lg cursor-pointer"
+                      className="absolute bottom-2 right-2 bg-black/70 hover:bg-[var(--accent-color-hover)] text-white p-1.5 rounded-md opacity-0 group-hover:opacity-100 transition-all flex items-center justify-center shadow-lg cursor-pointer"
                       title="Maximizar Vídeo"
                     >
                       <Maximize2 className="w-3.5 h-3.5" />
@@ -754,28 +924,92 @@ export default function SystemAppContent({
                   </div>
                 )}
                 
-                <div className="flex flex-col">
-                  <h3 className="font-bold text-base leading-snug text-white/95">{selectedGame.name}</h3>
-                  <div className="text-[10px] text-white/40 mt-1 uppercase tracking-wider font-semibold">
-                    {(() => {
-                      const relDate = selectedGame.releasedate || (selectedGame as any).ReleaseDate;
-                      return relDate ? String(relDate).substring(0, 4) : "Lançamento N/A";
-                    })()} · {system.fullname}
+                {/* Title & Metadata with Context Menu */}
+                <div className="flex justify-between items-start">
+                  <div className="flex flex-col flex-1 min-w-0 pr-2 text-left">
+                    <h3 className="font-bold text-base leading-snug text-white/95 truncate" title={selectedGame.name}>{selectedGame.name}</h3>
+                    <div className="text-[10px] text-white/40 mt-1 uppercase tracking-wider font-semibold">
+                      {(() => {
+                        const relDate = selectedGame.releasedate || (selectedGame as any).ReleaseDate;
+                        return relDate ? String(relDate).substring(0, 4) : "Lançamento N/A";
+                      })()} · {system.fullname}
+                    </div>
+                  </div>
+                  
+                  {/* Dropdown Menu Container */}
+                  <div className="relative shrink-0">
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setShowContextMenu(prev => !prev);
+                      }}
+                      className="p-1.5 rounded-md bg-[#1a1a1a] hover:bg-white/10 border border-white/5 text-white/60 hover:text-white transition cursor-pointer flex items-center justify-center"
+                      title="Opções"
+                    >
+                      <span className="block text-xs font-bold leading-none translate-y-[-2px]">...</span>
+                    </button>
+                    
+                    {showContextMenu && (
+                      <>
+                        <div className="fixed inset-0 z-40" onClick={() => setShowContextMenu(false)} />
+                        <div className="absolute right-0 mt-1 w-48 bg-[#1a1a1a] border border-white/10 rounded-md py-2 shadow-2xl z-50 animate-in fade-in slide-in-from-top-2 duration-150 text-left">
+                          <div className="px-3 py-1 text-[10px] font-bold text-white/40 uppercase tracking-widest border-b border-white/5 mb-1">
+                            Gerenciar jogo
+                          </div>
+                          
+                          <button
+                            onClick={() => {
+                              setShowContextMenu(false);
+                              setSidebarTab("saves");
+                              setShowSavesSidebar(true);
+                            }}
+                            className="w-full flex items-center gap-2 px-3 py-2 text-xs text-white/80 hover:text-white hover:bg-white/5 transition text-left cursor-pointer"
+                          >
+                            <HardDrive className="w-3.5 h-3.5 opacity-60" />
+                            <span>Save states</span>
+                          </button>
+                          
+                          <button
+                            onClick={() => {
+                              setShowContextMenu(false);
+                              setSidebarTab("collections");
+                              setShowSavesSidebar(true);
+                            }}
+                            className="w-full flex items-center gap-2 px-3 py-2 text-xs text-white/80 hover:text-white hover:bg-white/5 transition text-left cursor-pointer"
+                          >
+                            <Folder className="w-3.5 h-3.5 opacity-60" />
+                            <span>Adicionar à coleção</span>
+                          </button>
+                          
+                          <button
+                            onClick={() => {
+                              setShowContextMenu(false);
+                              handleToggleFavorite();
+                            }}
+                            className="w-full flex items-center gap-2 px-3 py-2 text-xs text-white/80 hover:text-white hover:bg-white/5 transition text-left cursor-pointer"
+                          >
+                            <Heart className={`w-3.5 h-3.5 ${selectedGame.favorite ? "fill-red-500 text-red-500" : "opacity-60"}`} />
+                            <span>{selectedGame.favorite ? "Remover dos Favoritos" : "Favoritar"}</span>
+                          </button>
+                        </div>
+                      </>
+                    )}
                   </div>
                 </div>
 
-                <div className="flex items-center gap-4 text-xs">
+                {/* Favoritar & Avaliação Row */}
+                <div className="flex items-center gap-2">
                   <button
                     onClick={handleToggleFavorite}
-                    className="flex items-center gap-1.5 hover:text-red-400 transition-colors font-bold cursor-pointer text-white/70"
+                    className="flex items-center gap-2 px-3 py-1.5 bg-[#1a1a1a] hover:bg-white/5 border border-white/5 rounded-md text-xs font-semibold text-white/80 transition cursor-pointer"
                   >
-                    <Heart className={`w-4 h-4 ${selectedGame.favorite ? "fill-red-500 text-red-500" : "text-white/60"}`} />
+                    <Heart className={`w-3.5 h-3.5 ${selectedGame.favorite ? "fill-red-500 text-red-500" : "text-white/60"}`} />
                     <span>{selectedGame.favorite ? "Favorito" : "Favoritar"}</span>
                   </button>
 
-                  <div className="flex items-center gap-1.5">
-                    <Star className="w-4 h-4 fill-amber-500 text-amber-500" />
-                    <span className="font-bold text-amber-400">
+                  <div className="flex items-center gap-1.5 px-3 py-1.5 bg-[#1a1a1a] border border-white/5 rounded-md text-xs font-semibold text-white/80">
+                    <Star className="w-3.5 h-3.5 fill-amber-500 text-amber-500" />
+                    <span className="text-amber-400 font-bold">
                       {(() => {
                         const rating = selectedGame.rating !== undefined ? selectedGame.rating : (selectedGame as any).Rating;
                         if (rating === undefined || rating === null) return "N/A";
@@ -787,52 +1021,42 @@ export default function SystemAppContent({
                       })()}
                     </span>
                   </div>
+                  
                   {selectedGame.playcount ? (
-                    <div className="text-white/50 text-[10px]">
+                    <div className="text-white/40 text-[10px] ml-auto">
                       Jogado <span className="text-white/80 font-bold">{selectedGame.playcount}</span> vezes
                     </div>
                   ) : null}
                 </div>
 
-                <ScrollArea className="text-xs leading-relaxed text-white/60 h-28 pr-1">
+                {/* Description Box */}
+                <ScrollArea className="text-xs leading-relaxed text-white/60 h-28 pr-1 text-left">
                   <p>
                     {selectedGame.desc || "Nenhuma descrição disponível para este jogo."}
                   </p>
                 </ScrollArea>
 
-                {/* Game Info Details (Developer, Publisher, Genre, Players) */}
+                {/* Game Info Details Table */}
                 {(() => {
                   const genre = selectedGame.genre || (selectedGame as any).Genre;
                   const players = selectedGame.players || (selectedGame as any).Players;
-                  const developer = selectedGame.developer || (selectedGame as any).Developer;
-                  const publisher = selectedGame.publisher || (selectedGame as any).Publisher;
+
+                  if (!genre && !players) return null;
 
                   return (
-                    <div className="flex flex-col gap-2 bg-white/5 rounded-lg p-3 text-[11px] text-white/70">
+                    <div className="flex flex-col gap-2 bg-[#1a1a1a] border border-white/5 rounded-md p-4 text-xs text-white/70">
                       {genre && (
-                        <div className="flex justify-between items-center border-b border-white/5 pb-1 last:border-none last:pb-0">
-                          <span className="text-white/40">Gênero</span>
+                        <div className="flex justify-between items-center">
+                          <span className="text-white/40 font-medium">Gênero</span>
                           <span className="font-semibold text-white/90 text-right truncate max-w-[150px]" title={String(genre)}>{String(genre)}</span>
                         </div>
                       )}
                       {players && (
-                        <div className="flex justify-between items-center border-b border-white/5 pb-1 last:border-none last:pb-0">
-                          <span className="text-white/40">Jogadores</span>
+                        <div className="flex justify-between items-center mt-1">
+                          <span className="text-white/40 font-medium">Jogadores</span>
                           <span className="font-semibold text-white/90 text-right">
-                            {String(players) === "1" ? "1 Jogador" : String(players) === "2" ? "2 Jogadores" : `${String(players)} Jogadores`}
+                            {String(players) === "1" ? "1.0 Jogador" : String(players) === "2" ? "2.0 Jogadores" : `${parseFloat(String(players)).toFixed(1)} Jogadores`}
                           </span>
-                        </div>
-                      )}
-                      {developer && (
-                        <div className="flex justify-between items-center border-b border-white/5 pb-1 last:border-none last:pb-0">
-                          <span className="text-white/40">Desenvolvedor</span>
-                          <span className="font-semibold text-white/90 text-right truncate max-w-[150px]" title={String(developer)}>{String(developer)}</span>
-                        </div>
-                      )}
-                      {publisher && (
-                        <div className="flex justify-between items-center border-b border-white/5 pb-1 last:border-none last:pb-0">
-                          <span className="text-white/40">Distribuidora</span>
-                          <span className="font-semibold text-white/90 text-right truncate max-w-[150px]" title={String(publisher)}>{String(publisher)}</span>
                         </div>
                       )}
                     </div>
@@ -840,143 +1064,46 @@ export default function SystemAppContent({
                 })()}
 
                 {/* Emulator/Core Select Option */}
-                <div className="flex flex-col gap-1.5">
-                  <span className="text-[10px] text-white/40 uppercase tracking-wider font-semibold">Emulador / Core</span>
-                  <div className="relative group">
-                    <select
-                      value={selectValue}
-                      onChange={handleEmulatorChange}
-                      className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-xs text-white/90 focus:outline-none focus-border-accent hover:bg-white/10 transition appearance-none cursor-pointer"
-                    >
-                      {emulatorChoices.map(choice => (
-                        <option key={choice.value} value={choice.value} className="bg-[#121212] text-white/90">
-                          {choice.label}
-                        </option>
-                      ))}
-                    </select>
-                    <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-white/40 group-focus-within:text-accent transition duration-200">
-                      <ChevronRight className="w-3.5 h-3.5 rotate-90" />
-                    </div>
-                  </div>
+                <div className="flex flex-col gap-1.5 text-left">
+                  <span className="text-[10px] text-white/40 uppercase tracking-wider font-bold">Emulador / Core</span>
+                  <RadixSelect
+                    value={selectValue}
+                    onValueChange={handleEmulatorValueChange}
+                    options={emulatorChoices.map(choice => ({ label: choice.label, value: choice.value }))}
+                    placeholder="Padrão (Auto)"
+                  />
                 </div>
 
-                {/* Save States Section */}
-                <div className="flex flex-col gap-1.5 mt-2 border-t border-white/5 pt-3">
-                  <span className="text-[10px] text-white/40 uppercase tracking-wider font-semibold">Save States</span>
-                  {saveStates.length === 0 ? (
-                    <div className="text-xs text-white/30 italic px-1">Nenhum save state encontrado</div>
-                  ) : (
-                    <div className="flex flex-col gap-2 max-h-48 overflow-y-auto pr-1">
-                      {saveStates.map(state => (
-                        <button
-                          key={state.path}
-                          onClick={() => onLaunchGame(selectedGame, system, state.slot)}
-                          className="w-full flex items-center gap-3 bg-white/5 hover:bg-white/10 border border-white/5 hover:border-white/10 p-2 rounded-lg transition text-left cursor-pointer group animate-in fade-in duration-200"
-                        >
-                          {state.screenshotUrl ? (
-                            <img src={state.screenshotUrl} alt={`Slot ${state.slot}`} className="w-16 h-10 object-cover rounded border border-white/10 shrink-0" />
-                          ) : (
-                            <div className="w-16 h-10 bg-black/40 border border-white/5 rounded flex items-center justify-center shrink-0">
-                              <HardDrive className="w-4 h-4 text-white/30" />
-                            </div>
-                          )}
-                          <div className="flex-1 min-w-0">
-                            <div className="text-xs font-bold text-white/90 group-hover:text-accent transition-colors">
-                              {state.slot === -1 ? 'Autosave' : `Slot ${state.slot}`}
-                            </div>
-                            <div className="text-[10px] text-white/40 truncate">
-                              {new Date(state.date).toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' })}
-                            </div>
-                          </div>
-                        </button>
-                      ))}
+                {/* Saves & Coleções interactive row button */}
+                <button
+                  onClick={() => {
+                    setSidebarTab("collections");
+                    setShowSavesSidebar(true);
+                  }}
+                  className="w-full bg-[#1a1a1a] hover:bg-white/5 border border-white/5 rounded-md p-3 flex items-center justify-between transition cursor-pointer text-left"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-md bg-accent/20 flex items-center justify-center shrink-0">
+                      <Folder className="w-4 h-4 text-accent" />
                     </div>
-                  )}
-                </div>
-
-                {/* Collections Section */}
-                <div className="flex flex-col gap-2 mt-2 border-t border-white/5 pt-3">
-                  <span className="text-[10px] text-white/40 uppercase tracking-wider font-semibold">Coleções do Jogo</span>
-                  
-                  {/* Tag List */}
-                  <div className="flex flex-wrap gap-1.5">
-                    {gameCollections.length === 0 ? (
-                      <span className="text-xs text-white/30 italic px-1">Este jogo não está em nenhuma coleção</span>
-                    ) : (
-                      gameCollections.map(col => (
-                        <span key={col} className="inline-flex items-center gap-1 bg-accent/20 border border-accent/20 text-accent text-[11px] font-bold px-2 py-0.5 rounded-full">
-                          {col}
-                          <button
-                            onClick={() => handleRemoveFromCollection(col)}
-                            className="hover:text-red-400 font-bold ml-0.5 text-xs focus:outline-none cursor-pointer"
-                            title="Remover da Coleção"
-                          >
-                            &times;
-                          </button>
-                        </span>
-                      ))
-                    )}
-                  </div>
-
-                  {/* Add to Existing Collection Dropdown */}
-                  {allCollections.filter(c => !gameCollections.includes(c)).length > 0 && (
-                    <div className="relative group mt-1">
-                      <select
-                        value=""
-                        onChange={(e) => {
-                          if (e.target.value) {
-                            handleAddToCollection(e.target.value);
-                          }
-                        }}
-                        className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-1.5 text-xs text-white/70 focus:outline-none focus:border-accent hover:bg-white/10 transition appearance-none cursor-pointer"
-                      >
-                        <option value="" className="bg-[#121212] text-white/40">Adicionar à Coleção...</option>
-                        {allCollections
-                          .filter(c => !gameCollections.includes(c))
-                          .map(col => (
-                            <option key={col} value={col} className="bg-[#121212] text-white/90">
-                              {col}
-                            </option>
-                          ))}
-                      </select>
-                      <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-white/40 group-focus-within:text-accent transition duration-200">
-                        <ChevronRight className="w-3.5 h-3.5 rotate-90" />
-                      </div>
+                    <div className="flex flex-col">
+                      <span className="text-xs font-bold text-white/95">Saves & Coleções</span>
+                      <span className="text-[10px] text-white/40 mt-0.5">
+                        {saveStates.length} saves · {gameCollections.length} coleções
+                      </span>
                     </div>
-                  )}
-
-                  {/* Create New Collection input */}
-                  <div className="flex gap-1.5 mt-1">
-                    <input
-                      type="text"
-                      value={newColName}
-                      onChange={(e) => setNewColName(e.target.value)}
-                      placeholder="Nova Coleção..."
-                      className="flex-1 bg-white/5 border border-white/10 rounded-lg px-3 py-1.5 text-xs text-white placeholder:text-white/30 focus:outline-none focus:border-accent focus:bg-white/[0.07] transition"
-                      onKeyDown={(e) => {
-                        if (e.key === 'Enter') {
-                          handleCreateAndAddToCollection();
-                        }
-                      }}
-                    />
-                    <button
-                      onClick={handleCreateAndAddToCollection}
-                      disabled={!newColName.trim()}
-                      className="bg-accent hover:bg-accent-hover disabled:bg-white/5 disabled:text-white/20 disabled:hover:scale-100 text-white px-3 rounded-lg text-xs font-bold transition-all hover:scale-[1.02] flex items-center justify-center cursor-pointer"
-                      title="Criar e Adicionar"
-                    >
-                      +
-                    </button>
                   </div>
-                </div>
+                  <ChevronRight className="w-4 h-4 text-white/30" />
+                </button>
 
+                {/* Play Button */}
                 <div className="flex flex-col gap-2 mt-auto pt-3">
                   <button
                     onClick={() => onLaunchGame(selectedGame, system)}
-                    className="w-full bg-accent bg-accent-hover hover:scale-[1.02] hover:shadow-lg transition-all rounded-lg py-2.5 text-md font-bold flex items-center justify-center gap-2 cursor-pointer"
+                    className="w-full bg-accent hover:bg-accent-hover hover:scale-[1.02] hover:shadow-lg transition-all rounded-md py-3 text-sm font-bold flex items-center justify-center gap-2 cursor-pointer text-white"
                   >
-                    <Play className="w-3.5 h-3.5 fill-white" />
-                    Jogar
+                    <Play className="w-4 h-4 fill-white text-white" />
+                    <span>Jogar</span>
                   </button>
                 </div>
               </div>
@@ -1000,7 +1127,7 @@ export default function SystemAppContent({
             autoPlay 
             controls 
             loop 
-            className="max-w-[95%] max-h-[90%] rounded-xl border border-white/10 shadow-2xl" 
+            className="max-w-[95%] max-h-[90%] rounded-md border border-white/10 shadow-2xl" 
           />
         </div>
       )}
