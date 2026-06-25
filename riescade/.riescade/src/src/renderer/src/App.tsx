@@ -274,6 +274,35 @@ export default function App() {
   const systemName = params.get("systemName");   // ex: "snes"
   const toolId = params.get("toolId");           // ex: "settings"
 
+  const toolApp = useMemo(() => {
+    if (!toolId) return undefined;
+    return TOOL_APPS.find(t => t.id === toolId);
+  }, [toolId]);
+
+  const virtualSystem = useMemo(() => {
+    if (windowType !== "tool" || !toolId) return null;
+    return {
+      name: toolId,
+      fullname: toolApp?.name || (toolId === "all" ? "Todos os Jogos" : toolId === "favorites" ? "Favoritos" : "Coleções"),
+      path: `virtual://${toolId}`,
+      extension: "",
+      command: "",
+      platform: "pc",
+      theme: toolId === "all" ? "auto-allgames" : toolId === "favorites" ? "auto-favorites" : "custom-collections",
+      hardware: toolId === "collections" ? "custom-collections" : "auto collection",
+      emulators: []
+    };
+  }, [windowType, toolId, toolApp]);
+
+  const virtualTheme = useMemo(() => {
+    if (windowType !== "tool" || !toolId) return null;
+    return {
+      icon: toolApp?.icon || Gamepad2,
+      color: toolApp?.color || "from-indigo-500 to-violet-600",
+      bg: "radial-gradient(1200px at 50% 50%, #222222ff 0%, #030303ff 100%)"
+    };
+  }, [windowType, toolId, toolApp]);
+
   // Fast boot: Skip overlay synchronized loader inside standalone windows
   const [libraryLoading, setLibraryLoading] = useState(windowType === null);
   const [loadingProgress, setLoadingProgress] = useState(0);
@@ -295,7 +324,7 @@ export default function App() {
     if (raw !== undefined) {
       return String(raw).split(",").filter(Boolean);
     }
-    return ["tool:library"];
+    return ["tool:all"];
   }, [settings]);
 
   const getTaskbarIcons = useCallback(() => {
@@ -303,7 +332,7 @@ export default function App() {
     if (raw !== undefined) {
       return String(raw).split(",").filter(Boolean);
     }
-    return ["tool:library", "tool:settings"];
+    return ["tool:all", "tool:settings"];
   }, [settings]);
 
   const resolveIconItem = useCallback((itemKey: string) => {
@@ -348,7 +377,7 @@ export default function App() {
   // Listen for systems loading progress from backend
   useEffect(() => {
     const unsubscribe = window.api.on('systems-loading-progress', (_event: any, progress: number) => {
-      setLoadingProgress(Math.min(100, Math.max(0, Math.round(progress * 5))));
+      setLoadingProgress(Math.min(100, Math.max(0, Math.round(progress))));
     });
     return () => unsubscribe();
   }, []);
@@ -699,6 +728,102 @@ export default function App() {
 
   // Standalone Tool Window
   if (windowType === "tool" && toolId) {
+    if (["all", "favorites", "collections"].includes(toolId)) {
+      const system = virtualSystem;
+      const theme = virtualTheme;
+      if (!system || !theme) return null;
+      const platformBackgroundArt = activeGameArt || null;
+
+      return (
+        <Toast.Provider swipeDirection="up" duration={Infinity}>
+          <div 
+            key={`tool-${toolId}`} 
+            className="w-screen h-screen overflow-hidden select-none flex relative" 
+            style={{ 
+              background: theme.bg
+            }}
+          >
+          {platformBackgroundArt && settings["RIESCADE.DynamicBackground"]?.value !== "false" && (
+            <div 
+              key={platformBackgroundArt}
+              className="absolute inset-0 bg-cover bg-center pointer-events-none opacity-20 animate-in fade-in duration-1000 z-0"
+              style={{ backgroundImage: `url("${platformBackgroundArt}")` }}
+            />
+          )}
+
+          {/* Draggable region at top - merged with sidebar */}
+          <div 
+            className="absolute top-0 left-0 right-0 h-8 z-10"
+            style={{ WebkitAppRegion: 'drag' } as any}
+          />
+
+          {/* Window Controls Overlay (top-right) */}
+          <div 
+            className="absolute top-0 right-0 z-20 flex items-center h-8"
+            style={{ WebkitAppRegion: 'no-drag' } as any}
+          >
+            <button 
+              onClick={() => window.api.minimizeWindow()} 
+              className="w-11 h-8 hover:bg-white/10 flex items-center justify-center text-white/60 hover:text-white transition cursor-pointer"
+              title="Minimizar"
+            >
+              <Minus className="w-4 h-4" />
+            </button>
+            <button 
+              onClick={() => window.api.maximizeWindow()} 
+              className="w-11 h-8 hover:bg-white/10 flex items-center justify-center text-white/60 hover:text-white transition cursor-pointer"
+              title="Maximizar"
+            >
+              <Square className="w-3 h-3" />
+            </button>
+            <button 
+              onClick={() => window.api.closeWindow()} 
+              className="w-11 h-8 hover:bg-red-600 flex items-center justify-center text-white/60 hover:text-white transition cursor-pointer"
+              title="Fechar"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+
+          {/* Content - fills entire window, sidebar merges with titlebar */}
+          <div className="flex-1 overflow-hidden relative z-0">
+            <div className="relative z-10 h-full">
+              <SystemAppContent
+                systemName={toolId}
+                system={system}
+                color={theme.color}
+                Icon={theme.icon}
+                onLaunchGame={handleLaunchGame}
+                search={search}
+                setSearch={setSearch}
+                onActiveGameArtChanged={setActiveGameArt}
+              />
+            </div>
+          </div>
+
+          {/* Premium Full-screen Game Loading Backdrop */}
+          {isLaunching && launchingGame && (
+            <div className="absolute inset-0 z-50 bg-black/95 flex flex-col items-center justify-center animate-in fade-in duration-300">
+              <div className="relative flex flex-col items-center">
+                <div 
+                  className="relative w-36 h-36 rounded-full flex items-center justify-center shadow-2xl mb-8 animate-pulse"
+                  style={{ backgroundColor: 'var(--accent-color-light)', borderColor: 'var(--accent-color-light)', borderWidth: 1 }}
+                >
+                  <Loader2 className="w-16 h-16 text-accent animate-spin" />
+                </div>
+                <h2 className="text-2xl font-bold tracking-wider text-white/90 mb-2">INICIANDO</h2>
+                <p className="text-xl font-medium text-white/70">{launchingGame.name}</p>
+                <p className="text-xs text-white/40 uppercase tracking-widest mt-2">{launchingGame.system}</p>
+              </div>
+            </div>
+          )}
+          </div>
+          {renderToasts()}
+          <Toast.Viewport className="fixed top-6 left-1/2 -translate-x-1/2 z-[10000] flex flex-col gap-2 w-80 max-w-full m-0 list-none outline-none items-center" />
+        </Toast.Provider>
+      );
+    }
+
     return (
       <Toast.Provider swipeDirection="up" duration={Infinity}>
         <div 
@@ -870,14 +995,14 @@ export default function App() {
             className="glass-strong rounded-3xl w-[760px] max-w-[90%] h-[78%] p-6 flex flex-col animate-in fade-in zoom-in-95 duration-200"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="relative mb-5">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/50" />
+            <div className="relative mb-5 group">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/50 group-focus-within:text-accent transition duration-200" />
               <input
                 autoFocus
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Pesquisar plataformas ou ferramentas..."
-                className="w-full bg-white/10 border border-white/15 rounded-full pl-11 pr-4 py-2.5 text-sm text-white placeholder:text-white/40 focus:outline-none focus-border-accent"
+                className="w-full bg-white/10 border border-white/15 rounded-full pl-11 pr-4 py-2.5 text-sm text-white placeholder:text-white/40 focus:outline-none focus:border-accent"
               />
             </div>
             

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { ChevronRight, Search, Folder, Star, User, Shield, Settings, Palette, Gamepad2, Volume2, Cpu, Info, Database, Trash2, Edit3, X, ChevronLeft, Filter, HardDrive, RefreshCw, Eye, EyeOff, Check, ChevronDown, Save } from "lucide-react";
+import { ChevronRight, Search, Folder, Star, User, Shield, Settings, Palette, Gamepad2, Volume2, Cpu, Info, Database, Trash2, Edit3, X, ChevronLeft, Filter, HardDrive, RefreshCw, Eye, EyeOff, Check, ChevronDown, Save, Trophy } from "lucide-react";
 import { System, SettingsCtx } from "../types";
 import { TOOL_APPS, getSystemTheme } from "../constants";
 import {
@@ -74,7 +74,6 @@ export default function ToolAppContent({
   const [activeSettingsTab, setActiveSettingsTab] = useState("conta");
   const [settingsSearch, setSettingsSearch] = useState("");
   const [settingsCategory, setSettingsCategory] = useState<"all" | "tools" | "systems">("all");
-
   const [updateState, setUpdateState] = useState<{
     status: 'idle' | 'checking' | 'no-update' | 'available' | 'downloading' | 'error';
     version?: string;
@@ -142,45 +141,6 @@ export default function ToolAppContent({
     }
   };
 
-  if (appId === "library") {
-    return (
-      <div className="flex flex-col h-full text-white p-6 pb-0">
-        <div className="shrink-0 mb-5">
-          <h2 className="text-xl font-bold mb-1">Biblioteca Gamer</h2>
-          <p className="text-xs text-white/50">Todos os seus sistemas e emuladores sincronizados</p>
-        </div>
-        
-        <ScrollArea className="flex-1 min-h-0">
-          <div className="grid grid-cols-4 gap-4 pb-6">
-            {systems.map(sys => {
-              const style = getSystemTheme(sys.name);
-              const SysIcon = style.icon;
-              return (
-                <div
-                  key={sys.name}
-                  onClick={() => onOpenSystem(sys.name)}
-                  className="rounded-2xl border border-white/5 bg-white/5 p-4 hover:bg-white/10 hover:scale-[1.02] hover:border-white/15 transition cursor-pointer select-none"
-                >
-                  <div className="w-full h-12 flex items-center justify-start mb-3">
-                    {sys.logo ? (
-                      <img src={sys.logo} alt={sys.fullname} className="h-full object-contain max-w-[85%] filter drop-shadow-[0_4px_6px_rgba(0,0,0,0.5)] transition-all group-hover:scale-105" />
-                    ) : (
-                      <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${style.color} flex items-center justify-center shadow-md`}>
-                        <SysIcon className="w-6 h-6 text-white" />
-                      </div>
-                    )}
-                  </div>
-                  <div className="font-bold text-sm truncate">{sys.fullname}</div>
-                  <div className="text-[10px] text-white/40 mt-1 uppercase tracking-wider">{sys.gamecount || 0} jogos</div>
-                </div>
-              );
-            })}
-          </div>
-        </ScrollArea>
-      </div>
-    );
-  }
-
 
   if (appId === "settings") {
     // --- Helper: read a setting value ---
@@ -233,12 +193,12 @@ export default function ToolAppContent({
     const getDesktopIcons = () => {
       const raw = settings?.["Desktop.Icons"]?.value;
       if (raw !== undefined) return String(raw).split(",").filter(Boolean);
-      return ["tool:library"];
+      return ["tool:all"];
     };
     const getTaskbarIcons = () => {
       const raw = settings?.["Taskbar.Icons"]?.value;
       if (raw !== undefined) return String(raw).split(",").filter(Boolean);
-      return ["tool:library", "tool:settings"];
+      return ["tool:all", "tool:settings"];
     };
     const desktopIcons = getDesktopIcons();
     const taskbarIcons = getTaskbarIcons();
@@ -278,8 +238,8 @@ export default function ToolAppContent({
               </div>
             </div>
             {/* Search */}
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-white/35" />
+            <div className="relative group">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-white/35 group-focus-within:text-accent transition duration-200" />
               <input 
                 placeholder="Buscar configurações..."
                 className="w-full bg-white/5 border border-white/10 rounded-md pl-9 pr-3 py-2 text-xs text-white placeholder:text-white/30 focus:outline-none focus:border-accent hover:border-accent focus:bg-white/[0.07] transition duration-200"
@@ -288,9 +248,9 @@ export default function ToolAppContent({
           </div>
 
           {/* Navigation */}
-          <div className="flex-1 overflow-y-auto px-2 pb-4">
-            <div className="text-[10px] font-bold uppercase text-white/25 tracking-widest px-3 py-2 mt-1">Configurações</div>
-            <div className="flex flex-col gap-0.5">
+          <div className="flex-1 overflow-y-auto p-3">
+            <div className="text-[10px] font-bold uppercase text-white/25 tracking-widest px-3.5 py-2 mt-1">Configurações</div>
+            <div className="flex flex-col gap-1">
               {settingsTabs.map((tab) => {
                 const TabIcon = tab.icon;
                 const isActive = activeSettingsTab === tab.id;
@@ -298,16 +258,13 @@ export default function ToolAppContent({
                   <button
                     key={tab.id}
                     onClick={() => setActiveSettingsTab(tab.id)}
-                    className={`w-full flex items-center gap-2.5 px-3 py-[7px] rounded-md text-[13px] transition-all cursor-pointer relative ${
+                    className={`cursor-pointer font-medium w-full text-left px-3.5 py-2.5 rounded-md text-xs flex items-center gap-2.5 transition ${
                       isActive 
-                        ? "bg-white/[0.08] text-white font-medium" 
-                        : "text-white/50 hover:bg-white/[0.04] hover:text-white/80"
+                        ? "bg-white/5" 
+                        : "text-white/60 hover:bg-white/5 hover:text-white"
                     }`}
                   >
-                    {isActive && (
-                      <div className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-4 bg-white rounded-r-full" />
-                    )}
-                    <TabIcon className="w-4 h-4 shrink-0 opacity-60" />
+                    <TabIcon className={`w-4 h-4 shrink-0 transition ${isActive ? 'text-accent' : 'opacity-60'}`} />
                     <span>{tab.name}</span>
                   </button>
                 );
@@ -351,8 +308,6 @@ export default function ToolAppContent({
                       {[
                         { label: "Nome de usuário", value: "RIESCADE Player", action: "Editar" },
                         { label: "E-mail", value: "**************@gmail.com", action: "Editar", link: "Mostrar" },
-                        { label: "Telefone", value: "*******8182", action: "Editar", link: "Mostrar" },
-                        { label: "Grupo Etário", value: "Não confirmado", action: "Confirmar" }
                       ].map((field, i) => (
                         <div key={i} className="flex items-center justify-between bg-black/20 border border-white/5 rounded-md px-4 py-3">
                           <div className="flex flex-col">
@@ -371,36 +326,6 @@ export default function ToolAppContent({
                           </div>
                         </div>
                       ))}
-                    </div>
-                  </div>
-
-                  {/* Password & Security Section */}
-                  <div className="mb-8">
-                    <h3 className="text-base font-bold text-white mb-4">Senha e segurança</h3>
-                    <div className="space-y-3">
-                      <div className="flex items-center justify-between bg-black/20 border border-white/5 rounded-md px-4 py-3">
-                        <div className="flex flex-col">
-                          <span className="text-xs text-white/40 font-medium">Senha</span>
-                          <span className="text-sm text-white/90">Senha</span>
-                        </div>
-                        <button className="px-3 py-1.5 rounded-md bg-white/[0.06] hover:bg-white/[0.1] text-xs text-white/80 font-medium transition cursor-pointer">
-                          Editar
-                        </button>
-                      </div>
-                      <div className="flex items-center justify-between bg-black/20 border border-white/5 rounded-md px-4 py-3 hover:bg-white/[0.03] transition cursor-pointer">
-                        <div className="flex flex-col">
-                          <span className="text-xs text-white/40 font-medium">Autenticação Multifatorial</span>
-                          <span className="text-sm text-white/90">Ativada</span>
-                        </div>
-                        <ChevronRight className="w-4 h-4 text-white/30" />
-                      </div>
-                      <div className="flex items-center justify-between bg-black/20 border border-white/5 rounded-md px-4 py-3 hover:bg-white/[0.03] transition cursor-pointer">
-                        <div className="flex flex-col">
-                          <span className="text-xs text-white/40 font-medium">Dispositivos conectados</span>
-                          <span className="text-sm text-white/90">0 dispositivos</span>
-                        </div>
-                        <ChevronRight className="w-4 h-4 text-white/30" />
-                      </div>
                     </div>
                   </div>
 
@@ -513,8 +438,8 @@ export default function ToolAppContent({
 
                   {/* Search & Category Filter */}
                   <div className="flex items-center gap-3 mb-4 select-none">
-                    <div className="relative flex-1">
-                      <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-white/40" />
+                    <div className="relative flex-1 group">
+                      <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-white/40 group-focus-within:text-accent transition duration-200" />
                       <input 
                         value={settingsSearch} 
                         onChange={(e) => setSettingsSearch(e.target.value)} 
@@ -754,43 +679,11 @@ export default function ToolAppContent({
                   <SettingGroup label="Exibição" />
                   <SettingToggle label="Mostrar Notificações de Controle" name="ShowControllerNotifications" ctx={ctx} />
                   <SettingToggle label="Mostrar Atividade do Controle" name="ShowControllerActivity" ctx={ctx} />
-                  <SettingToggle label="Mostrar Notificações de Gun" name="ShowGunNotifications" ctx={ctx} />
-                  <SettingToggle label="Desenhar Mira do Gun" name="DrawGunCrosshair" ctx={ctx} />
 
                   <SettingGroup label="Prioridade dos Controles" />
-                  {Array.from({ length: 8 }, (_, i) => (
+                  {Array.from({ length: 4 }, (_, i) => (
                     <SettingInput key={i} label={`Controle #${i + 1}`} name={`INPUT P${i + 1}NAME`} ctx={ctx} />
                   ))}
-
-                  <SettingGroup label="Analógico e D-Pad" />
-                  <SettingToggle label="D-Pad como Analógico" name="analogDpad" ctx={ctx} />
-                  <SettingSelect label="Zona Morta do Analógico" name="analog_deadzone" desc="Ignora movimentos abaixo deste limite." options={
-                    Array.from({ length: 11 }, (_, i) => ({ label: (i * 0.1).toFixed(1), value: (i * 0.1).toFixed(1) }))
-                  } ctx={ctx} />
-                  <SettingToggle label="Inverter Gatilhos N64" name="n64_special_trigger" desc="Usar R2 em vez de L2 como Z." ctx={ctx} />
-                  <SettingToggle label="PS4/PS5 Enhanced" name="ps_controller_enhanced" desc="Ativa vibração avançada para DualSense." ctx={ctx} />
-                  <SettingToggle label="Usar Botão para Gatilhos" name="buttonTrigger" desc="Força botão em vez de eixo." ctx={ctx} />
-
-                  <SettingGroup label="Bluetooth" />
-                  <SettingInfo label="Status" value="Gerenciamento via sistema operacional" />
-
-                  <SettingGroup label="Guns e Lightguns" />
-                  {Array.from({ length: 4 }, (_, i) => (
-                    <SettingSelect key={i} label={`Mouse/Gun P${i + 1}`} name={`p${i + 1}_gunIndex`} desc={`Índice do mouse para jogador ${i + 1}.`}
-                      options={Array.from({ length: 9 }, (_, j) => ({ label: String(j), value: String(j) }))} ctx={ctx} />
-                  ))}
-
-                  <SettingGroup label="Sinden Gun" />
-                  <SettingSelect label="Configuração de Botões" name="global.sindenJoyMode" options={[
-                    { label: "Padrão", value: "standard" }, { label: "Modo Gamepad", value: "joypad" }, { label: "Sem Configuração", value: "none" }
-                  ]} ctx={ctx} />
-                  <SettingToggle label="Fechar Software Sinden ao Sair" name="sindenKill" ctx={ctx} />
-
-                  <SettingGroup label="Wiimote" />
-                  <SettingSelect label="Modo de Conexão" name="WiimoteMode" options={[
-                    { label: "Modo 2 (Normal)", value: "normal" }, { label: "Modo 2 (Game)", value: "game" }, { label: "Modo 4 (WiimoteGun)", value: "wiimotegun" }
-                  ]} ctx={ctx} />
-                  <SettingToggle label="Corrigir Associação do Wiimote" name="WiimoteKbOrder" ctx={ctx} />
                 </div>
               </ScrollArea>
             </div>
@@ -823,24 +716,7 @@ export default function ToolAppContent({
                   <SettingToggle label="Sons de Navegação" name="EnableSounds" ctx={ctx} />
                   <SettingToggle label="Áudio na Prévia de Vídeo" name="VideoAudio" ctx={ctx} />
 
-                  <SettingGroup label="RetroArch Áudio" />
-                  <SettingSelect label="Reamostrador" name="audio_resampler" options={[
-                    { label: "sinc", value: "sinc" }, { label: "CC", value: "CC" }, { label: "nearest", value: "nearest" }, { label: "Nenhum", value: "null" }
-                  ]} ctx={ctx} />
-                  <SettingSelect label="Qualidade" name="audio_resampler_quality" options={[
-                    { label: "Mínima", value: "1" }, { label: "Baixa", value: "2" }, { label: "Normal", value: "3" },
-                    { label: "Alta", value: "4" }, { label: "Máxima", value: "5" }
-                  ]} ctx={ctx} />
-                  <SettingSlider label="Ganho de Volume" name="audio_volume" min={-80} max={12} step={2} suffix=" dB" ctx={ctx} />
-                  <SettingSlider label="Ganho do Mixer" name="audio_mixer_volume" min={-80} max={12} step={2} suffix=" dB" ctx={ctx} />
-                  <SettingToggle label="Sincronização de Áudio" name="audio_sync" ctx={ctx} />
-                  <SettingSelect label="Plugin DSP" name="audio_dsp_plugin" options={[
-                    { label: "Nenhum", value: "none" }, { label: "Bass Boost", value: ":\\filters\\audio\\BassBoost.dsp" },
-                    { label: "Chiptune", value: ":\\filters\\audio\\ChipTuneEnhance.dsp" },
-                    { label: "Echo", value: ":\\filters\\audio\\Echo.dsp" },
-                    { label: "Reverb", value: ":\\filters\\audio\\Reverb.dsp" },
-                    { label: "Mono", value: ":\\filters\\audio\\Mono.dsp" }
-                  ]} ctx={ctx} />
+
                 </div>
               </ScrollArea>
             </div>
@@ -897,13 +773,6 @@ export default function ToolAppContent({
                     { label: "Aviso", value: "warning" }, { label: "Erro", value: "error" }, { label: "Debug", value: "debug" }
                   ]} ctx={ctx} />
 
-                  <SettingGroup label="Gerenciamento de Dados" />
-                  <SettingToggle label="Ignorar Multi-Disco (CUE/GDI/M3U)" name="RemoveMultiDiskContent" ctx={ctx} />
-                  <SettingToggle label="Filtragem de Jogos" name="ForceDisableFilters" ctx={ctx} />
-                  <SettingToggle label="Salvar Metadados ao Sair" name="SaveGamelistsOnExit" ctx={ctx} />
-                  <SettingToggle label="Processar Apenas Gamelists" name="ParseGamelistOnly" desc="Debug: não verifica se ROMs existem." ctx={ctx} />
-                  <SettingToggle label="Buscar Artes Locais" name="LocalArt" desc="Busca mídia com o mesmo nome do arquivo." ctx={ctx} />
-
                   <SettingGroup label="Interface do Frontend" />
                   <SettingToggle label="Gravar posições das janelas" name="RIESCADE.SaveWindowPositions" desc="Gravar posições e tamanhos de todas as janelas do sistema operacional." ctx={ctx} />
                   <SettingSelect label="Menu do RetroArch" name="global.retroarch.menu_driver" options={[
@@ -912,10 +781,7 @@ export default function ToolAppContent({
                   ]} ctx={ctx} />
 
                   <SettingGroup label="Otimizações" />
-                  <SettingToggle label="Pré-carregar UI ao Iniciar" name="PreloadUI" ctx={ctx} />
-                  <SettingToggle label="Pré-carregar Mídias ao Iniciar" name="PreloadMedias" ctx={ctx} />
                   <SettingToggle label="Carregamento em Segundo Plano" name="ThreadedLoading" ctx={ctx} />
-                  <SettingToggle label="Imagens Assíncronas" name="AsyncImages" ctx={ctx} />
                   <SettingToggle label="Otimizar VRAM de Imagens" name="OptimizeVRAM" ctx={ctx} />
                   <SettingToggle label="Otimizar VRAM de Vídeos" name="OptimizeVideo" ctx={ctx} />
                   <SettingToggle label="Cache do Sistema de Arquivos" name="UseFileCache" ctx={ctx} />
@@ -1029,16 +895,6 @@ export default function ToolAppContent({
                       </div>
                     )}
                   </div>
-
-                  <SettingGroup label="Tradução por IA" />
-                  <SettingToggle label="Ativar Tradução por IA" name="ai_service_enabled" ctx={ctx} />
-                  <SettingSelect label="Idioma de Destino" name="ai_target_lang" options={[
-                    { label: "Português", value: "Pt" }, { label: "English", value: "En" }, { label: "Español", value: "Es" },
-                    { label: "Français", value: "Fr" }, { label: "Deutsch", value: "De" }, { label: "Italiano", value: "It" },
-                    { label: "日本語", value: "Ja" }, { label: "한국어", value: "Ko" }, { label: "中文", value: "Zh" }
-                  ]} ctx={ctx} />
-                  <SettingInput label="URL do Serviço" name="ai_service_url" ctx={ctx} />
-                  <SettingToggle label="Pausar na Tela Traduzida" name="ai_service_pause" ctx={ctx} />
                 </div>
               </ScrollArea>
             </div>
@@ -1263,35 +1119,35 @@ export default function ToolAppContent({
           <nav className="p-3 flex-1 flex flex-col gap-1">
             <button
               onClick={() => { setTab("games"); setDbPage(1); }}
-              className={`w-full text-left px-3.5 py-2.5 rounded-md text-xs font-semibold flex items-center gap-2.5 border transition ${
+              className={`cursor-pointer font-medium w-full text-left px-3.5 py-2.5 rounded-md text-xs flex items-center gap-2.5 transition ${
                 tab === "games" 
-                  ? "bg-accent-light text-accent border-accent/20" 
-                  : "text-white/60 border-transparent hover:bg-white/5 hover:text-white"
+                  ? "bg-white/5" 
+                  : "text-white/60 hover:bg-white/5 hover:text-white"
               }`}
             >
-              <Gamepad2 className="w-4 h-4" />
+              <Gamepad2 className={`w-4 h-4 ${tab === "games" && 'text-accent'}`} />
               <span>Jogos Catalogados</span>
             </button>
             <button
               onClick={() => setTab("systems")}
-              className={`w-full text-left px-3.5 py-2.5 rounded-md text-xs font-semibold flex items-center gap-2.5 border transition ${
+              className={`cursor-pointer font-medium w-full text-left px-3.5 py-2.5 rounded-md text-xs flex items-center gap-2.5 transition ${
                 tab === "systems" 
-                  ? "bg-accent-light text-accent border-accent/20" 
-                  : "text-white/60 border-transparent hover:bg-white/5 hover:text-white"
+                  ? "bg-white/5" 
+                  : "text-white/60 hover:bg-white/5 hover:text-white"
               }`}
             >
-              <Folder className="w-4 h-4" />
+              <Folder className={`w-4 h-4 ${tab === "systems" && 'text-accent'}`} />
               <span>Sistemas Ativos</span>
             </button>
             <button
               onClick={() => setTab("stats")}
-              className={`w-full text-left px-3.5 py-2.5 rounded-md text-xs font-semibold flex items-center gap-2.5 border transition ${
+              className={`cursor-pointer font-medium w-full text-left px-3.5 py-2.5 rounded-md text-xs flex items-center gap-2.5 transition ${
                 tab === "stats" 
-                  ? "bg-accent-light text-accent border-accent/20" 
-                  : "text-white/60 border-transparent hover:bg-white/5 hover:text-white"
+                  ? "bg-white/5" 
+                  : "text-white/60 hover:bg-white/5 hover:text-white"
               }`}
             >
-              <Cpu className="w-4 h-4" />
+              <Cpu className={`w-4 h-4 ${tab === "stats" && 'text-accent'}`} />
               <span>Manutenção & Info</span>
             </button>
           </nav>

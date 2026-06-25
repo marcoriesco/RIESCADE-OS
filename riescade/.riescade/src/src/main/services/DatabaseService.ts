@@ -1334,17 +1334,42 @@ export class DatabaseService {
     }
   }
 
+  public getCustomCollectionsGameCounts(): Map<string, number> {
+    const db = this.ensureOpen()
+    const map = new Map<string, number>()
+    try {
+      const rows = db.prepare(`
+        SELECT cg.collection_name, COUNT(*) as count
+        FROM collection_games cg
+        JOIN games g ON LOWER(cg.game_system) = LOWER(g.system) 
+          AND REPLACE(REPLACE(LOWER(cg.game_path), '\\\\', '/'), './', '') = REPLACE(REPLACE(LOWER(g.path), '\\\\', '/'), './', '')
+        GROUP BY cg.collection_name
+      `).all() as any[]
+      rows.forEach(r => {
+        map.set(r.collection_name, r.count)
+      })
+    } catch (e) {
+      console.error('Failed to query custom collections game counts:', e)
+    }
+    return map
+  }
+
   public getCollectionGames(collectionName: string): Game[] {
     const db = this.ensureOpen()
     try {
+      console.log(`[DatabaseService] Querying custom collection: "${collectionName}"`);
       const rows = db.prepare(`
         SELECT g.*
         FROM collection_games cg
-        JOIN games g ON cg.game_system = g.system AND cg.game_path = g.path
+        JOIN games g ON LOWER(cg.game_system) = LOWER(g.system) 
+          AND REPLACE(REPLACE(LOWER(cg.game_path), '\\\\', '/'), './', '') = REPLACE(REPLACE(LOWER(g.path), '\\\\', '/'), './', '')
         WHERE cg.collection_name = ?
         ORDER BY COALESCE(g.sortname, g.name) COLLATE NOCASE
       `).all(collectionName) as any[]
-      return rows.map(r => this.rowToGame(r))
+      console.log(`[DatabaseService] Found ${rows.length} rows in collection "${collectionName}"`);
+      const result = rows.map(r => this.rowToGame(r))
+      console.log(`[DatabaseService] Mapped ${result.length} games for collection "${collectionName}"`);
+      return result
     } catch (e) {
       console.error(`Failed to query games for collection ${collectionName} from DB:`, e)
       return []
@@ -1357,7 +1382,8 @@ export class DatabaseService {
       const rows = db.prepare(`
         SELECT collection_name
         FROM collection_games
-        WHERE game_system = ? AND game_path = ?
+        WHERE LOWER(game_system) = LOWER(?)
+          AND REPLACE(REPLACE(LOWER(game_path), '\\', '/'), './', '') = REPLACE(REPLACE(LOWER(?), '\\', '/'), './', '')
         ORDER BY collection_name COLLATE NOCASE
       `).all(systemName, gamePath) as any[]
       return rows.map(r => r.collection_name)
@@ -1374,9 +1400,17 @@ export class DatabaseService {
         // Ensure collection exists
         db.prepare('INSERT OR IGNORE INTO collections (name) VALUES (?)').run(collectionName)
         
+        // Remove existing matches to avoid duplicates differing in casing/slashes
+        db.prepare(`
+          DELETE FROM collection_games
+          WHERE collection_name = ?
+            AND LOWER(game_system) = LOWER(?)
+            AND REPLACE(REPLACE(LOWER(game_path), '\\', '/'), './', '') = REPLACE(REPLACE(LOWER(?), '\\', '/'), './', '')
+        `).run(collectionName, systemName, gamePath)
+
         // Insert association
         const res = db.prepare(`
-          INSERT OR IGNORE INTO collection_games (collection_name, game_system, game_path)
+          INSERT INTO collection_games (collection_name, game_system, game_path)
           VALUES (?, ?, ?)
         `).run(collectionName, systemName, gamePath)
         
@@ -1384,7 +1418,9 @@ export class DatabaseService {
       } else {
         const res = db.prepare(`
           DELETE FROM collection_games
-          WHERE collection_name = ? AND game_system = ? AND game_path = ?
+          WHERE collection_name = ?
+            AND LOWER(game_system) = LOWER(?)
+            AND REPLACE(REPLACE(LOWER(game_path), '\\', '/'), './', '') = REPLACE(REPLACE(LOWER(?), '\\', '/'), './', '')
         `).run(collectionName, systemName, gamePath)
         
         return res.changes > 0

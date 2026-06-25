@@ -1,4 +1,4 @@
-export type ToolAppId = "library" | "saves" | "settings" | "achievements" | "database";
+export type ToolAppId = "saves" | "settings" | "achievements" | "database" | "all" | "favorites" | "collections";
 
 export type System = {
   name: string;

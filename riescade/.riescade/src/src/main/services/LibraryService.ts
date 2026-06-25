@@ -539,7 +539,7 @@ export class LibraryService {
       if (!needsSync) {
         const syncMetadata = dbService.getAllSystemsSyncMetadata()
         for (const sys of syncMetadata) {
-          if (sys.path.startsWith('virtual://') || sys.name === 'collections') continue
+          if (!sys.path || sys.path.startsWith('virtual://') || sys.name === 'collections') continue
           
           systemsCheckedCount++
           const folderExists = existsSync(sys.path)
@@ -801,24 +801,6 @@ export class LibraryService {
     const settings = new SettingsParser()
     const sortMode = settings.getSetting('SortSystems', 'string') || 'hardware'
 
-    // Add collections virtual system
-    const gamecount = this.getCustomCollections().length
-
-    if (!systems.some(s => s.name === 'collections')) {
-      systems.push({
-        name: 'collections',
-        fullname: 'Coleções',
-        path: 'virtual://collections',
-        extension: '',
-        command: '',
-        platform: 'pc',
-        theme: 'custom-collections',
-        hardware: 'custom-collections',
-        emulators: [],
-        gamecount: gamecount
-      })
-    }
-
     // Set gamecount from preloaded cache or quick count
     const useDbForCounts = LibraryService.isDbMode() && LibraryService.databaseService.isOpen()
     const dbGameCounts = useDbForCounts ? LibraryService.databaseService.getAllGameCounts() : null
@@ -835,16 +817,11 @@ export class LibraryService {
         s.art = `file:///${artFile.replace(/\\/g, '/')}`
       }
 
-      if (s.name === 'collections') {
-        s.gamecount = this.getCustomCollections().length
-        return
-      }
-
       const nameLower = s.name.toLowerCase()
       const cleanColName = nameLower.startsWith('auto-') ? nameLower.substring(5) : nameLower
 
       const cached = LibraryService.cachedGames.get(nameLower)
-      const isSpecial = ['library', 'magazine', 'manuals', 'retrobat', 'emulators', 'screenshots'].includes(nameLower) || s.hardware === 'system'
+      const isSpecial = ['magazine', 'manuals', 'retrobat', 'emulators', 'screenshots'].includes(nameLower) || s.hardware === 'system'
 
       if (cached) {
         s.gamecount = cached.length
@@ -960,18 +937,56 @@ export class LibraryService {
 
     if (nameLower === 'collections') {
       const enabledCols = this.getCustomCollections()
+      const countsMap = this.getCustomCollectionsGameCounts()
       
-      return enabledCols.map(colName => ({
-        id: `collection_${colName}`,
-        name: colName,
-        desc: `Coleção de jogos: ${colName}`,
-        path: colName,
-        system: 'collections',
-        favorite: false,
-        hidden: false,
-        playcount: 0,
-        isCollectionFolder: true
-      } as any))
+      return enabledCols.map(colName => {
+        const logoFile = join(getLogosPath(), 'collections', `${colName}.webp`)
+        const artFile = join(getArtsPath(), 'collections', `${colName}.webp`)
+        
+        const gameObj: any = {
+          id: `collection_${colName}`,
+          name: colName,
+          desc: `Coleção de jogos: ${colName}`,
+          path: colName,
+          system: 'collections',
+          favorite: false,
+          hidden: false,
+          playcount: 0,
+          isCollectionFolder: true,
+          gameCount: countsMap.get(colName) || 0
+        }
+
+        if (existsSync(logoFile)) {
+          const logoPath = `file:///${logoFile.replace(/\\/g, '/')}`
+          gameObj.marquee = logoPath
+          gameObj.thumbnail = logoPath
+        }
+        if (existsSync(artFile)) {
+          const artPath = `file:///${artFile.replace(/\\/g, '/')}`
+          gameObj.image = artPath
+          gameObj.fanart = artPath
+        }
+
+        return gameObj
+      })
+    }
+
+    if (nameLower === 'all' || nameLower === 'favorites') {
+      if (LibraryService.cachedGames.has(nameLower)) {
+        return LibraryService.cachedGames.get(nameLower)!
+      }
+
+      if (LibraryService.isDbMode() && LibraryService.databaseService.isOpen()) {
+        const displayed = this.getDisplayedSystems()
+        const displayedNames = displayed.map(s => s.name)
+        const games = LibraryService.databaseService.getAutoCollectionGames(nameLower, displayedNames)
+        LibraryService.cachedGames.set(nameLower, games)
+        return games
+      }
+
+      const games = this.resolveAutoCollectionGames(nameLower)
+      LibraryService.cachedGames.set(nameLower, games)
+      return games
     }
 
     // Check if it is an auto-collection by looking up system hardware
@@ -1001,7 +1016,7 @@ export class LibraryService {
     }
 
     // Bypass database queries for special/system directories
-    const isSpecial = ['library', 'magazine', 'manuals', 'retrobat', 'emulators', 'screenshots'].includes(nameLower) || (matchedSystem && matchedSystem.hardware === 'system')
+    const isSpecial = ['magazine', 'manuals', 'retrobat', 'emulators', 'screenshots'].includes(nameLower) || (matchedSystem && matchedSystem.hardware === 'system')
     if (isSpecial) {
       if (LibraryService.cachedGames.has(nameLower)) {
         return LibraryService.cachedGames.get(nameLower)!
@@ -1384,83 +1399,27 @@ export class LibraryService {
   }
 
   public getCustomCollections(): string[] {
-    if (LibraryService.isDbMode() && LibraryService.databaseService.isOpen()) {
+    if (LibraryService.databaseService.isOpen()) {
       return LibraryService.databaseService.getCustomCollections()
     }
-    
-    // Fallback if DB not open
-    const collectionsDir = getCollectionsPath()
-    if (!existsSync(collectionsDir)) return []
-    try {
-      const files = readdirSync(collectionsDir)
-      const collections: string[] = []
-      files.forEach(f => {
-        if (f.startsWith('custom-') && f.endsWith('.cfg')) {
-          const colName = f.substring(7, f.length - 4)
-          collections.push(colName)
-        }
-      })
-      return collections.sort((a, b) => a.localeCompare(b))
-    } catch (e) {
-      console.error('Failed to read custom collections:', e)
-      return []
+    LibraryService.databaseService.open()
+    return LibraryService.databaseService.getCustomCollections()
+  }
+
+  public getCustomCollectionsGameCounts(): Map<string, number> {
+    if (LibraryService.databaseService.isOpen()) {
+      return LibraryService.databaseService.getCustomCollectionsGameCounts()
     }
+    LibraryService.databaseService.open()
+    return LibraryService.databaseService.getCustomCollectionsGameCounts()
   }
 
   public getCollectionGames(collectionName: string): Game[] {
-    if (LibraryService.isDbMode() && LibraryService.databaseService.isOpen()) {
+    if (LibraryService.databaseService.isOpen()) {
       return LibraryService.databaseService.getCollectionGames(collectionName)
     }
-
-    // Fallback if DB not open
-    const cfgPath = join(getCollectionsPath(), `custom-${collectionName}.cfg`)
-    if (!existsSync(cfgPath)) return []
-    try {
-      const content = readFileSync(cfgPath, 'utf-8')
-      const lines = content.split(/\r?\n/).map(line => line.trim()).filter(line => line.length > 0)
-      const allSystems = this.getSystems()
-      const collectionGames: Game[] = []
-      const parsedSystemsGames = new Map<string, Game[]>()
-      for (const line of lines) {
-        let resolvedRomPath = line.replace(/^\.\//, '')
-        const absoluteRomPath = resolve(getRetroBatPath(), resolvedRomPath).replace(/\\/g, '/')
-        const normalized = absoluteRomPath.toLowerCase()
-        const match = normalized.match(/\/roms\/([^/]+)\//)
-        const systemName = match ? match[1] : ''
-        if (!systemName) continue
-        const sysKey = systemName.toLowerCase()
-        if (!parsedSystemsGames.has(sysKey)) {
-          parsedSystemsGames.set(sysKey, this.getGames(systemName))
-        }
-        const systemGames = parsedSystemsGames.get(sysKey) || []
-        const systemObj = allSystems.find(s => s.name.toLowerCase() === sysKey)
-        const systemRomDir = systemObj ? systemObj.path : join(getRomsPath(), systemName)
-        const foundGame = systemGames.find(g => {
-          const gameAbsPath = resolve(systemRomDir, g.path).replace(/\\/g, '/')
-          return gameAbsPath.toLowerCase() === absoluteRomPath.toLowerCase()
-        })
-        if (foundGame) {
-          collectionGames.push({ ...foundGame })
-        } else {
-          const filename = absoluteRomPath.split('/').pop() || ''
-          const displayName = filename.replace(/\.[^/.]+$/, '')
-          const relativeRomPath = './' + relative(systemRomDir, absoluteRomPath).replace(/\\/g, '/')
-          collectionGames.push({
-            id: absoluteRomPath,
-            name: displayName,
-            path: relativeRomPath,
-            system: systemName,
-            favorite: false,
-            hidden: false,
-            playcount: 0
-          } as any)
-        }
-      }
-      return collectionGames.sort((a, b) => String(a.name || '').localeCompare(String(b.name || '')))
-    } catch (e) {
-      console.error(`Failed to read games for collection ${collectionName}:`, e)
-      return []
-    }
+    LibraryService.databaseService.open()
+    return LibraryService.databaseService.getCollectionGames(collectionName)
   }
 
   public updateGame(systemName: string, gameData: Game): void {
@@ -1546,6 +1505,9 @@ export class LibraryService {
   }
 
   private rebuildAutoCollections(): void {
+    LibraryService.cachedGames.delete('all')
+    LibraryService.cachedGames.delete('favorites')
+
     const settings = new SettingsParser()
     const autoColsString = settings.getSetting('CollectionSystemsAuto', 'string') || ''
     const enabledCols = autoColsString.split(',').map((c: string) => c.trim()).filter((c: string) => c !== '' && c.toLowerCase() !== 'arcade')
@@ -1604,63 +1566,19 @@ export class LibraryService {
   }
 
   public getCollectionsForGame(systemName: string, gamePath: string): string[] {
-    if (LibraryService.isDbMode() && LibraryService.databaseService.isOpen()) {
+    if (LibraryService.databaseService.isOpen()) {
       return LibraryService.databaseService.getCollectionsForGame(systemName, gamePath)
     }
-
-    // Fallback if DB not open
-    const collections = this.getCustomCollections()
-    const cleanGamePath = gamePath.replace(/^\.\//, '')
-    const targetLine = `./roms/${systemName}/${cleanGamePath}`.toLowerCase()
-    const fs = require('fs')
-    const matching: string[] = []
-    for (const col of collections) {
-      const cfgPath = join(getCollectionsPath(), `custom-${col}.cfg`)
-      if (fs.existsSync(cfgPath)) {
-        const content = fs.readFileSync(cfgPath, 'utf-8')
-        const lines = content.split(/\r?\n/).map((l: string) => l.trim()).filter((l: string) => l.length > 0)
-        if (lines.some((l: string) => l.toLowerCase() === targetLine)) {
-          matching.push(col)
-        }
-      }
-    }
-    return matching
+    LibraryService.databaseService.open()
+    return LibraryService.databaseService.getCollectionsForGame(systemName, gamePath)
   }
 
   public toggleGameInCollection(collectionName: string, systemName: string, gamePath: string, action: 'add' | 'remove'): boolean {
-    if (LibraryService.isDbMode() && LibraryService.databaseService.isOpen()) {
+    if (LibraryService.databaseService.isOpen()) {
       return LibraryService.databaseService.toggleGameInCollection(collectionName, systemName, gamePath, action)
     }
-
-    // Fallback if DB not open
-    const collectionsDir = getCollectionsPath()
-    const fs = require('fs')
-    if (!fs.existsSync(collectionsDir)) {
-      fs.mkdirSync(collectionsDir, { recursive: true })
-    }
-    const cfgPath = join(collectionsDir, `custom-${collectionName}.cfg`)
-    let lines: string[] = []
-    if (fs.existsSync(cfgPath)) {
-      const content = fs.readFileSync(cfgPath, 'utf-8')
-      lines = content.split(/\r?\n/).map((l: string) => l.trim()).filter((l: string) => l.length > 0)
-    }
-    const cleanGamePath = gamePath.replace(/^\.\//, '')
-    const targetLine = `./roms/${systemName}/${cleanGamePath}`
-    const exists = lines.some(l => l.toLowerCase() === targetLine.toLowerCase())
-    if (action === 'add') {
-      if (!exists) {
-        lines.push(targetLine)
-        fs.writeFileSync(cfgPath, lines.join('\n') + '\n', 'utf-8')
-        return true
-      }
-    } else if (action === 'remove') {
-      if (exists) {
-        lines = lines.filter(l => l.toLowerCase() !== targetLine.toLowerCase())
-        fs.writeFileSync(cfgPath, lines.join('\n') + '\n', 'utf-8')
-        return true
-      }
-    }
-    return false
+    LibraryService.databaseService.open()
+    return LibraryService.databaseService.toggleGameInCollection(collectionName, systemName, gamePath, action)
   }
 
   public cleanGamelists(): void {

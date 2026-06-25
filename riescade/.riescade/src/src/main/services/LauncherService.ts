@@ -229,7 +229,26 @@ export class LauncherService {
             '-Command',
             'Get-PnpDevice -Status OK | Where-Object { $_.InstanceId -like "*VID_*" -and $_.InstanceId -like "*PID_*" } | Select-Object -ExpandProperty InstanceId'
           ], { encoding: 'utf8' })
-          devicePaths = stdout.split('\n').map(s => s.trim()).filter(s => s.length > 0)
+          let rawPaths = stdout.split('\n').map(s => s.trim()).filter(s => s.length > 0)
+          
+          // Filter out parent/raw USB paths to ensure we pick the correct HID/IG node paths
+          devicePaths = rawPaths.filter((dp: string) => {
+            const dpUpper = dp.toUpperCase()
+            if (dpUpper.startsWith('USB\\') && dpUpper.includes('&IG_')) {
+              return false
+            }
+            // If it's a raw USB path like USB\VID_045E&PID_028E\01, filter it out if we have an IG node path for this controller
+            const vidMatch = dpUpper.match(/VID_([0-9A-F]{4})/)
+            const pidMatch = dpUpper.match(/PID_([0-9A-F]{4})/)
+            if (vidMatch && pidMatch && dpUpper.startsWith('USB\\') && !dpUpper.includes('&IG_')) {
+              const hasIg = rawPaths.some((x: string) => {
+                const xUpper = x.toUpperCase()
+                return xUpper.includes(`VID_${vidMatch[1]}`) && xUpper.includes(`PID_${pidMatch[1]}`) && xUpper.includes('&IG_')
+              })
+              if (hasIg) return false
+            }
+            return true
+          })
         } catch (e) {
           console.error('Failed to get device paths via PowerShell', e)
         }
@@ -440,8 +459,38 @@ export class LauncherService {
       ], { encoding: 'utf8' }).trim()
       if (stdout) {
         const parsed = JSON.parse(stdout)
-        const devices = Array.isArray(parsed) ? parsed : [parsed]
-        
+        let devices = Array.isArray(parsed) ? parsed : [parsed]
+
+        // Filter out duplicate driver/parent nodes to keep only the actual gamepad HID/IG node
+        const seenInstances = new Set<string>()
+        devices = devices.filter(device => {
+          if (!device.InstanceId) return false
+          const instanceId = device.InstanceId.toUpperCase()
+          
+          // Ignore parent USB driver nodes for XInput/Xbox controllers
+          if (instanceId.startsWith('USB\\') && instanceId.includes('&IG_')) {
+            return false
+          }
+          
+          // Ignore raw USB node if we have an IG node path for this controller
+          const vidMatch = instanceId.match(/VID_([0-9A-F]{4})/)
+          const pidMatch = instanceId.match(/PID_([0-9A-F]{4})/)
+          if (vidMatch && pidMatch && instanceId.startsWith('USB\\')) {
+            const hasIg = devices.some(x => {
+              if (!x.InstanceId) return false
+              const xUpper = x.InstanceId.toUpperCase()
+              return xUpper.includes(`VID_${vidMatch[1]}`) && xUpper.includes(`PID_${pidMatch[1]}`) && xUpper.includes('&IG_')
+            })
+            if (hasIg) return false
+          }
+
+          if (seenInstances.has(instanceId)) {
+            return false
+          }
+          seenInstances.add(instanceId)
+          return true
+        })
+
         devices.forEach((device: any) => {
           if (!device.FriendlyName || !device.InstanceId) return
           

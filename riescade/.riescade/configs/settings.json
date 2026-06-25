@@ -84,11 +84,11 @@
     "type": "bool"
   },
   "audio.bgmusic": {
-    "value": false,
+    "value": true,
     "type": "bool"
   },
   "audio.display_titles": {
-    "value": false,
+    "value": true,
     "type": "bool"
   },
   "audio.thememusics": {
@@ -480,7 +480,7 @@
     "type": "bool"
   },
   "DrawFramerate": {
-    "value": false,
+    "value": true,
     "type": "bool"
   },
   "ShowControllerBattery": {
@@ -940,7 +940,7 @@
     "type": "string"
   },
   "Taskbar.Icons": {
-    "value": "tool:library,tool:settings,system:switch,system:teknoparrot,system:cps1",
+    "value": "tool:settings,system:switch,system:teknoparrot,system:cps1,system:snes,system:namco2x6",
     "type": "string"
   },
   "Window.system-switch.Maximized": {
@@ -948,19 +948,19 @@
     "type": "bool"
   },
   "Window.system-switch.X": {
-    "value": 480,
+    "value": 167,
     "type": "int"
   },
   "Window.system-switch.Y": {
-    "value": 196,
+    "value": 75,
     "type": "int"
   },
   "Window.system-switch.Width": {
-    "value": 960,
+    "value": 1207,
     "type": "int"
   },
   "Window.system-switch.Height": {
-    "value": 640,
+    "value": 860,
     "type": "int"
   },
   "Window.system-teknoparrot.Maximized": {
@@ -981,26 +981,6 @@
   },
   "Window.system-teknoparrot.Height": {
     "value": 640,
-    "type": "int"
-  },
-  "Window.tool-library.Maximized": {
-    "value": false,
-    "type": "bool"
-  },
-  "Window.tool-library.X": {
-    "value": 470,
-    "type": "int"
-  },
-  "Window.tool-library.Y": {
-    "value": 206,
-    "type": "int"
-  },
-  "Window.tool-library.Width": {
-    "value": 980,
-    "type": "int"
-  },
-  "Window.tool-library.Height": {
-    "value": 620,
     "type": "int"
   },
   "Window.system-cps1.Maximized": {
@@ -1046,5 +1026,165 @@
   "Window.Height": {
     "value": 1032,
     "type": "int"
+  },
+  "Window.tool-database.Maximized": {
+    "value": false,
+    "type": "bool"
+  },
+  "Window.tool-database.X": {
+    "value": 292,
+    "type": "int"
+  },
+  "Window.tool-database.Y": {
+    "value": 83,
+    "type": "int"
+  },
+  "Window.tool-database.Width": {
+    "value": 1219,
+    "type": "int"
+  },
+  "Window.tool-database.Height": {
+    "value": 800,
+    "type": "int"
+  },
+  "Window.system-snes.Maximized": {
+    "value": true,
+    "type": "bool"
+  },
+  "Window.system-snes.X": {
+    "value": -1456,
+    "type": "int"
+  },
+  "Window.system-snes.Y": {
+    "value": 138,
+    "type": "int"
+  },
+  "Window.system-snes.Width": {
+    "value": 960,
+    "type": "int"
+  },
+  "Window.system-snes.Height": {
+    "value": 640,
+    "type": "int"
+  },
+  "Window.system-favorites.Maximized": {
+    "value": false,
+    "type": "bool"
+  },
+  "Window.system-favorites.X": {
+    "value": 480,
+    "type": "int"
+  },
+  "Window.system-favorites.Y": {
+    "value": 196,
+    "type": "int"
+  },
+  "Window.system-favorites.Width": {
+    "value": 960,
+    "type": "int"
+  },
+  "Window.system-favorites.Height": {
+    "value": 640,
+    "type": "int"
+  },
+  "Window.system-namco2x6.Maximized": {
+    "value": true,
+    "type": "bool"
+  },
+  "Window.system-namco2x6.X": {
+    "value": 480,
+    "type": "int"
+  },
+  "Window.system-namco2x6.Y": {
+    "value": 196,
+    "type": "int"
+  },
+  "Window.system-namco2x6.Width": {
+    "value": 960,
+    "type": "int"
+  },
+  "Window.system-namco2x6.Height": {
+    "value": 640,
+    "type": "int"
+  },
+  "Window.system-collections.Maximized": {
+    "value": true,
+    "type": "bool"
+  },
+  "Window.system-collections.X": {
+    "value": 480,
+    "type": "int"
+  },
+  "Window.system-collections.Y": {
+    "value": 196,
+    "type": "int"
+  },
+  "Window.system-collections.Width": {
+    "value": 960,
+    "type": "int"
+  },
+  "Window.system-collections.Height": {
+    "value": 640,
+    "type": "int"
+  },
+  "Window.tool-settings.Maximized": {
+    "value": false,
+    "type": "bool"
+  },
+  "Window.tool-settings.X": {
+    "value": 480,
+    "type": "int"
+  },
+  "Window.tool-settings.Y": {
+    "value": 33,
+    "type": "int"
+  },
+  "Window.tool-settings.Width": {
+    "value": 1121,
+    "type": "int"
+  },
+  "Window.tool-settings.Height": {
+    "value": 786,
+    "type": "int"
+  },
+  "Window.tool-collections.Maximized": {
+    "value": true,
+    "type": "bool"
+  },
+  "Window.tool-collections.X": {
+    "value": -1303,
+    "type": "int"
+  },
+  "Window.tool-collections.Y": {
+    "value": 98,
+    "type": "int"
+  },
+  "Window.tool-collections.Width": {
+    "value": 1024,
+    "type": "int"
+  },
+  "Window.tool-collections.Height": {
+    "value": 680,
+    "type": "int"
+  },
+  "VolumePopup": {
+    "value": true,
+    "type": "bool"
+  },
+  "video_driver": {
+    "value": "vulkan",
+    "type": "string"
+  },
+  "audio_driver": {
+    "value": "xaudio",
+    "type": "string"
+  },
+  "RotateScreen": {
+    "value": "0",
+    "type": "string"
+  },
+  "VSync": {
+    "value": true,
+    "type": "bool"
   }
 }

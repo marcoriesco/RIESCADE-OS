@@ -66,5 +66,6 @@ export interface Game {
   gametime?: number
   scrapName?: string
   scrapDate?: string
+  gameCount?: number
 }
 

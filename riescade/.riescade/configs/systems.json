@@ -5286,56 +5286,6 @@
       ]
     },
     {
-      "name": "library",
-      "fullname": "Library",
-      "path": "~\\..\\library",
-      "extension": ".jpg .jpeg .png .bmp .psd .tga .gif .hdr .pic .ppm .pgm .mkv .avi .mp4 .pdf .cbz .cbr",
-      "command": "\"%HOME%\\emulatorLauncher.exe\" -gameinfo %GAMEINFOXML% %CONTROLLERSCONFIG% -system %SYSTEM% -emulator %EMULATOR% -core %CORE% -rom %ROM%",
-      "platform": "imageviewer",
-      "theme": "library",
-      "hardware": "system",
-      "emulators": []
-    },
-    {
-      "name": "emulators",
-      "fullname": "Emulators",
-      "path": "~\\..\\system\\es_menu",
-      "extension": ".menu",
-      "command": "\"%HOME%\\emulatorLauncher.exe\" -system emulators -rom %ROM%",
-      "platform": "emulators",
-      "theme": "emulators",
-      "hardware": "system",
-      "emulators": []
-    },
-    {
-      "name": "screenshots",
-      "fullname": "Screenshots",
-      "path": "~\\..\\screenshots",
-      "extension": ".jpg .jpeg .png .bmp .psd .tga .gif .hdr .pic .ppm .pgm",
-      "command": "\"%HOME%\\emulatorLauncher.exe\" -gameinfo %GAMEINFOXML% %CONTROLLERSCONFIG% -system %SYSTEM% -emulator %EMULATOR% -core %CORE% -rom %ROM%",
-      "platform": "imageviewer",
-      "theme": "screenshots",
-      "hardware": "system",
-      "emulators": [
-        {
-          "name": "libretro",
-          "cores": ["imageviewer"]
-        }
-      ]
-    },
-    {
-      "name": "mess",
-      "fullname": "MESS",
-      "path": "",
-      "extension": ".fake",
-      "command": "\"%HOME%\\emulatorLauncher.exe\" -gameinfo %GAMEINFOXML% %CONTROLLERSCONFIG% -system %SYSTEM% -emulator %EMULATOR% -core %CORE% -rom %ROM%",
-      "platform": "pc",
-      "theme": "mess",
-      "hardware": "MESS",
-      "group": "mess",
-      "emulators": []
-    },
-    {
       "name": "3doj",
       "fullname": "3DO Japan",
       "path": "~\\..\\roms\\3doj",

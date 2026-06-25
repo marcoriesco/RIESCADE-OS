@@ -30,7 +30,7 @@ export class SystemsParser {
             const sName = String(s.name || '').toLowerCase()
             let sHardware = String(s.hardware || '')
             if (!sHardware) {
-              if (['library', 'magazine', 'manuals', 'retrobat', 'emulators', 'screenshots', 'windows'].includes(sName)) {
+              if (['magazine', 'manuals', 'retrobat', 'emulators', 'screenshots', 'windows'].includes(sName)) {
                 sHardware = 'system'
               } else {
                 sHardware = 'console'
@@ -115,36 +115,14 @@ export class SystemsParser {
       return rest
     })
 
-    // Inject Auto Collections - Only 'all' and 'favorites' are allowed as virtual systems
-    const enabledCols = ['all', 'favorites']
-    const specificThemes: Record<string, string> = {
-      'all': 'auto-allgames',
-      'favorites': 'auto-favorites'
-    }
-
-    enabledCols.forEach(col => {
-      const themeName = specificThemes[col] || col
-      const displayName = col === 'all' ? 'Todos os Jogos' : 'Favoritos'
-
-      filteredSystems.push({
-        name: col,
-        fullname: displayName,
-        path: `virtual://${col}`,
-        extension: '',
-        command: '',
-        platform: 'pc',
-        theme: themeName,
-        hardware: 'auto collection',
-        emulators: [],
-        gamecount: 0
-      })
-    })
-
     SystemsParser.cachedSystems = filteredSystems
     return filteredSystems
   }
 
   private resolveRomPath(romPath: string): string {
+    if (!romPath || romPath.trim() === '') {
+      return ''
+    }
     let path = romPath.replace('~', join(getRetroBatPath(), 'riescade'))
     return resolve(path)
   }

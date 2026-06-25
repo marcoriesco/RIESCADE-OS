@@ -5,6 +5,7 @@ import { LaunchArgs } from './types.js';
 import { BaseGenerator } from './generators/BaseGenerator.js';
 import { LibRetroGenerator } from './generators/LibRetroGenerator.js';
 import { Pcsx2Generator } from './generators/Pcsx2Generator.js';
+import { Pcsx2x6Generator } from './generators/Pcsx2x6Generator.js';
 import { DolphinGenerator } from './generators/DolphinGenerator.js';
 import { TeknoParrotGenerator } from './generators/TeknoParrotGenerator.js';
 import { GenericGenerator } from './generators/GenericGenerator.js';
@@ -57,6 +58,9 @@ function getGenerator(args: LaunchArgs): BaseGenerator {
   }
   if (emu === 'pcsx2' || emu === 'pcsx2qt' || emu === 'pcsx2-16' || emu === 'ps2' || sys === 'ps2') {
     return new Pcsx2Generator(args);
+  }
+  if (emu === 'pcsx2x6') {
+    return new Pcsx2x6Generator(args);
   }
   if (emu === 'dolphin' || emu === 'dolphin-emu' || emu === 'dolphin-triforce' || sys === 'gamecube' || sys === 'wii') {
     return new DolphinGenerator(args);

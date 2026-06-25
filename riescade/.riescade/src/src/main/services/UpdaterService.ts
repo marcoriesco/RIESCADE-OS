@@ -44,7 +44,7 @@ export function registerUpdaterIpc(getMainWindow: () => BrowserWindow | null): v
       let errorCause: string | undefined
 
       try {
-        const response = await fetch('https://raw.githubusercontent.com/marcoriesco/RIESCADE_SYSTEM/main/updater.json', {
+        const response = await fetch('https://raw.githubusercontent.com/marcoriesco/RIESCADE-OS/main/updater.json', {
           headers: {
             'User-Agent': 'RIESCADE-Updater'
           },

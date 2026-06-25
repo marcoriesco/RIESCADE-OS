@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, useMemo } from "react";
+import React, { useEffect, useRef, useState, useMemo, useCallback } from "react";
 import { Gamepad2, Heart, Loader2, Star, Play, ChevronRight, Maximize2, X, Search, Folder, ChevronLeft, HardDrive, ChevronDown, Check } from "lucide-react";
 import { System, Game } from "../types";
 import { ScrollArea } from "./ScrollArea";
@@ -67,6 +67,8 @@ export default function SystemAppContent({
   
   const [displayLimit, setDisplayLimit] = useState(40);
   const gridContainerRef = useRef<OverlayScrollbarsComponentRef>(null);
+  const scrollCleanupRef = useRef<(() => void) | null>(null);
+  const pendingAttachRef = useRef<number | null>(null);
 
   // New filter states for metadata tags
   const [selectedGenre, setSelectedGenre] = useState<string>("all");
@@ -107,47 +109,70 @@ export default function SystemAppContent({
     if (viewport) {
       viewport.scrollTop = 0;
     }
-  }, [system, search, filter, selectedGenre, selectedYear, selectedPlayers, selectedMinRating]);
+  }, [system, activeCollection, search, filter, selectedGenre, selectedYear, selectedPlayers, selectedMinRating]);
 
-  // Load Games of Platform & Reset Filters
+  // Single, unified hook to load games, reset filters and manage collection states
   useEffect(() => {
+    console.log("[SystemAppContent] unified hook fired: system.name =", system.name, "activeCollection =", activeCollection);
     setLoading(true);
     setSelectedGenre("all");
     setSelectedYear("all");
     setSelectedPlayers("all");
     setSelectedMinRating("all");
     setFailedImages({});
-    setActiveCollection(null);
-    window.api.getGames(system.name).then((gameList: Game[]) => {
-      setGames(gameList || []);
-      setSelectedIdx(0);
-      setLoading(false);
-    });
-  }, [system]);
+    setSelectedIdx(0);
+    setSearch(""); // Reset search to prevent filtering out files on folder changes
 
-  // Load Collection Games when activeCollection changes
-  useEffect(() => {
     if (system.name === 'collections') {
       if (activeCollection !== null) {
         setColLoading(true);
+        console.log("[SystemAppContent] Calling window.api.getCollectionGames for:", activeCollection);
         window.api.getCollectionGames(activeCollection).then((gameList: Game[]) => {
+          console.log("[SystemAppContent] getCollectionGames returned games list count:", gameList ? gameList.length : 0);
           setCollectionGames(gameList || []);
           setSelectedIdx(0);
           setColLoading(false);
+          setLoading(false);
+        }).catch(err => {
+          console.error("[SystemAppContent] Error in getCollectionGames promise:", err);
+          setCollectionGames([]);
+          setColLoading(false);
+          setLoading(false);
         });
       } else {
         setCollectionGames([]);
-        setLoading(true);
+        console.log("[SystemAppContent] Calling window.api.getGames for collections list");
         window.api.getGames(system.name).then((gameList: Game[]) => {
+          console.log("[SystemAppContent] getGames(collections) returned folders list count:", gameList ? gameList.length : 0);
           setGames(gameList || []);
           setSelectedIdx(0);
           setLoading(false);
+        }).catch(err => {
+          console.error("[SystemAppContent] Error in getGames(collections) promise:", err);
+          setGames([]);
+          setLoading(false);
         });
       }
+    } else {
+      setActiveCollection(null);
+      setCollectionGames([]);
+      console.log("[SystemAppContent] Calling window.api.getGames for system:", system.name);
+      window.api.getGames(system.name).then((gameList: Game[]) => {
+        setGames(gameList || []);
+        setSelectedIdx(0);
+        setLoading(false);
+      }).catch(err => {
+        console.error("[SystemAppContent] Error in getGames(system) promise:", err);
+        setGames([]);
+        setLoading(false);
+      });
     }
-  }, [activeCollection, system]);
+  }, [system.name, activeCollection]);
 
   const targetGamesForFiltering = useMemo(() => {
+    const isColView = (system.name === 'collections' && activeCollection !== null);
+    const list = isColView ? collectionGames : games;
+    console.log("[SystemAppContent] Recalculating targetGamesForFiltering. system.name:", system.name, "activeCollection:", activeCollection, "isColView:", isColView, "listLength:", list ? list.length : 0);
     if (system.name === 'collections' && activeCollection !== null) {
       return collectionGames;
     }
@@ -211,7 +236,7 @@ export default function SystemAppContent({
 
   // Apply filters including genre, release year, players, and rating dynamically
   const filteredGames = useMemo(() => {
-    return targetGamesForFiltering.filter(g => {
+    const res = targetGamesForFiltering.filter(g => {
       const gName = String(g.name || "");
       const matchSearch = gName.toLowerCase().includes(search.toLowerCase());
       const matchFilter = filter === "all" || g.favorite;
@@ -243,38 +268,58 @@ export default function SystemAppContent({
       
       return matchSearch && matchFilter && matchGenre && matchYear && matchPlayers && matchRating;
     });
+    console.log("[SystemAppContent] Recalculated filteredGames. original length:", targetGamesForFiltering.length, "filtered length:", res.length, "search query:", search, "games:", res);
+    return res;
   }, [targetGamesForFiltering, search, filter, selectedGenre, selectedYear, selectedPlayers, selectedMinRating]);
 
-  // Attach scroll listener for infinite scroll
-  useEffect(() => {
-    let cleanupFn: (() => void) | null = null;
-    let cancelled = false;
 
-    const tryAttach = () => {
-      if (cancelled) return;
-      const osRef = gridContainerRef.current;
-      if (!osRef) { setTimeout(tryAttach, 150); return; }
-      const inst = osRef.osInstance();
-      if (!inst) { setTimeout(tryAttach, 150); return; }
 
-      const viewport = inst.elements().viewport;
-      if (!viewport) { setTimeout(tryAttach, 150); return; }
+  // Callback ref to bind scroll listener to ScrollArea viewport robustly
+  const handleScrollAreaRef = useCallback((node: OverlayScrollbarsComponentRef | null) => {
+    (gridContainerRef as any).current = node;
 
-      const onScroll = () => {
-        if (viewport.scrollHeight - viewport.scrollTop <= viewport.clientHeight * 1.5) {
-          setDisplayLimit(prev => Math.min(filteredGames.length, prev + 40));
+    if (pendingAttachRef.current !== null) {
+      cancelAnimationFrame(pendingAttachRef.current);
+      pendingAttachRef.current = null;
+    }
+
+    if (scrollCleanupRef.current) {
+      scrollCleanupRef.current();
+      scrollCleanupRef.current = null;
+    }
+
+    if (node) {
+      const tryAttach = () => {
+        const inst = node.osInstance();
+        const viewport = inst?.elements().viewport;
+        if (!viewport) {
+          pendingAttachRef.current = requestAnimationFrame(tryAttach);
+          return;
         }
+
+        const onScroll = () => {
+          console.log("[SystemAppContent] onScroll (callback ref) triggered. scrollTop:", viewport.scrollTop, "scrollHeight:", viewport.scrollHeight, "clientHeight:", viewport.clientHeight, "filteredGames.length:", filteredGames.length);
+          if (viewport.scrollHeight - viewport.scrollTop <= viewport.clientHeight * 1.5) {
+            setDisplayLimit(prev => {
+              if (filteredGames.length <= prev) {
+                console.log("[SystemAppContent] onScroll: displayLimit already covers all games:", prev, ">=", filteredGames.length);
+                return prev;
+              }
+              const next = Math.min(filteredGames.length, prev + 40);
+              console.log("[SystemAppContent] onScroll: Increasing displayLimit from", prev, "to", next);
+              return next;
+            });
+          }
+        };
+
+        viewport.addEventListener('scroll', onScroll, { passive: true });
+        scrollCleanupRef.current = () => {
+          viewport.removeEventListener('scroll', onScroll);
+        };
       };
-      viewport.addEventListener('scroll', onScroll, { passive: true });
-      cleanupFn = () => { viewport.removeEventListener('scroll', onScroll); };
-    };
 
-    tryAttach();
-
-    return () => {
-      cancelled = true;
-      cleanupFn?.();
-    };
+      tryAttach();
+    }
   }, [filteredGames.length]);
 
   const selectedGame = filteredGames[selectedIdx];
@@ -292,12 +337,21 @@ export default function SystemAppContent({
     if (selectedGame && !selectedGame.isCollectionFolder) {
       window.api.scanSaveStates(selectedGame.system, selectedGame.path).then((states: any[]) => {
         setSaveStates(states || []);
+      }).catch(err => {
+        console.error("[SystemAppContent] Error loading scanSaveStates:", err);
+        setSaveStates([]);
       });
       window.api.getCollectionsForGame(selectedGame.system, selectedGame.path).then((cols: string[]) => {
         setGameCollections(cols || []);
+      }).catch(err => {
+        console.error("[SystemAppContent] Error loading getCollectionsForGame:", err);
+        setGameCollections([]);
       });
       window.api.getCustomCollections().then((cols: string[]) => {
         setAllCollections(cols || []);
+      }).catch(err => {
+        console.error("[SystemAppContent] Error loading getCustomCollections:", err);
+        setAllCollections([]);
       });
     } else {
       setSaveStates([]);
@@ -480,7 +534,7 @@ export default function SystemAppContent({
       {/* Discord-like Sidebar: Logo + Search + Filters - extends to top */}
       <aside className="w-[240px] bg-black/40 flex flex-col shrink-0 select-none">
         {/* System Logo Section - top padding for drag region */}
-        <div className="pt-8 px-4 pb-3 shrink-0">
+        <div className="pt-10 px-4 pb-3 shrink-0">
           <div className="flex items-center gap-3 mb-4">
             {system.logo ? (
               <img src={system.logo} alt={system.fullname} className="w-full h-14 object-contain filter drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]" />
@@ -645,7 +699,7 @@ export default function SystemAppContent({
 
             {/* Grid display of Games */}
             <ScrollArea 
-              ref={gridContainerRef}
+              ref={handleScrollAreaRef}
               className="flex-1 px-6 py-4"
             >
               {filteredGames.length === 0 ? (
@@ -654,66 +708,109 @@ export default function SystemAppContent({
                 </div>
               ) : (
                 <div className="grid grid-cols-5 gap-3">
-                  {filteredGames.slice(0, displayLimit).map((g, idx) => {
-                    if (g.isCollectionFolder) {
+                  {(() => {
+                    const sliced = filteredGames.slice(0, displayLimit);
+                    console.log("[SystemAppContent] Rendering grid items. displayLimit =", displayLimit, "filteredGames length =", filteredGames.length, "sliced length =", sliced.length, "items:", sliced);
+                    return sliced.map((g, idx) => {
+                      if (g.isCollectionFolder) {
+                        const hasLogo = !!g.thumbnail;
+                        const hasFanart = !!g.image;
+                        const count = g.gameCount ?? 0;
+                        const countText = `${count} ${count === 1 ? 'Jogo' : 'Jogos'}`;
+
+                        return (
+                          <button
+                            key={g.path}
+                            onClick={() => setSelectedIdx(idx)}
+                            onDoubleClick={() => setActiveCollection(g.name)}
+                            className={`group flex flex-col w-full rounded-md overflow-hidden text-left transition-all border-2 relative aspect-[3/4] bg-black/40 ${
+                              idx === selectedIdx
+                                ? "border-accent shadow-[0_0_15px_var(--accent-color-glass)] z-10"
+                                : "border-white/5 hover:border-white/10"
+                            }`}
+                          >
+                            {hasFanart || hasLogo ? (
+                              <div className="relative w-full h-full flex items-center justify-center overflow-hidden bg-[#1a1a1a]">
+                                {hasFanart && (
+                                  <img 
+                                    src={g.image} 
+                                    alt={g.name} 
+                                    className="absolute inset-0 w-full h-full object-cover opacity-40 group-hover:scale-105 transition-all duration-300"
+                                  />
+                                )}
+                                {hasLogo ? (
+                                  <img 
+                                    src={g.thumbnail} 
+                                    alt={g.name} 
+                                    className="relative w-[80%] max-h-[70%] object-contain filter drop-shadow-[0_4px_8px_rgba(0,0,0,0.6)] group-hover:scale-110 transition-all duration-300 z-10"
+                                  />
+                                ) : (
+                                  <div className="relative z-10 flex flex-col items-center p-4 text-center">
+                                    <Folder className="w-10 h-10 text-accent mb-2 opacity-80" />
+                                    <span className="text-[10px] font-bold text-white/90 uppercase tracking-wider">{g.name}</span>
+                                  </div>
+                                )}
+                                {/* Game count badge at top right */}
+                                <div className="absolute top-2 right-2 bg-black/60 backdrop-blur-[2px] px-1.5 py-0.5 rounded-md text-[8px] text-white/90 font-bold z-20 border border-white/5 uppercase tracking-wider">
+                                  {countText}
+                                </div>
+                                {/* Overlay/shadow at bottom for readability */}
+                                <div className="absolute top-2 left-2 flex items-center gap-1 bg-black/55 backdrop-blur-[2px] px-2 py-0.5 rounded-md text-[9px] text-white/95 font-bold uppercase tracking-wider border border-white/5 z-20">
+                                  <Folder className="w-2.5 h-2.5 text-accent shrink-0" />
+                                  <span className="truncate">{g.name}</span>
+                                </div>
+                              </div>
+                            ) : (
+                              <div className="flex flex-col items-center justify-center bg-[#1a1a1a] text-white/30 p-4 text-center w-full h-full select-none relative">
+                                <Folder className="w-10 h-10 text-accent mb-3 group-hover:scale-105 transition-all duration-300 opacity-80" />
+                                <span className="text-[10px] font-bold text-white/80 line-clamp-2 uppercase tracking-wider mb-1">{g.name}</span>
+                                <span className="text-[8px] font-bold text-white/40 uppercase tracking-widest">{countText}</span>
+                              </div>
+                            )}
+                          </button>
+                        );
+                      }
+
+                      const boxArt = g.thumbnail || g.image || g.marquee;
+                      const finalImage = boxArt ? (boxArt.startsWith("http") || boxArt.startsWith("file://") ? boxArt : `file:///${boxArt}`) : "";
+                      
                       return (
                         <button
                           key={g.path}
                           onClick={() => setSelectedIdx(idx)}
-                          onDoubleClick={() => setActiveCollection(g.name)}
-                          className={`group flex flex-col w-full rounded-md overflow-hidden text-left transition-all border-2 relative bg-black/40 aspect-[3/4] ${
-                            idx === selectedIdx
-                              ? "border-accent shadow-[0_0_15px_var(--accent-color-glass)] z-10"
+                          onDoubleClick={() => onLaunchGame(g, system)}
+                          className={`group flex flex-col w-full rounded-md overflow-hidden text-left transition-all border-4 relative bg-[#1a1a1a] aspect-[3/4] ${
+                            idx === selectedIdx 
+                              ? "border-accent shadow-[0_0_15px_var(--accent-color-glass)] z-10" 
                               : "border-white/5 hover:border-white/10"
                           }`}
                         >
-                          <div className="flex flex-col items-center justify-center bg-[#1a1a1a] text-white/30 p-4 text-center w-full h-full select-none">
-                            <Folder className="w-10 h-10 text-accent mb-3 group-hover:scale-105 transition-all duration-300 opacity-80" />
-                            <span className="text-[10px] font-bold text-white/80 line-clamp-2 uppercase tracking-wider">{g.name}</span>
+                          <div className="flex items-center justify-center overflow-hidden relative w-full h-full">
+                            {finalImage && !failedImages[g.path] ? (
+                              <>
+                                <img 
+                                  src={finalImage} 
+                                  alt={g.name} 
+                                  onError={() => setFailedImages(prev => ({ ...prev, [g.path]: true }))}
+                                  className="w-full h-full object-contain group-hover:scale-105 transition-all duration-300 animate-in fade-in duration-200" 
+                                />
+                                {/* Small clean controller icon and title overlay at top left */}
+                                <div className="absolute top-2 left-2 flex items-center gap-1.5 bg-black/55 backdrop-blur-[2px] px-2 py-0.5 rounded-md text-[9px] text-white/95 font-bold uppercase tracking-wider max-w-[90%] border border-white/5 z-20">
+                                  <Gamepad2 className="w-2.5 h-2.5 text-white/90 shrink-0" />
+                                  <span className="truncate">{g.name}</span>
+                                </div>
+                              </>
+                            ) : (
+                              <div className="flex flex-col items-center justify-center bg-[#1a1a1a] text-white/30 p-4 text-center w-full h-full select-none">
+                                <Gamepad2 className="w-8 h-8 text-white/20 mb-3 group-hover:scale-105 transition-all duration-300" />
+                                <span className="text-[10px] font-bold text-white/60 line-clamp-2 uppercase tracking-wider">{g.name}</span>
+                              </div>
+                            )}
                           </div>
                         </button>
                       );
-                    }
-
-                    const boxArt = g.thumbnail || g.image || g.marquee;
-                    const finalImage = boxArt ? (boxArt.startsWith("http") || boxArt.startsWith("file://") ? boxArt : `file:///${boxArt}`) : "";
-                    
-                    return (
-                      <button
-                        key={g.path}
-                        onClick={() => setSelectedIdx(idx)}
-                        onDoubleClick={() => onLaunchGame(g, system)}
-                        className={`group flex flex-col w-full rounded-md overflow-hidden text-left transition-all border-4 relative bg-[#1a1a1a] aspect-[3/4] ${
-                          idx === selectedIdx 
-                            ? "border-accent shadow-[0_0_15px_var(--accent-color-glass)] z-10" 
-                            : "border-white/5 hover:border-white/10"
-                        }`}
-                      >
-                        <div className="flex items-center justify-center overflow-hidden relative w-full h-full">
-                          {finalImage && !failedImages[g.path] ? (
-                            <>
-                              <img 
-                                src={finalImage} 
-                                alt={g.name} 
-                                onError={() => setFailedImages(prev => ({ ...prev, [g.path]: true }))}
-                                className="w-full h-full object-cover group-hover:scale-105 transition-all duration-300 animate-in fade-in duration-200" 
-                              />
-                              {/* Small clean controller icon and title overlay at top left */}
-                              <div className="absolute top-2 left-2 flex items-center gap-1.5 bg-black/55 backdrop-blur-[2px] px-2 py-0.5 rounded-md text-[9px] text-white/95 font-bold uppercase tracking-wider max-w-[90%] border border-white/5 z-20">
-                                <Gamepad2 className="w-2.5 h-2.5 text-white/90 shrink-0" />
-                                <span className="truncate">{g.name}</span>
-                              </div>
-                            </>
-                          ) : (
-                            <div className="flex flex-col items-center justify-center bg-[#1a1a1a] text-white/30 p-4 text-center w-full h-full select-none">
-                              <Gamepad2 className="w-8 h-8 text-white/20 mb-3 group-hover:scale-105 transition-all duration-300" />
-                              <span className="text-[10px] font-bold text-white/60 line-clamp-2 uppercase tracking-wider">{g.name}</span>
-                            </div>
-                          )}
-                        </div>
-                      </button>
-                    );
-                  })}
+                    });
+                  })()}
                 </div>
               )}
             </ScrollArea>
@@ -867,18 +964,61 @@ export default function SystemAppContent({
             ) : selectedGame.isCollectionFolder ? (
               /* Collection Folder details */
               <div className="flex flex-col gap-4 h-full">
-                <div className="w-full flex flex-col items-center justify-center py-8 bg-white/5 rounded-md border border-white/5 shadow-md">
-                  <Folder className="w-20 h-20 text-accent mb-4 opacity-80" />
-                  <h3 className="font-bold text-lg text-white/95 text-center px-4 leading-tight">{selectedGame.name}</h3>
-                  <span className="text-[10px] text-white/40 mt-1 uppercase tracking-wider font-semibold">Pasta de Coleção</span>
-                </div>
+                {(() => {
+                  const count = selectedGame.gameCount ?? 0;
+                  const countText = `${count} ${count === 1 ? 'jogo' : 'jogos'}`;
+                  
+                  return (
+                    <>
+                      {selectedGame.image || selectedGame.thumbnail ? (
+                        <div className="relative w-full aspect-video rounded-md overflow-hidden bg-black/50 border border-white/5 shadow-md flex items-center justify-center shrink-0">
+                          {selectedGame.image && (
+                            <img 
+                              src={selectedGame.image} 
+                              alt={selectedGame.name} 
+                              className="absolute inset-0 w-full h-full object-cover opacity-50"
+                            />
+                          )}
+                          {selectedGame.thumbnail ? (
+                            <img 
+                              src={selectedGame.thumbnail} 
+                              alt={selectedGame.name} 
+                              className="relative w-[70%] max-h-[85%] object-contain filter drop-shadow-[0_4px_8px_rgba(0,0,0,0.6)] z-10"
+                            />
+                          ) : (
+                            <div className="relative z-10 flex flex-col items-center">
+                              <Folder className="w-12 h-12 text-accent mb-2 opacity-80" />
+                              <h3 className="font-bold text-sm text-white/95 text-center">{selectedGame.name}</h3>
+                            </div>
+                          )}
+                        </div>
+                      ) : (
+                        <div className="w-full flex flex-col items-center justify-center py-8 bg-white/5 rounded-md border border-white/5 shadow-md shrink-0">
+                          <Folder className="w-20 h-20 text-accent mb-4 opacity-80" />
+                          <h3 className="font-bold text-lg text-white/95 text-center px-4 leading-tight">{selectedGame.name}</h3>
+                          <span className="text-[10px] text-white/40 mt-1 uppercase tracking-wider font-semibold">Pasta de Coleção · {countText}</span>
+                        </div>
+                      )}
+
+                      {/* Title and metadata */}
+                      {(selectedGame.image || selectedGame.thumbnail) && (
+                        <div className="flex flex-col text-left px-1">
+                          <h3 className="font-bold text-base leading-snug text-white/95 truncate" title={selectedGame.name}>{selectedGame.name}</h3>
+                          <span className="text-[10px] text-white/40 mt-1 uppercase tracking-wider font-semibold">Pasta de Coleção · {countText}</span>
+                        </div>
+                      )}
+                    </>
+                  );
+                })()}
+
                 <div className="text-xs leading-relaxed text-white/60">
                   {selectedGame.desc || "Esta é uma coleção personalizada de jogos."}
                 </div>
+                
                 <div className="flex flex-col gap-2 mt-auto">
                   <button
                     onClick={() => setActiveCollection(selectedGame.name)}
-                    className="w-full bg-accent bg-accent-hover hover:scale-[1.02] hover:shadow-lg transition-all rounded-md py-2.5 text-md font-bold flex items-center justify-center gap-2 cursor-pointer text-white"
+                    className="w-full bg-accent hover:bg-accent-hover hover:scale-[1.02] hover:shadow-lg transition-all rounded-md py-2.5 text-md font-bold flex items-center justify-center gap-2 cursor-pointer text-white"
                   >
                     <Folder className="w-4 h-4" />
                     Abrir Coleção

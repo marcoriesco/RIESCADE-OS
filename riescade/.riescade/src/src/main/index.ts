@@ -158,11 +158,13 @@ function createAppWindow(type: 'system' | 'tool', id: string): void {
   let title = id.toUpperCase()
 
   if (type === 'tool') {
-    if (id === 'library') { width = 980; height = 620; title = 'Biblioteca'; }
-    else if (id === 'saves') { width = 760; height = 540; title = 'Gerenciador de Saves'; }
+    if (id === 'saves') { width = 760; height = 540; title = 'Gerenciador de Saves'; }
     else if (id === 'achievements') { width = 720; height = 520; title = 'Conquistas'; }
     else if (id === 'settings') { width = 820; height = 560; title = 'Configurações'; }
     else if (id === 'database') { width = 1024; height = 680; title = 'Banco de Dados'; }
+    else if (id === 'all') { width = 1024; height = 680; title = 'Todos os Jogos'; }
+    else if (id === 'favorites') { width = 1024; height = 680; title = 'Favoritos'; }
+    else if (id === 'collections') { width = 1024; height = 680; title = 'Coleções'; }
   } else {
     try {
       const sys = libraryService.getSystems().find(s => s.name.toLowerCase() === id.toLowerCase())
