@@ -53,13 +53,12 @@ function RadixSelect({
 
 const SETTINGS_TABS = [
   { id: "conta", name: "Minha Conta", icon: User },
-  { id: "jogos", name: "Jogos", icon: Gamepad2 },
+  { id: "emuladores", name: "Emuladores", icon: Gamepad2 },
   { id: "interface", name: "Interface", icon: Settings },
   { id: "personalizacao", name: "Personalização", icon: Palette },
   { id: "controles", name: "Controles", icon: Gamepad2 },
   { id: "audio", name: "Áudio", icon: Volume2 },
   { id: "scraper", name: "Scraper", icon: Cpu },
-  { id: "emuladores", name: "Emuladores", icon: Gamepad2 },
   { id: "avancado", name: "Avançado", icon: Cpu },
   { id: "sobre", name: "Sobre", icon: Info }
 ];
@@ -76,6 +75,7 @@ export default function ToolAppContent({
   onSaveEmulatorSetting?: (emulator: string, name: string, value: any) => void;
 }) {
   const [activeSettingsTab, setActiveSettingsTab] = useState("conta");
+  const [activeEmuSubmenu, setActiveEmuSubmenu] = useState<"retroarch" | "ares">("retroarch");
   const [settingsSearch, setSettingsSearch] = useState("");
   const [settingsCategory, setSettingsCategory] = useState<"all" | "tools" | "systems">("all");
   const [updateState, setUpdateState] = useState<{
@@ -299,18 +299,54 @@ export default function ToolAppContent({
                 const TabIcon = tab.icon;
                 const isActive = activeSettingsTab === tab.id;
                 return (
-                  <button
-                    key={tab.id}
-                    onClick={() => setActiveSettingsTab(tab.id)}
-                    className={`cursor-pointer font-medium w-full text-left px-3.5 py-2.5 rounded-md text-xs flex items-center gap-2.5 transition ${
-                      isActive 
-                        ? "bg-white/5" 
-                        : "text-white/60 hover:bg-white/5 hover:text-white"
-                    }`}
-                  >
-                    <TabIcon className={`w-4 h-4 shrink-0 transition ${isActive ? 'text-accent' : 'opacity-60'}`} />
-                    <span>{tab.name}</span>
-                  </button>
+                  <div key={tab.id} className="flex flex-col gap-1">
+                    <button
+                      onClick={() => {
+                        setActiveSettingsTab(tab.id);
+                        if (tab.id === "emuladores") {
+                          setActiveEmuSubmenu("retroarch");
+                        }
+                      }}
+                      className={`cursor-pointer font-medium w-full text-left px-3.5 py-2.5 rounded-md text-xs flex items-center gap-2.5 transition ${
+                        isActive 
+                          ? "bg-white/5 text-white" 
+                          : "text-white/60 hover:bg-white/5 hover:text-white"
+                      }`}
+                    >
+                      <TabIcon className={`w-4 h-4 shrink-0 transition ${isActive ? 'text-accent' : 'opacity-60'}`} />
+                      <span>{tab.name}</span>
+                    </button>
+                    {tab.id === "emuladores" && (
+                      <div className="flex flex-col gap-1 pl-4 border-l border-white/5 ml-5.5 my-1">
+                        <button
+                          onClick={() => {
+                            setActiveSettingsTab("emuladores");
+                            setActiveEmuSubmenu("retroarch");
+                          }}
+                          className={`cursor-pointer w-full text-left py-1.5 px-2 rounded-md text-[11px] font-medium transition ${
+                            activeSettingsTab === "emuladores" && activeEmuSubmenu === "retroarch"
+                              ? "text-accent font-bold bg-white/[0.04]"
+                              : "text-white/50 hover:text-white/80 hover:bg-white/[0.02]"
+                          }`}
+                        >
+                          RetroArch
+                        </button>
+                        <button
+                          onClick={() => {
+                            setActiveSettingsTab("emuladores");
+                            setActiveEmuSubmenu("ares");
+                          }}
+                          className={`cursor-pointer w-full text-left py-1.5 px-2 rounded-md text-[11px] font-medium transition ${
+                            activeSettingsTab === "emuladores" && activeEmuSubmenu === "ares"
+                              ? "text-accent font-bold bg-white/[0.04]"
+                              : "text-white/50 hover:text-white/80 hover:bg-white/[0.02]"
+                          }`}
+                        >
+                          Ares
+                        </button>
+                      </div>
+                    )}
+                  </div>
                 );
               })}
             </div>
@@ -386,87 +422,7 @@ export default function ToolAppContent({
             </div>
           )}
 
-          {/* ===== TAB: JOGOS ===== */}
-          {activeSettingsTab === "jogos" && (
-            <div className="flex flex-col h-full overflow-hidden">
-              <div className="shrink-0 px-6 pt-8 pb-2 max-w-[740px]">
-                <h2 className="text-xl font-bold text-white mb-1">Configurações de Jogos</h2>
-                <p className="text-sm text-white/40">Configurações globais de emulação, vídeo, shaders e mais.</p>
-              </div>
-              <ScrollArea className="flex-1 min-h-0">
-                <div className="px-6 pb-6 max-w-[740px] space-y-2">
-                  <SettingGroup label="RetroAchievements" />
-                  <SettingToggle label="RetroAchievements" name="global.cheevos" desc="Ativar conquistas retrô durante a emulação." ctx={ctx} />
-                  <SettingInput label="Usuário" name="global.cheevos.username" ctx={ctx} />
-                  <SettingInput label="Senha" name="global.cheevos.password" isPassword ctx={ctx} />
 
-                  <SettingGroup label="Netplay" />
-                  <SettingToggle label="Ativar Netplay" name="global.netplay" desc="Ativar jogos em rede." ctx={ctx} />
-                  <SettingInput label="Apelido" name="global.netplay.nickname" ctx={ctx} />
-                  <SettingInput label="Porta" name="global.netplay.port" ctx={ctx} />
-
-                  <SettingGroup label="Save States" />
-                  <SettingToggle label="Salvar/Carregar Automático" name="global.autosave" desc="Carrega o estado mais recente ao iniciar e salva ao sair." ctx={ctx} />
-                  <SettingSelect label="Tipo de Incremento" name="global.incrementalsavestates" type="int" options={[
-                    { label: "Por Save State", value: "" },
-                    { label: "Por Save Slot", value: "0" },
-                    { label: "Não Incrementar", value: "2" }
-                  ]} ctx={ctx} />
-                  <SettingSelect label="Gerenciador de States" name="global.savestates" desc="Exibe o gerenciador antes de iniciar um jogo." options={[
-                    { label: "Não", value: "0" }, { label: "Sempre", value: "1" }, { label: "Se Disponível", value: "2" }
-                  ]} ctx={ctx} />
-
-                  <SettingGroup label="Exibição e Vídeo" />
-                  <SettingSelect label="Shaders" name="global.shaderset" options={[
-                    { label: "Nenhum", value: "none" }, { label: "RIESCADE", value: "[riescade]" },
-                    { label: "CRT-NEW-PIXIE", value: "crt-new-pixie" }, { label: "CRT-ROYALE", value: "crt-royale" },
-                    { label: "CURVATURE", value: "curvature" }, { label: "ENHANCED", value: "enhanced" },
-                    { label: "FLATTEN-GLOW", value: "flatten-glow" }, { label: "HANDHELD", value: "handheld" },
-                    { label: "NTSC", value: "ntsc" }, { label: "RETRO", value: "retro" },
-                    { label: "SCALEFX", value: "scalefx" }, { label: "SCANLINES", value: "scanlines" },
-                    { label: "TECHNICOLOR", value: "technicolor" }, { label: "VHS", value: "vhs" },
-                    { label: "XBRZ-5X", value: "xbrz-5x" }, { label: "ZFAST", value: "zfast" }
-                  ]} ctx={ctx} />
-                  <SettingSelect label="Decorações (Bezels)" name="global.bezel" options={[
-                    { label: "Nenhum", value: "none" }, { label: "Automático", value: "auto" }
-                  ]} ctx={ctx} />
-                  <SettingSelect label="Proporção de Tela" name="global.ratio" options={[
-                    { label: "Automático", value: "auto" }, { label: "4/3", value: "4/3" }, { label: "16/9", value: "16/9" },
-                    { label: "16/10", value: "16/10" }, { label: "Completo", value: "full" }
-                  ]} ctx={ctx} />
-                  <SettingSelect label="Modo de Vídeo" name="global.videomode" options={[
-                    { label: "Automático", value: "auto" }, { label: "1080p 60Hz", value: "1920x1080@60" },
-                    { label: "1080p 50Hz", value: "1920x1080@50" }, { label: "720p 60Hz", value: "1280x720@60" }
-                  ]} ctx={ctx} />
-                  <SettingToggle label="Forçar Tela Cheia" name="global.forcefullscreen" desc="Forçar emulador em tela cheia." ctx={ctx} />
-                  <SettingToggle label="Escala Inteira (Pixel Perfect)" name="global.integerscale" ctx={ctx} />
-                  <SettingToggle label="Suavizar Jogos (Bilinear)" name="global.smooth" ctx={ctx} />
-
-                  <SettingGroup label="Emulação" />
-                  <SettingToggle label="Rebobinar (Rewind)" name="rewind" ctx={ctx} />
-                  <SettingSlider label="Taxa de Avanço Rápido" name="global.fastforward_ratio" min={0} max={50} step={1} suffix="x" ctx={ctx} />
-                  <SettingToggle label="Discord Rich Presence" name="global.discord" desc="Atualiza status do Discord com o jogo atual." ctx={ctx} />
-                  <SettingToggle label="Configurar Controles Automaticamente" name="global.disableautocontrollers" ctx={ctx} />
-
-                  <SettingGroup label="Verificação de BIOS" />
-                  <SettingToggle label="Verificar BIOS ao Iniciar Jogo" name="CheckBiosesAtLaunch" ctx={ctx} />
-
-                  <SettingGroup label="Compressão" />
-                  <SettingSelect label="Descompressão" name="decompressedfolders" desc="Manter ou excluir arquivos extraídos." options={[
-                    { label: "Automático", value: "ask" }, { label: "Manter", value: "keep" }, { label: "Excluir", value: "delete" }
-                  ]} ctx={ctx} />
-
-                  <SettingGroup label="Tattoo (Sobreposição)" />
-                  <SettingToggle label="Mostrar Tattoo sobre Bezel" name="global.tattoo" desc="Exibe imagem de controle sobre a moldura." ctx={ctx} />
-                  <SettingSelect label="Posição do Tattoo" name="global.tattoo_corner" options={[
-                    { label: "Automático", value: "auto" }, { label: "Topo Esquerda", value: "NW" },
-                    { label: "Topo Direita", value: "NE" }, { label: "Baixo Direita", value: "SE" },
-                    { label: "Baixo Esquerda", value: "SW" }
-                  ]} ctx={ctx} />
-                </div>
-              </ScrollArea>
-            </div>
-          )}
 
           {/* ===== TAB: INTERFACE ===== */}
           {activeSettingsTab === "interface" && (
@@ -784,85 +740,152 @@ export default function ToolAppContent({
               </ScrollArea>
             </div>
           )}
+
           {/* ===== TAB: EMULADORES ===== */}
           {activeSettingsTab === "emuladores" && (
             <div className="flex flex-col h-full overflow-hidden">
-              <div className="shrink-0 px-6 pt-6 pb-2 max-w-[740px]">
-                <h2 className="text-xl font-bold text-white mb-1">Configurações dos Emuladores</h2>
-                <p className="text-sm text-white/40">Ajuste os parâmetros específicos de cada emulador integrado.</p>
+              <div className="shrink-0 px-6 pt-8 pb-4 max-w-[740px]">
+                <h2 className="text-xl font-bold text-white mb-1">
+                  Configurações dos Emuladores - {activeEmuSubmenu === "retroarch" ? "RetroArch" : "Ares"}
+                </h2>
+                <p className="text-sm text-white/40">
+                  {activeEmuSubmenu === "retroarch" 
+                    ? "Configurações globais de emulação, vídeo, shaders e mais." 
+                    : "Ajuste os parâmetros específicos do emulador Ares."}
+                </p>
               </div>
               <ScrollArea className="flex-1 min-h-0">
-                <div className="px-6 pb-6 max-w-[740px] space-y-2">
-                  <div className="bg-[#121620]/50 border border-white/5 rounded-lg p-4 mb-4">
-                    <h3 className="text-sm font-bold text-white/90 mb-1">Ares</h3>
-                    <p className="text-xs text-white/40 mb-3">Emulador multi-sistema de alta precisão (Ares).</p>
-                    
-                    <SettingGroup label="Geral & Vídeo" />
-                    <SettingToggle label="Iniciar em Tela Cheia" name="ares_fullscreen" desc="Inicia o emulador Ares em tela cheia adicionando o parâmetro --fullscreen." ctx={emuCtx} />
-                    <SettingSelect label="Proporção de Tela (Aspect Ratio)" name="ares_aspect" options={[
-                      { label: "Melhor Ajuste (Scale)", value: "Scale" },
-                      { label: "Inteira (Integer)", value: "Integer" },
-                      { label: "Esticar (Stretch)", value: "Stretch" }
-                    ]} ctx={emuCtx} />
-                    <SettingSelect label="Modo de Correção de Aspecto" name="ares_aspectcorrection" options={[
-                      { label: "Padrão (Standard)", value: "Standard" },
-                      { label: "Nenhum (None)", value: "None" },
-                      { label: "Anamórfico 16:9 (Anamorphic)", value: "Anamorphic" }
-                    ]} ctx={emuCtx} />
-                    <SettingSelect label="Driver de Vídeo" name="ares_renderer" options={[
-                      { label: "OpenGL 3.2", value: "OpenGL 3.2" },
-                      { label: "Direct3D 9.0", value: "Direct3D 9.0" },
-                      { label: "GDI", value: "GDI" }
-                    ]} ctx={emuCtx} />
-                    <SettingSelect label="Sincronização de Vídeo (GPU Sync)" name="ares_gpusync" options={[
-                      { label: "Sincronizado", value: "sync" },
-                      { label: "Apenas GPU", value: "gpu" },
-                      { label: "Sincronizado + GPU", value: "gpusync" },
-                      { label: "Nenhum", value: "none" }
-                    ]} ctx={emuCtx} />
-                    <SettingSlider label="Ajustar Luminância" name="ares_luminance" min={0} max={2} step={0.1} suffix="" ctx={emuCtx} type="float" />
-                    <SettingSlider label="Ajustar Saturação" name="ares_saturation" min={0} max={2} step={0.1} suffix="" ctx={emuCtx} type="float" />
-                    <SettingSlider label="Ajustar Gamma" name="ares_gamma" min={0} max={2} step={0.1} suffix="" ctx={emuCtx} type="float" />
-                    <SettingToggle label="Color Bleed" name="ares_colobleed" desc="Desfoque entre pixels adjacentes para efeitos de translucidez." ctx={emuCtx} />
-                    <SettingToggle label="Emulação de Cores Precisa" name="ares_coloremulation" desc="Ajusta as cores para parecer com o hardware original." ctx={emuCtx} />
-                    <SettingToggle label="Mesclagem de Quadros (Interframe Blending)" name="ares_interframe_blend" desc="Emula efeitos de LCD mas pode aumentar desfoque de movimento." ctx={emuCtx} />
-                    <SettingToggle label="Overscan" name="ares_overscan" desc="Exibe linhas de borda estendidas em CRT PAL." ctx={emuCtx} />
-                    <SettingToggle label="Precisão de Pixel (Pixel Accuracy)" name="ares_pixel_accurate" desc="Ativa emulação precisa de pixel quando disponível." ctx={emuCtx} />
+                <div className="px-6 pb-6 max-w-[740px]">
+                  {activeEmuSubmenu === "retroarch" ? (
+                    <div className="space-y-2 animate-in fade-in duration-150">
+                      <SettingGroup label="RetroAchievements" />
+                      <SettingToggle label="RetroAchievements" name="global.cheevos" desc="Ativar conquistas retrô durante a emulação." ctx={ctx} />
+                      <SettingInput label="Usuário" name="global.cheevos.username" ctx={ctx} />
+                      <SettingInput label="Senha" name="global.cheevos.password" isPassword ctx={ctx} />
 
-                    <SettingGroup label="Áudio" />
-                    <SettingSelect label="Driver de Áudio" name="ares_audio_renderer" options={[
-                      { label: "WASAPI", value: "WASAPI" },
-                      { label: "XAudio 2.1", value: "XAudio 2.1" },
-                      { label: "SDL", value: "SDL" },
-                      { label: "DirectSound 7.0", value: "DirectSound 7.0" },
-                      { label: "waveOut", value: "waveOut" }
-                    ]} ctx={emuCtx} />
-                    <SettingToggle label="Sincronização de Áudio (Audio Sync)" name="ares_audiosync" desc="Ativa bloqueio de sincronização para evitar falhas de áudio." ctx={emuCtx} />
+                      <SettingGroup label="Netplay" />
+                      <SettingToggle label="Ativar Netplay" name="global.netplay" desc="Ativar jogos em rede." ctx={ctx} />
+                      <SettingInput label="Apelido" name="global.netplay.nickname" ctx={ctx} />
+                      <SettingInput label="Porta" name="global.netplay.port" ctx={ctx} />
 
-                    <SettingGroup label="Emulação & Latência" />
-                    <SettingToggle label="Boot Rápido (Fast Boot)" name="ares_fastboot" desc="Ignora animações de inicialização do console." ctx={emuCtx} />
-                    <SettingSelect label="Região Preferencial" name="ares_region" options={[
-                      { label: "NTSC (EUA)", value: "NTSC-U" },
-                      { label: "NTSC (Japão)", value: "NTSC-J" },
-                      { label: "PAL", value: "PAL" }
-                    ]} ctx={emuCtx} />
-                    <SettingToggle label="Ativar Run-Ahead" name="ares_runahead" desc="Reduz a latência de entrada em um frame (dobra uso de CPU)." ctx={emuCtx} />
+                      <SettingGroup label="Save States" />
+                      <SettingToggle label="Salvar/Carregar Automático" name="global.autosave" desc="Carrega o estado mais recente ao iniciar e salva ao sair." ctx={ctx} />
+                      <SettingSelect label="Tipo de Incremento" name="global.incrementalsavestates" type="int" options={[
+                        { label: "Por Save State", value: "" },
+                        { label: "Por Save Slot", value: "0" },
+                        { label: "Não Incrementar", value: "2" }
+                      ]} ctx={ctx} />
+                      <SettingSelect label="Gerenciador de States" name="global.savestates" desc="Exibe o gerenciador antes de iniciar um jogo." options={[
+                        { label: "Não", value: "0" }, { label: "Sempre", value: "1" }, { label: "Se Disponível", value: "2" }
+                      ]} ctx={ctx} />
 
-                    <SettingGroup label="Nintendo 64" />
-                    <SettingSelect label="Qualidade de Renderização" name="ares_n64_quality" options={[
-                      { label: "SD", value: "SD" },
-                      { label: "HD", value: "HD" },
-                      { label: "UHD", value: "UHD" }
-                    ]} ctx={emuCtx} />
-                    <SettingToggle label="Supersampling" name="ares_supersampling" desc="Reduz resoluções HD/UHD de volta para SD (incompatível com weave deinterlacing)." ctx={emuCtx} />
-                    <SettingToggle label="Weave Deinterlacing" name="ares_weavedeinterlacing" desc="Dobra a resolução horizontal percebida (incompatível com supersampling)." ctx={emuCtx} />
-                    <SettingSelect label="Perfil de Entrada (Layout de Controle)" name="ares64_inputprofile" options={[
-                      { label: "Z = Gatilho Esquerdo (L-Trigger)", value: "zl" },
-                      { label: "Z = Gatilho Direito (R-Trigger)", value: "zr" },
-                      { label: "Xbox", value: "xbox" }
-                    ]} ctx={emuCtx} />
-                    <SettingToggle label="Expansor de Memória (Expansion Pak)" name="ares_ExpansionPak" desc="Ativa o pacote de expansão de 4MB de RAM do Nintendo 64." ctx={emuCtx} />
-                  </div>
+                      <SettingGroup label="Exibição e Vídeo" />
+                      <SettingSelect label="Shaders" name="global.shaderset" options={[
+                        { label: "Nenhum", value: "none" }, { label: "RIESCADE", value: "[riescade]" },
+                        { label: "CRT-NEW-PIXIE", value: "crt-new-pixie" }, { label: "CRT-ROYALE", value: "crt-royale" },
+                        { label: "CURVATURE", value: "curvature" }, { label: "ENHANCED", value: "enhanced" },
+                        { label: "FLATTEN-GLOW", value: "flatten-glow" }, { label: "HANDHELD", value: "handheld" },
+                        { label: "NTSC", value: "ntsc" }, { label: "RETRO", value: "retro" },
+                        { label: "SCALEFX", value: "scalefx" }, { label: "SCANLINES", value: "scanlines" },
+                        { label: "TECHNICOLOR", value: "technicolor" }, { label: "VHS", value: "vhs" },
+                        { label: "XBRZ-5X", value: "xbrz-5x" }, { label: "ZFAST", value: "zfast" }
+                      ]} ctx={ctx} />
+                      <SettingSelect label="Decorações (Bezels)" name="global.bezel" options={[
+                        { label: "Nenhum", value: "none" }, { label: "Automático", value: "auto" }
+                      ]} ctx={ctx} />
+                      <SettingSelect label="Proporção de Tela" name="global.ratio" options={[
+                        { label: "Automático", value: "auto" }, { label: "4/3", value: "4/3" }, { label: "16/9", value: "16/9" },
+                        { label: "16/10", value: "16/10" }, { label: "Completo", value: "full" }
+                      ]} ctx={ctx} />
+                      <SettingSelect label="Modo de Vídeo" name="global.videomode" options={[
+                        { label: "Automático", value: "auto" }, { label: "1080p 60Hz", value: "1920x1080@60" },
+                        { label: "1080p 50Hz", value: "1920x1080@50" }, { label: "720p 60Hz", value: "1280x720@60" }
+                      ]} ctx={ctx} />
+                      <SettingToggle label="Forçar Tela Cheia" name="global.forcefullscreen" desc="Forçar emulador em tela cheia." ctx={ctx} />
+                      <SettingToggle label="Escala Inteira (Pixel Perfect)" name="global.integerscale" ctx={ctx} />
+                      <SettingToggle label="Suavizar Jogos (Bilinear)" name="global.smooth" ctx={ctx} />
+
+                      <SettingGroup label="Emulação" />
+                      <SettingToggle label="Discord Rich Presence" name="global.discord" desc="Atualiza status do Discord com o jogo atual." ctx={ctx} />
+                      <SettingToggle label="Configurar Controles Automaticamente" name="global.disableautocontrollers" ctx={ctx} />
+
+                      <SettingGroup label="Verificação de BIOS" />
+                      <SettingToggle label="Verificar BIOS ao Iniciar Jogo" name="CheckBiosesAtLaunch" ctx={ctx} />
+
+                      <SettingGroup label="Compressão" />
+                      <SettingSelect label="Descompressão" name="decompressedfolders" desc="Manter ou excluir arquivos extraídos." options={[
+                        { label: "Automático", value: "ask" }, { label: "Manter", value: "keep" }, { label: "Excluir", value: "delete" }
+                      ]} ctx={ctx} />
+                    </div>
+                  ) : (
+                    <div className="space-y-2 animate-in fade-in duration-150">
+                      <SettingGroup label="Geral & Vídeo" />
+                      <SettingToggle label="Iniciar em Tela Cheia" name="ares_fullscreen" desc="Inicia o emulador Ares em tela cheia adicionando o parâmetro --fullscreen." ctx={emuCtx} />
+                      <SettingSelect label="Proporção de Tela (Aspect Ratio)" name="ares_aspect" options={[
+                        { label: "Melhor Ajuste (Scale)", value: "Scale" },
+                        { label: "Inteira (Integer)", value: "Integer" },
+                        { label: "Esticar (Stretch)", value: "Stretch" }
+                      ]} ctx={emuCtx} />
+                      <SettingSelect label="Modo de Correção de Aspecto" name="ares_aspectcorrection" options={[
+                        { label: "Padrão (Standard)", value: "Standard" },
+                        { label: "Nenhum (None)", value: "None" },
+                        { label: "Anamórfico 16:9 (Anamorphic)", value: "Anamorphic" }
+                      ]} ctx={emuCtx} />
+                      <SettingSelect label="Driver de Vídeo" name="ares_renderer" options={[
+                        { label: "OpenGL 3.2", value: "OpenGL 3.2" },
+                        { label: "Direct3D 9.0", value: "Direct3D 9.0" },
+                        { label: "GDI", value: "GDI" }
+                      ]} ctx={emuCtx} />
+                      <SettingSelect label="Sincronização de Vídeo (GPU Sync)" name="ares_gpusync" options={[
+                        { label: "Sincronizado", value: "sync" },
+                        { label: "Apenas GPU", value: "gpu" },
+                        { label: "Sincronizado + GPU", value: "gpusync" },
+                        { label: "Nenhum", value: "none" }
+                      ]} ctx={emuCtx} />
+                      <SettingSlider label="Ajustar Luminância" name="ares_luminance" min={0} max={2} step={0.1} suffix="" ctx={emuCtx} type="float" />
+                      <SettingSlider label="Ajustar Saturação" name="ares_saturation" min={0} max={2} step={0.1} suffix="" ctx={emuCtx} type="float" />
+                      <SettingSlider label="Ajustar Gamma" name="ares_gamma" min={0} max={2} step={0.1} suffix="" ctx={emuCtx} type="float" />
+                      <SettingToggle label="Color Bleed" name="ares_colobleed" desc="Desfoque entre pixels adjacentes para efeitos de translucidez." ctx={emuCtx} />
+                      <SettingToggle label="Emulação de Cores Precisa" name="ares_coloremulation" desc="Ajusta as cores para parecer com o hardware original." ctx={emuCtx} />
+                      <SettingToggle label="Mesclagem de Quadros (Interframe Blending)" name="ares_interframe_blend" desc="Emula efeitos de LCD mas pode aumentar desfoque de movimento." ctx={emuCtx} />
+                      <SettingToggle label="Overscan" name="ares_overscan" desc="Exibe linhas de borda estendidas em CRT PAL." ctx={emuCtx} />
+                      <SettingToggle label="Precisão de Pixel (Pixel Accuracy)" name="ares_pixel_accurate" desc="Ativa emulação precisa de pixel quando disponível." ctx={emuCtx} />
+
+                      <SettingGroup label="Áudio" />
+                      <SettingSelect label="Driver de Áudio" name="ares_audio_renderer" options={[
+                        { label: "WASAPI", value: "WASAPI" },
+                        { label: "XAudio 2.1", value: "XAudio 2.1" },
+                        { label: "SDL", value: "SDL" },
+                        { label: "DirectSound 7.0", value: "DirectSound 7.0" },
+                        { label: "waveOut", value: "waveOut" }
+                      ]} ctx={emuCtx} />
+                      <SettingToggle label="Sincronização de Áudio (Audio Sync)" name="ares_audiosync" desc="Ativa bloqueio de sincronização para evitar falhas de áudio." ctx={emuCtx} />
+
+                      <SettingGroup label="Emulação & Latência" />
+                      <SettingToggle label="Boot Rápido (Fast Boot)" name="ares_fastboot" desc="Ignora animações de inicialização do console." ctx={emuCtx} />
+                      <SettingSelect label="Região Preferencial" name="ares_region" options={[
+                        { label: "NTSC (EUA)", value: "NTSC-U" },
+                        { label: "NTSC (Japão)", value: "NTSC-J" },
+                        { label: "PAL", value: "PAL" }
+                      ]} ctx={emuCtx} />
+                      <SettingToggle label="Ativar Run-Ahead" name="ares_runahead" desc="Reduz a latência de entrada em um frame (dobra uso de CPU)." ctx={emuCtx} />
+
+                      <SettingGroup label="Nintendo 64" />
+                      <SettingSelect label="Qualidade de Renderização" name="ares_n64_quality" options={[
+                        { label: "SD", value: "SD" },
+                        { label: "HD", value: "HD" },
+                        { label: "UHD", value: "UHD" }
+                      ]} ctx={emuCtx} />
+                      <SettingToggle label="Supersampling" name="ares_supersampling" desc="Reduz resoluções HD/UHD de volta para SD (incompatível com weave deinterlacing)." ctx={emuCtx} />
+                      <SettingToggle label="Weave Deinterlacing" name="ares_weavedeinterlacing" desc="Dobra a resolução horizontal percebida (incompatível com supersampling)." ctx={emuCtx} />
+                      <SettingSelect label="Perfil de Entrada (Layout de Controle)" name="ares64_inputprofile" options={[
+                        { label: "Z = Gatilho Esquerdo (L-Trigger)", value: "zl" },
+                        { label: "Z = Gatilho Direito (R-Trigger)", value: "zr" },
+                        { label: "Xbox", value: "xbox" }
+                      ]} ctx={emuCtx} />
+                      <SettingToggle label="Expansor de Memória (Expansion Pak)" name="ares_ExpansionPak" desc="Ativa o pacote de expansão de 4MB de RAM do Nintendo 64." ctx={emuCtx} />
+                    </div>
+                  )}
                 </div>
               </ScrollArea>
             </div>
