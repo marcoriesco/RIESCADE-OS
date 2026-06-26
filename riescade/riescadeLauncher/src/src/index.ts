@@ -9,6 +9,7 @@ import { Pcsx2x6Generator } from './generators/Pcsx2x6Generator.js';
 import { DolphinGenerator } from './generators/DolphinGenerator.js';
 import { TeknoParrotGenerator } from './generators/TeknoParrotGenerator.js';
 import { GenericGenerator } from './generators/GenericGenerator.js';
+import { AresGenerator } from './generators/AresGenerator.js';
 
 function parseArgs(args: string[]): LaunchArgs {
   const rawArgs: Record<string, string> = {};
@@ -67,6 +68,9 @@ function getGenerator(args: LaunchArgs): BaseGenerator {
   }
   if (emu === 'teknoparrot' || sys === 'teknoparrot') {
     return new TeknoParrotGenerator(args);
+  }
+  if (emu === 'ares' || sys === 'ares') {
+    return new AresGenerator(args);
   }
 
   return new GenericGenerator(args);

@@ -940,7 +940,7 @@
     "type": "string"
   },
   "Taskbar.Icons": {
-    "value": "tool:settings,system:switch,system:teknoparrot,system:cps1,system:snes,system:namco2x6",
+    "value": "tool:settings,system:switch,system:teknoparrot,system:cps1,system:snes,system:namco2x6,system:laseractive",
     "type": "string"
   },
   "Window.system-switch.Maximized": {
@@ -1052,11 +1052,11 @@
     "type": "bool"
   },
   "Window.system-snes.X": {
-    "value": -1456,
+    "value": 380,
     "type": "int"
   },
   "Window.system-snes.Y": {
-    "value": 138,
+    "value": 90,
     "type": "int"
   },
   "Window.system-snes.Width": {
@@ -1186,5 +1186,9 @@
   "VSync": {
     "value": true,
     "type": "bool"
+  },
+  "RIESCADE.AccentColor": {
+    "value": "#9f0043",
+    "type": "string"
   }
 }

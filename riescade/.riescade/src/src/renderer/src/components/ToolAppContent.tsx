@@ -58,18 +58,22 @@ const SETTINGS_TABS = [
   { id: "personalizacao", name: "Personalização", icon: Palette },
   { id: "controles", name: "Controles", icon: Gamepad2 },
   { id: "audio", name: "Áudio", icon: Volume2 },
+  { id: "scraper", name: "Scraper", icon: Cpu },
+  { id: "emuladores", name: "Emuladores", icon: Gamepad2 },
   { id: "avancado", name: "Avançado", icon: Cpu },
   { id: "sobre", name: "Sobre", icon: Info }
 ];
 
 export default function ToolAppContent({
-  appId, systems, onOpenSystem, settings, onSaveSetting
+  appId, systems, onOpenSystem, settings, onSaveSetting, emulatorSettings, onSaveEmulatorSetting
 }: {
   appId: string;
   systems: System[];
   onOpenSystem: (sysName: string) => void;
   settings?: any;
   onSaveSetting?: (name: string, value: any, type: "string" | "bool" | "int" | "float") => void;
+  emulatorSettings?: any;
+  onSaveEmulatorSetting?: (emulator: string, name: string, value: any) => void;
 }) {
   const [activeSettingsTab, setActiveSettingsTab] = useState("conta");
   const [settingsSearch, setSettingsSearch] = useState("");
@@ -166,6 +170,46 @@ export default function ToolAppContent({
 
     // Build settings context object to pass to stable module-level components
     const ctx: SettingsCtx = { getSetting, isBoolOn, saveSetting };
+
+    // Build emulator settings context
+    const getEmuSetting = (name: string, fallback: any = ""): string => {
+      const val = emulatorSettings?.["ares"]?.[name];
+      console.log('[getEmuSetting] Key:', name, 'RawValue:', val, 'Type:', typeof val);
+      if (val !== undefined && val !== null) return String(val);
+      // Default fallbacks for specific settings
+      if (name === "ares_fullscreen") return "false";
+      if (name === "ares_aspect") return "Scale";
+      if (name === "ares_aspectcorrection") return "Anamorphic";
+      if (name === "ares_renderer") return "OpenGL 3.2";
+      if (name === "ares_audio_renderer") return "WASAPI";
+      if (name === "ares_audiosync") return "true";
+      if (name === "ares_coloremulation") return "true";
+      if (name === "ares_interframe_blend") return "true";
+      if (name === "ares_ExpansionPak") return "true";
+      if (name === "ares_n64_quality") return "HD";
+      if (name === "ares_luminance" || name === "ares_saturation" || name === "ares_gamma") return "1.0";
+      return String(fallback);
+    };
+
+    const isEmuBoolOn = (name: string) => {
+      const v = getEmuSetting(name, "false");
+      const res = v === "true" || v === "1";
+      console.log('[isEmuBoolOn] Key:', name, 'Result:', res);
+      return res;
+    };
+
+    const saveEmuSetting = (name: string, value: any, type: "string" | "bool" | "int" | "float" = "string") => {
+      console.log('[saveEmuSetting] Toggle clicked. Name:', name, 'Value:', value, 'Type:', type);
+      if (onSaveEmulatorSetting) {
+        onSaveEmulatorSetting("ares", name, value);
+      }
+    };
+
+    const emuCtx: SettingsCtx = {
+      getSetting: getEmuSetting,
+      isBoolOn: isEmuBoolOn,
+      saveSetting: saveEmuSetting
+    };
 
     // --- Desktop/Taskbar icons logic (Interface tab) ---
     const allToggleItems = [
@@ -722,6 +766,108 @@ export default function ToolAppContent({
             </div>
           )}
 
+          {/* ===== TAB: SCRAPER ===== */}
+          {activeSettingsTab === "scraper" && (
+            <div className="flex flex-col h-full overflow-hidden">
+              <div className="shrink-0 px-6 pt-6 pb-2 max-w-[740px]">
+                <h2 className="text-xl font-bold text-white mb-1">Configurações de Scraper</h2>
+                <p className="text-sm text-white/40">Download de Fanarts, covers, logos, etc.</p>
+              </div>
+              <ScrollArea className="flex-1 min-h-0">
+                <div className="px-6 pb-6 max-w-[740px] space-y-2">
+                  <SettingGroup label="Contas do Scraper" />
+                  <SettingInput label="ScreenScraper Usuário" name="ScreenScraperUser" ctx={ctx} />
+                  <SettingInput label="ScreenScraper Senha" name="ScreenScraperPass" isPassword ctx={ctx} />
+                  <SettingInput label="IGDB Client ID" name="IGDBClientID" ctx={ctx} />
+                  <SettingInput label="IGDB Secret" name="IGDBSecret" isPassword ctx={ctx} />
+                </div>
+              </ScrollArea>
+            </div>
+          )}
+          {/* ===== TAB: EMULADORES ===== */}
+          {activeSettingsTab === "emuladores" && (
+            <div className="flex flex-col h-full overflow-hidden">
+              <div className="shrink-0 px-6 pt-6 pb-2 max-w-[740px]">
+                <h2 className="text-xl font-bold text-white mb-1">Configurações dos Emuladores</h2>
+                <p className="text-sm text-white/40">Ajuste os parâmetros específicos de cada emulador integrado.</p>
+              </div>
+              <ScrollArea className="flex-1 min-h-0">
+                <div className="px-6 pb-6 max-w-[740px] space-y-2">
+                  <div className="bg-[#121620]/50 border border-white/5 rounded-lg p-4 mb-4">
+                    <h3 className="text-sm font-bold text-white/90 mb-1">Ares</h3>
+                    <p className="text-xs text-white/40 mb-3">Emulador multi-sistema de alta precisão (Ares).</p>
+                    
+                    <SettingGroup label="Geral & Vídeo" />
+                    <SettingToggle label="Iniciar em Tela Cheia" name="ares_fullscreen" desc="Inicia o emulador Ares em tela cheia adicionando o parâmetro --fullscreen." ctx={emuCtx} />
+                    <SettingSelect label="Proporção de Tela (Aspect Ratio)" name="ares_aspect" options={[
+                      { label: "Melhor Ajuste (Scale)", value: "Scale" },
+                      { label: "Inteira (Integer)", value: "Integer" },
+                      { label: "Esticar (Stretch)", value: "Stretch" }
+                    ]} ctx={emuCtx} />
+                    <SettingSelect label="Modo de Correção de Aspecto" name="ares_aspectcorrection" options={[
+                      { label: "Padrão (Standard)", value: "Standard" },
+                      { label: "Nenhum (None)", value: "None" },
+                      { label: "Anamórfico 16:9 (Anamorphic)", value: "Anamorphic" }
+                    ]} ctx={emuCtx} />
+                    <SettingSelect label="Driver de Vídeo" name="ares_renderer" options={[
+                      { label: "OpenGL 3.2", value: "OpenGL 3.2" },
+                      { label: "Direct3D 9.0", value: "Direct3D 9.0" },
+                      { label: "GDI", value: "GDI" }
+                    ]} ctx={emuCtx} />
+                    <SettingSelect label="Sincronização de Vídeo (GPU Sync)" name="ares_gpusync" options={[
+                      { label: "Sincronizado", value: "sync" },
+                      { label: "Apenas GPU", value: "gpu" },
+                      { label: "Sincronizado + GPU", value: "gpusync" },
+                      { label: "Nenhum", value: "none" }
+                    ]} ctx={emuCtx} />
+                    <SettingSlider label="Ajustar Luminância" name="ares_luminance" min={0} max={2} step={0.1} suffix="" ctx={emuCtx} type="float" />
+                    <SettingSlider label="Ajustar Saturação" name="ares_saturation" min={0} max={2} step={0.1} suffix="" ctx={emuCtx} type="float" />
+                    <SettingSlider label="Ajustar Gamma" name="ares_gamma" min={0} max={2} step={0.1} suffix="" ctx={emuCtx} type="float" />
+                    <SettingToggle label="Color Bleed" name="ares_colobleed" desc="Desfoque entre pixels adjacentes para efeitos de translucidez." ctx={emuCtx} />
+                    <SettingToggle label="Emulação de Cores Precisa" name="ares_coloremulation" desc="Ajusta as cores para parecer com o hardware original." ctx={emuCtx} />
+                    <SettingToggle label="Mesclagem de Quadros (Interframe Blending)" name="ares_interframe_blend" desc="Emula efeitos de LCD mas pode aumentar desfoque de movimento." ctx={emuCtx} />
+                    <SettingToggle label="Overscan" name="ares_overscan" desc="Exibe linhas de borda estendidas em CRT PAL." ctx={emuCtx} />
+                    <SettingToggle label="Precisão de Pixel (Pixel Accuracy)" name="ares_pixel_accurate" desc="Ativa emulação precisa de pixel quando disponível." ctx={emuCtx} />
+
+                    <SettingGroup label="Áudio" />
+                    <SettingSelect label="Driver de Áudio" name="ares_audio_renderer" options={[
+                      { label: "WASAPI", value: "WASAPI" },
+                      { label: "XAudio 2.1", value: "XAudio 2.1" },
+                      { label: "SDL", value: "SDL" },
+                      { label: "DirectSound 7.0", value: "DirectSound 7.0" },
+                      { label: "waveOut", value: "waveOut" }
+                    ]} ctx={emuCtx} />
+                    <SettingToggle label="Sincronização de Áudio (Audio Sync)" name="ares_audiosync" desc="Ativa bloqueio de sincronização para evitar falhas de áudio." ctx={emuCtx} />
+
+                    <SettingGroup label="Emulação & Latência" />
+                    <SettingToggle label="Boot Rápido (Fast Boot)" name="ares_fastboot" desc="Ignora animações de inicialização do console." ctx={emuCtx} />
+                    <SettingSelect label="Região Preferencial" name="ares_region" options={[
+                      { label: "NTSC (EUA)", value: "NTSC-U" },
+                      { label: "NTSC (Japão)", value: "NTSC-J" },
+                      { label: "PAL", value: "PAL" }
+                    ]} ctx={emuCtx} />
+                    <SettingToggle label="Ativar Run-Ahead" name="ares_runahead" desc="Reduz a latência de entrada em um frame (dobra uso de CPU)." ctx={emuCtx} />
+
+                    <SettingGroup label="Nintendo 64" />
+                    <SettingSelect label="Qualidade de Renderização" name="ares_n64_quality" options={[
+                      { label: "SD", value: "SD" },
+                      { label: "HD", value: "HD" },
+                      { label: "UHD", value: "UHD" }
+                    ]} ctx={emuCtx} />
+                    <SettingToggle label="Supersampling" name="ares_supersampling" desc="Reduz resoluções HD/UHD de volta para SD (incompatível com weave deinterlacing)." ctx={emuCtx} />
+                    <SettingToggle label="Weave Deinterlacing" name="ares_weavedeinterlacing" desc="Dobra a resolução horizontal percebida (incompatível com supersampling)." ctx={emuCtx} />
+                    <SettingSelect label="Perfil de Entrada (Layout de Controle)" name="ares64_inputprofile" options={[
+                      { label: "Z = Gatilho Esquerdo (L-Trigger)", value: "zl" },
+                      { label: "Z = Gatilho Direito (R-Trigger)", value: "zr" },
+                      { label: "Xbox", value: "xbox" }
+                    ]} ctx={emuCtx} />
+                    <SettingToggle label="Expansor de Memória (Expansion Pak)" name="ares_ExpansionPak" desc="Ativa o pacote de expansão de 4MB de RAM do Nintendo 64." ctx={emuCtx} />
+                  </div>
+                </div>
+              </ScrollArea>
+            </div>
+          )}
+
           {/* ===== TAB: AVANÇADO ===== */}
           {activeSettingsTab === "avancado" && (
             <div className="flex flex-col h-full overflow-hidden">
@@ -785,12 +931,6 @@ export default function ToolAppContent({
                   <SettingToggle label="Otimizar VRAM de Imagens" name="OptimizeVRAM" ctx={ctx} />
                   <SettingToggle label="Otimizar VRAM de Vídeos" name="OptimizeVideo" ctx={ctx} />
                   <SettingToggle label="Cache do Sistema de Arquivos" name="UseFileCache" ctx={ctx} />
-
-                  <SettingGroup label="Contas do Scraper" />
-                  <SettingInput label="ScreenScraper Usuário" name="ScreenScraperUser" ctx={ctx} />
-                  <SettingInput label="ScreenScraper Senha" name="ScreenScraperPass" isPassword ctx={ctx} />
-                  <SettingInput label="IGDB Client ID" name="IGDBClientID" ctx={ctx} />
-                  <SettingInput label="IGDB Secret" name="IGDBSecret" isPassword ctx={ctx} />
                 </div>
               </ScrollArea>
             </div>

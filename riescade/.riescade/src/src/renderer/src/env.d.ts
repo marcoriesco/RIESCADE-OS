@@ -19,6 +19,8 @@ declare global {
       loadTheme: (themeName: string) => Promise<any>
       getSettings: () => Promise<any>
       saveSetting: (name: string, value: any, type: string) => Promise<any>
+      getEmulatorSettings: () => Promise<any>
+      saveEmulatorSetting: (emulator: string, name: string, value: any) => Promise<any>
       selectBgImage: () => Promise<string | null>
       getThemeSettings: (themeName: string) => Promise<any>
       saveThemeSetting: (themeName: string, key: string, value: string) => Promise<any>

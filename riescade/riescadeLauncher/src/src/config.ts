@@ -33,6 +33,7 @@ export class Config {
   private static input: InputJson = { inputConfigs: [] };
   private static systems: any = null;
   private static features: any = null;
+  private static emulatorConfig: Record<string, any> = {};
   private static loaded = false;
 
   public static load() {
@@ -90,6 +91,19 @@ export class Config {
         Logger.error(`Failed to parse features.json`, err);
       }
     }
+    // Load Emulator Settings
+    const emulatorFile = join(configsDir, 'emulator.json');
+    if (existsSync(emulatorFile)) {
+      try {
+        const raw = readFileSync(emulatorFile, 'utf8');
+        this.emulatorConfig = JSON.parse(raw);
+        Logger.debug(`Loaded emulator.json (${Object.keys(this.emulatorConfig).length} entries)`);
+      } catch (err) {
+        Logger.error(`Failed to parse emulator.json`, err);
+      }
+    } else {
+      Logger.warn(`emulator.json not found at ${emulatorFile}`);
+    }
 
     this.loaded = true;
   }
@@ -99,6 +113,15 @@ export class Config {
     const item = this.settings[key];
     if (item === undefined) return defaultValue;
     return item.value;
+  }
+
+  public static getEmulatorSetting(emulator: string, key: string, defaultValue?: any): any {
+    this.load();
+    const emuConfig = this.emulatorConfig[emulator];
+    if (!emuConfig) return defaultValue;
+    const item = emuConfig[key];
+    if (item === undefined) return defaultValue;
+    return item;
   }
 
   public static getInputConfig(): InputJson {

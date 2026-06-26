@@ -1,0 +1,31 @@
+{
+  "ares": {
+    "ares_fullscreen": "true",
+    "ares_aspect": "Scale",
+    "ares_aspectcorrection": "Anamorphic",
+    "ares_gpusync": "sync",
+    "ares_luminance": "1.0",
+    "ares_saturation": "1.0",
+    "ares_gamma": "1.0",
+    "ares_colobleed": "false",
+    "ares_coloremulation": "true",
+    "ares_interframe_blend": "true",
+    "ares_overscan": "false",
+    "ares_pixel_accurate": "false",
+    "ares_region": "NTSC-U",
+    "ares_fastboot": "false",
+    "ares_runahead": "false",
+    "ares_renderer": "OpenGL 3.2",
+    "ares_audio_renderer": "WASAPI",
+    "ares_audiosync": "true",
+    "ares_n64_quality": "HD",
+    "ares_supersampling": "false",
+    "ares_weavedeinterlacing": "true",
+    "ares64_inputprofile": "zl",
+    "ares_ExpansionPak": "true",
+    "n64_pad": "false",
+    "md_pad": "false",
+    "rotate_buttons": "false",
+    "buttonsInvert": "false"
+  }
+}

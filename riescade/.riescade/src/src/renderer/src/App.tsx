@@ -22,6 +22,7 @@ export default function App() {
   const [isLaunching, setIsLaunching] = useState(false);
   const [launchingGame, setLaunchingGame] = useState<Game | null>(null);
   const [settings, setSettings] = useState<any>({});
+  const [emulatorSettings, setEmulatorSettings] = useState<any>({});
   const [nativeWins, setNativeWins] = useState<{ type: string; appId: string; minimized: boolean }[]>([]);
   const [overlaySystemUrl, setOverlaySystemUrl] = useState<string>("");
   const [riescadeLogoUrl, setRiescadeLogoUrl] = useState<string>("");
@@ -319,6 +320,18 @@ export default function App() {
     });
   }, []);
 
+  const handleSaveEmulatorSetting = useCallback((emulator: string, name: string, value: any) => {
+    window.api.saveEmulatorSetting(emulator, name, value).then(() => {
+      setEmulatorSettings((prev: any) => ({
+        ...prev,
+        [emulator]: {
+          ...(prev?.[emulator] || {}),
+          [name]: value
+        }
+      }));
+    });
+  }, []);
+
   const getDesktopIcons = useCallback(() => {
     const raw = settings["Desktop.Icons"]?.value;
     if (raw !== undefined) {
@@ -393,6 +406,19 @@ export default function App() {
     return () => unsubscribe();
   }, []);
 
+  useEffect(() => {
+    const unsubscribe = window.api.on('emulator-setting-changed', (_event: any, data: { emulator: string; name: string; value: any }) => {
+      setEmulatorSettings((prev: any) => ({
+        ...prev,
+        [data.emulator]: {
+          ...(prev?.[data.emulator] || {}),
+          [data.name]: data.value
+        }
+      }));
+    });
+    return () => unsubscribe();
+  }, []);
+
   // Fetch Systems & Settings on Mount
   useEffect(() => {
     const initPromise = windowType !== null 
@@ -404,11 +430,13 @@ export default function App() {
       setLoadingMessage("Sincronizando plataformas...");
       Promise.all([
         window.api.getSystems(),
-        window.api.getSettings()
-      ]).then(([sysList, appSettings]) => {
+        window.api.getSettings(),
+        window.api.getEmulatorSettings ? window.api.getEmulatorSettings() : Promise.resolve({})
+      ]).then(([sysList, appSettings, emuSettings]) => {
         setLoadingMessage("Carregando configurações de exibição...");
         setSystems(sysList || []);
         setSettings(appSettings || {});
+        setEmulatorSettings(emuSettings || {});
         
         setTimeout(() => {
           setLibraryLoading(false);
@@ -875,6 +903,8 @@ export default function App() {
             }}
             settings={settings}
             onSaveSetting={handleSaveSetting}
+            emulatorSettings={emulatorSettings}
+            onSaveEmulatorSetting={handleSaveEmulatorSetting}
           />
         </div>
         </div>

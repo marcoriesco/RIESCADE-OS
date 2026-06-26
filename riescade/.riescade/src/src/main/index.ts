@@ -5,6 +5,7 @@ import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import { LibraryService } from './services/LibraryService'
 import { LauncherService } from './services/LauncherService'
 import { SettingsParser } from './parsers/SettingsParser'
+import { EmulatorParser } from './parsers/EmulatorParser'
 import { ThemeSettingsParser } from './parsers/ThemeSettingsParser'
 import { SystemService } from './services/SystemService'
 import { ScraperService } from './services/ScraperService'
@@ -578,6 +579,28 @@ app.whenReady().then(() => {
       }
     }
     
+  })
+
+  ipcMain.handle('get-emulator-settings', async () => {
+    const emulatorParser = new EmulatorParser()
+    return emulatorParser.getAllSettings()
+  })
+
+  ipcMain.handle('save-emulator-setting', async (_, emulator: string, name: string, value: any) => {
+    const emulatorParser = new EmulatorParser()
+    emulatorParser.saveSetting(emulator, name, value)
+    
+    // Broadcast setting change to main window and all active sub-windows
+    sendToMainWindow('emulator-setting-changed', { emulator, name, value })
+    for (const subWin of activeSubWindows.values()) {
+      try {
+        if (subWin && !subWin.isDestroyed() && subWin.webContents && !subWin.webContents.isDestroyed()) {
+          subWin.webContents.send('emulator-setting-changed', { emulator, name, value })
+        }
+      } catch (err) {
+        console.error('[IPC] Error broadcasting emulator-setting-changed to sub-window:', err)
+      }
+    }
   })
 
   ipcMain.handle('select-bg-image', async (event) => {

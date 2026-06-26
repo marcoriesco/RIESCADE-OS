@@ -535,7 +535,7 @@ export default function SystemAppContent({
       <aside className="w-[240px] bg-black/40 flex flex-col shrink-0 select-none">
         {/* System Logo Section - top padding for drag region */}
         <div className="pt-10 px-4 pb-3 shrink-0">
-          <div className="flex items-center gap-3 mb-4">
+          <div className="flex items-center gap-3 mb-8">
             {system.logo ? (
               <img src={system.logo} alt={system.fullname} className="w-full h-14 object-contain filter drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]" />
             ) : (
