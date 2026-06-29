@@ -940,7 +940,7 @@
     "type": "string"
   },
   "Taskbar.Icons": {
-    "value": "tool:settings,system:switch,system:teknoparrot,system:cps1,system:snes,system:namco2x6,system:laseractive",
+    "value": "tool:settings,system:switch,system:teknoparrot,system:cps1,system:snes,system:namco2x6,system:laseractive,system:xbox360",
     "type": "string"
   },
   "Window.system-switch.Maximized": {
@@ -948,7 +948,7 @@
     "type": "bool"
   },
   "Window.system-switch.X": {
-    "value": 167,
+    "value": 609,
     "type": "int"
   },
   "Window.system-switch.Y": {
@@ -956,7 +956,7 @@
     "type": "int"
   },
   "Window.system-switch.Width": {
-    "value": 1207,
+    "value": 1104,
     "type": "int"
   },
   "Window.system-switch.Height": {
@@ -984,23 +984,23 @@
     "type": "int"
   },
   "Window.system-cps1.Maximized": {
-    "value": true,
+    "value": false,
     "type": "bool"
   },
   "Window.system-cps1.X": {
-    "value": 423,
+    "value": 110,
     "type": "int"
   },
   "Window.system-cps1.Y": {
-    "value": 240,
+    "value": 67,
     "type": "int"
   },
   "Window.system-cps1.Width": {
-    "value": 960,
+    "value": 1660,
     "type": "int"
   },
   "Window.system-cps1.Height": {
-    "value": 640,
+    "value": 819,
     "type": "int"
   },
   "Window.FullScreen": {
@@ -1032,11 +1032,11 @@
     "type": "bool"
   },
   "Window.tool-database.X": {
-    "value": 292,
+    "value": 296,
     "type": "int"
   },
   "Window.tool-database.Y": {
-    "value": 83,
+    "value": 86,
     "type": "int"
   },
   "Window.tool-database.Width": {
@@ -1088,23 +1088,23 @@
     "type": "int"
   },
   "Window.system-namco2x6.Maximized": {
-    "value": true,
+    "value": false,
     "type": "bool"
   },
   "Window.system-namco2x6.X": {
-    "value": 480,
+    "value": 95,
     "type": "int"
   },
   "Window.system-namco2x6.Y": {
-    "value": 196,
+    "value": 71,
     "type": "int"
   },
   "Window.system-namco2x6.Width": {
-    "value": 960,
+    "value": 1111,
     "type": "int"
   },
   "Window.system-namco2x6.Height": {
-    "value": 640,
+    "value": 782,
     "type": "int"
   },
   "Window.system-collections.Maximized": {
@@ -1132,15 +1132,15 @@
     "type": "bool"
   },
   "Window.tool-settings.X": {
-    "value": 480,
+    "value": 299,
     "type": "int"
   },
   "Window.tool-settings.Y": {
-    "value": 33,
+    "value": 146,
     "type": "int"
   },
   "Window.tool-settings.Width": {
-    "value": 1121,
+    "value": 1114,
     "type": "int"
   },
   "Window.tool-settings.Height": {
@@ -1189,6 +1189,162 @@
   },
   "RIESCADE.AccentColor": {
     "value": "#9f0043",
+    "type": "string"
+  },
+  "Window.system-2ship.Maximized": {
+    "value": true,
+    "type": "bool"
+  },
+  "Window.system-2ship.X": {
+    "value": 480,
+    "type": "int"
+  },
+  "Window.system-2ship.Y": {
+    "value": 196,
+    "type": "int"
+  },
+  "Window.system-2ship.Width": {
+    "value": 960,
+    "type": "int"
+  },
+  "Window.system-2ship.Height": {
+    "value": 640,
+    "type": "int"
+  },
+  "Window.system-halflife.Maximized": {
+    "value": true,
+    "type": "bool"
+  },
+  "Window.system-halflife.X": {
+    "value": 480,
+    "type": "int"
+  },
+  "Window.system-halflife.Y": {
+    "value": 196,
+    "type": "int"
+  },
+  "Window.system-halflife.Width": {
+    "value": 960,
+    "type": "int"
+  },
+  "Window.system-halflife.Height": {
+    "value": 640,
+    "type": "int"
+  },
+  "Desktop.Icons": {
+    "value": "",
+    "type": "string"
+  },
+  "Window.system-laseractive.Maximized": {
+    "value": false,
+    "type": "bool"
+  },
+  "Window.system-laseractive.X": {
+    "value": 217,
+    "type": "int"
+  },
+  "Window.system-laseractive.Y": {
+    "value": 55,
+    "type": "int"
+  },
+  "Window.system-laseractive.Width": {
+    "value": 1481,
+    "type": "int"
+  },
+  "Window.system-laseractive.Height": {
+    "value": 916,
+    "type": "int"
+  },
+  "Window.system-3do.Maximized": {
+    "value": true,
+    "type": "bool"
+  },
+  "Window.system-3do.X": {
+    "value": -1238,
+    "type": "int"
+  },
+  "Window.system-3do.Y": {
+    "value": 121,
+    "type": "int"
+  },
+  "Window.system-3do.Width": {
+    "value": 960,
+    "type": "int"
+  },
+  "Window.system-3do.Height": {
+    "value": 640,
+    "type": "int"
+  },
+  "Window.tool-favorites.Maximized": {
+    "value": true,
+    "type": "bool"
+  },
+  "Window.tool-favorites.X": {
+    "value": 448,
+    "type": "int"
+  },
+  "Window.tool-favorites.Y": {
+    "value": 200,
+    "type": "int"
+  },
+  "Window.tool-favorites.Width": {
+    "value": 1024,
+    "type": "int"
+  },
+  "Window.tool-favorites.Height": {
+    "value": 680,
+    "type": "int"
+  },
+  "Window.tool-all.Maximized": {
+    "value": true,
+    "type": "bool"
+  },
+  "Window.tool-all.X": {
+    "value": 448,
+    "type": "int"
+  },
+  "Window.tool-all.Y": {
+    "value": 200,
+    "type": "int"
+  },
+  "Window.tool-all.Width": {
+    "value": 1024,
+    "type": "int"
+  },
+  "Window.tool-all.Height": {
+    "value": 680,
+    "type": "int"
+  },
+  "Window.system-xboxlivearcade.Maximized": {
+    "value": true,
+    "type": "bool"
+  },
+  "Window.system-xbox360.Maximized": {
+    "value": true,
+    "type": "bool"
+  },
+  "Window.system-atomiswave.Maximized": {
+    "value": true,
+    "type": "bool"
+  },
+  "Window.system-arcade.X": {
+    "value": 176,
+    "type": "int"
+  },
+  "Window.system-arcade.Y": {
+    "value": 30,
+    "type": "int"
+  },
+  "Window.system-arcade.Width": {
+    "value": 1344,
+    "type": "int"
+  },
+  "Window.system-arcade.Height": {
+    "value": 873,
+    "type": "int"
+  },
+  "arcade.emulator": {
+    "value": "mame64",
     "type": "string"
   }
 }

@@ -41,7 +41,9 @@ export class SettingsParser {
       !name.startsWith('global.') &&
       !name.startsWith('RIESCADE.')
 
-    if (value !== null && value !== undefined && String(value) !== '' && String(value) !== 'null' && !isRedundantAuto) {
+    const isIconsSetting = name === 'Desktop.Icons' || name === 'Taskbar.Icons'
+
+    if (value !== null && value !== undefined && (String(value) !== '' || isIconsSetting) && String(value) !== 'null' && !isRedundantAuto) {
       let castedValue = value
       if (type === 'bool') {
         castedValue = value === true || String(value) === 'true'

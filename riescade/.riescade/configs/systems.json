@@ -5371,22 +5371,6 @@
       ]
     },
     {
-      "name": "arcadedumps",
-      "fullname": "Arcade Dumps",
-      "path": "~\\..\\roms\\teknoparrot",
-      "extension": ".teknoparrot .parrot .game .7z .zip .rar",
-      "command": "\"%HOME%\\emulatorLauncher.exe\" -gameinfo %GAMEINFOXML% %CONTROLLERSCONFIG% -system %SYSTEM% -emulator %EMULATOR% -core %CORE% -rom %ROM%",
-      "platform": "teknoparrot, arcade",
-      "theme": "arcadedumps",
-      "hardware": "arcade",
-      "emulators": [
-        {
-          "name": "teknoparrot",
-          "cores": []
-        }
-      ]
-    },
-    {
       "name": "bigfish",
       "fullname": "BigFish Games",
       "path": "~\\..\\roms\\bigfish",

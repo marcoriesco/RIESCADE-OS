@@ -73,7 +73,7 @@ function saveWindowConfig(): void {
 
 function createWindow(): void {
   const shouldSave = settingsParser.getSetting('RIESCADE.SaveWindowPositions', 'bool') !== false
-  const isFullScreen = shouldSave && settingsParser.getSetting('Window.FullScreen', 'bool') === true
+  const isFullScreen = shouldSave ? settingsParser.getSetting('Window.FullScreen', 'bool') !== false : true
   const isMaximized = shouldSave && settingsParser.getSetting('Window.Maximized', 'bool') === true
   
   const defaultWidth = 1280
@@ -121,11 +121,6 @@ function createWindow(): void {
 
   mainWindow.on('close', () => {
     saveWindowConfig()
-    activeSubWindows.forEach((win) => {
-      if (win && !win.isDestroyed()) {
-        win.close()
-      }
-    })
   })
 
   mainWindow.webContents.setWindowOpenHandler((details) => {
@@ -142,140 +137,7 @@ function createWindow(): void {
   }
 }
 
-const activeSubWindows = new Map<string, BrowserWindow>()
 
-function createAppWindow(type: 'system' | 'tool', id: string): void {
-  const winKey = `${type}-${id}`
-  const existing = activeSubWindows.get(winKey)
-  if (existing) {
-    if (existing.isMinimized()) existing.restore()
-    existing.show()
-    existing.focus()
-    return
-  }
-
-  let width = 960
-  let height = 640
-  let title = id.toUpperCase()
-
-  if (type === 'tool') {
-    if (id === 'saves') { width = 760; height = 540; title = 'Gerenciador de Saves'; }
-    else if (id === 'achievements') { width = 720; height = 520; title = 'Conquistas'; }
-    else if (id === 'settings') { width = 820; height = 560; title = 'Configurações'; }
-    else if (id === 'database') { width = 1024; height = 680; title = 'Banco de Dados'; }
-    else if (id === 'all') { width = 1024; height = 680; title = 'Todos os Jogos'; }
-    else if (id === 'favorites') { width = 1024; height = 680; title = 'Favoritos'; }
-    else if (id === 'collections') { width = 1024; height = 680; title = 'Coleções'; }
-  } else {
-    try {
-      const sys = libraryService.getSystems().find(s => s.name.toLowerCase() === id.toLowerCase())
-      if (sys) title = sys.fullname
-    } catch {}
-  }
-
-  const shouldSave = settingsParser.getSetting('RIESCADE.SaveWindowPositions', 'bool') !== false
-  const savedWidth = shouldSave ? settingsParser.getSetting(`Window.${winKey}.Width`, 'int') : null
-  const savedHeight = shouldSave ? settingsParser.getSetting(`Window.${winKey}.Height`, 'int') : null
-  const savedX = shouldSave ? settingsParser.getSetting(`Window.${winKey}.X`, 'int') : null
-  const savedY = shouldSave ? settingsParser.getSetting(`Window.${winKey}.Y`, 'int') : null
-  const savedMaximized = shouldSave && settingsParser.getSetting(`Window.${winKey}.Maximized`, 'bool') === true
-
-  const subWindowOptions: any = {
-    width: savedWidth !== null ? parseInt(savedWidth, 10) : width,
-    height: savedHeight !== null ? parseInt(savedHeight, 10) : height,
-    show: true,
-    frame: false,
-    autoHideMenuBar: true,
-    backgroundColor: '#0c0e14',
-    title: `RIESCADE OS - ${title}`,
-    icon: join(getResourcesPath(), 'riescade.ico'),
-    webPreferences: {
-      preload: join(__dirname, '../preload/index.js'),
-      sandbox: false,
-      webSecurity: false
-    }
-  }
-
-  if (savedX !== null && savedY !== null) {
-    subWindowOptions.x = parseInt(savedX, 10)
-    subWindowOptions.y = parseInt(savedY, 10)
-  }
-
-  const subWindow = new BrowserWindow(subWindowOptions)
-
-  if (savedMaximized) {
-    subWindow.maximize()
-  }
-
-  activeSubWindows.set(winKey, subWindow)
-
-  subWindow.on('show', () => {
-    sendToMainWindow('subwindow-state-changed', { type, id, state: 'visible' })
-  })
-
-  subWindow.on('hide', () => {
-    sendToMainWindow('subwindow-state-changed', { type, id, state: 'hidden' })
-  })
-
-  subWindow.on('focus', () => {
-    sendToMainWindow('subwindow-state-changed', { type, id, state: 'focused' })
-  })
-
-  subWindow.on('blur', () => {
-    sendToMainWindow('subwindow-state-changed', { type, id, state: 'blurred' })
-  })
-
-  subWindow.on('close', () => {
-    const shouldSave = settingsParser.getSetting('RIESCADE.SaveWindowPositions', 'bool') !== false
-    if (shouldSave) {
-      try {
-        const isMaximized = subWindow.isMaximized()
-        settingsParser.saveSetting(`Window.${winKey}.Maximized`, isMaximized, 'bool')
-        
-        let bounds = { x: 0, y: 0, width, height }
-        if (isMaximized) {
-          try {
-            bounds = subWindow.getNormalBounds()
-          } catch (e) {
-            bounds = subWindow.getBounds()
-          }
-        } else {
-          bounds = subWindow.getBounds()
-        }
-
-        settingsParser.saveSetting(`Window.${winKey}.X`, bounds.x, 'int')
-        settingsParser.saveSetting(`Window.${winKey}.Y`, bounds.y, 'int')
-        settingsParser.saveSetting(`Window.${winKey}.Width`, bounds.width, 'int')
-        settingsParser.saveSetting(`Window.${winKey}.Height`, bounds.height, 'int')
-      } catch (err) {
-        console.error(`[saveWindowConfig] Failed to save subwindow bounds for ${winKey}:`, err)
-      }
-    }
-  })
-
-  subWindow.on('closed', () => {
-    activeSubWindows.delete(winKey)
-    sendToMainWindow('subwindow-state-changed', { type, id, state: 'closed' })
-  })
-
-  subWindow.webContents.setWindowOpenHandler((details) => {
-    shell.openExternal(details.url)
-    return { action: 'deny' }
-  })
-
-  const queryParams = type === 'system' 
-    ? `windowType=system&systemName=${id}` 
-    : `windowType=tool&toolId=${id}`
-
-  if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
-    subWindow.loadURL(`${process.env['ELECTRON_RENDERER_URL']}?${queryParams}`)
-  } else {
-    const query = type === 'system' 
-      ? { windowType: 'system', systemName: id }
-      : { windowType: 'tool', toolId: id }
-    subWindow.loadFile(join(__dirname, '../renderer/index.html'), { query })
-  }
-}
 
 app.whenReady().then(() => {
   electronApp.setAppUserModelId('com.riescade')
@@ -289,18 +151,8 @@ app.whenReady().then(() => {
   registerUpdaterIpc(() => mainWindow)
 
   ipcMain.on('open-app-window', (_, type: 'system' | 'tool', id: string) => {
-    const winKey = `${type}-${id}`
-    const existing = activeSubWindows.get(winKey)
-    if (existing) {
-      if (existing.isVisible() && existing.isFocused()) {
-        existing.hide()
-      } else {
-        if (existing.isMinimized()) existing.restore()
-        existing.show()
-        existing.focus()
-      }
-    } else {
-      createAppWindow(type, id)
+    if (mainWindow && !mainWindow.isDestroyed()) {
+      mainWindow.webContents.send('open-app-window', type, id)
     }
   })
 
@@ -492,15 +344,7 @@ app.whenReady().then(() => {
       mainWindow.focus()
     }
     
-    // Focus the active system platform subwindow
-    const winKey = `system-${targetSystem.name.toLowerCase()}`
-    const existingSubWin = activeSubWindows.get(winKey)
-    if (existingSubWin && !existingSubWin.isDestroyed()) {
-      if (existingSubWin.isMinimized()) {
-        existingSubWin.restore()
-      }
-      existingSubWin.focus()
-    }
+
 
     if (targetSystem.name.toLowerCase() === 'windows_installers') {
       console.log('windows_installers launched and exited, reloading library and notifying frontend...')
@@ -567,18 +411,8 @@ app.whenReady().then(() => {
   ipcMain.handle('save-setting', async (_, name: string, value: any, type: 'string' | 'bool' | 'int' | 'float') => {
     const res = settingsParser.saveSetting(name, value, type)
     
-    // Broadcast setting change to main window and all active sub-windows
+    // Broadcast setting change to main window
     sendToMainWindow('setting-changed', { name, value, type })
-    for (const subWin of activeSubWindows.values()) {
-      try {
-        if (subWin && !subWin.isDestroyed() && subWin.webContents && !subWin.webContents.isDestroyed()) {
-          subWin.webContents.send('setting-changed', { name, value, type })
-        }
-      } catch (err) {
-        console.error('[IPC] Error broadcasting setting-changed to sub-window:', err)
-      }
-    }
-    
   })
 
   ipcMain.handle('get-emulator-settings', async () => {
@@ -590,17 +424,8 @@ app.whenReady().then(() => {
     const emulatorParser = new EmulatorParser()
     emulatorParser.saveSetting(emulator, name, value)
     
-    // Broadcast setting change to main window and all active sub-windows
+    // Broadcast setting change to main window
     sendToMainWindow('emulator-setting-changed', { emulator, name, value })
-    for (const subWin of activeSubWindows.values()) {
-      try {
-        if (subWin && !subWin.isDestroyed() && subWin.webContents && !subWin.webContents.isDestroyed()) {
-          subWin.webContents.send('emulator-setting-changed', { emulator, name, value })
-        }
-      } catch (err) {
-        console.error('[IPC] Error broadcasting emulator-setting-changed to sub-window:', err)
-      }
-    }
   })
 
   ipcMain.handle('select-bg-image', async (event) => {

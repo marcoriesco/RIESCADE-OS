@@ -10,6 +10,7 @@ import { DolphinGenerator } from './generators/DolphinGenerator.js';
 import { TeknoParrotGenerator } from './generators/TeknoParrotGenerator.js';
 import { GenericGenerator } from './generators/GenericGenerator.js';
 import { AresGenerator } from './generators/AresGenerator.js';
+import { Mame64Generator } from './generators/Mame64Generator.js';
 
 function parseArgs(args: string[]): LaunchArgs {
   const rawArgs: Record<string, string> = {};
@@ -71,6 +72,9 @@ function getGenerator(args: LaunchArgs): BaseGenerator {
   }
   if (emu === 'ares' || sys === 'ares') {
     return new AresGenerator(args);
+  }
+  if (emu === 'mame64' || emu === 'mame' || sys === 'mame64') {
+    return new Mame64Generator(args);
   }
 
   return new GenericGenerator(args);

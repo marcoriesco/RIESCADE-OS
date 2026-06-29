@@ -109,7 +109,7 @@ export default function SystemAppContent({
     if (viewport) {
       viewport.scrollTop = 0;
     }
-  }, [system, activeCollection, search, filter, selectedGenre, selectedYear, selectedPlayers, selectedMinRating]);
+  }, [system.name, activeCollection, search, filter, selectedGenre, selectedYear, selectedPlayers, selectedMinRating]);
 
   // Single, unified hook to load games, reset filters and manage collection states
   useEffect(() => {
@@ -534,7 +534,7 @@ export default function SystemAppContent({
       {/* Discord-like Sidebar: Logo + Search + Filters - extends to top */}
       <aside className="w-[240px] bg-black/40 flex flex-col shrink-0 select-none">
         {/* System Logo Section - top padding for drag region */}
-        <div className="pt-10 px-4 pb-3 shrink-0">
+        <div className="pt-6 p-4 shrink-0">
           <div className="flex items-center gap-3 mb-8">
             {system.logo ? (
               <img src={system.logo} alt={system.fullname} className="w-full h-14 object-contain filter drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]" />
@@ -677,7 +677,7 @@ export default function SystemAppContent({
         ) : (
           <div className="flex-1 flex flex-col overflow-hidden">
             {/* Header with system name + game count */}
-            <div className="shrink-0 px-6 pt-10 pb-3 flex items-center justify-between">
+            <div className="shrink-0 px-6 pt-6 pb-3 flex items-center justify-between">
               <div>
                 <div className="flex items-center gap-2">
                   {system.name === 'collections' && activeCollection !== null && (
@@ -700,7 +700,7 @@ export default function SystemAppContent({
             {/* Grid display of Games */}
             <ScrollArea 
               ref={handleScrollAreaRef}
-              className="flex-1 px-6 py-4"
+              className="flex-1 px-6 py-4 min-w-[400px]"
             >
               {filteredGames.length === 0 ? (
                 <div className="h-full flex items-center justify-center text-xs text-white uppercase tracking-widest">
@@ -819,7 +819,7 @@ export default function SystemAppContent({
 
         {/* Right Details Panel */}
         {selectedGame && (
-          <ScrollArea className="w-[20vw] min-w-[300px] bg-black/50 p-6 pt-14 select-none">
+          <ScrollArea className="w-[20vw] min-w-[250px] bg-black/50 p-6 select-none">
             {showSavesSidebar ? (
               /* Saves & Coleções Sidebar */
               <div className="flex flex-col gap-4 h-full">

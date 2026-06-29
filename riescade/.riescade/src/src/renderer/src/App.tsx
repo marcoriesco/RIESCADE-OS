@@ -11,6 +11,7 @@ import { TOOL_APPS, getSystemTheme } from "./constants";
 import SystemAppContent from "./components/SystemAppContent";
 import ToolAppContent from "./components/ToolAppContent";
 import { ScrollArea } from "./components/ScrollArea";
+import VirtualWindow from "./components/VirtualWindow";
 import defaultBg from '../../main/resources/default.webp';
 
 const DEFAULT_SYSTEM_BG = "radial-gradient(1200px 800px at 20% 10%, rgb(35 35 35) 0%, transparent 60%), radial-gradient(1000px 700px at 85% 90%, rgb(12 12 12) 0%, transparent 55%), linear-gradient(rgb(4 4 4) 0%, rgb(22 22 22) 100%)";
@@ -23,13 +24,66 @@ export default function App() {
   const [launchingGame, setLaunchingGame] = useState<Game | null>(null);
   const [settings, setSettings] = useState<any>({});
   const [emulatorSettings, setEmulatorSettings] = useState<any>({});
-  const [nativeWins, setNativeWins] = useState<{ type: string; appId: string; minimized: boolean }[]>([]);
+
+  const handleSaveSetting = useCallback((name: string, value: any, type: "string" | "bool" | "int" | "float") => {
+    window.api.saveSetting(name, value, type).then(() => {
+      setSettings((prev: any) => ({
+        ...prev,
+        [name]: { value }
+      }));
+    });
+  }, []);
+
+  const handleSaveEmulatorSetting = useCallback((emulator: string, name: string, value: any) => {
+    window.api.saveEmulatorSetting(emulator, name, value).then(() => {
+      setEmulatorSettings((prev: any) => ({
+        ...prev,
+        [emulator]: {
+          ...(prev?.[emulator] || {}),
+          [name]: value
+        }
+      }));
+    });
+  }, []);
+
+  const getDesktopIcons = useCallback(() => {
+    const raw = settings["Desktop.Icons"]?.value;
+    if (raw !== undefined) {
+      return String(raw).split(",").filter(Boolean);
+    }
+    return ["tool:all"];
+  }, [settings]);
+
+  const getTaskbarIcons = useCallback(() => {
+    const raw = settings["Taskbar.Icons"]?.value;
+    if (raw !== undefined) {
+      return String(raw).split(",").filter(Boolean);
+    }
+    return ["tool:all", "tool:settings"];
+  }, [settings]);
+
+  interface VirtualWindow {
+    id: string; // system-{id} or tool-{id}
+    type: 'system' | 'tool';
+    appId: string;
+    title: string;
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+    isMinimized: boolean;
+    isMaximized: boolean;
+    zIndex: number;
+  }
+
+  const [virtualWindows, setVirtualWindows] = useState<VirtualWindow[]>([]);
+  const [openMenuSystemId, setOpenMenuSystemId] = useState<string | null>(null);
   const [overlaySystemUrl, setOverlaySystemUrl] = useState<string>("");
   const [riescadeLogoUrl, setRiescadeLogoUrl] = useState<string>("");
-  const [activeSubWindowId, setActiveSubWindowId] = useState<string | null>(null);
   const [activeGameArt, setActiveGameArt] = useState<string | null>(null);
   const [controllers, setControllers] = useState<any[]>([]);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [showExitConfirm, setShowExitConfirm] = useState(false);
   const [toasts, setToasts] = useState<{ id: string; title: string; description: string; type: "favorite" | "controller"; favorite?: boolean; open: boolean }[]>([]);
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
@@ -233,41 +287,273 @@ export default function App() {
     };
   }, []);
 
-  // Listen for native subwindows state changes
-  useEffect(() => {
-    const unsubscribe = window.api.on('subwindow-state-changed', (_event: any, data: { type: string; id: string; state: string }) => {
-      // 1. Update focused subwindow id (keep background active on blur)
-      if (data.state === 'focused') {
-        setActiveSubWindowId(data.id);
+  // Helper callbacks for virtual windows
+  const focusVirtualWindow = useCallback((id: string) => {
+    setVirtualWindows(prev => {
+      const BASE_Z_INDEX = 50;
+      const maxZ = prev.reduce((max, w) => Math.max(max, w.zIndex), BASE_Z_INDEX - 1);
+      return prev.map(w => w.id === id ? { ...w, zIndex: maxZ + 1 } : w);
+    });
+  }, []);
+
+  const closeVirtualWindow = useCallback((id: string) => {
+    setVirtualWindows(prev => prev.filter(w => w.id !== id));
+  }, []);
+
+  const minimizeVirtualWindow = useCallback((id: string) => {
+    setVirtualWindows(prev => prev.map(w => w.id === id ? { ...w, isMinimized: true } : w));
+  }, []);
+
+  const toggleMaximizeVirtualWindow = useCallback((id: string) => {
+    setVirtualWindows(prev => {
+      const updated = prev.map(w => w.id === id ? { ...w, isMaximized: !w.isMaximized } : w);
+      const win = updated.find(w => w.id === id);
+      if (win) {
+        handleSaveSetting(`Window.${win.id}.Maximized`, win.isMaximized, 'bool');
       }
+      return updated;
+    });
+  }, [handleSaveSetting]);
 
-      // 2. Update list of native windows and resolve background fallback on close/hide
-      setNativeWins(prev => {
-        const list = data.state === 'closed'
-          ? prev.filter(w => !(w.appId === data.id && w.type === data.type))
-          : prev.find(w => w.appId === data.id && w.type === data.type)
-            ? prev.map(w => w.appId === data.id && w.type === data.type 
-                ? { ...w, minimized: data.state === 'hidden' ? true : (data.state === 'focused' ? false : w.minimized) } 
-                : w
-              )
-            : [...prev, { type: data.type, appId: data.id, minimized: data.state === 'hidden' }];
+  const updateVirtualWindowBounds = useCallback((id: string, bounds: { x: number; y: number; width: number; height: number }) => {
+    setVirtualWindows(prev => {
+      const updated = prev.map(w => w.id === id ? { ...w, ...bounds } : w);
+      // Save bounds to settings (saves to ES backend db)
+      handleSaveSetting(`Window.${id}.X`, bounds.x, 'int');
+      handleSaveSetting(`Window.${id}.Y`, bounds.y, 'int');
+      handleSaveSetting(`Window.${id}.Width`, bounds.width, 'int');
+      handleSaveSetting(`Window.${id}.Height`, bounds.height, 'int');
+      return updated;
+    });
+  }, [handleSaveSetting]);
 
-        // 3. Fallback active subwindow if the current active one was closed or hidden
-        if (data.state === 'closed' || data.state === 'hidden') {
-          setActiveSubWindowId(currentActive => {
-            if (currentActive === data.id) {
-              const nextVisible = list.find(w => w.type === 'system' && !w.minimized);
-              return nextVisible ? nextVisible.appId : null;
-            }
-            return currentActive;
-          });
-        }
+  const renderSystemMenu = (systemName: string) => {
+    const system = systems.find(s => s.name === systemName);
+    const isMenuOpen = openMenuSystemId === systemName;
+    
+    // Desktop and Taskbar helper variables
+    const desktopIcons = getDesktopIcons();
+    const taskbarIcons = getTaskbarIcons();
+    const isDesktop = desktopIcons.includes(`system:${systemName}`);
+    const isTaskbar = taskbarIcons.includes(`system:${systemName}`);
 
-        return list;
-      });
+    const handleToggleDesktop = () => {
+      const current = getDesktopIcons();
+      const itemKey = `system:${systemName}`;
+      const next = current.includes(itemKey) ? current.filter(x => x !== itemKey) : [...current, itemKey];
+      handleSaveSetting("Desktop.Icons", next.join(","), "string");
+    };
+
+    const handleToggleTaskbar = () => {
+      const current = getTaskbarIcons();
+      const itemKey = `system:${systemName}`;
+      const next = current.includes(itemKey) ? current.filter(x => x !== itemKey) : [...current, itemKey];
+      handleSaveSetting("Taskbar.Icons", next.join(","), "string");
+    };
+
+    return (
+      <div className="relative flex items-center gap-2 w-full min-w-0">
+        <div className="relative flex items-center no-drag shrink-0" onMouseDown={(e) => e.stopPropagation()}>
+          <button 
+            onClick={(e) => { 
+              e.stopPropagation(); 
+              setOpenMenuSystemId(isMenuOpen ? null : systemName); 
+            }}
+            className={`text-white/60 hover:text-white transition cursor-pointer flex items-center justify-center p-1 rounded ${isMenuOpen ? "text-white bg-white/10" : ""}`}
+          >
+            <MoreHorizontal className="w-4 h-4" />
+          </button>
+          
+          {isMenuOpen && (
+            <>
+              <div className="fixed inset-0 z-40" onClick={() => setOpenMenuSystemId(null)} />
+              <div className="absolute left-0 top-7 w-64 bg-[#0d0d0d]/95 backdrop-blur-md border border-white/10 rounded-xl shadow-2xl p-2 z-50 text-white animate-in fade-in slide-in-from-top-2 duration-150">
+                <button 
+                  onClick={() => { handleToggleDesktop(); setOpenMenuSystemId(null); }}
+                  className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs hover:bg-white/10 text-left transition"
+                >
+                  <Monitor className="w-4 h-4 text-accent" />
+                  <span>{isDesktop ? "Remover do Desktop" : "Adicionar ao Desktop"}</span>
+                </button>
+
+                <button 
+                  onClick={() => { handleToggleTaskbar(); setOpenMenuSystemId(null); }}
+                  className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs hover:bg-white/10 text-left transition"
+                >
+                  <Grid3x3 className="w-4 h-4 text-cyan-400" />
+                  <span>{isTaskbar ? "Remover da Taskbar" : "Adicionar à Taskbar"}</span>
+                </button>
+
+                <div className="h-px bg-white/10 my-1.5" />
+
+                <div className="px-3 py-1 text-[10px] text-white/40 uppercase font-semibold tracking-wider">
+                  Emuladores
+                </div>
+
+                <button
+                  onClick={() => {
+                    handleSaveSetting(`${systemName}.emulator`, "auto", "string");
+                    handleSaveSetting(`${systemName}.core`, "auto", "string");
+                    setOpenMenuSystemId(null);
+                  }}
+                  className={`w-full flex items-center justify-between px-3 py-1.5 rounded-lg text-xs hover:bg-white/10 text-left transition ${
+                    (settings[`${systemName}.emulator`]?.value === "auto" || !settings[`${systemName}.emulator`]?.value)
+                      ? "text-accent font-semibold"
+                      : "text-white/80"
+                  }`}
+                >
+                  <span>Padrão (Auto)</span>
+                  {(settings[`${systemName}.emulator`]?.value === "auto" || !settings[`${systemName}.emulator`]?.value) && <span className="text-[10px]">●</span>}
+                </button>
+
+                {system?.emulators?.map((emu: any) => {
+                  if (emu.cores && emu.cores.length > 0) {
+                    return emu.cores.map((core: string) => {
+                      const isSelected = settings[`${systemName}.emulator`]?.value === emu.name && settings[`${systemName}.core`]?.value === core;
+                      return (
+                        <button
+                          key={`${emu.name}:${core}`}
+                          onClick={() => {
+                            handleSaveSetting(`${systemName}.emulator`, emu.name, "string");
+                            handleSaveSetting(`${systemName}.core`, core, "string");
+                            setOpenMenuSystemId(null);
+                          }}
+                          className={`w-full flex items-center justify-between px-3 py-1.5 rounded-lg text-xs hover:bg-white/10 text-left transition ${
+                            isSelected ? "text-accent font-semibold" : "text-white/80"
+                          }`}
+                        >
+                          <span className="truncate uppercase">{emu.name} ({core})</span>
+                          {isSelected && <span className="text-[10px]">●</span>}
+                        </button>
+                      );
+                    });
+                  } else {
+                    const isSelected = settings[`${systemName}.emulator`]?.value === emu.name && (!settings[`${systemName}.core`]?.value || settings[`${systemName}.core`]?.value === "auto");
+                    return (
+                      <button
+                        key={emu.name}
+                        onClick={() => {
+                          handleSaveSetting(`${systemName}.emulator`, emu.name, "string");
+                          handleSaveSetting(`${systemName}.core`, "", "string");
+                          setOpenMenuSystemId(null);
+                        }}
+                        className={`w-full flex items-center justify-between px-3 py-1.5 rounded-lg text-xs hover:bg-white/10 text-left transition ${
+                          isSelected ? "text-accent font-semibold" : "text-white/80"
+                        }`}
+                      >
+                        <span className="truncate uppercase">{emu.name}</span>
+                        {isSelected && <span className="text-[10px]">●</span>}
+                      </button>
+                    );
+                  }
+                })}
+              </div>
+            </>
+          )}
+        </div>
+        
+        <span className="text-xs font-bold text-white/95 truncate tracking-wide pr-4">
+          {system?.fullname || systemName.toUpperCase()}
+        </span>
+      </div>
+    );
+  };
+
+  const openVirtualWindow = useCallback((type: "system" | "tool", appId: string) => {
+    setLauncherOpen(false);
+    const winKey = `${type}-${appId}`;
+    
+    setVirtualWindows(prev => {
+      const existing = prev.find(w => w.id === winKey);
+      const BASE_Z_INDEX = 50;
+      const maxZ = prev.reduce((max, w) => Math.max(max, w.zIndex), BASE_Z_INDEX - 1);
+      
+      if (existing) {
+        const visibleWins = prev.filter(w => !w.isMinimized);
+        const topWin = visibleWins.length > 0 
+          ? [...visibleWins].sort((a, b) => b.zIndex - a.zIndex)[0] 
+          : null;
+        const isCurrentlyActive = topWin && topWin.id === winKey;
+
+        return prev.map(w => w.id === winKey 
+          ? { 
+              ...w, 
+              isMinimized: isCurrentlyActive ? !w.isMinimized : false, 
+              zIndex: maxZ + 1 
+            } 
+          : w
+        );
+      }
+      
+      const savedWidth = settings[`Window.${winKey}.Width`]?.value;
+      const savedHeight = settings[`Window.${winKey}.Height`]?.value;
+      const savedX = settings[`Window.${winKey}.X`]?.value;
+      const savedY = settings[`Window.${winKey}.Y`]?.value;
+      const savedMaximized = settings[`Window.${winKey}.Maximized`]?.value === "true" || settings[`Window.${winKey}.Maximized`]?.value === true;
+      
+      let width = 960;
+      let height = 640;
+      let title = appId.toUpperCase();
+      
+      if (type === 'tool') {
+        if (appId === 'saves') { width = 760; height = 540; title = 'Gerenciador de Saves'; }
+        else if (appId === 'achievements') { width = 720; height = 520; title = 'Conquistas'; }
+        else if (appId === 'settings') { width = 820; height = 560; title = 'Configurações'; }
+        else if (appId === 'database') { width = 1024; height = 680; title = 'Banco de Dados'; }
+        else if (appId === 'all') { width = 1024; height = 680; title = 'Todos os Jogos'; }
+        else if (appId === 'favorites') { width = 1024; height = 680; title = 'Favoritos'; }
+        else if (appId === 'collections') { width = 1024; height = 680; title = 'Coleções'; }
+      } else {
+        const sys = systems.find(s => s.name.toLowerCase() === appId.toLowerCase());
+        if (sys) title = sys.fullname;
+      }
+      
+      const desktopWidth = window.innerWidth;
+      const desktopHeight = window.innerHeight - 56;
+      const defaultX = Math.max(20, Math.round((desktopWidth - width) / 2));
+      const defaultY = Math.max(70, Math.round((desktopHeight - height) / 2));
+      
+      let initialX = savedX !== undefined ? parseInt(savedX, 10) : defaultX;
+      let initialY = savedY !== undefined ? parseInt(savedY, 10) : defaultY;
+      
+      if (initialX < 0 || initialX > window.innerWidth - 100 || initialY < 0 || initialY > window.innerHeight - 100) {
+        initialX = defaultX;
+        initialY = defaultY;
+      }
+      
+      const newWin: VirtualWindow = {
+        id: winKey,
+        type,
+        appId,
+        title,
+        x: initialX,
+        y: initialY,
+        width: savedWidth !== undefined ? parseInt(savedWidth, 10) : width,
+        height: savedHeight !== undefined ? parseInt(savedHeight, 10) : height,
+        isMinimized: false,
+        isMaximized: savedMaximized,
+        zIndex: maxZ + 1
+      };
+      
+      return [...prev, newWin];
+    });
+  }, [systems, settings, handleSaveSetting]);
+
+  // Listen for IPC messages to open/show sub-windows
+  useEffect(() => {
+    const unsubscribe = window.api.on('open-app-window', (_event: any, type: 'system' | 'tool', id: string) => {
+      openVirtualWindow(type, id);
     });
     return () => unsubscribe();
-  }, []);
+  }, [openVirtualWindow]);
+
+  // Derive active sub-window id based on highest zIndex of visible windows
+  const activeSubWindowId = useMemo(() => {
+    const visibleWins = virtualWindows.filter(w => !w.isMinimized);
+    if (visibleWins.length === 0) return null;
+    const sorted = [...visibleWins].sort((a, b) => b.zIndex - a.zIndex);
+    return sorted[0].appId; // Focus by appId
+  }, [virtualWindows]);
 
   // Parse URL Search Parameters for Standalone mode
   const params = useMemo(() => new URLSearchParams(window.location.search), []);
@@ -310,43 +596,9 @@ export default function App() {
   const [loadingMessage, setLoadingMessage] = useState("Iniciando RIESCADE OS...");
   
   const desktopRef = useRef<HTMLDivElement>(null);
+  const startMenuInputRef = useRef<HTMLInputElement>(null);
 
-  const handleSaveSetting = useCallback((name: string, value: any, type: "string" | "bool" | "int" | "float") => {
-    window.api.saveSetting(name, value, type).then(() => {
-      setSettings((prev: any) => ({
-        ...prev,
-        [name]: { value }
-      }));
-    });
-  }, []);
 
-  const handleSaveEmulatorSetting = useCallback((emulator: string, name: string, value: any) => {
-    window.api.saveEmulatorSetting(emulator, name, value).then(() => {
-      setEmulatorSettings((prev: any) => ({
-        ...prev,
-        [emulator]: {
-          ...(prev?.[emulator] || {}),
-          [name]: value
-        }
-      }));
-    });
-  }, []);
-
-  const getDesktopIcons = useCallback(() => {
-    const raw = settings["Desktop.Icons"]?.value;
-    if (raw !== undefined) {
-      return String(raw).split(",").filter(Boolean);
-    }
-    return ["tool:all"];
-  }, [settings]);
-
-  const getTaskbarIcons = useCallback(() => {
-    const raw = settings["Taskbar.Icons"]?.value;
-    if (raw !== undefined) {
-      return String(raw).split(",").filter(Boolean);
-    }
-    return ["tool:all", "tool:settings"];
-  }, [settings]);
 
   const resolveIconItem = useCallback((itemKey: string) => {
     const [type, id] = itemKey.split(":");
@@ -394,6 +646,17 @@ export default function App() {
     });
     return () => unsubscribe();
   }, []);
+
+  // Handle Start Menu focus/cleanup on opening/closing
+  useEffect(() => {
+    if (launcherOpen) {
+      setTimeout(() => {
+        startMenuInputRef.current?.focus();
+      }, 50);
+    } else {
+      setSearch("");
+    }
+  }, [launcherOpen]);
 
   // Listen for settings changes from other windows (e.g. standalone Settings window)
   useEffect(() => {
@@ -448,11 +711,11 @@ export default function App() {
     });
   }, []);
 
-  // Open App - Natively opens platforms and tools
+  // Open App - Opens virtual windows
   const openApp = useCallback((type: "system" | "tool", appId: string) => {
     setLauncherOpen(false);
-    window.api.openAppWindow(type, appId);
-  }, []);
+    openVirtualWindow(type, appId);
+  }, [openVirtualWindow]);
 
   // Determine Dynamic Background
   const activeBg = useMemo(() => {
@@ -920,7 +1183,7 @@ export default function App() {
       <div key="desktop-container" className="w-screen h-screen flex flex-col overflow-hidden select-none">
       {/* Draggable custom titlebar */}
       <div 
-        className="h-14 px-4 pr-0 flex items-center justify-between select-none shrink-0 z-80 fixed top-0 w-full" 
+        className="h-14 px-4 pr-0 flex items-center justify-between select-none shrink-0 z-35 fixed top-0 w-full" 
         style={{ WebkitAppRegion: 'drag' } as any}
       >
         {/* Left Side: App Title/Logo */}
@@ -933,30 +1196,7 @@ export default function App() {
           <span className="text-sm font-bold tracking-wider text-white">RIESCADE OS</span>
         </div>
 
-        {/* Right Side: Native Window Controls (Windows styled) */}
-        <div className="flex items-center h-full shrink-0" style={{ WebkitAppRegion: 'no-drag' } as any}>
-          <button 
-            onClick={() => window.api.minimizeWindow()} 
-            className="w-11 h-full hover:bg-white/10 flex items-center justify-center text-white/60 hover:text-white transition cursor-pointer"
-            title="Minimizar"
-          >
-            <Minus className="w-4 h-4" />
-          </button>
-          <button 
-            onClick={() => window.api.maximizeWindow()} 
-            className="w-11 h-full hover:bg-white/10 flex items-center justify-center text-white/60 hover:text-white transition cursor-pointer"
-            title="Maximizar"
-          >
-            <Square className="w-3 h-3" />
-          </button>
-          <button 
-            onClick={() => window.api.closeWindow()} 
-            className="w-11 h-full hover:bg-red-600 flex items-center justify-center text-white/60 hover:text-white transition cursor-pointer"
-            title="Fechar"
-          >
-            <X className="w-4 h-4" />
-          </button>
-        </div>
+        {/* Right Side: Native Window Controls removed for main window */}
       </div>
 
       <div
@@ -971,6 +1211,80 @@ export default function App() {
         }}
         onClick={() => setLauncherOpen(false)}
       >
+        {/* Virtual Windows */}
+        {virtualWindows.map(win => {
+          if (win.type === 'system' && !systems.some(s => s.name === win.appId)) {
+            return null;
+          }
+          const active = activeSubWindowId === win.appId;
+          const isVirtualTool = ["all", "favorites", "collections"].includes(win.appId);
+          const toolItem = isVirtualTool ? TOOL_APPS.find(t => t.id === win.appId) : null;
+          
+          const theme = isVirtualTool && toolItem
+            ? { icon: toolItem.icon, color: toolItem.color, bg: "radial-gradient(1200px at 50% 50%, #222222ff 0%, #030303ff 100%)" }
+            : getSystemTheme(win.appId);
+            
+          const Icon = theme.icon;
+          const sys = systems.find(s => s.name === win.appId);
+
+          return (
+            <VirtualWindow
+              key={win.id}
+              id={win.id}
+              type={win.type}
+              appId={win.appId}
+              title={win.title}
+              initialX={win.x}
+              initialY={win.y}
+              initialWidth={win.width}
+              initialHeight={win.height}
+              isMinimized={win.isMinimized}
+              isMaximized={win.isMaximized}
+              zIndex={win.zIndex}
+              active={active}
+              headerLeft={win.type === 'system' ? renderSystemMenu(win.appId) : undefined}
+              onFocus={() => focusVirtualWindow(win.id)}
+              onClose={() => closeVirtualWindow(win.id)}
+              onMinimize={() => minimizeVirtualWindow(win.id)}
+              onMaximize={() => toggleMaximizeVirtualWindow(win.id)}
+              onUpdateBounds={(bounds) => updateVirtualWindowBounds(win.id, bounds)}
+            >
+              {win.type === 'system' || isVirtualTool ? (
+                <SystemAppContent
+                  systemName={win.appId}
+                  system={win.type === 'system' ? sys! : {
+                    name: win.appId,
+                    fullname: win.title,
+                    path: `virtual://${win.appId}`,
+                    extension: "",
+                    command: "",
+                    platform: "pc",
+                    theme: win.appId === "all" ? "auto-allgames" : win.appId === "favorites" ? "auto-favorites" : "custom-collections",
+                    hardware: win.appId === "collections" ? "custom-collections" : "auto collection",
+                    emulators: []
+                  } as any}
+                  color={theme.color}
+                  Icon={Icon}
+                  onLaunchGame={handleLaunchGame}
+                  search={search}
+                  setSearch={setSearch}
+                  onActiveGameArtChanged={setActiveGameArt}
+                />
+              ) : (
+                <ToolAppContent
+                  appId={win.appId}
+                  systems={systems}
+                  onOpenSystem={(sysName) => openVirtualWindow('system', sysName)}
+                  settings={settings}
+                  onSaveSetting={handleSaveSetting}
+                  emulatorSettings={emulatorSettings}
+                  onSaveEmulatorSetting={handleSaveEmulatorSetting}
+                />
+              )}
+            </VirtualWindow>
+          );
+        })}
+
         {/* Desktop Active System Background Art Overlay with Fade-in */}
         {activeSubWindowArt && settings["RIESCADE.DynamicBackground"]?.value !== "false" && (
           <div 
@@ -1016,25 +1330,28 @@ export default function App() {
 
 
       {/* App Launcher Start Menu */}
-      {launcherOpen && (
+      <div
+        className={`start-menu-overlay absolute inset-0 z-[100] flex items-center justify-center pt-16 pb-32 ${
+          launcherOpen ? "open" : ""
+        }`}
+        onClick={(e) => { e.stopPropagation(); setLauncherOpen(false); }}
+      >
         <div
-          className="absolute inset-0 z-[100] flex items-center justify-center pt-16 pb-32"
-          onClick={(e) => { e.stopPropagation(); setLauncherOpen(false); }}
+          className={`start-menu-card glass-strong rounded-3xl w-[760px] max-w-[90%] h-[78%] p-6 flex flex-col ${
+            launcherOpen ? "open" : ""
+          }`}
+          onClick={(e) => e.stopPropagation()}
         >
-          <div
-            className="glass-strong rounded-3xl w-[760px] max-w-[90%] h-[78%] p-6 flex flex-col animate-in fade-in zoom-in-95 duration-200"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="relative mb-5 group">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/50 group-focus-within:text-accent transition duration-200" />
-              <input
-                autoFocus
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                placeholder="Pesquisar plataformas ou ferramentas..."
-                className="w-full bg-white/10 border border-white/15 rounded-full pl-11 pr-4 py-2.5 text-sm text-white placeholder:text-white/40 focus:outline-none focus:border-accent"
-              />
-            </div>
+          <div className="relative mb-5 group">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/50 group-focus-within:text-accent transition duration-200" />
+            <input
+              ref={startMenuInputRef}
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Pesquisar plataformas ou ferramentas..."
+              className="w-full bg-white/10 border border-white/15 rounded-full pl-11 pr-4 py-2.5 text-sm text-white placeholder:text-white/40 focus:outline-none focus:border-accent"
+            />
+          </div>
             
             <ScrollArea className="flex-1 pr-2">
               <div className="text-xs uppercase text-white/40 tracking-wider mb-3">Ferramentas do Sistema</div>
@@ -1096,7 +1413,7 @@ export default function App() {
                 <span className="text-sm font-medium text-white/80">RIESCADE Player</span>
               </div>
               <button 
-                onClick={() => window.api.executeCommand("shutdown")}
+                onClick={() => setShowExitConfirm(true)}
                 className="w-9 h-9 rounded-full bg-white/5 hover:bg-red-500/80 flex items-center justify-center transition"
                 title="Desligar"
               >
@@ -1105,7 +1422,6 @@ export default function App() {
             </div>
           </div>
         </div>
-      )}
 
       {/* Overlay behind the taskbar */}
       {overlaySystemUrl && (
@@ -1123,7 +1439,7 @@ export default function App() {
 
       {/* Taskbar inferior flutuante */}
       <Tooltip.Provider delayDuration={400}>
-        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-[90]" onClick={(e) => e.stopPropagation()}>
+        <div className="taskbar-dock absolute bottom-4 left-1/2 -translate-x-1/2 z-[90]" onClick={(e) => e.stopPropagation()}>
           <div className="glass-strong rounded-2xl px-3 py-2 flex items-center gap-2 shadow-2xl">
             
             {/* Start Menu button */}
@@ -1155,8 +1471,8 @@ export default function App() {
 
               return pinnedList.map((item, idx) => {
                 const Icon = item.icon;
-                const isOpen = nativeWins.some(w => w.appId === item.appId && w.type === item.type);
-                const isMinimized = nativeWins.find(w => w.appId === item.appId && w.type === item.type)?.minimized ?? false;
+                const isOpen = virtualWindows.some(w => w.appId === item.appId && w.type === item.type);
+                const isMinimized = virtualWindows.find(w => w.appId === item.appId && w.type === item.type)?.isMinimized ?? false;
 
                 return (
                   <Tooltip.Root key={item.id} open={draggedIndex === null ? undefined : false}>
@@ -1236,19 +1552,19 @@ export default function App() {
             {/* Dynamic Running Apps Separator & Icons */}
             {(() => {
               const pinnedKeys = getTaskbarIcons();
-              const runningTools = nativeWins
+              const runningTools = virtualWindows
                 .filter(w => w.type === "tool" && !pinnedKeys.includes(`tool:${w.appId}`))
                 .map(w => {
                   const resolved = resolveIconItem(`tool:${w.appId}`);
-                  return resolved ? { ...resolved, isMinimized: w.minimized } : null;
+                  return resolved ? { ...resolved, isMinimized: w.isMinimized } : null;
                 })
                 .filter((x): x is NonNullable<typeof x> => x !== null);
 
-              const runningSystems = nativeWins
-                .filter(w => !pinnedKeys.includes(`system:${w.appId}`))
+              const runningSystems = virtualWindows
+                .filter(w => w.type === "system" && !pinnedKeys.includes(`system:${w.appId}`))
                 .map(w => {
                   const resolved = resolveIconItem(`system:${w.appId}`);
-                  return resolved ? { ...resolved, isMinimized: w.minimized } : null;
+                  return resolved ? { ...resolved, isMinimized: w.isMinimized } : null;
                 })
                 .filter((x): x is NonNullable<typeof x> => x !== null);
 
@@ -1325,6 +1641,56 @@ export default function App() {
           </div>
         </div>
       </Tooltip.Provider>
+      {/* Premium Full-screen Game Loading Backdrop */}
+      {isLaunching && launchingGame && (
+        <div className="absolute inset-0 z-[200] bg-black/95 flex flex-col items-center justify-center animate-in fade-in duration-300">
+          <div className="relative flex flex-col items-center">
+            <div 
+              className="relative w-36 h-36 rounded-full flex items-center justify-center shadow-2xl mb-8 animate-pulse"
+              style={{ backgroundColor: 'var(--accent-color-light)', borderColor: 'var(--accent-color-light)', borderWidth: 1 }}
+            >
+              <Loader2 className="w-16 h-16 text-accent animate-spin" />
+            </div>
+            <h2 className="text-2xl font-bold tracking-wider text-white/90 mb-2">INICIANDO</h2>
+            <p className="text-xl font-medium text-white/70">{launchingGame.name}</p>
+            <p className="text-xs text-white/40 uppercase tracking-widest mt-2">{launchingGame.system}</p>
+          </div>
+        </div>
+      )}
+      {/* Confirmation Modal to Exit the System */}
+      {showExitConfirm && (
+        <div className="fixed inset-0 z-[9999] bg-black/65 backdrop-blur-md flex items-center justify-center select-none" onClick={() => setShowExitConfirm(false)}>
+          <div 
+            className="glass-strong rounded-3xl p-7 max-w-sm w-full mx-4 shadow-2xl border border-white/10 flex flex-col items-center select-none text-center animate-in zoom-in-95 duration-200"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="w-12 h-12 rounded-full bg-red-500/20 flex items-center justify-center mb-4">
+              <Power className="w-6 h-6 text-red-500" />
+            </div>
+            <h3 className="text-lg font-bold text-white mb-2 tracking-wide">Sair do RIESCADE OS</h3>
+            <p className="text-xs text-white/60 mb-6 leading-relaxed">
+              Deseja realmente sair do RIESCADE OS?
+            </p>
+            <div className="flex gap-3 w-full">
+              <button
+                onClick={() => setShowExitConfirm(false)}
+                className="flex-1 py-2 px-4 rounded-xl bg-white/5 hover:bg-white/10 text-white font-medium text-xs transition cursor-pointer"
+              >
+                Não
+              </button>
+              <button
+                onClick={() => {
+                  setShowExitConfirm(false);
+                  window.api.executeCommand("exit-frontend");
+                }}
+                className="flex-1 py-2 px-4 rounded-xl bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white font-medium text-xs shadow-lg transition cursor-pointer"
+              >
+                Sim
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       </div>
       </div>
       {renderToasts()}
