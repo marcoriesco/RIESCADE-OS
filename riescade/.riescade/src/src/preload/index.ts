@@ -29,6 +29,7 @@ const api = {
   saveEmulatorSetting: (emulator: string, name: string, value: any) =>
     ipcRenderer.invoke('save-emulator-setting', emulator, name, value),
   selectBgImage: () => ipcRenderer.invoke('select-bg-image'),
+  selectBgVideo: () => ipcRenderer.invoke('select-bg-video'),
   getHostname: () => ipcRenderer.invoke('get-hostname'),
   getBiosInformation: () => ipcRenderer.invoke('get-bios-information'),
   cleanGamelists: () => ipcRenderer.invoke('clean-gamelists'),

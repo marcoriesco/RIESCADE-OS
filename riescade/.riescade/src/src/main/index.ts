@@ -504,6 +504,28 @@ app.whenReady().then(() => {
     return null
   })
 
+  ipcMain.handle('select-bg-video', async (event) => {
+    try {
+      console.log('[select-bg-video] Opening file dialog...')
+      const win = BrowserWindow.fromWebContents(event.sender) || mainWindow
+      const result = await dialog.showOpenDialog(win!, {
+        properties: ['openFile'],
+        filters: [
+          { name: 'Videos', extensions: ['mp4', 'webm', 'ogg', 'mkv', 'avi'] }
+        ]
+      })
+      console.log('[select-bg-video] Dialog finished. Canceled:', result.canceled, 'Paths:', result.filePaths)
+      if (!result.canceled && result.filePaths.length > 0) {
+        const filePath = result.filePaths[0]
+        return `file:///${filePath.replace(/\\/g, '/')}`
+      }
+    } catch (err) {
+      console.error('[select-bg-video] Error in file dialog handler:', err)
+    }
+    return null
+  })
+
+
   // ─── IPC: Theme Settings (Stubbed for RIESCADE OS) ───
   ipcMain.handle('get-theme-settings', async () => {
     return {}
@@ -756,7 +778,7 @@ app.whenReady().then(() => {
   })
 
   ipcMain.handle('get-riescade-logo-path', async () => {
-    const file = join(getRiescadePath(), 'resources', 'riescade.png')
+    const file = join(getRiescadePath(), 'resources', 'riescade.webp')
     return existsSync(file) ? `file:///${file.replace(/\\/g, '/')}` : ''
   })
 

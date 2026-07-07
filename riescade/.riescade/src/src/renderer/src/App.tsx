@@ -13,6 +13,8 @@ import ToolAppContent from "./components/ToolAppContent";
 import { ScrollArea } from "./components/ScrollArea";
 import VirtualWindow from "./components/VirtualWindow";
 import defaultBg from '../../main/resources/default.webp';
+import defaultVideo from '../../main/resources/default.mp4';
+
 
 const DEFAULT_SYSTEM_BG = "radial-gradient(1200px 800px at 20% 10%, rgb(35 35 35) 0%, transparent 60%), radial-gradient(1000px 700px at 85% 90%, rgb(12 12 12) 0%, transparent 55%), linear-gradient(rgb(4 4 4) 0%, rgb(22 22 22) 100%)";
 // Synchronously apply accent color from localStorage if present to prevent any layout/color flash
@@ -760,6 +762,12 @@ export default function App() {
     return `url(${defaultBg})`;
   }, [windowType, systemName, activeSubWindowId, settings, systems]);
 
+  const backgroundVideoSrc = useMemo(() => {
+    const isVideoEnabled = settings["RIESCADE.EnableBackgroundVideo"]?.value === true || settings["RIESCADE.EnableBackgroundVideo"]?.value === "true";
+    if (!isVideoEnabled) return null;
+    return settings["RIESCADE.BackgroundVideoPath"]?.value || defaultVideo;
+  }, [settings]);
+
   const activeSubWindowArt = useMemo(() => {
     if (!activeSubWindowId) return null;
     const sys = systems.find(s => s.name === activeSubWindowId);
@@ -1217,6 +1225,17 @@ export default function App() {
         }}
         onClick={() => setLauncherOpen(false)}
       >
+        {backgroundVideoSrc && (
+          <video
+            key={backgroundVideoSrc}
+            src={backgroundVideoSrc}
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="absolute inset-0 w-full h-full object-cover z-0 pointer-events-none"
+          />
+        )}
         {/* Virtual Windows */}
         {virtualWindows.map(win => {
           if (win.type === 'system' && !systems.some(s => s.name === win.appId)) {

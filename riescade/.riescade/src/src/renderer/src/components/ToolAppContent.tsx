@@ -700,6 +700,57 @@ export default function ToolAppContent({
                       </button>
                     </div>
                   </div>
+
+                  <SettingGroup label="Vídeo de Fundo" />
+                  
+                  <SettingToggle 
+                    label="Ativar vídeo de fundo" 
+                    name="RIESCADE.EnableBackgroundVideo" 
+                    desc="Reproduz um vídeo em loop na área de trabalho em tela cheia." 
+                    ctx={ctx} 
+                  />
+
+                  <div className="flex items-center justify-between bg-black/15 border border-white/5 rounded-md px-4 py-3 text-xs hover:bg-white/5 transition">
+                    <div className="flex flex-col gap-0.5 flex-1 min-w-0 pr-3">
+                      <span className="font-medium text-white/90">Vídeo de Fundo Personalizado</span>
+                      <span className="text-[10px] text-white/45 leading-relaxed font-sans">
+                        {ctx.getSetting("RIESCADE.BackgroundVideoPath") 
+                          ? `Arquivo selecionado: ${decodeURIComponent(ctx.getSetting("RIESCADE.BackgroundVideoPath").split('/').pop() || '')}` 
+                          : "Selecione um vídeo (MP4) do seu computador. Se não for selecionado, o default.mp4 será usado."}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-2 shrink-0 font-sans">
+                      {ctx.getSetting("RIESCADE.BackgroundVideoPath") && (
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            console.log('[Personalização] Clear background video button clicked');
+                            ctx.saveSetting("RIESCADE.BackgroundVideoPath", "", "string");
+                          }}
+                          className="px-3 py-1.5 rounded-md bg-red-600/10 border border-red-500/20 text-red-400 hover:bg-red-600/20 hover:text-red-300 font-semibold transition cursor-pointer"
+                        >
+                          Remover
+                        </button>
+                      )}
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          console.log('[Personalização] Browse background video button clicked');
+                          window.api.selectBgVideo().then((filePath) => {
+                            console.log('[Personalização] selectBgVideo returned path:', filePath);
+                            if (filePath) {
+                              ctx.saveSetting("RIESCADE.BackgroundVideoPath", filePath, "string");
+                            }
+                          }).catch((err) => {
+                            console.error('[Personalização] selectBgVideo error:', err);
+                          });
+                        }}
+                        className="px-3 py-1.5 rounded-md bg-white/10 border border-white/10 hover:bg-white/15 hover:border-white/20 text-white font-semibold transition cursor-pointer"
+                      >
+                        Procurar...
+                      </button>
+                    </div>
+                  </div>
                 </div>
               </ScrollArea>
             </div>

@@ -940,7 +940,7 @@
     "type": "string"
   },
   "Taskbar.Icons": {
-    "value": "tool:settings,system:switch,system:teknoparrot,system:cps1,system:snes,system:namco2x6,system:laseractive,system:xbox360",
+    "value": "tool:settings,system:switch,system:teknoparrot,system:cps1,system:snes,system:namco2x6,system:laseractive,system:xbox360,system:arcade",
     "type": "string"
   },
   "Window.system-switch.Maximized": {
@@ -1188,7 +1188,7 @@
     "type": "bool"
   },
   "RIESCADE.AccentColor": {
-    "value": "#06b6d4",
+    "value": "#9f0043",
     "type": "string"
   },
   "Window.system-2ship.Maximized": {
@@ -1390,5 +1390,13 @@
   "RIESCADE.PreferredMediaType.snes": {
     "value": "cover",
     "type": "string"
+  },
+  "RIESCADE.PreferredMediaType.arcade": {
+    "value": "cover2d",
+    "type": "string"
+  },
+  "RIESCADE.EnableBackgroundVideo": {
+    "value": true,
+    "type": "bool"
   }
 }
