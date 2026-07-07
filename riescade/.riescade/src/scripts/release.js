@@ -207,9 +207,19 @@ async function run() {
     }
   }
 
-  // --- Compress using local 7z.exe ---
-  const sevenZipPath = path.join(projectRoot, 'riescade', '7z.exe');
-  console.log('🤐 Compressing with 7-Zip (7z format)...');
+  // --- Compress using 7-Zip ---
+  let sevenZipPath = 'C:\\Program Files\\7-Zip\\7z.exe';
+  if (!fs.existsSync(sevenZipPath)) {
+    sevenZipPath = 'C:\\Program Files (x86)\\7-Zip\\7z.exe';
+  }
+  if (!fs.existsSync(sevenZipPath)) {
+    sevenZipPath = path.join(projectRoot, 'riescade', '7z.exe');
+  }
+  if (!fs.existsSync(sevenZipPath)) {
+    sevenZipPath = '7z'; // Fallback to PATH
+  }
+  
+  console.log(`🤐 Compressing with 7-Zip from: ${sevenZipPath}`);
   execSync(`"${sevenZipPath}" a -t7z -mx=9 -ms=on "${zipPath}" "${tempDir}\\*"`, { stdio: 'inherit' });
 
   // Cleanup temp
