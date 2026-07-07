@@ -45,6 +45,7 @@ export default function App() {
   const [launchingGame, setLaunchingGame] = useState<Game | null>(null);
   const [settings, setSettings] = useState<any>({});
   const [emulatorSettings, setEmulatorSettings] = useState<any>({});
+  const [appVersion, setAppVersion] = useState("2.0.2");
 
   const handleSaveSetting = useCallback((name: string, value: any, type: "string" | "bool" | "int" | "float") => {
     window.api.saveSetting(name, value, type).then(() => {
@@ -99,8 +100,6 @@ export default function App() {
 
   const [virtualWindows, setVirtualWindows] = useState<VirtualWindow[]>([]);
   const [openMenuSystemId, setOpenMenuSystemId] = useState<string | null>(null);
-  const [overlaySystemUrl, setOverlaySystemUrl] = useState<string>("");
-  const [riescadeLogoUrl, setRiescadeLogoUrl] = useState<string>("");
   const [activeGameArt, setActiveGameArt] = useState<string | null>(null);
   const [controllers, setControllers] = useState<any[]>([]);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -183,11 +182,10 @@ export default function App() {
   );
 
   useEffect(() => {
-    window.api.getOverlayPath("overlay-system.png").then((url: string) => {
-      setOverlaySystemUrl(url);
-    });
-    window.api.getRiescadeLogoPath().then((url: string) => {
-      setRiescadeLogoUrl(url);
+    window.api.getVersion().then((res: any) => {
+      if (res && res.app) {
+        setAppVersion(res.app);
+      }
     });
   }, []);
 
@@ -1205,23 +1203,7 @@ export default function App() {
   return (
     <Toast.Provider swipeDirection="up" duration={Infinity}>
       <div key="desktop-container" className="w-screen h-screen flex flex-col overflow-hidden select-none">
-      {/* Draggable custom titlebar */}
-      <div 
-        className="h-14 px-4 pr-0 flex items-center justify-between select-none shrink-0 z-35 fixed top-0 w-full" 
-        style={{ WebkitAppRegion: 'drag' } as any}
-      >
-        {/* Left Side: App Title/Logo */}
-        <div className="flex items-center gap-2" style={{ WebkitAppRegion: 'no-drag' } as any}>
-          {riescadeLogoUrl ? (
-            <img src={riescadeLogoUrl} alt="RIESCADE OS" className="w-5 h-5 object-contain" />
-          ) : (
-            <Gamepad2 className="w-5 h-5 text-accent" />
-          )}
-          <span className="text-sm font-bold tracking-wider text-white">RIESCADE OS</span>
-        </div>
 
-        {/* Right Side: Native Window Controls removed for main window */}
-      </div>
 
       <div
         ref={desktopRef}
@@ -1448,18 +1430,6 @@ export default function App() {
         </div>
 
       {/* Overlay behind the taskbar */}
-      {overlaySystemUrl && (
-        <>
-        <div 
-          className="pointer-events-none absolute w-full h-full top-0 left-0 bg-center bg-no-repeat bg-cover z-20 opacity-80"
-          style={{ backgroundImage: `url("${overlaySystemUrl}")` }}
-        />       
-        <div 
-          className="pointer-events-none absolute w-full h-full top-0 left-0 bg-center bg-no-repeat bg-cover z-20 opacity-80"
-          style={{ backgroundImage: `url("${overlaySystemUrl}")` }}
-        />
-        </>
-      )}
 
       {/* Taskbar inferior flutuante */}
       <Tooltip.Provider delayDuration={400}>
@@ -1715,6 +1685,13 @@ export default function App() {
           </div>
         </div>
       )}
+
+      {/* App Version Info bottom right */}
+      <div className="absolute bottom-2 right-2 z-30 pointer-events-none select-none text-right">
+        <span className="text-[10px] font-bold tracking-widest text-white/35 font-mono drop-shadow-sm">
+          RIESCADE OS {appVersion}
+        </span>
+      </div>
       </div>
       </div>
       {renderToasts()}

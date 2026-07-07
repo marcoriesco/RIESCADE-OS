@@ -78,7 +78,6 @@ export default function SystemAppContent({
 
   const [fullVideo, setFullVideo] = useState(false);
   const [imageError, setImageError] = useState(false);
-  const [logoPath, setLogoPath] = useState<string>("");
   const [failedImages, setFailedImages] = useState<Record<string, boolean>>({});
 
   // Collection and Save States states
@@ -112,12 +111,6 @@ export default function SystemAppContent({
 
 
 
-  // Load Riescade black-and-white fallback logo path once on mount
-  useEffect(() => {
-    window.api.getRiescadeLogoPath().then((path: string) => {
-      setLogoPath(path);
-    });
-  }, []);
 
   // Load preferred media type per-system on mount and system change
   useEffect(() => {
@@ -793,10 +786,10 @@ export default function SystemAppContent({
             <Loader2 className="w-8 h-8 text-white/20 animate-spin" />
           </div>
         ) : (
-          <div className="flex-1 flex flex-col overflow-hidden">
+          <div className="@container flex-1 flex flex-col overflow-hidden">
             {/* Header with system name + game count */}
-            <div className="shrink-0 px-6 pt-6 pb-3 flex items-center justify-between">
-              <div>
+            <div className="shrink-0 px-6 pt-6 pb-3 flex flex-col gap-4 @3xl:flex-row @3xl:items-center justify-between items-start">
+              <div className="min-w-0 max-w-full">
                 <div className="flex items-center gap-2">
                   {system.name === 'collections' && activeCollection !== null && (
                     <button
@@ -807,15 +800,15 @@ export default function SystemAppContent({
                       Voltar
                     </button>
                   )}
-                  <h2 className="text-4xl font-bold text-white tracking-wide">
+                  <h2 className="text-2xl @2xl:text-3xl @3xl:text-4xl font-bold text-white tracking-wide truncate" title={system.name === 'collections' && activeCollection !== null ? `${system.fullname} > ${activeCollection}` : system.fullname}>
                     {system.name === 'collections' && activeCollection !== null ? `${system.fullname} > ${activeCollection}` : system.fullname}
                   </h2>
                 </div>
-                <span className="text-md text-white/40">{filteredGames.length} {system.name === 'collections' && activeCollection === null ? 'coleções encontradas' : 'jogos encontrados'}</span>
+                <span className="text-xs @3xl:text-md text-white/40">{filteredGames.length} {system.name === 'collections' && activeCollection === null ? 'coleções encontradas' : 'jogos encontrados'}</span>
               </div>
 
               {/* Media Switcher Buttons */}
-              <div className="flex items-center bg-white/5 border border-white/5 p-1 rounded-lg gap-0.5 shadow-inner backdrop-blur-md">
+              <div className="flex flex-wrap items-center bg-white/5 border border-white/5 p-1 rounded-lg gap-0.5 shadow-inner backdrop-blur-md max-w-full">
                 {['cover', 'cover2d', 'cover3d', 'fanart', 'logo', 'screenshot', 'title', 'mix'].map((type) => {
                   const isAvailable = availableMediaTypes[type];
                   const isActive = preferredMediaType === type;
@@ -824,7 +817,7 @@ export default function SystemAppContent({
                       key={type}
                       disabled={!isAvailable}
                       onClick={() => handleMediaTypeChange(type)}
-                      className={`px-2.5 py-1 text-[10px] uppercase font-bold tracking-wider rounded-md transition-all cursor-pointer ${
+                      className={`px-1.5 py-0.5 text-[9px] @xs:px-2.5 @xs:py-1 @xs:text-[10px] uppercase font-bold tracking-wider rounded-md transition-all cursor-pointer ${
                         isActive
                           ? "bg-accent text-white shadow-md font-extrabold"
                           : isAvailable
@@ -841,7 +834,7 @@ export default function SystemAppContent({
             </div>
 
             {/* Grid display of Games */}
-            <div className="flex-1 relative overflow-hidden min-w-[400px]">
+            <div className="@container flex-1 relative overflow-hidden min-w-[400px]">
               {/* Grid media loading overlay */}
               {gridMediaLoading && (
                 <div className="absolute inset-0 flex items-center justify-center bg-black/45 backdrop-blur-[3px] z-30 animate-in fade-in duration-150">
@@ -858,7 +851,7 @@ export default function SystemAppContent({
                     {system.name === 'collections' && activeCollection === null ? 'Nenhuma coleção encontrada' : 'Nenhum jogo encontrado'}
                   </div>
                 ) : (
-                  <div className="grid grid-cols-5 gap-3">
+                  <div className="grid grid-cols-2 @xl:grid-cols-3 @3xl:grid-cols-4 @5xl:grid-cols-5 gap-3">
                     {(() => {
                       const sliced = filteredGames.slice(0, displayLimit);
                       console.log("[SystemAppContent] Rendering grid items. displayLimit =", displayLimit, "filteredGames length =", filteredGames.length, "sliced length =", sliced.length, "items:", sliced);

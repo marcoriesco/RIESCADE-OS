@@ -1356,7 +1356,7 @@
     "type": "string"
   },
   "RIESCADE.PreferredMediaType.xbox360": {
-    "value": "cover",
+    "value": "cover2d",
     "type": "string"
   },
   "RIESCADE.PreferredMediaType.teknoparrot": {
@@ -1364,15 +1364,15 @@
     "type": "string"
   },
   "Window.system-xbox360.X": {
-    "value": 8,
+    "value": 24,
     "type": "int"
   },
   "Window.system-xbox360.Y": {
-    "value": 71,
+    "value": 66,
     "type": "int"
   },
   "Window.system-xbox360.Width": {
-    "value": 1785,
+    "value": 1355,
     "type": "int"
   },
   "Window.system-xbox360.Height": {
@@ -1385,6 +1385,10 @@
   },
   "RIESCADE.PreferredMediaType.laseractive": {
     "value": "logo",
+    "type": "string"
+  },
+  "RIESCADE.PreferredMediaType.snes": {
+    "value": "cover",
     "type": "string"
   }
 }

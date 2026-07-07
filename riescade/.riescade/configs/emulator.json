@@ -27,5 +27,10 @@
     "md_pad": "false",
     "rotate_buttons": "false",
     "buttonsInvert": "false"
+  },
+  "xenia": {
+    "xenia_fullscreen": "true",
+    "xenia_license_mask": "-1",
+    "xenia_gpu": "vulkan"
   }
 }

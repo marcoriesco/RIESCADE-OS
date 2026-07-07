@@ -86,7 +86,7 @@
 }
 
 html, body, #root {
-  background: radial-gradient(1200px 800px at 20% 10%, var(--accent-color-glass, rgba(30,30,30,0.4)) 0%, transparent 60%), radial-gradient(1000px 700px at 85% 90%, var(--accent-color-glass, rgba(30,30,30,0.4)) 0%, transparent 55%), linear-gradient(rgb(10, 10, 14) 0%, rgb(14, 14, 18) 100%);
+  background: radial-gradient(1200px 800px at 20% 10%, var(--accent-color-glass, rgba(30,30,30,0.4)) 0%, transparent 60%), radial-gradient(1000px 700px at 85% 90%, var(--accent-color-glass, rgba(30,30,30,0.4)) 0%, transparent 55%), linear-gradient(var(--accent-color) 0%, var(--accent-color-hover) 100%);
   height: 100%;
   margin: 0;
   padding: 0;

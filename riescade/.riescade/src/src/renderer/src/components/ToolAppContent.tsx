@@ -63,6 +63,18 @@ const SETTINGS_TABS = [
   { id: "sobre", name: "Sobre", icon: Info }
 ];
 
+const EMULATOR_NAMES: Record<string, string> = {
+  retroarch: "RetroArch",
+  ares: "Ares",
+  xenia: "Xenia"
+};
+
+const EMULATOR_DESCRIPTIONS: Record<string, string> = {
+  retroarch: "Configurações globais de emulação, vídeo, shaders e mais.",
+  ares: "Ajuste os parâmetros específicos do emulador Ares.",
+  xenia: "Ajuste os parâmetros específicos do emulador Xenia e Xenia Canary."
+};
+
 export default function ToolAppContent({
   appId, systems, onOpenSystem, settings, onSaveSetting, emulatorSettings, onSaveEmulatorSetting
 }: {
@@ -75,7 +87,8 @@ export default function ToolAppContent({
   onSaveEmulatorSetting?: (emulator: string, name: string, value: any) => void;
 }) {
   const [activeSettingsTab, setActiveSettingsTab] = useState("conta");
-  const [activeEmuSubmenu, setActiveEmuSubmenu] = useState<"retroarch" | "ares">("retroarch");
+  const [activeEmuSubmenu, setActiveEmuSubmenu] = useState<string>("retroarch");
+  const [emuMenuOpen, setEmuMenuOpen] = useState(true);
   const [settingsSearch, setSettingsSearch] = useState("");
   const [settingsCategory, setSettingsCategory] = useState<"all" | "tools" | "systems">("all");
   const [updateState, setUpdateState] = useState<{
@@ -173,35 +186,37 @@ export default function ToolAppContent({
 
     // Build emulator settings context
     const getEmuSetting = (name: string, fallback: any = ""): string => {
-      const val = emulatorSettings?.["ares"]?.[name];
-      console.log('[getEmuSetting] Key:', name, 'RawValue:', val, 'Type:', typeof val);
+      const val = emulatorSettings?.[activeEmuSubmenu]?.[name];
+      console.log('[getEmuSetting] Emu:', activeEmuSubmenu, 'Key:', name, 'RawValue:', val, 'Type:', typeof val);
       if (val !== undefined && val !== null) return String(val);
       // Default fallbacks for specific settings
-      if (name === "ares_fullscreen") return "false";
+      if (name === "ares_fullscreen" || name === "xenia_fullscreen") return "false";
       if (name === "ares_aspect") return "Scale";
       if (name === "ares_aspectcorrection") return "Anamorphic";
       if (name === "ares_renderer") return "OpenGL 3.2";
       if (name === "ares_audio_renderer") return "WASAPI";
-      if (name === "ares_audiosync") return "true";
+      if (name === "ares_audiosync" || name === "xenia_vsync") return "true";
       if (name === "ares_coloremulation") return "true";
       if (name === "ares_interframe_blend") return "true";
       if (name === "ares_ExpansionPak") return "true";
       if (name === "ares_n64_quality") return "HD";
       if (name === "ares_luminance" || name === "ares_saturation" || name === "ares_gamma") return "1.0";
+      if (name === "xenia_gpu") return "any";
+      if (name === "xenia_license_mask") return "0";
       return String(fallback);
     };
 
     const isEmuBoolOn = (name: string) => {
       const v = getEmuSetting(name, "false");
       const res = v === "true" || v === "1";
-      console.log('[isEmuBoolOn] Key:', name, 'Result:', res);
+      console.log('[isEmuBoolOn] Emu:', activeEmuSubmenu, 'Key:', name, 'Result:', res);
       return res;
     };
 
     const saveEmuSetting = (name: string, value: any, type: "string" | "bool" | "int" | "float" = "string") => {
-      console.log('[saveEmuSetting] Toggle clicked. Name:', name, 'Value:', value, 'Type:', type);
+      console.log('[saveEmuSetting] Toggle clicked. Emu:', activeEmuSubmenu, 'Name:', name, 'Value:', value, 'Type:', type);
       if (onSaveEmulatorSetting) {
-        onSaveEmulatorSetting("ares", name, value);
+        onSaveEmulatorSetting(activeEmuSubmenu, name, value);
       }
     };
 
@@ -304,19 +319,29 @@ export default function ToolAppContent({
                       onClick={() => {
                         setActiveSettingsTab(tab.id);
                         if (tab.id === "emuladores") {
-                          setActiveEmuSubmenu("retroarch");
+                          if (activeSettingsTab === "emuladores") {
+                            setEmuMenuOpen(v => !v);
+                          } else {
+                            setEmuMenuOpen(true);
+                            setActiveEmuSubmenu("retroarch");
+                          }
                         }
                       }}
-                      className={`cursor-pointer font-medium w-full text-left px-3.5 py-2.5 rounded-md text-xs flex items-center gap-2.5 transition ${
+                      className={`cursor-pointer font-medium w-full text-left px-3.5 py-2.5 rounded-md text-xs flex items-center justify-between transition ${
                         isActive 
                           ? "bg-white/5 text-white" 
                           : "text-white/60 hover:bg-white/5 hover:text-white"
                       }`}
                     >
-                      <TabIcon className={`w-4 h-4 shrink-0 transition ${isActive ? 'text-accent' : 'opacity-60'}`} />
-                      <span>{tab.name}</span>
+                      <div className="flex items-center gap-2.5">
+                        <TabIcon className={`w-4 h-4 shrink-0 transition ${isActive ? 'text-accent' : 'opacity-60'}`} />
+                        <span>{tab.name}</span>
+                      </div>
+                      {tab.id === "emuladores" && (
+                        <ChevronDown className={`w-3.5 h-3.5 text-white/40 transition-transform duration-200 ${emuMenuOpen ? "" : "-rotate-90"}`} />
+                      )}
                     </button>
-                    {tab.id === "emuladores" && (
+                    {tab.id === "emuladores" && emuMenuOpen && (
                       <div className="flex flex-col gap-1 pl-4 border-l border-white/5 ml-5.5 my-1">
                         <button
                           onClick={() => {
@@ -343,6 +368,19 @@ export default function ToolAppContent({
                           }`}
                         >
                           Ares
+                        </button>
+                        <button
+                          onClick={() => {
+                            setActiveSettingsTab("emuladores");
+                            setActiveEmuSubmenu("xenia");
+                          }}
+                          className={`cursor-pointer w-full text-left py-1.5 px-2 rounded-md text-[11px] font-medium transition ${
+                            activeSettingsTab === "emuladores" && activeEmuSubmenu === "xenia"
+                              ? "text-accent font-bold bg-white/[0.04]"
+                              : "text-white/50 hover:text-white/80 hover:bg-white/[0.02]"
+                          }`}
+                        >
+                          Xenia
                         </button>
                       </div>
                     )}
@@ -746,12 +784,10 @@ export default function ToolAppContent({
             <div className="flex flex-col h-full overflow-hidden">
               <div className="shrink-0 px-6 pt-8 pb-4 max-w-[740px]">
                 <h2 className="text-xl font-bold text-white mb-1">
-                  Configurações dos Emuladores - {activeEmuSubmenu === "retroarch" ? "RetroArch" : "Ares"}
+                  Configurações dos Emuladores - {EMULATOR_NAMES[activeEmuSubmenu] || (activeEmuSubmenu.charAt(0).toUpperCase() + activeEmuSubmenu.slice(1))}
                 </h2>
                 <p className="text-sm text-white/40">
-                  {activeEmuSubmenu === "retroarch" 
-                    ? "Configurações globais de emulação, vídeo, shaders e mais." 
-                    : "Ajuste os parâmetros específicos do emulador Ares."}
+                  {EMULATOR_DESCRIPTIONS[activeEmuSubmenu] || `Ajuste os parâmetros específicos do emulador ${EMULATOR_NAMES[activeEmuSubmenu] || activeEmuSubmenu}.`}
                 </p>
               </div>
               <ScrollArea className="flex-1 min-h-0">
@@ -817,7 +853,7 @@ export default function ToolAppContent({
                         { label: "Automático", value: "ask" }, { label: "Manter", value: "keep" }, { label: "Excluir", value: "delete" }
                       ]} ctx={ctx} />
                     </div>
-                  ) : (
+                  ) : activeEmuSubmenu === "ares" ? (
                     <div className="space-y-2 animate-in fade-in duration-150">
                       <SettingGroup label="Geral & Vídeo" />
                       <SettingToggle label="Iniciar em Tela Cheia" name="ares_fullscreen" desc="Inicia o emulador Ares em tela cheia adicionando o parâmetro --fullscreen." ctx={emuCtx} />
@@ -885,7 +921,25 @@ export default function ToolAppContent({
                       ]} ctx={emuCtx} />
                       <SettingToggle label="Expansor de Memória (Expansion Pak)" name="ares_ExpansionPak" desc="Ativa o pacote de expansão de 4MB de RAM do Nintendo 64." ctx={emuCtx} />
                     </div>
-                  )}
+                  ) : activeEmuSubmenu === "xenia" ? (
+                    <div className="space-y-2 animate-in fade-in duration-150">
+                      <SettingGroup label="Geral & Vídeo" />
+                      <SettingToggle label="Iniciar em Tela Cheia" name="xenia_fullscreen" desc="Inicia o emulador Xenia/Xenia-Canary em tela cheia." ctx={emuCtx} />
+                      <SettingSelect label="Driver de Vídeo (GPU)" name="xenia_gpu" options={[
+                        { label: "Qualquer (any)", value: "any" },
+                        { label: "Direct3D 12", value: "d3d12" },
+                        { label: "Vulkan", value: "vulkan" }
+                      ]} ctx={emuCtx} />
+                      <SettingToggle label="Ativar V-Sync" name="xenia_vsync" desc="Sincroniza os frames com a taxa de atualização do monitor para evitar screen tearing." ctx={emuCtx} />
+
+                      <SettingGroup label="Jogos & Conteúdo" />
+                      <SettingSelect label="Máscara de Licença (Desbloquear Conteúdo)" name="xenia_license_mask" desc="Desbloqueia jogos em versão completa/full ou demos." options={[
+                        { label: "Padrão (Demos/Limitações)", value: "0" },
+                        { label: "Primeira Licença Habilitada", value: "1" },
+                        { label: "Todas as Licenças Habilitadas", value: "-1" }
+                      ]} ctx={emuCtx} />
+                    </div>
+                  ) : null}
                 </div>
               </ScrollArea>
             </div>
