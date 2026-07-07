@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState, useMemo, useCallback } from "react";
-import { Gamepad2, Heart, Loader2, Star, Play, ChevronRight, Maximize2, X, Search, Folder, ChevronLeft, HardDrive, ChevronDown, Check } from "lucide-react";
+import { Gamepad2, Heart, Loader2, Star, Play, ChevronRight, Maximize2, X, Search, Folder, ChevronLeft, HardDrive, ChevronDown, Check, MoreHorizontal } from "lucide-react";
 import { System, Game } from "../types";
 import { ScrollArea } from "./ScrollArea";
 import { OverlayScrollbarsComponentRef } from "overlayscrollbars-react";
@@ -95,11 +95,120 @@ export default function SystemAppContent({
   const [showSavesSidebar, setShowSavesSidebar] = useState(false);
   const [sidebarTab, setSidebarTab] = useState<"collections" | "saves">("collections");
 
+  const [preferredMediaType, setPreferredMediaType] = useState<string>("cover");
+  const [availableMediaTypes, setAvailableMediaTypes] = useState<Record<string, boolean>>({
+    cover: true,
+    cover2d: false,
+    cover3d: false,
+    fanart: false,
+    logo: false,
+    screenshot: false,
+    title: false,
+    mix: false
+  });
+
+  const [mediaLoading, setMediaLoading] = useState(false);
+  const [gridMediaLoading, setGridMediaLoading] = useState(false);
+
+
+
   // Load Riescade black-and-white fallback logo path once on mount
   useEffect(() => {
     window.api.getRiescadeLogoPath().then((path: string) => {
       setLogoPath(path);
     });
+  }, []);
+
+  // Load preferred media type per-system on mount and system change
+  useEffect(() => {
+    const settingKey = `RIESCADE.PreferredMediaType.${system.name}`;
+    window.api.getSettings().then(settings => {
+      if (settings[settingKey]?.value) {
+        setPreferredMediaType(settings[settingKey].value);
+      } else {
+        setPreferredMediaType("cover");
+      }
+    });
+  }, [system.name]);
+
+  // Query folder availability when systemName or systemPath changes
+  useEffect(() => {
+    if (system && system.path && !system.path.startsWith('virtual://') && system.name !== 'collections') {
+      window.api.checkMediaFolders(system.path).then((res: Record<string, boolean>) => {
+        setAvailableMediaTypes(res || {
+          cover: true,
+          cover2d: false,
+          cover3d: false,
+          fanart: false,
+          logo: false,
+          screenshot: false,
+          title: false,
+          mix: false
+        });
+      }).catch((err: any) => {
+        console.error("Failed to check media folders:", err);
+      });
+    } else {
+      // Enable all for virtual systems
+      setAvailableMediaTypes({
+        cover: true,
+        cover2d: true,
+        cover3d: true,
+        fanart: true,
+        logo: true,
+        screenshot: true,
+        title: true,
+        mix: true
+      });
+    }
+  }, [system.name, system.path]);
+
+  const handleMediaTypeChange = (type: string) => {
+    setGridMediaLoading(true);
+    setFailedImages({});
+    setPreferredMediaType(type);
+    const settingKey = `RIESCADE.PreferredMediaType.${system.name}`;
+    window.api.saveSetting(settingKey, type, "string");
+    // Brief loading overlay for the grid transition
+    setTimeout(() => setGridMediaLoading(false), 400);
+  };
+
+  const getGameMediaUrl = useCallback((g: Game, type: string) => {
+    if (g.isCollectionFolder) return g.cover || g.thumbnail || g.fanart || g.image || "";
+    
+    let mediaPath: string | undefined = undefined;
+    switch (type) {
+      case 'cover':
+        mediaPath = g.cover;
+        break;
+      case 'cover2d':
+        mediaPath = g.cover2d;
+        break;
+      case 'cover3d':
+        mediaPath = g.cover3d;
+        break;
+      case 'fanart':
+        mediaPath = g.fanart;
+        break;
+      case 'logo':
+        mediaPath = g.logo;
+        break;
+      case 'screenshot':
+        mediaPath = g.screenshot;
+        break;
+      case 'title':
+        mediaPath = g.title || g.titleshot;
+        break;
+      case 'mix':
+        mediaPath = g.mix;
+        break;
+      default:
+        mediaPath = g.cover;
+    }
+
+    // No fallback to other media types - only display the selected type
+
+    return mediaPath ? (mediaPath.startsWith("http") || mediaPath.startsWith("file://") ? mediaPath : `file:///${mediaPath}`) : "";
   }, []);
 
   // Reset display limit when system, search, filter or metadata filters change
@@ -332,6 +441,15 @@ export default function SystemAppContent({
     setShowSavesSidebar(false);
   }, [selectedGame]);
 
+  // Set mediaLoading to true when selected game or preferred media type changes (if a media URL exists)
+  useEffect(() => {
+    if (selectedGame && getGameMediaUrl(selectedGame, preferredMediaType)) {
+      setMediaLoading(true);
+    } else {
+      setMediaLoading(false);
+    }
+  }, [selectedGame?.id, preferredMediaType]);
+
   // Load save states and collections for the selected game
   useEffect(() => {
     if (selectedGame && !selectedGame.isCollectionFolder) {
@@ -437,7 +555,7 @@ export default function SystemAppContent({
   useEffect(() => {
     let gameArtUrl: string | null = null;
     if (selectedGame) {
-      const rawArt = selectedGame.fanart || selectedGame.image || selectedGame.thumbnail || null;
+      const rawArt = selectedGame.fanart || selectedGame.cover || selectedGame.cover3d || selectedGame.image || selectedGame.thumbnail || null;
       gameArtUrl = rawArt ? (rawArt.startsWith("http") || rawArt.startsWith("file://") ? rawArt : `file:///${rawArt.replace(/\\/g, '/')}`) : null;
       window.api.executeCommand("active-game-art-changed", { systemName: system.name, art: gameArtUrl });
     } else {
@@ -695,125 +813,158 @@ export default function SystemAppContent({
                 </div>
                 <span className="text-md text-white/40">{filteredGames.length} {system.name === 'collections' && activeCollection === null ? 'coleções encontradas' : 'jogos encontrados'}</span>
               </div>
+
+              {/* Media Switcher Buttons */}
+              <div className="flex items-center bg-white/5 border border-white/5 p-1 rounded-lg gap-0.5 shadow-inner backdrop-blur-md">
+                {['cover', 'cover2d', 'cover3d', 'fanart', 'logo', 'screenshot', 'title', 'mix'].map((type) => {
+                  const isAvailable = availableMediaTypes[type];
+                  const isActive = preferredMediaType === type;
+                  return (
+                    <button
+                      key={type}
+                      disabled={!isAvailable}
+                      onClick={() => handleMediaTypeChange(type)}
+                      className={`px-2.5 py-1 text-[10px] uppercase font-bold tracking-wider rounded-md transition-all cursor-pointer ${
+                        isActive
+                          ? "bg-accent text-white shadow-md font-extrabold"
+                          : isAvailable
+                          ? "text-white/60 hover:text-white hover:bg-white/5"
+                          : "text-white/20 cursor-not-allowed opacity-30"
+                      }`}
+                      title={!isAvailable ? `Sem mídia '${type}' disponível` : `Exibir mídia '${type}'`}
+                    >
+                      {type}
+                    </button>
+                  );
+                })}
+              </div>
             </div>
 
             {/* Grid display of Games */}
-            <ScrollArea 
-              ref={handleScrollAreaRef}
-              className="flex-1 px-6 py-4 min-w-[400px]"
-            >
-              {filteredGames.length === 0 ? (
-                <div className="h-full flex items-center justify-center text-xs text-white uppercase tracking-widest">
-                  {system.name === 'collections' && activeCollection === null ? 'Nenhuma coleção encontrada' : 'Nenhum jogo encontrado'}
+            <div className="flex-1 relative overflow-hidden min-w-[400px]">
+              {/* Grid media loading overlay */}
+              {gridMediaLoading && (
+                <div className="absolute inset-0 flex items-center justify-center bg-black/45 backdrop-blur-[3px] z-30 animate-in fade-in duration-150">
+                  <Loader2 className="w-8 h-8 text-accent animate-spin" />
                 </div>
-              ) : (
-                <div className="grid grid-cols-5 gap-3">
-                  {(() => {
-                    const sliced = filteredGames.slice(0, displayLimit);
-                    console.log("[SystemAppContent] Rendering grid items. displayLimit =", displayLimit, "filteredGames length =", filteredGames.length, "sliced length =", sliced.length, "items:", sliced);
-                    return sliced.map((g, idx) => {
-                      if (g.isCollectionFolder) {
-                        const hasLogo = !!g.thumbnail;
-                        const hasFanart = !!g.image;
-                        const count = g.gameCount ?? 0;
-                        const countText = `${count} ${count === 1 ? 'Jogo' : 'Jogos'}`;
+              )}
+              
+              <ScrollArea 
+                ref={handleScrollAreaRef}
+                className="h-full w-full px-6 py-4"
+              >
+                {filteredGames.length === 0 ? (
+                  <div className="h-full flex items-center justify-center text-xs text-white uppercase tracking-widest">
+                    {system.name === 'collections' && activeCollection === null ? 'Nenhuma coleção encontrada' : 'Nenhum jogo encontrado'}
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-5 gap-3">
+                    {(() => {
+                      const sliced = filteredGames.slice(0, displayLimit);
+                      console.log("[SystemAppContent] Rendering grid items. displayLimit =", displayLimit, "filteredGames length =", filteredGames.length, "sliced length =", sliced.length, "items:", sliced);
+                      return sliced.map((g, idx) => {
+                        if (g.isCollectionFolder) {
+                          const hasLogo = !!g.cover || !!g.thumbnail;
+                          const hasFanart = !!g.fanart || !!g.image;
+                          const count = g.gameCount ?? 0;
+                          const countText = `${count} ${count === 1 ? 'Jogo' : 'Jogos'}`;
 
+                          return (
+                            <button
+                              key={g.path}
+                              onClick={() => setSelectedIdx(idx)}
+                              onDoubleClick={() => setActiveCollection(g.name)}
+                              className={`group flex flex-col w-full rounded-md overflow-hidden text-left transition-all border-2 relative aspect-[3/4] bg-black/40 ${
+                                idx === selectedIdx
+                                  ? "border-accent shadow-[0_0_15px_var(--accent-color-glass)] z-10"
+                                  : "border-white/5 hover:border-white/10"
+                              }`}
+                            >
+                              {hasFanart || hasLogo ? (
+                                <div className="relative w-full h-full flex items-center justify-center overflow-hidden bg-[#1a1a1a]">
+                                  {hasFanart && (
+                                    <img 
+                                      src={g.fanart || g.image} 
+                                      alt={g.name} 
+                                      className="absolute inset-0 w-full h-full object-cover opacity-40 group-hover:scale-105 transition-all duration-300"
+                                    />
+                                  )}
+                                  {hasLogo ? (
+                                    <img 
+                                      src={g.cover || g.thumbnail} 
+                                      alt={g.name} 
+                                      className="relative w-[80%] max-h-[70%] object-contain filter drop-shadow-[0_4px_8px_rgba(0,0,0,0.6)] group-hover:scale-110 transition-all duration-300 z-10"
+                                    />
+                                  ) : (
+                                    <div className="relative z-10 flex flex-col items-center p-4 text-center">
+                                      <Folder className="w-10 h-10 text-accent mb-2 opacity-80" />
+                                      <span className="text-[10px] font-bold text-white/90 uppercase tracking-wider">{g.name}</span>
+                                    </div>
+                                  )}
+                                  {/* Game count badge at top right */}
+                                  <div className="absolute top-2 right-2 bg-black/60 backdrop-blur-[2px] px-1.5 py-0.5 rounded-md text-[8px] text-white/90 font-bold z-20 border border-white/5 uppercase tracking-wider">
+                                    {countText}
+                                  </div>
+                                  {/* Overlay/shadow at bottom for readability */}
+                                  <div className="absolute top-2 left-2 flex items-center gap-1 bg-black/55 backdrop-blur-[2px] px-2 py-0.5 rounded-md text-[9px] text-white/95 font-bold uppercase tracking-wider border border-white/5 z-20">
+                                    <Folder className="w-2.5 h-2.5 text-accent shrink-0" />
+                                    <span className="truncate">{g.name}</span>
+                                  </div>
+                                </div>
+                              ) : (
+                                <div className="flex flex-col items-center justify-center bg-[#1a1a1a] text-white/30 p-4 text-center w-full h-full select-none relative">
+                                  <Folder className="w-10 h-10 text-accent mb-3 group-hover:scale-105 transition-all duration-300 opacity-80" />
+                                  <span className="text-[10px] font-bold text-white/80 line-clamp-2 uppercase tracking-wider mb-1">{g.name}</span>
+                                  <span className="text-[8px] font-bold text-white/40 uppercase tracking-widest">{countText}</span>
+                                </div>
+                              )}
+                            </button>
+                          );
+                        }
+
+                        const finalImage = getGameMediaUrl(g, preferredMediaType);
+                        
                         return (
                           <button
                             key={g.path}
                             onClick={() => setSelectedIdx(idx)}
-                            onDoubleClick={() => setActiveCollection(g.name)}
-                            className={`group flex flex-col w-full rounded-md overflow-hidden text-left transition-all border-2 relative aspect-[3/4] bg-black/40 ${
-                              idx === selectedIdx
-                                ? "border-accent shadow-[0_0_15px_var(--accent-color-glass)] z-10"
+                            onDoubleClick={() => onLaunchGame(g, system)}
+                            className={`group flex flex-col w-full rounded-md overflow-hidden text-left transition-all border-4 relative bg-[#1a1a1a] aspect-[3/4] ${
+                              idx === selectedIdx 
+                                ? "border-accent shadow-[0_0_15px_var(--accent-color-glass)] z-10" 
                                 : "border-white/5 hover:border-white/10"
                             }`}
                           >
-                            {hasFanart || hasLogo ? (
-                              <div className="relative w-full h-full flex items-center justify-center overflow-hidden bg-[#1a1a1a]">
-                                {hasFanart && (
+                            <div className="flex items-center justify-center overflow-hidden relative w-full h-full">
+                              {finalImage && !failedImages[g.path] ? (
+                                <>
                                   <img 
-                                    src={g.image} 
+                                    src={finalImage} 
                                     alt={g.name} 
-                                    className="absolute inset-0 w-full h-full object-cover opacity-40 group-hover:scale-105 transition-all duration-300"
+                                    onError={() => setFailedImages(prev => ({ ...prev, [g.path]: true }))}
+                                    className="w-full h-full object-contain group-hover:scale-105 transition-all duration-300 animate-in fade-in duration-200" 
                                   />
-                                )}
-                                {hasLogo ? (
-                                  <img 
-                                    src={g.thumbnail} 
-                                    alt={g.name} 
-                                    className="relative w-[80%] max-h-[70%] object-contain filter drop-shadow-[0_4px_8px_rgba(0,0,0,0.6)] group-hover:scale-110 transition-all duration-300 z-10"
-                                  />
-                                ) : (
-                                  <div className="relative z-10 flex flex-col items-center p-4 text-center">
-                                    <Folder className="w-10 h-10 text-accent mb-2 opacity-80" />
-                                    <span className="text-[10px] font-bold text-white/90 uppercase tracking-wider">{g.name}</span>
+                                  {/* Small clean controller icon and title overlay at top left */}
+                                  <div className="absolute top-2 left-2 flex items-center gap-1.5 bg-black/55 backdrop-blur-[2px] px-2 py-0.5 rounded-md text-[9px] text-white/95 font-bold uppercase tracking-wider max-w-[90%] border border-white/5 z-20">
+                                    <Gamepad2 className="w-2.5 h-2.5 text-white/90 shrink-0" />
+                                    <span className="truncate">{g.name}</span>
                                   </div>
-                                )}
-                                {/* Game count badge at top right */}
-                                <div className="absolute top-2 right-2 bg-black/60 backdrop-blur-[2px] px-1.5 py-0.5 rounded-md text-[8px] text-white/90 font-bold z-20 border border-white/5 uppercase tracking-wider">
-                                  {countText}
+                                </>
+                              ) : (
+                                <div className="flex flex-col items-center justify-center bg-[#1a1a1a] text-white/30 p-4 text-center w-full h-full select-none">
+                                  <Gamepad2 className="w-8 h-8 text-white/20 mb-3 group-hover:scale-105 transition-all duration-300" />
+                                  <span className="text-[10px] font-bold text-white/60 line-clamp-2 uppercase tracking-wider">{g.name}</span>
                                 </div>
-                                {/* Overlay/shadow at bottom for readability */}
-                                <div className="absolute top-2 left-2 flex items-center gap-1 bg-black/55 backdrop-blur-[2px] px-2 py-0.5 rounded-md text-[9px] text-white/95 font-bold uppercase tracking-wider border border-white/5 z-20">
-                                  <Folder className="w-2.5 h-2.5 text-accent shrink-0" />
-                                  <span className="truncate">{g.name}</span>
-                                </div>
-                              </div>
-                            ) : (
-                              <div className="flex flex-col items-center justify-center bg-[#1a1a1a] text-white/30 p-4 text-center w-full h-full select-none relative">
-                                <Folder className="w-10 h-10 text-accent mb-3 group-hover:scale-105 transition-all duration-300 opacity-80" />
-                                <span className="text-[10px] font-bold text-white/80 line-clamp-2 uppercase tracking-wider mb-1">{g.name}</span>
-                                <span className="text-[8px] font-bold text-white/40 uppercase tracking-widest">{countText}</span>
-                              </div>
-                            )}
+                              )}
+                            </div>
                           </button>
                         );
-                      }
-
-                      const boxArt = g.thumbnail || g.image || g.marquee;
-                      const finalImage = boxArt ? (boxArt.startsWith("http") || boxArt.startsWith("file://") ? boxArt : `file:///${boxArt}`) : "";
-                      
-                      return (
-                        <button
-                          key={g.path}
-                          onClick={() => setSelectedIdx(idx)}
-                          onDoubleClick={() => onLaunchGame(g, system)}
-                          className={`group flex flex-col w-full rounded-md overflow-hidden text-left transition-all border-4 relative bg-[#1a1a1a] aspect-[3/4] ${
-                            idx === selectedIdx 
-                              ? "border-accent shadow-[0_0_15px_var(--accent-color-glass)] z-10" 
-                              : "border-white/5 hover:border-white/10"
-                          }`}
-                        >
-                          <div className="flex items-center justify-center overflow-hidden relative w-full h-full">
-                            {finalImage && !failedImages[g.path] ? (
-                              <>
-                                <img 
-                                  src={finalImage} 
-                                  alt={g.name} 
-                                  onError={() => setFailedImages(prev => ({ ...prev, [g.path]: true }))}
-                                  className="w-full h-full object-contain group-hover:scale-105 transition-all duration-300 animate-in fade-in duration-200" 
-                                />
-                                {/* Small clean controller icon and title overlay at top left */}
-                                <div className="absolute top-2 left-2 flex items-center gap-1.5 bg-black/55 backdrop-blur-[2px] px-2 py-0.5 rounded-md text-[9px] text-white/95 font-bold uppercase tracking-wider max-w-[90%] border border-white/5 z-20">
-                                  <Gamepad2 className="w-2.5 h-2.5 text-white/90 shrink-0" />
-                                  <span className="truncate">{g.name}</span>
-                                </div>
-                              </>
-                            ) : (
-                              <div className="flex flex-col items-center justify-center bg-[#1a1a1a] text-white/30 p-4 text-center w-full h-full select-none">
-                                <Gamepad2 className="w-8 h-8 text-white/20 mb-3 group-hover:scale-105 transition-all duration-300" />
-                                <span className="text-[10px] font-bold text-white/60 line-clamp-2 uppercase tracking-wider">{g.name}</span>
-                              </div>
-                            )}
-                          </div>
-                        </button>
-                      );
-                    });
-                  })()}
-                </div>
-              )}
-            </ScrollArea>
+                      });
+                    })()}
+                  </div>
+                )}
+              </ScrollArea>
+            </div>
           </div>
         )}
 
@@ -970,18 +1121,18 @@ export default function SystemAppContent({
                   
                   return (
                     <>
-                      {selectedGame.image || selectedGame.thumbnail ? (
+                      {selectedGame.cover || selectedGame.thumbnail || selectedGame.fanart || selectedGame.image ? (
                         <div className="relative w-full aspect-video rounded-md overflow-hidden bg-black/50 border border-white/5 shadow-md flex items-center justify-center shrink-0">
-                          {selectedGame.image && (
+                          {(selectedGame.fanart || selectedGame.image) && (
                             <img 
-                              src={selectedGame.image} 
+                              src={selectedGame.fanart || selectedGame.image} 
                               alt={selectedGame.name} 
                               className="absolute inset-0 w-full h-full object-cover opacity-50"
                             />
                           )}
-                          {selectedGame.thumbnail ? (
+                          {(selectedGame.cover || selectedGame.thumbnail) ? (
                             <img 
-                              src={selectedGame.thumbnail} 
+                              src={selectedGame.cover || selectedGame.thumbnail} 
                               alt={selectedGame.name} 
                               className="relative w-[70%] max-h-[85%] object-contain filter drop-shadow-[0_4px_8px_rgba(0,0,0,0.6)] z-10"
                             />
@@ -1001,7 +1152,7 @@ export default function SystemAppContent({
                       )}
 
                       {/* Title and metadata */}
-                      {(selectedGame.image || selectedGame.thumbnail) && (
+                      {(selectedGame.cover || selectedGame.thumbnail || selectedGame.fanart || selectedGame.image) && (
                         <div className="flex flex-col text-left px-1">
                           <h3 className="font-bold text-base leading-snug text-white/95 truncate" title={selectedGame.name}>{selectedGame.name}</h3>
                           <span className="text-[10px] text-white/40 mt-1 uppercase tracking-wider font-semibold">Pasta de Coleção · {countText}</span>
@@ -1029,11 +1180,11 @@ export default function SystemAppContent({
               /* Normal Game Details */
               <div className="flex flex-col gap-4">
                 {/* Game Logo/Marquee (Transparent background) */}
-                {selectedGame.marquee && !imageError && (
+                {(selectedGame.logo || selectedGame.marquee) && !imageError && (
                   <div className="w-full flex items-center justify-center overflow-hidden relative shrink-0">
                     <img 
                       src={(() => {
-                        const logo = selectedGame.marquee || "";
+                        const logo = selectedGame.logo || selectedGame.marquee || "";
                         return logo.startsWith("http") || logo.startsWith("file://") ? logo : `file:///${logo.replace(/\\/g, '/')}`;
                       })()} 
                       alt={selectedGame.name} 
@@ -1043,8 +1194,8 @@ export default function SystemAppContent({
                   </div>
                 )}
 
-                {/* Game Playback Video Preview */}
-                {videoUrl && (
+                {/* Game Playback Video Preview or Image Fallback */}
+                {videoUrl ? (
                   <div className="relative group w-full aspect-video rounded-md overflow-hidden bg-black/50 border border-white/5 shadow-md shrink-0">
                     <video 
                       src={videoUrl} 
@@ -1062,6 +1213,23 @@ export default function SystemAppContent({
                       <Maximize2 className="w-3.5 h-3.5" />
                     </button>
                   </div>
+                ) : (
+                  getGameMediaUrl(selectedGame, preferredMediaType) && (
+                    <div className="relative w-full aspect-video rounded-md overflow-hidden bg-black/50 border border-white/5 shadow-md shrink-0 flex items-center justify-center">
+                      {mediaLoading && (
+                        <div className="absolute inset-0 flex items-center justify-center bg-black/30 backdrop-blur-[2px] z-10 animate-in fade-in duration-200">
+                          <Loader2 className="w-6 h-6 text-accent animate-spin" />
+                        </div>
+                      )}
+                      <img 
+                        src={getGameMediaUrl(selectedGame, preferredMediaType)} 
+                        alt={selectedGame.name} 
+                        onLoad={() => setMediaLoading(false)}
+                        onError={() => setMediaLoading(false)}
+                        className={`w-full h-full object-contain filter drop-shadow-[0_4px_8px_rgba(0,0,0,0.6)] transition-all duration-300 ${mediaLoading ? 'opacity-0 scale-95 blur-sm' : 'opacity-100 scale-100 blur-0'}`}
+                      />
+                    </div>
+                  )
                 )}
                 
                 {/* Title & Metadata with Context Menu */}
@@ -1083,17 +1251,17 @@ export default function SystemAppContent({
                         e.stopPropagation();
                         setShowContextMenu(prev => !prev);
                       }}
-                      className="p-1.5 rounded-md bg-[#1a1a1a] hover:bg-white/10 border border-white/5 text-white/60 hover:text-white transition cursor-pointer flex items-center justify-center"
+                      className={`text-white/60 hover:text-white transition cursor-pointer flex items-center justify-center p-1.5 rounded-lg border border-white/5 hover:bg-white/10 ${showContextMenu ? "text-white bg-white/10" : "bg-[#1a1a1a]"}`}
                       title="Opções"
                     >
-                      <span className="block text-xs font-bold leading-none translate-y-[-2px]">...</span>
+                      <MoreHorizontal className="w-4 h-4" />
                     </button>
                     
                     {showContextMenu && (
                       <>
                         <div className="fixed inset-0 z-40" onClick={() => setShowContextMenu(false)} />
-                        <div className="absolute right-0 mt-1 w-48 bg-[#1a1a1a] border border-white/10 rounded-md py-2 shadow-2xl z-50 animate-in fade-in slide-in-from-top-2 duration-150 text-left">
-                          <div className="px-3 py-1 text-[10px] font-bold text-white/40 uppercase tracking-widest border-b border-white/5 mb-1">
+                        <div className="absolute right-0 mt-2 w-56 bg-[#0d0d0d]/95 backdrop-blur-md border border-white/10 rounded-xl shadow-2xl p-2 z-50 text-white animate-in fade-in slide-in-from-top-2 duration-150 text-left">
+                          <div className="px-3 py-1 text-[10px] text-white/40 uppercase font-semibold tracking-wider mb-1.5">
                             Gerenciar jogo
                           </div>
                           
@@ -1103,9 +1271,9 @@ export default function SystemAppContent({
                               setSidebarTab("saves");
                               setShowSavesSidebar(true);
                             }}
-                            className="w-full flex items-center gap-2 px-3 py-2 text-xs text-white/80 hover:text-white hover:bg-white/5 transition text-left cursor-pointer"
+                            className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs hover:bg-white/10 text-left transition cursor-pointer text-white/80 hover:text-white"
                           >
-                            <HardDrive className="w-3.5 h-3.5 opacity-60" />
+                            <HardDrive className="w-4 h-4 text-accent" />
                             <span>Save states</span>
                           </button>
                           
@@ -1115,9 +1283,9 @@ export default function SystemAppContent({
                               setSidebarTab("collections");
                               setShowSavesSidebar(true);
                             }}
-                            className="w-full flex items-center gap-2 px-3 py-2 text-xs text-white/80 hover:text-white hover:bg-white/5 transition text-left cursor-pointer"
+                            className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs hover:bg-white/10 text-left transition cursor-pointer text-white/80 hover:text-white"
                           >
-                            <Folder className="w-3.5 h-3.5 opacity-60" />
+                            <Folder className="w-4 h-4 text-cyan-400" />
                             <span>Adicionar à coleção</span>
                           </button>
                           
@@ -1126,9 +1294,9 @@ export default function SystemAppContent({
                               setShowContextMenu(false);
                               handleToggleFavorite();
                             }}
-                            className="w-full flex items-center gap-2 px-3 py-2 text-xs text-white/80 hover:text-white hover:bg-white/5 transition text-left cursor-pointer"
+                            className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs hover:bg-white/10 text-left transition cursor-pointer text-white/80 hover:text-white"
                           >
-                            <Heart className={`w-3.5 h-3.5 ${selectedGame.favorite ? "fill-red-500 text-red-500" : "opacity-60"}`} />
+                            <Heart className={`w-4 h-4 ${selectedGame.favorite ? "fill-red-500 text-red-500" : "text-red-500 opacity-60"}`} />
                             <span>{selectedGame.favorite ? "Remover dos Favoritos" : "Favoritar"}</span>
                           </button>
                         </div>
@@ -1218,7 +1386,7 @@ export default function SystemAppContent({
                 <div className="flex flex-col gap-2 mt-auto pt-3">
                   <button
                     onClick={() => onLaunchGame(selectedGame, system)}
-                    className="w-full bg-accent hover:bg-accent-hover hover:scale-[1.02] hover:shadow-lg transition-all rounded-md py-3 text-xl font-bold flex items-center justify-center gap-2 cursor-pointer text-white bg-gradient-to-br from-[var(--accent-color)] to-[var(--accent-color-hover)] outline outline-2 outline-[var(--accent-color)] outline-offset-2">
+                    className="w-[calc(100%-8px)] mx-auto bg-accent hover:bg-accent-hover hover:scale-[1.02] hover:shadow-lg transition-all rounded-md py-3 text-xl font-bold flex items-center justify-center gap-2 cursor-pointer text-white bg-gradient-to-br from-[var(--accent-color)] to-[var(--accent-color-hover)] outline outline-2 outline-[var(--accent-color)] outline-offset-2">
                     <Play className="w-6 h-6 fill-white text-white" />
                     <span>Jogar</span>
                   </button>

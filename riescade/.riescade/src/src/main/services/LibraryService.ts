@@ -940,8 +940,17 @@ export class LibraryService {
       const countsMap = this.getCustomCollectionsGameCounts()
       
       return enabledCols.map(colName => {
-        const logoFile = join(getLogosPath(), 'collections', `${colName}.webp`)
-        const artFile = join(getArtsPath(), 'collections', `${colName}.webp`)
+        const normName = colName.toLowerCase().replace(/[^a-z0-9]/g, '')
+        
+        let logoFile = join(getLogosPath(), 'collections', `${normName}.webp`)
+        if (!existsSync(logoFile)) {
+          logoFile = join(getLogosPath(), 'collections', `${colName}.webp`)
+        }
+        
+        let artFile = join(getArtsPath(), 'collections', `${normName}.webp`)
+        if (!existsSync(artFile)) {
+          artFile = join(getArtsPath(), 'collections', `${colName}.webp`)
+        }
         
         const gameObj: any = {
           id: `collection_${colName}`,
@@ -1605,7 +1614,7 @@ export class LibraryService {
             for (const game of games) {
               const absRomPath = resolve(sys.path, game.path)
               if (fs.existsSync(absRomPath)) {
-                const mediaFields = ['image', 'video', 'marquee', 'thumbnail', 'fanart', 'mix', 'wheel']
+                const mediaFields = ['image', 'video', 'marquee', 'thumbnail', 'fanart', 'mix', 'wheel', 'cover2d', 'screenshot', 'cover', 'cover3d', 'logo', 'title']
                 mediaFields.forEach(field => {
                   const mediaPath = (game as any)[field]
                   if (mediaPath && typeof mediaPath === 'string' && !mediaPath.startsWith('http')) {

@@ -15,6 +15,27 @@ import VirtualWindow from "./components/VirtualWindow";
 import defaultBg from '../../main/resources/default.webp';
 
 const DEFAULT_SYSTEM_BG = "radial-gradient(1200px 800px at 20% 10%, rgb(35 35 35) 0%, transparent 60%), radial-gradient(1000px 700px at 85% 90%, rgb(12 12 12) 0%, transparent 55%), linear-gradient(rgb(4 4 4) 0%, rgb(22 22 22) 100%)";
+// Synchronously apply accent color from localStorage if present to prevent any layout/color flash
+try {
+  const savedColor = localStorage.getItem("accentColor");
+  if (savedColor) {
+    const root = document.documentElement;
+    root.style.setProperty("--accent-color", savedColor);
+    let hex = savedColor.replace("#", "");
+    if (/^[0-9A-F]{6}$/i.test(hex)) {
+      const r = parseInt(hex.substring(0, 2), 16);
+      const g = parseInt(hex.substring(2, 4), 16);
+      const b = parseInt(hex.substring(4, 6), 16);
+      root.style.setProperty("--accent-color-hover", `#${Math.max(0, Math.floor(r * 0.8)).toString(16).padStart(2, '0')}${Math.max(0, Math.floor(g * 0.8)).toString(16).padStart(2, '0')}${Math.max(0, Math.floor(b * 0.8)).toString(16).padStart(2, '0')}`);
+      root.style.setProperty("--accent-color-light", `rgba(${r}, ${g}, ${b}, 0.2)`);
+      root.style.setProperty("--accent-color-focus", `rgba(${r}, ${g}, ${b}, 0.6)`);
+      root.style.setProperty("--accent-color-glass", `rgba(${r}, ${g}, ${b}, 0.4)`);
+    }
+  }
+} catch (e) {
+  // Ignore localStorage error
+}
+
 export default function App() {
   const [systems, setSystems] = useState<System[]>([]);
   const [launcherOpen, setLauncherOpen] = useState(false);
@@ -172,7 +193,10 @@ export default function App() {
 
   // Dynamically apply accent color CSS variables
   useEffect(() => {
-    const color = settings["RIESCADE.AccentColor"]?.value || "#8b5cf6";
+    // Don't override localStorage with default color before settings have loaded from DB
+    if (!settings["RIESCADE.AccentColor"]) return;
+
+    const color = settings["RIESCADE.AccentColor"].value || "#8b5cf6";
     const root = document.documentElement;
     root.style.setProperty("--accent-color", color);
     localStorage.setItem("accentColor", color);

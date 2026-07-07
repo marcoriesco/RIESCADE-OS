@@ -50,6 +50,12 @@ export type Game = {
   languages?: string;
   region?: string;
   lang?: string;
+  cover2d?: string;
+  screenshot?: string;
+  cover?: string;
+  cover3d?: string;
+  logo?: string;
+  title?: string;
   sortname?: string;
   tags?: string;
   crc32?: string;
@@ -59,6 +65,8 @@ export type Game = {
   scrapDate?: string;
   hidden?: boolean;
   kidgame?: boolean;
+  isCollectionFolder?: boolean;
+  gameCount?: number;
 };
 
 

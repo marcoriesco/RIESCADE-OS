@@ -65,6 +65,7 @@ const api = {
   downloadGameMedia: (systemName: string, gamePath: string, matchData: any) => ipcRenderer.invoke('download-game-media', systemName, gamePath, matchData),
   downloadTempMedia: (url: string) => ipcRenderer.invoke('download-temp-media', url),
   getRiescadeLogoPath: () => ipcRenderer.invoke('get-riescade-logo-path'),
+  checkMediaFolders: (systemPath: string) => ipcRenderer.invoke('check-media-folders', systemPath),
 
   // DB Manager APIs
   dbGetGamesPaginated: (system: string, page: number, pageSize: number, search: string, sortBy: string, sortDir: string) =>

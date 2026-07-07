@@ -1,5 +1,5 @@
 import Database from 'better-sqlite3'
-import { existsSync, statSync, readdirSync, mkdirSync } from 'fs'
+import { existsSync, statSync, readdirSync, mkdirSync, readFileSync } from 'fs'
 import { join, dirname, relative, resolve, isAbsolute } from 'path'
 import { getDatabasePath, getRomsPath, getConfigPath, getCollectionsPath, getRiescadePath } from '../utils/paths'
 import { GamelistParser } from '../parsers/GamelistParser'
@@ -107,6 +107,12 @@ export class DatabaseService {
         manual        TEXT,
         magazine      TEXT,
         map           TEXT,
+        cover2d       TEXT,
+        screenshot    TEXT,
+        cover         TEXT,
+        cover3d       TEXT,
+        logo          TEXT,
+        title         TEXT,
         rating        REAL,
         releasedate   TEXT,
         developer     TEXT,
@@ -229,6 +235,78 @@ export class DatabaseService {
       }
     }
 
+    // Schema migration: Add cover2d to games if it doesn't exist
+    try {
+      db.prepare("SELECT cover2d FROM games LIMIT 1").get()
+    } catch {
+      try {
+        db.exec("ALTER TABLE games ADD COLUMN cover2d TEXT")
+        console.log("Database table 'games' altered to add 'cover2d' column.")
+      } catch (err) {
+        console.error("Failed to alter games table to add cover2d column:", err)
+      }
+    }
+
+    // Schema migration: Add screenshot to games if it doesn't exist
+    try {
+      db.prepare("SELECT screenshot FROM games LIMIT 1").get()
+    } catch {
+      try {
+        db.exec("ALTER TABLE games ADD COLUMN screenshot TEXT")
+        console.log("Database table 'games' altered to add 'screenshot' column.")
+      } catch (err) {
+        console.error("Failed to alter games table to add screenshot column:", err)
+      }
+    }
+
+    // Schema migration: Add cover to games if it doesn't exist
+    try {
+      db.prepare("SELECT cover FROM games LIMIT 1").get()
+    } catch {
+      try {
+        db.exec("ALTER TABLE games ADD COLUMN cover TEXT")
+        console.log("Database table 'games' altered to add 'cover' column.")
+      } catch (err) {
+        console.error("Failed to alter games table to add cover column:", err)
+      }
+    }
+
+    // Schema migration: Add cover3d to games if it doesn't exist
+    try {
+      db.prepare("SELECT cover3d FROM games LIMIT 1").get()
+    } catch {
+      try {
+        db.exec("ALTER TABLE games ADD COLUMN cover3d TEXT")
+        console.log("Database table 'games' altered to add 'cover3d' column.")
+      } catch (err) {
+        console.error("Failed to alter games table to add cover3d column:", err)
+      }
+    }
+
+    // Schema migration: Add logo to games if it doesn't exist
+    try {
+      db.prepare("SELECT logo FROM games LIMIT 1").get()
+    } catch {
+      try {
+        db.exec("ALTER TABLE games ADD COLUMN logo TEXT")
+        console.log("Database table 'games' altered to add 'logo' column.")
+      } catch (err) {
+        console.error("Failed to alter games table to add logo column:", err)
+      }
+    }
+
+    // Schema migration: Add title to games if it doesn't exist
+    try {
+      db.prepare("SELECT title FROM games LIMIT 1").get()
+    } catch {
+      try {
+        db.exec("ALTER TABLE games ADD COLUMN title TEXT")
+        console.log("Database table 'games' altered to add 'title' column.")
+      } catch (err) {
+        console.error("Failed to alter games table to add title column:", err)
+      }
+    }
+
     // Create Collections and Collection Games Tables
     db.exec(`
       CREATE TABLE IF NOT EXISTS collections (
@@ -244,20 +322,140 @@ export class DatabaseService {
       );
     `)
 
-    // Migrate custom collection .cfg files to SQLite if collections table is empty
+    // Check user_version for migrations
+    let userVersion = 0;
+    try {
+      const row = db.prepare("PRAGMA user_version").get() as any;
+      userVersion = row ? row.user_version : 0;
+    } catch (e) {
+      console.error("Failed to read PRAGMA user_version:", e);
+    }
+
+    if (userVersion < 2) {
+      try {
+        console.log(`[Migration] Running database schema media update (version ${userVersion} -> 2)...`);
+        const totalCount = db.prepare("SELECT COUNT(*) as count FROM games").get() as any;
+        if (totalCount?.count > 0) {
+          const unpopulated = db.prepare("SELECT id, path, system FROM games").all() as any[];
+          console.log(`[Migration] Updating media paths for ${unpopulated.length} games in place...`);
+          
+          const updateStmt = db.prepare(`
+            UPDATE games 
+            SET cover = ?, cover3d = ?, logo = ?, title = ?, cover2d = ?, screenshot = ?
+            WHERE id = ?
+          `);
+          
+          const systemMediaCaches = new Map<string, Map<string, Map<string, string>>>();
+          const getSystemMediaCache = (systemName: string) => {
+            if (systemMediaCaches.has(systemName)) return systemMediaCaches.get(systemName)!;
+            
+            const cache = new Map<string, Map<string, string>>();
+            const sysPath = join(getRomsPath(), systemName);
+            const mediaDir = join(sysPath, 'media');
+            const subfolders = ['cover', 'cover2d', 'cover3d', 'fanart', 'logo', 'screenshot', 'title'];
+            
+            if (existsSync(mediaDir)) {
+              for (const sub of subfolders) {
+                const subPath = join(mediaDir, sub);
+                if (existsSync(subPath)) {
+                  try {
+                    const files = readdirSync(subPath);
+                    const fileMap = new Map<string, string>();
+                    for (const file of files) {
+                      const fileStem = file.includes('.') ? file.substring(0, file.lastIndexOf('.')) : file;
+                      fileMap.set(fileStem.toLowerCase(), file);
+                    }
+                    cache.set(sub, fileMap);
+                  } catch {}
+                }
+              }
+            }
+            systemMediaCaches.set(systemName, cache);
+            return cache;
+          };
+
+          const runUpdate = db.transaction(() => {
+            for (const row of unpopulated) {
+              const stem = row.path.replace(/^.*[\/\\]/, '').replace(/\.[^.]+$/, '');
+              const cache = getSystemMediaCache(row.system);
+              
+              const findMedia = (folder: string): string | null => {
+                const folderMap = cache.get(folder);
+                if (folderMap) {
+                  const match = folderMap.get(stem.toLowerCase());
+                  if (match) {
+                    return `./media/${folder}/${match}`;
+                  }
+                }
+                return null;
+              };
+              
+              updateStmt.run(
+                findMedia('cover'),
+                findMedia('cover3d'),
+                findMedia('logo'),
+                findMedia('title'),
+                findMedia('cover2d'),
+                findMedia('screenshot'),
+                row.id
+              );
+            }
+          });
+          
+          runUpdate();
+          console.log(`[Migration] Successfully updated ${unpopulated.length} games in place.`);
+        }
+        
+        db.exec("PRAGMA user_version = 2");
+        console.log("[Migration] Database user_version updated to 2.");
+      } catch (e) {
+        console.error("[Migration] Failed to run in-place media update:", e);
+      }
+    }
+
+    // Ensure collections table has fullname column
+    try {
+      db.prepare("SELECT fullname FROM collections LIMIT 1").get()
+    } catch {
+      try {
+        db.exec("ALTER TABLE collections ADD COLUMN fullname TEXT")
+        console.log("Database table 'collections' altered to add 'fullname' column.")
+      } catch (err) {
+        console.error("Failed to alter collections table to add fullname column:", err)
+      }
+    }
+
+    // Populate collections from collections.json if collections table is empty
     try {
       const collectionsCount = db.prepare('SELECT COUNT(*) as count FROM collections').get() as any
       if (collectionsCount && collectionsCount.count === 0) {
+        const collectionsJsonPath = join(getRiescadePath(), 'configs', 'collections.json')
+        if (existsSync(collectionsJsonPath)) {
+          const content = readFileSync(collectionsJsonPath, 'utf-8')
+          const list = JSON.parse(content) as { name: string, fullname: string }[]
+          
+          const insertStmt = db.prepare('INSERT OR IGNORE INTO collections (name, fullname) VALUES (?, ?)')
+          const insertTx = db.transaction(() => {
+            for (const col of list) {
+              insertStmt.run(col.name, col.fullname)
+            }
+          })
+          insertTx()
+          console.log(`[DatabaseService] Populated collections table with ${list.length} predefined collections from collections.json.`)
+        }
+
+        // Fallback: Migrate custom collection .cfg files to SQLite if any exist
         const collectionsDir = getCollectionsPath()
         if (existsSync(collectionsDir)) {
           const files = readdirSync(collectionsDir)
-          const insertCol = db.prepare('INSERT OR IGNORE INTO collections (name) VALUES (?)')
+          const insertCol = db.prepare('INSERT OR IGNORE INTO collections (name, fullname) VALUES (?, ?)')
           const insertColGame = db.prepare('INSERT OR IGNORE INTO collection_games (collection_name, game_system, game_path) VALUES (?, ?, ?)')
           
           files.forEach(f => {
             if (f.startsWith('custom-') && f.endsWith('.cfg')) {
               const colName = f.substring(7, f.length - 4)
-              insertCol.run(colName)
+              const normalizedName = this.normalizeCollectionName(colName)
+              insertCol.run(normalizedName, colName)
               
               try {
                 const fs = require('fs')
@@ -269,7 +467,7 @@ export class DatabaseService {
                   if (match) {
                     const systemName = match[1]
                     const gamePath = './' + match[2]
-                    insertColGame.run(colName, systemName, gamePath)
+                    insertColGame.run(normalizedName, systemName, gamePath)
                   }
                 })
                 console.log(`Migrated collection '${colName}' with ${lines.length} items from .cfg to SQLite database.`)
@@ -281,7 +479,7 @@ export class DatabaseService {
         }
       }
     } catch (err) {
-      console.error('Failed to migrate custom collections to DB:', err)
+      console.error('Failed to initialize/populate collections in DB:', err)
     }
   }
 
@@ -405,8 +603,8 @@ export class DatabaseService {
     const mediaCache = new Map<string, Map<string, string>>()
     const mediaDir = join(system.path, 'media')
     const mediaSubfolders = [
-      'cover', 'video', 'logo', 'thumbnail', 'cover3d', 'fanart', 'title',
-      'wheel', 'mix', 'backcover', 'bezel', 'manual', 'magazine', 'map'
+      'cover', 'cover2d', 'cover3d', 'fanart', 'logo', 'screenshot', 'title',
+      'video', 'thumbnail', 'wheel', 'mix', 'backcover', 'bezel', 'manual', 'magazine', 'map'
     ]
 
     if (existsSync(mediaDir)) {
@@ -467,37 +665,49 @@ export class DatabaseService {
             path: pg.path,
             id: metadataSource.id && !metadataSource.id.includes('/') && !metadataSource.id.includes('\\') ? metadataSource.id : pg.id,
             // Ensure media is looked up if missing in existing metadata
-            image: getMediaVal('image', 'cover'),
+            image: undefined,
             video: getMediaVal('video', 'video'),
-            marquee: getMediaVal('marquee', 'logo', 'wheel'),
-            thumbnail: getMediaVal('thumbnail', 'cover3d', 'thumbnail'),
+            marquee: getMediaVal('marquee', 'marquee'),
+            thumbnail: undefined,
             fanart: getMediaVal('fanart', 'fanart'),
-            titleshot: getMediaVal('titleshot', 'title'),
-            wheel: getMediaVal('wheel', 'wheel', 'logo'),
+            titleshot: undefined,
+            wheel: undefined,
             mix: getMediaVal('mix', 'mix'),
             boxback: getMediaVal('boxback', 'backcover'),
             bezel: getMediaVal('bezel', 'bezel'),
             manual: getMediaVal('manual', 'manual'),
             magazine: getMediaVal('magazine', 'magazine'),
-            map: getMediaVal('map', 'map')
+            map: getMediaVal('map', 'map'),
+            cover2d: getMediaVal('cover2d', 'cover2d'),
+            screenshot: getMediaVal('screenshot', 'screenshot'),
+            cover: getMediaVal('cover', 'cover'),
+            cover3d: getMediaVal('cover3d', 'cover3d'),
+            logo: getMediaVal('logo', 'logo'),
+            title: getMediaVal('title', 'title')
           })
         } else {
           // New game physical scan: resolve local media fallback
           mergedGames.push({
             ...pg,
-            image: findLocalMedia(stem, 'cover') || undefined,
+            image: undefined,
             video: findLocalMedia(stem, 'video') || undefined,
-            marquee: findLocalMedia(stem, 'logo') || findLocalMedia(stem, 'wheel') || undefined,
-            thumbnail: findLocalMedia(stem, 'cover3d') || findLocalMedia(stem, 'thumbnail') || undefined,
+            marquee: findLocalMedia(stem, 'marquee') || undefined,
+            thumbnail: undefined,
             fanart: findLocalMedia(stem, 'fanart') || undefined,
-            titleshot: findLocalMedia(stem, 'title') || undefined,
-            wheel: findLocalMedia(stem, 'wheel') || findLocalMedia(stem, 'logo') || undefined,
+            titleshot: undefined,
+            wheel: undefined,
             mix: findLocalMedia(stem, 'mix') || undefined,
             boxback: findLocalMedia(stem, 'backcover') || undefined,
             bezel: findLocalMedia(stem, 'bezel') || undefined,
             manual: findLocalMedia(stem, 'manual') || undefined,
             magazine: findLocalMedia(stem, 'magazine') || undefined,
-            map: findLocalMedia(stem, 'map') || undefined
+            map: findLocalMedia(stem, 'map') || undefined,
+            cover2d: findLocalMedia(stem, 'cover2d') || undefined,
+            screenshot: findLocalMedia(stem, 'screenshot') || undefined,
+            cover: findLocalMedia(stem, 'cover') || undefined,
+            cover3d: findLocalMedia(stem, 'cover3d') || undefined,
+            logo: findLocalMedia(stem, 'logo') || undefined,
+            title: findLocalMedia(stem, 'title') || undefined
           })
         }
       }
@@ -519,7 +729,8 @@ export class DatabaseService {
         favorite, hidden, kidgame, playcount, lastplayed,
         region, lang, emulator, core, sortname, tags,
         gamefamily, arcadesystem, languages, cheevos_id, cheevos_hash,
-        file_size, file_mtime, crc32, md5, gametime, scrap_name, scrap_date
+        file_size, file_mtime, crc32, md5, gametime, scrap_name, scrap_date,
+        cover2d, screenshot, cover, cover3d, logo, title
       ) VALUES (
         @id, @name, @path, @system, @desc, @image, @video, @marquee, @thumbnail,
         @fanart, @titleshot, @wheel, @mix, @boxback, @bezel, @manual, @magazine, @map,
@@ -527,7 +738,8 @@ export class DatabaseService {
         @favorite, @hidden, @kidgame, @playcount, @lastplayed,
         @region, @lang, @emulator, @core, @sortname, @tags,
         @gamefamily, @arcadesystem, @languages, @cheevos_id, @cheevos_hash,
-        @file_size, @file_mtime, @crc32, @md5, @gametime, @scrap_name, @scrap_date
+        @file_size, @file_mtime, @crc32, @md5, @gametime, @scrap_name, @scrap_date,
+        @cover2d, @screenshot, @cover, @cover3d, @logo, @title
       )
     `)
 
@@ -575,6 +787,12 @@ export class DatabaseService {
           manual: makeRelative(g.manual),
           magazine: makeRelative(g.magazine),
           map: makeRelative(g.map),
+          cover2d: makeRelative(g.cover2d),
+          screenshot: makeRelative(g.screenshot),
+          cover: makeRelative(g.cover),
+          cover3d: makeRelative(g.cover3d),
+          logo: makeRelative(g.logo),
+          title: makeRelative(g.title),
           rating: g.rating != null ? g.rating : null,
           releasedate: g.releasedate || null,
           developer: g.developer || null,
@@ -662,7 +880,7 @@ export class DatabaseService {
     for (let i = 0; i < realSystems.length; i++) {
       const sys = realSystems[i]
 
-      if (isFirstRun || this.needsSync(sys.name, sys.path)) {
+      if (isFirstRun || this.migrationOccurred || this.needsSync(sys.name, sys.path)) {
         this.syncSystem(sys, scanPhysicalGames, isFirstRun || process.env.NODE_ENV === 'development')
         synced++
       }
@@ -1219,6 +1437,12 @@ export class DatabaseService {
       manual: resolvePath(row.manual),
       magazine: resolvePath(row.magazine),
       map: resolvePath(row.map),
+      cover2d: resolvePath(row.cover2d),
+      screenshot: resolvePath(row.screenshot),
+      cover: resolvePath(row.cover),
+      cover3d: resolvePath(row.cover3d),
+      logo: resolvePath(row.logo),
+      title: resolvePath(row.title),
       gamefamily: row.gamefamily || undefined,
       arcadesystem: row.arcadesystem || undefined,
       languages: row.languages || undefined,
@@ -1323,11 +1547,15 @@ export class DatabaseService {
 
   // ─── Custom Collection Operations ─────────────────────────────
 
+  private normalizeCollectionName(name: string): string {
+    return name.toLowerCase().replace(/[^a-z0-9]/g, '');
+  }
+
   public getCustomCollections(): string[] {
     const db = this.ensureOpen()
     try {
-      const rows = db.prepare('SELECT name FROM collections ORDER BY name COLLATE NOCASE').all() as any[]
-      return rows.map(r => r.name)
+      const rows = db.prepare('SELECT COALESCE(fullname, name) as display_name FROM collections ORDER BY display_name COLLATE NOCASE').all() as any[]
+      return rows.map(r => r.display_name)
     } catch (e) {
       console.error('Failed to query custom collections from DB:', e)
       return []
@@ -1339,14 +1567,15 @@ export class DatabaseService {
     const map = new Map<string, number>()
     try {
       const rows = db.prepare(`
-        SELECT cg.collection_name, COUNT(*) as count
+        SELECT COALESCE(c.fullname, cg.collection_name) as display_name, COUNT(*) as count
         FROM collection_games cg
+        LEFT JOIN collections c ON cg.collection_name = c.name
         JOIN games g ON LOWER(cg.game_system) = LOWER(g.system) 
           AND REPLACE(REPLACE(LOWER(cg.game_path), '\\\\', '/'), './', '') = REPLACE(REPLACE(LOWER(g.path), '\\\\', '/'), './', '')
-        GROUP BY cg.collection_name
+        GROUP BY display_name
       `).all() as any[]
       rows.forEach(r => {
-        map.set(r.collection_name, r.count)
+        map.set(r.display_name, r.count)
       })
     } catch (e) {
       console.error('Failed to query custom collections game counts:', e)
@@ -1357,7 +1586,11 @@ export class DatabaseService {
   public getCollectionGames(collectionName: string): Game[] {
     const db = this.ensureOpen()
     try {
-      console.log(`[DatabaseService] Querying custom collection: "${collectionName}"`);
+      // Find the lowercase name if the input is a fullname or name
+      const colRow = db.prepare('SELECT name FROM collections WHERE LOWER(name) = LOWER(?) OR LOWER(fullname) = LOWER(?)').get(collectionName, collectionName) as any
+      const actualName = colRow ? colRow.name : this.normalizeCollectionName(collectionName)
+
+      console.log(`[DatabaseService] Querying custom collection: "${actualName}" (requested: "${collectionName}")`);
       const rows = db.prepare(`
         SELECT g.*
         FROM collection_games cg
@@ -1365,10 +1598,10 @@ export class DatabaseService {
           AND REPLACE(REPLACE(LOWER(cg.game_path), '\\\\', '/'), './', '') = REPLACE(REPLACE(LOWER(g.path), '\\\\', '/'), './', '')
         WHERE cg.collection_name = ?
         ORDER BY COALESCE(g.sortname, g.name) COLLATE NOCASE
-      `).all(collectionName) as any[]
-      console.log(`[DatabaseService] Found ${rows.length} rows in collection "${collectionName}"`);
+      `).all(actualName) as any[]
+      console.log(`[DatabaseService] Found ${rows.length} rows in collection "${actualName}"`);
       const result = rows.map(r => this.rowToGame(r))
-      console.log(`[DatabaseService] Mapped ${result.length} games for collection "${collectionName}"`);
+      console.log(`[DatabaseService] Mapped ${result.length} games for collection "${actualName}"`);
       return result
     } catch (e) {
       console.error(`Failed to query games for collection ${collectionName} from DB:`, e)
@@ -1380,13 +1613,14 @@ export class DatabaseService {
     const db = this.ensureOpen()
     try {
       const rows = db.prepare(`
-        SELECT collection_name
-        FROM collection_games
+        SELECT COALESCE(c.fullname, cg.collection_name) as display_name
+        FROM collection_games cg
+        LEFT JOIN collections c ON cg.collection_name = c.name
         WHERE LOWER(game_system) = LOWER(?)
           AND REPLACE(REPLACE(LOWER(game_path), '\\', '/'), './', '') = REPLACE(REPLACE(LOWER(?), '\\', '/'), './', '')
-        ORDER BY collection_name COLLATE NOCASE
+        ORDER BY display_name COLLATE NOCASE
       `).all(systemName, gamePath) as any[]
-      return rows.map(r => r.collection_name)
+      return rows.map(r => r.display_name)
     } catch (e) {
       console.error('Failed to query collections for game:', e)
       return []
@@ -1396,9 +1630,10 @@ export class DatabaseService {
   public toggleGameInCollection(collectionName: string, systemName: string, gamePath: string, action: 'add' | 'remove'): boolean {
     const db = this.ensureOpen()
     try {
+      const normalizedName = this.normalizeCollectionName(collectionName)
       if (action === 'add') {
-        // Ensure collection exists
-        db.prepare('INSERT OR IGNORE INTO collections (name) VALUES (?)').run(collectionName)
+        // Ensure collection exists in the collections table with both normalized name and fullname
+        db.prepare('INSERT OR IGNORE INTO collections (name, fullname) VALUES (?, ?)').run(normalizedName, collectionName)
         
         // Remove existing matches to avoid duplicates differing in casing/slashes
         db.prepare(`
@@ -1406,13 +1641,13 @@ export class DatabaseService {
           WHERE collection_name = ?
             AND LOWER(game_system) = LOWER(?)
             AND REPLACE(REPLACE(LOWER(game_path), '\\', '/'), './', '') = REPLACE(REPLACE(LOWER(?), '\\', '/'), './', '')
-        `).run(collectionName, systemName, gamePath)
+        `).run(normalizedName, systemName, gamePath)
 
         // Insert association
         const res = db.prepare(`
           INSERT INTO collection_games (collection_name, game_system, game_path)
           VALUES (?, ?, ?)
-        `).run(collectionName, systemName, gamePath)
+        `).run(normalizedName, systemName, gamePath)
         
         return res.changes > 0
       } else {
@@ -1421,7 +1656,7 @@ export class DatabaseService {
           WHERE collection_name = ?
             AND LOWER(game_system) = LOWER(?)
             AND REPLACE(REPLACE(LOWER(game_path), '\\', '/'), './', '') = REPLACE(REPLACE(LOWER(?), '\\', '/'), './', '')
-        `).run(collectionName, systemName, gamePath)
+        `).run(normalizedName, systemName, gamePath)
         
         return res.changes > 0
       }

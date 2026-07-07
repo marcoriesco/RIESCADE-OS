@@ -53,6 +53,7 @@ declare global {
       downloadGameMedia: (systemName: string, gamePath: string, matchData: any) => Promise<any>
       downloadTempMedia: (url: string) => Promise<string>
       getRiescadeLogoPath: () => Promise<string>
+      checkMediaFolders: (systemPath: string) => Promise<Record<string, boolean>>
       dbGetGamesPaginated: (system: string, page: number, pageSize: number, search: string, sortBy: string, sortDir: string) => Promise<{ games: any[]; total: number; pages: number }>
       dbUpdateGame: (game: any) => Promise<boolean>
       dbDeleteGames: (items: { system: string; path: string; deletePhysical?: boolean }[]) => Promise<boolean>

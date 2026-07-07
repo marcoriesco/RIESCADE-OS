@@ -9,6 +9,26 @@
     />
   </head>
   <body style="background-color: #0c0e14; margin: 0; overflow: hidden;">
+    <script>
+      // Apply accent color from localStorage BEFORE any CSS/React renders to prevent color flash
+      try {
+        var c = localStorage.getItem("accentColor");
+        if (c) {
+          var s = document.documentElement.style;
+          s.setProperty("--accent-color", c);
+          var h = c.replace("#", "");
+          if (/^[0-9A-Fa-f]{6}$/.test(h)) {
+            var r = parseInt(h.substring(0, 2), 16);
+            var g = parseInt(h.substring(2, 4), 16);
+            var b = parseInt(h.substring(4, 6), 16);
+            s.setProperty("--accent-color-hover", "#" + Math.max(0, Math.floor(r * 0.8)).toString(16).padStart(2, "0") + Math.max(0, Math.floor(g * 0.8)).toString(16).padStart(2, "0") + Math.max(0, Math.floor(b * 0.8)).toString(16).padStart(2, "0"));
+            s.setProperty("--accent-color-light", "rgba(" + r + "," + g + "," + b + ",0.2)");
+            s.setProperty("--accent-color-focus", "rgba(" + r + "," + g + "," + b + ",0.6)");
+            s.setProperty("--accent-color-glass", "rgba(" + r + "," + g + "," + b + ",0.4)");
+          }
+        }
+      } catch(e) {}
+    </script>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

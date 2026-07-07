@@ -321,6 +321,61 @@ app.whenReady().then(() => {
     return libraryService.getSystems()
   })
 
+  ipcMain.handle('check-media-folders', async (_, systemPath: string) => {
+    const fs = require('fs')
+    const { join } = require('path')
+    const results: Record<string, boolean> = {}
+    const folders = ['cover', 'cover2d', 'cover3d', 'fanart', 'logo', 'screenshot', 'title', 'mix']
+
+    if (!systemPath || systemPath.startsWith('virtual://') || systemPath === 'collections') {
+      const systems = libraryService.getSystems()
+      for (const f of folders) {
+        results[f] = false
+        for (const sys of systems) {
+          if (sys.path && !sys.path.startsWith('virtual://')) {
+            const p = join(sys.path, 'media', f)
+            if (fs.existsSync(p)) {
+              try {
+                const files = fs.readdirSync(p)
+                const hasFiles = files.some(file => !file.startsWith('.') && fs.statSync(join(p, file)).isFile())
+                if (hasFiles) {
+                  results[f] = true
+                  break
+                }
+              } catch (e) {
+                // ignore
+              }
+            }
+          }
+        }
+      }
+      return results
+    }
+
+    const mediaDir = join(systemPath, 'media')
+    if (!fs.existsSync(mediaDir)) {
+      folders.forEach(f => results[f] = false)
+      return results
+    }
+
+    for (const f of folders) {
+      const p = join(mediaDir, f)
+      try {
+        if (fs.existsSync(p)) {
+          const files = fs.readdirSync(p)
+          const hasFiles = files.some(file => !file.startsWith('.') && fs.statSync(join(p, file)).isFile())
+          results[f] = hasFiles
+        } else {
+          results[f] = false
+        }
+      } catch (err) {
+        results[f] = false
+      }
+    }
+
+    return results
+  })
+
   ipcMain.handle('get-games', async (_, systemName: string) => {
     return libraryService.getGames(systemName)
   })

@@ -1,13 +1,13 @@
 import { join, dirname, basename } from 'path'
 import { existsSync } from 'fs'
-import chokidar from 'chokidar'
+import chokidar, { FSWatcher } from 'chokidar'
 import { getRomsPath } from '../utils/paths'
 import { LibraryService } from './LibraryService'
 import { SystemsParser } from '../parsers/SystemsParser'
 import { BrowserWindow } from 'electron'
 
 export class RomsWatcherService {
-  private watcher: chokidar.FSWatcher | null = null
+  private watcher: FSWatcher | null = null
   private libraryService: LibraryService
   private systemsParser: SystemsParser
   private queuedSystems: Set<string> = new Set()
