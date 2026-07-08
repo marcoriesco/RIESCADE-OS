@@ -48,6 +48,8 @@ function RadixSelect({
 }
 
 
+const missingMediaCache = new Set<string>();
+
 export default function SystemAppContent({
   system, color, Icon, onLaunchGame, search, setSearch, onActiveGameArtChanged
 }: {
@@ -99,8 +101,10 @@ export default function SystemAppContent({
     cover: true,
     cover2d: false,
     cover3d: false,
+    coverback: false,
     fanart: false,
     logo: false,
+    marquee: false,
     screenshot: false,
     title: false,
     mix: false
@@ -132,8 +136,10 @@ export default function SystemAppContent({
           cover: true,
           cover2d: false,
           cover3d: false,
+          coverback: false,
           fanart: false,
           logo: false,
+          marquee: false,
           screenshot: false,
           title: false,
           mix: false
@@ -147,8 +153,10 @@ export default function SystemAppContent({
         cover: true,
         cover2d: true,
         cover3d: true,
+        coverback: true,
         fanart: true,
         logo: true,
+        marquee: true,
         screenshot: true,
         title: true,
         mix: true
@@ -167,7 +175,7 @@ export default function SystemAppContent({
   };
 
   const getGameMediaUrl = useCallback((g: Game, type: string) => {
-    if (g.isCollectionFolder) return g.cover || g.thumbnail || g.fanart || g.image || "";
+    if (g.isCollectionFolder) return g.cover || g.fanart || "";
     
     let mediaPath: string | undefined = undefined;
     switch (type) {
@@ -180,17 +188,23 @@ export default function SystemAppContent({
       case 'cover3d':
         mediaPath = g.cover3d;
         break;
+      case 'coverback':
+        mediaPath = g.coverback;
+        break;
       case 'fanart':
         mediaPath = g.fanart;
         break;
       case 'logo':
         mediaPath = g.logo;
         break;
+      case 'marquee':
+        mediaPath = g.marquee;
+        break;
       case 'screenshot':
         mediaPath = g.screenshot;
         break;
       case 'title':
-        mediaPath = g.title || g.titleshot;
+        mediaPath = g.title;
         break;
       case 'mix':
         mediaPath = g.mix;
@@ -199,9 +213,11 @@ export default function SystemAppContent({
         mediaPath = g.cover;
     }
 
-    // No fallback to other media types - only display the selected type
-
-    return mediaPath ? (mediaPath.startsWith("http") || mediaPath.startsWith("file://") ? mediaPath : `file:///${mediaPath}`) : "";
+    const url = mediaPath ? (mediaPath.startsWith("http") || mediaPath.startsWith("file://") ? mediaPath : `file:///${mediaPath}`) : "";
+    if (url && missingMediaCache.has(url)) {
+      return "";
+    }
+    return url;
   }, []);
 
   // Reset display limit when system, search, filter or metadata filters change
@@ -548,7 +564,7 @@ export default function SystemAppContent({
   useEffect(() => {
     let gameArtUrl: string | null = null;
     if (selectedGame) {
-      const rawArt = selectedGame.fanart || selectedGame.cover || selectedGame.cover3d || selectedGame.image || selectedGame.thumbnail || null;
+      const rawArt = selectedGame.fanart || selectedGame.cover || selectedGame.cover3d || null;
       gameArtUrl = rawArt ? (rawArt.startsWith("http") || rawArt.startsWith("file://") ? rawArt : `file:///${rawArt.replace(/\\/g, '/')}`) : null;
       window.api.executeCommand("active-game-art-changed", { systemName: system.name, art: gameArtUrl });
     } else {
@@ -857,8 +873,8 @@ export default function SystemAppContent({
                       console.log("[SystemAppContent] Rendering grid items. displayLimit =", displayLimit, "filteredGames length =", filteredGames.length, "sliced length =", sliced.length, "items:", sliced);
                       return sliced.map((g, idx) => {
                         if (g.isCollectionFolder) {
-                          const hasLogo = !!g.cover || !!g.thumbnail;
-                          const hasFanart = !!g.fanart || !!g.image;
+                          const hasLogo = !!g.cover || !!g.logo;
+                          const hasFanart = !!g.fanart;
                           const count = g.gameCount ?? 0;
                           const countText = `${count} ${count === 1 ? 'Jogo' : 'Jogos'}`;
 
@@ -877,14 +893,14 @@ export default function SystemAppContent({
                                 <div className="relative w-full h-full flex items-center justify-center overflow-hidden bg-[#1a1a1a]">
                                   {hasFanart && (
                                     <img 
-                                      src={g.fanart || g.image} 
+                                      src={g.fanart} 
                                       alt={g.name} 
                                       className="absolute inset-0 w-full h-full object-cover opacity-40 group-hover:scale-105 transition-all duration-300"
                                     />
                                   )}
                                   {hasLogo ? (
                                     <img 
-                                      src={g.cover || g.thumbnail} 
+                                      src={g.cover || g.logo} 
                                       alt={g.name} 
                                       className="relative w-[80%] max-h-[70%] object-contain filter drop-shadow-[0_4px_8px_rgba(0,0,0,0.6)] group-hover:scale-110 transition-all duration-300 z-10"
                                     />
@@ -934,7 +950,10 @@ export default function SystemAppContent({
                                   <img 
                                     src={finalImage} 
                                     alt={g.name} 
-                                    onError={() => setFailedImages(prev => ({ ...prev, [g.path]: true }))}
+                                    onError={() => {
+                                      if (finalImage) missingMediaCache.add(finalImage);
+                                      setFailedImages(prev => ({ ...prev, [g.path]: true }));
+                                    }}
                                     className="w-full h-full object-contain group-hover:scale-105 transition-all duration-300 animate-in fade-in duration-200" 
                                   />
                                   {/* Small clean controller icon and title overlay at top left */}
@@ -1114,18 +1133,18 @@ export default function SystemAppContent({
                   
                   return (
                     <>
-                      {selectedGame.cover || selectedGame.thumbnail || selectedGame.fanart || selectedGame.image ? (
+                      {selectedGame.cover || selectedGame.logo || selectedGame.fanart ? (
                         <div className="relative w-full aspect-video rounded-md overflow-hidden bg-black/50 border border-white/5 shadow-md flex items-center justify-center shrink-0">
-                          {(selectedGame.fanart || selectedGame.image) && (
+                          {(selectedGame.fanart) && (
                             <img 
-                              src={selectedGame.fanart || selectedGame.image} 
+                              src={selectedGame.fanart} 
                               alt={selectedGame.name} 
                               className="absolute inset-0 w-full h-full object-cover opacity-50"
                             />
                           )}
-                          {(selectedGame.cover || selectedGame.thumbnail) ? (
+                          {(selectedGame.cover || selectedGame.logo) ? (
                             <img 
-                              src={selectedGame.cover || selectedGame.thumbnail} 
+                              src={selectedGame.cover || selectedGame.logo} 
                               alt={selectedGame.name} 
                               className="relative w-[70%] max-h-[85%] object-contain filter drop-shadow-[0_4px_8px_rgba(0,0,0,0.6)] z-10"
                             />
@@ -1145,7 +1164,7 @@ export default function SystemAppContent({
                       )}
 
                       {/* Title and metadata */}
-                      {(selectedGame.cover || selectedGame.thumbnail || selectedGame.fanart || selectedGame.image) && (
+                      {(selectedGame.cover || selectedGame.logo || selectedGame.fanart) && (
                         <div className="flex flex-col text-left px-1">
                           <h3 className="font-bold text-base leading-snug text-white/95 truncate" title={selectedGame.name}>{selectedGame.name}</h3>
                           <span className="text-[10px] text-white/40 mt-1 uppercase tracking-wider font-semibold">Pasta de Coleção · {countText}</span>
@@ -1173,19 +1192,24 @@ export default function SystemAppContent({
               /* Normal Game Details */
               <div className="flex flex-col gap-4">
                 {/* Game Logo/Marquee (Transparent background) */}
-                {(selectedGame.logo || selectedGame.marquee) && !imageError && (
-                  <div className="w-full flex items-center justify-center overflow-hidden relative shrink-0">
-                    <img 
-                      src={(() => {
-                        const logo = selectedGame.logo || selectedGame.marquee || "";
-                        return logo.startsWith("http") || logo.startsWith("file://") ? logo : `file:///${logo.replace(/\\/g, '/')}`;
-                      })()} 
-                      alt={selectedGame.name} 
-                      onError={() => setImageError(true)}
-                      className="w-full max-h-40 object-contain filter drop-shadow-[0_4px_8px_rgba(0,0,0,0.5)]" 
-                    />
-                  </div>
-                )}
+                {(() => {
+                  const logo = selectedGame.logo || selectedGame.marquee || "";
+                  const url = logo ? (logo.startsWith("http") || logo.startsWith("file://") ? logo : `file:///${logo.replace(/\\/g, '/')}`) : "";
+                  const isMissing = url && missingMediaCache.has(url);
+                  return url && !isMissing && !imageError && (
+                    <div className="w-full flex items-center justify-center overflow-hidden relative shrink-0">
+                      <img 
+                        src={url} 
+                        alt={selectedGame.name} 
+                        onError={() => {
+                          missingMediaCache.add(url);
+                          setImageError(true);
+                        }}
+                        className="w-full max-h-40 object-contain filter drop-shadow-[0_4px_8px_rgba(0,0,0,0.5)]" 
+                      />
+                    </div>
+                  );
+                })()}
 
                 {/* Game Playback Video Preview or Image Fallback */}
                 {videoUrl ? (
@@ -1218,7 +1242,11 @@ export default function SystemAppContent({
                         src={getGameMediaUrl(selectedGame, preferredMediaType)} 
                         alt={selectedGame.name} 
                         onLoad={() => setMediaLoading(false)}
-                        onError={() => setMediaLoading(false)}
+                        onError={() => {
+                          const url = getGameMediaUrl(selectedGame, preferredMediaType);
+                          if (url) missingMediaCache.add(url);
+                          setMediaLoading(false);
+                        }}
                         className={`w-full h-full object-contain filter drop-shadow-[0_4px_8px_rgba(0,0,0,0.6)] transition-all duration-300 ${mediaLoading ? 'opacity-0 scale-95 blur-sm' : 'opacity-100 scale-100 blur-0'}`}
                       />
                     </div>

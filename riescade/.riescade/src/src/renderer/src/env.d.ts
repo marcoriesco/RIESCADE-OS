@@ -21,6 +21,7 @@ declare global {
       saveSetting: (name: string, value: any, type: string) => Promise<any>
       getEmulatorSettings: () => Promise<any>
       saveEmulatorSetting: (emulator: string, name: string, value: any) => Promise<any>
+      getFeatures: () => Promise<any>
       selectBgImage: () => Promise<string | null>
       selectBgVideo: () => Promise<string | null>
       getThemeSettings: (themeName: string) => Promise<any>

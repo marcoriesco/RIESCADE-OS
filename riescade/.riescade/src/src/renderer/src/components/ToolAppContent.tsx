@@ -66,13 +66,45 @@ const SETTINGS_TABS = [
 const EMULATOR_NAMES: Record<string, string> = {
   retroarch: "RetroArch",
   ares: "Ares",
-  xenia: "Xenia"
+  xenia: "Xenia",
+  pcsx2: "PCSX2",
+  pcsx2x6: "PCSX2X6",
+  teknoparrot: "TeknoParrot",
+  mame64: "MAME64",
+  dolphin: "Dolphin",
+  ryujinx: "Ryujinx",
+  rpcs3: "RPCS3",
+  cemu: "Cemu",
+  duckstation: "DuckStation",
+  ppsspp: "PPSSPP",
+  flycast: "Flycast",
+  xemu: "Xemu",
+  bigpemu: "BigPEmu",
+  model2: "Model 2 Emulator",
+  model3: "Supermodel (Model 3)",
+  redream: "Redream"
 };
 
 const EMULATOR_DESCRIPTIONS: Record<string, string> = {
   retroarch: "Configurações globais de emulação, vídeo, shaders e mais.",
   ares: "Ajuste os parâmetros específicos do emulador Ares.",
-  xenia: "Ajuste os parâmetros específicos do emulador Xenia e Xenia Canary."
+  xenia: "Ajuste os parâmetros específicos do emulador Xenia e Xenia Canary.",
+  pcsx2: "Ajuste os parâmetros específicos do emulador PCSX2.",
+  pcsx2x6: "Ajuste os parâmetros específicos do emulador PCSX2X6.",
+  teknoparrot: "Ajuste os parâmetros específicos do emulador TeknoParrot.",
+  mame64: "Ajuste os parâmetros específicos do emulador MAME64.",
+  dolphin: "Ajuste os parâmetros específicos do emulador Dolphin.",
+  ryujinx: "Ajuste os parâmetros específicos do emulador Ryujinx.",
+  rpcs3: "Ajuste os parâmetros específicos do emulador RPCS3.",
+  cemu: "Ajuste os parâmetros específicos do emulador Cemu.",
+  duckstation: "Ajuste os parâmetros específicos do emulador DuckStation.",
+  ppsspp: "Ajuste os parâmetros específicos do emulador PPSSPP.",
+  flycast: "Ajuste os parâmetros específicos do emulador Flycast.",
+  xemu: "Ajuste os parâmetros específicos do emulador Xemu.",
+  bigpemu: "Ajuste os parâmetros específicos do emulador BigPEmu.",
+  model2: "Ajuste os parâmetros específicos do emulador Model 2.",
+  model3: "Ajuste os parâmetros específicos do emulador Supermodel.",
+  redream: "Ajuste os parâmetros específicos do emulador Redream."
 };
 
 export default function ToolAppContent({
@@ -101,6 +133,16 @@ export default function ToolAppContent({
     downloadedBytes?: number;
     totalBytes?: number;
   }>({ status: 'idle' });
+
+  const [features, setFeatures] = useState<any>(null);
+
+  useEffect(() => {
+    window.api.getFeatures().then(res => {
+      setFeatures(res);
+    }).catch(err => {
+      console.error("Failed to load features.json:", err);
+    });
+  }, []);
 
   useEffect(() => {
     const unsub = window.api.on('update-progress', (_event: any, data: any) => {
@@ -186,23 +228,32 @@ export default function ToolAppContent({
 
     // Build emulator settings context
     const getEmuSetting = (name: string, fallback: any = ""): string => {
-      const val = emulatorSettings?.[activeEmuSubmenu]?.[name];
+      const val = emulatorSettings?.[activeEmuSubmenu]?.[name] ?? emulatorSettings?.[activeEmuSubmenu]?.[`${activeEmuSubmenu}_${name}`];
       console.log('[getEmuSetting] Emu:', activeEmuSubmenu, 'Key:', name, 'RawValue:', val, 'Type:', typeof val);
       if (val !== undefined && val !== null) return String(val);
       // Default fallbacks for specific settings
-      if (name === "ares_fullscreen" || name === "xenia_fullscreen") return "false";
+      if (name === "ares_fullscreen" || name === "xenia_fullscreen" || name === "fullscreen" || name === "forcefullscreen") return "false";
+      if (name === "pcsx2_fullscreen" || name === "pcsx2x6_fullscreen" || name === "teknoparrot_fullscreen" || name === "dolphin_fullscreen" || name === "mame64_fullscreen") return "true";
+      if (name === "pcsx2_aspectratio" || name === "pcsx2x6_aspectratio" || name === "aspectratio" || name === "ratio") return "16:9";
+      if (name === "pcsx2_renderer" || name === "pcsx2x6_renderer" || name === "renderer") return "-1";
+      if (name === "teknoparrot_minimize" || name === "minimize") return "true";
+      if (name === "dolphin_backend" || name === "backend") return "Vulkan";
+      if (name === "dolphin_aspect" || name === "aspect") return "0";
+      if (name === "dolphin_vsync" || name === "mame64_vsync" || name === "vsync") return "true";
+      if (name === "mame64_video" || name === "video") return "d3d";
+      if (name === "mame64_sound" || name === "sound") return "dsound";
       if (name === "ares_aspect") return "Scale";
       if (name === "ares_aspectcorrection") return "Anamorphic";
       if (name === "ares_renderer") return "OpenGL 3.2";
       if (name === "ares_audio_renderer") return "WASAPI";
-      if (name === "ares_audiosync" || name === "xenia_vsync") return "true";
+      if (name === "ares_audiosync") return "true";
       if (name === "ares_coloremulation") return "true";
       if (name === "ares_interframe_blend") return "true";
       if (name === "ares_ExpansionPak") return "true";
       if (name === "ares_n64_quality") return "HD";
       if (name === "ares_luminance" || name === "ares_saturation" || name === "ares_gamma") return "1.0";
-      if (name === "xenia_gpu") return "any";
-      if (name === "xenia_license_mask") return "0";
+      if (name === "xenia_gpu" || name === "gpu") return "any";
+      if (name === "xenia_license_mask" || name === "license_mask") return "0";
       return String(fallback);
     };
 
@@ -275,6 +326,142 @@ export default function ToolAppContent({
       onSaveSetting("Taskbar.Icons", next.join(","), "string");
     };
 
+    const renderDynamicEmulatorSettings = () => {
+      if (!features) {
+        return (
+          <div className="flex flex-col items-center justify-center py-12 gap-3">
+            <RefreshCw className="w-6 h-6 text-accent animate-spin" />
+            <span className="text-xs text-white/40 font-medium">Carregando esquemas de configurações...</span>
+          </div>
+        );
+      }
+
+      const nameAliases: Record<string, string> = {
+        "pcsx2x6": "pcsx2",
+        "mame64": "mame"
+      };
+
+      const targetName = nameAliases[activeEmuSubmenu] || activeEmuSubmenu;
+      const emuData = features.emulators?.find((e: any) => {
+        if (!e.name) return false;
+        const names = e.name.split(',').map((n: string) => n.trim().toLowerCase());
+        const targetNames = targetName.split(',').map((n: string) => n.trim().toLowerCase());
+        return names.some((n: string) => targetNames.includes(n));
+      });
+
+      if (!emuData) {
+        return (
+          <div className="text-sm text-white/40 text-center py-12">
+            Nenhum esquema de configuração dinâmica encontrado para "{activeEmuSubmenu}".
+          </div>
+        );
+      }
+
+      let coreData = emuData;
+      if (emuData.cores && emuData.cores.length > 0) {
+        coreData = emuData.cores[0];
+      }
+
+      const rawShared = coreData.sharedFeatures || [];
+      const rawFeatures = coreData.featuresList || [];
+
+      const resolvedFeatures: any[] = [];
+
+      // Resolve shared features
+      rawShared.forEach((ref: any) => {
+        const found = features.sharedFeatures?.featuresList?.find((f: any) => f.value === ref.value);
+        if (found) {
+          resolvedFeatures.push({
+            ...found,
+            group: ref.group || found.group || "Geral",
+            submenu: ref.submenu || found.submenu || "",
+            order: ref.order !== undefined ? ref.order : (found.order || 999)
+          });
+        }
+      });
+
+      // Add custom features
+      rawFeatures.forEach((f: any) => {
+        resolvedFeatures.push({
+          ...f,
+          group: f.group || "Geral",
+          submenu: f.submenu || "",
+          order: f.order !== undefined ? f.order : 999
+        });
+      });
+
+      // Remove duplicates
+      const uniqueFeaturesMap = new Map<string, any>();
+      resolvedFeatures.forEach(f => {
+        uniqueFeaturesMap.set(f.value, f);
+      });
+      const finalFeatures = Array.from(uniqueFeaturesMap.values());
+
+      // Sort by order
+      finalFeatures.sort((a, b) => (a.order || 999) - (b.order || 999));
+
+      // Group by group
+      const groups: Record<string, any[]> = {};
+      finalFeatures.forEach(f => {
+        const gName = f.group || "Configurações";
+        if (!groups[gName]) {
+          groups[gName] = [];
+        }
+        groups[gName].push(f);
+      });
+
+      return (
+        <div className="space-y-6 animate-in fade-in duration-150">
+          {Object.entries(groups).map(([groupLabel, items]) => (
+            <div key={groupLabel} className="space-y-2">
+              <SettingGroup label={groupLabel} />
+              {items.map((item: any) => {
+                if (item.choices && item.choices.length > 0) {
+                  const options = item.choices.map((c: any) => ({
+                    label: String(c.name),
+                    value: String(c.value)
+                  }));
+                  return (
+                    <SettingSelect
+                      key={item.value}
+                      label={item.name}
+                      name={item.value}
+                      desc={item.description}
+                      options={options}
+                      ctx={emuCtx}
+                    />
+                  );
+                } else if (item.preset === "slider" || item.preset === "sliderauto") {
+                  return (
+                    <SettingSlider
+                      key={item.value}
+                      label={item.name}
+                      name={item.value}
+                      desc={item.description}
+                      min={item.min !== undefined ? item.min : 0}
+                      max={item.max !== undefined ? item.max : 100}
+                      step={item.step !== undefined ? item.step : 1}
+                      ctx={emuCtx}
+                    />
+                  );
+                } else {
+                  return (
+                    <SettingToggle
+                      key={item.value}
+                      label={item.name}
+                      name={item.value}
+                      desc={item.description}
+                      ctx={emuCtx}
+                    />
+                  );
+                }
+              })}
+            </div>
+          ))}
+        </div>
+      );
+    };
+
     // --- Settings tabs definition ---
     const settingsTabs = SETTINGS_TABS;
 
@@ -342,46 +529,23 @@ export default function ToolAppContent({
                       )}
                     </button>
                     {tab.id === "emuladores" && emuMenuOpen && (
-                      <div className="flex flex-col gap-1 pl-4 border-l border-white/5 ml-5.5 my-1">
-                        <button
-                          onClick={() => {
-                            setActiveSettingsTab("emuladores");
-                            setActiveEmuSubmenu("retroarch");
-                          }}
-                          className={`cursor-pointer w-full text-left py-1.5 px-2 rounded-md text-[11px] font-medium transition ${
-                            activeSettingsTab === "emuladores" && activeEmuSubmenu === "retroarch"
-                              ? "text-accent font-bold bg-white/[0.04]"
-                              : "text-white/50 hover:text-white/80 hover:bg-white/[0.02]"
-                          }`}
-                        >
-                          RetroArch
-                        </button>
-                        <button
-                          onClick={() => {
-                            setActiveSettingsTab("emuladores");
-                            setActiveEmuSubmenu("ares");
-                          }}
-                          className={`cursor-pointer w-full text-left py-1.5 px-2 rounded-md text-[11px] font-medium transition ${
-                            activeSettingsTab === "emuladores" && activeEmuSubmenu === "ares"
-                              ? "text-accent font-bold bg-white/[0.04]"
-                              : "text-white/50 hover:text-white/80 hover:bg-white/[0.02]"
-                          }`}
-                        >
-                          Ares
-                        </button>
-                        <button
-                          onClick={() => {
-                            setActiveSettingsTab("emuladores");
-                            setActiveEmuSubmenu("xenia");
-                          }}
-                          className={`cursor-pointer w-full text-left py-1.5 px-2 rounded-md text-[11px] font-medium transition ${
-                            activeSettingsTab === "emuladores" && activeEmuSubmenu === "xenia"
-                              ? "text-accent font-bold bg-white/[0.04]"
-                              : "text-white/50 hover:text-white/80 hover:bg-white/[0.02]"
-                          }`}
-                        >
-                          Xenia
-                        </button>
+                      <div className="flex flex-col gap-1 pl-4 border-l border-white/5 ml-5.5 my-1 max-h-[340px] overflow-y-auto pr-1 select-none scrollbar-thin">
+                        {Object.entries(EMULATOR_NAMES).map(([emuKey, emuName]) => (
+                          <button
+                            key={emuKey}
+                            onClick={() => {
+                              setActiveSettingsTab("emuladores");
+                              setActiveEmuSubmenu(emuKey);
+                            }}
+                            className={`cursor-pointer w-full text-left py-1.5 px-2 rounded-md text-[11px] font-medium transition ${
+                              activeSettingsTab === "emuladores" && activeEmuSubmenu === emuKey
+                                ? "text-accent font-bold bg-white/[0.04]"
+                                : "text-white/50 hover:text-white/80 hover:bg-white/[0.02]"
+                            }`}
+                          >
+                            {emuName}
+                          </button>
+                        ))}
                       </div>
                     )}
                   </div>
@@ -843,154 +1007,7 @@ export default function ToolAppContent({
               </div>
               <ScrollArea className="flex-1 min-h-0">
                 <div className="px-6 pb-6 max-w-[740px]">
-                  {activeEmuSubmenu === "retroarch" ? (
-                    <div className="space-y-2 animate-in fade-in duration-150">
-                      <SettingGroup label="RetroAchievements" />
-                      <SettingToggle label="RetroAchievements" name="global.cheevos" desc="Ativar conquistas retrô durante a emulação." ctx={ctx} />
-                      <SettingInput label="Usuário" name="global.cheevos.username" ctx={ctx} />
-                      <SettingInput label="Senha" name="global.cheevos.password" isPassword ctx={ctx} />
-
-                      <SettingGroup label="Netplay" />
-                      <SettingToggle label="Ativar Netplay" name="global.netplay" desc="Ativar jogos em rede." ctx={ctx} />
-                      <SettingInput label="Apelido" name="global.netplay.nickname" ctx={ctx} />
-                      <SettingInput label="Porta" name="global.netplay.port" ctx={ctx} />
-
-                      <SettingGroup label="Save States" />
-                      <SettingToggle label="Salvar/Carregar Automático" name="global.autosave" desc="Carrega o estado mais recente ao iniciar e salva ao sair." ctx={ctx} />
-                      <SettingSelect label="Tipo de Incremento" name="global.incrementalsavestates" type="int" options={[
-                        { label: "Por Save State", value: "" },
-                        { label: "Por Save Slot", value: "0" },
-                        { label: "Não Incrementar", value: "2" }
-                      ]} ctx={ctx} />
-                      <SettingSelect label="Gerenciador de States" name="global.savestates" desc="Exibe o gerenciador antes de iniciar um jogo." options={[
-                        { label: "Não", value: "0" }, { label: "Sempre", value: "1" }, { label: "Se Disponível", value: "2" }
-                      ]} ctx={ctx} />
-
-                      <SettingGroup label="Exibição e Vídeo" />
-                      <SettingSelect label="Shaders" name="global.shaderset" options={[
-                        { label: "Nenhum", value: "none" }, { label: "RIESCADE", value: "[riescade]" },
-                        { label: "CRT-NEW-PIXIE", value: "crt-new-pixie" }, { label: "CRT-ROYALE", value: "crt-royale" },
-                        { label: "CURVATURE", value: "curvature" }, { label: "ENHANCED", value: "enhanced" },
-                        { label: "FLATTEN-GLOW", value: "flatten-glow" }, { label: "HANDHELD", value: "handheld" },
-                        { label: "NTSC", value: "ntsc" }, { label: "RETRO", value: "retro" },
-                        { label: "SCALEFX", value: "scalefx" }, { label: "SCANLINES", value: "scanlines" },
-                        { label: "TECHNICOLOR", value: "technicolor" }, { label: "VHS", value: "vhs" },
-                        { label: "XBRZ-5X", value: "xbrz-5x" }, { label: "ZFAST", value: "zfast" }
-                      ]} ctx={ctx} />
-                      <SettingSelect label="Decorações (Bezels)" name="global.bezel" options={[
-                        { label: "Nenhum", value: "none" }, { label: "Automático", value: "auto" }
-                      ]} ctx={ctx} />
-                      <SettingSelect label="Proporção de Tela" name="global.ratio" options={[
-                        { label: "Automático", value: "auto" }, { label: "4/3", value: "4/3" }, { label: "16/9", value: "16/9" },
-                        { label: "16/10", value: "16/10" }, { label: "Completo", value: "full" }
-                      ]} ctx={ctx} />
-                      <SettingSelect label="Modo de Vídeo" name="global.videomode" options={[
-                        { label: "Automático", value: "auto" }, { label: "1080p 60Hz", value: "1920x1080@60" },
-                        { label: "1080p 50Hz", value: "1920x1080@50" }, { label: "720p 60Hz", value: "1280x720@60" }
-                      ]} ctx={ctx} />
-                      <SettingToggle label="Forçar Tela Cheia" name="global.forcefullscreen" desc="Forçar emulador em tela cheia." ctx={ctx} />
-                      <SettingToggle label="Escala Inteira (Pixel Perfect)" name="global.integerscale" ctx={ctx} />
-                      <SettingToggle label="Suavizar Jogos (Bilinear)" name="global.smooth" ctx={ctx} />
-
-                      <SettingGroup label="Emulação" />
-                      <SettingToggle label="Discord Rich Presence" name="global.discord" desc="Atualiza status do Discord com o jogo atual." ctx={ctx} />
-                      <SettingToggle label="Configurar Controles Automaticamente" name="global.disableautocontrollers" ctx={ctx} />
-
-                      <SettingGroup label="Verificação de BIOS" />
-                      <SettingToggle label="Verificar BIOS ao Iniciar Jogo" name="CheckBiosesAtLaunch" ctx={ctx} />
-
-                      <SettingGroup label="Compressão" />
-                      <SettingSelect label="Descompressão" name="decompressedfolders" desc="Manter ou excluir arquivos extraídos." options={[
-                        { label: "Automático", value: "ask" }, { label: "Manter", value: "keep" }, { label: "Excluir", value: "delete" }
-                      ]} ctx={ctx} />
-                    </div>
-                  ) : activeEmuSubmenu === "ares" ? (
-                    <div className="space-y-2 animate-in fade-in duration-150">
-                      <SettingGroup label="Geral & Vídeo" />
-                      <SettingToggle label="Iniciar em Tela Cheia" name="ares_fullscreen" desc="Inicia o emulador Ares em tela cheia adicionando o parâmetro --fullscreen." ctx={emuCtx} />
-                      <SettingSelect label="Proporção de Tela (Aspect Ratio)" name="ares_aspect" options={[
-                        { label: "Melhor Ajuste (Scale)", value: "Scale" },
-                        { label: "Inteira (Integer)", value: "Integer" },
-                        { label: "Esticar (Stretch)", value: "Stretch" }
-                      ]} ctx={emuCtx} />
-                      <SettingSelect label="Modo de Correção de Aspecto" name="ares_aspectcorrection" options={[
-                        { label: "Padrão (Standard)", value: "Standard" },
-                        { label: "Nenhum (None)", value: "None" },
-                        { label: "Anamórfico 16:9 (Anamorphic)", value: "Anamorphic" }
-                      ]} ctx={emuCtx} />
-                      <SettingSelect label="Driver de Vídeo" name="ares_renderer" options={[
-                        { label: "OpenGL 3.2", value: "OpenGL 3.2" },
-                        { label: "Direct3D 9.0", value: "Direct3D 9.0" },
-                        { label: "GDI", value: "GDI" }
-                      ]} ctx={emuCtx} />
-                      <SettingSelect label="Sincronização de Vídeo (GPU Sync)" name="ares_gpusync" options={[
-                        { label: "Sincronizado", value: "sync" },
-                        { label: "Apenas GPU", value: "gpu" },
-                        { label: "Sincronizado + GPU", value: "gpusync" },
-                        { label: "Nenhum", value: "none" }
-                      ]} ctx={emuCtx} />
-                      <SettingSlider label="Ajustar Luminância" name="ares_luminance" min={0} max={2} step={0.1} suffix="" ctx={emuCtx} type="float" />
-                      <SettingSlider label="Ajustar Saturação" name="ares_saturation" min={0} max={2} step={0.1} suffix="" ctx={emuCtx} type="float" />
-                      <SettingSlider label="Ajustar Gamma" name="ares_gamma" min={0} max={2} step={0.1} suffix="" ctx={emuCtx} type="float" />
-                      <SettingToggle label="Color Bleed" name="ares_colobleed" desc="Desfoque entre pixels adjacentes para efeitos de translucidez." ctx={emuCtx} />
-                      <SettingToggle label="Emulação de Cores Precisa" name="ares_coloremulation" desc="Ajusta as cores para parecer com o hardware original." ctx={emuCtx} />
-                      <SettingToggle label="Mesclagem de Quadros (Interframe Blending)" name="ares_interframe_blend" desc="Emula efeitos de LCD mas pode aumentar desfoque de movimento." ctx={emuCtx} />
-                      <SettingToggle label="Overscan" name="ares_overscan" desc="Exibe linhas de borda estendidas em CRT PAL." ctx={emuCtx} />
-                      <SettingToggle label="Precisão de Pixel (Pixel Accuracy)" name="ares_pixel_accurate" desc="Ativa emulação precisa de pixel quando disponível." ctx={emuCtx} />
-
-                      <SettingGroup label="Áudio" />
-                      <SettingSelect label="Driver de Áudio" name="ares_audio_renderer" options={[
-                        { label: "WASAPI", value: "WASAPI" },
-                        { label: "XAudio 2.1", value: "XAudio 2.1" },
-                        { label: "SDL", value: "SDL" },
-                        { label: "DirectSound 7.0", value: "DirectSound 7.0" },
-                        { label: "waveOut", value: "waveOut" }
-                      ]} ctx={emuCtx} />
-                      <SettingToggle label="Sincronização de Áudio (Audio Sync)" name="ares_audiosync" desc="Ativa bloqueio de sincronização para evitar falhas de áudio." ctx={emuCtx} />
-
-                      <SettingGroup label="Emulação & Latência" />
-                      <SettingToggle label="Boot Rápido (Fast Boot)" name="ares_fastboot" desc="Ignora animações de inicialização do console." ctx={emuCtx} />
-                      <SettingSelect label="Região Preferencial" name="ares_region" options={[
-                        { label: "NTSC (EUA)", value: "NTSC-U" },
-                        { label: "NTSC (Japão)", value: "NTSC-J" },
-                        { label: "PAL", value: "PAL" }
-                      ]} ctx={emuCtx} />
-                      <SettingToggle label="Ativar Run-Ahead" name="ares_runahead" desc="Reduz a latência de entrada em um frame (dobra uso de CPU)." ctx={emuCtx} />
-
-                      <SettingGroup label="Nintendo 64" />
-                      <SettingSelect label="Qualidade de Renderização" name="ares_n64_quality" options={[
-                        { label: "SD", value: "SD" },
-                        { label: "HD", value: "HD" },
-                        { label: "UHD", value: "UHD" }
-                      ]} ctx={emuCtx} />
-                      <SettingToggle label="Supersampling" name="ares_supersampling" desc="Reduz resoluções HD/UHD de volta para SD (incompatível com weave deinterlacing)." ctx={emuCtx} />
-                      <SettingToggle label="Weave Deinterlacing" name="ares_weavedeinterlacing" desc="Dobra a resolução horizontal percebida (incompatível com supersampling)." ctx={emuCtx} />
-                      <SettingSelect label="Perfil de Entrada (Layout de Controle)" name="ares64_inputprofile" options={[
-                        { label: "Z = Gatilho Esquerdo (L-Trigger)", value: "zl" },
-                        { label: "Z = Gatilho Direito (R-Trigger)", value: "zr" },
-                        { label: "Xbox", value: "xbox" }
-                      ]} ctx={emuCtx} />
-                      <SettingToggle label="Expansor de Memória (Expansion Pak)" name="ares_ExpansionPak" desc="Ativa o pacote de expansão de 4MB de RAM do Nintendo 64." ctx={emuCtx} />
-                    </div>
-                  ) : activeEmuSubmenu === "xenia" ? (
-                    <div className="space-y-2 animate-in fade-in duration-150">
-                      <SettingGroup label="Geral & Vídeo" />
-                      <SettingToggle label="Iniciar em Tela Cheia" name="xenia_fullscreen" desc="Inicia o emulador Xenia/Xenia-Canary em tela cheia." ctx={emuCtx} />
-                      <SettingSelect label="Driver de Vídeo (GPU)" name="xenia_gpu" options={[
-                        { label: "Qualquer (any)", value: "any" },
-                        { label: "Direct3D 12", value: "d3d12" },
-                        { label: "Vulkan", value: "vulkan" }
-                      ]} ctx={emuCtx} />
-                      <SettingToggle label="Ativar V-Sync" name="xenia_vsync" desc="Sincroniza os frames com a taxa de atualização do monitor para evitar screen tearing." ctx={emuCtx} />
-
-                      <SettingGroup label="Jogos & Conteúdo" />
-                      <SettingSelect label="Máscara de Licença (Desbloquear Conteúdo)" name="xenia_license_mask" desc="Desbloqueia jogos em versão completa/full ou demos." options={[
-                        { label: "Padrão (Demos/Limitações)", value: "0" },
-                        { label: "Primeira Licença Habilitada", value: "1" },
-                        { label: "Todas as Licenças Habilitadas", value: "-1" }
-                      ]} ctx={emuCtx} />
-                    </div>
-                  ) : null}
+                  {renderDynamicEmulatorSettings()}
                 </div>
               </ScrollArea>
             </div>

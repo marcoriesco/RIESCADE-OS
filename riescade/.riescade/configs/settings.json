@@ -940,7 +940,7 @@
     "type": "string"
   },
   "Taskbar.Icons": {
-    "value": "tool:settings,system:switch,system:teknoparrot,system:cps1,system:snes,system:namco2x6,system:laseractive,system:xbox360,system:arcade",
+    "value": "tool:settings,system:switch,system:teknoparrot,system:cps1,system:snes,system:namco2x6,system:laseractive,system:xbox360,system:arcade,system:ps3,system:ps4",
     "type": "string"
   },
   "Window.system-switch.Maximized": {
@@ -1128,7 +1128,7 @@
     "type": "int"
   },
   "Window.tool-settings.Maximized": {
-    "value": false,
+    "value": true,
     "type": "bool"
   },
   "Window.tool-settings.X": {
@@ -1140,7 +1140,7 @@
     "type": "int"
   },
   "Window.tool-settings.Width": {
-    "value": 1114,
+    "value": 1107,
     "type": "int"
   },
   "Window.tool-settings.Height": {
@@ -1364,11 +1364,11 @@
     "type": "string"
   },
   "Window.system-xbox360.X": {
-    "value": 24,
+    "value": 18,
     "type": "int"
   },
   "Window.system-xbox360.Y": {
-    "value": 66,
+    "value": 26,
     "type": "int"
   },
   "Window.system-xbox360.Width": {
@@ -1376,7 +1376,7 @@
     "type": "int"
   },
   "Window.system-xbox360.Height": {
-    "value": 844,
+    "value": 873,
     "type": "int"
   },
   "RIESCADE.PreferredMediaType.collections": {
@@ -1392,11 +1392,71 @@
     "type": "string"
   },
   "RIESCADE.PreferredMediaType.arcade": {
-    "value": "cover2d",
+    "value": "cover",
     "type": "string"
   },
   "RIESCADE.EnableBackgroundVideo": {
     "value": true,
     "type": "bool"
+  },
+  "RIESCADE.PreferredMediaType.cps1": {
+    "value": "cover",
+    "type": "string"
+  },
+  "Window.system-msx1.Maximized": {
+    "value": true,
+    "type": "bool"
+  },
+  "RIESCADE.PreferredMediaType.msx1": {
+    "value": "cover",
+    "type": "string"
+  },
+  "Window.system-ps3.X": {
+    "value": 366,
+    "type": "int"
+  },
+  "Window.system-ps3.Y": {
+    "value": 140,
+    "type": "int"
+  },
+  "Window.system-ps3.Width": {
+    "value": 1224,
+    "type": "int"
+  },
+  "Window.system-ps3.Height": {
+    "value": 640,
+    "type": "int"
+  },
+  "Window.system-ps3.Maximized": {
+    "value": true,
+    "type": "bool"
+  },
+  "RIESCADE.PreferredMediaType.ps3": {
+    "value": "cover2d",
+    "type": "string"
+  },
+  "Window.system-ps4.X": {
+    "value": 361,
+    "type": "int"
+  },
+  "Window.system-ps4.Y": {
+    "value": 202,
+    "type": "int"
+  },
+  "Window.system-ps4.Width": {
+    "value": 960,
+    "type": "int"
+  },
+  "Window.system-ps4.Height": {
+    "value": 640,
+    "type": "int"
+  },
+  "Window.system-ps4.Maximized": {
+    "value": true,
+    "type": "bool"
+  },
+  "RIESCADE.PreferredMediaType.ps4": {
+    "value": "cover",
+    "type": "string"
   }
 }

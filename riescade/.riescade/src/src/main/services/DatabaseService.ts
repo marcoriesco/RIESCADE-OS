@@ -94,25 +94,6 @@ export class DatabaseService {
         path          TEXT NOT NULL,
         system        TEXT NOT NULL,
         desc          TEXT,
-        image         TEXT,
-        video         TEXT,
-        marquee       TEXT,
-        thumbnail     TEXT,
-        fanart        TEXT,
-        titleshot     TEXT,
-        wheel         TEXT,
-        mix           TEXT,
-        boxback       TEXT,
-        bezel         TEXT,
-        manual        TEXT,
-        magazine      TEXT,
-        map           TEXT,
-        cover2d       TEXT,
-        screenshot    TEXT,
-        cover         TEXT,
-        cover3d       TEXT,
-        logo          TEXT,
-        title         TEXT,
         rating        REAL,
         releasedate   TEXT,
         developer     TEXT,
@@ -170,143 +151,6 @@ export class DatabaseService {
       }
     }
 
-    // Schema migration: Add crc32 to games if it doesn't exist
-    try {
-      db.prepare("SELECT crc32 FROM games LIMIT 1").get()
-    } catch {
-      try {
-        db.exec("ALTER TABLE games ADD COLUMN crc32 TEXT")
-        console.log("Database table 'games' altered to add 'crc32' column.")
-        this.migrationOccurred = true
-      } catch (err) {
-        console.error("Failed to alter games table to add crc32 column:", err)
-      }
-    }
-
-    // Schema migration: Add md5 to games if it doesn't exist
-    try {
-      db.prepare("SELECT md5 FROM games LIMIT 1").get()
-    } catch {
-      try {
-        db.exec("ALTER TABLE games ADD COLUMN md5 TEXT")
-        console.log("Database table 'games' altered to add 'md5' column.")
-        this.migrationOccurred = true
-      } catch (err) {
-        console.error("Failed to alter games table to add md5 column:", err)
-      }
-    }
-
-    // Schema migration: Add gametime to games if it doesn't exist
-    try {
-      db.prepare("SELECT gametime FROM games LIMIT 1").get()
-    } catch {
-      try {
-        db.exec("ALTER TABLE games ADD COLUMN gametime INTEGER")
-        console.log("Database table 'games' altered to add 'gametime' column.")
-        this.migrationOccurred = true
-      } catch (err) {
-        console.error("Failed to alter games table to add gametime column:", err)
-      }
-    }
-
-    // Schema migration: Add scrap_name to games if it doesn't exist
-    try {
-      db.prepare("SELECT scrap_name FROM games LIMIT 1").get()
-    } catch {
-      try {
-        db.exec("ALTER TABLE games ADD COLUMN scrap_name TEXT")
-        console.log("Database table 'games' altered to add 'scrap_name' column.")
-        this.migrationOccurred = true
-      } catch (err) {
-        console.error("Failed to alter games table to add scrap_name column:", err)
-      }
-    }
-
-    // Schema migration: Add scrap_date to games if it doesn't exist
-    try {
-      db.prepare("SELECT scrap_date FROM games LIMIT 1").get()
-    } catch {
-      try {
-        db.exec("ALTER TABLE games ADD COLUMN scrap_date TEXT")
-        console.log("Database table 'games' altered to add 'scrap_date' column.")
-        this.migrationOccurred = true
-      } catch (err) {
-        console.error("Failed to alter games table to add scrap_date column:", err)
-      }
-    }
-
-    // Schema migration: Add cover2d to games if it doesn't exist
-    try {
-      db.prepare("SELECT cover2d FROM games LIMIT 1").get()
-    } catch {
-      try {
-        db.exec("ALTER TABLE games ADD COLUMN cover2d TEXT")
-        console.log("Database table 'games' altered to add 'cover2d' column.")
-      } catch (err) {
-        console.error("Failed to alter games table to add cover2d column:", err)
-      }
-    }
-
-    // Schema migration: Add screenshot to games if it doesn't exist
-    try {
-      db.prepare("SELECT screenshot FROM games LIMIT 1").get()
-    } catch {
-      try {
-        db.exec("ALTER TABLE games ADD COLUMN screenshot TEXT")
-        console.log("Database table 'games' altered to add 'screenshot' column.")
-      } catch (err) {
-        console.error("Failed to alter games table to add screenshot column:", err)
-      }
-    }
-
-    // Schema migration: Add cover to games if it doesn't exist
-    try {
-      db.prepare("SELECT cover FROM games LIMIT 1").get()
-    } catch {
-      try {
-        db.exec("ALTER TABLE games ADD COLUMN cover TEXT")
-        console.log("Database table 'games' altered to add 'cover' column.")
-      } catch (err) {
-        console.error("Failed to alter games table to add cover column:", err)
-      }
-    }
-
-    // Schema migration: Add cover3d to games if it doesn't exist
-    try {
-      db.prepare("SELECT cover3d FROM games LIMIT 1").get()
-    } catch {
-      try {
-        db.exec("ALTER TABLE games ADD COLUMN cover3d TEXT")
-        console.log("Database table 'games' altered to add 'cover3d' column.")
-      } catch (err) {
-        console.error("Failed to alter games table to add cover3d column:", err)
-      }
-    }
-
-    // Schema migration: Add logo to games if it doesn't exist
-    try {
-      db.prepare("SELECT logo FROM games LIMIT 1").get()
-    } catch {
-      try {
-        db.exec("ALTER TABLE games ADD COLUMN logo TEXT")
-        console.log("Database table 'games' altered to add 'logo' column.")
-      } catch (err) {
-        console.error("Failed to alter games table to add logo column:", err)
-      }
-    }
-
-    // Schema migration: Add title to games if it doesn't exist
-    try {
-      db.prepare("SELECT title FROM games LIMIT 1").get()
-    } catch {
-      try {
-        db.exec("ALTER TABLE games ADD COLUMN title TEXT")
-        console.log("Database table 'games' altered to add 'title' column.")
-      } catch (err) {
-        console.error("Failed to alter games table to add title column:", err)
-      }
-    }
-
     // Create Collections and Collection Games Tables
     db.exec(`
       CREATE TABLE IF NOT EXISTS collections (
@@ -331,85 +175,99 @@ export class DatabaseService {
       console.error("Failed to read PRAGMA user_version:", e);
     }
 
-    if (userVersion < 2) {
+    // Migration v3: Simplified schema - media paths are now derived from game stem,
+    // no longer stored in the database. Remove all media columns.
+    if (userVersion < 3) {
       try {
-        console.log(`[Migration] Running database schema media update (version ${userVersion} -> 2)...`);
-        const totalCount = db.prepare("SELECT COUNT(*) as count FROM games").get() as any;
-        if (totalCount?.count > 0) {
-          const unpopulated = db.prepare("SELECT id, path, system FROM games").all() as any[];
-          console.log(`[Migration] Updating media paths for ${unpopulated.length} games in place...`);
-          
-          const updateStmt = db.prepare(`
-            UPDATE games 
-            SET cover = ?, cover3d = ?, logo = ?, title = ?, cover2d = ?, screenshot = ?
-            WHERE id = ?
-          `);
-          
-          const systemMediaCaches = new Map<string, Map<string, Map<string, string>>>();
-          const getSystemMediaCache = (systemName: string) => {
-            if (systemMediaCaches.has(systemName)) return systemMediaCaches.get(systemName)!;
-            
-            const cache = new Map<string, Map<string, string>>();
-            const sysPath = join(getRomsPath(), systemName);
-            const mediaDir = join(sysPath, 'media');
-            const subfolders = ['cover', 'cover2d', 'cover3d', 'fanart', 'logo', 'screenshot', 'title'];
-            
-            if (existsSync(mediaDir)) {
-              for (const sub of subfolders) {
-                const subPath = join(mediaDir, sub);
-                if (existsSync(subPath)) {
-                  try {
-                    const files = readdirSync(subPath);
-                    const fileMap = new Map<string, string>();
-                    for (const file of files) {
-                      const fileStem = file.includes('.') ? file.substring(0, file.lastIndexOf('.')) : file;
-                      fileMap.set(fileStem.toLowerCase(), file);
-                    }
-                    cache.set(sub, fileMap);
-                  } catch {}
-                }
-              }
-            }
-            systemMediaCaches.set(systemName, cache);
-            return cache;
-          };
+        console.log(`[Migration] Running database schema simplification (version ${userVersion} -> 3)...`);
 
-          const runUpdate = db.transaction(() => {
-            for (const row of unpopulated) {
-              const stem = row.path.replace(/^.*[\/\\]/, '').replace(/\.[^.]+$/, '');
-              const cache = getSystemMediaCache(row.system);
-              
-              const findMedia = (folder: string): string | null => {
-                const folderMap = cache.get(folder);
-                if (folderMap) {
-                  const match = folderMap.get(stem.toLowerCase());
-                  if (match) {
-                    return `./media/${folder}/${match}`;
-                  }
-                }
-                return null;
-              };
-              
-              updateStmt.run(
-                findMedia('cover'),
-                findMedia('cover3d'),
-                findMedia('logo'),
-                findMedia('title'),
-                findMedia('cover2d'),
-                findMedia('screenshot'),
-                row.id
-              );
-            }
-          });
-          
-          runUpdate();
-          console.log(`[Migration] Successfully updated ${unpopulated.length} games in place.`);
+        // Check if old media columns exist (they may not on fresh DBs)
+        let hasOldColumns = false;
+        try {
+          db.prepare("SELECT image FROM games LIMIT 1").get();
+          hasOldColumns = true;
+        } catch {}
+
+        if (hasOldColumns) {
+          console.log('[Migration] Recreating games table without media columns...');
+          db.exec(`
+            CREATE TABLE IF NOT EXISTS games_new (
+              id            TEXT,
+              name          TEXT NOT NULL,
+              path          TEXT NOT NULL,
+              system        TEXT NOT NULL,
+              desc          TEXT,
+              rating        REAL,
+              releasedate   TEXT,
+              developer     TEXT,
+              publisher     TEXT,
+              genre         TEXT,
+              players       TEXT,
+              favorite      INTEGER DEFAULT 0,
+              hidden        INTEGER DEFAULT 0,
+              kidgame       INTEGER DEFAULT 0,
+              playcount     INTEGER DEFAULT 0,
+              lastplayed    TEXT,
+              region        TEXT,
+              lang          TEXT,
+              emulator      TEXT,
+              core          TEXT,
+              sortname      TEXT,
+              tags          TEXT,
+              gamefamily    TEXT,
+              arcadesystem  TEXT,
+              languages     TEXT,
+              cheevos_id    TEXT,
+              cheevos_hash  TEXT,
+              file_size     INTEGER,
+              file_mtime    INTEGER,
+              crc32         TEXT,
+              md5           TEXT,
+              gametime      INTEGER,
+              scrap_name    TEXT,
+              scrap_date    TEXT,
+              PRIMARY KEY (system, path)
+            );
+
+            INSERT INTO games_new (
+              id, name, path, system, desc,
+              rating, releasedate, developer, publisher, genre, players,
+              favorite, hidden, kidgame, playcount, lastplayed,
+              region, lang, emulator, core, sortname, tags,
+              gamefamily, arcadesystem, languages, cheevos_id, cheevos_hash,
+              file_size, file_mtime, crc32, md5, gametime, scrap_name, scrap_date
+            ) SELECT
+              id, name, path, system, desc,
+              rating, releasedate, developer, publisher, genre, players,
+              favorite, hidden, kidgame, playcount, lastplayed,
+              region, lang, emulator, core, sortname, tags,
+              gamefamily, arcadesystem, languages, cheevos_id, cheevos_hash,
+              file_size, file_mtime, crc32, md5, gametime, scrap_name, scrap_date
+            FROM games;
+
+            DROP TABLE games;
+            ALTER TABLE games_new RENAME TO games;
+
+            CREATE INDEX IF NOT EXISTS idx_games_system ON games(system);
+            CREATE INDEX IF NOT EXISTS idx_games_name ON games(name);
+            CREATE INDEX IF NOT EXISTS idx_games_releasedate ON games(releasedate);
+            CREATE INDEX IF NOT EXISTS idx_games_playcount ON games(playcount);
+            CREATE INDEX IF NOT EXISTS idx_games_favorite ON games(favorite) WHERE favorite = 1;
+            CREATE INDEX IF NOT EXISTS idx_games_lastplayed ON games(lastplayed) WHERE lastplayed IS NOT NULL;
+            CREATE INDEX IF NOT EXISTS idx_games_genre ON games(genre);
+            CREATE INDEX IF NOT EXISTS idx_games_players ON games(players);
+            CREATE INDEX IF NOT EXISTS idx_games_publisher ON games(publisher);
+            CREATE INDEX IF NOT EXISTS idx_games_developer ON games(developer);
+            CREATE INDEX IF NOT EXISTS idx_games_hidden ON games(hidden);
+          `);
+          console.log('[Migration] Games table recreated without media columns.');
         }
-        
-        db.exec("PRAGMA user_version = 2");
-        console.log("[Migration] Database user_version updated to 2.");
+
+        db.exec("PRAGMA user_version = 3");
+        this.migrationOccurred = true;
+        console.log("[Migration] Database user_version updated to 3.");
       } catch (e) {
-        console.error("[Migration] Failed to run in-place media update:", e);
+        console.error("[Migration] Failed to run schema simplification:", e);
       }
     }
 
@@ -599,63 +457,14 @@ export class DatabaseService {
       })
     }
 
-    // 6. Build media file cache for fast lookup
-    const mediaCache = new Map<string, Map<string, string>>()
-    const mediaDir = join(system.path, 'media')
-    const mediaSubfolders = [
-      'cover', 'cover2d', 'cover3d', 'fanart', 'logo', 'screenshot', 'title',
-      'video', 'thumbnail', 'wheel', 'mix', 'backcover', 'bezel', 'manual', 'magazine', 'map'
-    ]
-
-    if (existsSync(mediaDir)) {
-      for (const sub of mediaSubfolders) {
-        const subPath = join(mediaDir, sub)
-        if (existsSync(subPath)) {
-          try {
-            const files = readdirSync(subPath)
-            const fileMap = new Map<string, string>()
-            for (const file of files) {
-              const fileStem = file.includes('.') ? file.substring(0, file.lastIndexOf('.')) : file
-              fileMap.set(fileStem.toLowerCase(), file)
-            }
-            mediaCache.set(sub, fileMap)
-          } catch (e) {
-            console.error(`Failed to cache media subfolder ${sub}:`, e)
-          }
-        }
-      }
-    }
-
-    const findLocalMedia = (stem: string, folder: string): string | null => {
-      const folderMap = mediaCache.get(folder)
-      if (folderMap) {
-        const match = folderMap.get(stem.toLowerCase())
-        if (match) {
-          return `./media/${folder}/${match}`
-        }
-      }
-      return null
-    }
-
-    // 7. Merge: physical scan + metadata (SQLite or XML) + local media lookup fallback
+    // 6. Merge: physical scan + metadata (SQLite or XML) — no media scanning needed
+    // Media paths are derived from game stem in rowToGame()
     const mergedGames: Game[] = []
 
     if (physicalGames.length > 0) {
       for (const pg of physicalGames) {
         const normPath = normalizePathForComparison(pg.path)
         const metadataSource = isIndexed ? existingGamesMap.get(normPath) : xmlGamesMap.get(normPath)
-        const stem = pg.path.replace(/^.*[\/\\]/, '').replace(/\.[^.]+$/, '')
-
-        const getMediaVal = (field: keyof Game, folder: string, fallbackFolder?: string): string | null => {
-          if (metadataSource && metadataSource[field]) {
-            return metadataSource[field] as string
-          }
-          let local = findLocalMedia(stem, folder)
-          if (!local && fallbackFolder) {
-            local = findLocalMedia(stem, fallbackFolder)
-          }
-          return local
-        }
 
         if (metadataSource) {
           mergedGames.push({
@@ -663,52 +472,10 @@ export class DatabaseService {
             ...metadataSource,
             system: system.name,
             path: pg.path,
-            id: metadataSource.id && !metadataSource.id.includes('/') && !metadataSource.id.includes('\\') ? metadataSource.id : pg.id,
-            // Ensure media is looked up if missing in existing metadata
-            image: undefined,
-            video: getMediaVal('video', 'video'),
-            marquee: getMediaVal('marquee', 'marquee'),
-            thumbnail: undefined,
-            fanart: getMediaVal('fanart', 'fanart'),
-            titleshot: undefined,
-            wheel: undefined,
-            mix: getMediaVal('mix', 'mix'),
-            boxback: getMediaVal('boxback', 'backcover'),
-            bezel: getMediaVal('bezel', 'bezel'),
-            manual: getMediaVal('manual', 'manual'),
-            magazine: getMediaVal('magazine', 'magazine'),
-            map: getMediaVal('map', 'map'),
-            cover2d: getMediaVal('cover2d', 'cover2d'),
-            screenshot: getMediaVal('screenshot', 'screenshot'),
-            cover: getMediaVal('cover', 'cover'),
-            cover3d: getMediaVal('cover3d', 'cover3d'),
-            logo: getMediaVal('logo', 'logo'),
-            title: getMediaVal('title', 'title')
+            id: metadataSource.id && !metadataSource.id.includes('/') && !metadataSource.id.includes('\\') ? metadataSource.id : pg.id
           })
         } else {
-          // New game physical scan: resolve local media fallback
-          mergedGames.push({
-            ...pg,
-            image: undefined,
-            video: findLocalMedia(stem, 'video') || undefined,
-            marquee: findLocalMedia(stem, 'marquee') || undefined,
-            thumbnail: undefined,
-            fanart: findLocalMedia(stem, 'fanart') || undefined,
-            titleshot: undefined,
-            wheel: undefined,
-            mix: findLocalMedia(stem, 'mix') || undefined,
-            boxback: findLocalMedia(stem, 'backcover') || undefined,
-            bezel: findLocalMedia(stem, 'bezel') || undefined,
-            manual: findLocalMedia(stem, 'manual') || undefined,
-            magazine: findLocalMedia(stem, 'magazine') || undefined,
-            map: findLocalMedia(stem, 'map') || undefined,
-            cover2d: findLocalMedia(stem, 'cover2d') || undefined,
-            screenshot: findLocalMedia(stem, 'screenshot') || undefined,
-            cover: findLocalMedia(stem, 'cover') || undefined,
-            cover3d: findLocalMedia(stem, 'cover3d') || undefined,
-            logo: findLocalMedia(stem, 'logo') || undefined,
-            title: findLocalMedia(stem, 'title') || undefined
-          })
+          mergedGames.push(pg)
         }
       }
     } else {
@@ -723,23 +490,19 @@ export class DatabaseService {
     // 8. Store in DB inside a transaction
     const insertGame = db.prepare(`
       INSERT OR REPLACE INTO games (
-        id, name, path, system, desc, image, video, marquee, thumbnail,
-        fanart, titleshot, wheel, mix, boxback, bezel, manual, magazine, map,
+        id, name, path, system, desc,
         rating, releasedate, developer, publisher, genre, players,
         favorite, hidden, kidgame, playcount, lastplayed,
         region, lang, emulator, core, sortname, tags,
         gamefamily, arcadesystem, languages, cheevos_id, cheevos_hash,
-        file_size, file_mtime, crc32, md5, gametime, scrap_name, scrap_date,
-        cover2d, screenshot, cover, cover3d, logo, title
+        file_size, file_mtime, crc32, md5, gametime, scrap_name, scrap_date
       ) VALUES (
-        @id, @name, @path, @system, @desc, @image, @video, @marquee, @thumbnail,
-        @fanart, @titleshot, @wheel, @mix, @boxback, @bezel, @manual, @magazine, @map,
+        @id, @name, @path, @system, @desc,
         @rating, @releasedate, @developer, @publisher, @genre, @players,
         @favorite, @hidden, @kidgame, @playcount, @lastplayed,
         @region, @lang, @emulator, @core, @sortname, @tags,
         @gamefamily, @arcadesystem, @languages, @cheevos_id, @cheevos_hash,
-        @file_size, @file_mtime, @crc32, @md5, @gametime, @scrap_name, @scrap_date,
-        @cover2d, @screenshot, @cover, @cover3d, @logo, @title
+        @file_size, @file_mtime, @crc32, @md5, @gametime, @scrap_name, @scrap_date
       )
     `)
 
@@ -759,13 +522,11 @@ export class DatabaseService {
         file_count = excluded.file_count
     `)
 
-    const makeRelative = (p?: string | null) => this.toRelativePath(system.path, p)
-
     const runTransaction = db.transaction(() => {
       // Delete existing games for this system
       db.prepare('DELETE FROM games WHERE system = ?').run(system.name)
 
-      // Insert all merged games
+      // Insert all merged games (no media columns — derived at read time)
       for (const game of mergedGames) {
         const g = game as any
         insertGame.run({
@@ -774,25 +535,6 @@ export class DatabaseService {
           path: g.path || '',
           system: system.name,
           desc: g.desc || null,
-          image: makeRelative(g.image),
-          video: makeRelative(g.video),
-          marquee: makeRelative(g.marquee),
-          thumbnail: makeRelative(g.thumbnail),
-          fanart: makeRelative(g.fanart),
-          titleshot: makeRelative(g.titleshot),
-          wheel: makeRelative(g.wheel),
-          mix: makeRelative(g.mix),
-          boxback: makeRelative(g.boxback),
-          bezel: makeRelative(g.bezel),
-          manual: makeRelative(g.manual),
-          magazine: makeRelative(g.magazine),
-          map: makeRelative(g.map),
-          cover2d: makeRelative(g.cover2d),
-          screenshot: makeRelative(g.screenshot),
-          cover: makeRelative(g.cover),
-          cover3d: makeRelative(g.cover3d),
-          logo: makeRelative(g.logo),
-          title: makeRelative(g.title),
           rating: g.rating != null ? g.rating : null,
           releasedate: g.releasedate || null,
           developer: g.developer || null,
@@ -1167,22 +909,16 @@ export class DatabaseService {
     const db = this.ensureOpen()
     const g = game as any
 
-    const systemRow = db.prepare('SELECT path FROM systems WHERE name = ?').get(g.system) as any
-    const systemPath = systemRow ? systemRow.path : join(getRomsPath(), g.system)
-    const makeRelative = (p?: string | null) => this.toRelativePath(systemPath, p)
-
     db.prepare(`
       INSERT OR REPLACE INTO games (
-        id, name, path, system, desc, image, video, marquee, thumbnail,
-        fanart, titleshot, wheel, mix, boxback, bezel, manual, magazine, map,
+        id, name, path, system, desc,
         rating, releasedate, developer, publisher, genre, players,
         favorite, hidden, kidgame, playcount, lastplayed,
         region, lang, emulator, core, sortname, tags,
         gamefamily, arcadesystem, languages, cheevos_id, cheevos_hash,
         file_size, file_mtime, crc32, md5, gametime, scrap_name, scrap_date
       ) VALUES (
-        @id, @name, @path, @system, @desc, @image, @video, @marquee, @thumbnail,
-        @fanart, @titleshot, @wheel, @mix, @boxback, @bezel, @manual, @magazine, @map,
+        @id, @name, @path, @system, @desc,
         @rating, @releasedate, @developer, @publisher, @genre, @players,
         @favorite, @hidden, @kidgame, @playcount, @lastplayed,
         @region, @lang, @emulator, @core, @sortname, @tags,
@@ -1195,19 +931,6 @@ export class DatabaseService {
       path: g.path || '',
       system: g.system,
       desc: g.desc || null,
-      image: makeRelative(g.image),
-      video: makeRelative(g.video),
-      marquee: makeRelative(g.marquee),
-      thumbnail: makeRelative(g.thumbnail),
-      fanart: makeRelative(g.fanart),
-      titleshot: makeRelative(g.titleshot),
-      wheel: makeRelative(g.wheel),
-      mix: makeRelative(g.mix),
-      boxback: makeRelative(g.boxback),
-      bezel: makeRelative(g.bezel),
-      manual: makeRelative(g.manual),
-      magazine: makeRelative(g.magazine),
-      map: makeRelative(g.map),
       rating: g.rating != null ? g.rating : null,
       releasedate: g.releasedate || null,
       developer: g.developer || null,
@@ -1399,11 +1122,39 @@ export class DatabaseService {
   }
 
   /**
+   * Standardized media type → file extension mapping.
+   * Media paths are derived from game stem, never stored in DB.
+   */
+  private static readonly MEDIA_MAP: Record<string, string> = {
+    fanart: '.webp',
+    logo: '.webp',
+    marquee: '.webp',
+    video: '.mp4',
+    screenshot: '.webp',
+    title: '.webp',
+    cover: '.webp',
+    cover2d: '.webp',
+    cover3d: '.webp',
+    coverback: '.webp',
+    manual: '.pdf',
+    mix: '.webp'
+  }
+
+  /**
    * Convert a database row to a Game object.
+   * Media paths are derived from game filename stem — no media columns in DB.
    */
   private rowToGame(row: any): Game {
     const systemPath = join(getRomsPath(), row.system)
-    const resolvePath = (p?: string | null) => this.toAbsolutePath(systemPath, p) || undefined
+    // Derive stem from the game path (e.g. './Super Mario World.sfc' → 'Super Mario World')
+    const stem = String(row.path || '').replace(/^.*[\/\\]/, '').replace(/\.[^.]+$/, '')
+
+    // Build absolute media paths from stem using standardized media map
+    const buildMediaPath = (mediaType: string): string | undefined => {
+      const ext = DatabaseService.MEDIA_MAP[mediaType]
+      if (!ext || !stem) return undefined
+      return resolve(systemPath, 'media', mediaType, `${stem}${ext}`).replace(/\\/g, '/')
+    }
 
     return {
       id: row.id || row.path,
@@ -1411,12 +1162,18 @@ export class DatabaseService {
       path: row.path,
       system: row.system,
       desc: row.desc || undefined,
-      image: resolvePath(row.image),
-      video: resolvePath(row.video),
-      marquee: resolvePath(row.marquee),
-      thumbnail: resolvePath(row.thumbnail),
-      fanart: resolvePath(row.fanart),
-      titleshot: resolvePath(row.titleshot),
+      fanart: buildMediaPath('fanart'),
+      logo: buildMediaPath('logo'),
+      marquee: buildMediaPath('marquee'),
+      video: buildMediaPath('video'),
+      screenshot: buildMediaPath('screenshot'),
+      title: buildMediaPath('title'),
+      cover: buildMediaPath('cover'),
+      cover2d: buildMediaPath('cover2d'),
+      cover3d: buildMediaPath('cover3d'),
+      coverback: buildMediaPath('coverback'),
+      manual: buildMediaPath('manual'),
+      mix: buildMediaPath('mix'),
       rating: row.rating != null ? row.rating : undefined,
       releasedate: row.releasedate || undefined,
       developer: row.developer || undefined,
@@ -1432,17 +1189,6 @@ export class DatabaseService {
       core: row.core || undefined,
       sortname: row.sortname || undefined,
       tags: row.tags || undefined,
-      boxback: resolvePath(row.boxback),
-      bezel: resolvePath(row.bezel),
-      manual: resolvePath(row.manual),
-      magazine: resolvePath(row.magazine),
-      map: resolvePath(row.map),
-      cover2d: resolvePath(row.cover2d),
-      screenshot: resolvePath(row.screenshot),
-      cover: resolvePath(row.cover),
-      cover3d: resolvePath(row.cover3d),
-      logo: resolvePath(row.logo),
-      title: resolvePath(row.title),
       gamefamily: row.gamefamily || undefined,
       arcadesystem: row.arcadesystem || undefined,
       languages: row.languages || undefined,
@@ -1453,42 +1199,21 @@ export class DatabaseService {
       md5: row.md5 || undefined,
       gametime: row.gametime || undefined,
       scrapName: row.scrap_name || undefined,
-      scrapDate: row.scrap_date || undefined,
-      wheel: resolvePath(row.wheel),
-      mix: resolvePath(row.mix)
+      scrapDate: row.scrap_date || undefined
     } as any
   }
 
 
-  public getRandomGameWithMedia(mediaType: 'video' | 'image'): Game | null {
+  public getRandomGameWithMedia(mediaType: 'video' | 'fanart'): Game | null {
     const db = this.ensureOpen()
-    const field = mediaType === 'video' ? 'video' : 'image'
     try {
-      const row = db.prepare(`SELECT * FROM games WHERE ${field} IS NOT NULL AND ${field} != '' AND hidden = 0 ORDER BY RANDOM() LIMIT 1`).get() as any
+      // Since media is derived from stem, any game can potentially have media.
+      // Just pick a random non-hidden game.
+      const row = db.prepare(`SELECT * FROM games WHERE hidden = 0 ORDER BY RANDOM() LIMIT 1`).get() as any
       return row ? this.rowToGame(row) : null
     } catch (e) {
       console.error(`Failed to get random game with ${mediaType}:`, e)
       return null
-    }
-  }
-
-  /**
-   * Get all unique media paths (image, fanart, marquee) stored in the database.
-   */
-  public getAllMediaPaths(): string[] {
-    const db = this.ensureOpen()
-    try {
-      const rows = db.prepare(`
-        SELECT DISTINCT image as path FROM games WHERE image IS NOT NULL AND image != ''
-        UNION
-        SELECT DISTINCT fanart as path FROM games WHERE fanart IS NOT NULL AND fanart != ''
-        UNION
-        SELECT DISTINCT marquee as path FROM games WHERE marquee IS NOT NULL AND marquee != ''
-      `).all() as any[]
-      return rows.map(r => r.path).filter(Boolean)
-    } catch (e) {
-      console.error('Failed to get all media paths from database:', e)
-      return []
     }
   }
 

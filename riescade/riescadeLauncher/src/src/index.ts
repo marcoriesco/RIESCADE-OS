@@ -12,6 +12,17 @@ import { GenericGenerator } from './generators/GenericGenerator.js';
 import { AresGenerator } from './generators/AresGenerator.js';
 import { Mame64Generator } from './generators/Mame64Generator.js';
 import { XeniaGenerator } from './generators/XeniaGenerator.js';
+import { DuckstationGenerator } from './generators/DuckstationGenerator.js';
+import { RyujinxGenerator } from './generators/RyujinxGenerator.js';
+import { Rpcs3Generator } from './generators/Rpcs3Generator.js';
+import { CemuGenerator } from './generators/CemuGenerator.js';
+import { PpssppGenerator } from './generators/PpssppGenerator.js';
+import { FlycastGenerator } from './generators/FlycastGenerator.js';
+import { XemuGenerator } from './generators/XemuGenerator.js';
+import { BigPemuGenerator } from './generators/BigPemuGenerator.js';
+import { Model2Generator } from './generators/Model2Generator.js';
+import { Model3Generator } from './generators/Model3Generator.js';
+import { RedreamGenerator } from './generators/RedreamGenerator.js';
 
 function parseArgs(args: string[]): LaunchArgs {
   const rawArgs: Record<string, string> = {};
@@ -79,6 +90,39 @@ function getGenerator(args: LaunchArgs): BaseGenerator {
   }
   if (emu === 'xenia' || emu === 'xenia-canary' || sys === 'xbox360') {
     return new XeniaGenerator(args);
+  }
+  if (emu === 'ryujinx' || sys === 'switch') {
+    return new RyujinxGenerator(args);
+  }
+  if (emu === 'rpcs3' || sys === 'ps3') {
+    return new Rpcs3Generator(args);
+  }
+  if (emu === 'cemu' || sys === 'wiiu') {
+    return new CemuGenerator(args);
+  }
+  if (emu === 'duckstation' || sys === 'psx') {
+    return new DuckstationGenerator(args);
+  }
+  if (emu === 'ppsspp' || sys === 'psp') {
+    return new PpssppGenerator(args);
+  }
+  if (emu === 'flycast' || sys === 'dreamcast' || sys === 'naomi') {
+    return new FlycastGenerator(args);
+  }
+  if (emu === 'xemu' || sys === 'xbox') {
+    return new XemuGenerator(args);
+  }
+  if (emu === 'bigpemu' || sys === 'atarijaguar') {
+    return new BigPemuGenerator(args);
+  }
+  if (emu === 'model2' || sys === 'model2') {
+    return new Model2Generator(args);
+  }
+  if (emu === 'supermodel' || emu === 'model3' || sys === 'model3') {
+    return new Model3Generator(args);
+  }
+  if (emu === 'redream') {
+    return new RedreamGenerator(args);
   }
 
   return new GenericGenerator(args);

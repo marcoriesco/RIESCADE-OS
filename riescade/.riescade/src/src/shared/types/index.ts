@@ -23,10 +23,8 @@ export interface Game {
   id: string
   name: string
   desc?: string
-  image?: string
   video?: string
   marquee?: string
-  thumbnail?: string
   rating?: number
   releasedate?: string
   developer?: string
@@ -46,24 +44,19 @@ export interface Game {
   cheevosId?: string
   cheevosHash?: string
   fanart?: string
-  titleshot?: string
-  wheel?: string
   mix?: string
-  boxback?: string
-  bezel?: string
   manual?: string
-  magazine?: string
-  map?: string
   gamefamily?: string
   arcadesystem?: string
   languages?: string
   region?: string
   lang?: string
-  cover2d?: string
-  screenshot?: string
   cover?: string
+  cover2d?: string
   cover3d?: string
+  coverback?: string
   logo?: string
+  screenshot?: string
   title?: string
   sortname?: string
   tags?: string

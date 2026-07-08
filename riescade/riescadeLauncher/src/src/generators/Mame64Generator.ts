@@ -3,6 +3,7 @@ import { join } from 'path';
 import { BaseGenerator } from './BaseGenerator.js';
 import { getEmulatorsPath, getRetroBatPath } from '../utils/paths.js';
 import { Logger } from '../utils/logger.js';
+import { Config } from '../config.js';
 
 export class Mame64Generator extends BaseGenerator {
   public configure(): void {
@@ -39,6 +40,11 @@ export class Mame64Generator extends BaseGenerator {
       Logger.warn(`Mame64Generator: MAME executable not found at ${exePath}.`);
     }
 
+    const fullscreen = (Config.getEmulatorSetting('mame64', 'fullscreen') ?? Config.getEmulatorSetting('mame64', 'forcefullscreen') ?? Config.getEmulatorSetting('mame64', 'mame64_fullscreen', 'true')) === 'true';
+    const vsync = (Config.getEmulatorSetting('mame64', 'vsync') ?? Config.getEmulatorSetting('mame64', 'mame64_vsync', 'true')) === 'true';
+    const video = Config.getEmulatorSetting('mame64', 'video') ?? Config.getEmulatorSetting('mame64', 'mame64_video', 'd3d');
+    const sound = Config.getEmulatorSetting('mame64', 'sound') ?? Config.getEmulatorSetting('mame64', 'mame64_sound', 'dsound');
+
     const commandArgs: string[] = [
       '-skip_gameinfo',
       '-rp', `${join(retroBatPath, 'bios')};${join(retroBatPath, 'roms', 'arcade')}`,
@@ -54,11 +60,12 @@ export class Mame64Generator extends BaseGenerator {
       '-noflt',
       '-v',
       '-throttle',
-      '-sound', 'dsound',
-      '-video', 'd3d',
+      '-sound', sound,
+      '-video', video,
       '-resolution', 'auto',
       '-noka',
-      '-waitvsync',
+      vsync ? '-waitvsync' : '-nowaitvsync',
+      fullscreen ? '-nowindow' : '-window',
       '-mouse_device', 'mouse',
       '-ui_mouse',
       '-pedal_device', 'joystick',

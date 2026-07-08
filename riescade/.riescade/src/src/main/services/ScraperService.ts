@@ -232,8 +232,8 @@ export class ScraperService {
           if (filter === 'all') {
             shouldScrape = true
           } else {
-            const hasImage = game.image && existsSync(resolvePath(sys.path, game.image))
-            const hasThumb = game.thumbnail && existsSync(resolvePath(sys.path, game.thumbnail))
+            const hasImage = game.fanart && existsSync(resolvePath(sys.path, game.fanart))
+            const hasThumb = game.cover && existsSync(resolvePath(sys.path, game.cover))
             const hasLogo = game.marquee && existsSync(resolvePath(sys.path, game.marquee))
             const hasVideo = game.video && existsSync(resolvePath(sys.path, game.video))
 

@@ -85,7 +85,7 @@ export class LauncherService {
     <path>${game.path}</path>
     <name>${game.name}</name>
     <desc>${game.desc || ''}</desc>
-    <image>${resolvePath(game.image)}</image>
+    <image>${resolvePath(game.fanart)}</image>
     <video>${resolvePath(game.video)}</video>
     <rating>${game.rating || 0}</rating>
     <releasedate>${game.releasedate || ''}</releasedate>

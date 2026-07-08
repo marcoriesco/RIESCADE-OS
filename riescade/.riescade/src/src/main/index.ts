@@ -310,22 +310,18 @@ app.whenReady().then(() => {
 
 
   ipcMain.handle('get-all-media-paths', async () => {
-    const db = LibraryService.getDatabase()
-    if (db.isOpen()) {
-      return db.getAllMediaPaths()
-    }
+    // Media paths are now derived from game stems, not stored in DB
     return []
   })
 
   ipcMain.handle('get-systems', async () => {
     return libraryService.getSystems()
   })
-
   ipcMain.handle('check-media-folders', async (_, systemPath: string) => {
     const fs = require('fs')
     const { join } = require('path')
+    const folders = ['cover', 'cover2d', 'cover3d', 'coverback', 'fanart', 'logo', 'marquee', 'screenshot', 'title', 'mix', 'video', 'manual']
     const results: Record<string, boolean> = {}
-    const folders = ['cover', 'cover2d', 'cover3d', 'fanart', 'logo', 'screenshot', 'title', 'mix']
 
     if (!systemPath || systemPath.startsWith('virtual://') || systemPath === 'collections') {
       const systems = libraryService.getSystems()
@@ -333,18 +329,9 @@ app.whenReady().then(() => {
         results[f] = false
         for (const sys of systems) {
           if (sys.path && !sys.path.startsWith('virtual://')) {
-            const p = join(sys.path, 'media', f)
-            if (fs.existsSync(p)) {
-              try {
-                const files = fs.readdirSync(p)
-                const hasFiles = files.some(file => !file.startsWith('.') && fs.statSync(join(p, file)).isFile())
-                if (hasFiles) {
-                  results[f] = true
-                  break
-                }
-              } catch (e) {
-                // ignore
-              }
+            if (fs.existsSync(join(sys.path, 'media', f))) {
+              results[f] = true
+              break
             }
           }
         }
@@ -352,27 +339,9 @@ app.whenReady().then(() => {
       return results
     }
 
-    const mediaDir = join(systemPath, 'media')
-    if (!fs.existsSync(mediaDir)) {
-      folders.forEach(f => results[f] = false)
-      return results
-    }
-
     for (const f of folders) {
-      const p = join(mediaDir, f)
-      try {
-        if (fs.existsSync(p)) {
-          const files = fs.readdirSync(p)
-          const hasFiles = files.some(file => !file.startsWith('.') && fs.statSync(join(p, file)).isFile())
-          results[f] = hasFiles
-        } else {
-          results[f] = false
-        }
-      } catch (err) {
-        results[f] = false
-      }
+      results[f] = fs.existsSync(join(systemPath, 'media', f))
     }
-
     return results
   })
 
@@ -473,6 +442,18 @@ app.whenReady().then(() => {
   ipcMain.handle('get-emulator-settings', async () => {
     const emulatorParser = new EmulatorParser()
     return emulatorParser.getAllSettings()
+  })
+
+  ipcMain.handle('get-features', async () => {
+    const filePath = join(getRiescadePath(), 'configs', 'features.json')
+    if (!existsSync(filePath)) return {}
+    try {
+      const content = readFileSync(filePath, 'utf-8')
+      return JSON.parse(content)
+    } catch (error) {
+      console.error('Error parsing features.json:', error)
+      return {}
+    }
   })
 
   ipcMain.handle('save-emulator-setting', async (_, emulator: string, name: string, value: any) => {

@@ -968,12 +968,12 @@ export class LibraryService {
         if (existsSync(logoFile)) {
           const logoPath = `file:///${logoFile.replace(/\\/g, '/')}`
           gameObj.marquee = logoPath
-          gameObj.thumbnail = logoPath
+          gameObj.logo = logoPath
         }
         if (existsSync(artFile)) {
           const artPath = `file:///${artFile.replace(/\\/g, '/')}`
-          gameObj.image = artPath
           gameObj.fanart = artPath
+          gameObj.cover = artPath
         }
 
         return gameObj
@@ -1170,18 +1170,7 @@ export class LibraryService {
 
     const systemPath = system && system.path ? system.path : null
 
-    const processedGames = games.map(g => {
-      const sysLower = String(g.system || systemName).toLowerCase()
-      if (!g.image || String(g.image).trim() === '') {
-        const ext = (g.path.includes('.') ? g.path.substring(g.path.lastIndexOf('.')) : '').toLowerCase()
-        if (ext === '.png' || (sysLower === 'pico8' && ext === '.p8')) {
-          if (systemPath) {
-            g.image = resolve(systemPath, g.path).replace(/\\/g, '/')
-          }
-        }
-      }
-      return g
-    })
+    const processedGames = games
 
     const showHidden = settings.getSetting('ShowHidden', 'bool') === true
     const visibleGames = showHidden ? processedGames : processedGames.filter(g => g.hidden !== true && String(g.hidden) !== 'true')
@@ -1389,9 +1378,9 @@ export class LibraryService {
                 lang: defaultLang
               } as any
 
-              // If it's the screenshots system, set the image property to the absolute path of the file itself
+              // If it's the screenshots system, set the fanart property to the absolute path of the file itself
               if (systemName === 'screenshots') {
-                game.image = fullPath.replace(/\\/g, '/')
+                game.fanart = fullPath.replace(/\\/g, '/')
               }
 
               games.push(game)
@@ -1836,7 +1825,7 @@ export class LibraryService {
     }
   }
 
-  public getRandomGameWithMedia(mediaType: 'video' | 'image'): Game | null {
+  public getRandomGameWithMedia(mediaType: 'video' | 'fanart'): Game | null {
     if (LibraryService.isDbMode() && LibraryService.databaseService.isOpen()) {
       return LibraryService.databaseService.getRandomGameWithMedia(mediaType)
     }
@@ -1848,7 +1837,7 @@ export class LibraryService {
     for (let attempt = 0; attempt < 5; attempt++) {
       const randSys = validSystems[Math.floor(Math.random() * validSystems.length)]
       const games = this.getGames(randSys.name)
-      const matches = games.filter(g => mediaType === 'video' ? !!g.video : !!g.image)
+      const matches = games.filter(g => mediaType === 'video' ? !!g.video : !!g.fanart)
       if (matches.length > 0) {
         return matches[Math.floor(Math.random() * matches.length)]
       }

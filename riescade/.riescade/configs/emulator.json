@@ -31,6 +31,41 @@
   "xenia": {
     "xenia_fullscreen": "true",
     "xenia_license_mask": "-1",
-    "xenia_gpu": "vulkan"
+    "xenia_gpu": "vulkan",
+    "xenia_resolution": "1_1",
+    "xenia_lang": "9",
+    "xenia_hid": "sdl"
+  },
+  "pcsx2x6": {
+    "TVShader": "0",
+    "internalresolution": "3",
+    "pcsx2_vsync": "true",
+    "fullboot": "true",
+    "pcsx2_fastboot": "true",
+    "pcsx2_forcebios": "ps2-0230a-20080220.bin"
+  },
+  "pcsx2": {
+    "TVShader": "0",
+    "internalresolution": "3",
+    "fullboot": "true",
+    "pcsx2_fastboot": "true"
+  },
+  "teknoparrot": {
+    "tp_play_resolution": "1920p",
+    "tp_play_gpuapi": "Vulkan"
+  },
+  "xemu": {
+    "xemu_ratio": "16x9"
+  },
+  "rpcs3": {
+    "rpcs3_internal_resolution": "150",
+    "rpcs3_ratio": "16:9",
+    "rpcs3_vsync": "Full",
+    "ps3_region": "SCEA",
+    "ps3_language": "Portuguese (Brazil)",
+    "show_trophy": "true",
+    "gfxbackend": "Vulkan",
+    "stretchtodisplay": "true",
+    "rpcs3_fullscreen_mode": "Enable"
   }
 }
