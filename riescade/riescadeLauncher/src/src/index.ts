@@ -1,4 +1,5 @@
 import { spawn } from 'child_process';
+import { dirname } from 'path';
 import { Logger } from './utils/logger.js';
 import { Config } from './config.js';
 import { LaunchArgs } from './types.js';
@@ -23,6 +24,7 @@ import { BigPemuGenerator } from './generators/BigPemuGenerator.js';
 import { Model2Generator } from './generators/Model2Generator.js';
 import { Model3Generator } from './generators/Model3Generator.js';
 import { RedreamGenerator } from './generators/RedreamGenerator.js';
+import { Shadps4Generator } from './generators/Shadps4Generator.js';
 
 function parseArgs(args: string[]): LaunchArgs {
   const rawArgs: Record<string, string> = {};
@@ -123,6 +125,9 @@ function getGenerator(args: LaunchArgs): BaseGenerator {
   }
   if (emu === 'redream') {
     return new RedreamGenerator(args);
+  }
+  if (emu === 'shadps4' || sys === 'ps4') {
+    return new Shadps4Generator(args);
   }
 
   return new GenericGenerator(args);
@@ -289,7 +294,8 @@ async function main() {
   // Spawn the child process
   const child = spawn(executable, args, {
     stdio: ['inherit', 'pipe', 'pipe'],
-    detached: false
+    detached: false,
+    cwd: dirname(executable)
   });
 
   Logger.info(`[Running]`);

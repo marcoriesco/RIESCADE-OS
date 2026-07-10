@@ -1128,19 +1128,19 @@
     "type": "int"
   },
   "Window.tool-settings.Maximized": {
-    "value": true,
+    "value": false,
     "type": "bool"
   },
   "Window.tool-settings.X": {
-    "value": 482,
+    "value": 34,
     "type": "int"
   },
   "Window.tool-settings.Y": {
-    "value": 127,
+    "value": 22,
     "type": "int"
   },
   "Window.tool-settings.Width": {
-    "value": 1107,
+    "value": 1544,
     "type": "int"
   },
   "Window.tool-settings.Height": {
@@ -1372,7 +1372,7 @@
     "type": "int"
   },
   "Window.system-xbox360.Width": {
-    "value": 1355,
+    "value": 1858,
     "type": "int"
   },
   "Window.system-xbox360.Height": {
@@ -1432,7 +1432,7 @@
     "type": "bool"
   },
   "RIESCADE.PreferredMediaType.ps3": {
-    "value": "cover2d",
+    "value": "cover",
     "type": "string"
   },
   "Window.system-ps4.X": {
@@ -1457,6 +1457,10 @@
   },
   "RIESCADE.PreferredMediaType.ps4": {
     "value": "cover",
+    "type": "string"
+  },
+  "RIESCADE.PreferredMediaType.2ship": {
+    "value": "logo",
     "type": "string"
   }
 }

@@ -67,5 +67,24 @@
     "gfxbackend": "Vulkan",
     "stretchtodisplay": "true",
     "rpcs3_fullscreen_mode": "Enable"
+  },
+  "dolphin": {
+    "internal_resolution": "3",
+    "ratio": "16/9"
+  },
+  "ryujinx": {
+    "res_scale": "1",
+    "aspect_ratio": "Fixed16x9",
+    "ryujinx_undock": "true",
+    "switch_language": "BrazilianPortuguese",
+    "system_region": "USA",
+    "memory_manager_mode": "HostMappedUnsafe",
+    "backend_threading": "true",
+    "ryujinx_vsync": "0"
+  },
+  "ppsspp": {
+    "ppsspp_ratio": "1",
+    "ppsspp_lang": "7",
+    "ppsspp_backend": "3 (VULKAN)"
   }
 }
