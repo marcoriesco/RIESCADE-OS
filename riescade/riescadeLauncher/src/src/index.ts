@@ -25,6 +25,8 @@ import { Model2Generator } from './generators/Model2Generator.js';
 import { Model3Generator } from './generators/Model3Generator.js';
 import { RedreamGenerator } from './generators/RedreamGenerator.js';
 import { Shadps4Generator } from './generators/Shadps4Generator.js';
+import { Vita3kGenerator } from './generators/Vita3kGenerator.js';
+
 
 function parseArgs(args: string[]): LaunchArgs {
   const rawArgs: Record<string, string> = {};
@@ -90,7 +92,7 @@ function getGenerator(args: LaunchArgs): BaseGenerator {
   if (emu === 'mame64' || emu === 'mame' || sys === 'mame64') {
     return new Mame64Generator(args);
   }
-  if (emu === 'xenia' || emu === 'xenia-canary' || sys === 'xbox360') {
+  if (emu === 'xenia' || emu === 'xenia-canary' || sys === 'xbox360' || sys === 'xboxlivearcade' || sys === 'xbla') {
     return new XeniaGenerator(args);
   }
   if (emu === 'ryujinx' || sys === 'switch') {
@@ -129,6 +131,10 @@ function getGenerator(args: LaunchArgs): BaseGenerator {
   if (emu === 'shadps4' || sys === 'ps4') {
     return new Shadps4Generator(args);
   }
+  if (emu === 'vita3k' || sys === 'psvita') {
+    return new Vita3kGenerator(args);
+  }
+
 
   return new GenericGenerator(args);
 }

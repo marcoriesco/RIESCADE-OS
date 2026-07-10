@@ -1,5 +1,5 @@
 import { existsSync, readFileSync, writeFileSync } from 'fs';
-import { join } from 'path';
+import { join, dirname } from 'path';
 import { BaseGenerator } from './BaseGenerator.js';
 import { getEmulatorsPath } from '../utils/paths.js';
 import { Logger } from '../utils/logger.js';
@@ -10,7 +10,7 @@ export class XeniaGenerator extends BaseGenerator {
     Logger.info(`XeniaGenerator: Configuring Xenia/Xenia-Canary`);
 
     const emulatorsDir = getEmulatorsPath();
-    const isCanary = this.emulator.toLowerCase() === 'xenia-canary';
+    const isCanary = this.emulator.toLowerCase() === 'xenia-canary' || this.core.toLowerCase() === 'xenia-canary';
     const targetFolder = isCanary ? 'xenia-canary' : 'xenia';
     const configName = isCanary ? 'xenia-canary.config.toml' : 'xenia.config.toml';
     const configPath = join(emulatorsDir, targetFolder, configName);
@@ -126,7 +126,7 @@ export class XeniaGenerator extends BaseGenerator {
 
   public getLaunchCommand(): { executable: string; args: string[] } {
     const emulatorsDir = getEmulatorsPath();
-    const isCanary = this.emulator.toLowerCase() === 'xenia-canary';
+    const isCanary = this.emulator.toLowerCase() === 'xenia-canary' || this.core.toLowerCase() === 'xenia-canary';
     const targetFolder = isCanary ? 'xenia-canary' : 'xenia';
     const exeName = isCanary ? 'xenia_canary.exe' : 'xenia.exe';
     const exePath = join(emulatorsDir, targetFolder, exeName);
@@ -135,9 +135,31 @@ export class XeniaGenerator extends BaseGenerator {
       Logger.warn(`XeniaGenerator: Xenia executable not found at ${exePath}. Falling back to default path.`);
     }
 
+    let romPath = this.rom;
+    if (this.rom && this.rom.toLowerCase().endsWith('.m3u')) {
+      if (existsSync(this.rom)) {
+        try {
+          const content = readFileSync(this.rom, 'utf8').trim();
+          if (content) {
+            const romDir = dirname(this.rom);
+            const relPath = content.replace(/^[\\/]/, '');
+            const resolved = join(romDir, relPath);
+            if (existsSync(resolved)) {
+              romPath = resolved;
+              Logger.info(`XeniaGenerator: Resolved ROM from .m3u: ${romPath}`);
+            } else {
+              Logger.warn(`XeniaGenerator: Resolved ROM path from .m3u does not exist: ${resolved}`);
+            }
+          }
+        } catch (err) {
+          Logger.error(`XeniaGenerator: Failed to read .m3u file ${this.rom}`, err);
+        }
+      }
+    }
+
     const commandArgs: string[] = [
       '--fullscreen',
-      this.rom
+      romPath
     ];
 
     return {

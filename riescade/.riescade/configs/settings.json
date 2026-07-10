@@ -1462,5 +1462,13 @@
   "RIESCADE.PreferredMediaType.2ship": {
     "value": "logo",
     "type": "string"
+  },
+  "Window.system-psvita.Maximized": {
+    "value": true,
+    "type": "bool"
+  },
+  "RIESCADE.PreferredMediaType.xboxlivearcade": {
+    "value": "cover",
+    "type": "string"
   }
 }
