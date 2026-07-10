@@ -1470,5 +1470,9 @@
   "RIESCADE.PreferredMediaType.xboxlivearcade": {
     "value": "cover",
     "type": "string"
+  },
+  "RIESCADE.PreferredMediaType.psvita": {
+    "value": "cover",
+    "type": "string"
   }
 }

@@ -6938,7 +6938,7 @@
     {
       "name": "xboxlivearcade",
       "fullname": "Xbox Live Arcade",
-      "path": "~\\..\\roms\\xbla",
+      "path": "~\\..\\roms\\xboxlivearcade",
       "extension": ".iso .m3u",
       "command": "\"%HOME%\\emulatorLauncher.exe\" %CONTROLLERSCONFIG% -system %SYSTEM% -emulator %EMULATOR% -core %CORE% -rom %ROM%",
       "platform": "xbox360",
