@@ -1,5 +1,5 @@
 import { spawn } from 'child_process';
-import { dirname } from 'path';
+import { dirname, parse, join } from 'path';
 import { Logger } from './utils/logger.js';
 import { Config } from './config.js';
 import { LaunchArgs } from './types.js';
@@ -26,6 +26,10 @@ import { Model3Generator } from './generators/Model3Generator.js';
 import { RedreamGenerator } from './generators/RedreamGenerator.js';
 import { Shadps4Generator } from './generators/Shadps4Generator.js';
 import { Vita3kGenerator } from './generators/Vita3kGenerator.js';
+import { WindowsGenerator } from './generators/WindowsGenerator.js';
+import { findFreeDriveLetter, mountSquashfs, unmountSquashfs, resolveRomInDrive } from './utils/squashfs.js';
+import { getRetroBatPath } from './utils/paths.js';
+
 
 
 function parseArgs(args: string[]): LaunchArgs {
@@ -134,6 +138,10 @@ function getGenerator(args: LaunchArgs): BaseGenerator {
   if (emu === 'vita3k' || sys === 'psvita') {
     return new Vita3kGenerator(args);
   }
+  if (emu === 'windows' || sys === 'windows') {
+    return new WindowsGenerator(args);
+  }
+
 
 
   return new GenericGenerator(args);
@@ -287,77 +295,116 @@ async function main() {
   // Load configuration files
   Config.load();
 
-  // Instantiate correct generator
-  const generator = getGenerator(parsedArgs);
+  let mountProcess: any = null;
+  let virtualDrive = '';
 
-  // Configure emulator/files before launching
-  await generator.configure();
+  try {
+    if (parsedArgs.rom && (parsedArgs.rom.toLowerCase().endsWith('.squashfs') || parsedArgs.rom.toLowerCase().endsWith('.wsquashfs'))) {
+      virtualDrive = findFreeDriveLetter();
+      const retroBatPath = getRetroBatPath();
+      const gameName = parse(parsedArgs.rom).name;
+      const overlayDir = join(retroBatPath, 'saves', parsedArgs.system, 'squashfs-overlays', gameName);
+      const workDir = join(retroBatPath, 'saves', parsedArgs.system, 'squashfs-work', gameName);
 
-  // Get launch command
-  const { executable, args } = generator.getLaunchCommand();
-  Logger.info(`Spawning child process: "${executable}" ${args.join(' ')}`);
+      mountProcess = await mountSquashfs(parsedArgs.rom, virtualDrive, overlayDir, workDir);
+      const resolved = resolveRomInDrive(virtualDrive, parsedArgs.system);
 
-  // Spawn the child process
-  const child = spawn(executable, args, {
-    stdio: ['inherit', 'pipe', 'pipe'],
-    detached: false,
-    cwd: dirname(executable)
-  });
+      Logger.info(`Launcher: Mounted SquashFS, resolved ROM path to: ${resolved}`);
+      parsedArgs.rom = resolved;
+    }
 
-  Logger.info(`[Running]`);
+    // Instantiate correct generator
+    const generator = getGenerator(parsedArgs);
 
-  // Start controller hotkey exit monitor (only for standalone emulators, i.e., not libretro)
-  const isLibRetro = parsedArgs.emulator.toLowerCase() === 'libretro';
-  const monitors = isLibRetro ? [] : getControllerMonitors(parsedArgs);
-  let psMonitor: any = null;
+    // Configure emulator/files before launching
+    await generator.configure();
 
-  if (monitors.length > 0) {
-    psMonitor = startHotkeyMonitor(monitors, () => {
-      Logger.info(`Hotkey exit requested. Terminating emulator...`);
-      try {
-        spawn('taskkill', ['/F', '/T', '/PID', child.pid.toString()]);
-      } catch (err) {
-        Logger.error(`Failed to execute taskkill:`, err);
-        child.kill();
+    // Get launch command
+    const { executable, args } = generator.getLaunchCommand();
+    Logger.info(`Spawning child process: "${executable}" ${args.join(' ')}`);
+
+    const useShell = executable.toLowerCase().endsWith('.lnk') || 
+                     executable.toLowerCase().endsWith('.bat') || 
+                     executable.toLowerCase().endsWith('.cmd');
+
+    // Spawn the child process
+    const child = spawn(executable, args, {
+      stdio: ['inherit', 'pipe', 'pipe'],
+      detached: false,
+      cwd: dirname(executable),
+      shell: useShell
+    });
+
+    Logger.info(`[Running]`);
+
+    // Start controller hotkey exit monitor (only for standalone emulators, i.e., not libretro)
+    const isLibRetro = parsedArgs.emulator.toLowerCase() === 'libretro';
+    const monitors = isLibRetro ? [] : getControllerMonitors(parsedArgs);
+    let psMonitor: any = null;
+
+    if (monitors.length > 0) {
+      psMonitor = startHotkeyMonitor(monitors, () => {
+        Logger.info(`Hotkey exit requested. Terminating emulator...`);
+        try {
+          spawn('taskkill', ['/F', '/T', '/PID', child.pid.toString()]);
+        } catch (err) {
+          Logger.error(`Failed to execute taskkill:`, err);
+          child.kill();
+        }
+      });
+    }
+
+    child.stdout.on('data', (data) => {
+      const lines = data.toString().split(/\r?\n/);
+      for (const line of lines) {
+        if (line.trim()) Logger.debug(`[Emulator STDOUT] ${line.trim()}`);
       }
     });
-  }
 
-  child.stdout.on('data', (data) => {
-    const lines = data.toString().split(/\r?\n/);
-    for (const line of lines) {
-      if (line.trim()) Logger.debug(`[Emulator STDOUT] ${line.trim()}`);
-    }
-  });
+    child.stderr.on('data', (data) => {
+      const lines = data.toString().split(/\r?\n/);
+      for (const line of lines) {
+        if (line.trim()) Logger.error(`[Emulator STDERR] ${line.trim()}`);
+      }
+    });
 
-  child.stderr.on('data', (data) => {
-    const lines = data.toString().split(/\r?\n/);
-    for (const line of lines) {
-      if (line.trim()) Logger.error(`[Emulator STDERR] ${line.trim()}`);
-    }
-  });
+    child.on('close', (code) => {
+      Logger.info(`Emulator process closed with exit code ${code}`);
+      if (psMonitor) {
+        try {
+          psMonitor.kill();
+        } catch (e) {}
+      }
+      if (mountProcess) {
+        unmountSquashfs(mountProcess);
+      }
+      generator.cleanup();
+      process.exit(code ?? 0);
+    });
 
-  child.on('close', (code) => {
-    Logger.info(`Emulator process closed with exit code ${code}`);
-    if (psMonitor) {
+    child.on('error', (err) => {
+      Logger.error(`Failed to start emulator:`, err);
+      if (psMonitor) {
+        try {
+          psMonitor.kill();
+        } catch (e) {}
+      }
+      if (mountProcess) {
+        unmountSquashfs(mountProcess);
+      }
+      generator.cleanup();
+      process.exit(1);
+    });
+
+  } catch (err) {
+    Logger.error(`Launcher: Error during configuration or execution:`, err);
+    if (mountProcess) {
       try {
-        psMonitor.kill();
+        unmountSquashfs(mountProcess);
       } catch (e) {}
     }
-    generator.cleanup();
-    process.exit(code ?? 0);
-  });
-
-  child.on('error', (err) => {
-    Logger.error(`Failed to start emulator:`, err);
-    if (psMonitor) {
-      try {
-        psMonitor.kill();
-      } catch (e) {}
-    }
-    generator.cleanup();
     process.exit(1);
-  });
+  }
 }
 
 main().catch((err) => {

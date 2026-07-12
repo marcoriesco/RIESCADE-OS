@@ -940,7 +940,7 @@
     "type": "string"
   },
   "Taskbar.Icons": {
-    "value": "tool:settings,system:switch,system:teknoparrot,system:cps1,system:snes,system:namco2x6,system:laseractive,system:xbox360,system:arcade,system:ps3,system:ps4",
+    "value": "tool:settings,system:switch,system:teknoparrot,system:cps1,system:snes,system:namco2x6,system:laseractive,system:xbox360,system:arcade,system:ps3,system:ps4,system:Windows",
     "type": "string"
   },
   "Window.system-switch.Maximized": {
@@ -1132,11 +1132,11 @@
     "type": "bool"
   },
   "Window.tool-settings.X": {
-    "value": 34,
+    "value": 149,
     "type": "int"
   },
   "Window.tool-settings.Y": {
-    "value": 22,
+    "value": 89,
     "type": "int"
   },
   "Window.tool-settings.Width": {
@@ -1474,5 +1474,9 @@
   "RIESCADE.PreferredMediaType.psvita": {
     "value": "cover",
     "type": "string"
+  },
+  "Window.system-Windows.Maximized": {
+    "value": true,
+    "type": "bool"
   }
 }

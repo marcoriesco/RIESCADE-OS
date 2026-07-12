@@ -55,10 +55,12 @@
     "tp_play_gpuapi": "Vulkan"
   },
   "xemu": {
-    "xemu_ratio": "16x9"
+    "xemu_ratio": "16x9",
+    "render_scale": "3",
+    "system_memory": "128"
   },
   "rpcs3": {
-    "rpcs3_internal_resolution": "150",
+    "rpcs3_internal_resolution": "100",
     "rpcs3_ratio": "16:9",
     "rpcs3_vsync": "Full",
     "ps3_region": "SCEA",
@@ -70,7 +72,8 @@
   },
   "dolphin": {
     "internal_resolution": "3",
-    "ratio": "16/9"
+    "ratio": "16/9",
+    "dolphin_shaders": "(off)"
   },
   "ryujinx": {
     "res_scale": "1",

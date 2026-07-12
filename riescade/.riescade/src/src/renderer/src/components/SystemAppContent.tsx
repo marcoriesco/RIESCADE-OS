@@ -93,6 +93,12 @@ export default function SystemAppContent({
 
   // New States for context menu and saves sidebar
   const [showContextMenu, setShowContextMenu] = useState(false);
+  const [gameContextMenu, setGameContextMenu] = useState<{
+    x: number;
+    y: number;
+    game: Game;
+    index: number;
+  } | null>(null);
   const [showSavesSidebar, setShowSavesSidebar] = useState(false);
   const [sidebarTab, setSidebarTab] = useState<"collections" | "saves">("collections");
 
@@ -619,9 +625,8 @@ export default function SystemAppContent({
     return `${selectedGame.emulator}:${selectedGame.core || ""}`;
   }, [selectedGame]);
 
-  const handleEmulatorValueChange = (val: string) => {
-    if (!selectedGame) return;
-    let updatedGame = { ...selectedGame };
+  const handleEmulatorValueChangeForGame = (game: Game, val: string) => {
+    let updatedGame = { ...game };
     
     if (val === "auto") {
       updatedGame.emulator = "auto";
@@ -633,8 +638,13 @@ export default function SystemAppContent({
     }
 
     window.api.updateGame(system.name, updatedGame).then(() => {
-      setGames(prev => prev.map(g => g.path === selectedGame.path ? updatedGame : g));
+      setGames(prev => prev.map(g => g.path === game.path ? updatedGame : g));
     });
+  };
+
+  const handleEmulatorValueChange = (val: string) => {
+    if (!selectedGame) return;
+    handleEmulatorValueChangeForGame(selectedGame, val);
   };
 
   const handleToggleFavorite = () => {
@@ -938,6 +948,16 @@ export default function SystemAppContent({
                             key={g.path}
                             onClick={() => setSelectedIdx(idx)}
                             onDoubleClick={() => onLaunchGame(g, system)}
+                            onContextMenu={(e) => {
+                              e.preventDefault();
+                              setSelectedIdx(idx);
+                              setGameContextMenu({
+                                x: e.clientX,
+                                y: e.clientY,
+                                game: g,
+                                index: idx
+                              });
+                            }}
                             className={`group flex flex-col w-full rounded-md overflow-hidden text-left transition-all border-4 relative bg-[#1a1a1a] aspect-[3/4] ${
                               idx === selectedIdx 
                                 ? "border-accent shadow-[0_0_15px_var(--accent-color-glass)] z-10" 
@@ -1436,6 +1456,120 @@ export default function SystemAppContent({
             className="max-w-[95%] max-h-[90%] rounded-md border border-white/10 shadow-2xl" 
           />
         </div>
+      )}
+
+      {/* Right-click Context Menu */}
+      {gameContextMenu && (
+        <>
+          <div className="fixed inset-0 z-40" onClick={() => setGameContextMenu(null)} />
+          <div 
+            style={{ 
+              top: `${Math.min(gameContextMenu.y, window.innerHeight - 250)}px`, 
+              left: `${Math.min(gameContextMenu.x, window.innerWidth - 240)}px` 
+            }}
+            className="fixed w-56 bg-[#0d0d0d]/95 backdrop-blur-md border border-white/10 rounded-xl shadow-2xl p-2 z-50 text-white animate-in fade-in slide-in-from-top-2 duration-150 text-left"
+          >
+            <div className="px-3 py-1 text-[10px] text-white/40 uppercase font-semibold tracking-wider mb-1.5">
+              Gerenciar jogo
+            </div>
+            
+            <button
+              onClick={() => {
+                setGameContextMenu(null);
+                onLaunchGame(gameContextMenu.game, system);
+              }}
+              className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs hover:bg-white/10 text-left transition cursor-pointer text-white/80 hover:text-white"
+            >
+              <Play className="w-4 h-4 text-emerald-400 fill-emerald-400/20" />
+              <span>Jogar</span>
+            </button>
+            
+            <button
+              onClick={() => {
+                setGameContextMenu(null);
+                setSidebarTab("saves");
+                setShowSavesSidebar(true);
+              }}
+              className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs hover:bg-white/10 text-left transition cursor-pointer text-white/80 hover:text-white"
+            >
+              <HardDrive className="w-4 h-4 text-accent" />
+              <span>Save states</span>
+            </button>
+            
+            <button
+              onClick={() => {
+                setGameContextMenu(null);
+                setSidebarTab("collections");
+                setShowSavesSidebar(true);
+              }}
+              className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs hover:bg-white/10 text-left transition cursor-pointer text-white/80 hover:text-white"
+            >
+              <Folder className="w-4 h-4 text-cyan-400" />
+              <span>Adicionar à coleção</span>
+            </button>
+            
+            <button
+              onClick={() => {
+                setGameContextMenu(null);
+                handleToggleFavorite();
+              }}
+              className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs hover:bg-white/10 text-left transition cursor-pointer text-white/80 hover:text-white"
+            >
+              <Heart className={`w-4 h-4 ${games[gameContextMenu.index]?.favorite ? "fill-red-500 text-red-500" : "text-red-500 opacity-60"}`} />
+              <span>{games[gameContextMenu.index]?.favorite ? "Remover dos Favoritos" : "Favoritar"}</span>
+            </button>
+
+            {/* Separator */}
+            <div className="my-1 border-t border-white/5" />
+
+            {/* Change Emulator Submenu */}
+            {(() => {
+              const menuGame = games[gameContextMenu.index];
+              const menuGameSelectValue = !menuGame
+                ? "auto"
+                : (!menuGame.emulator || menuGame.emulator === "auto")
+                  ? "auto"
+                  : `${menuGame.emulator}:${menuGame.core || ""}`;
+              const submenuOnLeft = gameContextMenu.x > window.innerWidth - 440;
+
+              return (
+                <div className="relative group/sub">
+                  <button className="w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs hover:bg-white/10 text-left transition cursor-pointer text-white/80 hover:text-white">
+                    <span className="flex items-center gap-2.5">
+                      <Gamepad2 className="w-4 h-4 text-amber-500" />
+                      <span>Trocar emulador</span>
+                    </span>
+                    <ChevronRight className="w-3.5 h-3.5 text-white/40" />
+                  </button>
+                  
+                  {/* Submenu list */}
+                  <div 
+                    className={`absolute top-0 w-52 bg-[#0d0d0d]/95 backdrop-blur-md border border-white/10 rounded-xl shadow-2xl p-2 z-50 text-white hidden group-hover/sub:block ${
+                      submenuOnLeft ? "right-full mr-1" : "left-full ml-1"
+                    }`}
+                  >
+                    {emulatorChoices.map(choice => {
+                      const isSelected = menuGameSelectValue === choice.value;
+                      return (
+                        <button
+                          key={choice.value}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleEmulatorValueChangeForGame(menuGame, choice.value);
+                          }}
+                          className="w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg text-xs hover:bg-white/10 text-left transition cursor-pointer text-white/80 hover:text-white"
+                        >
+                          <span className="truncate pr-2">{choice.label}</span>
+                          {isSelected && <Check className="w-3.5 h-3.5 text-accent shrink-0" />}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              );
+            })()}
+          </div>
+        </>
       )}
     </div>
     </div>
