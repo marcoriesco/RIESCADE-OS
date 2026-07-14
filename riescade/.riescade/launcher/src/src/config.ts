@@ -222,7 +222,11 @@ export class Config {
     // Discord
     'discord': 'discord',
     'psvita.discord': 'discord',
-    'switch.discord': 'discord'
+    'switch.discord': 'discord',
+
+    // Aspect Ratio
+    'aspect_ratio': 'aspect_ratio',
+    'retroarch_aspect_ratio': 'aspect_ratio'
   };
 
   public static getEmulatorSetting(emulator: string, key: string, defaultValue?: any): any {

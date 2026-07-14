@@ -51,17 +51,21 @@ function RadixSelect({
 const missingMediaCache = new Set<string>();
 
 export default function SystemAppContent({
-  system, color, Icon, onLaunchGame, search, setSearch, onActiveGameArtChanged
+  system, color, Icon, onLaunchGame, search: propSearch, setSearch: propSetSearch, onActiveGameArtChanged
 }: {
   systemName: string;
   system: System;
   color: string;
   Icon: any;
   onLaunchGame: (game: Game, system: System, saveStateSlot?: number) => void;
-  search: string;
-  setSearch: (s: string) => void;
+  search?: string;
+  setSearch?: (s: string) => void;
   onActiveGameArtChanged?: (art: string | null) => void;
 }) {
+  const [localSearch, setLocalSearch] = useState("");
+  const search = propSearch !== undefined ? propSearch : localSearch;
+  const setSearch = propSetSearch !== undefined ? propSetSearch : setLocalSearch;
+
   const [games, setGames] = useState<Game[]>([]);
   const [selectedIdx, setSelectedIdx] = useState(0);
   const [filter, setFilter] = useState<"all" | "favorites">("all");

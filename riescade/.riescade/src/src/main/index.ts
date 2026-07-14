@@ -12,6 +12,7 @@ import { ScraperService } from './services/ScraperService'
 import { RomsWatcherService } from './services/RomsWatcherService'
 import { registerUpdaterIpc } from './services/UpdaterService'
 import { Game, System } from '../shared/types'
+import { ControllerManager } from './services/ControllerManager'
 import { watch, FSWatcher, readFileSync, existsSync, writeFileSync, mkdirSync, statSync } from 'fs'
 import { getRetroBatPath, getConfigPath, getResourcesPath, getRiescadePath, getDatabasePath } from './utils/paths'
 import { XMLParser, XMLBuilder } from 'fast-xml-parser'
@@ -24,6 +25,8 @@ const systemService = new SystemService(libraryService)
 const scraperService = new ScraperService(libraryService)
 
 // Configure Chromium GPU graphics backend switches based on user settings
+app.commandLine.appendSwitch('ignore-gpu-blocklist')
+app.commandLine.appendSwitch('enable-gpu-rasterization')
 const gpuDriver = settingsParser.getSetting('RIESCADE.GpuDriver', 'string')
 if (gpuDriver && gpuDriver !== 'default') {
   if (gpuDriver === 'd3d12') {
@@ -40,7 +43,6 @@ if (gpuDriver && gpuDriver !== 'default') {
   }
 }
 
-let activeControllers: any[] = []
 let themeWatcher: FSWatcher | null = null
 let mainWindow: BrowserWindow | null = null
 let themeReloadTimeout: NodeJS.Timeout | null = null
@@ -164,6 +166,16 @@ app.whenReady().then(() => {
   })
 
   createWindow()
+
+  // Start polling game controllers and emit changes to the frontend
+  const controllerManager = ControllerManager.getInstance()
+  controllerManager.startPolling((controllers) => {
+    sendToMainWindow('controllers-updated', controllers)
+  }, 2000)
+
+  app.on('will-quit', () => {
+    controllerManager.stopPolling()
+  })
 
   registerUpdaterIpc(() => mainWindow)
 
@@ -368,7 +380,7 @@ app.whenReady().then(() => {
       }
     }
 
-    const result = await launcherService.launch(game, targetSystem, activeControllers, saveStateSlot)
+    const result = await launcherService.launch(game, targetSystem, ControllerManager.getInstance().getConnected(), saveStateSlot)
     
     // Focus main window when the game exits
     if (mainWindow && !mainWindow.isDestroyed()) {
@@ -526,12 +538,7 @@ app.whenReady().then(() => {
     return true
   })
 
-  // ─── IPC: System Commands ───
   ipcMain.on('system-command', (_, command: string, data?: any) => {
-    if (command === 'set-active-controllers') {
-      activeControllers = data || []
-      return
-    }
     if (command === 'save-input-config') {
       // Implement later if needed, handled differently in new code
       return
@@ -541,6 +548,23 @@ app.whenReady().then(() => {
       return
     }
     systemService.executeCommand(command)
+  })
+
+  ipcMain.handle('detect-controllers', async () => {
+    return ControllerManager.getInstance().detectAll()
+  })
+
+  ipcMain.handle('get-controller-state', async (_, xinputIndex: number) => {
+    return ControllerManager.getInstance().getState(xinputIndex)
+  })
+
+  ipcMain.handle('save-controller-config', async (_, { guid, config }) => {
+    ControllerManager.getInstance().saveConfig(guid, config)
+    return true
+  })
+
+  ipcMain.handle('get-controller-configs', async () => {
+    return ControllerManager.getInstance().getConfigs()
   })
 
   ipcMain.handle('save-input-config', async (_, { deviceName, deviceGUID, mappings }) => {

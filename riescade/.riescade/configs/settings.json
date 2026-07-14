@@ -376,11 +376,11 @@
     "type": "bool"
   },
   "Window.tool-settings.X": {
-    "value": 259,
+    "value": 164,
     "type": "int"
   },
   "Window.tool-settings.Y": {
-    "value": 34,
+    "value": 19,
     "type": "int"
   },
   "Window.tool-settings.Width": {
@@ -388,7 +388,7 @@
     "type": "int"
   },
   "Window.tool-settings.Height": {
-    "value": 786,
+    "value": 928,
     "type": "int"
   },
   "Window.tool-collections.Maximized": {
@@ -575,10 +575,6 @@
     "value": 873,
     "type": "int"
   },
-  "arcade.emulator": {
-    "value": "mame64",
-    "type": "string"
-  },
   "Window.system-arcade.Maximized": {
     "value": true,
     "type": "bool"
@@ -620,7 +616,7 @@
     "type": "string"
   },
   "RIESCADE.PreferredMediaType.arcade": {
-    "value": "fanart",
+    "value": "cover2d",
     "type": "string"
   },
   "RIESCADE.EnableBackgroundVideo": {
@@ -800,7 +796,7 @@
     "type": "bool"
   },
   "RIESCADE.GpuDriver": {
-    "value": "vulkan",
+    "value": "d3d12",
     "type": "string"
   },
   "LogLevel": {
@@ -813,6 +809,10 @@
   },
   "RIESCADE.PreferredMediaType.zinc": {
     "value": "cover",
+    "type": "string"
+  },
+  "ScraperRegion": {
+    "value": "us",
     "type": "string"
   }
 }

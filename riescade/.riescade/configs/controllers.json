@@ -1,0 +1,111 @@
+{
+  "030000005e0400008e02000000007200": {
+    "name": "Xbox 360 Controller",
+    "type": "xinput",
+    "buttons": 15,
+    "axes": 6,
+    "hats": 1,
+    "aliases": [
+      "Xbox 360 Controller",
+      "Controller (Xbox 360 For Windows)",
+      "XINPUT Gamepad",
+      "Xbox 360 Wireless Receiver"
+    ]
+  },
+  "030000005e040000ea02000000007200": {
+    "name": "Xbox One Controller",
+    "type": "xinput",
+    "buttons": 15,
+    "axes": 6,
+    "hats": 1,
+    "aliases": [
+      "Xbox One Controller",
+      "Xbox Wireless Controller",
+      "Controller (Xbox One For Windows)",
+      "Xbox Controller"
+    ]
+  },
+  "030000005e040000120b000000007200": {
+    "name": "Xbox Series X/S Controller",
+    "type": "xinput",
+    "buttons": 15,
+    "axes": 6,
+    "hats": 1,
+    "aliases": [
+      "Xbox Series X/S Controller",
+      "Xbox Wireless Controller",
+      "Xbox Elite Wireless Controller Series 2"
+    ]
+  },
+  "030000004c050000cc09000000016800": {
+    "name": "Sony DualShock 4",
+    "type": "dinput",
+    "buttons": 16,
+    "axes": 6,
+    "hats": 1,
+    "aliases": [
+      "Wireless Controller",
+      "Sony DualShock 4",
+      "PS4 Controller",
+      "DualShock 4 Wireless Controller"
+    ]
+  },
+  "030000004c050000e60c000000016800": {
+    "name": "Sony DualSense",
+    "type": "dinput",
+    "buttons": 16,
+    "axes": 6,
+    "hats": 1,
+    "aliases": [
+      "DualSense Wireless Controller",
+      "Sony DualSense",
+      "PS5 Controller"
+    ]
+  },
+  "030000007e0500000920000000007200": {
+    "name": "Nintendo Switch Pro Controller",
+    "type": "dinput",
+    "buttons": 16,
+    "axes": 4,
+    "hats": 1,
+    "aliases": [
+      "Pro Controller",
+      "Nintendo Switch Pro Controller",
+      "Switch Pro Controller"
+    ]
+  },
+  "03000000c82d00000631000000007200": {
+    "name": "8BitDo Ultimate",
+    "type": "xinput",
+    "buttons": 15,
+    "axes": 6,
+    "hats": 1,
+    "aliases": [
+      "8BitDo Ultimate Wireless Controller",
+      "8BitDo Ultimate",
+      "8BitDo Ultimate Controller"
+    ]
+  },
+  "03000000c82d00000650000000007200": {
+    "name": "8BitDo Pro 2",
+    "type": "xinput",
+    "buttons": 15,
+    "axes": 6,
+    "hats": 1,
+    "aliases": [
+      "8BitDo Pro 2",
+      "8BitDo Pro 2 Wired Controller"
+    ]
+  },
+  "03000000d11a00000120000000007200": {
+    "name": "Google Stadia Controller",
+    "type": "dinput",
+    "buttons": 15,
+    "axes": 4,
+    "hats": 1,
+    "aliases": [
+      "Stadia Controller",
+      "Google Stadia Controller"
+    ]
+  }
+}

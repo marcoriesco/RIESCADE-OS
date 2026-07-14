@@ -15,6 +15,14 @@ export interface LaunchArgs {
   p2name?: string;
   p3name?: string;
   p4name?: string;
+  p1type?: string;
+  p2type?: string;
+  p3type?: string;
+  p4type?: string;
+  p1path?: string;
+  p2path?: string;
+  p3path?: string;
+  p4path?: string;
   rawArgs: Record<string, string>;
   flags: string[];
 }

@@ -42,7 +42,7 @@ try {
 export default function App() {
   const [systems, setSystems] = useState<System[]>([]);
   const [launcherOpen, setLauncherOpen] = useState(false);
-  const [search, setSearch] = useState("");
+  const [startMenuSearch, setStartMenuSearch] = useState("");
   const [now, setNow] = useState(new Date());
   const [isLaunching, setIsLaunching] = useState(false);
   const [launchingGame, setLaunchingGame] = useState<Game | null>(null);
@@ -247,93 +247,55 @@ export default function App() {
     root.style.setProperty("--accent-color-glass", glassColor);
   }, [settings]);
 
-  // Monitor gamepad connections and synchronize active controllers with main process
+  // Listen for native controllers updates from Electron main process
   useEffect(() => {
-    let lastControllersStr = "";
+    // 1. Load initial connected controllers
+    window.api.detectControllers().then((initial: any[]) => {
+      setControllers(initial || []);
+    });
 
-    const updateControllers = () => {
-      const gamepads = navigator.getGamepads();
-      const active = Array.from(gamepads)
-        .filter((gp) => gp !== null)
-        .map((gp) => {
-          const id = gp!.id;
-          const vMatch = id.match(/vendor: ([0-9a-f]{4})/i);
-          const pMatch = id.match(/product: ([0-9a-f]{4})/i);
+    // 2. Listen to hot-plug updates
+    const unsubscribe = window.api.on('controllers-updated', (_, newControllers: any[]) => {
+      setControllers((prev: any[]) => {
+        const prevGuids = prev.map(c => c.guid);
+        const newGuids = newControllers.map(c => c.guid);
 
-          let guid = id;
-          if (vMatch && pMatch) {
-            const v = vMatch[1];
-            const p = pMatch[1];
-            const vSwap = v.substring(2, 4) + v.substring(0, 2);
-            const pSwap = p.substring(2, 4) + p.substring(0, 2);
-            guid = `03000000${vSwap}0000${pSwap}000000000000`;
-          } else if (
-            id.toLowerCase().includes('xinput') ||
-            id.toLowerCase().includes('xbox 360')
-          ) {
-            guid = '030000005e0400008e02000000007200';
+        // Find connected ones
+        newControllers.forEach(c => {
+          if (!prevGuids.includes(c.guid)) {
+            window.dispatchEvent(
+              new CustomEvent("show-toast", {
+                detail: {
+                  title: "Controle Conectado",
+                  description: c.name,
+                  type: "controller"
+                }
+              })
+            );
           }
-
-          return {
-            name: id.split('(')[0].trim(),
-            guid: guid,
-            buttons: gp!.buttons.length,
-            axes: gp!.axes.length,
-            hats: 1,
-          };
         });
 
-      const currentStr = JSON.stringify(active);
-      if (currentStr !== lastControllersStr) {
-        lastControllersStr = currentStr;
-        setControllers(active);
-        window.api.executeCommand('set-active-controllers', active);
-      }
-    };
-
-    let rafId: number;
-    const poll = () => {
-      updateControllers();
-      rafId = requestAnimationFrame(poll);
-    };
-
-    rafId = requestAnimationFrame(poll);
-
-    const handleGamepadConnected = (e: GamepadEvent) => {
-      updateControllers();
-      const gpName = e.gamepad.id.split('(')[0].trim();
-      window.dispatchEvent(
-        new CustomEvent("show-toast", {
-          detail: {
-            title: "Controle Conectado",
-            description: gpName,
-            type: "controller"
+        // Find disconnected ones
+        prev.forEach(c => {
+          if (!newGuids.includes(c.guid)) {
+            window.dispatchEvent(
+              new CustomEvent("show-toast", {
+                detail: {
+                  title: "Controle Desconectado",
+                  description: c.name,
+                  type: "controller"
+                }
+              })
+            );
           }
-        })
-      );
-    };
+        });
 
-    const handleGamepadDisconnected = (e: GamepadEvent) => {
-      updateControllers();
-      const gpName = e.gamepad.id.split('(')[0].trim();
-      window.dispatchEvent(
-        new CustomEvent("show-toast", {
-          detail: {
-            title: "Controle Desconectado",
-            description: gpName,
-            type: "controller"
-          }
-        })
-      );
-    };
-
-    window.addEventListener('gamepadconnected', handleGamepadConnected);
-    window.addEventListener('gamepaddisconnected', handleGamepadDisconnected);
+        return newControllers;
+      });
+    });
 
     return () => {
-      cancelAnimationFrame(rafId);
-      window.removeEventListener('gamepadconnected', handleGamepadConnected);
-      window.removeEventListener('gamepaddisconnected', handleGamepadDisconnected);
+      unsubscribe();
     };
   }, []);
 
@@ -704,7 +666,7 @@ export default function App() {
         startMenuInputRef.current?.focus();
       }, 50);
     } else {
-      setSearch("");
+      setStartMenuSearch("");
     }
   }, [launcherOpen]);
 
@@ -1043,8 +1005,6 @@ export default function App() {
               color={theme.color}
               Icon={theme.icon}
               onLaunchGame={handleLaunchGame}
-              search={search}
-              setSearch={setSearch}
               onActiveGameArtChanged={setActiveGameArt}
             />
           </div>
@@ -1141,8 +1101,6 @@ export default function App() {
                 color={theme.color}
                 Icon={theme.icon}
                 onLaunchGame={handleLaunchGame}
-                search={search}
-                setSearch={setSearch}
                 onActiveGameArtChanged={setActiveGameArt}
               />
             </div>
@@ -1317,8 +1275,6 @@ export default function App() {
                   color={theme.color}
                   Icon={Icon}
                   onLaunchGame={handleLaunchGame}
-                  search={search}
-                  setSearch={setSearch}
                   onActiveGameArtChanged={setActiveGameArt}
                 />
               ) : (
@@ -1397,8 +1353,8 @@ export default function App() {
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/50 group-focus-within:text-accent transition duration-200" />
             <input
               ref={startMenuInputRef}
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
+              value={startMenuSearch}
+              onChange={(e) => setStartMenuSearch(e.target.value)}
               placeholder="Pesquisar plataformas ou ferramentas..."
               className="w-full bg-white/10 border border-white/15 rounded-full pl-11 pr-4 py-2.5 text-sm text-white placeholder:text-white/40 focus:outline-none focus:border-accent"
             />
@@ -1408,7 +1364,7 @@ export default function App() {
               <div className="text-xs uppercase text-white/40 tracking-wider mb-3">Ferramentas do Sistema</div>
               <div className="grid grid-cols-5 gap-3 mb-6">
                 {TOOL_APPS
-                  .filter(app => app.name.toLowerCase().includes(search.toLowerCase()))
+                  .filter(app => app.name.toLowerCase().includes(startMenuSearch.toLowerCase()))
                   .map(app => {
                     const ToolIcon = app.icon;
                     return (
@@ -1429,7 +1385,7 @@ export default function App() {
               <div className="text-xs uppercase text-white/40 tracking-wider mb-3">Plataformas de Jogos</div>
               <div className="grid grid-cols-5 gap-3">
                 {systems
-                  .filter(sys => sys.fullname.toLowerCase().includes(search.toLowerCase()) || sys.name.toLowerCase().includes(search.toLowerCase()))
+                  .filter(sys => sys.fullname.toLowerCase().includes(startMenuSearch.toLowerCase()) || sys.name.toLowerCase().includes(startMenuSearch.toLowerCase()))
                   .map(sys => {
                     const theme = getSystemTheme(sys.name);
                     const SysIcon = theme.icon;
@@ -1656,21 +1612,6 @@ export default function App() {
 
             {/* System tray */}
             <div className="flex items-center gap-2 px-3 text-white/80">
-              {controllers.length > 0 && (
-                <Tooltip.Root>
-                  <Tooltip.Trigger asChild>
-                    <span className="flex items-center cursor-help">
-                      <Gamepad2 className="w-4 h-4 text-accent mr-1 animate-pulse" />
-                    </span>
-                  </Tooltip.Trigger>
-                  <Tooltip.Portal>
-                    <Tooltip.Content className="tooltip-content" side="top" sideOffset={8}>
-                      {`${controllers.length} controle(s) conectado(s)`}
-                      <Tooltip.Arrow className="tooltip-arrow" width={10} height={5} />
-                    </Tooltip.Content>
-                  </Tooltip.Portal>
-                </Tooltip.Root>
-              )}
               <Wifi className="w-4 h-4 text-white/60" />
               <Volume2 className="w-4 h-4 text-white/60" />
               <Battery className="w-4 h-4 text-white/60" />
@@ -1679,6 +1620,22 @@ export default function App() {
                   FPS <span className="font-bold">{fps}</span>
                 </span>
               )}
+              {controllers.map((c, idx) => (
+                <Tooltip.Root key={c.guid + idx}>
+                  <Tooltip.Trigger asChild>
+                    <span className="flex items-center cursor-help bg-white/5 border border-white/5 rounded px-1.5 py-0.5 select-none shrink-0 gap-1 text-[9px] hover:border-accent/40 transition">
+                      <Gamepad2 className="w-3.5 h-3.5 text-accent animate-pulse" />
+                      <span className="font-bold text-accent">P{c.playerIndex + 1}</span>
+                    </span>
+                  </Tooltip.Trigger>
+                  <Tooltip.Portal>
+                    <Tooltip.Content className="tooltip-content" side="top" sideOffset={8}>
+                      {`${c.name} (Jogador ${c.playerIndex + 1})`}
+                      <Tooltip.Arrow className="tooltip-arrow" width={10} height={5} />
+                    </Tooltip.Content>
+                  </Tooltip.Portal>
+                </Tooltip.Root>
+              ))}
               <div className="text-xs leading-tight ml-1 flex text-right gap-1 pl-3">
                 <span className="font-semibold text-white capitalize">{now.toLocaleDateString("pt-BR", { month: "short" })}</span>
                 <span className="font-semibold text-white">{now.toLocaleDateString("pt-BR", { day: "2-digit" })}</span>

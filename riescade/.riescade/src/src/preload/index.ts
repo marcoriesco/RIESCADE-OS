@@ -49,6 +49,10 @@ const api = {
   saveInputConfig: (data: { deviceName: string; deviceGUID: string; mappings: any }) =>
     ipcRenderer.invoke('save-input-config', data),
   getBluetoothDevices: () => ipcRenderer.invoke('get-bluetooth-devices'),
+  detectControllers: () => ipcRenderer.invoke('detect-controllers'),
+  getControllerState: (index: number) => ipcRenderer.invoke('get-controller-state', index),
+  saveControllerConfig: (guid: string, config: any) => ipcRenderer.invoke('save-controller-config', { guid, config }),
+  getControllerConfigs: () => ipcRenderer.invoke('get-controller-configs'),
 
   executeCommand: (command: string, data?: any) => ipcRenderer.send('system-command', command, data),
   openAppWindow: (type: 'system' | 'tool', id: string) => ipcRenderer.send('open-app-window', type, id),

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { ChevronRight, Search, Folder, Star, User, Shield, Settings, Palette, Gamepad2, Volume2, Cpu, Info, Database, Trash2, Edit3, X, ChevronLeft, Filter, HardDrive, RefreshCw, Eye, EyeOff, Check, ChevronDown, Save, Trophy, Loader2 } from "lucide-react";
+import { ChevronRight, Search, Folder, Star, User, Shield, Settings, Palette, Gamepad2, Volume2, Cpu, Info, Database, Trash2, Edit3, X, ChevronLeft, Filter, HardDrive, RefreshCw, Eye, EyeOff, Check, ChevronDown, Save, Trophy, Loader2, Sliders, CheckCircle, Circle } from "lucide-react";
 import { System, SettingsCtx } from "../types";
 import { TOOL_APPS, getSystemTheme } from "../constants";
 import {
@@ -143,6 +143,83 @@ export default function ToolAppContent({
   const [features, setFeatures] = useState<any>(null);
   const [testingConnection, setTestingConnection] = useState(false);
   const [testResult, setTestResult] = useState<{ success: boolean; message: string } | null>(null);
+
+  // Gamepad Control States
+  const [controllers, setControllers] = useState<any[]>([]);
+  const [selectedController, setSelectedController] = useState<any | null>(null);
+  const [controllerConfigs, setControllerConfigs] = useState<Record<string, any>>({});
+  const [gamepadState, setGamepadState] = useState<{ buttons: any[]; axes: number[] } | null>(null);
+  const [scanningControllers, setScanningControllers] = useState(false);
+
+  useEffect(() => {
+    if (activeSettingsTab === "controles") {
+      // 1. Initial load
+      window.api.detectControllers().then((data: any[]) => {
+        setControllers(data || []);
+      });
+
+      // 2. Load configurations
+      window.api.getControllerConfigs().then((configs: any) => {
+        setControllerConfigs(configs || {});
+      });
+
+      // 3. Listen to updates
+      const unsubscribe = window.api.on('controllers-updated', (_, data: any[]) => {
+        setControllers(data || []);
+      });
+
+      return () => {
+        unsubscribe();
+      };
+    }
+  }, [activeSettingsTab]);
+
+  useEffect(() => {
+    if (!selectedController) {
+      setGamepadState(null);
+      return;
+    }
+
+    let animationId: number;
+
+    const findAndPollGamepad = () => {
+      const gps = navigator.getGamepads();
+      let matchIdx: number | null = null;
+
+      // 1. Match by exact or partial name
+      for (let i = 0; i < gps.length; i++) {
+        const gp = gps[i];
+        if (gp && gp.id.toLowerCase().includes(selectedController.name.split('(')[0].trim().toLowerCase())) {
+          matchIdx = i;
+          break;
+        }
+      }
+
+      // 2. Fallback to matching index
+      if (matchIdx === null && selectedController.xinputIndex !== undefined) {
+        if (gps[selectedController.xinputIndex]) {
+          matchIdx = selectedController.xinputIndex;
+        }
+      }
+
+      if (matchIdx !== null) {
+        const gp = gps[matchIdx];
+        if (gp) {
+          setGamepadState({
+            buttons: gp.buttons.map(b => ({ pressed: b.pressed, value: b.value })),
+            axes: [...gp.axes]
+          });
+        }
+      } else {
+        setGamepadState(null);
+      }
+
+      animationId = requestAnimationFrame(findAndPollGamepad);
+    };
+
+    animationId = requestAnimationFrame(findAndPollGamepad);
+    return () => cancelAnimationFrame(animationId);
+  }, [selectedController]);
 
   useEffect(() => {
     window.api.getFeatures().then(res => {
@@ -897,20 +974,308 @@ export default function ToolAppContent({
           {/* ===== TAB: CONTROLES ===== */}
           {activeSettingsTab === "controles" && (
             <div className="flex flex-col h-full overflow-hidden">
-              <div className="shrink-0 px-6 pt-6 pb-2 max-w-[740px]">
-                <h2 className="text-xl font-bold text-white mb-1">Controles</h2>
-                <p className="text-sm text-white/40">Configurações de controles, bluetooth e armas lightgun.</p>
+              {/* Header */}
+              <div className="shrink-0 px-6 pt-6 pb-2 max-w-[740px] flex items-center justify-between">
+                <div>
+                  <h2 className="text-xl font-bold text-white mb-1">Controles</h2>
+                  <p className="text-sm text-white/40">Configuração nativa de gamepads, slots de jogadores e calibração.</p>
+                </div>
+                <button
+                  type="button"
+                  disabled={scanningControllers}
+                  onClick={async () => {
+                    setScanningControllers(true);
+                    const list = await window.api.detectControllers();
+                    setControllers(list || []);
+                    setScanningControllers(false);
+                    window.dispatchEvent(
+                      new CustomEvent("show-toast", {
+                        detail: {
+                          title: "Busca de Controles",
+                          description: `Detecção concluída. ${list.length} controle(s) encontrados.`,
+                          type: "controller"
+                        }
+                      })
+                    );
+                  }}
+                  className="px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 hover:border-accent text-white/80 hover:text-white transition cursor-pointer flex items-center gap-2 disabled:opacity-50"
+                >
+                  <RefreshCw className={`w-3.5 h-3.5 ${scanningControllers ? 'animate-spin' : ''}`} />
+                  <span className="text-xs font-semibold">Buscar</span>
+                </button>
               </div>
-              <ScrollArea className="flex-1 min-h-0">
-                <div className="px-6 pb-6 max-w-[740px] space-y-2">
-                  <SettingGroup label="Exibição" />
-                  <SettingToggle label="Mostrar Notificações de Controle" name="ShowControllerNotifications" ctx={ctx} />
-                  <SettingToggle label="Mostrar Atividade do Controle" name="ShowControllerActivity" ctx={ctx} />
 
-                  <SettingGroup label="Prioridade dos Controles" />
-                  {Array.from({ length: 4 }, (_, i) => (
-                    <SettingInput key={i} label={`Controle #${i + 1}`} name={`INPUT P${i + 1}NAME`} ctx={ctx} />
-                  ))}
+              {/* Grid content */}
+              <ScrollArea className="flex-1 min-h-0">
+                <div className="px-6 pb-6 max-w-[740px] space-y-6">
+                  {/* Connected Controllers List */}
+                  <div className="space-y-3">
+                    <h3 className="text-sm font-semibold text-white/60">Controles Conectados</h3>
+                    {controllers.length === 0 ? (
+                      <div className="flex flex-col items-center justify-center p-8 bg-white/2 border border-dashed border-white/10 rounded-xl text-center">
+                        <Gamepad2 className="w-8 h-8 text-white/10 mb-2 animate-pulse" />
+                        <p className="text-xs text-white/40">Nenhum controle detectado automaticamente no momento.</p>
+                        <p className="text-[10px] text-white/20 mt-1">Conecte um controle USB/Bluetooth ou clique em "Buscar" acima.</p>
+                      </div>
+                    ) : (
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        {controllers.map((c, idx) => {
+                          const isSelected = selectedController?.guid === c.guid;
+                          return (
+                            <div
+                              key={c.guid + idx}
+                              onClick={() => setSelectedController(c)}
+                              className={`p-4 rounded-xl border transition-all cursor-pointer flex flex-col justify-between h-28 select-none ${
+                                isSelected
+                                  ? "bg-accent/10 border-accent shadow-lg shadow-accent/5"
+                                  : "bg-white/5 border-white/5 hover:bg-white/8 hover:border-white/10"
+                              }`}
+                            >
+                              <div className="flex items-start justify-between gap-2">
+                                <div className="flex items-center gap-3">
+                                  <div className={`p-2 rounded-lg ${isSelected ? 'bg-accent/20 text-accent' : 'bg-white/5 text-white/60'}`}>
+                                    <Gamepad2 className="w-4 h-4" />
+                                  </div>
+                                  <div className="min-w-0">
+                                    <h4 className="text-xs font-bold text-white truncate max-w-[150px]">{c.name}</h4>
+                                    <p className="text-[9px] text-white/30 truncate max-w-[130px] font-mono">{c.guid.substring(0, 16)}...</p>
+                                  </div>
+                                </div>
+                                <div className="flex flex-col items-end gap-1 shrink-0">
+                                  <span className={`px-2 py-0.5 text-[8px] font-bold rounded-full ${c.type === 'xinput' ? 'bg-green-500/20 text-green-400' : 'bg-blue-500/20 text-blue-400'}`}>
+                                    {c.type === 'xinput' ? 'XInput' : 'DirectInput'}
+                                  </span>
+                                  {c.isVirtual && (
+                                    <span className="px-2 py-0.5 text-[8px] font-bold bg-amber-500/20 text-amber-400 rounded-full">
+                                      Virtual ({c.virtualSource || 'Desconhecido'})
+                                    </span>
+                                  )}
+                                </div>
+                              </div>
+
+                              <div className="flex items-center justify-between border-t border-white/5 pt-2">
+                                <span className="text-[9px] text-white/40 font-semibold">
+                                  Configurado para:
+                                </span>
+                                <span className="text-xs font-bold text-accent">
+                                  Jogador {c.playerIndex + 1} (P{c.playerIndex + 1})
+                                </span>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Selected Controller Customizations & Visual Test */}
+                  {selectedController && (() => {
+                    const config = controllerConfigs[selectedController.guid] || {};
+                    const leftStickX = gamepadState?.axes[0] ?? 0;
+                    const leftStickY = gamepadState?.axes[1] ?? 0;
+                    const rightStickX = gamepadState?.axes[2] ?? 0;
+                    const rightStickY = gamepadState?.axes[3] ?? 0;
+
+                    return (
+                      <div className="space-y-4 pt-2 border-t border-white/5">
+                        <div className="flex items-center gap-2">
+                          <Sliders className="w-3.5 h-3.5 text-accent" />
+                          <h3 className="text-xs font-bold text-white/80">Configurações: {selectedController.name}</h3>
+                        </div>
+
+                        <div className="p-4 bg-white/2 border border-white/5 rounded-xl space-y-4">
+                          {/* Slot Preference */}
+                          <div className="flex items-center justify-between gap-4">
+                            <div>
+                              <h4 className="text-xs font-bold text-white">Preferência de Jogador</h4>
+                              <p className="text-[10px] text-white/40">Selecione o slot preferido deste controle.</p>
+                            </div>
+                            <RadixSelect
+                              value={String(config.preferredPlayer || "auto")}
+                              onValueChange={(val) => {
+                                const newConfig = {
+                                  ...config,
+                                  preferredPlayer: val === "auto" ? undefined : parseInt(val, 10)
+                                };
+                                window.api.saveControllerConfig(selectedController.guid, newConfig);
+                                setControllerConfigs(prev => ({
+                                  ...prev,
+                                  [selectedController.guid]: newConfig
+                                }));
+                              }}
+                              options={[
+                                { label: "Automático", value: "auto" },
+                                { label: "Jogador 1 (P1)", value: "1" },
+                                { label: "Jogador 2 (P2)", value: "2" },
+                                { label: "Jogador 3 (P3)", value: "3" },
+                                { label: "Jogador 4 (P4)", value: "4" }
+                              ]}
+                            />
+                          </div>
+
+                          {/* Deadzone Slider */}
+                          <div className="space-y-1.5">
+                            <div className="flex justify-between items-center">
+                              <div>
+                                <h4 className="text-xs font-bold text-white">Deadzone do Analógico</h4>
+                                <p className="text-[10px] text-white/40">Regula a sensibilidade física de ponto morto dos sticks.</p>
+                              </div>
+                              <span className="text-xs font-bold text-accent">
+                                {Math.round((config.deadzone ?? 0.15) * 100)}%
+                              </span>
+                            </div>
+                            <input
+                              type="range"
+                              min="0"
+                              max="30"
+                              step="1"
+                              value={Math.round((config.deadzone ?? 0.15) * 100)}
+                              onChange={(e) => {
+                                const newConfig = {
+                                  ...config,
+                                  deadzone: parseFloat(e.target.value) / 100
+                                };
+                                window.api.saveControllerConfig(selectedController.guid, newConfig);
+                                setControllerConfigs(prev => ({
+                                  ...prev,
+                                  [selectedController.guid]: newConfig
+                                }));
+                              }}
+                              className="w-full h-1 bg-[#121620] accent-accent rounded-lg cursor-pointer hover:accent-accent/80 transition"
+                            />
+                          </div>
+
+                          {/* Invert Axis Y toggles */}
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2 border-t border-white/5">
+                            <div className="flex items-center justify-between gap-4">
+                              <div>
+                                <h4 className="text-xs font-bold text-white">Inverter Eixo Y Esquerdo</h4>
+                                <p className="text-[10px] text-white/40">Inverte a direção para cima/baixo.</p>
+                              </div>
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  const newConfig = {
+                                    ...config,
+                                    invertLeftY: !config.invertLeftY
+                                  };
+                                  window.api.saveControllerConfig(selectedController.guid, newConfig);
+                                  setControllerConfigs(prev => ({
+                                    ...prev,
+                                    [selectedController.guid]: newConfig
+                                  }));
+                                }}
+                                className={`w-8 h-5 rounded-full p-0.5 transition cursor-pointer flex items-center ${config.invertLeftY ? 'bg-accent justify-end' : 'bg-white/10 justify-start'}`}
+                              >
+                                <span className="w-4 h-4 rounded-full bg-white shadow-md" />
+                              </button>
+                            </div>
+
+                            <div className="flex items-center justify-between gap-4">
+                              <div>
+                                <h4 className="text-xs font-bold text-white">Inverter Eixo Y Direito</h4>
+                                <p className="text-[10px] text-white/40">Inverte o stick analógico da câmera.</p>
+                              </div>
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  const newConfig = {
+                                    ...config,
+                                    invertRightY: !config.invertRightY
+                                  };
+                                  window.api.saveControllerConfig(selectedController.guid, newConfig);
+                                  setControllerConfigs(prev => ({
+                                    ...prev,
+                                    [selectedController.guid]: newConfig
+                                  }));
+                                }}
+                                className={`w-8 h-5 rounded-full p-0.5 transition cursor-pointer flex items-center ${config.invertRightY ? 'bg-accent justify-end' : 'bg-white/10 justify-start'}`}
+                              >
+                                <span className="w-4 h-4 rounded-full bg-white shadow-md" />
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Interactive Visual Test */}
+                        <div className="space-y-3">
+                          <h4 className="text-xs font-semibold text-white/60">Teste de Hardware em Tempo Real</h4>
+                          <div className="p-4 bg-white/2 border border-white/5 rounded-xl flex flex-col md:flex-row items-center justify-around gap-6">
+                            
+                            {/* Visual sticks */}
+                            <div className="flex gap-8">
+                              <div className="flex flex-col items-center gap-1.5">
+                                <span className="text-[9px] font-semibold text-white/30">Stick Esquerdo</span>
+                                <div className="relative w-20 h-20 rounded-full bg-[#121620] border border-white/10 flex items-center justify-center">
+                                  <div className="absolute w-px h-full bg-white/5" />
+                                  <div className="absolute h-px w-full bg-white/5" />
+                                  <div 
+                                    className="absolute w-3.5 h-3.5 rounded-full bg-accent shadow-lg shadow-accent/50 transition-all duration-75"
+                                    style={{
+                                      transform: `translate(${leftStickX * 30}px, ${leftStickY * 30}px)`
+                                    }}
+                                  />
+                                </div>
+                                <span className="text-[8px] font-mono text-white/40">X: {leftStickX.toFixed(2)} Y: {leftStickY.toFixed(2)}</span>
+                              </div>
+
+                              <div className="flex flex-col items-center gap-1.5">
+                                <span className="text-[9px] font-semibold text-white/30">Stick Direito</span>
+                                <div className="relative w-20 h-20 rounded-full bg-[#121620] border border-white/10 flex items-center justify-center">
+                                  <div className="absolute w-px h-full bg-white/5" />
+                                  <div className="absolute h-px w-full bg-white/5" />
+                                  <div 
+                                    className="absolute w-3.5 h-3.5 rounded-full bg-accent shadow-lg shadow-accent/50 transition-all duration-75"
+                                    style={{
+                                      transform: `translate(${rightStickX * 30}px, ${rightStickY * 30}px)`
+                                    }}
+                                  />
+                                </div>
+                                <span className="text-[8px] font-mono text-white/40">X: {rightStickX.toFixed(2)} Y: {rightStickY.toFixed(2)}</span>
+                              </div>
+                            </div>
+
+                            {/* Buttons indicator */}
+                            <div className="flex-1 min-w-0 space-y-2">
+                              {gamepadState ? (
+                                <>
+                                  <span className="text-[9px] font-semibold text-white/30 block mb-1">Botões Detectados</span>
+                                  <div className="flex flex-wrap gap-1.5 max-h-20 overflow-y-auto pr-1">
+                                    {gamepadState.buttons.map((b, btnIdx) => (
+                                      <span
+                                        key={btnIdx}
+                                        className={`px-1.5 py-0.5 text-[8px] font-bold rounded font-mono transition-all ${
+                                          b.pressed 
+                                            ? 'bg-accent text-white scale-105 shadow-md shadow-accent/20' 
+                                            : 'bg-white/5 text-white/30 border border-white/5'
+                                        }`}
+                                      >
+                                        B{btnIdx}
+                                      </span>
+                                    ))}
+                                  </div>
+                                </>
+                              ) : (
+                                <div className="flex flex-col items-center justify-center p-4 border border-dashed border-white/10 rounded-lg text-center h-20 bg-black/10 flex-1">
+                                  <Info className="w-3.5 h-3.5 text-white/20 mb-1" />
+                                  <p className="text-[9px] text-white/40">Pressione um botão no controle para ativar o teste visual.</p>
+                                </div>
+                              )}
+                            </div>
+
+                          </div>
+                        </div>
+
+                      </div>
+                    );
+                  })()}
+
+                  {/* Global settings */}
+                  <div className="space-y-3 pt-2 border-t border-white/5">
+                    <h3 className="text-sm font-semibold text-white/60">Configurações Globais</h3>
+                    <SettingToggle label="Mostrar Notificações de Controle" name="ShowControllerNotifications" ctx={ctx} />
+                    <SettingToggle label="Mostrar Atividade do Controle" name="ShowControllerActivity" ctx={ctx} />
+                  </div>
                 </div>
               </ScrollArea>
             </div>

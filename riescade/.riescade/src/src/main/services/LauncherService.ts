@@ -5,15 +5,7 @@ import { tmpdir } from 'os'
 import { Game, System } from '../../shared/types'
 import { getRetroBatPath, getRiescadePath } from '../utils/paths'
 import { SettingsParser } from '../parsers/SettingsParser'
-
-interface ControllerInfo {
-  name: string
-  guid: string
-  path?: string
-  buttons: number
-  axes: number
-  hats: number
-}
+import { ControllerManager, ControllerInfo } from './ControllerManager'
 
 export class LauncherService {
   public launch(game: Game, system: System, activeControllers: ControllerInfo[] = [], saveStateSlot?: number, netplayOptions?: any): Promise<void> {
@@ -214,12 +206,12 @@ export class LauncherService {
 
       let controllerArgs: string[] = []
       
-      let finalControllers = activeControllers
+      let finalControllers = ControllerManager.getInstance().getConnected()
       if (!finalControllers || finalControllers.length === 0) {
-        console.log('No active controllers from renderer. Performing native detection...')
-        finalControllers = this.detectConnectedControllers()
-        console.log(`Natively detected controllers: ${finalControllers.length}`, finalControllers)
+        console.log('No connected controllers in ControllerManager. Running a manual scan...')
+        finalControllers = ControllerManager.getInstance().detectAll()
       }
+      console.log(`Controllers for launching: ${finalControllers.length}`, finalControllers)
       
       if (finalControllers.length > 0) {
         // Try to get a list of HID device IDs to match paths
@@ -279,7 +271,7 @@ export class LauncherService {
           }
 
           // If still empty, use the provided path or default
-          const finalPath = discoveredPath || controller.path || ""
+          const finalPath = controller.instanceId || discoveredPath || ""
 
           controllerArgs.push(
             `-${p}index`, index.toString(),
@@ -288,6 +280,7 @@ export class LauncherService {
             `-${p}nbbuttons`, controller.buttons.toString(),
             `-${p}nbaxes`, controller.axes.toString(),
             `-${p}nbhats`, (controller.hats || 1).toString(),
+            `-${p}type`, controller.type,
             `-${p}path`, `"${finalPath}"`
           )
         })
@@ -459,108 +452,4 @@ export class LauncherService {
         }
       }
     })
-  }
-
-  private detectConnectedControllers(): any[] {
-    const controllers: any[] = []
-    try {
-      const retroBatPath = getRetroBatPath()
-      const inputFile = join(retroBatPath, 'riescade', '.riescade', 'configs', 'input.json')
-      let configs: any[] = []
-      if (existsSync(inputFile)) {
-        try {
-          const raw = readFileSync(inputFile, 'utf8')
-          configs = JSON.parse(raw).inputConfigs || []
-        } catch (e) {
-          console.error('Failed to parse input.json in native detector', e)
-        }
-      }
-
-      // Query gamepads via PowerShell (execFileSync prevents shell variable/quote expansion issues)
-      const stdout = require('child_process').execFileSync('powershell', [
-        '-Command',
-        'Get-PnpDevice -Status OK | Where-Object { $_.FriendlyName -like "*Controlador*" -or $_.FriendlyName -like "*gamepad*" -or $_.FriendlyName -like "*joystick*" -or $_.InstanceId -like "*IG_*" } | Where-Object { $_.Class -eq "HIDClass" -or $_.Class -eq "Gamepad" -or $_.Class -eq "Xboxgip" } | Select-Object FriendlyName, InstanceId | ConvertTo-Json'
-      ], { encoding: 'utf8' }).trim()
-      if (stdout) {
-        const parsed = JSON.parse(stdout)
-        let devices = Array.isArray(parsed) ? parsed : [parsed]
-
-        // Filter out duplicate driver/parent nodes to keep only the actual gamepad HID/IG node
-        const seenInstances = new Set<string>()
-        devices = devices.filter(device => {
-          if (!device.InstanceId) return false
-          const instanceId = device.InstanceId.toUpperCase()
-          
-          // Ignore parent USB driver nodes for XInput/Xbox controllers
-          if (instanceId.startsWith('USB\\') && instanceId.includes('&IG_')) {
-            return false
-          }
-          
-          // Ignore raw USB node if we have an IG node path for this controller
-          const vidMatch = instanceId.match(/VID_([0-9A-F]{4})/)
-          const pidMatch = instanceId.match(/PID_([0-9A-F]{4})/)
-          if (vidMatch && pidMatch && instanceId.startsWith('USB\\')) {
-            const hasIg = devices.some(x => {
-              if (!x.InstanceId) return false
-              const xUpper = x.InstanceId.toUpperCase()
-              return xUpper.includes(`VID_${vidMatch[1]}`) && xUpper.includes(`PID_${pidMatch[1]}`) && xUpper.includes('&IG_')
-            })
-            if (hasIg) return false
-          }
-
-          if (seenInstances.has(instanceId)) {
-            return false
-          }
-          seenInstances.add(instanceId)
-          return true
-        })
-
-        devices.forEach((device: any) => {
-          if (!device.FriendlyName || !device.InstanceId) return
-          
-          const instanceId = device.InstanceId.toUpperCase()
-          let vid = ''
-          let pid = ''
-          
-          const vidMatch = instanceId.match(/VID_([0-9A-F]{4})/)
-          const pidMatch = instanceId.match(/PID_([0-9A-F]{4})/)
-          
-          let finalGuid = ''
-          let finalName = device.FriendlyName
-          
-          if (vidMatch && pidMatch) {
-            vid = vidMatch[1].toLowerCase()
-            pid = pidMatch[1].toLowerCase()
-            
-            const vidSwapped = vid.substring(2, 4) + vid.substring(0, 2)
-            const pidSwapped = pid.substring(2, 4) + pid.substring(0, 2)
-            
-            const matchPrefix = `03000000${vidSwapped}0000${pidSwapped}0000`
-            
-            const matched = configs.find(c => c.deviceGUID?.toString().toLowerCase().startsWith(matchPrefix))
-            if (matched) {
-              finalGuid = matched.deviceGUID.toString()
-              finalName = matched.deviceName
-            } else {
-              finalGuid = `03000000${vidSwapped}0000${pidSwapped}000000007200`
-            }
-            
-            let isXbox = vid === '045e' && (pid === '028e' || pid === '02a1' || pid === '0b12' || pid === '0b20')
-            if (matched || isXbox) {
-              controllers.push({
-                name: finalName,
-                guid: finalGuid,
-                buttons: 15,
-                axes: 6,
-                hats: 1
-              })
-            }
-          }
-        })
-      }
-    } catch (err) {
-      console.error('Failed to detect controllers natively:', err)
-    }
-    return controllers
-  }
-}
+  }}
