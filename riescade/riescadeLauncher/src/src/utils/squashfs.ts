@@ -7,25 +7,29 @@ import { Config } from '../config.js';
 
 export function findFreeDriveLetter(): string {
   try {
-    const activeDrives = execSync('wmic logicaldisk get name').toString();
-    const alphabet = 'WXYZUTSRQPONMLKJIHGFEDCBA'.split(''); // reverse order to avoid C:, D:, etc.
-    for (const letter of alphabet) {
+    const output = execSync('fsutil fsinfo drives').toString();
+    const activeDrives = (output.match(/[A-Z]:/gi) || []).map(d => d.toUpperCase());
+    
+    // Scan Z down to D as in C# EmulatorLauncher
+    for (let i = 90; i >= 68; i--) {
+      const letter = String.fromCharCode(i);
       if (!activeDrives.includes(letter + ':')) {
         return letter + ':';
       }
     }
   } catch (err) {
-    Logger.error('SquashFS: Failed to get active drives using WMIC, trying fallback', err);
+    Logger.error('SquashFS: Failed to get active drives using fsutil, trying fallback', err);
   }
   
-  // Fallback if WMIC fails (e.g. permission or WMI service disabled)
-  // Check common letters from end of alphabet by attempting to access them
-  const fallbackAlphabet = 'WXYZ'.split('');
-  for (const letter of fallbackAlphabet) {
+  // Fallback: fast loop check using existsSync
+  for (let i = 90; i >= 68; i--) {
+    const letter = String.fromCharCode(i);
     const drivePath = letter + ':\\';
-    if (!existsSync(drivePath)) {
-      return letter + ':';
-    }
+    try {
+      if (!existsSync(drivePath)) {
+        return letter + ':';
+      }
+    } catch (e) {}
   }
 
   throw new Error('No virtual drive letter available.');
@@ -73,7 +77,7 @@ export function mountSquashfs(
 
     // Wait until the drive is mounted and readable
     let attempts = 0;
-    const maxAttempts = 30; // 15 seconds
+    const maxAttempts = 100; // 5 seconds (100 * 50ms)
     const interval = setInterval(() => {
       attempts++;
       if (existsSync(join(driveLetter, '\\'))) {
@@ -88,7 +92,7 @@ export function mountSquashfs(
         } catch (e) {}
         reject(new Error(`SquashFS: Timeout waiting for drive ${driveLetter} to mount`));
       }
-    }, 500);
+    }, 50);
   });
 }
 

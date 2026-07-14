@@ -17,7 +17,7 @@ export class Vita3kGenerator extends BaseGenerator {
     try {
       const retroBatPath = getRetroBatPath();
       const gamesDir = join(retroBatPath, 'roms', 'psvita', 'games');
-      const prefPath = join(retroBatPath, 'saves', 'psvita', 'vita3k');
+      const prefPath = join(retroBatPath, 'riescade', 'saves', 'psvita', 'vita3k');
 
       if (existsSync(gamesDir)) {
         if (!existsSync(prefPath)) {

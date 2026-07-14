@@ -73,11 +73,7 @@ export function getDatabasePath(): string {
 
 // ─── RIESCADE OS Specific Resource Resolvers ───
 export function getResourcesPath(): string {
-  const devPath = join(getRiescadePath(), 'src', 'src', 'main', 'resources')
-  if (existsSync(devPath)) {
-    return devPath
-  }
-  return join(getRiescadePath(), 'resources')
+  return join(app.getAppPath(), 'src', 'main', 'resources')
 }
 
 export function getLogosPath(): string {

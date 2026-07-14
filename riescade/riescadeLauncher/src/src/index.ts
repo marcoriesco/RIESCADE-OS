@@ -303,8 +303,8 @@ async function main() {
       virtualDrive = findFreeDriveLetter();
       const retroBatPath = getRetroBatPath();
       const gameName = parse(parsedArgs.rom).name;
-      const overlayDir = join(retroBatPath, 'saves', parsedArgs.system, 'squashfs-overlays', gameName);
-      const workDir = join(retroBatPath, 'saves', parsedArgs.system, 'squashfs-work', gameName);
+      const overlayDir = join(retroBatPath, 'riescade', 'saves', parsedArgs.system, 'squashfs-overlays', gameName);
+      const workDir = join(retroBatPath, 'riescade', 'saves', parsedArgs.system, 'squashfs-work', gameName);
 
       mountProcess = await mountSquashfs(parsedArgs.rom, virtualDrive, overlayDir, workDir);
       const resolved = resolveRomInDrive(virtualDrive, parsedArgs.system);

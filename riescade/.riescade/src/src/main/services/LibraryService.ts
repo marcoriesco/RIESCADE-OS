@@ -1722,7 +1722,7 @@ export class LibraryService {
     const fs = require('fs')
     const path = require('path')
     
-    const savesDir = path.join(getRetroBatPath(), 'saves', systemName)
+    const savesDir = path.join(getRetroBatPath(), 'riescade', 'saves', systemName)
     if (!fs.existsSync(savesDir)) {
       return []
     }

@@ -66,13 +66,6 @@ console.log('🚀 Starting deployment...')
 if (fs.existsSync(distSource)) {
   console.log(`📦 Copying build from ${distSource} to ${distDest}...`)
   copyRecursiveSync(distSource, distDest)
-  
-  // 1.2 Copy descompacted resources (logos, arts, fonts, overlay)
-  console.log('📦 Copying system assets (logos, arts, fonts, overlay) to resources...')
-  if (fs.existsSync(logosSrc)) copyRecursiveSync(logosSrc, logosDest)
-  if (fs.existsSync(artsSrc)) copyRecursiveSync(artsSrc, artsDest)
-  if (fs.existsSync(fontsSrc)) copyRecursiveSync(fontsSrc, fontsDest)
-  if (fs.existsSync(overlaySrc)) copyRecursiveSync(overlaySrc, overlayDest)
 } else {
   console.log('⚠️ Build source not found. Make sure you ran "npm run build" first.')
   process.exit(1)
@@ -87,14 +80,10 @@ try {
 const escapePs = (s) => String(s).replace(/`/g, '``').replace(/"/g, '`"')
 
 try {
-  try {
-    if (fs.existsSync(iconIcoSource)) fs.copyFileSync(iconIcoSource, iconIco)
-  } catch {}
-
   const ps = `
 $ErrorActionPreference = 'Stop'
 $outExe = "${escapePs(rootExe)}"
-$iconPath = "${escapePs(iconIco)}"
+$iconPath = "${escapePs(iconIcoSource)}"
 
 if (Test-Path $outExe) { Remove-Item -Force $outExe }
 
