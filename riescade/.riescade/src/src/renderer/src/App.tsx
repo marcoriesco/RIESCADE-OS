@@ -14,6 +14,7 @@ import { ScrollArea } from "./components/ScrollArea";
 import VirtualWindow from "./components/VirtualWindow";
 import defaultBg from '../../main/resources/default.webp';
 import defaultVideo from '../../main/resources/default.mp4';
+import riescadeLogo from '../../main/resources/riescade.webp';
 
 
 const DEFAULT_SYSTEM_BG = "radial-gradient(1200px 800px at 20% 10%, rgb(35 35 35) 0%, transparent 60%), radial-gradient(1000px 700px at 85% 90%, rgb(12 12 12) 0%, transparent 55%), linear-gradient(rgb(4 4 4) 0%, rgb(22 22 22) 100%)";
@@ -168,10 +169,10 @@ export default function App() {
             )}
           </div>
           <div className="flex-1 min-w-0">
-            <Toast.Title className="text-xs font-bold text-white truncate">
+            <Toast.Title className="text-md font-bold text-white truncate">
               {toast.title}
             </Toast.Title>
-            <Toast.Description className="text-[10px] text-white/50 truncate mt-0.5">
+            <Toast.Description className="text-[12px] text-white/50 truncate mt-0.5">
               {toast.description}
             </Toast.Description>
           </div>
@@ -1314,7 +1315,7 @@ export default function App() {
         {activeSubWindowArt && settings["RIESCADE.DynamicBackground"]?.value !== "false" && (
           <div 
             key={activeSubWindowArt}
-            className="absolute inset-0 bg-cover bg-center pointer-events-none opacity-80 animate-in fade-in duration-1000 z-0"
+            className="absolute inset-0 bg-cover bg-center pointer-events-none animate-in fade-in duration-1000 z-0"
             style={{ backgroundImage: `url("${activeSubWindowArt}")` }}
           />
         )}
@@ -1460,15 +1461,19 @@ export default function App() {
               <Tooltip.Trigger asChild>
                 <button
                   onClick={() => setLauncherOpen(v => !v)}
-                  className={`w-11 h-11 rounded-xl flex items-center justify-center transition-all ${launcherOpen ? "bg-accent-glass" : "hover:scale-105"}`}
-                  style={!launcherOpen ? { background: 'linear-gradient(135deg, var(--accent-color), var(--accent-color-hover))' } : {}}
+                  className="w-10 h-10 rounded-full flex items-center justify-center transition-all hover:scale-105 overflow-visible relative"
+                  style={{ background: 'linear-gradient(135deg, var(--accent-color), var(--accent-color-hover))' }}
                 >
-                  <Grid3x3 className="w-5 h-5 text-white" />
+                  <img 
+                    src={riescadeLogo} 
+                    alt="Menu" 
+                    className={`w-[46px] h-auto max-w-none absolute t-[-6px] object-contain ${launcherOpen ? "animate-start-menu-open" : "animate-start-menu-close"}`}
+                  />
                 </button>
               </Tooltip.Trigger>
               <Tooltip.Portal>
                 <Tooltip.Content className="tooltip-content" side="top" sideOffset={8}>
-                  Menu RIESCADE
+                  RIESCADE OS
                   <Tooltip.Arrow className="tooltip-arrow" width={10} height={5} />
                 </Tooltip.Content>
               </Tooltip.Portal>

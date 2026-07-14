@@ -114,6 +114,7 @@ export default function SystemAppContent({
   const [showPdfViewer, setShowPdfViewer] = useState(false);
   const [pdfUrl, setPdfUrl] = useState("");
   const [hasManual, setHasManual] = useState(false);
+  const [systemNamesMap, setSystemNamesMap] = useState<Record<string, string>>({});
   const [isCancellingScrape, setIsCancellingScrape] = useState(false);
   const [scrapeProgress, setScrapeProgress] = useState<{
     systemName: string;
@@ -281,6 +282,17 @@ export default function SystemAppContent({
   useEffect(() => {
     checkMediaAvailability();
   }, [system.name, system.path, checkMediaAvailability]);
+
+  // Load systems map for full name lookup (e.g. from low-level code like "sfc" to "Super Nintendo")
+  useEffect(() => {
+    window.api.getSystems().then((sysList: System[]) => {
+      const mapping: Record<string, string> = {};
+      sysList.forEach(s => {
+        mapping[s.name.toLowerCase()] = s.fullname;
+      });
+      setSystemNamesMap(mapping);
+    }).catch(err => console.error("Failed to load systems for mapping:", err));
+  }, []);
 
 
   const handleMediaTypeChange = (type: string) => {
@@ -965,27 +977,29 @@ export default function SystemAppContent({
               {/* Media Switcher & Platform Options */}
               <div className="flex items-center gap-2 max-w-full">
                 {/* Media Switcher Buttons */}
-                <div className="flex flex-wrap items-center bg-white/5 border border-white/5 p-1 rounded-lg gap-0.5 shadow-inner backdrop-blur-md max-w-full">
-                  {['cover', 'cover2d', 'cover3d', 'coverback', 'fanart', 'logo', 'marquee', 'screenshot', 'title', 'mix'].map((type) => {
-                    const isAvailable = availableMediaTypes[type];
-                    if (!isAvailable) return null;
-                    const isActive = preferredMediaType === type;
-                    return (
-                      <button
-                        key={type}
-                        onClick={() => handleMediaTypeChange(type)}
-                        className={`px-1.5 py-0.5 text-[9px] @xs:px-2.5 @xs:py-1 @xs:text-[10px] uppercase font-bold tracking-wider rounded-md transition-all cursor-pointer ${
-                          isActive
-                            ? "bg-accent text-white shadow-md font-extrabold"
-                            : "text-white/60 hover:text-white hover:bg-white/5"
-                        }`}
-                        title={`Exibir mídia '${type}'`}
-                      >
-                        {type}
-                      </button>
-                    );
-                  })}
-                </div>
+                {!(system.name === 'collections' && activeCollection === null) && (
+                  <div className="flex flex-wrap items-center bg-white/5 border border-white/5 p-1 rounded-lg gap-0.5 shadow-inner backdrop-blur-md max-w-full">
+                    {['cover', 'cover2d', 'cover3d', 'coverback', 'fanart', 'logo', 'marquee', 'screenshot', 'title', 'mix'].map((type) => {
+                      const isAvailable = availableMediaTypes[type];
+                      if (!isAvailable) return null;
+                      const isActive = preferredMediaType === type;
+                      return (
+                        <button
+                          key={type}
+                          onClick={() => handleMediaTypeChange(type)}
+                          className={`px-1.5 py-0.5 text-[9px] @xs:px-2.5 @xs:py-1 @xs:text-[10px] uppercase font-bold tracking-wider rounded-md transition-all cursor-pointer ${
+                            isActive
+                              ? "bg-accent text-white shadow-md font-extrabold"
+                              : "text-white/60 hover:text-white hover:bg-white/5"
+                          }`}
+                          title={`Exibir mídia '${type}'`}
+                        >
+                          {type}
+                        </button>
+                      );
+                    })}
+                  </div>
+                )}
 
                 {/* 3-dots Platform options (only for physical systems) */}
                 {system.name !== 'collections' && !system.path.startsWith('virtual://') && (
@@ -1068,7 +1082,7 @@ export default function SystemAppContent({
                       console.log("[SystemAppContent] Rendering grid items. displayLimit =", displayLimit, "filteredGames length =", filteredGames.length, "sliced length =", sliced.length, "items:", sliced);
                       return sliced.map((g, idx) => {
                         if (g.isCollectionFolder) {
-                          const hasLogo = !!g.cover || !!g.logo;
+                          const hasLogo = !!g.logo || !!g.marquee;
                           const hasFanart = !!g.fanart;
                           const count = g.gameCount ?? 0;
                           const countText = `${count} ${count === 1 ? 'Jogo' : 'Jogos'}`;
@@ -1095,7 +1109,7 @@ export default function SystemAppContent({
                                   )}
                                   {hasLogo ? (
                                     <img 
-                                      src={g.cover || g.logo} 
+                                      src={g.logo || g.marquee} 
                                       alt={g.name} 
                                       className="relative w-[80%] max-h-[70%] object-contain filter drop-shadow-[0_4px_8px_rgba(0,0,0,0.6)] group-hover:scale-110 transition-all duration-300 z-10"
                                     />
@@ -1338,27 +1352,13 @@ export default function SystemAppContent({
                   
                   return (
                     <>
-                      {selectedGame.cover || selectedGame.logo || selectedGame.fanart ? (
-                        <div className="relative w-full aspect-video rounded-md overflow-hidden bg-black/50 border border-white/5 shadow-md flex items-center justify-center shrink-0">
-                          {(selectedGame.fanart) && (
-                            <img 
-                              src={selectedGame.fanart} 
-                              alt={selectedGame.name} 
-                              className="absolute inset-0 w-full h-full object-cover opacity-50"
-                            />
-                          )}
-                          {(selectedGame.cover || selectedGame.logo) ? (
-                            <img 
-                              src={selectedGame.cover || selectedGame.logo} 
-                              alt={selectedGame.name} 
-                              className="relative w-[70%] max-h-[85%] object-contain filter drop-shadow-[0_4px_8px_rgba(0,0,0,0.6)] z-10"
-                            />
-                          ) : (
-                            <div className="relative z-10 flex flex-col items-center">
-                              <Folder className="w-12 h-12 text-accent mb-2 opacity-80" />
-                              <h3 className="font-bold text-sm text-white/95 text-center">{selectedGame.name}</h3>
-                            </div>
-                          )}
+                      {(selectedGame.logo || selectedGame.marquee) ? (
+                        <div className="w-full flex items-center justify-center overflow-hidden relative shrink-0">
+                          <img 
+                            src={selectedGame.logo || selectedGame.marquee} 
+                            alt={selectedGame.name} 
+                            className="w-full max-h-40 object-contain filter drop-shadow-[0_4px_8px_rgba(0,0,0,0.5)]" 
+                          />
                         </div>
                       ) : (
                         <div className="w-full flex flex-col items-center justify-center py-8 bg-white/5 rounded-md border border-white/5 shadow-md shrink-0">
@@ -1394,7 +1394,6 @@ export default function SystemAppContent({
                 </div>
               </div>
             ) : (
-              /* Normal Game Details */
               <div className="flex flex-col gap-4">
                 {/* Game Logo/Marquee (Transparent background) */}
                 {(() => {
@@ -1436,26 +1435,31 @@ export default function SystemAppContent({
                     </button>
                   </div>
                 ) : (
-                  getGameMediaUrl(selectedGame, preferredMediaType) && (
-                    <div className="relative w-full aspect-video rounded-md overflow-hidden bg-black/50 border border-white/5 shadow-md shrink-0 flex items-center justify-center">
-                      {mediaLoading && (
-                        <div className="absolute inset-0 flex items-center justify-center bg-black/30 backdrop-blur-[2px] z-10 animate-in fade-in duration-200">
-                          <Loader2 className="w-6 h-6 text-accent animate-spin" />
-                        </div>
-                      )}
-                      <img 
-                        src={getGameMediaUrl(selectedGame, preferredMediaType)} 
-                        alt={selectedGame.name} 
-                        onLoad={() => setMediaLoading(false)}
-                        onError={() => {
-                          const url = getGameMediaUrl(selectedGame, preferredMediaType);
-                          if (url) missingMediaCache.add(url);
-                          setMediaLoading(false);
-                        }}
-                        className={`w-full h-full object-contain filter drop-shadow-[0_4px_8px_rgba(0,0,0,0.6)] transition-all duration-300 ${mediaLoading ? 'opacity-0 scale-95 blur-sm' : 'opacity-100 scale-100 blur-0'}`}
-                      />
-                    </div>
-                  )
+                  (() => {
+                    const fanart = selectedGame.fanart || selectedGame.image || "";
+                    const fanartUrl = fanart ? (fanart.startsWith("http") || fanart.startsWith("file://") ? fanart : `file:///${fanart.replace(/\\/g, '/')}`) : "";
+                    const logo = selectedGame.logo || selectedGame.marquee || "";
+                    const logoUrl = logo ? (logo.startsWith("http") || logo.startsWith("file://") ? logo : `file:///${logo.replace(/\\/g, '/')}`) : "";
+                    const coverUrl = getGameMediaUrl(selectedGame, preferredMediaType);
+
+                    return (coverUrl || fanartUrl || logoUrl) && (
+                      <div className="relative w-full aspect-video rounded-md overflow-hidden bg-black/50 border border-white/5 shadow-md shrink-0 flex items-center justify-center">
+                        {logoUrl ? (
+                          <img 
+                            src={logoUrl} 
+                            alt="Logo" 
+                            className="relative w-[75%] max-h-[80%] object-contain filter drop-shadow-[0_4px_8px_rgba(0,0,0,0.6)] z-10 animate-in fade-in zoom-in-95 duration-200" 
+                          />
+                        ) : coverUrl ? (
+                          <img 
+                            src={coverUrl} 
+                            alt={selectedGame.name} 
+                            className="relative w-[60%] max-h-[85%] object-contain filter drop-shadow-[0_4px_8px_rgba(0,0,0,0.6)] z-10 animate-in fade-in zoom-in-95 duration-200" 
+                          />
+                        ) : null}
+                      </div>
+                    );
+                  })()
                 )}
                 
                 {/* Title & Metadata with Context Menu */}
@@ -1466,7 +1470,7 @@ export default function SystemAppContent({
                       {(() => {
                         const relDate = selectedGame.releasedate || (selectedGame as any).ReleaseDate;
                         return relDate ? String(relDate).substring(0, 4) : "Lançamento N/A";
-                      })()} · {system.fullname}
+                      })()} · {systemNamesMap[selectedGame.system?.toLowerCase() || ''] || system.fullname}
                     </div>
                   </div>
                   
@@ -1644,7 +1648,12 @@ export default function SystemAppContent({
                 <div className="flex flex-col gap-2 mt-auto pt-3">
                   <button
                     onClick={() => onLaunchGame(selectedGame, system)}
-                    className="w-[calc(100%-8px)] mx-auto bg-accent hover:bg-accent-hover hover:scale-[1.02] hover:shadow-lg transition-all rounded-md py-3 text-xl font-bold flex items-center justify-center gap-2 cursor-pointer text-white bg-gradient-to-br from-[var(--accent-color)] to-[var(--accent-color-hover)] outline outline-2 outline-[var(--accent-color)] outline-offset-2">
+                    className="w-[calc(100%-8px)] mx-auto hover:scale-[1.02] hover:brightness-110 hover:shadow-lg transition-all rounded-md py-3 text-xl font-bold flex items-center justify-center gap-2 cursor-pointer text-white outline outline-2 outline-offset-2"
+                    style={{
+                      background: 'linear-gradient(135deg, var(--accent-color) 0%, var(--accent-color-hover) 100%)',
+                      outlineColor: 'var(--accent-color)'
+                    }}
+                  >
                     <Play className="w-6 h-6 fill-white text-white" />
                     <span>Jogar</span>
                   </button>

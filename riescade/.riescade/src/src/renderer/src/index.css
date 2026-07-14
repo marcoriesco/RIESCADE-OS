@@ -361,4 +361,33 @@ html, body, #root {
   filter: drop-shadow(0 15px 35px rgba(0, 0, 0, 0.8));
 }
 
+@keyframes startMenuOpenAnim {
+  0% {
+    transform: scale(1) rotate(0deg);
+  }
+  25% {
+    transform: scale(1.22) rotate(-14deg);
+  }
+  50% {
+    transform: scale(1.22) rotate(4deg);
+  }
+  75% {
+    transform: scale(1.22) rotate(-8deg);
+  }
+  100% {
+    transform: scale(1.22) rotate(0deg);
+  }
+}
+
+.animate-start-menu-open {
+  animation: startMenuOpenAnim 0.65s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+  transform-origin: center center;
+}
+
+.animate-start-menu-close {
+  transition: transform 0.45s cubic-bezier(0.25, 1, 0.5, 1);
+  transform: scale(1) rotate(0deg);
+  transform-origin: center center;
+}
+
 

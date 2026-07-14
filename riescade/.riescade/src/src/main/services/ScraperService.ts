@@ -26,6 +26,7 @@ export const SYSTEM_TO_SCREENSCRAPER_PLATFORM: Record<string, number> = {
   'colecovision': 48,
   'c64': 66,
   'commodore64': 66,
+  'dos': 135,
   'intellivision': 115,
   'mac': 146,
   'macintosh': 146,
@@ -82,12 +83,18 @@ export const SYSTEM_TO_SCREENSCRAPER_PLATFORM: Record<string, number> = {
   'snes': 4,
   'sfc': 4,
   'tg16': 31,
+  'tg16cd': 114,
   'tgcd': 114,
   'wonderswan': 45,
   'wonderswancolor': 46,
   'zxspectrum': 76,
   'daphne': 49,
-  'pico8': 234
+  'pico8': 234,
+  'naomi': 56,
+  'naomi2': 56,
+  'atomiswave': 53,
+  'teknoparrot': 269,
+  'neogeocd': 70
 }
 
 function getRipList(imageSource: string): string[] {

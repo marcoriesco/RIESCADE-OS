@@ -1132,7 +1132,7 @@
     "type": "int"
   },
   "Window.tool-settings.Width": {
-    "value": 1544,
+    "value": 1002,
     "type": "int"
   },
   "Window.tool-settings.Height": {
@@ -1144,19 +1144,19 @@
     "type": "bool"
   },
   "Window.tool-collections.X": {
-    "value": -1303,
+    "value": 102,
     "type": "int"
   },
   "Window.tool-collections.Y": {
-    "value": 98,
+    "value": 89,
     "type": "int"
   },
   "Window.tool-collections.Width": {
-    "value": 1024,
+    "value": 1796,
     "type": "int"
   },
   "Window.tool-collections.Height": {
-    "value": 680,
+    "value": 840,
     "type": "int"
   },
   "VolumePopup": {
@@ -1288,23 +1288,23 @@
     "type": "int"
   },
   "Window.tool-all.Maximized": {
-    "value": true,
+    "value": false,
     "type": "bool"
   },
   "Window.tool-all.X": {
-    "value": 448,
+    "value": 288,
     "type": "int"
   },
   "Window.tool-all.Y": {
-    "value": 200,
+    "value": 8,
     "type": "int"
   },
   "Window.tool-all.Width": {
-    "value": 1024,
+    "value": 1363,
     "type": "int"
   },
   "Window.tool-all.Height": {
-    "value": 680,
+    "value": 875,
     "type": "int"
   },
   "Window.system-xboxlivearcade.Maximized": {
@@ -1356,15 +1356,15 @@
     "type": "string"
   },
   "Window.system-xbox360.X": {
-    "value": 18,
+    "value": 137,
     "type": "int"
   },
   "Window.system-xbox360.Y": {
-    "value": 26,
+    "value": 70,
     "type": "int"
   },
   "Window.system-xbox360.Width": {
-    "value": 1858,
+    "value": 1721,
     "type": "int"
   },
   "Window.system-xbox360.Height": {
@@ -1372,7 +1372,7 @@
     "type": "int"
   },
   "RIESCADE.PreferredMediaType.collections": {
-    "value": "cover2d",
+    "value": "cover",
     "type": "string"
   },
   "RIESCADE.PreferredMediaType.laseractive": {
@@ -1424,7 +1424,7 @@
     "type": "bool"
   },
   "RIESCADE.PreferredMediaType.ps3": {
-    "value": "manual",
+    "value": "cover2d",
     "type": "string"
   },
   "Window.system-ps4.X": {
@@ -1472,7 +1472,7 @@
     "type": "bool"
   },
   "RIESCADE.PreferredMediaType.Windows": {
-    "value": "title",
+    "value": "cover",
     "type": "string"
   },
   "Window.system-hbmame.Maximized": {

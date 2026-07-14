@@ -4,11 +4,11 @@ const isProduction = !process.execPath.includes('node') && !process.execPath.inc
 
 export function getRetroBatPath(): string {
   if (isProduction) {
-    // execPath is in: riescade/riescadeLauncher/riescadeLauncher.exe
-    return resolve(dirname(process.execPath), '..', '..');
+    // execPath is in: riescade/.riescade/launcher/riescadeLauncher.exe
+    return resolve(dirname(process.execPath), '..', '..', '..');
   }
-  // cwd is in: riescade/riescadeLauncher/src
-  return resolve(process.cwd(), '..', '..', '..');
+  // cwd is in: riescade/.riescade/launcher/src
+  return resolve(process.cwd(), '..', '..', '..', '..');
 }
 
 export function getRiescadePath(): string {
