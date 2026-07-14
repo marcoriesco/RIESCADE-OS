@@ -216,239 +216,6 @@ export class LibraryService {
     return controlData
   }
 
-  private calculateQuickAutoCounts(): void {
-    const displayed = this.getDisplayedSystems()
-    
-    let totalAll = 0
-    let totalFavorites = 0
-    let totalRecent = 0
-    let totalNeverPlayed = 0
-    let totalCheevos = 0
-    let total2P = 0
-    let total4P = 0
-
-    const configPath = getConfigPath()
-    const romsPath = getRomsPath()
-
-    // Discover genre-based and manufacturer-based auto-collections that need counting
-    const specificCols = new Set(['all', 'favorites', 'recent', 'neverplayed', 'retroachievements', '2players', '4players', 'arcade'])
-    const settings = new SettingsParser()
-    const autoColsString = settings.getSetting('CollectionSystemsAuto', 'string') || ''
-    const enabledCols = autoColsString.split(',').map((c: string) => c.trim()).filter((c: string) => c !== '')
-    
-    // Separate genre collections from manufacturer collections
-    const genreColKeys: Map<string, string> = new Map() // cleanKey -> colKey for quickAutoCounts
-    const manufacturerColKeys: Map<string, string> = new Map() // manufacturer name -> colKey
-    // Control type collections that use gamesdb.xml (not genre matching)
-    const controlTypeSet = new Set(['wheel', 'trackball', 'spinner', 'lightgun', 'vertical'])
-    const activeControlTypes = new Set<string>()
-    
-    for (const col of enabledCols) {
-      if (specificCols.has(col)) continue
-      
-      if (col.startsWith('z')) {
-        // Arcade manufacturer: znamco -> namco, zcapcom -> capcom, etc.
-        const mfr = col.substring(1).toLowerCase()
-        manufacturerColKeys.set(mfr, mfr)
-      } else if (controlTypeSet.has(col)) {
-        // Control type collection: wheel, trackball, spinner, lightgun, vertical
-        activeControlTypes.add(col)
-      } else if (col.startsWith('_')) {
-        // Genre collection: _shootemup -> shootemup
-        const cleanKey = col.substring(1).toLowerCase()
-        genreColKeys.set(cleanKey, cleanKey)
-      }
-    }
-    
-    // Build genre map from genres.xml for proper multi-language matching
-    const genreMap = this.buildGenreMap()
-    // Parse gamesdb.xml for control type collections
-    const gamesDbData = this.parseGamesDb()
-    
-    // Initialize counters
-    const genreCounts: Map<string, number> = new Map()
-    for (const [, key] of genreColKeys) genreCounts.set(key, 0)
-    
-    const mfrCounts: Map<string, number> = new Map()
-    for (const [, key] of manufacturerColKeys) mfrCounts.set(key, 0)
-
-    // Control type counters
-    const controlTypeCounts: Map<string, number> = new Map()
-    for (const ct of activeControlTypes) controlTypeCounts.set(ct, 0)
-
-    for (const sys of displayed) {
-      // Skip virtual/auto-collection systems - only scan real system gamelists
-      if (sys.path && sys.path.startsWith('virtual://')) continue
-      
-      const paths = [
-        join(romsPath, sys.name, 'gamelist.xml'),
-        join(configPath, 'gamelists', sys.name, 'gamelist.xml'),
-        sys.path ? join(sys.path, 'gamelist.xml') : ''
-      ].filter(Boolean)
-      
-      let content = ''
-      for (const p of paths) {
-        if (existsSync(p)) {
-          try {
-            content = readFileSync(p, 'utf8')
-          } catch (e) {}
-          break
-        }
-      }
-      
-      if (!content) {
-        try {
-          if (sys.path && existsSync(sys.path)) {
-            const count = readdirSync(sys.path).filter((f: string) => !f.startsWith('.')).length
-            totalAll += count
-            totalNeverPlayed += count
-          }
-        } catch(e) {}
-        continue
-      }
-      
-      const gameMatches = content.match(/<game[\s>]/g)
-      if (!gameMatches) continue
-      
-      totalAll += gameMatches.length
-      
-      const favMatches = content.match(/<favorite>(true|1)<\/favorite>/g)
-      if (favMatches) totalFavorites += favMatches.length
-      
-      const playedMatches = content.match(/<lastplayed>/g)
-      const playedCount = playedMatches ? playedMatches.length : 0
-      totalRecent += playedCount
-      totalNeverPlayed += (gameMatches.length - playedCount)
-      
-      const cheevosMatches = content.match(/<(cheevosId|cheevosHash)>/g)
-      if (cheevosMatches) totalCheevos += cheevosMatches.length / 2
-      
-      const p2Matches = content.match(/<players>\s*(2|.*2.*)\s*<\/players>/g)
-      if (p2Matches) total2P += p2Matches.length
-      
-      const p4Matches = content.match(/<players>\s*(4|.*4.*)\s*<\/players>/g)
-      if (p4Matches) total4P += p4Matches.length
-
-      // Count genre-based collections using genres.xml mapping
-      if (genreColKeys.size > 0) {
-        const genreRegex = /<genre>(.*?)<\/genre>/gi
-        let match: RegExpExecArray | null
-        while ((match = genreRegex.exec(content)) !== null) {
-          const genreValue = match[1].toUpperCase()
-          // Decode XML entities
-          const decoded = genreValue.replace(/&amp;/gi, '&').replace(/&apos;/gi, "'").replace(/&lt;/gi, '<').replace(/&gt;/gi, '>');
-          
-          for (const [colKey] of genreColKeys) {
-            const matchNames = genreMap.get(colKey)
-            if (matchNames) {
-              // Check if genre value matches any known name (exact) or is a parent/child combination
-              // Also check if any known name is a prefix of the genre
-              let found = false
-              for (const name of matchNames) {
-                if (decoded === name || decoded.startsWith(name + ' /') || decoded.startsWith(name + ',')) {
-                  found = true
-                  break
-                }
-              }
-              if (found) {
-                genreCounts.set(colKey, (genreCounts.get(colKey) || 0) + 1)
-              }
-            } else {
-              // Fallback: try simple substring match for collections not in genres.xml
-              if (decoded.toLowerCase().includes(colKey)) {
-                genreCounts.set(colKey, (genreCounts.get(colKey) || 0) + 1)
-              }
-            }
-          }
-        }
-      }
-
-      // Count manufacturer-based collections by scanning <publisher> and <developer>
-      if (manufacturerColKeys.size > 0) {
-        const pubRegex = /<(?:publisher|developer)>(.*?)<\/(?:publisher|developer)>/gi
-        let match: RegExpExecArray | null
-        while ((match = pubRegex.exec(content)) !== null) {
-          const pubValue = match[1].toLowerCase()
-          for (const [mfrKey] of manufacturerColKeys) {
-            if (pubValue.includes(mfrKey)) {
-              mfrCounts.set(mfrKey, (mfrCounts.get(mfrKey) || 0) + 1)
-            }
-          }
-        }
-      }
-
-      // Count control type collections using gamesdb.xml data
-      if (activeControlTypes.size > 0) {
-        const sysName = sys.name.toLowerCase()
-        // Extract game blocks with path and check against gamesdb data
-        const gameBlockRegex = /<game[\s>][\s\S]*?<\/game>/gi
-        let blockMatch: RegExpExecArray | null
-        while ((blockMatch = gameBlockRegex.exec(content)) !== null) {
-          const block = blockMatch[0]
-          // Extract ROM stem from <path> tag
-          const pathMatch = block.match(/<path>(.*?)<\/path>/i)
-          if (!pathMatch) continue
-          const pathVal = pathMatch[1]
-          // Get filename without extension (ROM stem)
-          const fileName = pathVal.replace(/^.*[\/\\]/, '').replace(/\.[^.]+$/, '').toLowerCase()
-
-          for (const ct of activeControlTypes) {
-            if (ct === 'vertical') {
-              // Vertical: check gamesdb for 'vertical' tag OR genre contains "Vertical"
-              const vertSystemMap = gamesDbData.get('vertical')
-              if (vertSystemMap) {
-                const sysGameIds = vertSystemMap.get(sysName)
-                if (sysGameIds && sysGameIds.has(fileName)) {
-                  controlTypeCounts.set(ct, (controlTypeCounts.get(ct) || 0) + 1)
-                  continue
-                }
-              }
-              // Fallback: check genre for "Vertical" (for arcade games with vertical genre tag)
-              const genreMatch = block.match(/<genre>(.*?)<\/genre>/i)
-              if (genreMatch) {
-                const genreUpper = genreMatch[1].toUpperCase().replace(/&amp;/gi, '&').replace(/&apos;/gi, "'")
-                if (genreUpper.includes('VERTICAL')) {
-                  controlTypeCounts.set(ct, (controlTypeCounts.get(ct) || 0) + 1)
-                }
-              }
-            } else {
-              // wheel, trackball, spinner, lightgun: check gamesdb.xml data
-              const systemMap = gamesDbData.get(ct)
-              if (systemMap) {
-                const sysGameIds = systemMap.get(sysName)
-                if (sysGameIds && sysGameIds.has(fileName)) {
-                  controlTypeCounts.set(ct, (controlTypeCounts.get(ct) || 0) + 1)
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-    
-    LibraryService.quickAutoCounts.set('all', totalAll)
-    LibraryService.quickAutoCounts.set('favorites', totalFavorites)
-    LibraryService.quickAutoCounts.set('recent', totalRecent)
-    LibraryService.quickAutoCounts.set('neverplayed', totalNeverPlayed)
-    LibraryService.quickAutoCounts.set('retroachievements', Math.floor(totalCheevos))
-    LibraryService.quickAutoCounts.set('2players', total2P)
-    LibraryService.quickAutoCounts.set('4players', total4P)
-    
-    // Set genre-based collection counts
-    for (const [, colKey] of genreColKeys) {
-      LibraryService.quickAutoCounts.set(colKey, genreCounts.get(colKey) || 0)
-    }
-    
-    // Set manufacturer-based collection counts
-    for (const [, colKey] of manufacturerColKeys) {
-      LibraryService.quickAutoCounts.set(colKey, mfrCounts.get(colKey) || 0)
-    }
-
-    // Set control type collection counts
-    for (const ct of activeControlTypes) {
-      LibraryService.quickAutoCounts.set(ct, controlTypeCounts.get(ct) || 0)
-    }
-  }
 
   private getQuickGameCount(systemName: string): number {
     try {
@@ -580,23 +347,6 @@ export class LibraryService {
       console.log(`[SyncCheck] All ${systemsCheckedCount} systems are up-to-date. SQLite fast path active.`)
       sendProgress(10, 'LOADING_PLATFORMS')
 
-      // Only recalculate auto-collection counts from DB (fast SQL queries)
-      const displayed = this.getDisplayedSystems()
-      sendProgress(30, 'LOADING_PLATFORMS')
-      const displayedNames = displayed.map(s => s.name)
-      const settings = new SettingsParser()
-      const autoColsString = settings.getSetting('CollectionSystemsAuto', 'string') || ''
-      const enabledCols = autoColsString.split(',').map((c: string) => c.trim()).filter((c: string) => c !== '')
-
-      sendProgress(60, 'LOADING_PLATFORMS')
-      for (const col of enabledCols) {
-        let countKey = col
-        if (col.startsWith('_')) countKey = col.substring(1)
-        else if (col.startsWith('z')) countKey = col.substring(1)
-        const count = dbService.getAutoCollectionCount(countKey, displayedNames)
-        LibraryService.quickAutoCounts.set(countKey, count)
-      }
-
       sendProgress(80, 'LOADING_PLATFORMS')
       await delay(50)
       sendProgress(100, 'READY')
@@ -629,33 +379,6 @@ export class LibraryService {
       })
 
       sendProgress(50, initialStatusKey)
-
-      // Use SQL queries for auto-collection counts
-      const displayed = this.getDisplayedSystems()
-      const displayedNames = displayed.map(s => s.name)
-      const settings = new SettingsParser()
-      const autoColsString = settings.getSetting('CollectionSystemsAuto', 'string') || ''
-      const enabledCols = autoColsString.split(',').map((c: string) => c.trim()).filter((c: string) => c !== '')
-
-      // Get all game counts at once from DB
-      const allCounts = dbService.getAllGameCounts()
-
-      // Calculate auto-collection counts
-      const specificCols = new Set(['all', 'favorites', 'recent', 'neverplayed', 'retroachievements', '2players', '4players', 'arcade'])
-      for (const col of enabledCols) {
-        let countKey = col
-        if (col.startsWith('_')) countKey = col.substring(1)
-        else if (col.startsWith('z')) countKey = col.substring(1)
-
-        if (specificCols.has(col) || specificCols.has(countKey)) {
-          const count = dbService.getAutoCollectionCount(countKey, displayedNames)
-          LibraryService.quickAutoCounts.set(countKey, count)
-        } else {
-          // Genre/manufacturer collections
-          const count = dbService.getAutoCollectionCount(countKey, displayedNames)
-          LibraryService.quickAutoCounts.set(countKey, count)
-        }
-      }
 
       sendProgress(80, initialStatusKey)
     }
@@ -743,20 +466,6 @@ export class LibraryService {
     const dbService = LibraryService.databaseService
     dbService.open()
     
-    const displayed = this.getDisplayedSystems()
-    const displayedNames = displayed.map(s => s.name)
-    const settings = new SettingsParser()
-    const autoColsString = settings.getSetting('CollectionSystemsAuto', 'string') || ''
-    const enabledCols = autoColsString.split(',').map((c: string) => c.trim()).filter((c: string) => c !== '')
-
-    for (const col of enabledCols) {
-      let countKey = col
-      if (col.startsWith('_')) countKey = col.substring(1)
-      else if (col.startsWith('z')) countKey = col.substring(1)
-
-      const count = dbService.getAutoCollectionCount(countKey, displayedNames)
-      LibraryService.quickAutoCounts.set(countKey, count)
-    }
     LibraryService.isPreloaded = true
   }
 
@@ -841,11 +550,9 @@ export class LibraryService {
     const settings = new SettingsParser()
     const visibleSetting = settings.getSetting('VisibleSystems', 'string') || ''
     const hiddenSetting = settings.getSetting('HiddenSystems', 'string') || ''
-    const groupedSetting = settings.getSetting('SystemsGrouped', 'string') || ''
     
     const visibleList = String(visibleSetting).split(',').filter(v => v.trim() !== '')
     const hiddenList = String(hiddenSetting).split(';').filter(v => v.trim() !== '')
-    const groupedList = String(groupedSetting).split(',').filter(v => v.trim() !== '')
 
     const systems = this.systemsParser.parse()
 
@@ -853,25 +560,12 @@ export class LibraryService {
       ? systems.filter(s => 
           visibleList.includes(s.name) || 
           s.name === 'collections' ||
-          s.path.startsWith('virtual://') ||
-          systems.some(child => 
-            child.group && 
-            child.group.toLowerCase() === s.name.toLowerCase() && 
-            groupedList.includes(child.name) && 
-            visibleList.includes(child.name)
-          )
+          s.path.startsWith('virtual://')
         )
       : systems
 
     if (hiddenList.length > 0) {
       baseSystems = baseSystems.filter(s => !hiddenList.includes(s.name))
-    }
-
-    if (groupedList.length > 0) {
-      baseSystems = baseSystems.filter(s => 
-        !groupedList.includes(s.name) || 
-        (s.group && s.group.toLowerCase() === s.name.toLowerCase())
-      )
     }
 
     return baseSystems.filter(s => 
@@ -1353,62 +1047,6 @@ export class LibraryService {
   private rebuildAutoCollections(): void {
     LibraryService.cachedGames.delete('all')
     LibraryService.cachedGames.delete('favorites')
-
-    const settings = new SettingsParser()
-    const autoColsString = settings.getSetting('CollectionSystemsAuto', 'string') || ''
-    const enabledCols = autoColsString.split(',').map((c: string) => c.trim()).filter((c: string) => c !== '' && c.toLowerCase() !== 'arcade')
-
-    // Build clean keys for auto-collections
-    const autoCollections: string[] = []
-    for (const col of enabledCols) {
-      let cleanKey = col
-      if (col.startsWith('_')) {
-        cleanKey = col.substring(1)
-      } else if (col.startsWith('z')) {
-        cleanKey = col.substring(1)
-      }
-      autoCollections.push(cleanKey.toLowerCase())
-    }
-
-    const displayed = this.getDisplayedSystems()
-    const physicalSystems = displayed.filter(s => 
-      !s.path.startsWith('virtual://') && 
-      s.name !== 'collections' && 
-      !autoCollections.includes(s.name.toLowerCase())
-    )
-
-    if (LibraryService.isDbMode() && LibraryService.databaseService.isOpen()) {
-      // DB Mode fast-path: invalidate cached games for auto-collections and update quick counts directly from DB
-      const displayedNames = displayed.map(s => s.name)
-      for (const col of autoCollections) {
-        const isDuplicate = physicalSystems.some(s => s.name.toLowerCase() === col.toLowerCase())
-        const cacheKey = (isDuplicate ? `auto-${col}` : col).toLowerCase()
-        LibraryService.cachedGames.delete(cacheKey)
-
-        let countKey = col
-        if (col.startsWith('_')) countKey = col.substring(1)
-        else if (col.startsWith('z')) countKey = col.substring(1)
-        try {
-          const count = LibraryService.databaseService.getAutoCollectionCount(countKey, displayedNames)
-          LibraryService.quickAutoCounts.set(countKey, count)
-        } catch (err) {
-          console.error(`Failed to update count for auto collection ${countKey} in DB mode:`, err)
-        }
-      }
-      return
-    }
-
-    for (const col of autoCollections) {
-      const isDuplicate = physicalSystems.some(s => s.name.toLowerCase() === col.toLowerCase())
-      const cacheKey = (isDuplicate ? `auto-${col}` : col).toLowerCase()
-      if (LibraryService.cachedGames.has(cacheKey)) {
-        try {
-          const colGames = this.resolveAutoCollectionGames(col)
-          LibraryService.cachedGames.set(cacheKey, colGames)
-        } catch (err) {}
-      }
-    }
-    this.calculateQuickAutoCounts()
   }
 
   public getCollectionsForGame(systemName: string, gamePath: string): string[] {

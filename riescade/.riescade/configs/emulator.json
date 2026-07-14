@@ -104,7 +104,7 @@
     "bezels": "auto",
     "filters": "auto",
     "discord": "false",
-    "aspect_ratio": "Stretched"
+    "aspect_ratio": "Fixed4x3"
   },
   "vita3k": {
     "resolution_multiplier": "2",

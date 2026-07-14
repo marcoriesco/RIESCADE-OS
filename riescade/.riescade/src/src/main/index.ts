@@ -23,6 +23,23 @@ const settingsParser = new SettingsParser()
 const systemService = new SystemService(libraryService)
 const scraperService = new ScraperService(libraryService)
 
+// Configure Chromium GPU graphics backend switches based on user settings
+const gpuDriver = settingsParser.getSetting('RIESCADE.GpuDriver', 'string')
+if (gpuDriver && gpuDriver !== 'default') {
+  if (gpuDriver === 'd3d12') {
+    app.commandLine.appendSwitch('use-angle', 'd3d12')
+  } else if (gpuDriver === 'opengl') {
+    app.commandLine.appendSwitch('use-gl', 'desktop')
+  } else if (gpuDriver === 'vulkan') {
+    app.commandLine.appendSwitch('use-angle', 'vulkan')
+    app.commandLine.appendSwitch('enable-features', 'Vulkan')
+  } else if (gpuDriver === 'software') {
+    app.commandLine.appendSwitch('disable-gpu')
+  } else if (gpuDriver === 'd3d11') {
+    app.commandLine.appendSwitch('use-angle', 'd3d11')
+  }
+}
+
 let activeControllers: any[] = []
 let themeWatcher: FSWatcher | null = null
 let mainWindow: BrowserWindow | null = null

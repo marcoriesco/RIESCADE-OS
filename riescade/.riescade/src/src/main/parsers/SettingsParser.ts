@@ -69,10 +69,7 @@ export class SettingsParser {
       const affectingSettings = [
         'VisibleSystems',
         'HiddenSystems',
-        'SystemsGrouped',
-        'LoadEmptySystems',
-        'CollectionSystemsAuto',
-        'CollectionSystemsCustom'
+        'LoadEmptySystems'
       ]
       if (affectingSettings.includes(name)) {
         try {

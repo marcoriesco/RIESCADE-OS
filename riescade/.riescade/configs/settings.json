@@ -1,86 +1,14 @@
 {
-  "2ship.ungroup": {
-    "value": true,
-    "type": "bool"
-  },
   "EnableSounds": {
     "value": true,
-    "type": "bool"
-  },
-  "LocalArt": {
-    "value": true,
-    "type": "bool"
-  },
-  "ScrapeOverWrite": {
-    "value": false,
     "type": "bool"
   },
   "ScrapeVideos": {
     "value": true,
     "type": "bool"
   },
-  "ShowGunNotifications": {
-    "value": true,
-    "type": "bool"
-  },
   "VideoLowersMusic": {
     "value": false,
-    "type": "bool"
-  },
-  "Windows.ungroup": {
-    "value": true,
-    "type": "bool"
-  },
-  "adam.ungroup": {
-    "value": true,
-    "type": "bool"
-  },
-  "advision.ungroup": {
-    "value": true,
-    "type": "bool"
-  },
-  "amazon.ungroup": {
-    "value": true,
-    "type": "bool"
-  },
-  "amiga1200.ungroup": {
-    "value": true,
-    "type": "bool"
-  },
-  "amiga4000.ungroup": {
-    "value": true,
-    "type": "bool"
-  },
-  "amiga500.ungroup": {
-    "value": true,
-    "type": "bool"
-  },
-  "apfm1000.ungroup": {
-    "value": true,
-    "type": "bool"
-  },
-  "apple2gs.ungroup": {
-    "value": true,
-    "type": "bool"
-  },
-  "aquarius.ungroup": {
-    "value": true,
-    "type": "bool"
-  },
-  "arcadia.ungroup": {
-    "value": true,
-    "type": "bool"
-  },
-  "archimedes.ungroup": {
-    "value": true,
-    "type": "bool"
-  },
-  "astrocade.ungroup": {
-    "value": true,
-    "type": "bool"
-  },
-  "atom.ungroup": {
-    "value": true,
     "type": "bool"
   },
   "audio.bgmusic": {
@@ -95,371 +23,7 @@
     "value": false,
     "type": "bool"
   },
-  "bbcmicro.ungroup": {
-    "value": true,
-    "type": "bool"
-  },
-  "bennugd.ungroup": {
-    "value": true,
-    "type": "bool"
-  },
-  "bk.ungroup": {
-    "value": true,
-    "type": "bool"
-  },
-  "bstone.ungroup": {
-    "value": true,
-    "type": "bool"
-  },
-  "bsyndrome.ungroup": {
-    "value": true,
-    "type": "bool"
-  },
-  "camplynx.ungroup": {
-    "value": true,
-    "type": "bool"
-  },
-  "cannonball.ungroup": {
-    "value": true,
-    "type": "bool"
-  },
-  "casloopy.ungroup": {
-    "value": true,
-    "type": "bool"
-  },
-  "cavestory.ungroup": {
-    "value": true,
-    "type": "bool"
-  },
-  "cdogs.ungroup": {
-    "value": true,
-    "type": "bool"
-  },
-  "cgenius.ungroup": {
-    "value": true,
-    "type": "bool"
-  },
-  "cinematronics.ungroup": {
-    "value": true,
-    "type": "bool"
-  },
-  "coco.ungroup": {
-    "value": true,
-    "type": "bool"
-  },
-  "corsixth.ungroup": {
-    "value": true,
-    "type": "bool"
-  },
-  "crvision.ungroup": {
-    "value": true,
-    "type": "bool"
-  },
-  "devilutionx.ungroup": {
-    "value": true,
-    "type": "bool"
-  },
-  "dinothawr.ungroup": {
-    "value": true,
-    "type": "bool"
-  },
-  "doom3.ungroup": {
-    "value": true,
-    "type": "bool"
-  },
-  "eagames.ungroup": {
-    "value": true,
-    "type": "bool"
-  },
-  "easyrpg.ungroup": {
-    "value": true,
-    "type": "bool"
-  },
-  "ecwolf.ungroup": {
-    "value": true,
-    "type": "bool"
-  },
-  "eduke32.ungroup": {
-    "value": true,
-    "type": "bool"
-  },
-  "electron.ungroup": {
-    "value": true,
-    "type": "bool"
-  },
-  "epic.ungroup": {
-    "value": true,
-    "type": "bool"
-  },
-  "fc.ungroup": {
-    "value": true,
-    "type": "bool"
-  },
-  "fds.ungroup": {
-    "value": true,
-    "type": "bool"
-  },
-  "fm7.ungroup": {
-    "value": true,
-    "type": "bool"
-  },
-  "fmtowns.ungroup": {
-    "value": true,
-    "type": "bool"
-  },
-  "gamate.ungroup": {
-    "value": true,
-    "type": "bool"
-  },
-  "gamecom.ungroup": {
-    "value": true,
-    "type": "bool"
-  },
-  "gamepock.ungroup": {
-    "value": true,
-    "type": "bool"
-  },
-  "gb2players.ungroup": {
-    "value": true,
-    "type": "bool"
-  },
-  "gbc.ungroup": {
-    "value": true,
-    "type": "bool"
-  },
-  "gbc2players.ungroup": {
-    "value": true,
-    "type": "bool"
-  },
-  "gemrb.ungroup": {
-    "value": true,
-    "type": "bool"
-  },
   "global.disableautocontrollers": {
-    "value": true,
-    "type": "bool"
-  },
-  "gmaster.ungroup": {
-    "value": true,
-    "type": "bool"
-  },
-  "gog.ungroup": {
-    "value": true,
-    "type": "bool"
-  },
-  "gp32.ungroup": {
-    "value": true,
-    "type": "bool"
-  },
-  "gzdoom.ungroup": {
-    "value": true,
-    "type": "bool"
-  },
-  "halflife.ungroup": {
-    "value": true,
-    "type": "bool"
-  },
-  "jaguarcd.ungroup": {
-    "value": true,
-    "type": "bool"
-  },
-  "megacd.ungroup": {
-    "value": true,
-    "type": "bool"
-  },
-  "megadrive-msu.ungroup": {
-    "value": true,
-    "type": "bool"
-  },
-  "msx1.ungroup": {
-    "value": true,
-    "type": "bool"
-  },
-  "msx2+.ungroup": {
-    "value": true,
-    "type": "bool"
-  },
-  "msx2.ungroup": {
-    "value": true,
-    "type": "bool"
-  },
-  "msxturbor.ungroup": {
-    "value": true,
-    "type": "bool"
-  },
-  "n64dd.ungroup": {
-    "value": true,
-    "type": "bool"
-  },
-  "neogeo.ungroup": {
-    "value": true,
-    "type": "bool"
-  },
-  "neogeocd.ungroup": {
-    "value": true,
-    "type": "bool"
-  },
-  "ngpc.ungroup": {
-    "value": true,
-    "type": "bool"
-  },
-  "opengoal.ungroup": {
-    "value": true,
-    "type": "bool"
-  },
-  "openjazz.ungroup": {
-    "value": true,
-    "type": "bool"
-  },
-  "openlara.ungroup": {
-    "value": true,
-    "type": "bool"
-  },
-  "pcenginecd.ungroup": {
-    "value": true,
-    "type": "bool"
-  },
-  "pdark.ungroup": {
-    "value": true,
-    "type": "bool"
-  },
-  "pegasus.ungroup": {
-    "value": true,
-    "type": "bool"
-  },
-  "powerbomberman.ungroup": {
-    "value": true,
-    "type": "bool"
-  },
-  "prboom.ungroup": {
-    "value": true,
-    "type": "bool"
-  },
-  "pv1000.ungroup": {
-    "value": true,
-    "type": "bool"
-  },
-  "quake.ungroup": {
-    "value": true,
-    "type": "bool"
-  },
-  "quake2.ungroup": {
-    "value": true,
-    "type": "bool"
-  },
-  "quake3.ungroup": {
-    "value": true,
-    "type": "bool"
-  },
-  "raze.ungroup": {
-    "value": true,
-    "type": "bool"
-  },
-  "reminiscence.ungroup": {
-    "value": true,
-    "type": "bool"
-  },
-  "rtcw.ungroup": {
-    "value": true,
-    "type": "bool"
-  },
-  "satellaview.ungroup": {
-    "value": true,
-    "type": "bool"
-  },
-  "sega32x.ungroup": {
-    "value": true,
-    "type": "bool"
-  },
-  "sega32xh.ungroup": {
-    "value": true,
-    "type": "bool"
-  },
-  "sgb-msu1.ungroup": {
-    "value": true,
-    "type": "bool"
-  },
-  "snes-msu1.ungroup": {
-    "value": true,
-    "type": "bool"
-  },
-  "soh.ungroup": {
-    "value": true,
-    "type": "bool"
-  },
-  "sonic-mania.ungroup": {
-    "value": true,
-    "type": "bool"
-  },
-  "sonic3-air.ungroup": {
-    "value": true,
-    "type": "bool"
-  },
-  "sonicretro.ungroup": {
-    "value": true,
-    "type": "bool"
-  },
-  "starship.ungroup": {
-    "value": true,
-    "type": "bool"
-  },
-  "steam.ungroup": {
-    "value": true,
-    "type": "bool"
-  },
-  "sufami.ungroup": {
-    "value": true,
-    "type": "bool"
-  },
-  "superbroswar.ungroup": {
-    "value": true,
-    "type": "bool"
-  },
-  "supergrafx.ungroup": {
-    "value": true,
-    "type": "bool"
-  },
-  "supracan.ungroup": {
-    "value": true,
-    "type": "bool"
-  },
-  "theforceengine.ungroup": {
-    "value": true,
-    "type": "bool"
-  },
-  "ti99.ungroup": {
-    "value": true,
-    "type": "bool"
-  },
-  "tutor.ungroup": {
-    "value": true,
-    "type": "bool"
-  },
-  "tvgames.ungroup": {
-    "value": true,
-    "type": "bool"
-  },
-  "vc4000.ungroup": {
-    "value": true,
-    "type": "bool"
-  },
-  "vg5k.ungroup": {
-    "value": true,
-    "type": "bool"
-  },
-  "vsmile.ungroup": {
-    "value": true,
-    "type": "bool"
-  },
-  "wswanc.ungroup": {
-    "value": true,
-    "type": "bool"
-  },
-  "xegs.ungroup": {
-    "value": true,
-    "type": "bool"
-  },
-  "yuzu_mutualize": {
     "value": true,
     "type": "bool"
   },
@@ -471,10 +35,6 @@
     "value": true,
     "type": "bool"
   },
-  "DrawGunCrosshair": {
-    "value": true,
-    "type": "bool"
-  },
   "global.autosave": {
     "value": false,
     "type": "bool"
@@ -483,23 +43,7 @@
     "value": true,
     "type": "bool"
   },
-  "ShowControllerBattery": {
-    "value": true,
-    "type": "bool"
-  },
-  "ParseGamelistOnly": {
-    "value": false,
-    "type": "bool"
-  },
-  "updates.enabled": {
-    "value": true,
-    "type": "bool"
-  },
   "LoadEmptySystems": {
-    "value": true,
-    "type": "bool"
-  },
-  "CheckBiosesAtLaunch": {
     "value": true,
     "type": "bool"
   },
@@ -511,10 +55,6 @@
     "value": true,
     "type": "bool"
   },
-  "vrr_runloop_enable": {
-    "value": false,
-    "type": "bool"
-  },
   "ScrapeNames": {
     "value": true,
     "type": "bool"
@@ -523,20 +63,8 @@
     "value": true,
     "type": "bool"
   },
-  "ScrapePadToKey": {
-    "value": true,
-    "type": "bool"
-  },
-  "forcefullscreen": {
-    "value": true,
-    "type": "bool"
-  },
   "ThreadedLoading": {
     "value": true,
-    "type": "bool"
-  },
-  "AsyncImages": {
-    "value": false,
     "type": "bool"
   },
   "OptimizeVRAM": {
@@ -551,44 +79,16 @@
     "value": true,
     "type": "bool"
   },
-  "ShowNetworkIndicator": {
-    "value": false,
-    "type": "bool"
-  },
   "global.netplay": {
     "value": true,
     "type": "bool"
-  },
-  "CollectionShowHidden": {
-    "value": true,
-    "type": "string"
-  },
-  "CollectionShowSystemName": {
-    "value": true,
-    "type": "string"
-  },
-  "GameTransitionStyle": {
-    "value": "fast fade",
-    "type": "string"
-  },
-  "HideSingleSystemGroups": {
-    "value": true,
-    "type": "string"
   },
   "MusicVolume": {
     "value": 100,
     "type": "string"
   },
-  "PowerSaverMode": {
-    "value": "disabled",
-    "type": "string"
-  },
   "ScrapperFilter": {
     "value": "all",
-    "type": "string"
-  },
-  "ScrapperIgnoreRecent": {
-    "value": 0,
     "type": "string"
   },
   "ScrapperImageSrc": {
@@ -599,14 +99,6 @@
     "value": "box-3D",
     "type": "string"
   },
-  "ScreenSaverBehavior": {
-    "value": "black",
-    "type": "string"
-  },
-  "ScreenSaverGameInfo": {
-    "value": "start & end",
-    "type": "string"
-  },
   "ScreenScraperPass": {
     "value": "qui02nho04",
     "type": "string"
@@ -615,45 +107,13 @@
     "value": "marcoriesco",
     "type": "string"
   },
-  "ShowFlags": {
-    "value": "auto",
-    "type": "string"
-  },
-  "ShowTags": {
-    "value": "auto",
-    "type": "string"
-  },
   "SortSystems": {
     "value": "hardware",
-    "type": "string"
-  },
-  "StartOnGamelist": {
-    "value": false,
-    "type": "string"
-  },
-  "StartupSystem": {
-    "value": "last",
-    "type": "string"
-  },
-  "ThemeSet": {
-    "value": "RIESCADE_ORIGINS",
-    "type": "string"
-  },
-  "TransitionStyle": {
-    "value": "fade",
     "type": "string"
   },
   "Volume": {
     "value": 100,
     "type": "int"
-  },
-  "controller_layout": {
-    "value": "modern8",
-    "type": "string"
-  },
-  "decompressedfolders": {
-    "value": "ask",
-    "type": "string"
   },
   "global.OptionsMenu": {
     "value": "full",
@@ -691,174 +151,6 @@
     "value": "vulkan",
     "type": "string"
   },
-  "global.vrr_runloop_enable": {
-    "value": 1,
-    "type": "string"
-  },
-  "global.yuzu_mutualize": {
-    "value": 1,
-    "type": "string"
-  },
-  "lindbergh.forcefullscreen": {
-    "value": 1,
-    "type": "string"
-  },
-  "lindbergh.ll_crosshair": {
-    "value": 1,
-    "type": "string"
-  },
-  "p1controller": {
-    "value": "auto",
-    "type": "string"
-  },
-  "psvita.async_pipeline_compilation": {
-    "value": 1,
-    "type": "string"
-  },
-  "psvita.backend-renderer": {
-    "value": "Vulkan",
-    "type": "string"
-  },
-  "psvita.cpu_opt": {
-    "value": 1,
-    "type": "string"
-  },
-  "psvita.discord": {
-    "value": 0,
-    "type": "string"
-  },
-  "psvita.forcefullscreen": {
-    "value": 1,
-    "type": "string"
-  },
-  "psvita.vita3k_fpshack": {
-    "value": 1,
-    "type": "string"
-  },
-  "psvita.vita3k_gui": {
-    "value": 0,
-    "type": "string"
-  },
-  "psvita.vita3k_showShaderCompile": {
-    "value": 0,
-    "type": "string"
-  },
-  "retrobat.defaultView": {
-    "value": "Content",
-    "type": "string"
-  },
-  "singe.core": {
-    "value": "singe2",
-    "type": "string"
-  },
-  "subset.video_gamelist_delay": {
-    "value": 4,
-    "type": "string"
-  },
-  "switch.discord": {
-    "value": 0,
-    "type": "string"
-  },
-  "switch.eden_backend": {
-    "value": 1,
-    "type": "string"
-  },
-  "switch.eden_gpu_accuracy": {
-    "value": 1,
-    "type": "string"
-  },
-  "switch.eden_language": {
-    "value": 17,
-    "type": "string"
-  },
-  "switch.eden_memory": {
-    "value": 2,
-    "type": "string"
-  },
-  "switch.eden_multicore": {
-    "value": 1,
-    "type": "string"
-  },
-  "switch.eden_region_value": {
-    "value": 1,
-    "type": "string"
-  },
-  "switch.eden_resolution_setup": {
-    "value": 5,
-    "type": "string"
-  },
-  "switch.eden_scaling_filter": {
-    "value": 6,
-    "type": "string"
-  },
-  "switch.eden_undock": {
-    "value": 1,
-    "type": "string"
-  },
-  "switch.eden_use_asynchronous_shaders": {
-    "value": 1,
-    "type": "string"
-  },
-  "switch.emulator": {
-    "value": "eden",
-    "type": "string"
-  },
-  "system.language": {
-    "value": "pt_BR",
-    "type": "string"
-  },
-  "updates.type": {
-    "value": "stable",
-    "type": "string"
-  },
-  "wii.emulatedwiimotes": {
-    "value": 1,
-    "type": "string"
-  },
-  "global.savestates": {
-    "value": 0,
-    "type": "string"
-  },
-  "UIMode": {
-    "value": "Full",
-    "type": "string"
-  },
-  "CollectionSystemsCustom": {
-    "value": "Alex Kidd,Aliens,Aof,Assassins Creed,Asterix,Batman,Battletoads,Bomberman,Burnout,Call Of Duty,Castlevania,Contra,Crash Bandicoot,Darius,Darkstalkers,Dbz,Dead Or Alive,Devil May Cry,Disney,Donkey Kong,Doom,Double Dragon,Dragon Quest,Duke Nukem,Earthworm Jim,Fatal Fury,Final Fantasy,Final Fight,Fzero,Ghostbusters,Ghouls And Ghosts,Golden Axe,Gow,Gran Turismo,Gta,Guilty Gear,Halo,Harry Potter,House Of The Dead,James Bond,Jurassic Park,Killer Instinct,King of Fighters,Lemmings,Mario,Megaman,Metal Gear,Metal Slug,Metroid,Mortal Kombat,Nba,Need For Speed,Outrun,Pacman,Pokemon,Quake,Rayman,Resident Evil,Robocop,Samurai Shodown,Shining Force,Silent Hill,Simpsons,Sonic,Space Invaders,Spiderman,Spyro,Starfox,Starwars,Street Fighter,Tekken,Tmnt,Toki,Tomb Raider,Transformers,Virtua Fighter,Xmen,Yoshi,Zelda",
-    "type": "string"
-  },
-  "CollectionSystemsAuto": {
-    "value": "all,favorites,recent,neverplayed",
-    "type": "string"
-  },
-  "Scraper": {
-    "value": "ScreenScraper",
-    "type": "string"
-  },
-  "SystemsGrouped": {
-    "value": "apple2,2ship,bennugd,bstone,bsyndrome,cavestory,cannonball,theforceengine,superbroswar,starship,sonicretro,sonic3-air,sonic-mania,soh,rtcw,reminiscence,powerbomberman,prboom,quake2,quake,quake3,raze,opengoal,openjazz,openlara,pdark,ports,corsixth,devilutionx,dinothawr,doom3,ecwolf,easyrpg,eduke32,gemrb,gzdoom,halflife,cdogs,cgenius,dusklight,ghostship",
-    "type": "string"
-  },
-  "OptionsMenu": {
-    "value": "full",
-    "type": "string"
-  },
-  "global.videomode": {
-    "value": "auto",
-    "type": "string"
-  },
-  "RotateVideo": {
-    "value": 0,
-    "type": "string"
-  },
-  "video_vsync": {
-    "value": true,
-    "type": "string"
-  },
-  "video_hard_sync": {
-    "value": false,
-    "type": "string"
-  },
   "ScrapperLogoSrc": {
     "value": "wheel",
     "type": "string"
@@ -883,53 +175,13 @@
     "value": "none",
     "type": "string"
   },
-  "input_driver": {
-    "value": "xinput",
-    "type": "string"
-  },
-  "ScreenSaverType": {
-    "value": "dim",
-    "type": "string"
-  },
-  "LastSystem": {
-    "value": "arcade",
-    "type": "string"
-  },
   "MaxVRAM": {
     "value": 516,
-    "type": "int"
-  },
-  "recent.sort": {
-    "value": 7,
     "type": "int"
   },
   "audio.display_titles_time": {
     "value": 3,
     "type": "int"
-  },
-  "ScreenSaverTime": {
-    "value": 0,
-    "type": "int"
-  },
-  "GunMoveTolerence": {
-    "value": 0,
-    "type": "float"
-  },
-  "CreateImageCache": {
-    "value": true,
-    "type": "bool"
-  },
-  "CreateThemeAssetsCache": {
-    "value": true,
-    "type": "bool"
-  },
-  "SmartCache": {
-    "value": false,
-    "type": "bool"
-  },
-  "neshd.hd_packs": {
-    "value": "true",
-    "type": "string"
   },
   "Taskbar.Icons": {
     "value": "tool:settings,system:switch,system:teknoparrot,system:cps1,system:snes,system:namco2x6,system:laseractive,system:xbox360,system:arcade,system:ps3,system:ps4,system:Windows",
@@ -1124,15 +376,15 @@
     "type": "bool"
   },
   "Window.tool-settings.X": {
-    "value": 149,
+    "value": 259,
     "type": "int"
   },
   "Window.tool-settings.Y": {
-    "value": 89,
+    "value": 34,
     "type": "int"
   },
   "Window.tool-settings.Width": {
-    "value": 1002,
+    "value": 1149,
     "type": "int"
   },
   "Window.tool-settings.Height": {
@@ -1163,24 +415,12 @@
     "value": true,
     "type": "bool"
   },
-  "video_driver": {
-    "value": "vulkan",
-    "type": "string"
-  },
-  "audio_driver": {
-    "value": "xaudio",
-    "type": "string"
-  },
-  "RotateScreen": {
-    "value": "0",
-    "type": "string"
-  },
   "VSync": {
     "value": true,
     "type": "bool"
   },
   "RIESCADE.AccentColor": {
-    "value": "#9f0043",
+    "value": "#06b6d4",
     "type": "string"
   },
   "Window.system-2ship.Maximized": {
@@ -1343,10 +583,6 @@
     "value": true,
     "type": "bool"
   },
-  "RIESCADE.PreferredMediaType": {
-    "value": "cover2d",
-    "type": "string"
-  },
   "RIESCADE.PreferredMediaType.xbox360": {
     "value": "cover",
     "type": "string"
@@ -1380,7 +616,7 @@
     "type": "string"
   },
   "RIESCADE.PreferredMediaType.snes": {
-    "value": "marquee",
+    "value": "cover",
     "type": "string"
   },
   "RIESCADE.PreferredMediaType.arcade": {
@@ -1558,5 +794,25 @@
   "ScrapperDownloadMarquee": {
     "value": true,
     "type": "bool"
+  },
+  "RIESCADE.SaveWindowPositions": {
+    "value": true,
+    "type": "bool"
+  },
+  "RIESCADE.GpuDriver": {
+    "value": "vulkan",
+    "type": "string"
+  },
+  "LogLevel": {
+    "value": "default",
+    "type": "string"
+  },
+  "Window.system-zinc.Maximized": {
+    "value": true,
+    "type": "bool"
+  },
+  "RIESCADE.PreferredMediaType.zinc": {
+    "value": "cover",
+    "type": "string"
   }
 }

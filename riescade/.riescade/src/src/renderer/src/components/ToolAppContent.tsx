@@ -615,13 +615,13 @@ export default function ToolAppContent({
           {/* ===== TAB: INTERFACE ===== */}
           {activeSettingsTab === "interface" && (
             <div className="flex flex-col h-full overflow-hidden">
-              <div className="shrink-0 px-6 pt-6 pb-2">
+              <div className="shrink-0 px-6 pt-8 pb-2 max-w-[740px]">
                 <h2 className="text-xl font-bold text-white mb-1">Interface</h2>
                 <p className="text-sm text-white/40">Aparência, ícones do desktop/taskbar, tema e idioma.</p>
               </div>
 
               <ScrollArea className="flex-1 min-h-0">
-                <div className="px-6 pb-6 space-y-2">
+                <div className="px-6 pb-6 max-w-[740px] space-y-2">
                   <SettingGroup label="Ícones do Desktop e Taskbar" />
 
                   {/* Search & Category Filter */}
@@ -700,18 +700,6 @@ export default function ToolAppContent({
                       </div>
                     );
                   })}
-
-                  <SettingGroup label="Tema e Aparência" />
-                  <SettingSelect label="Protetor de Tela" name="ScreenSaverTime" options={[
-                    { label: "Desligado", value: "0" }, { label: "1 Minuto", value: "60000" }, { label: "5 Minutos", value: "300000" }
-                  ]} ctx={ctx} />
-                  <SettingSelect label="Modo de Economia de Energia" name="PowerSaverMode" desc="Reduz consumo quando ocioso." options={[
-                    { label: "Desativado", value: "disabled" }, { label: "Padrão", value: "default" },
-                    { label: "Melhorado", value: "enhanced" }, { label: "Instantâneo", value: "instant" }
-                  ]} ctx={ctx} />
-                  <SettingSelect label="Modo da Interface" name="UIMode" desc="Bloqueia menus para uso com convidados." options={[
-                    { label: "Completo", value: "Full" }, { label: "Básico", value: "Basic" }, { label: "Quiosque", value: "Kiosk" }
-                  ]} ctx={ctx} />
                 </div>
               </ScrollArea>
             </div>
@@ -1101,47 +1089,39 @@ export default function ToolAppContent({
               </div>
               <ScrollArea className="flex-1 min-h-0">
                 <div className="px-6 pb-6 max-w-[740px] space-y-2">
-                  <SettingGroup label="Drivers" />
-                  <SettingSelect label="Driver de Vídeo" name="video_driver" desc="Vulkan oferece melhor desempenho em hardware compatível." options={[
-                    { label: "OpenGL", value: "gl" }, { label: "OpenGL Core", value: "glcore" },
-                    { label: "DirectX 12", value: "d3d12" }, { label: "DirectX 11", value: "d3d11" },
-                    { label: "Vulkan", value: "vulkan" }
-                  ]} ctx={ctx} />
-                  <SettingSelect label="Driver de Áudio" name="audio_driver" options={[
-                    { label: "XAudio", value: "xaudio" }, { label: "DirectSound", value: "dsound" },
-                    { label: "SDL", value: "sdl2" }, { label: "WASAPI", value: "wasapi" }
-                  ]} ctx={ctx} />
-                  <SettingSelect label="Driver de Controles" name="input_driver" desc="XInput ativa vibração. SDL para maior compatibilidade." options={[
-                    { label: "SDL", value: "sdl2" }, { label: "XInput", value: "xinput" }, { label: "DInput", value: "dinput" }
-                  ]} ctx={ctx} />
 
-                  <SettingGroup label="Sincronização de Tela" />
-                  <SettingToggle label="G-Sync/FreeSync" name="vrr_runloop_enable" desc="Sincroniza com a taxa do jogo. Apenas para monitores VRR." ctx={ctx} />
-                  <SettingSelect label="V-Sync" name="video_vsync" options={[
-                    { label: "Não", value: "false" }, { label: "Sim", value: "true" }, { label: "Adaptativo", value: "adaptative" }
-                  ]} ctx={ctx} />
-
-                  <SettingGroup label="Redução de Latência" />
-                  <SettingSlider label="Quadros de Run-Ahead" name="runahead" min={0} max={12} step={1} suffix=" f" ctx={ctx} />
-                  <SettingToggle label="Usar Preemptive Frames" name="preemptive_frames" desc="Usa quadros preventivos em vez de run-ahead." ctx={ctx} />
-                  <SettingToggle label="Run-Ahead Segunda Instância" name="secondinstance" ctx={ctx} />
-                  <SettingToggle label="Frame Delay Automático" name="video_frame_delay_auto" desc="Diminui frame delay para evitar quedas." ctx={ctx} />
-
-                  <SettingGroup label="Vídeo Avançado" />
-                  <SettingSelect label="Orientação de Tela" name="RotateScreen" desc="Rotaciona a área de trabalho." options={[
-                    { label: "Normal", value: "0" }, { label: "90°", value: "1" }, { label: "180°", value: "2" }, { label: "270°", value: "3" }
-                  ]} ctx={ctx} />
-                  <SettingSelect label="Monitor" name="MonitorIndex" options={Array.from({ length: 5 }, (_, i) => ({ label: String(i), value: String(i) }))} ctx={ctx} />
-                  <SettingToggle label="HDR" name="enable_hdr" desc="Ativa HDR para telas compatíveis." ctx={ctx} />
 
                   <SettingGroup label="Opções de Desenvolvedor" />
+                  <SettingSelect 
+                    label="Aceleração Gráfica do Frontend" 
+                    name="RIESCADE.GpuDriver" 
+                    defaultValue="default" 
+                    desc="Define a API gráfica para aceleração de vídeo da interface do RIESCADE (necessita reiniciar o app)." 
+                    options={[
+                      { label: "Padrão (Direct3D 11)", value: "default" },
+                      { label: "Direct3D 12", value: "d3d12" },
+                      { label: "OpenGL", value: "opengl" },
+                      { label: "Vulkan", value: "vulkan" },
+                      { label: "Desativado (Software)", value: "software" }
+                    ]} 
+                    ctx={ctx} 
+                  />
                   <SettingSlider label="Limite de VRAM" name="MaxVRAM" min={40} max={1000} step={10} suffix=" Mb" ctx={ctx} />
                   <SettingToggle label="Exibir FPS" name="DrawFramerate" ctx={ctx} />
                   <SettingToggle label="V-Sync do Frontend" name="VSync" ctx={ctx} />
-                  <SettingSelect label="Nível de Log" name="LogLevel" options={[
-                    { label: "Padrão", value: "" }, { label: "Desativado", value: "disabled" },
-                    { label: "Aviso", value: "warning" }, { label: "Erro", value: "error" }, { label: "Debug", value: "debug" }
-                  ]} ctx={ctx} />
+                  <SettingSelect 
+                    label="Nível de Log" 
+                    name="LogLevel" 
+                    defaultValue="default" 
+                    options={[
+                      { label: "Padrão", value: "default" }, 
+                      { label: "Desativado", value: "disabled" },
+                      { label: "Aviso", value: "warning" }, 
+                      { label: "Erro", value: "error" }, 
+                      { label: "Debug", value: "debug" }
+                    ]} 
+                    ctx={ctx} 
+                  />
 
                   <SettingGroup label="Interface do Frontend" />
                   <SettingToggle label="Gravar posições das janelas" name="RIESCADE.SaveWindowPositions" desc="Gravar posições e tamanhos de todas as janelas do sistema operacional." ctx={ctx} />
@@ -1175,11 +1155,7 @@ export default function ToolAppContent({
                   <SettingInfo label="Idioma" value={getSetting("Language", "pt_BR")} />
                   <SettingInfo label="Tema Ativo" value={getSetting("RIESCADE.ThemeSet", "default")} />
 
-                  <SettingGroup label="Atualizações" />
-                  <SettingSelect label="Canal de Atualização" name="updates.type" options={[
-                    { label: "Estável", value: "stable" }, { label: "Beta", value: "beta" },
-                    { label: "Beta (Butterfly)", value: "butterfly" }, { label: "Instável", value: "unstable" }
-                  ]} ctx={ctx} />
+
 
                   <div className="bg-black/15 border border-white/5 rounded-md px-4 py-3.5 text-xs hover:bg-white/[0.03] transition duration-200 space-y-3 mt-3">
                     <div className="flex items-center justify-between">

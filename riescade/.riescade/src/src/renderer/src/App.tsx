@@ -192,6 +192,31 @@ export default function App() {
     });
   }, []);
 
+  const [fps, setFps] = useState(60);
+  const showFps = settings["DrawFramerate"]?.value === true;
+
+  useEffect(() => {
+    if (!showFps) return;
+
+    let lastTime = performance.now();
+    let frameCount = 0;
+    let animationId: number;
+
+    const tick = () => {
+      frameCount++;
+      const now = performance.now();
+      if (now >= lastTime + 1000) {
+        setFps(Math.round((frameCount * 1000) / (now - lastTime)));
+        frameCount = 0;
+        lastTime = now;
+      }
+      animationId = requestAnimationFrame(tick);
+    };
+
+    animationId = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(animationId);
+  }, [showFps]);
+
   // Dynamically apply accent color CSS variables
   useEffect(() => {
     // Don't override localStorage with default color before settings have loaded from DB
@@ -1467,7 +1492,7 @@ export default function App() {
                   <img 
                     src={riescadeLogo} 
                     alt="Menu" 
-                    className={`w-[46px] h-auto max-w-none absolute t-[-6px] object-contain ${launcherOpen ? "animate-start-menu-open" : "animate-start-menu-close"}`}
+                    className={`w-[46px] h-auto max-w-none absolute top-[-6px] object-contain ${launcherOpen ? "animate-start-menu-open" : "animate-start-menu-close"}`}
                   />
                 </button>
               </Tooltip.Trigger>
@@ -1649,6 +1674,11 @@ export default function App() {
               <Wifi className="w-4 h-4 text-white/60" />
               <Volume2 className="w-4 h-4 text-white/60" />
               <Battery className="w-4 h-4 text-white/60" />
+              {showFps && (
+                <span className="text-[10px] font-sans text-white/50 tracking-wide select-none ml-1 bg-white/5 px-1.5 py-0.5 rounded border border-white/5 shrink-0">
+                  FPS <span className="font-bold">{fps}</span>
+                </span>
+              )}
               <div className="text-xs leading-tight ml-1 flex text-right gap-1 pl-3">
                 <span className="font-semibold text-white capitalize">{now.toLocaleDateString("pt-BR", { month: "short" })}</span>
                 <span className="font-semibold text-white">{now.toLocaleDateString("pt-BR", { day: "2-digit" })}</span>

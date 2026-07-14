@@ -49,7 +49,8 @@ export const SettingSelect = ({ label, name, options, desc, type = "string", def
   label: string; name: string; options: { label: string; value: string }[]; desc?: string;
   type?: "string" | "int"; defaultValue?: string; ctx: SettingsCtx;
 }) => {
-  const value = ctx.getSetting(name) || defaultValue || "auto";
+  const rawVal = ctx.getSetting(name);
+  const value = (rawVal !== null && rawVal !== undefined) ? String(rawVal) : (defaultValue !== undefined ? defaultValue : "auto");
 
   return (
     <div className="flex items-center justify-between bg-black/15 border border-white/5 rounded-md px-4 py-3 text-xs hover:bg-white/5 transition duration-200">
