@@ -3,7 +3,7 @@ import { writeFileSync, existsSync, mkdirSync, readFileSync, unlinkSync, statSyn
 import { join, resolve, dirname } from 'path'
 import { tmpdir } from 'os'
 import { Game, System } from '../../shared/types'
-import { getRetroBatPath } from '../utils/paths'
+import { getRetroBatPath, getRiescadePath } from '../utils/paths'
 import { SettingsParser } from '../parsers/SettingsParser'
 
 interface ControllerInfo {
@@ -28,7 +28,7 @@ export class LauncherService {
       }
 
       const retroBatPath = getRetroBatPath()
-      const launcherPath = join(retroBatPath, 'riescade', 'riescadeLauncher', 'riescadeLauncher.exe')
+      const launcherPath = join(getRiescadePath(), 'launcher', 'riescadeLauncher.exe')
       
       // Resolve Rom Path relative to system.path instead of hardcoding roms directory
       const romPath = resolve(system.path, game.path)
@@ -370,7 +370,7 @@ export class LauncherService {
       }
 
 
-      const logPath = join(retroBatPath, 'riescade', '.riescade', 'logs', 'riescadeLauncher.log')
+      const logPath = join(getRiescadePath(), 'logs', 'riescadeLauncher.log')
       let hasSentRunning = false
 
       sendLauncherStatus('loading')

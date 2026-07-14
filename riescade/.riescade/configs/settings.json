@@ -1380,7 +1380,7 @@
     "type": "string"
   },
   "RIESCADE.PreferredMediaType.snes": {
-    "value": "cover",
+    "value": "marquee",
     "type": "string"
   },
   "RIESCADE.PreferredMediaType.arcade": {

@@ -3,7 +3,7 @@ import { existsSync, createWriteStream } from 'fs'
 import { join } from 'path'
 import { lookup as dnsLookup } from 'dns/promises'
 import { spawn } from 'child_process'
-import { getRetroBatPath } from '../utils/paths'
+import { getRetroBatPath, getRiescadePath } from '../utils/paths'
 
 export function registerUpdaterIpc(getMainWindow: () => BrowserWindow | null): void {
   ipcMain.handle('check-for-updates', async () => {
@@ -191,7 +191,7 @@ export function registerUpdaterIpc(getMainWindow: () => BrowserWindow | null): v
       const wrapperLauncherPath = join(currentAppDir, 'RIESCADE.exe')
       const execPath = existsSync(wrapperLauncherPath) ? wrapperLauncherPath : process.execPath
 
-      const updaterPath = join(currentAppDir, 'riescade', 'updater', 'RIESCADEUpdater.exe')
+      const updaterPath = join(getRiescadePath(), 'updater', 'RIESCADEUpdater.exe')
       if (existsSync(updaterPath)) {
         const child = spawn(updaterPath, [zipPath, currentAppDir, execPath], {
           detached: true,

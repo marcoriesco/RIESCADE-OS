@@ -194,16 +194,9 @@ app.whenReady().then(() => {
       await libraryService.preloadAll(forcePhysicalScan)
 
       // Start/stop ROMs watcher dynamically based on DB mode setting
-      if (LibraryService.isDbMode()) {
-        if (!romsWatcher) {
-          romsWatcher = new RomsWatcherService(libraryService)
-          romsWatcher.start()
-        }
-      } else {
-        if (romsWatcher) {
-          romsWatcher.stop()
-          romsWatcher = null
-        }
+      if (!romsWatcher) {
+        romsWatcher = new RomsWatcherService(libraryService)
+        romsWatcher.start()
       }
     }
     return true
@@ -230,7 +223,7 @@ app.whenReady().then(() => {
   })
 
   ipcMain.handle('get-library-mode', async () => {
-    return LibraryService.isDbMode() ? 'database' : 'gamelist'
+    return 'database'
   })
 
   ipcMain.handle('db-get-games-paginated', async (_, system, page, pageSize, search, sortBy, sortDir) => {

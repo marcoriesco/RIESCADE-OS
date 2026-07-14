@@ -170,10 +170,12 @@ if (Test-Path $iconPath) {
   console.log(`✅ Fallback launcher created: ${cmdPath}`)
 }
 
-// 3. Create RIESCADEUpdater.exe inside riescade/updater/ folder
-const updaterExe = path.join(rootDir, 'riescade', 'updater', 'RIESCADEUpdater.exe')
+// 3. Create RIESCADEUpdater.exe inside riescade/.riescade/updater/ folder
+const updaterExe = path.join(distDest, 'updater', 'RIESCADEUpdater.exe')
 console.log(`🔗 Creating updater at ${updaterExe}...`)
 try {
+  const updaterDir = path.dirname(updaterExe)
+  if (!fs.existsSync(updaterDir)) fs.mkdirSync(updaterDir, { recursive: true })
   if (fs.existsSync(updaterExe)) fs.unlinkSync(updaterExe)
 } catch {}
 

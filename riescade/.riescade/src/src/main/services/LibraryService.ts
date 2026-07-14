@@ -658,13 +658,6 @@ export class LibraryService {
       }
 
       sendProgress(80, initialStatusKey)
-    } else {
-      // ─── Gamelist.xml Mode: original behavior ───
-      sendProgress(10, initialStatusKey)
-      this.getDisplayedSystems()
-      sendProgress(30, initialStatusKey)
-      this.calculateQuickAutoCounts()
-      sendProgress(50, initialStatusKey)
     }
 
     await delay(50)
@@ -679,38 +672,27 @@ export class LibraryService {
     // Clear only this system's cache
     LibraryService.cachedGames.delete(nameLower)
     
-    const useDb = LibraryService.isDbMode()
     const dbService = LibraryService.databaseService
+    dbService.open()
 
-    if (useDb) {
-      dbService.open()
-      const systems = this.systemsParser.parse()
-      const systemObj = systems.find(s => s.name.toLowerCase() === nameLower)
-      if (systemObj) {
-        try {
-          const scanFn = this.scanPhysicalGames.bind(this)
-          dbService.syncSystem(systemObj, scanFn, true)
-        } catch (err) {
-          console.error(`Failed to sync system database for ${systemName}:`, err)
-        }
+    const systems = this.systemsParser.parse()
+    const systemObj = systems.find(s => s.name.toLowerCase() === nameLower)
+    if (systemObj) {
+      try {
+        const scanFn = this.scanPhysicalGames.bind(this)
+        dbService.syncSystem(systemObj, scanFn, true)
+      } catch (err) {
+        console.error(`Failed to sync system database for ${systemName}:`, err)
       }
+    }
 
-      try {
-        const settings = new SettingsParser()
-        const showHidden = settings.getSetting('ShowHidden', 'bool') === true
-        const games = dbService.getGamesBySystem(systemName, showHidden)
-        LibraryService.cachedGames.set(nameLower, games)
-      } catch (err) {
-        console.error(`Failed to load games from DB after update for ${systemName}:`, err)
-      }
-    } else {
-      // Preload games for only this specific system (XML Mode)
-      try {
-        const games = this.getGamesRaw(systemName, forcePhysicalScan)
-        LibraryService.cachedGames.set(nameLower, games)
-      } catch (err) {
-        console.error(`Failed to preload games for ${systemName}:`, err)
-      }
+    try {
+      const settings = new SettingsParser()
+      const showHidden = settings.getSetting('ShowHidden', 'bool') === true
+      const games = dbService.getGamesBySystem(systemName, showHidden)
+      LibraryService.cachedGames.set(nameLower, games)
+    } catch (err) {
+      console.error(`Failed to load games from DB after update for ${systemName}:`, err)
     }
     
     // Re-resolve and update all auto-collections based on the new cached games
@@ -740,50 +722,40 @@ export class LibraryService {
       const { BrowserWindow } = require('electron')
       const win = BrowserWindow.getAllWindows()[0]
       if (win) {
-        const useDb = LibraryService.isDbMode()
-        const isFirstRun = useDb && LibraryService.databaseService.isOpen() && LibraryService.databaseService.getIndexedSystemCount() === 0
-        const statusKey = useDb 
-          ? (isFirstRun ? 'INDEXING_DATABASE' : 'UPDATING_DATABASE')
-          : 'LOADING_PLATFORMS'
+        const isFirstRun = LibraryService.databaseService.isOpen() && LibraryService.databaseService.getIndexedSystemCount() === 0
+        const statusKey = isFirstRun ? 'INDEXING_DATABASE' : 'UPDATING_DATABASE'
         win.webContents.send('systems-loading-progress', 100, statusKey)
       }
     } catch (err) {}
   }
 
   public async rebuildDatabase(onProgress?: (systemName: string, current: number, total: number) => void): Promise<void> {
-    if (LibraryService.isDbMode()) {
-      const dbService = LibraryService.databaseService
-      dbService.open()
-      const allSystems = this.systemsParser.parse()
-      const scanFn = this.scanPhysicalGames.bind(this)
-      await dbService.rebuildAll(allSystems, scanFn, onProgress)
-    }
+    const dbService = LibraryService.databaseService
+    dbService.open()
+    const allSystems = this.systemsParser.parse()
+    const scanFn = this.scanPhysicalGames.bind(this)
+    await dbService.rebuildAll(allSystems, scanFn, onProgress)
   }
 
   public preloadAllSync(forcePhysicalScan = false): void {
     if (LibraryService.isPreloaded) return
     
-    if (LibraryService.isDbMode()) {
-      const dbService = LibraryService.databaseService
-      dbService.open()
-      
-      const displayed = this.getDisplayedSystems()
-      const displayedNames = displayed.map(s => s.name)
-      const settings = new SettingsParser()
-      const autoColsString = settings.getSetting('CollectionSystemsAuto', 'string') || ''
-      const enabledCols = autoColsString.split(',').map((c: string) => c.trim()).filter((c: string) => c !== '')
+    const dbService = LibraryService.databaseService
+    dbService.open()
+    
+    const displayed = this.getDisplayedSystems()
+    const displayedNames = displayed.map(s => s.name)
+    const settings = new SettingsParser()
+    const autoColsString = settings.getSetting('CollectionSystemsAuto', 'string') || ''
+    const enabledCols = autoColsString.split(',').map((c: string) => c.trim()).filter((c: string) => c !== '')
 
-      for (const col of enabledCols) {
-        let countKey = col
-        if (col.startsWith('_')) countKey = col.substring(1)
-        else if (col.startsWith('z')) countKey = col.substring(1)
+    for (const col of enabledCols) {
+      let countKey = col
+      if (col.startsWith('_')) countKey = col.substring(1)
+      else if (col.startsWith('z')) countKey = col.substring(1)
 
-        const count = dbService.getAutoCollectionCount(countKey, displayedNames)
-        LibraryService.quickAutoCounts.set(countKey, count)
-      }
-    } else {
-      this.getDisplayedSystems()
-      this.calculateQuickAutoCounts()
+      const count = dbService.getAutoCollectionCount(countKey, displayedNames)
+      LibraryService.quickAutoCounts.set(countKey, count)
     }
     LibraryService.isPreloaded = true
   }
@@ -916,14 +888,8 @@ export class LibraryService {
     const allGames: Game[] = []
     
     for (const sys of displayed) {
-      const cached = LibraryService.cachedGames.get(sys.name.toLowerCase())
-      if (cached) {
-        allGames.push(...cached)
-      } else {
-        const sysGames = this.getGamesRaw(sys.name, false, true)
-        LibraryService.cachedGames.set(sys.name.toLowerCase(), sysGames)
-        allGames.push(...sysGames)
-      }
+      const sysGames = this.getGames(sys.name)
+      allGames.push(...sysGames)
     }
 
     return allGames
@@ -1034,131 +1000,34 @@ export class LibraryService {
     }
 
     // ─── DB Mode: load from SQLite for physical systems ───
-    if (LibraryService.isDbMode() && LibraryService.databaseService.isOpen()) {
-      if (LibraryService.cachedGames.has(nameLower)) {
-        return LibraryService.cachedGames.get(nameLower)!
-      }
-      const settings = new SettingsParser()
-      const showHidden = settings.getSetting('ShowHidden', 'bool') === true
-      const games = LibraryService.databaseService.getGamesBySystem(systemName, showHidden)
-      LibraryService.cachedGames.set(nameLower, games)
-      LibraryService.fullyLoadedSystems.add(nameLower)
-      return games
-    }
-
-    // ─── Gamelist.xml Mode: original behavior ───
-    // For physical systems, verify if we have completed a full load/scan
-    if (LibraryService.fullyLoadedSystems.has(nameLower)) {
+    // Load from SQLite for physical systems
+    if (LibraryService.cachedGames.has(nameLower)) {
       return LibraryService.cachedGames.get(nameLower)!
     }
-
-    const games = this.getGamesRaw(systemName, false, false) // full scan/load
+    const settings = new SettingsParser()
+    const showHidden = settings.getSetting('ShowHidden', 'bool') === true
+    const games = LibraryService.databaseService.isOpen()
+      ? LibraryService.databaseService.getGamesBySystem(systemName, showHidden)
+      : []
     LibraryService.cachedGames.set(nameLower, games)
     LibraryService.fullyLoadedSystems.add(nameLower)
     return games
   }
 
-  public getGamesRaw(systemName: string, forcePhysicalScan = false, xmlOnly = false): Game[] {
+  public getGamesRaw(systemName: string, forcePhysicalScan = false): Game[] {
     const systems = this.systemsParser.parse()
     const system = systems.find(s => s.name.toLowerCase() === systemName.toLowerCase())
     const settings = new SettingsParser()
 
-    const configPath = getConfigPath()
-    let gamelistPath = join(configPath, 'gamelists', systemName, 'gamelist.xml')
-    let romsGamelistPath = join(getRomsPath(), systemName, 'gamelist.xml')
-    let systemGamelistPath = system ? join(system.path, 'gamelist.xml') : ''
-
-    // Fix collision between physical arcade system and virtual auto-arcade collection
-    if (systemName === 'auto-arcade') {
-      gamelistPath = join(configPath, 'gamelists', 'arcade', 'gamelist.xml')
-      romsGamelistPath = ''
-      systemGamelistPath = ''
-    } else if (systemName === 'arcade') {
-      gamelistPath = '' // Physical arcade should only load roms/arcade/gamelist.xml
-    }
-    
-    let xmlGames: Game[] = []
-    let source = 'none'
-
-    // XML Gamelists are no longer supported/used. All metadata is managed in DB.
-    xmlGames = []
-
     let games: Game[] = []
 
-    if (xmlOnly) {
-      games = xmlGames
-      source = `${source}+xmlOnly`
-    } else if (system && existsSync(system.path)) {
-      const settings = new SettingsParser()
-      const parseGamelistOnly = settings.getSetting('ParseGamelistOnly', 'bool') === true
-
-      if (parseGamelistOnly && xmlGames.length > 0 && !forcePhysicalScan) {
-        games = xmlGames
-        source = `${source}+trustXml`
-      } else {
-        const extensions = (system.extension || '').split(/\s+/).filter(e => e.trim().length > 0)
-        const physicalGames = this.scanPhysicalGames(system.path, extensions, systemName)
-        
-        const xmlGamesMap = new Map<string, Game>()
-        xmlGames.forEach(g => {
-          xmlGamesMap.set(normalizePathForComparison(g.path), g)
-        })
-
-        let hasNewGames = false
-        physicalGames.forEach(pg => {
-          const normPath = normalizePathForComparison(pg.path)
-          const xmlGame = xmlGamesMap.get(normPath)
-          if (xmlGame) {
-            games.push({
-              ...pg,
-              ...xmlGame,
-              system: systemName,
-              path: pg.path,
-              id: xmlGame.id && !xmlGame.id.includes('/') && !xmlGame.id.includes('\\') ? xmlGame.id : pg.id
-            })
-          } else {
-            games.push(pg)
-            hasNewGames = true
-          }
-        })
-
-        if ((hasNewGames || xmlGames.length === 0) && games.length > 0 && romsGamelistPath) {
-          try {
-            const fs = require('fs')
-            const dir = dirname(romsGamelistPath)
-            if (!fs.existsSync(dir)) {
-              fs.mkdirSync(dir, { recursive: true })
-            }
-            this.gamelistParser.save(romsGamelistPath, games)
-          } catch (e) {
-            console.error(`Failed to save complete gamelist to ${romsGamelistPath}:`, e)
-          }
-        }
-
-        source = `${source}+physicalScan`
-      }
-    } else {
-      games = xmlGames
+    if (system && existsSync(system.path)) {
+      const extensions = (system.extension || '').split(/\s+/).filter(e => e.trim().length > 0)
+      games = this.scanPhysicalGames(system.path, extensions, systemName)
     }
-
-    try {
-      const logsDir = join(getRiescadePath(), 'logs')
-      const fs = require('fs')
-      if (!fs.existsSync(logsDir)) {
-        fs.mkdirSync(logsDir, { recursive: true })
-      }
-      const logStr = `getGames systemName: ${systemName}\n  systemFound: ${!!system}\n  systemPath: ${system ? system.path : 'N/A'}\n  gamelistPath: ${gamelistPath} (exists: ${existsSync(gamelistPath)})\n  romsGamelistPath: ${romsGamelistPath} (exists: ${romsGamelistPath ? existsSync(romsGamelistPath) : false})\n  systemGamelistPath: ${systemGamelistPath} (exists: ${systemGamelistPath ? existsSync(systemGamelistPath) : false})\n  finalSource: ${source}\n  gamesCount: ${games.length}\n\n`
-      fs.appendFileSync(join(logsDir, 'debug_games.log'), logStr, 'utf-8')
-    } catch(e) {
-      console.error('Failed to write debug_games.log:', e)
-    }
-
-    const systemPath = system && system.path ? system.path : null
-
-    const processedGames = games
 
     const showHidden = settings.getSetting('ShowHidden', 'bool') === true
-    const visibleGames = showHidden ? processedGames : processedGames.filter(g => g.hidden !== true && String(g.hidden) !== 'true')
+    const visibleGames = showHidden ? games : games.filter(g => g.hidden !== true && String(g.hidden) !== 'true')
 
     return visibleGames.sort((a, b) => String(a.name || '').localeCompare(String(b.name || '')))
   }
@@ -1559,81 +1428,13 @@ export class LibraryService {
   }
 
   public cleanGamelists(): void {
-    const fs = require('fs')
-    const resolve = require('path').resolve
-    const systems = this.getSystems()
-    const configPath = getConfigPath()
-
-    for (const sys of systems) {
-      if (sys.name === 'collections' || sys.path.startsWith('virtual://')) continue
-
-      const gamelistPaths = [
-        join(configPath, 'gamelists', sys.name, 'gamelist.xml'),
-        join(getRomsPath(), sys.name, 'gamelist.xml'),
-        join(sys.path, 'gamelist.xml')
-      ]
-
-      for (const gp of gamelistPaths) {
-        if (fs.existsSync(gp)) {
-          try {
-            const games = this.gamelistParser.parse(gp, sys.name)
-            const cleanedGames: Game[] = []
-
-            for (const game of games) {
-              const absRomPath = resolve(sys.path, game.path)
-              if (fs.existsSync(absRomPath)) {
-                const mediaFields = ['image', 'video', 'marquee', 'thumbnail', 'fanart', 'mix', 'wheel', 'cover2d', 'screenshot', 'cover', 'cover3d', 'logo', 'title']
-                mediaFields.forEach(field => {
-                  const mediaPath = (game as any)[field]
-                  if (mediaPath && typeof mediaPath === 'string' && !mediaPath.startsWith('http')) {
-                    if (!fs.existsSync(mediaPath)) {
-                      delete (game as any)[field]
-                    }
-                  }
-                })
-                cleanedGames.push(game)
-              }
-            }
-
-            this.gamelistParser.save(gp, cleanedGames)
-          } catch (e) {
-            console.error(`Failed to clean gamelist ${gp}:`, e)
-          }
-        }
-      }
-    }
+    // Legacy cleanup method - no longer used as metadata is managed in DB.
     LibraryService.clearCache()
   }
 
   public resetGamelistUsage(): void {
-    const fs = require('fs')
-    const systems = this.getSystems()
-    const configPath = getConfigPath()
-
-    for (const sys of systems) {
-      if (sys.name === 'collections' || sys.path.startsWith('virtual://')) continue
-
-      const gamelistPaths = [
-        join(configPath, 'gamelists', sys.name, 'gamelist.xml'),
-        join(getRomsPath(), sys.name, 'gamelist.xml'),
-        join(sys.path, 'gamelist.xml')
-      ]
-
-      for (const gp of gamelistPaths) {
-        if (fs.existsSync(gp)) {
-          try {
-            const games = this.gamelistParser.parse(gp, sys.name)
-            for (const game of games) {
-              game.playcount = 0
-              delete (game as any).lastplayed
-              delete (game as any).gametime
-            }
-            this.gamelistParser.save(gp, games)
-          } catch (e) {
-            console.error(`Failed to reset usage for ${gp}:`, e)
-          }
-        }
-      }
+    if (LibraryService.databaseService.isOpen()) {
+      LibraryService.databaseService.resetAllPlayHistory()
     }
     LibraryService.clearCache()
   }

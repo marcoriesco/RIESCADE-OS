@@ -432,27 +432,8 @@ export class DatabaseService {
       physicalGames = scanPhysicalGames(system.path, extensions, system.name)
     }
 
-    // 5. Parse gamelist.xml ONLY if not indexed yet (first run)
+    // XML Gamelists are no longer supported/used.
     let xmlGamesMap = new Map<string, Game>()
-    if (!isIndexed) {
-      const gamelistPaths = [
-        join(romsPath, system.name, 'gamelist.xml'),
-        join(configPath, 'gamelists', system.name, 'gamelist.xml'),
-        join(system.path, 'gamelist.xml')
-      ]
-
-      let xmlGames: Game[] = []
-      for (const gp of gamelistPaths) {
-        if (gp && existsSync(gp)) {
-          xmlGames = this.gamelistParser.parse(gp, system.name)
-          if (xmlGames.length > 0) break
-        }
-      }
-
-      xmlGames.forEach(g => {
-        xmlGamesMap.set(normalizePathForComparison(g.path), g)
-      })
-    }
 
     // 6. Merge: physical scan + metadata (SQLite or XML) — no media scanning needed
     // Media paths are derived from game stem in rowToGame()
@@ -1385,6 +1366,15 @@ export class DatabaseService {
     } catch (e) {
       console.error('Failed to toggle game in collection:', e)
       return false
+    }
+  }
+
+  public resetAllPlayHistory(): void {
+    try {
+      const db = this.ensureOpen()
+      db.prepare('UPDATE games SET playcount = 0, lastplayed = NULL').run()
+    } catch (e) {
+      console.error('Failed to reset play history in database:', e)
     }
   }
 }
