@@ -41,6 +41,7 @@ declare global {
       getCollectionsForGame: (systemName: string, gamePath: string) => Promise<string[]>
       toggleGameInCollection: (collectionName: string, systemName: string, gamePath: string, action: 'add' | 'remove') => Promise<boolean>
       getFileContent: (path: string) => Promise<string | null>
+      checkFileExists: (path: string) => Promise<boolean>
       getHostname: () => Promise<string>
       getBiosInformation: () => Promise<any[]>
       cleanGamelists: () => Promise<any>
@@ -49,8 +50,10 @@ declare global {
       clearCaches: () => Promise<any>
       getMusicFiles: (subfolder?: string) => Promise<string[]>
       getMusicPath: () => Promise<string>
-      startScrape: () => Promise<boolean>
+      startScrape: (options?: { systemName?: string; gamePath?: string }) => Promise<boolean>
       cancelScrape: () => Promise<boolean>
+      submitManualScrapeQuery: (query: string) => Promise<boolean>
+      cancelManualScrape: () => Promise<boolean>
       searchGameMedia: (systemName: string, gameName: string, databases: string[], gamePath?: string) => Promise<any[]>
       downloadGameMedia: (systemName: string, gamePath: string, matchData: any) => Promise<any>
       downloadTempMedia: (url: string) => Promise<string>

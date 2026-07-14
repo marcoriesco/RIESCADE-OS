@@ -1120,7 +1120,7 @@
     "type": "int"
   },
   "Window.tool-settings.Maximized": {
-    "value": true,
+    "value": false,
     "type": "bool"
   },
   "Window.tool-settings.X": {
@@ -1424,7 +1424,7 @@
     "type": "bool"
   },
   "RIESCADE.PreferredMediaType.ps3": {
-    "value": "cover2d",
+    "value": "manual",
     "type": "string"
   },
   "Window.system-ps4.X": {
@@ -1472,7 +1472,7 @@
     "type": "bool"
   },
   "RIESCADE.PreferredMediaType.Windows": {
-    "value": "cover",
+    "value": "title",
     "type": "string"
   },
   "Window.system-hbmame.Maximized": {
@@ -1548,6 +1548,14 @@
     "type": "bool"
   },
   "ScrapperDownloadManual": {
+    "value": true,
+    "type": "bool"
+  },
+  "RIESCADE.PreferredMediaType.all": {
+    "value": "cover",
+    "type": "string"
+  },
+  "ScrapperDownloadMarquee": {
     "value": true,
     "type": "bool"
   }

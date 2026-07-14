@@ -1032,6 +1032,21 @@ export default function ToolAppContent({
                   </div>
 
                   <SettingGroup label="Configurações de Metadados" />
+                  <SettingSelect
+                    label="Região de Preferência"
+                    name="ScraperRegion"
+                    defaultValue="us"
+                    options={[
+                      { label: "Estados Unidos (USA)", value: "us" },
+                      { label: "Europa (EU)", value: "eu" },
+                      { label: "Japão (JP)", value: "jp" },
+                      { label: "Brasil (BR)", value: "br" },
+                      { label: "Mundo (WOR)", value: "wor" },
+                      { label: "ScreenScraper (SS)", value: "ss" }
+                    ]}
+                    desc="Define a região prioritária para o download de capas e logos."
+                    ctx={ctx}
+                  />
                   <SettingToggle label="Sobrescrever Título" name="ScrapeOverWriteNames" desc="Permite atualizar o título do jogo caso ele já exista." ctx={ctx} />
                   <SettingToggle label="Sobrescrever Descrição" name="ScrapeOverWriteDesc" desc="Permite atualizar a sinopse do jogo caso ela já exista." ctx={ctx} />
                   <SettingToggle label="Sobrescrever Metadados" name="ScrapeOverWriteMetadata" desc="Atualiza gênero, desenvolvedor, distribuidora, jogadores e nota." ctx={ctx} />
@@ -1042,7 +1057,8 @@ export default function ToolAppContent({
                   <SettingToggle label="Capa 2D" name="ScrapperDownloadCover2D" ctx={ctx} />
                   <SettingToggle label="Capa 3D" name="ScrapperDownloadCover3D" ctx={ctx} />
                   <SettingToggle label="Verso da Capa (Cover Back)" name="ScrapperDownloadCoverBack" ctx={ctx} />
-                  <SettingToggle label="Logo / Marquee" name="ScrapperDownloadLogo" ctx={ctx} />
+                  <SettingToggle label="Logo (Wheel)" name="ScrapperDownloadLogo" ctx={ctx} />
+                  <SettingToggle label="Marquee" name="ScrapperDownloadMarquee" ctx={ctx} />
                   <SettingToggle label="Captura de Tela (Screenshot)" name="ScrapperDownloadScreenshot" ctx={ctx} />
                   <SettingToggle label="Tela de Título (Title Screen)" name="ScrapperDownloadTitle" ctx={ctx} />
                   <SettingToggle label="Mix Image" name="ScrapperDownloadMix" ctx={ctx} />

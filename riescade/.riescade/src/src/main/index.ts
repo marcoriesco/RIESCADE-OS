@@ -753,6 +753,19 @@ app.whenReady().then(() => {
     }
   })
 
+  ipcMain.handle('check-file-exists', async (_, filePath: string) => {
+    try {
+      if (!filePath) return false
+      let cleanPath = filePath
+      if (cleanPath.startsWith('file:///')) {
+        cleanPath = cleanPath.substring(8)
+      }
+      return existsSync(cleanPath)
+    } catch (e) {
+      return false
+    }
+  })
+
   ipcMain.handle('get-overlay-path', async (_, name: string) => {
     const file = join(getResourcesPath(), 'overlay', name)
     return existsSync(file) ? `file:///${file.replace(/\\/g, '/')}` : ''
@@ -802,6 +815,16 @@ app.whenReady().then(() => {
 
   ipcMain.handle('cancel-scrape', async () => {
     scraperService.cancel()
+    return true
+  })
+
+  ipcMain.handle('submit-manual-scrape-query', async (event, query: string) => {
+    scraperService.resolveManualSearch(query)
+    return true
+  })
+
+  ipcMain.handle('cancel-manual-scrape', async () => {
+    scraperService.resolveManualSearch(null)
     return true
   })
 

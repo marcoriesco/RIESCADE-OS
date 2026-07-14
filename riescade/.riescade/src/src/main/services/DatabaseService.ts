@@ -2,7 +2,6 @@ import Database from 'better-sqlite3'
 import { existsSync, statSync, readdirSync, mkdirSync, readFileSync } from 'fs'
 import { join, dirname, relative, resolve, isAbsolute } from 'path'
 import { getDatabasePath, getRomsPath, getConfigPath, getCollectionsPath, getRiescadePath } from '../utils/paths'
-import { GamelistParser } from '../parsers/GamelistParser'
 import { Game, System } from '../../shared/types'
 
 function normalizePathForComparison(p: string): string {
@@ -24,11 +23,9 @@ function normalizePathForComparison(p: string): string {
  */
 export class DatabaseService {
   private db: Database.Database | null = null
-  private gamelistParser: GamelistParser
   public migrationOccurred = false
 
   constructor() {
-    this.gamelistParser = new GamelistParser()
   }
 
   // ─── Lifecycle ───────────────────────────────────────────────

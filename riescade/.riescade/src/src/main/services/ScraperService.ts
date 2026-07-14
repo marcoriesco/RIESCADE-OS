@@ -4,7 +4,7 @@ import { getRomsPath, getConfigPath } from '../utils/paths'
 import { LibraryService } from './LibraryService'
 import { SettingsParser } from '../parsers/SettingsParser'
 import { Game } from '../../shared/types'
-import { BrowserWindow } from 'electron'
+import { BrowserWindow, app } from 'electron'
 import sharp from 'sharp'
 
 export const SYSTEM_TO_SCREENSCRAPER_PLATFORM: Record<string, number> = {
@@ -52,7 +52,10 @@ export const SYSTEM_TO_SCREENSCRAPER_PLATFORM: Record<string, number> = {
   'wiiu': 18,
   'switch': 225,
   'virtualboy': 11,
-  'pc': 135,
+  'pc': 138,
+  'windows': 138,
+  'win': 138,
+  'windows9x': 137,
   'scummvm': 123,
   'sega32x': 19,
   'segacd': 20,
@@ -94,9 +97,9 @@ function getRipList(imageSource: string): string[] {
   if (imageSource === 'mixrbv2') return ['mixrbv2', 'mixrbv1']
   if (imageSource === 'box-2D') return ['box-2D', 'box-3D']
   if (imageSource === 'box-3D') return ['box-3D', 'box-2D']
-  if (imageSource === 'wheel') return ['wheel', 'wheel-hd', 'wheel-steel', 'wheel-carbon', 'screenmarqueesmall', 'screenmarquee']
-  if (imageSource === 'wheel-hd') return ['wheel-hd', 'wheel', 'wheel-steel', 'wheel-carbon', 'screenmarqueesmall', 'screenmarquee']
-  if (imageSource === 'marquee') return ['screenmarqueesmall', 'screenmarquee', 'wheel', 'wheel-hd', 'wheel-steel', 'wheel-carbon']
+  if (imageSource === 'wheel') return ['wheel', 'wheel-hd', 'wheel-steel', 'wheel-carbon']
+  if (imageSource === 'wheel-hd') return ['wheel-hd', 'wheel', 'wheel-steel', 'wheel-carbon']
+  if (imageSource === 'marquee') return ['screenmarqueesmall', 'screenmarquee']
   if (imageSource === 'video') return ['video-normalized', 'video']
   return [imageSource]
 }
@@ -156,6 +159,7 @@ export class ScraperService {
   private libraryService: LibraryService
   private settingsParser: SettingsParser
   private isCancelled = false
+  private manualSearchResolver: ((value: string | null) => void) | null = null
 
   constructor(libraryService: LibraryService) {
     this.libraryService = libraryService
@@ -164,6 +168,15 @@ export class ScraperService {
 
   public cancel(): void {
     this.isCancelled = true
+    if (this.manualSearchResolver) {
+      this.manualSearchResolver(null)
+    }
+  }
+
+  public resolveManualSearch(query: string | null): void {
+    if (this.manualSearchResolver) {
+      this.manualSearchResolver(query)
+    }
   }
 
   public async scrape(options?: { systemName?: string; gamePath?: string }): Promise<void> {
@@ -180,16 +193,9 @@ export class ScraperService {
 
     try {
       // 1. Load settings
-      const scraper = this.settingsParser.getSetting('Scraper', 'string') || 'ScreenScraper'
-      if (scraper !== 'ScreenScraper') {
-        // Currently we only support ScreenScraper as requested
-        sendUpdate('scrape-finished', { success: false, reason: 'Unsupported scraper source' })
-        return
-      }
-
-      const devid = 'retrobat'
-      const devpassword = 'JRLmOtnZXwo'
-      const softname = 'retrobat'
+      const devid = 'marcoriesco'
+      const devpassword = 'Knt6uNptQ3z'
+      const softname = 'marcoriesco'
 
       const customUser = this.settingsParser.getSetting('ScreenScraperUser', 'string') || ''
       const customPass = this.settingsParser.getSetting('ScreenScraperPass', 'string') || ''
@@ -198,7 +204,7 @@ export class ScraperService {
       const sspassword = customPass || ''
 
       const filter = this.settingsParser.getSetting('ScrapperFilter', 'string') || 'all'
-      const preferredRegion = this.settingsParser.getSetting('ScraperRegion', 'string') || 'eu'
+      const preferredRegion = this.settingsParser.getSetting('ScraperRegion', 'string') || 'us'
       
       const scrapeNames = this.settingsParser.getSetting('ScrapeNames', 'bool') ?? true
       const scrapeDesc = this.settingsParser.getSetting('ScrapeDescription', 'bool') ?? true
@@ -216,6 +222,7 @@ export class ScraperService {
       const downloadCover3D = this.settingsParser.getSetting('ScrapperDownloadCover3D', 'bool') ?? true
       const downloadCoverBack = this.settingsParser.getSetting('ScrapperDownloadCoverBack', 'bool') ?? true
       const downloadLogo = this.settingsParser.getSetting('ScrapperDownloadLogo', 'bool') ?? true
+      const downloadMarquee = this.settingsParser.getSetting('ScrapperDownloadMarquee', 'bool') ?? true
       const downloadScreenshot = this.settingsParser.getSetting('ScrapperDownloadScreenshot', 'bool') ?? true
       const downloadTitle = this.settingsParser.getSetting('ScrapperDownloadTitle', 'bool') ?? true
       const downloadMix = this.settingsParser.getSetting('ScrapperDownloadMix', 'bool') ?? true
@@ -340,6 +347,14 @@ export class ScraperService {
                          SYSTEM_TO_SCREENSCRAPER_PLATFORM[system.platform.toLowerCase()] || 
                          0
 
+        const manualQuery = (jobs[i] as any).manualQuery
+        const queryRomName = manualQuery || romName
+          .replace(/\.[^/.]+$/, '')
+          .replace(/\([^)]*\)/g, '')
+          .replace(/\[[^\]]*\]/g, '')
+          .replace(/\s+/g, ' ')
+          .trim()
+
         sendUpdate('scrape-progress', {
           systemName: system.fullname || system.name.toUpperCase(),
           systemCode: system.name,
@@ -351,7 +366,7 @@ export class ScraperService {
         })
 
         try {
-          let url = `https://api.screenscraper.fr/api2/jeuInfos.php?devid=${devid}&devpassword=${devpassword}&softname=${softname}&output=json&romnom=${encodeURIComponent(romName)}`
+          let url = `https://api.screenscraper.fr/api2/jeuInfos.php?devid=${devid}&devpassword=${devpassword}&softname=${softname}&output=json&romnom=${encodeURIComponent(queryRomName)}`
           if (systemId > 0) {
             url += `&systemeid=${systemId}`
           }
@@ -364,7 +379,23 @@ export class ScraperService {
 
           const response = await fetch(url)
           if (!response.ok) {
-            throw new Error(`ScreenScraper returned status ${response.status}`)
+            let bodyText = ''
+            try {
+              bodyText = (await response.text()).trim()
+            } catch (e) {}
+
+            const maskUrl = (rawUrl: string) => {
+              return rawUrl
+                .replace(/devid=[^&]*/gi, 'devid=***')
+                .replace(/devpassword=[^&]*/gi, 'devpassword=***')
+                .replace(/ssid=[^&]*/gi, 'ssid=***')
+                .replace(/sspassword=[^&]*/gi, 'sspassword=***')
+            }
+            const maskedUrl = maskUrl(url)
+
+            throw new Error(
+              `ScreenScraper returned status ${response.status} (${response.statusText}).\n  URL: ${maskedUrl}\n  ResponseBody: ${bodyText}`
+            )
           }
 
           const json = await response.json()
@@ -515,8 +546,11 @@ export class ScraperService {
           // 5. Cover Back
           await handleMediaDownload(downloadCoverBack, ['box-2D-back', 'box-back', 'box-3D-back'], 'coverback', ['coverback'])
 
-          // 6. Logo / Marquee
-          await handleMediaDownload(downloadLogo, ['wheel', 'wheel-hd', 'wheel-steel'], 'logo', ['logo', 'marquee'])
+          // 6. Logo (Wheel)
+          await handleMediaDownload(downloadLogo, ['wheel', 'wheel-hd', 'wheel-steel'], 'logo', ['logo'])
+
+          // 6.1 Marquee
+          await handleMediaDownload(downloadMarquee, ['screenmarqueesmall', 'screenmarquee'], 'marquee', ['marquee'])
 
           // 7. Screenshot
           await handleMediaDownload(downloadScreenshot, ['ss', 'sstitle'], 'screenshot', ['screenshot'])
@@ -528,7 +562,7 @@ export class ScraperService {
           await handleMediaDownload(downloadMix, ['mixrbv2', 'mixrbv1'], 'mix', ['mix'])
 
           // 10. Manual (skip WebP conversion)
-          await handleMediaDownload(downloadManual, ['manual'], 'manual', ['manual'], true)
+          await handleMediaDownload(downloadManual, ['manuel'], 'manual', ['manual'], true)
 
           // 11. Video (skip WebP conversion)
           await handleMediaDownload(scrapeVideos, ['video-normalized', 'video'], 'video', ['video'], true)
@@ -540,6 +574,31 @@ export class ScraperService {
 
         } catch (e: any) {
           console.error(`Scraper error for ${game.name} (${system.name}):`, e.message)
+
+          const isNotFound = e.message.includes('404') || 
+                             e.message.includes('not found') || 
+                             e.message.includes('non trouvée') || 
+                             e.message.includes('Game not found')
+
+          if (jobs.length === 1 && isNotFound && !this.isCancelled) {
+            sendUpdate('scrape-manual-search-required', {
+              systemName: system.name,
+              gamePath: game.path,
+              failedQuery: queryRomName
+            })
+
+            const newQuery = await new Promise<string | null>((resolve) => {
+              this.manualSearchResolver = resolve
+            })
+            this.manualSearchResolver = null
+
+            if (newQuery && newQuery.trim().length > 0) {
+              (jobs[i] as any).manualQuery = newQuery.trim()
+              i--
+              continue
+            }
+          }
+
           failCount++
         }
 

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState, useMemo, useCallback } from "react";
-import { Gamepad2, Heart, Loader2, Star, Play, ChevronRight, Maximize2, X, Search, Folder, ChevronLeft, HardDrive, ChevronDown, Check, MoreHorizontal, RefreshCw } from "lucide-react";
+import { Gamepad2, Heart, Loader2, Star, Play, ChevronRight, Maximize2, X, Search, Folder, ChevronLeft, HardDrive, ChevronDown, Check, MoreHorizontal, RefreshCw, BookOpen } from "lucide-react";
 import { System, Game } from "../types";
 import { ScrollArea } from "./ScrollArea";
 import { OverlayScrollbarsComponentRef } from "overlayscrollbars-react";
@@ -104,6 +104,16 @@ export default function SystemAppContent({
   const [sidebarTab, setSidebarTab] = useState<"collections" | "saves">("collections");
 
   const [isScraping, setIsScraping] = useState(false);
+  const [showManualSearchModal, setShowManualSearchModal] = useState(false);
+  const [manualSearchQuery, setManualSearchQuery] = useState("");
+  const [manualSearchData, setManualSearchData] = useState<{
+    systemName: string;
+    gamePath: string;
+    failedQuery: string;
+  } | null>(null);
+  const [showPdfViewer, setShowPdfViewer] = useState(false);
+  const [pdfUrl, setPdfUrl] = useState("");
+  const [hasManual, setHasManual] = useState(false);
   const [isCancellingScrape, setIsCancellingScrape] = useState(false);
   const [scrapeProgress, setScrapeProgress] = useState<{
     systemName: string;
@@ -133,7 +143,8 @@ export default function SystemAppContent({
     marquee: false,
     screenshot: false,
     title: false,
-    mix: false
+    mix: false,
+    manual: false
   });
 
   const [mediaLoading, setMediaLoading] = useState(false);
@@ -173,7 +184,8 @@ export default function SystemAppContent({
           marquee: false,
           screenshot: false,
           title: false,
-          mix: false
+          mix: false,
+          manual: false
         });
       }).catch((err: any) => {
         console.log("Failed to check media folders:", err);
@@ -190,10 +202,29 @@ export default function SystemAppContent({
         marquee: true,
         screenshot: true,
         title: true,
-        mix: true
+        mix: true,
+        manual: true
       });
     }
   }, [system.name, system.path]);
+
+  const handleManualSearchSubmit = async () => {
+    setShowManualSearchModal(false);
+    await window.api.submitManualScrapeQuery(manualSearchQuery);
+  };
+
+  const handleManualSearchCancel = async () => {
+    setShowManualSearchModal(false);
+    await window.api.cancelManualScrape();
+  };
+
+  const handleOpenManual = (manualPath: string) => {
+    const url = manualPath.startsWith("http") || manualPath.startsWith("file://")
+      ? manualPath
+      : `file:///${manualPath}`;
+    setPdfUrl(url);
+    setShowPdfViewer(true);
+  };
 
   // Listen to scraper events
   useEffect(() => {
@@ -201,7 +232,7 @@ export default function SystemAppContent({
       setIsScraping(true);
       setIsCancellingScrape(false);
       setScrapeProgress(progress);
-    });
+    })
 
     const unsubFinished = window.api.on('scrape-finished', (_, result) => {
       setIsScraping(false);
@@ -221,9 +252,16 @@ export default function SystemAppContent({
       });
     });
 
+    const unsubManualSearch = window.api.on('scrape-manual-search-required', (_, data) => {
+      setManualSearchData(data);
+      setManualSearchQuery(data.failedQuery);
+      setShowManualSearchModal(true);
+    });
+
     return () => {
       unsubProgress();
       unsubFinished();
+      unsubManualSearch();
     };
   }, [reloadLibrary, checkMediaAvailability]);
 
@@ -243,6 +281,7 @@ export default function SystemAppContent({
   useEffect(() => {
     checkMediaAvailability();
   }, [system.name, system.path, checkMediaAvailability]);
+
 
   const handleMediaTypeChange = (type: string) => {
     setGridMediaLoading(true);
@@ -288,6 +327,9 @@ export default function SystemAppContent({
         break;
       case 'mix':
         mediaPath = g.mix;
+        break;
+      case 'manual':
+        mediaPath = g.manual;
         break;
       default:
         mediaPath = g.cover;
@@ -528,6 +570,19 @@ export default function SystemAppContent({
     setFullVideo(false);
     setShowContextMenu(false);
     setShowSavesSidebar(false);
+  }, [selectedGame]);
+
+  // Check if selected game has a physical manual file
+  useEffect(() => {
+    if (selectedGame && selectedGame.manual) {
+      window.api.checkFileExists(selectedGame.manual).then(exists => {
+        setHasManual(exists);
+      }).catch(() => {
+        setHasManual(false);
+      });
+    } else {
+      setHasManual(false);
+    }
   }, [selectedGame]);
 
   // Set mediaLoading to true when selected game or preferred media type changes (if a media URL exists)
@@ -911,22 +966,20 @@ export default function SystemAppContent({
               <div className="flex items-center gap-2 max-w-full">
                 {/* Media Switcher Buttons */}
                 <div className="flex flex-wrap items-center bg-white/5 border border-white/5 p-1 rounded-lg gap-0.5 shadow-inner backdrop-blur-md max-w-full">
-                  {['cover', 'cover2d', 'cover3d', 'fanart', 'logo', 'screenshot', 'title', 'mix'].map((type) => {
+                  {['cover', 'cover2d', 'cover3d', 'coverback', 'fanart', 'logo', 'marquee', 'screenshot', 'title', 'mix'].map((type) => {
                     const isAvailable = availableMediaTypes[type];
+                    if (!isAvailable) return null;
                     const isActive = preferredMediaType === type;
                     return (
                       <button
                         key={type}
-                        disabled={!isAvailable}
                         onClick={() => handleMediaTypeChange(type)}
                         className={`px-1.5 py-0.5 text-[9px] @xs:px-2.5 @xs:py-1 @xs:text-[10px] uppercase font-bold tracking-wider rounded-md transition-all cursor-pointer ${
                           isActive
                             ? "bg-accent text-white shadow-md font-extrabold"
-                            : isAvailable
-                            ? "text-white/60 hover:text-white hover:bg-white/5"
-                            : "text-white/20 cursor-not-allowed opacity-30"
+                            : "text-white/60 hover:text-white hover:bg-white/5"
                         }`}
-                        title={!isAvailable ? `Sem mídia '${type}' disponível` : `Exibir mídia '${type}'`}
+                        title={`Exibir mídia '${type}'`}
                       >
                         {type}
                       </button>
@@ -1496,10 +1549,14 @@ export default function SystemAppContent({
                 <div className="flex items-center gap-2">
                   <button
                     onClick={handleToggleFavorite}
-                    className="flex items-center gap-2 px-3 py-1.5 bg-[#1a1a1a] hover:bg-white/5 border border-white/5 rounded-md text-xs font-semibold text-white/80 transition cursor-pointer"
+                    className="flex items-center justify-center p-2 bg-[#1a1a1a] hover:bg-white/5 border border-white/5 rounded-md transition cursor-pointer relative group text-white/80"
                   >
-                    <Heart className={`w-3.5 h-3.5 ${selectedGame.favorite ? "fill-red-500 text-red-500" : "text-white/60"}`} />
-                    <span>{selectedGame.favorite ? "Favorito" : "Favoritar"}</span>
+                    <Heart className={`w-4 h-4 ${selectedGame.favorite ? "fill-red-500 text-red-500" : "text-white/60"}`} />
+                    
+                    {/* Popper/Tooltip */}
+                    <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-black text-[10px] text-white rounded opacity-0 group-hover:opacity-100 transition duration-150 pointer-events-none whitespace-nowrap z-50 shadow-xl border border-white/10">
+                      {selectedGame.favorite ? "Remover dos Favoritos" : "Adicionar aos Favoritos"}
+                    </span>
                   </button>
 
                   <div className="flex items-center gap-1.5 px-3 py-1.5 bg-[#1a1a1a] border border-white/5 rounded-md text-xs font-semibold text-white/80">
@@ -1516,6 +1573,20 @@ export default function SystemAppContent({
                       })()}
                     </span>
                   </div>
+
+                  {hasManual && (
+                    <button
+                      onClick={() => handleOpenManual(selectedGame.manual!)}
+                      className="flex items-center justify-center p-2 bg-[#1a1a1a] hover:bg-accent/20 hover:text-accent border border-white/5 hover:border-accent/30 rounded-md text-white/85 transition cursor-pointer relative group"
+                    >
+                      <BookOpen className="w-4 h-4" />
+                      
+                      {/* Popper/Tooltip */}
+                      <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-black text-[10px] text-white rounded opacity-0 group-hover:opacity-100 transition duration-150 pointer-events-none whitespace-nowrap z-50 shadow-xl border border-white/10">
+                        Visualizar Manual
+                      </span>
+                    </button>
+                  )}
                   
                   {selectedGame.playcount ? (
                     <div className="text-white/40 text-[10px] ml-auto">
@@ -1584,7 +1655,22 @@ export default function SystemAppContent({
         )}
       </div>
 
-      {/* Full Window Video Overlay */}
+      {/* Full Window PDF Manual Overlay */}
+      {showPdfViewer && pdfUrl && (
+        <div className="absolute inset-0 bg-black/95 z-[999] flex flex-col items-center justify-center animate-in fade-in duration-300">
+          <button 
+            onClick={() => setShowPdfViewer(false)}
+            className="absolute top-4 right-4 bg-white/10 hover:bg-white/20 text-white rounded-full p-2.5 transition cursor-pointer z-[1000]"
+            title="Fechar Manual"
+          >
+            <X className="w-5 h-5" />
+          </button>
+          <iframe 
+            src={pdfUrl} 
+            className="w-[95%] h-[90%] rounded-md border border-white/10 shadow-2xl bg-black" 
+          />
+        </div>
+      )}
       {fullVideo && videoUrl && (
         <div className="absolute inset-0 bg-black/95 z-[999] flex flex-col items-center justify-center animate-in fade-in duration-300">
           <button 
@@ -1673,6 +1759,60 @@ export default function SystemAppContent({
                 <span>Cancelar Operação</span>
               )}
             </button>
+          </div>
+        </div>
+      )}
+
+      {/* Scraper Manual Search Input Modal */}
+      {showManualSearchModal && manualSearchData && (
+        <div className="fixed inset-0 bg-black/75 backdrop-blur-md flex items-center justify-center z-[1000] select-none text-white transition-opacity duration-300">
+          <div className="bg-[#0f0f12] border border-white/10 p-6 rounded-2xl w-[420px] flex flex-col gap-4 shadow-2xl relative animate-in fade-in zoom-in duration-200">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-lg bg-accent/15 flex items-center justify-center">
+                <Search className="w-4 h-4 text-accent" />
+              </div>
+              <div>
+                <h3 className="text-sm font-bold text-white tracking-wide">Jogo não encontrado</h3>
+                <p className="text-[10px] text-white/40 uppercase tracking-widest font-semibold mt-0.5">Scraper Manual</p>
+              </div>
+            </div>
+
+            <p className="text-xs text-white/70 leading-relaxed">
+              O ScreenScraper não encontrou correspondência para a busca automática. Digite abaixo o nome do jogo para tentar novamente:
+            </p>
+
+            <div className="flex flex-col gap-1.5 mt-1">
+              <label className="text-[10px] text-white/40 font-bold uppercase tracking-wider">Termo de Busca</label>
+              <input
+                type="text"
+                value={manualSearchQuery}
+                onChange={(e) => setManualSearchQuery(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    handleManualSearchSubmit();
+                  }
+                }}
+                autoFocus
+                placeholder="Ex: Need for Speed Underground 2"
+                className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder-white/20 focus:outline-none focus:border-accent focus:bg-white/10 transition-all"
+              />
+            </div>
+
+            <div className="flex gap-2 mt-2">
+              <button
+                onClick={handleManualSearchCancel}
+                className="flex-1 py-2.5 px-4 bg-white/5 hover:bg-white/10 text-white/70 border border-white/10 rounded-xl text-xs font-semibold tracking-wide transition-all cursor-pointer text-center"
+              >
+                Cancelar
+              </button>
+              <button
+                onClick={handleManualSearchSubmit}
+                disabled={!manualSearchQuery.trim()}
+                className="flex-1 py-2.5 px-4 bg-accent hover:bg-[var(--accent-color-hover)] text-white rounded-xl text-xs font-bold tracking-wide transition-all cursor-pointer text-center disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Buscar
+              </button>
+            </div>
           </div>
         </div>
       )}

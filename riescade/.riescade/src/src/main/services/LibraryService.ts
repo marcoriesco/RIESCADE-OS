@@ -1,9 +1,8 @@
 import { join, resolve, relative, dirname } from 'path'
 import { existsSync, readdirSync, readFileSync, statSync } from 'fs'
 import { SystemsParser } from '../parsers/SystemsParser'
-import { GamelistParser } from '../parsers/GamelistParser'
 import { SettingsParser } from '../parsers/SettingsParser'
-import { getConfigPath, getRomsPath, getRetroBatPath, getCollectionsPath, getDatabasePath, getRiescadePath, getLogosPath, getArtsPath } from '../utils/paths'
+import { getConfigPath, getRomsPath, getRetroBatPath, getDatabasePath, getRiescadePath, getLogosPath, getArtsPath } from '../utils/paths'
 import { System, Game } from '../../shared/types'
 import { DatabaseService } from './DatabaseService'
 
@@ -21,12 +20,10 @@ function normalizePathForComparison(p: string): string {
 
 export class LibraryService {
   private systemsParser: SystemsParser
-  private gamelistParser: GamelistParser
   private static databaseService: DatabaseService = new DatabaseService()
 
   constructor() {
     this.systemsParser = new SystemsParser()
-    this.gamelistParser = new GamelistParser()
   }
 
   public static isDbMode(): boolean {
@@ -1083,20 +1080,8 @@ export class LibraryService {
     let xmlGames: Game[] = []
     let source = 'none'
 
-    if (romsGamelistPath && existsSync(romsGamelistPath)) {
-      xmlGames = this.gamelistParser.parse(romsGamelistPath, systemName)
-      if (xmlGames.length > 0) source = 'romsGamelistPath'
-    }
-    
-    if (xmlGames.length === 0 && gamelistPath && existsSync(gamelistPath)) {
-      xmlGames = this.gamelistParser.parse(gamelistPath, systemName)
-      if (xmlGames.length > 0) source = 'gamelistPath'
-    }
-    
-    if (xmlGames.length === 0 && systemGamelistPath && existsSync(systemGamelistPath)) {
-      xmlGames = this.gamelistParser.parse(systemGamelistPath, systemName)
-      if (xmlGames.length > 0) source = 'systemGamelistPath'
-    }
+    // XML Gamelists are no longer supported/used. All metadata is managed in DB.
+    xmlGames = []
 
     let games: Game[] = []
 

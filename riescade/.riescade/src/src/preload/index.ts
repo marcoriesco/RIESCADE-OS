@@ -42,6 +42,7 @@ const api = {
   saveThemeSetting: (themeName: string, key: string, value: string) => 
     ipcRenderer.invoke('save-theme-setting', themeName, key, value),
   getFileContent: (path: string) => ipcRenderer.invoke('get-file-content', path),
+  checkFileExists: (path: string) => ipcRenderer.invoke('check-file-exists', path),
 
   // Controllers
   getConfiguredControllers: () => ipcRenderer.invoke('get-configured-controllers'),
@@ -62,6 +63,8 @@ const api = {
   getMusicPath: () => ipcRenderer.invoke('get-music-path'),
   startScrape: (options?: { systemName?: string; gamePath?: string }) => ipcRenderer.invoke('start-scrape', options),
   cancelScrape: () => ipcRenderer.invoke('cancel-scrape'),
+  submitManualScrapeQuery: (query: string) => ipcRenderer.invoke('submit-manual-scrape-query', query),
+  cancelManualScrape: () => ipcRenderer.invoke('cancel-manual-scrape'),
   testScreenScraper: (ssid: string, sspassword: string) => ipcRenderer.invoke('test-screenscraper', ssid, sspassword),
   searchGameMedia: (systemName: string, gameName: string, databases: string[], gamePath?: string) => ipcRenderer.invoke('search-game-media', systemName, gameName, databases, gamePath),
   downloadGameMedia: (systemName: string, gamePath: string, matchData: any) => ipcRenderer.invoke('download-game-media', systemName, gamePath, matchData),

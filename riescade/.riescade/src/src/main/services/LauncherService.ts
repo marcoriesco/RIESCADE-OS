@@ -18,7 +18,7 @@ interface ControllerInfo {
 export class LauncherService {
   public launch(game: Game, system: System, activeControllers: ControllerInfo[] = [], saveStateSlot?: number, netplayOptions?: any): Promise<void> {
     return new Promise((resolvePromise, reject) => {
-      const { BrowserWindow } = require('electron')
+      const { BrowserWindow, app } = require('electron')
       const sendLauncherStatus = (status: 'loading' | 'running' | 'closed') => {
         BrowserWindow.getAllWindows().forEach((win: any) => {
           if (!win.isDestroyed()) {
@@ -396,7 +396,18 @@ export class LauncherService {
       const command = `"${launcherPath}" ${args.join(' ')}`
       console.log(`Launching: ${command}`)
 
-      exec(command, { cwd: retroBatPath }, (error) => {
+      if (!app.isPackaged) {
+        console.log('[Dev] Startup Environment info:', {
+          system: system.name,
+          emulator,
+          core,
+          romPath,
+          saveStateSlot
+        })
+        console.log('[Dev] Natively detected / renderer controllers:', finalControllers)
+      }
+
+      const child = exec(command, { cwd: retroBatPath }, (error) => {
         clearInterval(logInterval)
         sendLauncherStatus('closed')
 
@@ -434,6 +445,19 @@ export class LauncherService {
           resolvePromise()
         }
       })
+
+      if (!app.isPackaged) {
+        if (child.stdout) {
+          child.stdout.on('data', (data) => {
+            console.log(`[Launcher:stdout] ${data.trim()}`)
+          })
+        }
+        if (child.stderr) {
+          child.stderr.on('data', (data) => {
+            console.error(`[Launcher:stderr] ${data.trim()}`)
+          })
+        }
+      }
     })
   }
 
