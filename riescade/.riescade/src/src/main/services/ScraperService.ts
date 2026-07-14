@@ -1,10 +1,11 @@
 import { join, dirname, extname, basename } from 'path'
-import { existsSync, mkdirSync, writeFileSync } from 'fs'
+import { existsSync, mkdirSync, writeFileSync, unlinkSync } from 'fs'
 import { getRomsPath, getConfigPath } from '../utils/paths'
 import { LibraryService } from './LibraryService'
 import { SettingsParser } from '../parsers/SettingsParser'
 import { Game } from '../../shared/types'
 import { BrowserWindow } from 'electron'
+import sharp from 'sharp'
 
 export const SYSTEM_TO_SCREENSCRAPER_PLATFORM: Record<string, number> = {
   '3do': 29,
@@ -131,6 +132,26 @@ async function downloadFile(url: string, destPath: string): Promise<void> {
   writeFileSync(destPath, buffer)
 }
 
+async function convertToWebp(srcPath: string): Promise<string> {
+  try {
+    const ext = extname(srcPath).toLowerCase()
+    if (ext === '.webp') return srcPath  // already webp
+    
+    const webpPath = srcPath.replace(/\.[^/.]+$/, '.webp')
+    await sharp(srcPath)
+      .webp({ quality: 90 })
+      .toFile(webpPath)
+    
+    // Remove original file
+    try { unlinkSync(srcPath) } catch (_) {}
+    
+    return webpPath
+  } catch (e) {
+    // If conversion fails, keep original
+    return srcPath
+  }
+}
+
 export class ScraperService {
   private libraryService: LibraryService
   private settingsParser: SettingsParser
@@ -145,7 +166,7 @@ export class ScraperService {
     this.isCancelled = true
   }
 
-  public async scrape(): Promise<void> {
+  public async scrape(options?: { systemName?: string; gamePath?: string }): Promise<void> {
     this.isCancelled = false
     LibraryService.clearCache()
     const win = BrowserWindow.getAllWindows()[0]
@@ -182,13 +203,25 @@ export class ScraperService {
       const scrapeNames = this.settingsParser.getSetting('ScrapeNames', 'bool') ?? true
       const scrapeDesc = this.settingsParser.getSetting('ScrapeDescription', 'bool') ?? true
       const scrapeRatings = this.settingsParser.getSetting('ScrapeRatings', 'bool') ?? true
-      const scrapeVideos = this.settingsParser.getSetting('ScrapeVideos', 'bool') ?? false
-      const scrapeFanart = this.settingsParser.getSetting('ScrapeFanart', 'bool') ?? false
-      const scrapeOverWrite = this.settingsParser.getSetting('ScrapeOverWrite', 'bool') ?? false
 
-      const imageSrc = this.settingsParser.getSetting('ScrapperImageSrc', 'string') || 'mixrbv2'
-      const thumbSrc = this.settingsParser.getSetting('ScrapperThumbSrc', 'string') || ''
-      const logoSrc = this.settingsParser.getSetting('ScrapperLogoSrc', 'string') || ''
+      // Overwrite settings from settings.json
+      const overwriteNames = this.settingsParser.getSetting('ScrapeOverWriteNames', 'bool') ?? false
+      const overwriteDesc = this.settingsParser.getSetting('ScrapeOverWriteDesc', 'bool') ?? false
+      const overwriteMetadata = this.settingsParser.getSetting('ScrapeOverWriteMetadata', 'bool') ?? false
+
+      // Media download toggles
+      const downloadFanart = this.settingsParser.getSetting('ScrapperDownloadFanart', 'bool') ?? true
+      const downloadCover = this.settingsParser.getSetting('ScrapperDownloadCover', 'bool') ?? true
+      const downloadCover2D = this.settingsParser.getSetting('ScrapperDownloadCover2D', 'bool') ?? true
+      const downloadCover3D = this.settingsParser.getSetting('ScrapperDownloadCover3D', 'bool') ?? true
+      const downloadCoverBack = this.settingsParser.getSetting('ScrapperDownloadCoverBack', 'bool') ?? true
+      const downloadLogo = this.settingsParser.getSetting('ScrapperDownloadLogo', 'bool') ?? true
+      const downloadScreenshot = this.settingsParser.getSetting('ScrapperDownloadScreenshot', 'bool') ?? true
+      const downloadTitle = this.settingsParser.getSetting('ScrapperDownloadTitle', 'bool') ?? true
+      const downloadMix = this.settingsParser.getSetting('ScrapperDownloadMix', 'bool') ?? true
+      const downloadManual = this.settingsParser.getSetting('ScrapperDownloadManual', 'bool') ?? true
+      const scrapeVideos = this.settingsParser.getSetting('ScrapeVideos', 'bool') ?? false
+      const scrapeOverWriteMedias = this.settingsParser.getSetting('ScrapeOverWriteMedias', 'bool') ?? false
 
       // Fetch system settings
       const systemLanguage = (this.settingsParser.getSetting('Language', 'string') || 'pt').substring(0, 2).toLowerCase()
@@ -206,7 +239,9 @@ export class ScraperService {
         const isGenre = sys.name.startsWith('_')
         const isCustom = sys.name.startsWith('auto-') || sys.name.startsWith('custom-')
         const hasExtension = sys.extension && sys.extension.length > 0
-        const isIncluded = selectedSystems.length === 0 || selectedSystems.includes(sys.name)
+        const isIncluded = options?.systemName
+          ? sys.name === options.systemName
+          : (selectedSystems.length === 0 || selectedSystems.includes(sys.name))
         return !isAuto && !isGenre && !isCustom && hasExtension && isIncluded
       })
 
@@ -227,11 +262,24 @@ export class ScraperService {
         for (const game of games) {
           if (game.isCollectionFolder) continue
 
+          // Target a single game path if specified
+          if (options?.gamePath && game.path !== options.gamePath) {
+            continue
+          }
+
           // Evaluate filters
           let shouldScrape = false
-          if (filter === 'all') {
+          if (options?.gamePath) {
+            // Always scrape if targeted
+            shouldScrape = true
+          } else if (filter === 'all') {
             shouldScrape = true
           } else {
+            // Default filter fallback if no specific targets
+            const imageSrc = this.settingsParser.getSetting('ScrapperImageSrc', 'string') || 'mixrbv2'
+            const thumbSrc = this.settingsParser.getSetting('ScrapperThumbSrc', 'string') || ''
+            const logoSrc = this.settingsParser.getSetting('ScrapperLogoSrc', 'string') || ''
+
             const hasImage = game.fanart && existsSync(resolvePath(sys.path, game.fanart))
             const hasThumb = game.cover && existsSync(resolvePath(sys.path, game.cover))
             const hasLogo = game.marquee && existsSync(resolvePath(sys.path, game.marquee))
@@ -380,65 +428,110 @@ export class ScraperService {
 
           // Build game updates
           const updatedFields: Partial<Game> = {}
-          if (scrapeNames && gameName) updatedFields.name = gameName
-          if (scrapeDesc && gameDesc) updatedFields.desc = gameDesc
-          if (gameDev) updatedFields.developer = gameDev
-          if (gamePub) updatedFields.publisher = gamePub
-          if (gameGenre) updatedFields.genre = gameGenre
-          if (gamePlayers) updatedFields.players = gamePlayers
-          if (scrapeRatings && gameRating !== undefined) updatedFields.rating = gameRating
-          if (relDate) updatedFields.releasedate = relDate
+          if (scrapeNames && gameName && (overwriteNames || !game.name)) updatedFields.name = gameName
+          if (scrapeDesc && gameDesc && (overwriteDesc || !game.desc)) updatedFields.desc = gameDesc
+          if (gameDev && (overwriteMetadata || !game.developer)) updatedFields.developer = gameDev
+          if (gamePub && (overwriteMetadata || !game.publisher)) updatedFields.publisher = gamePub
+          if (gameGenre && (overwriteMetadata || !game.genre)) updatedFields.genre = gameGenre
+          if (gamePlayers && (overwriteMetadata || !game.players)) updatedFields.players = gamePlayers
+          if (scrapeRatings && gameRating !== undefined && (overwriteMetadata || game.rating === undefined || game.rating === null)) {
+            updatedFields.rating = gameRating
+          }
+          if (relDate && (overwriteMetadata || !game.releasedate)) updatedFields.releasedate = relDate
 
           // Media downloads
           const mediaFolder = join(system.path, 'media')
 
-          // 1. Main image
-          if (imageSrc) {
-            const found = findMedia(jeu.medias, getRipList(imageSrc), preferredRegion)
+          const handleMediaDownload = async (
+            isEnabled: boolean,
+            ripList: string[],
+            subfolder: string,
+            fieldNames: (keyof Game)[],
+            skipConvert = false
+          ) => {
+            if (!isEnabled) return
+            const found = findMedia(jeu.medias, ripList, preferredRegion)
             if (found) {
-              const destFile = join(mediaFolder, 'fanart', `${romNameNoExt}.${found.format}`)
-              if (scrapeOverWrite || !existsSync(destFile)) {
-                await downloadFile(found.url, destFile)
+              const destFile = join(mediaFolder, subfolder, `${romNameNoExt}.${found.format}`)
+              const webpFile = join(mediaFolder, subfolder, `${romNameNoExt}.webp`)
+              
+              const hasWebp = !skipConvert && existsSync(webpFile)
+              const hasOriginal = existsSync(destFile)
+              const fileExists = hasWebp || hasOriginal
+              
+              let finalRelPath = ''
+
+              if (scrapeOverWriteMedias || !fileExists) {
+                try {
+                  await downloadFile(found.url, destFile)
+                  if (!skipConvert) {
+                    const convertedPath = await convertToWebp(destFile)
+                    const convertedName = basename(convertedPath)
+                    finalRelPath = `./media/${subfolder}/${convertedName}`
+                  } else {
+                    finalRelPath = `./media/${subfolder}/${romNameNoExt}.${found.format}`
+                  }
+                } catch (err: any) {
+                  console.error(`Failed to download media ${subfolder} for ${game.name}:`, err.message)
+                  return
+                }
+              } else {
+                if (hasWebp) {
+                  finalRelPath = `./media/${subfolder}/${romNameNoExt}.webp`
+                } else {
+                  finalRelPath = `./media/${subfolder}/${romNameNoExt}.${found.format}`
+                  if (!skipConvert) {
+                    try {
+                      const convertedPath = await convertToWebp(destFile)
+                      const convertedName = basename(convertedPath)
+                      finalRelPath = `./media/${subfolder}/${convertedName}`
+                    } catch (err) {
+                      console.error(`Failed to convert existing image to webp for ${game.name}:`, err)
+                    }
+                  }
+                }
               }
-              updatedFields.image = `./media/fanart/${romNameNoExt}.${found.format}`
+
+              if (finalRelPath) {
+                fieldNames.forEach(field => {
+                  (updatedFields as any)[field] = finalRelPath
+                })
+              }
             }
           }
 
-          // 2. Thumbnail
-          if (thumbSrc) {
-            const found = findMedia(jeu.medias, getRipList(thumbSrc), preferredRegion)
-            if (found) {
-              const destFile = join(mediaFolder, 'cover', `${romNameNoExt}.${found.format}`)
-              if (scrapeOverWrite || !existsSync(destFile)) {
-                await downloadFile(found.url, destFile)
-              }
-              updatedFields.thumbnail = `./media/cover/${romNameNoExt}.${found.format}`
-            }
-          }
+          // 1. Fanart
+          await handleMediaDownload(downloadFanart, ['fanart', 'ss'], 'fanart', ['fanart', 'image'])
 
-          // 3. Logo/marquee
-          if (logoSrc) {
-            const found = findMedia(jeu.medias, getRipList(logoSrc), preferredRegion)
-            if (found) {
-              const destFile = join(mediaFolder, 'logo', `${romNameNoExt}.${found.format}`)
-              if (scrapeOverWrite || !existsSync(destFile)) {
-                await downloadFile(found.url, destFile)
-              }
-              updatedFields.marquee = `./media/logo/${romNameNoExt}.${found.format}`
-            }
-          }
+          // 2. Cover (always 2D)
+          await handleMediaDownload(downloadCover, ['box-2D'], 'cover', ['cover', 'thumbnail'])
 
-          // 4. Video
-          if (scrapeVideos) {
-            const found = findMedia(jeu.medias, getRipList('video'), preferredRegion)
-            if (found) {
-              const destFile = join(mediaFolder, 'video', `${romNameNoExt}.${found.format}`)
-              if (scrapeOverWrite || !existsSync(destFile)) {
-                await downloadFile(found.url, destFile)
-              }
-              updatedFields.video = `./media/video/${romNameNoExt}.${found.format}`
-            }
-          }
+          // 3. Cover 2D
+          await handleMediaDownload(downloadCover2D, ['box-2D'], 'cover2d', ['cover2d'])
+
+          // 4. Cover 3D
+          await handleMediaDownload(downloadCover3D, ['box-3D'], 'cover3d', ['cover3d'])
+
+          // 5. Cover Back
+          await handleMediaDownload(downloadCoverBack, ['box-2D-back', 'box-back', 'box-3D-back'], 'coverback', ['coverback'])
+
+          // 6. Logo / Marquee
+          await handleMediaDownload(downloadLogo, ['wheel', 'wheel-hd', 'wheel-steel'], 'logo', ['logo', 'marquee'])
+
+          // 7. Screenshot
+          await handleMediaDownload(downloadScreenshot, ['ss', 'sstitle'], 'screenshot', ['screenshot'])
+
+          // 8. Title Screen
+          await handleMediaDownload(downloadTitle, ['sstitle', 'ss'], 'title', ['title'])
+
+          // 9. Mix Image
+          await handleMediaDownload(downloadMix, ['mixrbv2', 'mixrbv1'], 'mix', ['mix'])
+
+          // 10. Manual (skip WebP conversion)
+          await handleMediaDownload(downloadManual, ['manual'], 'manual', ['manual'], true)
+
+          // 11. Video (skip WebP conversion)
+          await handleMediaDownload(scrapeVideos, ['video-normalized', 'video'], 'video', ['video'], true)
 
           // Apply updates to game list
           const updatedGame = { ...game, ...updatedFields }

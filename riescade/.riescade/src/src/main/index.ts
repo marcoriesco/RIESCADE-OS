@@ -795,14 +795,55 @@ app.whenReady().then(() => {
     return join(getConfigPath(), 'music')
   })
 
-  ipcMain.handle('start-scrape', async () => {
-    scraperService.scrape()
+  ipcMain.handle('start-scrape', async (event, options?: { systemName?: string; gamePath?: string }) => {
+    scraperService.scrape(options)
     return true
   })
 
   ipcMain.handle('cancel-scrape', async () => {
     scraperService.cancel()
     return true
+  })
+
+  ipcMain.handle('test-screenscraper', async (event, ssid, sspassword) => {
+    try {
+      const devid = 'retrobat'
+      const devpassword = 'JRLmOtnZXwo'
+      const softname = 'retrobat'
+      
+      let url = `https://api.screenscraper.fr/api2/systemesListe.php?devid=${devid}&devpassword=${devpassword}&softname=${softname}&output=json`
+      if (ssid) {
+        url += `&ssid=${encodeURIComponent(ssid)}`
+      }
+      if (sspassword) {
+        url += `&sspassword=${encodeURIComponent(sspassword)}`
+      }
+      
+      const response = await fetch(url)
+      if (!response.ok) {
+        return { success: false, reason: `Erro HTTP: ${response.status}` }
+      }
+      
+      const json = await response.json()
+      const user = json.response?.ssuser
+      
+      if (!user || user.numid === '0' || !user.numid) {
+        return { success: false, reason: 'Usuário ou senha incorretos.' }
+      }
+      
+      const requestsToday = parseInt(user.requeststoday || '0', 10)
+      const maxRequests = parseInt(user.maxrequestsperday || '0', 10)
+      const requestsRemaining = maxRequests - requestsToday
+      
+      return { 
+        success: true, 
+        username: user.id || ssid, 
+        requests: String(requestsRemaining), 
+        maxRequests: String(maxRequests) 
+      }
+    } catch (err: any) {
+      return { success: false, reason: err.message || 'Falha na conexão.' }
+    }
   })
 
   // Helper functions for scrapers

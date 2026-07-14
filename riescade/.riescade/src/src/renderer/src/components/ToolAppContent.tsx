@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { ChevronRight, Search, Folder, Star, User, Shield, Settings, Palette, Gamepad2, Volume2, Cpu, Info, Database, Trash2, Edit3, X, ChevronLeft, Filter, HardDrive, RefreshCw, Eye, EyeOff, Check, ChevronDown, Save, Trophy } from "lucide-react";
+import { ChevronRight, Search, Folder, Star, User, Shield, Settings, Palette, Gamepad2, Volume2, Cpu, Info, Database, Trash2, Edit3, X, ChevronLeft, Filter, HardDrive, RefreshCw, Eye, EyeOff, Check, ChevronDown, Save, Trophy, Loader2 } from "lucide-react";
 import { System, SettingsCtx } from "../types";
 import { TOOL_APPS, getSystemTheme } from "../constants";
 import {
@@ -64,6 +64,7 @@ const SETTINGS_TABS = [
 ];
 
 const EMULATOR_NAMES: Record<string, string> = {
+  global: "Geral / Globais",
   retroarch: "RetroArch",
   ares: "Ares",
   xenia: "Xenia",
@@ -82,10 +83,13 @@ const EMULATOR_NAMES: Record<string, string> = {
   bigpemu: "BigPEmu",
   model2: "Model 2 Emulator",
   model3: "Supermodel (Model 3)",
-  redream: "Redream"
+  redream: "Redream",
+  shadps4: "shadPS4",
+  vita3k: "Vita3K"
 };
 
 const EMULATOR_DESCRIPTIONS: Record<string, string> = {
+  global: "Configure opções gerais aplicadas a todos os emuladores.",
   retroarch: "Configurações globais de emulação, vídeo, shaders e mais.",
   ares: "Ajuste os parâmetros específicos do emulador Ares.",
   xenia: "Ajuste os parâmetros específicos do emulador Xenia e Xenia Canary.",
@@ -104,7 +108,9 @@ const EMULATOR_DESCRIPTIONS: Record<string, string> = {
   bigpemu: "Ajuste os parâmetros específicos do emulador BigPEmu.",
   model2: "Ajuste os parâmetros específicos do emulador Model 2.",
   model3: "Ajuste os parâmetros específicos do emulador Supermodel.",
-  redream: "Ajuste os parâmetros específicos do emulador Redream."
+  redream: "Ajuste os parâmetros específicos do emulador Redream.",
+  shadps4: "Ajuste os parâmetros específicos do emulador shadPS4.",
+  vita3k: "Ajuste os parâmetros específicos do emulador Vita3K."
 };
 
 export default function ToolAppContent({
@@ -119,8 +125,8 @@ export default function ToolAppContent({
   onSaveEmulatorSetting?: (emulator: string, name: string, value: any) => void;
 }) {
   const [activeSettingsTab, setActiveSettingsTab] = useState("conta");
-  const [activeEmuSubmenu, setActiveEmuSubmenu] = useState<string>("retroarch");
-  const [emuMenuOpen, setEmuMenuOpen] = useState(true);
+  const [activeEmuSubmenu, setActiveEmuSubmenu] = useState<string>("global");
+  const [emuMenuOpen, setEmuMenuOpen] = useState(false);
   const [settingsSearch, setSettingsSearch] = useState("");
   const [settingsCategory, setSettingsCategory] = useState<"all" | "tools" | "systems">("all");
   const [updateState, setUpdateState] = useState<{
@@ -135,6 +141,8 @@ export default function ToolAppContent({
   }>({ status: 'idle' });
 
   const [features, setFeatures] = useState<any>(null);
+  const [testingConnection, setTestingConnection] = useState(false);
+  const [testResult, setTestResult] = useState<{ success: boolean; message: string } | null>(null);
 
   useEffect(() => {
     window.api.getFeatures().then(res => {
@@ -231,29 +239,6 @@ export default function ToolAppContent({
       const val = emulatorSettings?.[activeEmuSubmenu]?.[name] ?? emulatorSettings?.[activeEmuSubmenu]?.[`${activeEmuSubmenu}_${name}`];
       console.log('[getEmuSetting] Emu:', activeEmuSubmenu, 'Key:', name, 'RawValue:', val, 'Type:', typeof val);
       if (val !== undefined && val !== null) return String(val);
-      // Default fallbacks for specific settings
-      if (name === "ares_fullscreen" || name === "xenia_fullscreen" || name === "fullscreen" || name === "forcefullscreen") return "false";
-      if (name === "pcsx2_fullscreen" || name === "pcsx2x6_fullscreen" || name === "teknoparrot_fullscreen" || name === "dolphin_fullscreen" || name === "mame64_fullscreen") return "true";
-      if (name === "pcsx2_aspectratio" || name === "pcsx2x6_aspectratio" || name === "aspectratio" || name === "ratio") return "16:9";
-      if (name === "pcsx2_renderer" || name === "pcsx2x6_renderer" || name === "renderer") return "-1";
-      if (name === "teknoparrot_minimize" || name === "minimize") return "true";
-      if (name === "dolphin_backend" || name === "backend") return "Vulkan";
-      if (name === "dolphin_aspect" || name === "aspect") return "0";
-      if (name === "dolphin_vsync" || name === "mame64_vsync" || name === "vsync") return "true";
-      if (name === "mame64_video" || name === "video") return "d3d";
-      if (name === "mame64_sound" || name === "sound") return "dsound";
-      if (name === "ares_aspect") return "Scale";
-      if (name === "ares_aspectcorrection") return "Anamorphic";
-      if (name === "ares_renderer") return "OpenGL 3.2";
-      if (name === "ares_audio_renderer") return "WASAPI";
-      if (name === "ares_audiosync") return "true";
-      if (name === "ares_coloremulation") return "true";
-      if (name === "ares_interframe_blend") return "true";
-      if (name === "ares_ExpansionPak") return "true";
-      if (name === "ares_n64_quality") return "HD";
-      if (name === "ares_luminance" || name === "ares_saturation" || name === "ares_gamma") return "1.0";
-      if (name === "xenia_gpu" || name === "gpu") return "any";
-      if (name === "xenia_license_mask" || name === "license_mask") return "0";
       return String(fallback);
     };
 
@@ -338,7 +323,8 @@ export default function ToolAppContent({
 
       const nameAliases: Record<string, string> = {
         "pcsx2x6": "pcsx2",
-        "mame64": "mame"
+        "model2": "m2emulator",
+        "model3": "supermodel"
       };
 
       const targetName = nameAliases[activeEmuSubmenu] || activeEmuSubmenu;
@@ -510,7 +496,7 @@ export default function ToolAppContent({
                             setEmuMenuOpen(v => !v);
                           } else {
                             setEmuMenuOpen(true);
-                            setActiveEmuSubmenu("retroarch");
+                            setActiveEmuSubmenu("global");
                           }
                         }
                       }}
@@ -980,15 +966,92 @@ export default function ToolAppContent({
             <div className="flex flex-col h-full overflow-hidden">
               <div className="shrink-0 px-6 pt-6 pb-2 max-w-[740px]">
                 <h2 className="text-xl font-bold text-white mb-1">Configurações de Scraper</h2>
-                <p className="text-sm text-white/40">Download de Fanarts, covers, logos, etc.</p>
+                <p className="text-sm text-white/40">Download de Fanarts, capas, logos, manuais e vídeos.</p>
               </div>
               <ScrollArea className="flex-1 min-h-0">
                 <div className="px-6 pb-6 max-w-[740px] space-y-2">
                   <SettingGroup label="Contas do Scraper" />
                   <SettingInput label="ScreenScraper Usuário" name="ScreenScraperUser" ctx={ctx} />
                   <SettingInput label="ScreenScraper Senha" name="ScreenScraperPass" isPassword ctx={ctx} />
-                  <SettingInput label="IGDB Client ID" name="IGDBClientID" ctx={ctx} />
-                  <SettingInput label="IGDB Secret" name="IGDBSecret" isPassword ctx={ctx} />
+
+                  {/* Connection Test Controls */}
+                  <div className="flex flex-col gap-2 p-3.5 bg-white/5 border border-white/5 rounded-xl max-w-[400px] mt-2 mb-4">
+                    <div className="flex items-center gap-3">
+                      <button
+                        type="button"
+                        disabled={testingConnection}
+                        onClick={async () => {
+                          setTestingConnection(true);
+                          setTestResult(null);
+                          try {
+                            const user = ctx.getSetting('ScreenScraperUser') || '';
+                            const pass = ctx.getSetting('ScreenScraperPass') || '';
+                            const res = await window.api.testScreenScraper(user, pass);
+                            if (res.success) {
+                              setTestResult({
+                                success: true,
+                                message: `Sucesso! Conectado como ${res.username}. Requisições hoje: ${res.requests} / ${res.maxRequests}`
+                              });
+                            } else {
+                              setTestResult({
+                                success: false,
+                                message: res.reason || 'Usuário ou senha incorretos.'
+                              });
+                            }
+                          } catch (err: any) {
+                            setTestResult({
+                              success: false,
+                              message: err.message || 'Erro inesperado na conexão.'
+                            });
+                          } finally {
+                            setTestingConnection(false);
+                          }
+                        }}
+                        className="px-4 py-2 bg-accent hover:bg-[var(--accent-color-hover)] text-white text-xs font-bold rounded-lg transition-all cursor-pointer flex items-center justify-center gap-2 self-start disabled:opacity-50"
+                      >
+                        {testingConnection ? (
+                          <>
+                            <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                            <span>Testando...</span>
+                          </>
+                        ) : (
+                          <span>Testar Conexão</span>
+                        )}
+                      </button>
+                    </div>
+
+                    {testResult && (
+                      <div className={`text-xs font-semibold px-3 py-2 rounded-lg border mt-1 animate-in fade-in duration-200 ${
+                        testResult.success 
+                          ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400' 
+                          : 'bg-red-500/10 border-red-500/20 text-red-400'
+                      }`}>
+                        {testResult.message}
+                      </div>
+                    )}
+                  </div>
+
+                  <SettingGroup label="Configurações de Metadados" />
+                  <SettingToggle label="Sobrescrever Título" name="ScrapeOverWriteNames" desc="Permite atualizar o título do jogo caso ele já exista." ctx={ctx} />
+                  <SettingToggle label="Sobrescrever Descrição" name="ScrapeOverWriteDesc" desc="Permite atualizar a sinopse do jogo caso ela já exista." ctx={ctx} />
+                  <SettingToggle label="Sobrescrever Metadados" name="ScrapeOverWriteMetadata" desc="Atualiza gênero, desenvolvedor, distribuidora, jogadores e nota." ctx={ctx} />
+
+                  <SettingGroup label="Download de Mídia" />
+                  <SettingToggle label="Imagem Principal (Fanart)" name="ScrapperDownloadFanart" ctx={ctx} />
+                  <SettingToggle label="Capa Padrão (Cover - Sempre 2D)" name="ScrapperDownloadCover" ctx={ctx} />
+                  <SettingToggle label="Capa 2D" name="ScrapperDownloadCover2D" ctx={ctx} />
+                  <SettingToggle label="Capa 3D" name="ScrapperDownloadCover3D" ctx={ctx} />
+                  <SettingToggle label="Verso da Capa (Cover Back)" name="ScrapperDownloadCoverBack" ctx={ctx} />
+                  <SettingToggle label="Logo / Marquee" name="ScrapperDownloadLogo" ctx={ctx} />
+                  <SettingToggle label="Captura de Tela (Screenshot)" name="ScrapperDownloadScreenshot" ctx={ctx} />
+                  <SettingToggle label="Tela de Título (Title Screen)" name="ScrapperDownloadTitle" ctx={ctx} />
+                  <SettingToggle label="Mix Image" name="ScrapperDownloadMix" ctx={ctx} />
+                  <SettingToggle label="Manual" name="ScrapperDownloadManual" ctx={ctx} />
+                  <SettingToggle label="Vídeo" name="ScrapeVideos" ctx={ctx} />
+                  
+                  <div className="pt-2">
+                    <SettingToggle label="Sobrescrever Mídias Existentes" name="ScrapeOverWriteMedias" desc="Baixa e substitui as mídias mesmo se os arquivos já existirem." ctx={ctx} />
+                  </div>
                 </div>
               </ScrollArea>
             </div>

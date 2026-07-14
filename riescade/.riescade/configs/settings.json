@@ -575,14 +575,6 @@
     "value": true,
     "type": "string"
   },
-  "IGDBClientID": {
-    "value": "a6j303y0qtil1b4uzhmwtu7tg1s138",
-    "type": "string"
-  },
-  "IGDBSecret": {
-    "value": "bj1qgz4yvsmot64j2ocn1edl0nmdec",
-    "type": "string"
-  },
   "MusicVolume": {
     "value": 100,
     "type": "string"
@@ -653,7 +645,7 @@
   },
   "Volume": {
     "value": 100,
-    "type": "string"
+    "type": "int"
   },
   "controller_layout": {
     "value": "modern8",
@@ -1128,7 +1120,7 @@
     "type": "int"
   },
   "Window.tool-settings.Maximized": {
-    "value": false,
+    "value": true,
     "type": "bool"
   },
   "Window.tool-settings.X": {
@@ -1356,7 +1348,7 @@
     "type": "string"
   },
   "RIESCADE.PreferredMediaType.xbox360": {
-    "value": "cover2d",
+    "value": "cover",
     "type": "string"
   },
   "RIESCADE.PreferredMediaType.teknoparrot": {
@@ -1380,7 +1372,7 @@
     "type": "int"
   },
   "RIESCADE.PreferredMediaType.collections": {
-    "value": "cover",
+    "value": "cover2d",
     "type": "string"
   },
   "RIESCADE.PreferredMediaType.laseractive": {
@@ -1392,7 +1384,7 @@
     "type": "string"
   },
   "RIESCADE.PreferredMediaType.arcade": {
-    "value": "cover",
+    "value": "fanart",
     "type": "string"
   },
   "RIESCADE.EnableBackgroundVideo": {
@@ -1432,7 +1424,7 @@
     "type": "bool"
   },
   "RIESCADE.PreferredMediaType.ps3": {
-    "value": "cover",
+    "value": "cover2d",
     "type": "string"
   },
   "Window.system-ps4.X": {
@@ -1476,6 +1468,86 @@
     "type": "string"
   },
   "Window.system-Windows.Maximized": {
+    "value": true,
+    "type": "bool"
+  },
+  "RIESCADE.PreferredMediaType.Windows": {
+    "value": "cover",
+    "type": "string"
+  },
+  "Window.system-hbmame.Maximized": {
+    "value": true,
+    "type": "bool"
+  },
+  "Window.system-hbmame.X": {
+    "value": 480,
+    "type": "int"
+  },
+  "Window.system-hbmame.Y": {
+    "value": 192,
+    "type": "int"
+  },
+  "Window.system-hbmame.Width": {
+    "value": 1263,
+    "type": "int"
+  },
+  "Window.system-hbmame.Height": {
+    "value": 640,
+    "type": "int"
+  },
+  "RIESCADE.PreferredMediaType.hbmame": {
+    "value": "cover",
+    "type": "string"
+  },
+  "ScrapeOverWriteNames": {
+    "value": true,
+    "type": "bool"
+  },
+  "ScrapeOverWriteDesc": {
+    "value": true,
+    "type": "bool"
+  },
+  "ScrapeOverWriteMetadata": {
+    "value": true,
+    "type": "bool"
+  },
+  "ScrapperDownloadFanart": {
+    "value": true,
+    "type": "bool"
+  },
+  "ScrapperDownloadCover": {
+    "value": true,
+    "type": "bool"
+  },
+  "ScrapperDownloadCover2D": {
+    "value": true,
+    "type": "bool"
+  },
+  "ScrapperDownloadCover3D": {
+    "value": true,
+    "type": "bool"
+  },
+  "ScrapperDownloadCoverBack": {
+    "value": true,
+    "type": "bool"
+  },
+  "ScrapperDownloadLogo": {
+    "value": true,
+    "type": "bool"
+  },
+  "ScrapperDownloadScreenshot": {
+    "value": true,
+    "type": "bool"
+  },
+  "ScrapperDownloadTitle": {
+    "value": true,
+    "type": "bool"
+  },
+  "ScrapperDownloadMix": {
+    "value": true,
+    "type": "bool"
+  },
+  "ScrapperDownloadManual": {
     "value": true,
     "type": "bool"
   }

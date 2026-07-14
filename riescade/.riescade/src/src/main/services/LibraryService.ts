@@ -1432,15 +1432,9 @@ export class LibraryService {
       }
     }
 
-    const cached = LibraryService.cachedGames.get(targetSystem.toLowerCase())
-    if (cached) {
-      const cIdx = cached.findIndex(g => normalizePathForComparison(g.path) === normalizePathForComparison(gameData.path))
-      if (cIdx !== -1) {
-        cached[cIdx] = { ...cached[cIdx], ...gameData }
-      } else {
-        cached.push(gameData)
-      }
-    }
+    // Invalidate the cache for this system so that getGames queries the database and runs rowToGame
+    // to build proper absolute paths for media files.
+    LibraryService.cachedGames.delete(targetSystem.toLowerCase())
 
     this.rebuildAutoCollections()
   }

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState, useMemo, useCallback } from "react";
-import { Gamepad2, Heart, Loader2, Star, Play, ChevronRight, Maximize2, X, Search, Folder, ChevronLeft, HardDrive, ChevronDown, Check, MoreHorizontal } from "lucide-react";
+import { Gamepad2, Heart, Loader2, Star, Play, ChevronRight, Maximize2, X, Search, Folder, ChevronLeft, HardDrive, ChevronDown, Check, MoreHorizontal, RefreshCw } from "lucide-react";
 import { System, Game } from "../types";
 import { ScrollArea } from "./ScrollArea";
 import { OverlayScrollbarsComponentRef } from "overlayscrollbars-react";
@@ -91,8 +91,9 @@ export default function SystemAppContent({
   const [allCollections, setAllCollections] = useState<string[]>([]);
   const [newColName, setNewColName] = useState("");
 
-  // New States for context menu and saves sidebar
+  // New States for context menu, saves sidebar, and scraper
   const [showContextMenu, setShowContextMenu] = useState(false);
+  const [showPlatformMenu, setShowPlatformMenu] = useState(false);
   const [gameContextMenu, setGameContextMenu] = useState<{
     x: number;
     y: number;
@@ -101,6 +102,25 @@ export default function SystemAppContent({
   } | null>(null);
   const [showSavesSidebar, setShowSavesSidebar] = useState(false);
   const [sidebarTab, setSidebarTab] = useState<"collections" | "saves">("collections");
+
+  const [isScraping, setIsScraping] = useState(false);
+  const [isCancellingScrape, setIsCancellingScrape] = useState(false);
+  const [scrapeProgress, setScrapeProgress] = useState<{
+    systemName: string;
+    systemCode: string;
+    gameName: string;
+    current: number;
+    total: number;
+    successCount: number;
+    failCount: number;
+  } | null>(null);
+  const [showScrapeFinished, setShowScrapeFinished] = useState(false);
+  const [scrapeFinishedData, setScrapeFinishedData] = useState<{
+    success: boolean;
+    count?: number;
+    failed?: number;
+    reason?: string;
+  } | null>(null);
 
   const [preferredMediaType, setPreferredMediaType] = useState<string>("cover");
   const [availableMediaTypes, setAvailableMediaTypes] = useState<Record<string, boolean>>({
@@ -122,20 +142,25 @@ export default function SystemAppContent({
 
 
 
-  // Load preferred media type per-system on mount and system change
-  useEffect(() => {
-    const settingKey = `RIESCADE.PreferredMediaType.${system.name}`;
-    window.api.getSettings().then(settings => {
-      if (settings[settingKey]?.value) {
-        setPreferredMediaType(settings[settingKey].value);
+  const reloadLibrary = useCallback(() => {
+    if (system.name === 'collections') {
+      if (activeCollection !== null) {
+        window.api.getCollectionGames(activeCollection).then((gameList: Game[]) => {
+          setCollectionGames(gameList || []);
+        });
       } else {
-        setPreferredMediaType("cover");
+        window.api.getGames(system.name).then((gameList: Game[]) => {
+          setGames(gameList || []);
+        });
       }
-    });
-  }, [system.name]);
+    } else {
+      window.api.getGames(system.name).then((gameList: Game[]) => {
+        setGames(gameList || []);
+      });
+    }
+  }, [system.name, activeCollection]);
 
-  // Query folder availability when systemName or systemPath changes
-  useEffect(() => {
+  const checkMediaAvailability = useCallback(() => {
     if (system && system.path && !system.path.startsWith('virtual://') && system.name !== 'collections') {
       window.api.checkMediaFolders(system.path).then((res: Record<string, boolean>) => {
         setAvailableMediaTypes(res || {
@@ -151,7 +176,7 @@ export default function SystemAppContent({
           mix: false
         });
       }).catch((err: any) => {
-        console.error("Failed to check media folders:", err);
+        console.log("Failed to check media folders:", err);
       });
     } else {
       // Enable all for virtual systems
@@ -169,6 +194,55 @@ export default function SystemAppContent({
       });
     }
   }, [system.name, system.path]);
+
+  // Listen to scraper events
+  useEffect(() => {
+    const unsubProgress = window.api.on('scrape-progress', (_, progress) => {
+      setIsScraping(true);
+      setIsCancellingScrape(false);
+      setScrapeProgress(progress);
+    });
+
+    const unsubFinished = window.api.on('scrape-finished', (_, result) => {
+      setIsScraping(false);
+      setIsCancellingScrape(false);
+      setScrapeProgress(null);
+      setScrapeFinishedData(result);
+      setShowScrapeFinished(true);
+      
+      // Clear image cache states to force reload downloaded medias
+      missingMediaCache.clear();
+      setFailedImages({});
+      setImageError(false);
+
+      window.api.preloadLibrary(false, system.name).then(() => {
+        reloadLibrary();
+        checkMediaAvailability();
+      });
+    });
+
+    return () => {
+      unsubProgress();
+      unsubFinished();
+    };
+  }, [reloadLibrary, checkMediaAvailability]);
+
+  // Load preferred media type per-system on mount and system change
+  useEffect(() => {
+    const settingKey = `RIESCADE.PreferredMediaType.${system.name}`;
+    window.api.getSettings().then(settings => {
+      if (settings[settingKey]?.value) {
+        setPreferredMediaType(settings[settingKey].value);
+      } else {
+        setPreferredMediaType("cover");
+      }
+    });
+  }, [system.name]);
+
+  // Query folder availability when systemName or systemPath changes
+  useEffect(() => {
+    checkMediaAvailability();
+  }, [system.name, system.path, checkMediaAvailability]);
 
   const handleMediaTypeChange = (type: string) => {
     setGridMediaLoading(true);
@@ -830,32 +904,90 @@ export default function SystemAppContent({
                     {system.name === 'collections' && activeCollection !== null ? `${system.fullname} > ${activeCollection}` : system.fullname}
                   </h2>
                 </div>
-                <span className="text-xs @3xl:text-md text-white/40">{filteredGames.length} {system.name === 'collections' && activeCollection === null ? 'coleções encontradas' : 'jogos encontrados'}</span>
+                <span className="text-md @3xl:text-md text-white/40">{filteredGames.length} {system.name === 'collections' && activeCollection === null ? 'coleções encontradas' : 'jogos encontrados'}</span>
               </div>
 
-              {/* Media Switcher Buttons */}
-              <div className="flex flex-wrap items-center bg-white/5 border border-white/5 p-1 rounded-lg gap-0.5 shadow-inner backdrop-blur-md max-w-full">
-                {['cover', 'cover2d', 'cover3d', 'fanart', 'logo', 'screenshot', 'title', 'mix'].map((type) => {
-                  const isAvailable = availableMediaTypes[type];
-                  const isActive = preferredMediaType === type;
-                  return (
+              {/* Media Switcher & Platform Options */}
+              <div className="flex items-center gap-2 max-w-full">
+                {/* Media Switcher Buttons */}
+                <div className="flex flex-wrap items-center bg-white/5 border border-white/5 p-1 rounded-lg gap-0.5 shadow-inner backdrop-blur-md max-w-full">
+                  {['cover', 'cover2d', 'cover3d', 'fanart', 'logo', 'screenshot', 'title', 'mix'].map((type) => {
+                    const isAvailable = availableMediaTypes[type];
+                    const isActive = preferredMediaType === type;
+                    return (
+                      <button
+                        key={type}
+                        disabled={!isAvailable}
+                        onClick={() => handleMediaTypeChange(type)}
+                        className={`px-1.5 py-0.5 text-[9px] @xs:px-2.5 @xs:py-1 @xs:text-[10px] uppercase font-bold tracking-wider rounded-md transition-all cursor-pointer ${
+                          isActive
+                            ? "bg-accent text-white shadow-md font-extrabold"
+                            : isAvailable
+                            ? "text-white/60 hover:text-white hover:bg-white/5"
+                            : "text-white/20 cursor-not-allowed opacity-30"
+                        }`}
+                        title={!isAvailable ? `Sem mídia '${type}' disponível` : `Exibir mídia '${type}'`}
+                      >
+                        {type}
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {/* 3-dots Platform options (only for physical systems) */}
+                {system.name !== 'collections' && !system.path.startsWith('virtual://') && (
+                  <div className="relative shrink-0">
                     <button
-                      key={type}
-                      disabled={!isAvailable}
-                      onClick={() => handleMediaTypeChange(type)}
-                      className={`px-1.5 py-0.5 text-[9px] @xs:px-2.5 @xs:py-1 @xs:text-[10px] uppercase font-bold tracking-wider rounded-md transition-all cursor-pointer ${
-                        isActive
-                          ? "bg-accent text-white shadow-md font-extrabold"
-                          : isAvailable
-                          ? "text-white/60 hover:text-white hover:bg-white/5"
-                          : "text-white/20 cursor-not-allowed opacity-30"
-                      }`}
-                      title={!isAvailable ? `Sem mídia '${type}' disponível` : `Exibir mídia '${type}'`}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setShowPlatformMenu(prev => !prev);
+                      }}
+                      className={`text-white/60 hover:text-white transition cursor-pointer flex items-center justify-center p-1.5 rounded-lg border border-white/5 hover:bg-white/10 ${showPlatformMenu ? "text-white bg-white/10" : "bg-[#1a1a1a]"}`}
+                      title="Opções da plataforma"
                     >
-                      {type}
+                      <MoreHorizontal className="w-4 h-4" />
                     </button>
-                  );
-                })}
+                    
+                    {showPlatformMenu && (
+                      <>
+                        <div className="fixed inset-0 z-40" onClick={() => setShowPlatformMenu(false)} />
+                        <div className="absolute right-0 mt-2 w-56 bg-[#0d0d0d]/95 backdrop-blur-md border border-white/10 rounded-xl shadow-2xl p-2 z-50 text-white animate-in fade-in slide-in-from-top-2 duration-150 text-left">
+                          <div className="px-3 py-1 text-[10px] text-white/40 uppercase font-semibold tracking-wider mb-1.5">
+                            Ações da Plataforma
+                          </div>
+                          
+                          <button
+                            onClick={() => {
+                              setShowPlatformMenu(false);
+                              window.api.startScrape({ systemName: system.name });
+                            }}
+                            className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs hover:bg-white/10 text-left transition cursor-pointer text-white/80 hover:text-white"
+                          >
+                            <Search className="w-4 h-4 text-accent" />
+                            <span>Buscar metadados do sistema</span>
+                          </button>
+
+                          <button
+                            onClick={() => {
+                              setShowPlatformMenu(false);
+                              missingMediaCache.clear();
+                              setFailedImages({});
+                              setImageError(false);
+                              window.api.preloadLibrary(true, system.name).then(() => {
+                                reloadLibrary();
+                                checkMediaAvailability();
+                              });
+                            }}
+                            className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs hover:bg-white/10 text-left transition cursor-pointer text-white/80 hover:text-white"
+                          >
+                            <RefreshCw className="w-4 h-4 text-cyan-400" />
+                            <span>Recarregar mídias</span>
+                          </button>
+                        </div>
+                      </>
+                    )}
+                  </div>
+                )}
               </div>
             </div>
 
@@ -893,7 +1025,7 @@ export default function SystemAppContent({
                               key={g.path}
                               onClick={() => setSelectedIdx(idx)}
                               onDoubleClick={() => setActiveCollection(g.name)}
-                              className={`group flex flex-col w-full rounded-md overflow-hidden text-left transition-all border-2 relative aspect-[3/4] bg-black/40 ${
+                              className={`group flex flex-col w-full rounded-md overflow-hidden text-left transition-all border-2 relative bg-black/40 ${
                                 idx === selectedIdx
                                   ? "border-accent shadow-[0_0_15px_var(--accent-color-glass)] z-10"
                                   : "border-white/5 hover:border-white/10"
@@ -958,7 +1090,7 @@ export default function SystemAppContent({
                                 index: idx
                               });
                             }}
-                            className={`group flex flex-col w-full rounded-md overflow-hidden text-left transition-all border-4 relative bg-[#1a1a1a] aspect-[3/4] ${
+                            className={`group flex flex-col w-full rounded-md overflow-hidden text-left transition-all border-4 relative bg-[#1a1a1a] ${
                               idx === selectedIdx 
                                 ? "border-accent shadow-[0_0_15px_var(--accent-color-glass)] z-10" 
                                 : "border-white/5 hover:border-white/10"
@@ -977,7 +1109,7 @@ export default function SystemAppContent({
                                     className="w-full h-full object-contain group-hover:scale-105 transition-all duration-300 animate-in fade-in duration-200" 
                                   />
                                   {/* Small clean controller icon and title overlay at top left */}
-                                  <div className="absolute top-2 left-2 flex items-center gap-1.5 bg-black/55 backdrop-blur-[2px] px-2 py-0.5 rounded-md text-[9px] text-white/95 font-bold uppercase tracking-wider max-w-[90%] border border-white/5 z-20">
+                                  <div className="absolute top-2 left-2 flex items-center gap-1.5 bg-black/55 backdrop-blur-[2px] px-2 py-0.5 rounded-md text-[9px] text-white/95 font-bold uppercase tracking-wider max-w-[90%] border border-white/5 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                                     <Gamepad2 className="w-2.5 h-2.5 text-white/90 shrink-0" />
                                     <span className="truncate">{g.name}</span>
                                   </div>
@@ -1340,6 +1472,20 @@ export default function SystemAppContent({
                             <Heart className={`w-4 h-4 ${selectedGame.favorite ? "fill-red-500 text-red-500" : "text-red-500 opacity-60"}`} />
                             <span>{selectedGame.favorite ? "Remover dos Favoritos" : "Favoritar"}</span>
                           </button>
+
+                          {/* Separator */}
+                          <div className="my-1 border-t border-white/5" />
+
+                          <button
+                            onClick={() => {
+                              setShowContextMenu(false);
+                              window.api.startScrape({ systemName: system.name, gamePath: selectedGame.path });
+                            }}
+                            className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs hover:bg-white/10 text-left transition cursor-pointer text-white/80 hover:text-white"
+                          >
+                            <Search className="w-4 h-4 text-cyan-400" />
+                            <span>Buscar metadados (Scrape)</span>
+                          </button>
                         </div>
                       </>
                     )}
@@ -1458,6 +1604,119 @@ export default function SystemAppContent({
         </div>
       )}
 
+      {/* Scraper Progress Overlay Modal */}
+      {isScraping && scrapeProgress && (
+        <div className="fixed inset-0 bg-black/75 backdrop-blur-md flex items-center justify-center z-[999] select-none text-white transition-opacity duration-300">
+          <div className="bg-[#0f0f12] border border-white/10 p-6 rounded-2xl w-[460px] flex flex-col gap-4 shadow-2xl relative animate-in fade-in zoom-in duration-200">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-lg bg-accent/15 flex items-center justify-center">
+                <Loader2 className="w-4 h-4 text-accent animate-spin" />
+              </div>
+              <div>
+                <h3 className="text-sm font-bold text-white tracking-wide">Buscando metadados...</h3>
+                <p className="text-[10px] text-white/40 uppercase tracking-widest font-semibold mt-0.5">ScreenScraper.fr</p>
+              </div>
+            </div>
+
+            <div className="bg-white/5 border border-white/5 rounded-xl p-3.5 flex flex-col gap-2">
+              <div className="flex justify-between items-start gap-3">
+                <div className="min-w-0">
+                  <p className="text-[10px] text-white/40 font-bold uppercase tracking-wider">Sistema</p>
+                  <p className="text-xs font-semibold text-white/90 truncate mt-0.5">{`${scrapeProgress.systemName}`}</p>
+                </div>
+                <div className="text-right shrink-0">
+                  <p className="text-[10px] text-white/40 font-bold uppercase tracking-wider">Progresso</p>
+                  <p className="text-xs font-bold text-accent mt-0.5">{`${scrapeProgress.current} / ${scrapeProgress.total}`}</p>
+                </div>
+              </div>
+
+              <div className="min-w-0 mt-1">
+                <p className="text-[10px] text-white/40 font-bold uppercase tracking-wider">Jogo Atual</p>
+                <p className="text-xs font-semibold text-white/90 truncate mt-0.5" title={`${scrapeProgress.gameName}`}>{`${scrapeProgress.gameName}`}</p>
+              </div>
+
+              {/* Progress Bar */}
+              <div className="w-full bg-white/5 rounded-full h-1.5 overflow-hidden mt-2 relative">
+                <div 
+                  className="bg-accent h-full rounded-full transition-all duration-300"
+                  style={{ width: `${(scrapeProgress.current / scrapeProgress.total) * 100}%` }}
+                />
+              </div>
+            </div>
+
+            {/* Counters */}
+            <div className="grid grid-cols-2 gap-2 text-center">
+              <div className="bg-emerald-500/10 border border-emerald-500/10 rounded-xl py-2 px-3">
+                <p className="text-[9px] text-emerald-400 font-bold uppercase tracking-wider">Sucessos</p>
+                <p className="text-base font-bold text-emerald-400 mt-0.5">{`${scrapeProgress.successCount}`}</p>
+              </div>
+              <div className="bg-red-500/10 border border-red-500/10 rounded-xl py-2 px-3">
+                <p className="text-[9px] text-red-400 font-bold uppercase tracking-wider">Falhas</p>
+                <p className="text-base font-bold text-red-400 mt-0.5">{`${scrapeProgress.failCount}`}</p>
+              </div>
+            </div>
+
+            <button
+              disabled={isCancellingScrape}
+              onClick={() => {
+                setIsCancellingScrape(true);
+                window.api.cancelScrape();
+              }}
+              className="w-full mt-2 py-2.5 px-4 bg-white/5 hover:bg-red-500/20 hover:text-red-300 text-white/70 border border-white/10 hover:border-red-500/20 rounded-xl text-xs font-semibold tracking-wide transition-all cursor-pointer flex items-center justify-center gap-1.5"
+            >
+              {isCancellingScrape ? (
+                <>
+                  <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                  <span>Cancelando...</span>
+                </>
+              ) : (
+                <span>Cancelar Operação</span>
+              )}
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Scraper Finished Success Modal */}
+      {showScrapeFinished && scrapeFinishedData && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-[999] select-none text-white transition-opacity duration-300">
+          <div className="bg-[#0f0f12] border border-white/10 p-6 rounded-2xl w-[400px] flex flex-col gap-4 shadow-2xl relative animate-in fade-in zoom-in duration-200 text-center">
+            <div className="w-12 h-12 rounded-full bg-accent/15 flex items-center justify-center mx-auto mb-1">
+              <Check className="w-6 h-6 text-accent" />
+            </div>
+            
+            <div>
+              <h3 className="text-base font-bold text-white tracking-wide">Busca Concluída!</h3>
+              <p className="text-xs text-white/50 mt-1">
+                {scrapeFinishedData.success 
+                  ? `Os metadados foram atualizados com sucesso.` 
+                  : (scrapeFinishedData.reason || 'Ocorreu um erro ou a busca foi cancelada.')}
+              </p>
+            </div>
+
+            {scrapeFinishedData.success && (
+              <div className="bg-white/5 border border-white/5 rounded-xl p-3.5 grid grid-cols-2 gap-2 text-center">
+                <div>
+                  <p className="text-[10px] text-white/40 font-bold uppercase tracking-wider">Sucessos</p>
+                  <p className="text-sm font-bold text-emerald-400 mt-0.5">{`${scrapeFinishedData.count ?? 0}`}</p>
+                </div>
+                <div>
+                  <p className="text-[10px] text-white/40 font-bold uppercase tracking-wider">Falhas</p>
+                  <p className="text-sm font-bold text-red-400 mt-0.5">{`${scrapeFinishedData.failed ?? 0}`}</p>
+                </div>
+              </div>
+            )}
+
+            <button
+              onClick={() => setShowScrapeFinished(false)}
+              className="w-full mt-2 py-2.5 px-4 bg-accent hover:bg-[var(--accent-color-hover)] text-white rounded-xl text-xs font-bold tracking-wide shadow-lg transition-all cursor-pointer"
+            >
+              OK
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Right-click Context Menu */}
       {gameContextMenu && (
         <>
@@ -1517,6 +1776,18 @@ export default function SystemAppContent({
             >
               <Heart className={`w-4 h-4 ${games[gameContextMenu.index]?.favorite ? "fill-red-500 text-red-500" : "text-red-500 opacity-60"}`} />
               <span>{games[gameContextMenu.index]?.favorite ? "Remover dos Favoritos" : "Favoritar"}</span>
+            </button>
+
+            <button
+              onClick={() => {
+                const menuGame = games[gameContextMenu.index] || gameContextMenu.game;
+                setGameContextMenu(null);
+                window.api.startScrape({ systemName: system.name, gamePath: menuGame.path });
+              }}
+              className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs hover:bg-white/10 text-left transition cursor-pointer text-white/80 hover:text-white"
+            >
+              <Search className="w-4 h-4 text-cyan-400" />
+              <span>Buscar metadados (Scrape)</span>
             </button>
 
             {/* Separator */}

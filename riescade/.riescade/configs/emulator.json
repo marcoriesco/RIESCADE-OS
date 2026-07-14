@@ -34,7 +34,9 @@
     "xenia_gpu": "vulkan",
     "xenia_resolution": "1_1",
     "xenia_lang": "9",
-    "xenia_hid": "sdl"
+    "xenia_hid": "sdl",
+    "videomode": "false",
+    "gpu": "auto"
   },
   "pcsx2x6": {
     "TVShader": "0",
@@ -89,5 +91,33 @@
     "ppsspp_ratio": "1",
     "ppsspp_lang": "7",
     "ppsspp_backend": "3 (VULKAN)"
+  },
+  "global": {
+    "resolution": "auto",
+    "video_driver": "Vulkan",
+    "audio_driver": "auto",
+    "fullscreen": "true",
+    "hdr": "auto",
+    "monitor_index": "auto",
+    "gpu_index": "auto",
+    "shaders": "auto",
+    "bezels": "auto",
+    "filters": "auto",
+    "discord": "false",
+    "aspect_ratio": "Stretched"
+  },
+  "vita3k": {
+    "resolution_multiplier": "2",
+    "vita_vsync": "true",
+    "psvita_language": "17"
+  },
+  "shadps4": {
+    "shadps4_isps4pro": "true",
+    "shadps4_lang": "17",
+    "shadps4_version": "default",
+    "forcefullscreen": "true"
+  },
+  "cemu": {
+    "wiiu_language": "1"
   }
 }

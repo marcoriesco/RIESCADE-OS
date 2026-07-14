@@ -34,7 +34,21 @@ export class XeniaGenerator extends BaseGenerator {
       };
 
       const fullscreen = (Config.getEmulatorSetting('xenia', 'fullscreen') ?? Config.getEmulatorSetting('xenia', 'forcefullscreen') ?? Config.getEmulatorSetting('xenia', 'xenia_fullscreen', 'false')) === 'true';
-      const gpu = Config.getEmulatorSetting('xenia', 'gpu') ?? Config.getEmulatorSetting('xenia', 'xenia_gpu', 'any');
+      
+      let gpu = Config.getEmulatorSetting('xenia', 'gpu') ?? Config.getEmulatorSetting('xenia', 'xenia_gpu', 'any');
+      if (gpu === 'auto' || !gpu) {
+        gpu = 'any';
+      } else {
+        const lowerGpu = gpu.toLowerCase();
+        if (lowerGpu.includes('vulkan')) {
+          gpu = 'vulkan';
+        } else if (lowerGpu.includes('d3d12') || lowerGpu.includes('directx 12') || lowerGpu.includes('directx12')) {
+          gpu = 'd3d12';
+        } else {
+          gpu = 'any';
+        }
+      }
+
       const vsync = (Config.getEmulatorSetting('xenia', 'vsync') ?? Config.getEmulatorSetting('xenia', 'xenia_vsync', 'true')) === 'true';
       const licenseMaskSetting = Config.getEmulatorSetting('xenia', 'license_mask') ?? Config.getEmulatorSetting('xenia', 'xenia_license_mask', '0');
       const licenseMask = parseInt(licenseMaskSetting, 10);
