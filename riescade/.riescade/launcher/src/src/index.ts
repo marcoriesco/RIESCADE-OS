@@ -15,6 +15,8 @@ import { Mame64Generator } from './generators/Mame64Generator.js';
 import { XeniaGenerator } from './generators/XeniaGenerator.js';
 import { DuckstationGenerator } from './generators/DuckstationGenerator.js';
 import { RyujinxGenerator } from './generators/RyujinxGenerator.js';
+import { EdenGenerator } from './generators/EdenGenerator.js';
+import { CitronGenerator } from './generators/CitronGenerator.js';
 import { Rpcs3Generator } from './generators/Rpcs3Generator.js';
 import { CemuGenerator } from './generators/CemuGenerator.js';
 import { PpssppGenerator } from './generators/PpssppGenerator.js';
@@ -106,6 +108,12 @@ function getGenerator(args: LaunchArgs): BaseGenerator {
   }
   if (emu === 'xenia' || emu === 'xenia-canary' || sys === 'xbox360' || sys === 'xboxlivearcade' || sys === 'xbla') {
     return new XeniaGenerator(args);
+  }
+  if (emu === 'eden' || emu === 'eden-nightly') {
+    return new EdenGenerator(args);
+  }
+  if (emu === 'citron') {
+    return new CitronGenerator(args);
   }
   if (emu === 'ryujinx' || sys === 'switch') {
     return new RyujinxGenerator(args);

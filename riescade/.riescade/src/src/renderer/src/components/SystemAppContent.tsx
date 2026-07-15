@@ -140,7 +140,6 @@ export default function SystemAppContent({
   const [preferredMediaType, setPreferredMediaType] = useState<string>("cover");
   const [availableMediaTypes, setAvailableMediaTypes] = useState<Record<string, boolean>>({
     cover: true,
-    cover2d: false,
     cover3d: false,
     coverback: false,
     fanart: false,
@@ -181,7 +180,6 @@ export default function SystemAppContent({
       window.api.checkMediaFolders(system.path).then((res: Record<string, boolean>) => {
         setAvailableMediaTypes(res || {
           cover: true,
-          cover2d: false,
           cover3d: false,
           coverback: false,
           fanart: false,
@@ -199,7 +197,6 @@ export default function SystemAppContent({
       // Enable all for virtual systems
       setAvailableMediaTypes({
         cover: true,
-        cover2d: true,
         cover3d: true,
         coverback: true,
         fanart: true,
@@ -316,9 +313,6 @@ export default function SystemAppContent({
     switch (type) {
       case 'cover':
         mediaPath = g.cover;
-        break;
-      case 'cover2d':
-        mediaPath = g.cover2d;
         break;
       case 'cover3d':
         mediaPath = g.cover3d;
@@ -983,7 +977,7 @@ export default function SystemAppContent({
                 {/* Media Switcher Buttons */}
                 {!(system.name === 'collections' && activeCollection === null) && (
                   <div className="flex flex-wrap items-center bg-white/5 border border-white/5 p-1 rounded-lg gap-0.5 shadow-inner backdrop-blur-md max-w-full">
-                    {['cover', 'cover2d', 'cover3d', 'coverback', 'fanart', 'logo', 'marquee', 'screenshot', 'title', 'mix'].map((type) => {
+                    {['cover', 'cover3d', 'coverback', 'fanart', 'logo', 'marquee', 'screenshot', 'title', 'mix'].map((type) => {
                       const isAvailable = availableMediaTypes[type];
                       if (!isAvailable) return null;
                       const isActive = preferredMediaType === type;

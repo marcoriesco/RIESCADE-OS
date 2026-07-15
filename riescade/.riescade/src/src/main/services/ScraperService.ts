@@ -225,7 +225,6 @@ export class ScraperService {
       // Media download toggles
       const downloadFanart = this.settingsParser.getSetting('ScrapperDownloadFanart', 'bool') ?? true
       const downloadCover = this.settingsParser.getSetting('ScrapperDownloadCover', 'bool') ?? true
-      const downloadCover2D = this.settingsParser.getSetting('ScrapperDownloadCover2D', 'bool') ?? true
       const downloadCover3D = this.settingsParser.getSetting('ScrapperDownloadCover3D', 'bool') ?? true
       const downloadCoverBack = this.settingsParser.getSetting('ScrapperDownloadCoverBack', 'bool') ?? true
       const downloadLogo = this.settingsParser.getSetting('ScrapperDownloadLogo', 'bool') ?? true
@@ -544,8 +543,6 @@ export class ScraperService {
           // 2. Cover (always 2D)
           await handleMediaDownload(downloadCover, ['box-2D'], 'cover', ['cover', 'thumbnail'])
 
-          // 3. Cover 2D
-          await handleMediaDownload(downloadCover2D, ['box-2D'], 'cover2d', ['cover2d'])
 
           // 4. Cover 3D
           await handleMediaDownload(downloadCover3D, ['box-3D'], 'cover3d', ['cover3d'])

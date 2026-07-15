@@ -1406,8 +1406,7 @@ export default function ToolAppContent({
 
                   <SettingGroup label="Download de Mídia" />
                   <SettingToggle label="Imagem Principal (Fanart)" name="ScrapperDownloadFanart" ctx={ctx} />
-                  <SettingToggle label="Capa Padrão (Cover - Sempre 2D)" name="ScrapperDownloadCover" ctx={ctx} />
-                  <SettingToggle label="Capa 2D" name="ScrapperDownloadCover2D" ctx={ctx} />
+                  <SettingToggle label="Capa 2D (Cover)" name="ScrapperDownloadCover" ctx={ctx} />
                   <SettingToggle label="Capa 3D" name="ScrapperDownloadCover3D" ctx={ctx} />
                   <SettingToggle label="Verso da Capa (Cover Back)" name="ScrapperDownloadCoverBack" ctx={ctx} />
                   <SettingToggle label="Logo (Wheel)" name="ScrapperDownloadLogo" ctx={ctx} />

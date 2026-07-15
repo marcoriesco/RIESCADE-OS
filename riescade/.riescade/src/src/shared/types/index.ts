@@ -52,7 +52,6 @@ export interface Game {
   region?: string
   lang?: string
   cover?: string
-  cover2d?: string
   cover3d?: string
   coverback?: string
   logo?: string

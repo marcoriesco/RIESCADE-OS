@@ -208,7 +208,7 @@
     "type": "int"
   },
   "Window.system-teknoparrot.Maximized": {
-    "value": false,
+    "value": true,
     "type": "bool"
   },
   "Window.system-teknoparrot.X": {
@@ -332,7 +332,7 @@
     "type": "int"
   },
   "Window.system-namco2x6.Maximized": {
-    "value": false,
+    "value": true,
     "type": "bool"
   },
   "Window.system-namco2x6.X": {
@@ -704,7 +704,7 @@
     "type": "bool"
   },
   "RIESCADE.PreferredMediaType.Windows": {
-    "value": "cover",
+    "value": "cover3d",
     "type": "string"
   },
   "Window.system-hbmame.Maximized": {
@@ -813,6 +813,10 @@
   },
   "ScraperRegion": {
     "value": "us",
+    "type": "string"
+  },
+  "RIESCADE.PreferredMediaType.switch": {
+    "value": "cover",
     "type": "string"
   }
 }

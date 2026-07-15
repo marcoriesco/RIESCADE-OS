@@ -49,7 +49,8 @@ export class SystemsParser {
               emulators: Array.isArray(s.emulators) ? s.emulators.map((e: any) => ({
                 name: String(e.name || ''),
                 cores: Array.isArray(e.cores) ? e.cores.map((c: any) => String(c)) : [],
-                command: e.command ? String(e.command) : undefined
+                command: e.command ? String(e.command) : undefined,
+                source: e.source ? String(e.source) : undefined
               })) : []
             }
           })

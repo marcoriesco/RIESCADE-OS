@@ -4,6 +4,7 @@ import { exec } from 'child_process'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import { LibraryService } from './services/LibraryService'
 import { LauncherService } from './services/LauncherService'
+import { EmulatorInstaller } from './services/EmulatorInstaller'
 import { SettingsParser } from './parsers/SettingsParser'
 import { EmulatorParser } from './parsers/EmulatorParser'
 import { ThemeSettingsParser } from './parsers/ThemeSettingsParser'
@@ -342,7 +343,7 @@ app.whenReady().then(() => {
   ipcMain.handle('check-media-folders', async (_, systemPath: string) => {
     const fs = require('fs')
     const { join } = require('path')
-    const folders = ['cover', 'cover2d', 'cover3d', 'coverback', 'fanart', 'logo', 'marquee', 'screenshot', 'title', 'mix', 'video', 'manual']
+    const folders = ['cover', 'cover3d', 'coverback', 'fanart', 'logo', 'marquee', 'screenshot', 'title', 'mix', 'video', 'manual']
     const results: Record<string, boolean> = {}
 
     if (!systemPath || systemPath.startsWith('virtual://') || systemPath === 'collections') {
@@ -369,6 +370,20 @@ app.whenReady().then(() => {
 
   ipcMain.handle('get-games', async (_, systemName: string) => {
     return libraryService.getGames(systemName)
+  })
+
+  ipcMain.handle('check-emulator-status', async (_, emulatorName: string, systemName: string) => {
+    const systems = libraryService.getSystems()
+    const systemObj = systems.find(s => s.name === systemName)
+    const emulatorObj = systemObj?.emulators?.find(e => e.name === emulatorName)
+    const sourceUrl = emulatorObj?.source
+    return EmulatorInstaller.checkStatus(emulatorName, sourceUrl)
+  })
+
+  ipcMain.handle('download-install-emulator', async (event, emulatorName: string, sourceUrl: string) => {
+    return EmulatorInstaller.downloadAndInstall(emulatorName, sourceUrl, (pct) => {
+      event.sender.send('emulator-download-progress', { emulatorName, pct })
+    })
   })
 
   ipcMain.handle('launch-game', async (_, game: Game, system: System, saveStateSlot?: number) => {

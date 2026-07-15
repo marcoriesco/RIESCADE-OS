@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useRef, useState, useMemo } from "react"
 import {
   Search, Power, X, Minus, Square, Gamepad2, Monitor,
   Folder, Grid3x3, Wifi, Volume2, Battery, Loader2,
-  MoreHorizontal, Heart
+  MoreHorizontal, Heart, Download, Check, AlertTriangle
 } from "lucide-react";
 import * as Toast from '@radix-ui/react-toast';
 import * as Tooltip from '@radix-ui/react-tooltip';
@@ -107,6 +107,17 @@ export default function App() {
   const [controllers, setControllers] = useState<any[]>([]);
   const [menuOpen, setMenuOpen] = useState(false);
   const [showExitConfirm, setShowExitConfirm] = useState(false);
+
+  // Installer states
+  const [installerOpen, setInstallerOpen] = useState(false);
+  const [installerStatus, setInstallerStatus] = useState<'prompt' | 'downloading' | 'extracting' | 'completed' | 'error'>('prompt');
+  const [installerEmulator, setInstallerEmulator] = useState('');
+  const [installerSourceUrl, setInstallerSourceUrl] = useState('');
+  const [installerSystem, setInstallerSystem] = useState<System | null>(null);
+  const [installerGame, setInstallerGame] = useState<Game | null>(null);
+  const [installerProgress, setInstallerProgress] = useState(0);
+  const [installerError, setInstallerError] = useState('');
+  const [isUpdatePrompt, setIsUpdatePrompt] = useState(false);
   const [toasts, setToasts] = useState<{ id: string; title: string; description: string; type: "favorite" | "controller"; favorite?: boolean; open: boolean }[]>([]);
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
@@ -762,8 +773,18 @@ export default function App() {
     return sys?.art || null;
   }, [activeSubWindowId, systems]);
 
-  // Launch Game Handler
-  const handleLaunchGame = (game: Game, system: System, saveStateSlot?: number) => {
+  // Listen to emulator download progress
+  useEffect(() => {
+    const unsubscribe = window.api.on('emulator-download-progress', (_event: any, data: { emulatorName: string; pct: number }) => {
+      setInstallerProgress(data.pct);
+      if (data.pct >= 100) {
+        setInstallerStatus('extracting');
+      }
+    });
+    return unsubscribe;
+  }, []);
+
+  const launchDirectly = (game: Game, system: System, saveStateSlot?: number) => {
     setIsLaunching(true);
     setLaunchingGame(game);
     window.api.launchGame(game, system, saveStateSlot).then(() => {
@@ -772,6 +793,86 @@ export default function App() {
     }).catch(() => {
       setIsLaunching(false);
       setLaunchingGame(null);
+    });
+  };
+
+  const handleStartInstall = () => {
+    setInstallerStatus('downloading');
+    setInstallerProgress(0);
+    setInstallerError('');
+
+    window.api.downloadAndInstallEmulator(installerEmulator, installerSourceUrl).then(() => {
+      setInstallerStatus('completed');
+      setTimeout(() => {
+        setInstallerOpen(false);
+        if (installerGame && installerSystem) {
+          launchDirectly(installerGame, installerSystem);
+        }
+      }, 1200);
+    }).catch((err: any) => {
+      setInstallerStatus('error');
+      setInstallerError(err.message || 'Erro durante o download ou extração.');
+    });
+  };
+
+  // Launch Game Handler
+  const handleLaunchGame = (game: Game, system: System, saveStateSlot?: number) => {
+    let targetSystem = system;
+    if (system.name === 'collections') {
+      const realSystem = systems.find(s => s.name.toLowerCase() === game.system.toLowerCase());
+      if (realSystem) targetSystem = realSystem;
+    }
+
+    let emulatorName = 'libretro';
+    if (game.emulator && game.emulator !== 'auto') {
+      emulatorName = game.emulator;
+    } else {
+      const systemWideEmulator = settings[`${targetSystem.name}.emulator`]?.value;
+      if (systemWideEmulator && systemWideEmulator !== 'auto') {
+        emulatorName = systemWideEmulator;
+      } else if (targetSystem.emulators?.[0]?.name) {
+        emulatorName = targetSystem.emulators[0].name;
+      }
+    }
+
+    window.api.checkEmulatorStatus(emulatorName, targetSystem.name).then((status: any) => {
+      if (!status.installed && status.sourceUrl) {
+        setInstallerEmulator(emulatorName);
+        setInstallerSourceUrl(status.sourceUrl);
+        setInstallerSystem(targetSystem);
+        setInstallerGame(game);
+        setInstallerStatus('prompt');
+        setIsUpdatePrompt(false);
+        setInstallerOpen(true);
+        return;
+      }
+
+      if (!status.installed && !status.sourceUrl) {
+        setInstallerEmulator(emulatorName);
+        setInstallerSourceUrl('');
+        setInstallerSystem(targetSystem);
+        setInstallerGame(game);
+        setInstallerStatus('error');
+        setInstallerError(`O emulador ${emulatorName.toUpperCase()} é necessário para jogar, mas não está instalado no seu sistema e não possui link de download automático cadastrado.`);
+        setInstallerOpen(true);
+        return;
+      }
+
+      if (status.updateAvailable && status.sourceUrl) {
+        setInstallerEmulator(emulatorName);
+        setInstallerSourceUrl(status.sourceUrl);
+        setInstallerSystem(targetSystem);
+        setInstallerGame(game);
+        setInstallerStatus('prompt');
+        setIsUpdatePrompt(true);
+        setInstallerOpen(true);
+        return;
+      }
+
+      launchDirectly(game, targetSystem, saveStateSlot);
+    }).catch((err) => {
+      console.error('Failed to check emulator status, launching fallback:', err);
+      launchDirectly(game, targetSystem, saveStateSlot);
     });
   };
 
@@ -1662,6 +1763,120 @@ export default function App() {
           </div>
         </div>
       )}
+      {/* Emulator Installer / Updater Modal */}
+      {installerOpen && (
+        <div className="fixed inset-0 z-[9999] bg-black/65 backdrop-blur-md flex items-center justify-center select-none">
+          <div 
+            className="glass-strong rounded-3xl p-7 max-w-sm w-full mx-4 shadow-2xl border border-white/10 flex flex-col items-center select-none text-center animate-in zoom-in-95 duration-200"
+          >
+            {installerStatus === 'prompt' && (
+              <>
+                <div 
+                  className="w-12 h-12 rounded-full flex items-center justify-center mb-4"
+                  style={{ backgroundColor: 'var(--accent-color-light)' }}
+                >
+                  <Download className="w-6 h-6" style={{ color: 'var(--accent-color)' }} />
+                </div>
+                <h3 className="text-lg font-bold text-white mb-2 tracking-wide">
+                  {isUpdatePrompt ? 'Atualização Disponível' : 'Emulador Não Encontrado'}
+                </h3>
+                <p className="text-xs text-white/60 mb-6 leading-relaxed">
+                  {isUpdatePrompt 
+                    ? `Uma nova versão do emulador ${installerEmulator.toUpperCase()} está disponível. Deseja atualizar agora?`
+                    : `O emulador ${installerEmulator.toUpperCase()} é necessário para rodar este jogo, mas não está instalado. Deseja realizar a instalação automática?`
+                  }
+                </p>
+                <div className="flex gap-3 w-full">
+                  <button
+                    onClick={() => {
+                      setInstallerOpen(false);
+                      if (isUpdatePrompt && installerGame && installerSystem) {
+                        launchDirectly(installerGame, installerSystem);
+                      }
+                    }}
+                    className="flex-1 py-2 px-4 rounded-xl bg-white/5 hover:bg-white/10 text-white font-medium text-xs transition cursor-pointer"
+                  >
+                    {isUpdatePrompt ? 'Pular e Jogar' : 'Cancelar'}
+                  </button>
+                  <button
+                    onClick={handleStartInstall}
+                    className="flex-1 py-2 px-4 rounded-xl text-white font-medium text-xs shadow-lg transition cursor-pointer hover:brightness-95"
+                    style={{ background: 'linear-gradient(135deg, var(--accent-color), var(--accent-color-hover))' }}
+                  >
+                    {isUpdatePrompt ? 'Atualizar' : 'Baixar e Instalar'}
+                  </button>
+                </div>
+              </>
+            )}
+
+            {(installerStatus === 'downloading' || installerStatus === 'extracting') && (
+              <>
+                <div 
+                  className="w-12 h-12 rounded-full flex items-center justify-center mb-4 animate-bounce"
+                  style={{ backgroundColor: 'var(--accent-color-light)' }}
+                >
+                  <Download className="w-6 h-6" style={{ color: 'var(--accent-color)' }} />
+                </div>
+                <h3 className="text-lg font-bold text-white mb-2 tracking-wide">
+                  {installerStatus === 'downloading' ? 'Baixando Emulador' : 'Instalando Emulador'}
+                </h3>
+                <p className="text-xs text-white/60 mb-6 leading-relaxed">
+                  {installerStatus === 'downloading' 
+                    ? `Fazendo o download dos arquivos do ${installerEmulator.toUpperCase()}...`
+                    : `Extraindo e configurando o ${installerEmulator.toUpperCase()} no sistema...`
+                  }
+                </p>
+                <div className="w-full bg-white/10 h-2 rounded-full overflow-hidden mb-2 relative">
+                  <div 
+                    className="h-full rounded-full transition-all duration-300"
+                    style={{ 
+                      width: `${installerStatus === 'downloading' ? installerProgress : 100}%`,
+                      backgroundColor: 'var(--accent-color)'
+                    }}
+                  />
+                </div>
+                <span 
+                  className="text-[10px] font-bold font-mono"
+                  style={{ color: 'var(--accent-color)' }}
+                >
+                  {installerStatus === 'downloading' ? `${installerProgress}%` : 'Extraindo...'}
+                </span>
+              </>
+            )}
+
+            {installerStatus === 'completed' && (
+              <>
+                <div className="w-12 h-12 rounded-full bg-green-500/20 flex items-center justify-center mb-4">
+                  <Check className="w-6 h-6 text-green-500" />
+                </div>
+                <h3 className="text-lg font-bold text-white mb-2 tracking-wide">Instalação Concluída!</h3>
+                <p className="text-xs text-white/60 leading-relaxed">
+                  O emulador foi configurado com sucesso. O jogo iniciará em instantes...
+                </p>
+              </>
+            )}
+
+            {installerStatus === 'error' && (
+              <>
+                <div className="w-12 h-12 rounded-full bg-red-500/20 flex items-center justify-center mb-4">
+                  <AlertTriangle className="w-6 h-6 text-red-500" />
+                </div>
+                <h3 className="text-lg font-bold text-white mb-2 tracking-wide">Falha na Instalação</h3>
+                <p className="text-xs text-white/65 mb-6 leading-relaxed break-words max-w-full">
+                  {installerError || 'Ocorreu um erro inesperado durante o download ou extração.'}
+                </p>
+                <button
+                  onClick={() => setInstallerOpen(false)}
+                  className="w-full py-2 px-4 rounded-xl bg-white/5 hover:bg-white/10 text-white font-medium text-xs transition cursor-pointer"
+                >
+                  Fechar
+                </button>
+              </>
+            )}
+          </div>
+        </div>
+      )}
+
       {/* Confirmation Modal to Exit the System */}
       {showExitConfirm && (
         <div className="fixed inset-0 z-[9999] bg-black/65 backdrop-blur-md flex items-center justify-center select-none" onClick={() => setShowExitConfirm(false)}>

@@ -50,7 +50,6 @@ export type Game = {
   languages?: string;
   region?: string;
   lang?: string;
-  cover2d?: string;
   screenshot?: string;
   cover?: string;
   cover3d?: string;
