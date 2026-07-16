@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { ChevronRight, Search, Folder, Star, User, Shield, Settings, Palette, Gamepad2, Volume2, Cpu, Info, Database, Trash2, Edit3, X, ChevronLeft, Filter, HardDrive, RefreshCw, Eye, EyeOff, Check, ChevronDown, Save, Trophy, Loader2, Sliders, CheckCircle, Circle } from "lucide-react";
+import React, { useState, useEffect, useRef } from "react";
+import { ChevronRight, Search, Folder, Star, User, Shield, Settings, Palette, Gamepad2, Volume2, Cpu, Info, Database, Trash2, Edit3, X, ChevronLeft, Filter, HardDrive, RefreshCw, Eye, EyeOff, Check, ChevronDown, Save, Trophy, Loader2, Sliders, CheckCircle, Circle, Wrench, Bug, Copy, Download } from "lucide-react";
 import { System, SettingsCtx } from "../types";
 import { TOOL_APPS, getSystemTheme } from "../constants";
 import {
@@ -7,6 +7,30 @@ import {
 } from "./SettingsComponents";
 import { ScrollArea } from "./ScrollArea";
 import * as Select from "@radix-ui/react-select";
+
+const WIZARD_STEPS = [
+  { key: 'a', label: 'Botão A / Confirmação' },
+  { key: 'b', label: 'Botão B / Voltar' },
+  { key: 'x', label: 'Botão X' },
+  { key: 'y', label: 'Botão Y' },
+  { key: 'leftshoulder', label: 'Bumper Esquerdo (LB)' },
+  { key: 'rightshoulder', label: 'Bumper Direito (RB)' },
+  { key: 'lefttrigger', label: 'Gatilho Esquerdo (LT)', type: 'axis' },
+  { key: 'righttrigger', label: 'Gatilho Direito (RT)', type: 'axis' },
+  { key: 'back', label: 'Select / Back' },
+  { key: 'start', label: 'Start' },
+  { key: 'leftstick', label: 'Stick Esquerdo (L3/Click)' },
+  { key: 'rightstick', label: 'Stick Direito (R3/Click)' },
+  { key: 'dpad_up', label: 'D-Pad Cima' },
+  { key: 'dpad_down', label: 'D-Pad Baixo' },
+  { key: 'dpad_left', label: 'D-Pad Esquerda' },
+  { key: 'dpad_right', label: 'D-Pad Direita' },
+  { key: 'leftx', label: 'Stick Esquerdo (Eixo Horizontal X)', type: 'axis' },
+  { key: 'lefty', label: 'Stick Esquerdo (Eixo Vertical Y)', type: 'axis' },
+  { key: 'rightx', label: 'Stick Direito (Eixo Horizontal X)', type: 'axis' },
+  { key: 'righty', label: 'Stick Direito (Eixo Vertical Y)', type: 'axis' },
+  { key: 'hotkey', label: 'Botão Hotkey (Atalho)' }
+];
 
 function RadixSelect({
   value,
@@ -163,8 +187,124 @@ export default function ToolAppContent({
   const [controllerConfigs, setControllerConfigs] = useState<Record<string, any>>({});
   const [gamepadState, setGamepadState] = useState<{ buttons: any[]; axes: number[] } | null>(null);
   const [scanningControllers, setScanningControllers] = useState(false);
-  const [activeControlSubTab, setActiveControlSubTab] = useState<'configuracoes' | 'testes' | 'calibracao' | 'mapeamento' | 'informacoes'>('configuracoes');
+  const [activeControlSubTab, setActiveControlSubTab] = useState<'configuracoes' | 'testes' | 'calibracao' | 'mapeamento' | 'debug' | 'informacoes'>('configuracoes');
   const [calibratingSticks, setCalibratingSticks] = useState(false);
+  const [wizardStep, setWizardStep] = useState<number | null>(null);
+  const [wizardMappings, setWizardMappings] = useState<Record<string, any>>({});
+  const [debugEvents, setDebugEvents] = useState<string[]>([]);
+  const [sdlVersion, setSdlVersion] = useState<string>('3.0.0');
+
+  useEffect(() => {
+    window.api.getSdlVersion().then((ver: string) => {
+      if (ver) setSdlVersion(ver);
+    }).catch(() => {});
+  }, []);
+
+  const copyControllerId = () => {
+    if (!selectedController) return;
+    const idData = {
+      name: selectedController.name,
+      vendorId: selectedController.vendorId,
+      productId: selectedController.productId,
+      guid: selectedController.guid,
+      isGamepad: selectedController.type === 'xinput' || selectedController.buttons > 0
+    };
+    navigator.clipboard.writeText(JSON.stringify(idData, null, 2));
+    window.dispatchEvent(
+      new CustomEvent("show-toast", {
+        detail: {
+          title: "Identificação Copiada",
+          description: "Metadados do controle copiados para a área de transferência.",
+          type: "controller"
+        }
+      })
+    );
+  };
+
+  const exportDebugReport = async () => {
+    if (!selectedController) return;
+    const report = await window.api.exportDebugReport(debugEvents);
+    const reportStr = JSON.stringify(report, null, 2);
+    
+    const blob = new Blob([reportStr], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `RIESCADE_controller_debug_${selectedController.name.replace(/\s+/g, '_')}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    
+    window.dispatchEvent(
+      new CustomEvent("show-toast", {
+        detail: {
+          title: "Diagnóstico Exportado",
+          description: "Relatório de diagnóstico gravado com sucesso.",
+          type: "controller"
+        }
+      })
+    );
+  };
+
+  const finishWizard = async (finalMappings: any) => {
+    if (!selectedController) return;
+    setWizardStep(null);
+    
+    const inputsList = Object.entries(finalMappings).map(([name, val]: [string, any]) => ({
+      name,
+      type: val.type,
+      id: val.id,
+      value: val.value
+    }));
+    
+    const hotkeyButton = finalMappings['hotkey'];
+    
+    const payload = {
+      deviceName: selectedController.name,
+      deviceGUID: selectedController.guid,
+      vendorId: selectedController.vendorId,
+      productId: selectedController.productId,
+      profileId: `profile-custom-${selectedController.name.toLowerCase().replace(/\s+/g, '-')}`,
+      inputs: inputsList,
+      hotkey: hotkeyButton ? {
+        button: {
+          type: hotkeyButton.type,
+          id: hotkeyButton.id
+        },
+        combos: [
+          { button: "start", action: "quit" }
+        ]
+      } : undefined,
+      analog: {
+        leftDeadzone: 15,
+        rightDeadzone: 15
+      }
+    };
+    
+    const success = await window.api.saveInputConfig(payload);
+    if (success) {
+      window.dispatchEvent(
+        new CustomEvent("show-toast", {
+          detail: {
+            title: "Mapeamento Salvo",
+            description: "O layout personalizado foi persistido no input.json.",
+            type: "controller"
+          }
+        })
+      );
+    } else {
+      window.dispatchEvent(
+        new CustomEvent("show-toast", {
+          detail: {
+            title: "Erro ao Salvar",
+            description: "Não foi possível gravar o arquivo de configurações.",
+            type: "controller"
+          }
+        })
+      );
+    }
+  };
 
   useEffect(() => {
     if (activeSettingsTab === "controles") {
@@ -189,52 +329,150 @@ export default function ToolAppContent({
     }
   }, [activeSettingsTab]);
 
+  const prevControllersCount = useRef<number | null>(null);
+
+  // Keep selected controller synchronized when the controllers list changes
+  useEffect(() => {
+    prevControllersCount.current = controllers.length;
+
+    if (!selectedController) {
+      if (controllers.length > 0) {
+        setSelectedController(controllers[0]);
+      }
+      return;
+    }
+
+    const stillConnected = controllers.find(c => c.guid === selectedController.guid);
+
+    if (stillConnected) {
+      if (stillConnected.instanceId !== selectedController.instanceId) {
+        setSelectedController(stillConnected);
+      }
+    } else {
+      if (controllers.length > 0) {
+        setSelectedController(controllers[0]);
+      } else {
+        setSelectedController(null);
+      }
+    }
+  }, [controllers]);
+
   useEffect(() => {
     if (!selectedController) {
       setGamepadState(null);
       return;
     }
 
-    let animationId: number;
+    const initialButtons = Array.from({ length: 25 }, () => ({ pressed: false, value: 0 }));
+    const initialAxes = Array.from({ length: 10 }, () => 0);
+    const state = { buttons: initialButtons, axes: initialAxes };
+    setGamepadState(state);
 
-    const findAndPollGamepad = () => {
-      const gps = navigator.getGamepads();
-      let matchIdx: number | null = null;
-
-      // 1. Match by exact or partial name
-      for (let i = 0; i < gps.length; i++) {
-        const gp = gps[i];
-        if (gp && gp.id.toLowerCase().includes(selectedController.name.split('(')[0].trim().toLowerCase())) {
-          matchIdx = i;
-          break;
-        }
+    const unsubscribe = window.api.on('controller-input', (_, data: any) => {
+      if (data.instanceId !== parseInt(selectedController.instanceId, 10)) {
+        return;
       }
 
-      // 2. Fallback to matching index
-      if (matchIdx === null && selectedController.xinputIndex !== undefined) {
-        if (gps[selectedController.xinputIndex]) {
-          matchIdx = selectedController.xinputIndex;
-        }
-      }
+      setGamepadState(prev => {
+        if (!prev) return prev;
+        const nextButtons = [...prev.buttons];
+        const nextAxes = [...prev.axes];
 
-      if (matchIdx !== null) {
-        const gp = gps[matchIdx];
-        if (gp) {
-          setGamepadState({
-            buttons: gp.buttons.map(b => ({ pressed: b.pressed, value: b.value })),
-            axes: [...gp.axes]
-          });
+        if (data.type === 'GPBUTTON' || data.type === 'BUTTON') {
+          if (data.index >= 0 && data.index < nextButtons.length) {
+            nextButtons[data.index] = { pressed: data.value === 1, value: data.value };
+          }
+        } else if (data.type === 'GPAXIS' || data.type === 'AXIS') {
+          if (data.index >= 0 && data.index < nextAxes.length) {
+            nextAxes[data.index] = data.value / 32768;
+          }
+        } else if (data.type === 'HAT') {
+          const hatVal = data.value;
+          const up = (hatVal & 1) !== 0;
+          const right = (hatVal & 2) !== 0;
+          const down = (hatVal & 4) !== 0;
+          const left = (hatVal & 8) !== 0;
+          
+          nextButtons[12] = { pressed: up, value: up ? 1 : 0 };
+          nextButtons[13] = { pressed: down, value: down ? 1 : 0 };
+          nextButtons[14] = { pressed: left, value: left ? 1 : 0 };
+          nextButtons[15] = { pressed: right, value: right ? 1 : 0 };
         }
-      } else {
-        setGamepadState(null);
-      }
 
-      animationId = requestAnimationFrame(findAndPollGamepad);
+        return { buttons: nextButtons, axes: nextAxes };
+      });
+
+      setDebugEvents(prev => {
+        const timestamp = new Date().toLocaleTimeString();
+        const eventStr = `[${timestamp}] ${data.type} (Index: ${data.index}, Val: ${data.value})`;
+        return [eventStr, ...prev].slice(0, 50);
+      });
+    });
+
+    return () => {
+      unsubscribe();
     };
-
-    animationId = requestAnimationFrame(findAndPollGamepad);
-    return () => cancelAnimationFrame(animationId);
   }, [selectedController]);
+
+  // Listen to inputs during wizard setup
+  useEffect(() => {
+    if (wizardStep === null || !selectedController) return;
+    
+    const currentStep = WIZARD_STEPS[wizardStep];
+    
+    const unsubscribe = window.api.on('controller-input', (_, data: any) => {
+      if (data.instanceId !== parseInt(selectedController.instanceId, 10)) return;
+      
+      let captured = false;
+      let mappingVal: any = null;
+      
+      if (data.type === 'GPBUTTON' || data.type === 'BUTTON') {
+        if (data.value === 1) {
+          captured = true;
+          mappingVal = {
+            type: 'button',
+            id: data.index,
+            value: 1
+          };
+        }
+      } else if (data.type === 'GPAXIS' || data.type === 'AXIS') {
+        const normalizedVal = data.value / 32768;
+        if (Math.abs(normalizedVal) > 0.6) {
+          captured = true;
+          mappingVal = {
+            type: 'axis',
+            id: data.index,
+            value: data.value > 0 ? 1 : -1
+          };
+        }
+      }
+      
+      if (captured && mappingVal) {
+        setWizardMappings(prev => {
+          const isAlreadyMapped = Object.entries(prev).some(([k, v]) => {
+            if (currentStep.key === 'hotkey') return false;
+            return v.type === mappingVal.type && v.id === mappingVal.id && k !== 'hotkey';
+          });
+
+          if (isAlreadyMapped) {
+            return prev;
+          }
+
+          const next = { ...prev, [currentStep.key]: mappingVal };
+          
+          if (wizardStep < WIZARD_STEPS.length - 1) {
+            setWizardStep(prevStep => prevStep! + 1);
+          } else {
+            finishWizard(next);
+          }
+          
+          return next;
+        });
+      }
+    });
+    
+    return () => unsubscribe();
+  }, [wizardStep, selectedController]);
 
   useEffect(() => {
     window.api.getFeatures().then(res => {
@@ -1254,6 +1492,8 @@ export default function ToolAppContent({
                             { id: "configuracoes", label: "Configurações", icon: Sliders },
                             { id: "testes", label: "Testes em Tempo Real", icon: Gamepad2 },
                             { id: "calibracao", label: "Calibração dos Sticks", icon: Star },
+                            { id: "mapeamento", label: "Mapeamento Customizado", icon: Wrench },
+                            { id: "debug", label: "Diagnóstico e Debug", icon: Bug },
                             { id: "informacoes", label: "Informações", icon: Info }
                           ].map((tab) => {
                             const isActive = activeControlSubTab === tab.id;
@@ -1606,7 +1846,7 @@ export default function ToolAppContent({
                                         detail: {
                                           title: "Recalibração",
                                           description: "Analógicos calibrados com sucesso!",
-                                          type: "success"
+                                          type: "controller"
                                         }
                                       })
                                     );
@@ -1673,7 +1913,7 @@ export default function ToolAppContent({
                                       detail: {
                                         title: "Calibração Concluída",
                                         description: "O centro dos sticks analógicos foi recalibrado.",
-                                        type: "success"
+                                        type: "controller"
                                       }
                                     })
                                   );
@@ -1689,24 +1929,119 @@ export default function ToolAppContent({
 
                         {/* 4. MAPEAMENTO SUB-TAB */}
                         {activeControlSubTab === "mapeamento" && (
-                          <div className="p-4 bg-white/2 border border-white/5 rounded-xl space-y-3 text-left">
-                            <h4 className="text-xs font-bold text-white">Mapa de Entrada (Layout Padrão)</h4>
-                            <p className="text-[10px] text-white/40 pb-2 border-b border-white/5">
-                              Este dispositivo está mapeado automaticamente usando o banco GameControllerDB da SDL3.
-                            </p>
-                            <div className="grid grid-cols-2 md:grid-cols-3 gap-2.5 pt-1 text-[10px] font-medium font-mono text-white/60">
-                              <div className="p-2 rounded bg-black/20 border border-white/5 flex justify-between"><span>D-Pad Cima:</span> <span className="text-accent font-bold">Hat 0 Up</span></div>
-                              <div className="p-2 rounded bg-black/20 border border-white/5 flex justify-between"><span>Botão A:</span> <span className="text-accent font-bold">Button 0</span></div>
-                              <div className="p-2 rounded bg-black/20 border border-white/5 flex justify-between"><span>Botão B:</span> <span className="text-accent font-bold">Button 1</span></div>
-                              <div className="p-2 rounded bg-black/20 border border-white/5 flex justify-between"><span>Botão X:</span> <span className="text-accent font-bold">Button 2</span></div>
-                              <div className="p-2 rounded bg-black/20 border border-white/5 flex justify-between"><span>Botão Y:</span> <span className="text-accent font-bold">Button 3</span></div>
-                              <div className="p-2 rounded bg-black/20 border border-white/5 flex justify-between"><span>Bumper Esq (LB):</span> <span className="text-accent font-bold">Button 4</span></div>
-                              <div className="p-2 rounded bg-black/20 border border-white/5 flex justify-between"><span>Bumper Dir (RB):</span> <span className="text-accent font-bold">Button 5</span></div>
-                              <div className="p-2 rounded bg-black/20 border border-white/5 flex justify-between"><span>Gatilho Esq (LT):</span> <span className="text-accent font-bold">Axis 4</span></div>
-                              <div className="p-2 rounded bg-black/20 border border-white/5 flex justify-between"><span>Gatilho Dir (RT):</span> <span className="text-accent font-bold">Axis 5</span></div>
-                              <div className="p-2 rounded bg-black/20 border border-white/5 flex justify-between"><span>Select (BACK):</span> <span className="text-accent font-bold">Button 8</span></div>
-                              <div className="p-2 rounded bg-black/20 border border-white/5 flex justify-between"><span>Start (START):</span> <span className="text-accent font-bold">Button 9</span></div>
-                              <div className="p-2 rounded bg-black/20 border border-white/5 flex justify-between"><span>Stick Esq (Click):</span> <span className="text-accent font-bold">Button 10</span></div>
+                          <div className="p-4 bg-white/2 border border-white/5 rounded-xl space-y-4 text-left">
+                            <div className="flex items-center justify-between border-b border-white/5 pb-3">
+                              <div>
+                                <h4 className="text-xs font-bold text-white">Wizard de Mapeamento</h4>
+                                <p className="text-[10px] text-white/40">Mapeie os botões e analógicos do seu controle manualmente.</p>
+                              </div>
+                              {wizardStep === null ? (
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    setWizardStep(0);
+                                    setWizardMappings({});
+                                  }}
+                                  className="px-3 py-1.5 rounded-lg bg-accent hover:bg-accent/80 text-white text-[10px] font-bold transition cursor-pointer"
+                                >
+                                  Iniciar Mapeamento
+                                </button>
+                              ) : (
+                                <button
+                                  type="button"
+                                  onClick={() => setWizardStep(null)}
+                                  className="px-3 py-1.5 rounded-lg bg-red-600/20 border border-red-500/30 hover:bg-red-600/30 text-red-400 text-[10px] font-bold transition cursor-pointer"
+                                >
+                                  Cancelar
+                                </button>
+                              )}
+                            </div>
+
+                            {wizardStep !== null ? (
+                              <div className="p-6 bg-black/35 rounded-xl border border-white/5 text-center space-y-4">
+                                <p className="text-xs font-bold text-white/50 uppercase tracking-widest">Passo {wizardStep + 1} de {WIZARD_STEPS.length}</p>
+                                <h3 className="text-lg font-extrabold text-white animate-pulse">
+                                  Pressione ou mova: <span className="text-accent">{WIZARD_STEPS[wizardStep].label}</span>
+                                </h3>
+                                <p className="text-xs text-white/40">
+                                  Pressione o botão físico correspondente no controle ou mova o analógico além de 60%.
+                                </p>
+                                <div className="flex justify-center gap-2 pt-2">
+                                  <button
+                                    type="button"
+                                    onClick={() => {
+                                      if (wizardStep < WIZARD_STEPS.length - 1) {
+                                        setWizardStep(prev => prev! + 1);
+                                      } else {
+                                        finishWizard(wizardMappings);
+                                      }
+                                    }}
+                                    className="px-3 py-1.5 rounded bg-white/5 border border-white/10 hover:bg-white/10 text-white text-[10px] font-bold transition cursor-pointer"
+                                  >
+                                    Pular este botão
+                                  </button>
+                                </div>
+                              </div>
+                            ) : (
+                              <div className="space-y-3">
+                                <h5 className="text-[10px] font-bold text-white/60 uppercase tracking-wider">Perfil de Entrada:</h5>
+                                <div className="p-3 bg-black/25 border border-white/5 rounded-lg text-xs space-y-2">
+                                  <p className="text-white/80">O layout de entrada do controle é carregado do arquivo central <span className="font-mono text-accent">input.json</span>.</p>
+                                  <p className="text-white/60 text-[10px]">Use o Wizard acima para substituir ou reconfigurar todas as atribuições físicas deste dispositivo.</p>
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                        )}
+
+                        {/* 4.5. DEBUG/DIAGNÓSTICO SUB-TAB */}
+                        {activeControlSubTab === "debug" && (
+                          <div className="p-4 bg-white/2 border border-white/5 rounded-xl space-y-4 text-left">
+                            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-white/5 pb-3">
+                              <div>
+                                <h4 className="text-xs font-bold text-white">Debug & Diagnóstico SDL3</h4>
+                                <p className="text-[10px] text-white/40">Monitore as entradas de baixo nível recebidas do driver de controle.</p>
+                              </div>
+                              <div className="flex gap-2 shrink-0">
+                                <button
+                                  type="button"
+                                  onClick={copyControllerId}
+                                  className="px-2.5 py-1.5 rounded bg-white/5 border border-white/10 hover:bg-white/10 text-white text-[10px] font-bold transition flex items-center gap-1 cursor-pointer"
+                                >
+                                  <Copy className="w-3 h-3 text-accent" />
+                                  Copiar ID
+                                </button>
+                                <button
+                                  type="button"
+                                  onClick={exportDebugReport}
+                                  className="px-2.5 py-1.5 rounded bg-white/5 border border-white/10 hover:bg-white/10 text-white text-[10px] font-bold transition flex items-center gap-1 cursor-pointer"
+                                >
+                                  <Download className="w-3 h-3 text-accent" />
+                                  Exportar Relatório
+                                </button>
+                              </div>
+                            </div>
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-black/20 border border-white/5 p-3 rounded-lg text-[10px] font-mono text-white/60">
+                              <div><span className="text-white/40 font-bold block">Dispositivo:</span> {selectedController.name}</div>
+                              <div><span className="text-white/40 font-bold block">Identificador GUID:</span> {selectedController.guid}</div>
+                              <div><span className="text-white/40 font-bold block">Vendor / Product:</span> 0x{selectedController.vendorId} / 0x{selectedController.productId}</div>
+                              <div><span className="text-white/40 font-bold block">Conexão API:</span> {selectedController.type === 'xinput' ? 'XInput' : 'DirectInput / HID'}</div>
+                              <div><span className="text-white/40 font-bold block">Instance ID:</span> {selectedController.instanceId}</div>
+                              <div><span className="text-white/40 font-bold block">Versão SDL3 Runtime:</span> {sdlVersion}</div>
+                            </div>
+
+                            <div className="space-y-2">
+                              <h5 className="text-[10px] font-bold text-white/60 uppercase tracking-wider">Console de Eventos em Tempo Real:</h5>
+                              <div className="h-40 overflow-y-auto bg-black/45 border border-white/5 p-2 rounded-lg font-mono text-[10px] text-green-400 space-y-1 select-text scrollbar-thin">
+                                {debugEvents.length === 0 ? (
+                                  <p className="text-white/30 italic">Aguardando eventos... Pressione algum botão ou mova os sticks analógicos.</p>
+                                ) : (
+                                  debugEvents.map((evt, idx) => (
+                                    <div key={idx} className="hover:bg-white/5 py-0.5 truncate">{evt}</div>
+                                  ))
+                                )}
+                              </div>
                             </div>
                           </div>
                         )}

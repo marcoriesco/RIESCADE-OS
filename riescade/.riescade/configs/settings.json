@@ -40,7 +40,7 @@
     "type": "bool"
   },
   "DrawFramerate": {
-    "value": true,
+    "value": false,
     "type": "bool"
   },
   "LoadEmptySystems": {
@@ -384,7 +384,7 @@
     "type": "int"
   },
   "Window.tool-settings.Width": {
-    "value": 1149,
+    "value": 1520,
     "type": "int"
   },
   "Window.tool-settings.Height": {
@@ -416,11 +416,11 @@
     "type": "bool"
   },
   "VSync": {
-    "value": true,
+    "value": false,
     "type": "bool"
   },
   "RIESCADE.AccentColor": {
-    "value": "#06b6d4",
+    "value": "#9f0043",
     "type": "string"
   },
   "Window.system-2ship.Maximized": {
@@ -796,7 +796,7 @@
     "type": "bool"
   },
   "RIESCADE.GpuDriver": {
-    "value": "d3d12",
+    "value": "default",
     "type": "string"
   },
   "LogLevel": {

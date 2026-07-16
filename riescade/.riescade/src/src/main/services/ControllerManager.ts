@@ -1,6 +1,7 @@
 import { readFileSync, writeFileSync, existsSync, mkdirSync, appendFileSync } from 'fs'
 import { join } from 'path'
 import { execFileSync, execFile, spawn } from 'child_process'
+import { BrowserWindow } from 'electron'
 import { getRiescadePath } from '../utils/paths'
 
 export interface ControllerInfo {
@@ -30,13 +31,14 @@ export interface ControllerConfig {
 export class ControllerManager {
   private static instance: ControllerManager | null = null
   private configPath: string
-  private profilesPath: string
   private logPath: string
   private helperExePath: string
+  private inputJsonPath: string
   
-  private profiles: Record<string, any> = {}
   private userConfigs: Record<string, ControllerConfig> = {}
   private connectedControllers: ControllerInfo[] = []
+  private inputJsonData: { version: number; inputConfigs: any[] } = { version: 1, inputConfigs: [] }
+  public sdlVersion = '3.0.0'
   
   private watchProcess: any | null = null
   private stdoutBuffer = ''
@@ -52,24 +54,52 @@ export class ControllerManager {
 
   private constructor() {
     const riescadePath = getRiescadePath()
-    this.configPath = join(riescadePath, 'configs', 'controllerConfigs.json')
-    this.profilesPath = join(riescadePath, 'configs', 'controllers.json')
+    this.configPath = join(riescadePath, 'configs', 'controllers.json')
     this.logPath = join(riescadePath, 'logs', 'controllers.log')
     this.helperExePath = join(riescadePath, 'bin', 'sdl3_detector.exe')
+    this.inputJsonPath = join(riescadePath, 'configs', 'input.json')
 
-    this.loadProfiles()
     this.loadConfigs()
+    this.loadInputJson()
     this.compileHelper()
   }
 
-  private loadProfiles(): void {
-    if (existsSync(this.profilesPath)) {
+  private loadInputJson(): void {
+    if (existsSync(this.inputJsonPath)) {
       try {
-        this.profiles = JSON.parse(readFileSync(this.profilesPath, 'utf8'))
+        this.inputJsonData = JSON.parse(readFileSync(this.inputJsonPath, 'utf8'))
+        if (!this.inputJsonData.inputConfigs) {
+          this.inputJsonData.inputConfigs = []
+        }
       } catch (err) {
-        console.error('Failed to load controllers.json:', err)
+        console.error('Failed to load input.json:', err)
       }
     }
+  }
+
+  public findInputConfig(guid: string, name: string, vid?: string, pid?: string): any | null {
+    const configs = this.inputJsonData.inputConfigs || []
+    
+    // 1. Match by VendorID & ProductID
+    if (vid && pid) {
+      const match = configs.find(c => c.device && c.device.vendorId === vid && c.device.productId === pid)
+      if (match) return match
+    }
+    
+    // 2. Match by GUID
+    if (guid) {
+      const match = configs.find(c => c.device && c.device.deviceGUID === guid)
+      if (match) return match
+    }
+    
+    // 3. Match by name fallback
+    if (name) {
+      const cleanName = name.split('(')[0].trim().toLowerCase()
+      const match = configs.find(c => c.device && c.device.deviceName.split('(')[0].trim().toLowerCase() === cleanName)
+      if (match) return match
+    }
+    
+    return null
   }
 
   private loadConfigs(): void {
@@ -77,32 +107,166 @@ export class ControllerManager {
       try {
         this.userConfigs = JSON.parse(readFileSync(this.configPath, 'utf8'))
       } catch (err) {
-        console.error('Failed to load controllerConfigs.json:', err)
+        console.error('Failed to load controllers.json:', err)
       }
     }
   }
 
   public saveConfig(guid: string, config: ControllerConfig): void {
-    this.userConfigs[guid] = {
-      ...(this.userConfigs[guid] || {}),
-      ...config
+    const connectedDev = this.connectedControllers.find(c => c.guid === guid)
+    const deviceName = connectedDev ? connectedDev.name : 'Unknown Device'
+    const vendorId = connectedDev ? connectedDev.vendorId : undefined
+    const productId = connectedDev ? connectedDev.productId : undefined
+    
+    const configs = this.inputJsonData.inputConfigs || []
+    
+    let existingIndex = -1
+    if (vendorId && productId) {
+      existingIndex = configs.findIndex(c => c.device && c.device.vendorId === vendorId && c.device.productId === productId)
     }
+    if (existingIndex === -1 && guid) {
+      existingIndex = configs.findIndex(c => c.device && c.device.deviceGUID === guid)
+    }
+    
+    const now = new Date().toISOString()
+    
+    if (existingIndex !== -1) {
+      const entry = configs[existingIndex]
+      if (config.preferredPlayer !== undefined) {
+        entry.preferredPlayer = config.preferredPlayer
+        entry.lastPlayer = config.preferredPlayer
+      }
+      if (config.deadzone !== undefined) {
+        if (!entry.analog) entry.analog = {}
+        entry.analog.leftDeadzone = Math.round(config.deadzone * 100)
+        entry.analog.rightDeadzone = Math.round(config.deadzone * 100)
+      }
+      if (config.invertLeftY !== undefined || config.invertRightY !== undefined) {
+        if (!entry.analog) entry.analog = {}
+        entry.analog.invertLeftY = config.invertLeftY
+        entry.analog.invertRightY = config.invertRightY
+      }
+      entry.updatedAt = now
+    } else {
+      const entry: any = {
+        device: {
+          deviceName,
+          deviceGUID: guid,
+          vendorId: vendorId || '',
+          productId: productId || ''
+        },
+        profileId: 'default-profile',
+        profileVersion: 1,
+        source: 'sdl-auto',
+        createdAt: now,
+        updatedAt: now,
+        analog: {
+          leftDeadzone: config.deadzone !== undefined ? Math.round(config.deadzone * 100) : 15,
+          rightDeadzone: config.deadzone !== undefined ? Math.round(config.deadzone * 100) : 15,
+          invertLeftY: config.invertLeftY,
+          invertRightY: config.invertRightY
+        },
+        inputs: []
+      }
+      if (config.preferredPlayer !== undefined) {
+        entry.preferredPlayer = config.preferredPlayer
+        entry.lastPlayer = config.preferredPlayer
+      }
+      configs.push(entry)
+    }
+    
     try {
       const configDir = join(getRiescadePath(), 'configs')
       if (!existsSync(configDir)) {
         mkdirSync(configDir, { recursive: true })
       }
-      writeFileSync(this.configPath, JSON.stringify(this.userConfigs, null, 2), 'utf8')
-      this.log(`Saved config for GUID ${guid}: ${JSON.stringify(config)}`)
+      writeFileSync(this.inputJsonPath, JSON.stringify(this.inputJsonData, null, 2), 'utf8')
+      this.log(`Saved configuration to input.json for GUID ${guid}`)
     } catch (err) {
-      console.error('Failed to write controllerConfigs.json:', err)
+      console.error('Failed to write input.json:', err)
     }
-    // Trigger update asynchronously to apply player slots immediately
+    
     this.detectAll()
   }
 
   public getConfigs(): Record<string, ControllerConfig> {
-    return this.userConfigs
+    const result: Record<string, ControllerConfig> = {}
+    const configs = this.inputJsonData.inputConfigs || []
+    
+    configs.forEach(c => {
+      if (c.device && c.device.deviceGUID) {
+        result[c.device.deviceGUID] = {
+          preferredPlayer: c.preferredPlayer,
+          deadzone: c.analog ? (c.analog.leftDeadzone / 100) : 0.15,
+          invertLeftY: c.analog ? c.analog.invertLeftY : false,
+          invertRightY: c.analog ? c.analog.invertRightY : false
+        }
+      }
+    })
+    
+    return result
+  }
+
+  public saveInputConfig(data: {
+    deviceName: string
+    deviceGUID: string
+    vendorId?: string
+    productId?: string
+    profileId?: string
+    inputs: any[]
+    hotkey?: any
+    analog?: any
+  }): boolean {
+    const configs = this.inputJsonData.inputConfigs || []
+    
+    let existingIndex = -1
+    if (data.vendorId && data.productId) {
+      existingIndex = configs.findIndex(c => c.device && c.device.vendorId === data.vendorId && c.device.productId === data.productId)
+    }
+    if (existingIndex === -1 && data.deviceGUID) {
+      existingIndex = configs.findIndex(c => c.device && c.device.deviceGUID === data.deviceGUID)
+    }
+    
+    const now = new Date().toISOString()
+    const newConfig = {
+      device: {
+        deviceName: data.deviceName,
+        deviceGUID: data.deviceGUID,
+        vendorId: data.vendorId || '',
+        productId: data.productId || ''
+      },
+      profileId: data.profileId || 'custom-profile',
+      profileVersion: 1,
+      source: 'wizard',
+      createdAt: existingIndex !== -1 ? configs[existingIndex].createdAt : now,
+      updatedAt: now,
+      preferredPlayer: existingIndex !== -1 ? configs[existingIndex].preferredPlayer : undefined,
+      lastPlayer: existingIndex !== -1 ? configs[existingIndex].lastPlayer : undefined,
+      analog: data.analog || (existingIndex !== -1 ? configs[existingIndex].analog : { leftDeadzone: 15, rightDeadzone: 15 }),
+      hotkey: data.hotkey || (existingIndex !== -1 ? configs[existingIndex].hotkey : undefined),
+      inputs: data.inputs
+    }
+    
+    if (existingIndex !== -1) {
+      configs[existingIndex] = newConfig
+    } else {
+      configs.push(newConfig)
+    }
+    
+    try {
+      const configDir = join(getRiescadePath(), 'configs')
+      if (!existsSync(configDir)) {
+        mkdirSync(configDir, { recursive: true })
+      }
+      writeFileSync(this.inputJsonPath, JSON.stringify(this.inputJsonData, null, 2), 'utf8')
+      this.log(`Saved mapping to input.json for device: ${data.deviceName}`)
+      
+      this.detectAll()
+      return true
+    } catch (err) {
+      console.error('Failed to write input.json:', err)
+      return false
+    }
   }
 
   private log(message: string): void {
@@ -131,7 +295,11 @@ export class ControllerManager {
       return // Already compiled
     }
 
-    const sourceCode = `
+    let sourceCode = ''
+    if (existsSync(csFile)) {
+      sourceCode = readFileSync(csFile, 'utf8')
+    } else {
+      sourceCode = `
 using System;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -366,8 +534,11 @@ public class Program {
     }
 }
 `
+    }
     try {
-      writeFileSync(csFile, sourceCode, 'utf8')
+      if (!existsSync(csFile)) {
+        writeFileSync(csFile, sourceCode, 'utf8')
+      }
       const cscPath = 'C:\\Windows\\Microsoft.NET\\Framework64\\v4.0.30319\\csc.exe'
       if (existsSync(cscPath)) {
         execFileSync(cscPath, ['/out:' + this.helperExePath, '/target:exe', '/optimize', csFile])
@@ -398,9 +569,10 @@ public class Program {
     if (existsSync(this.helperExePath)) {
       try {
         const stdout = await this.execFileAsync(this.helperExePath, [])
-        const trimmed = stdout.trim()
-        if (trimmed) {
-          sdlPads = JSON.parse(trimmed)
+        const lines = stdout.split('\n')
+        const jsonLine = lines.find(l => l.trim().startsWith('['))
+        if (jsonLine) {
+          sdlPads = JSON.parse(jsonLine.trim())
         }
       } catch (err: any) {
         console.error('Error running sdl3_detector.exe:', err)
@@ -417,9 +589,9 @@ public class Program {
       const pid = pad.productId
       const serial = pad.serial
       
-      const profile = this.findProfile(guid, name)
-      if (profile) {
-        name = profile.name
+      const config = this.findInputConfig(guid, name, vid, pid)
+      if (config && config.device && config.device.deviceName) {
+        name = config.device.deviceName
       }
 
       const virtualInfo = this.checkVirtual(name, serial || pad.instanceId.toString() || '')
@@ -472,9 +644,9 @@ public class Program {
       const pid = pad.productId
       const serial = pad.serial
       
-      const profile = this.findProfile(guid, name)
-      if (profile) {
-        name = profile.name
+      const config = this.findInputConfig(guid, name, vid, pid)
+      if (config && config.device && config.device.deviceName) {
+        name = config.device.deviceName
       }
 
       const virtualInfo = this.checkVirtual(name, serial || pad.instanceId.toString() || '')
@@ -558,10 +730,10 @@ public class Program {
 
   private rebuildPlayerAssignments(connected: ControllerInfo[]): ControllerInfo[] {
     const assigned = connected.map(c => {
-      const config = this.userConfigs[c.guid] || {}
+      const config = this.findInputConfig(c.guid, c.name, c.vendorId, c.productId)
       return {
         controller: c,
-        preferred: config.preferredPlayer || null
+        preferred: config ? config.preferredPlayer : null
       }
     })
 
@@ -631,11 +803,32 @@ public class Program {
         for (const line of lines) {
           const trimmed = line.trim()
           if (trimmed) {
-            try {
-              const sdlPads = JSON.parse(trimmed)
-              this.handleSdlPadsUpdate(sdlPads)
-            } catch (err: any) {
-              this.log(`Error parsing watch JSON line: ${err.message}. Line: ${trimmed}`)
+            if (trimmed.startsWith('SDL_VERSION:')) {
+              const version = trimmed.split(':')[1]
+              this.log(`SDL3 Runtime Version detected: ${version}`)
+              this.sdlVersion = version
+            } else if (trimmed.startsWith('GPAXIS:') || trimmed.startsWith('GPBUTTON:') || 
+                       trimmed.startsWith('AXIS:') || trimmed.startsWith('HAT:') || 
+                       trimmed.startsWith('BUTTON:')) {
+              const parts = trimmed.split(':')
+              const payload = {
+                type: parts[0],
+                instanceId: parseInt(parts[1], 10),
+                index: parseInt(parts[2], 10),
+                value: parseInt(parts[3], 10)
+              }
+              BrowserWindow.getAllWindows().forEach(w => {
+                if (!w.isDestroyed()) {
+                  w.webContents.send('controller-input', payload)
+                }
+              })
+            } else if (trimmed.startsWith('[')) {
+              try {
+                const sdlPads = JSON.parse(trimmed)
+                this.handleSdlPadsUpdate(sdlPads)
+              } catch (err: any) {
+                this.log(`Error parsing watch JSON line: ${err.message}. Line: ${trimmed}`)
+              }
             }
           }
         }

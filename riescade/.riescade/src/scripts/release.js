@@ -149,6 +149,18 @@ async function run() {
       console.log('   ✓ riescade.db excluded');
     }
 
+    // Clean up local user save files, screenshots, and videos from the release package
+    const foldersToEmpty = ['saves', 'screenshots', 'videos'];
+    for (const folderName of foldersToEmpty) {
+      const folderPath = path.join(esDest, folderName);
+      if (fs.existsSync(folderPath)) {
+        fs.rmSync(folderPath, { recursive: true, force: true });
+      }
+      fs.mkdirSync(folderPath, { recursive: true });
+      fs.writeFileSync(path.join(folderPath, '.keep'), '', 'utf8');
+      console.log(`   ✓ riescade/${folderName}/ emptied (.keep added)`);
+    }
+
     // Empty the logs folder in the temp release directory
     const logsDir = path.join(esDest, '.riescade', 'logs');
     if (fs.existsSync(logsDir)) {

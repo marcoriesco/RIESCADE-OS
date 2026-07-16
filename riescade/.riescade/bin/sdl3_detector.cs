@@ -1,6 +1,7 @@
 using System;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Collections.Generic;
 
 public class Program {
     [StructLayout(LayoutKind.Sequential)]
@@ -8,9 +9,93 @@ public class Program {
         public byte b0, b1, b2, b3, b4, b5, b6, b7, b8, b9, b10, b11, b12, b13, b14, b15;
     }
 
-    [StructLayout(LayoutKind.Sequential, Size = 128)]
-    public struct SDL_Event {
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_JoyAxisEvent {
         public uint type;
+        public uint reserved;
+        public ulong timestamp;
+        public uint which;
+        public byte axis;
+        public byte padding1;
+        public byte padding2;
+        public byte padding3;
+        public short value;
+        public ushort padding4;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_JoyBallEvent {
+        public uint type;
+        public uint reserved;
+        public ulong timestamp;
+        public uint which;
+        public byte ball;
+        public byte padding1;
+        public byte padding2;
+        public byte padding3;
+        public short xrel;
+        public short yrel;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_JoyHatEvent {
+        public uint type;
+        public uint reserved;
+        public ulong timestamp;
+        public uint which;
+        public byte hat;
+        public byte value;
+        public byte padding1;
+        public byte padding2;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_JoyButtonEvent {
+        public uint type;
+        public uint reserved;
+        public ulong timestamp;
+        public uint which;
+        public byte button;
+        public byte down;
+        public byte padding1;
+        public byte padding2;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_GamepadAxisEvent {
+        public uint type;
+        public uint reserved;
+        public ulong timestamp;
+        public uint which;
+        public byte axis;
+        public byte padding1;
+        public byte padding2;
+        public byte padding3;
+        public short value;
+        public ushort padding4;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SDL_GamepadButtonEvent {
+        public uint type;
+        public uint reserved;
+        public ulong timestamp;
+        public uint which;
+        public byte button;
+        public byte down;
+        public byte padding1;
+        public byte padding2;
+    }
+
+    [StructLayout(LayoutKind.Explicit, Size = 128)]
+    public struct SDL_Event {
+        [FieldOffset(0)] public uint type;
+        [FieldOffset(0)] public SDL_JoyAxisEvent jaxis;
+        [FieldOffset(0)] public SDL_JoyBallEvent jball;
+        [FieldOffset(0)] public SDL_JoyHatEvent jhat;
+        [FieldOffset(0)] public SDL_JoyButtonEvent jbutton;
+        [FieldOffset(0)] public SDL_GamepadAxisEvent gaxis;
+        [FieldOffset(0)] public SDL_GamepadButtonEvent gbutton;
     }
 
     [DllImport("SDL3.dll", CallingConvention = CallingConvention.Cdecl)]
@@ -96,6 +181,14 @@ public class Program {
 
     [DllImport("SDL3.dll", CallingConvention = CallingConvention.Cdecl)]
     public static extern bool SDL_RumbleGamepad(IntPtr gamepad, ushort low_frequency_rumble, ushort high_frequency_rumble, uint duration_ms);
+
+    [DllImport("SDL3.dll", CallingConvention = CallingConvention.Cdecl)]
+    public static extern int SDL_GetVersion();
+
+    private static Dictionary<uint, IntPtr> openGamepads = new Dictionary<uint, IntPtr>();
+    private static Dictionary<uint, IntPtr> openJoysticks = new Dictionary<uint, IntPtr>();
+    private static Dictionary<string, int> lastAxisValues = new Dictionary<string, int>();
+    private const int AXIS_THRESHOLD = 1200;
 
     private static string GetDevicesJson() {
         int count = 0;
@@ -194,16 +287,64 @@ public class Program {
         return json.ToString();
     }
 
+    private static void OpenDevice(uint instanceId) {
+        if (SDL_IsGamepad(instanceId)) {
+            if (!openGamepads.ContainsKey(instanceId)) {
+                IntPtr gp = SDL_OpenGamepad(instanceId);
+                if (gp != IntPtr.Zero) {
+                    openGamepads[instanceId] = gp;
+                }
+            }
+        } else {
+            if (!openJoysticks.ContainsKey(instanceId)) {
+                IntPtr joy = SDL_OpenJoystick(instanceId);
+                if (joy != IntPtr.Zero) {
+                    openJoysticks[instanceId] = joy;
+                }
+            }
+        }
+    }
+
+    private static void CloseDevice(uint instanceId) {
+        if (openGamepads.ContainsKey(instanceId)) {
+            SDL_CloseGamepad(openGamepads[instanceId]);
+            openGamepads.Remove(instanceId);
+        }
+        if (openJoysticks.ContainsKey(instanceId)) {
+            SDL_CloseJoystick(openJoysticks[instanceId]);
+            openJoysticks.Remove(instanceId);
+        }
+    }
+
     public static void Main(string[] args) {
         bool watchMode = args.Length > 0 && args[0] == "--watch";
 
-        if (!SDL_Init(0x00002000u)) { // SDL_INIT_GAMEPAD (includes joystick)
+        if (!SDL_Init(0x00002000u)) { // SDL_INIT_GAMEPAD
             Console.WriteLine("[]");
             return;
         }
 
         try {
+            int versionNum = SDL_GetVersion();
+            int major = versionNum / 1000000;
+            int minor = (versionNum / 1000) % 1000;
+            int patch = versionNum % 1000;
+            string sdlVersionStr = major + "." + minor + "." + patch;
+            Console.WriteLine("SDL_VERSION:" + sdlVersionStr);
+
             if (watchMode) {
+                // Open all existing devices at startup
+                int existingCount = 0;
+                IntPtr ptr = SDL_GetJoysticks(out existingCount);
+                if (ptr != IntPtr.Zero && existingCount > 0) {
+                    int[] ids = new int[existingCount];
+                    Marshal.Copy(ptr, ids, 0, existingCount);
+                    for (int i = 0; i < existingCount; i++) {
+                        OpenDevice((uint)ids[i]);
+                    }
+                    SDL_free(ptr);
+                }
+
                 System.Threading.Thread stdinThread = new System.Threading.Thread(() => {
                     try {
                         string line;
@@ -215,11 +356,18 @@ public class Program {
                                     uint instId = uint.Parse(parts[1]);
                                     uint duration = uint.Parse(parts[2]);
                                     
-                                    IntPtr gp = SDL_OpenGamepad(instId);
+                                    IntPtr gp = IntPtr.Zero;
+                                    bool wasAlreadyOpen = openGamepads.TryGetValue(instId, out gp);
+                                    if (!wasAlreadyOpen) {
+                                        gp = SDL_OpenGamepad(instId);
+                                    }
+                                    
                                     if (gp != IntPtr.Zero) {
                                         SDL_RumbleGamepad(gp, 0xFFFF, 0xFFFF, duration);
                                         System.Threading.Thread.Sleep((int)duration + 50);
-                                        SDL_CloseGamepad(gp);
+                                        if (!wasAlreadyOpen) {
+                                            SDL_CloseGamepad(gp);
+                                        }
                                     }
                                 }
                             }
@@ -234,12 +382,73 @@ public class Program {
 
                 SDL_Event ev = new SDL_Event();
                 while (true) {
-                    if (SDL_WaitEventTimeout(ref ev, 100)) {
-                        // ADDED (0x605 or 0x653) and REMOVED (0x606 or 0x654)
-                        if (ev.type == 0x605 || ev.type == 0x606 || ev.type == 0x653 || ev.type == 0x654) {
+                    if (SDL_WaitEventTimeout(ref ev, 50)) {
+                        // 1. Device connection/disconnection events
+                        if (ev.type == 0x605) { // SDL_EVENT_JOYSTICK_ADDED
+                            OpenDevice(ev.jaxis.which);
                             System.Threading.Thread.Sleep(50);
-                            while (SDL_PollEvent(ref ev)) { }
                             Console.WriteLine(GetDevicesJson());
+                        } else if (ev.type == 0x606) { // SDL_EVENT_JOYSTICK_REMOVED
+                            CloseDevice(ev.jaxis.which);
+                            System.Threading.Thread.Sleep(50);
+                            Console.WriteLine(GetDevicesJson());
+                        } else if (ev.type == 0x653) { // SDL_EVENT_GAMEPAD_ADDED
+                            OpenDevice(ev.gbutton.which);
+                            System.Threading.Thread.Sleep(50);
+                            Console.WriteLine(GetDevicesJson());
+                        } else if (ev.type == 0x654) { // SDL_EVENT_GAMEPAD_REMOVED
+                            CloseDevice(ev.gbutton.which);
+                            System.Threading.Thread.Sleep(50);
+                            Console.WriteLine(GetDevicesJson());
+                        }
+
+                        // 2. Gamepad events (semantic mappings)
+                        else if (ev.type == 0x650) { // SDL_EVENT_GAMEPAD_AXIS_MOTION
+                            uint which = ev.gaxis.which;
+                            byte axis = ev.gaxis.axis;
+                            short val = ev.gaxis.value;
+                            string key = which + "_" + axis + "_gp";
+                            int lastVal = 0;
+                            bool hasLast = lastAxisValues.TryGetValue(key, out lastVal);
+                            if (!hasLast || Math.Abs(val - lastVal) >= AXIS_THRESHOLD || (val == 0 && lastVal != 0)) {
+                                lastAxisValues[key] = val;
+                                Console.WriteLine("GPAXIS:" + which + ":" + axis + ":" + val);
+                            }
+                        } else if (ev.type == 0x651 || ev.type == 0x652) { // DOWN or UP
+                            uint which = ev.gbutton.which;
+                            byte button = ev.gbutton.button;
+                            int state = ev.type == 0x651 ? 1 : 0;
+                            Console.WriteLine("GPBUTTON:" + which + ":" + button + ":" + state);
+                        }
+
+                        // 3. Joystick events (generic fallback for non-gamepads)
+                        else if (ev.type == 0x600) { // SDL_EVENT_JOYSTICK_AXIS_MOTION
+                            uint which = ev.jaxis.which;
+                            if (!openGamepads.ContainsKey(which)) {
+                                byte axis = ev.jaxis.axis;
+                                short val = ev.jaxis.value;
+                                string key = which + "_" + axis + "_joy";
+                                int lastVal = 0;
+                                bool hasLast = lastAxisValues.TryGetValue(key, out lastVal);
+                                if (!hasLast || Math.Abs(val - lastVal) >= AXIS_THRESHOLD || (val == 0 && lastVal != 0)) {
+                                    lastAxisValues[key] = val;
+                                    Console.WriteLine("AXIS:" + which + ":" + axis + ":" + val);
+                                }
+                            }
+                        } else if (ev.type == 0x602) { // SDL_EVENT_JOYSTICK_HAT_MOTION
+                            uint which = ev.jhat.which;
+                            if (!openGamepads.ContainsKey(which)) {
+                                byte hat = ev.jhat.hat;
+                                byte val = ev.jhat.value;
+                                Console.WriteLine("HAT:" + which + ":" + hat + ":" + val);
+                            }
+                        } else if (ev.type == 0x603 || ev.type == 0x604) { // DOWN or UP
+                            uint which = ev.jbutton.which;
+                            if (!openGamepads.ContainsKey(which)) {
+                                byte button = ev.jbutton.button;
+                                int state = ev.type == 0x603 ? 1 : 0;
+                                Console.WriteLine("BUTTON:" + which + ":" + button + ":" + state);
+                            }
                         }
                     }
                 }
@@ -247,6 +456,13 @@ public class Program {
                 Console.WriteLine(GetDevicesJson());
             }
         } finally {
+            // Close all opened devices on quit
+            foreach (var gp in openGamepads.Values) {
+                SDL_CloseGamepad(gp);
+            }
+            foreach (var joy in openJoysticks.Values) {
+                SDL_CloseJoystick(joy);
+            }
             SDL_Quit();
         }
     }

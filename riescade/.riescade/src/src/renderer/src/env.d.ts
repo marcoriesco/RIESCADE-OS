@@ -34,6 +34,8 @@ declare global {
       saveControllerConfig: (guid: string, config: any) => Promise<boolean>
       getControllerConfigs: () => Promise<any>
       rumbleController: (instanceId: string, durationMs: number) => Promise<boolean>
+      exportDebugReport: (recentEvents?: any[]) => Promise<any>
+      getSdlVersion: () => Promise<string>
       executeCommand: (command: string, data?: any) => void
       openAppWindow: (type: 'system' | 'tool', id: string) => void
       minimizeWindow: () => void

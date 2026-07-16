@@ -129,15 +129,15 @@ export class LibRetroGenerator extends BaseGenerator {
   }
 
   private mapControllers(cfg: Record<string, string>) {
-    // Load controllerConfigs.json to get deadzones
+    // Load controllers.json to get deadzones
     let configs: Record<string, any> = {};
     try {
-      const configPath = join(getConfigsPath(), 'controllerConfigs.json');
+      const configPath = join(getConfigsPath(), 'controllers.json');
       if (existsSync(configPath)) {
         configs = JSON.parse(readFileSync(configPath, 'utf8'));
       }
     } catch (e) {
-      Logger.error('LibRetroGenerator: Failed to load controllerConfigs.json', e);
+      Logger.error('LibRetroGenerator: Failed to load controllers.json', e);
     }
 
     // Up to 4 players
