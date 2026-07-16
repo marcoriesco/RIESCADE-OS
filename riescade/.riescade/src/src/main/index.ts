@@ -569,6 +569,11 @@ app.whenReady().then(() => {
     return ControllerManager.getInstance().detectAll()
   })
 
+  ipcMain.handle('rumble-controller', async (_, { instanceId, durationMs }) => {
+    ControllerManager.getInstance().rumble(instanceId, durationMs)
+    return true
+  })
+
   ipcMain.handle('get-controller-state', async (_, xinputIndex: number) => {
     return ControllerManager.getInstance().getState(xinputIndex)
   })
@@ -821,7 +826,10 @@ app.whenReady().then(() => {
   })
 
   ipcMain.handle('get-riescade-logo-path', async () => {
-    const file = join(getRiescadePath(), 'resources', 'riescade.webp')
+    let file = join(getResourcesPath(), 'riescade.webp')
+    if (!existsSync(file)) {
+      file = join(getRiescadePath(), 'resources', 'riescade.webp')
+    }
     return existsSync(file) ? `file:///${file.replace(/\\/g, '/')}` : ''
   })
 

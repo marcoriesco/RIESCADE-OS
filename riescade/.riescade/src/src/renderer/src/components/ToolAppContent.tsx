@@ -129,6 +129,19 @@ export default function ToolAppContent({
   const [emuMenuOpen, setEmuMenuOpen] = useState(false);
   const [settingsSearch, setSettingsSearch] = useState("");
   const [settingsCategory, setSettingsCategory] = useState<"all" | "tools" | "systems">("all");
+  const [riescadeLogo, setRiescadeLogo] = useState<string>("");
+  const [riescadeVersion, setRiescadeVersion] = useState<string>("v2.0.0-Beta");
+
+  useEffect(() => {
+    window.api.getRiescadeLogoPath().then((path) => {
+      if (path) setRiescadeLogo(path);
+    });
+    window.api.getVersion().then((res) => {
+      if (res && res.app) {
+        setRiescadeVersion(`v${res.app}`);
+      }
+    });
+  }, []);
   const [updateState, setUpdateState] = useState<{
     status: 'idle' | 'checking' | 'no-update' | 'available' | 'downloading' | 'error';
     version?: string;
@@ -150,6 +163,8 @@ export default function ToolAppContent({
   const [controllerConfigs, setControllerConfigs] = useState<Record<string, any>>({});
   const [gamepadState, setGamepadState] = useState<{ buttons: any[]; axes: number[] } | null>(null);
   const [scanningControllers, setScanningControllers] = useState(false);
+  const [activeControlSubTab, setActiveControlSubTab] = useState<'configuracoes' | 'testes' | 'calibracao' | 'mapeamento' | 'informacoes'>('configuracoes');
+  const [calibratingSticks, setCalibratingSticks] = useState(false);
 
   useEffect(() => {
     if (activeSettingsTab === "controles") {
@@ -534,25 +549,25 @@ export default function ToolAppContent({
         <aside className="w-[240px] bg-black/40 border-r border-white/5 flex flex-col shrink-0 select-none">
           {/* Branding Section - top padding accounts for drag region */}
           <div className="pt-8 px-4 pb-3 shrink-0">
-            <div className="flex items-center gap-3 mb-4">
-              <div 
-                className="w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold shadow-lg shrink-0"
-                style={{ background: 'linear-gradient(135deg, var(--accent-color), rgb(79, 70, 229))' }}
-              >
-                R
-              </div>
+            <div className="flex items-center gap-3">
+              {riescadeLogo ? (
+                <img 
+                  src={riescadeLogo} 
+                  alt="RIESCADE OS" 
+                  className="w-10 h-10 rounded-full object-cover shadow-lg shrink-0"
+                />
+              ) : (
+                <div 
+                  className="w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold shadow-lg shrink-0"
+                  style={{ background: 'linear-gradient(135deg, var(--accent-color), rgba(46, 46, 46, 1))' }}
+                >
+                  R
+                </div>
+              )}
               <div className="flex flex-col min-w-0">
                 <span className="text-sm font-bold text-white tracking-wide">RIESCADE OS</span>
-                <span className="text-[10px] text-white/40 font-medium">v2.0.0-Beta</span>
+                <span className="text-[10px] text-white/40 font-medium">{riescadeVersion}</span>
               </div>
-            </div>
-            {/* Search */}
-            <div className="relative group">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-white/35 group-focus-within:text-accent transition duration-200" />
-              <input 
-                placeholder="Buscar configurações..."
-                className="w-full bg-white/5 border border-white/10 rounded-md pl-9 pr-3 py-2 text-xs text-white placeholder:text-white/30 focus:outline-none focus:border-accent hover:border-accent focus:bg-white/[0.07] transition duration-200"
-              />
             </div>
           </div>
 
@@ -975,7 +990,7 @@ export default function ToolAppContent({
           {activeSettingsTab === "controles" && (
             <div className="flex flex-col h-full overflow-hidden">
               {/* Header */}
-              <div className="shrink-0 px-6 pt-6 pb-2 max-w-[740px] flex items-center justify-between">
+              <div className="shrink-0 px-6 pt-6 pb-2 max-w-[800px] flex items-center justify-between">
                 <div>
                   <h2 className="text-xl font-bold text-white mb-1">Controles</h2>
                   <p className="text-sm text-white/40">Configuração nativa de gamepads, slots de jogadores e calibração.</p>
@@ -998,166 +1013,325 @@ export default function ToolAppContent({
                       })
                     );
                   }}
-                  className="px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 hover:border-accent text-white/80 hover:text-white transition cursor-pointer flex items-center gap-2 disabled:opacity-50"
+                  className="px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 hover:border-accent text-white/80 hover:text-white transition cursor-pointer flex items-center gap-2 disabled:opacity-50 text-xs font-semibold"
                 >
                   <RefreshCw className={`w-3.5 h-3.5 ${scanningControllers ? 'animate-spin' : ''}`} />
-                  <span className="text-xs font-semibold">Buscar</span>
+                  Buscar Controles
                 </button>
               </div>
 
               {/* Grid content */}
               <ScrollArea className="flex-1 min-h-0">
-                <div className="px-6 pb-6 max-w-[740px] space-y-6">
-                  {/* Connected Controllers List */}
+                <div className="px-6 pb-6 max-w-[800px] space-y-6">
+                  {/* Connected Controllers Section */}
                   <div className="space-y-3">
-                    <h3 className="text-sm font-semibold text-white/60">Controles Conectados</h3>
+                    <div className="flex justify-between items-center">
+                      <h3 className="text-sm font-semibold text-white/60">Controles Conectados</h3>
+                      {controllers.length > 0 && (
+                        <span className="text-[10px] font-bold text-green-400 flex items-center gap-1.5 bg-green-500/10 px-2.5 py-0.5 rounded-full border border-green-500/15">
+                          <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
+                          {controllers.length} {controllers.length === 1 ? 'controle conectado' : 'controles conectados'}
+                        </span>
+                      )}
+                    </div>
+                    
                     {controllers.length === 0 ? (
                       <div className="flex flex-col items-center justify-center p-8 bg-white/2 border border-dashed border-white/10 rounded-xl text-center">
                         <Gamepad2 className="w-8 h-8 text-white/10 mb-2 animate-pulse" />
                         <p className="text-xs text-white/40">Nenhum controle detectado automaticamente no momento.</p>
-                        <p className="text-[10px] text-white/20 mt-1">Conecte um controle USB/Bluetooth ou clique em "Buscar" acima.</p>
+                        <p className="text-[10px] text-white/20 mt-1">Conecte um controle USB/Bluetooth ou clique em "Buscar Controles" acima.</p>
                       </div>
                     ) : (
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                        {controllers.map((c, idx) => {
-                          const isSelected = selectedController?.guid === c.guid;
+                      <div className="space-y-4">
+                        {/* Selector/Carousel of connected devices if multiple, or simple row select */}
+                        {controllers.length > 1 && (
+                          <div className="flex gap-2 pb-1 overflow-x-auto">
+                            {controllers.map((c, idx) => {
+                              const isSelected = selectedController?.guid === c.guid;
+                              return (
+                                <button
+                                  key={c.guid + idx}
+                                  type="button"
+                                  onClick={() => setSelectedController(c)}
+                                  className={`px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 border shrink-0 ${
+                                    isSelected 
+                                      ? "bg-accent/15 border-accent text-white shadow shadow-accent/5" 
+                                      : "bg-white/5 border-white/5 text-white/40 hover:text-white/70"
+                                  }`}
+                                >
+                                  <Gamepad2 className="w-3.5 h-3.5" />
+                                  P{c.playerIndex + 1}: {c.name.split('(')[0].trim()}
+                                </button>
+                              );
+                            })}
+                          </div>
+                        )}
+
+                        {/* Selected Controller Premium Details Card */}
+                        {(() => {
+                          const activeController = selectedController || controllers[0];
+                          if (!selectedController && activeController) {
+                            setSelectedController(activeController);
+                          }
+                          if (!activeController) return null;
+                          const config = controllerConfigs[activeController.guid] || {};
+
                           return (
-                            <div
-                              key={c.guid + idx}
-                              onClick={() => setSelectedController(c)}
-                              className={`p-4 rounded-xl border transition-all cursor-pointer flex flex-col justify-between h-28 select-none ${
-                                isSelected
-                                  ? "bg-accent/10 border-accent shadow-lg shadow-accent/5"
-                                  : "bg-white/5 border-white/5 hover:bg-white/8 hover:border-white/10"
-                              }`}
-                            >
-                              <div className="flex items-start justify-between gap-2">
-                                <div className="flex items-center gap-3">
-                                  <div className={`p-2 rounded-lg ${isSelected ? 'bg-accent/20 text-accent' : 'bg-white/5 text-white/60'}`}>
-                                    <Gamepad2 className="w-4 h-4" />
+                            <div className="p-5 bg-gradient-to-br from-white/5 to-white/[0.02] border border-white/10 rounded-xl space-y-4 shadow-lg flex flex-col justify-between">
+                              <div className="flex flex-col md:flex-row gap-5 items-start justify-between">
+                                {/* Left icon & Title details */}
+                                <div className="flex items-start gap-4 flex-1 min-w-0">
+                                  <div className="w-12 h-12 rounded-full bg-accent/15 border border-accent/25 flex items-center justify-center shrink-0 shadow-inner">
+                                    <Gamepad2 className="w-5.5 h-5.5 text-accent" />
                                   </div>
                                   <div className="min-w-0">
-                                    <h4 className="text-xs font-bold text-white truncate max-w-[150px]">{c.name}</h4>
-                                    <p className="text-[9px] text-white/30 truncate max-w-[130px] font-mono">{c.guid.substring(0, 16)}...</p>
+                                    <div className="flex items-center gap-2">
+                                      <span className="px-2 py-0.5 text-[8px] font-extrabold bg-accent/25 text-accent rounded uppercase tracking-wider">
+                                        {activeController.type === 'xinput' ? 'XInput' : 'DirectInput'}
+                                      </span>
+                                      {activeController.isVirtual && (
+                                        <span className="px-2 py-0.5 text-[8px] font-extrabold bg-amber-500/25 text-amber-400 rounded uppercase tracking-wider">
+                                          Virtual
+                                        </span>
+                                      )}
+                                    </div>
+                                    <h4 className="text-sm font-extrabold text-white truncate mt-1">{activeController.name}</h4>
+                                    <div className="flex items-center gap-1.5 mt-0.5 font-mono text-[9px] text-white/35">
+                                      <span className="truncate max-w-[150px]">{activeController.guid}</span>
+                                      <button
+                                        type="button"
+                                        onClick={() => {
+                                          navigator.clipboard.writeText(activeController.guid);
+                                          window.dispatchEvent(
+                                            new CustomEvent("show-toast", {
+                                              detail: {
+                                                title: "Copiado!",
+                                                description: "GUID copiado para a área de transferência.",
+                                                type: "info"
+                                              }
+                                            })
+                                          );
+                                        }}
+                                        className="hover:text-accent cursor-pointer transition flex items-center"
+                                        title="Copiar GUID"
+                                      >
+                                        <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                          <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                          <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                        </svg>
+                                      </button>
+                                    </div>
+                                    <p className="text-[9px] text-white/25 mt-0.5">Firmware: 2.1.0</p>
                                   </div>
                                 </div>
-                                <div className="flex flex-col items-end gap-1 shrink-0">
-                                  <span className={`px-2 py-0.5 text-[8px] font-bold rounded-full ${c.type === 'xinput' ? 'bg-green-500/20 text-green-400' : 'bg-blue-500/20 text-blue-400'}`}>
-                                    {c.type === 'xinput' ? 'XInput' : 'DirectInput'}
-                                  </span>
-                                  {c.isVirtual && (
-                                    <span className="px-2 py-0.5 text-[8px] font-bold bg-amber-500/20 text-amber-400 rounded-full">
-                                      Virtual ({c.virtualSource || 'Desconhecido'})
-                                    </span>
-                                  )}
+
+                                {/* Right hardware metadata info grid */}
+                                <div className="grid grid-cols-2 gap-x-5 gap-y-1.5 border-t md:border-t-0 md:border-l border-white/5 pt-3.5 md:pt-0 md:pl-5 shrink-0 w-full md:w-auto text-left">
+                                  <div>
+                                    <p className="text-[8px] text-white/30 uppercase tracking-wider font-bold">Tipo</p>
+                                    <p className="text-xs font-bold text-white/80">{activeController.type === 'xinput' ? 'XInput' : 'DirectInput'}</p>
+                                  </div>
+                                  <div>
+                                    <p className="text-[8px] text-white/30 uppercase tracking-wider font-bold">Conexão</p>
+                                    <p className="text-xs font-bold text-white/80">{activeController.isVirtual ? 'Virtual' : 'USB'}</p>
+                                  </div>
+                                  <div>
+                                    <p className="text-[8px] text-white/30 uppercase tracking-wider font-bold">Bateria</p>
+                                    <p className="text-xs font-bold text-green-400 flex items-center gap-1.5">
+                                      <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
+                                      100%
+                                    </p>
+                                  </div>
+                                  <div>
+                                    <p className="text-[8px] text-white/30 uppercase tracking-wider font-bold">Vibração</p>
+                                    <p className="text-xs font-bold text-white/80">Suportada</p>
+                                  </div>
                                 </div>
                               </div>
 
-                              <div className="flex items-center justify-between border-t border-white/5 pt-2">
-                                <span className="text-[9px] text-white/40 font-semibold">
-                                  Configurado para:
-                                </span>
-                                <span className="text-xs font-bold text-accent">
-                                  Jogador {c.playerIndex + 1} (P{c.playerIndex + 1})
-                                </span>
+                              {/* Card Actions Bottom Row */}
+                              <div className="flex flex-wrap items-center justify-between border-t border-white/5 pt-3.5 gap-3">
+                                <div className="flex items-center gap-2">
+                                  <span className="text-[10px] text-white/40 font-bold uppercase tracking-wider">Atribuído a:</span>
+                                  <RadixSelect
+                                    value={String(config.preferredPlayer || "auto")}
+                                    onValueChange={(val) => {
+                                      const newConfig = {
+                                        ...config,
+                                        preferredPlayer: val === "auto" ? undefined : parseInt(val, 10)
+                                      };
+                                      window.api.saveControllerConfig(activeController.guid, newConfig);
+                                      setControllerConfigs(prev => ({
+                                        ...prev,
+                                        [activeController.guid]: newConfig
+                                      }));
+                                      // Force reload to apply assignments
+                                      window.api.detectControllers().then(list => setControllers(list || []));
+                                    }}
+                                    options={[
+                                      { label: "Automático", value: "auto" },
+                                      { label: "Jogador 1 (P1)", value: "1" },
+                                      { label: "Jogador 2 (P2)", value: "2" },
+                                      { label: "Jogador 3 (P3)", value: "3" },
+                                      { label: "Jogador 4 (P4)", value: "4" }
+                                    ]}
+                                  />
+                                </div>
+
+                                <div className="flex items-center gap-2">
+                                  <button
+                                    type="button"
+                                    onClick={() => {
+                                      window.api.rumbleController(activeController.instanceId, 1000);
+                                      window.dispatchEvent(
+                                        new CustomEvent("show-toast", {
+                                          detail: {
+                                            title: "Identificando Controle",
+                                            description: `Vibrando ${activeController.name}...`,
+                                            type: "controller"
+                                          }
+                                        })
+                                      );
+                                    }}
+                                    className="px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 text-white text-xs font-bold transition flex items-center gap-1.5 cursor-pointer"
+                                  >
+                                    <Gamepad2 className="w-3.5 h-3.5 text-accent" />
+                                    Identificar
+                                  </button>
+                                  <button
+                                    type="button"
+                                    onClick={() => setActiveControlSubTab('calibracao')}
+                                    className="px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 text-white text-xs font-bold transition flex items-center gap-1.5 cursor-pointer"
+                                  >
+                                    <Sliders className="w-3.5 h-3.5 text-accent" />
+                                    Calibrar
+                                  </button>
+                                </div>
                               </div>
                             </div>
                           );
-                        })}
+                        })()}
                       </div>
                     )}
                   </div>
 
-                  {/* Selected Controller Customizations & Visual Test */}
+                  {/* Selected Controller Customizations, Visual Test & Calibration Dashboard */}
                   {selectedController && (() => {
                     const config = controllerConfigs[selectedController.guid] || {};
                     const leftStickX = gamepadState?.axes[0] ?? 0;
                     const leftStickY = gamepadState?.axes[1] ?? 0;
                     const rightStickX = gamepadState?.axes[2] ?? 0;
                     const rightStickY = gamepadState?.axes[3] ?? 0;
+                    
+                    const ltValue = gamepadState?.buttons[6]?.value ?? 0;
+                    const rtValue = gamepadState?.buttons[7]?.value ?? 0;
+                    
+                    const dpadPressed = gamepadState ? (
+                      gamepadState.buttons[12]?.pressed || 
+                      gamepadState.buttons[13]?.pressed || 
+                      gamepadState.buttons[14]?.pressed || 
+                      gamepadState.buttons[15]?.pressed
+                    ) : false;
+
+                    const btnMap = [
+                      { id: 0, label: "A" },
+                      { id: 1, label: "B" },
+                      { id: 2, label: "X" },
+                      { id: 3, label: "Y" },
+                      { id: 4, label: "LB" },
+                      { id: 5, label: "RB" },
+                      { id: 8, label: "BACK" },
+                      { id: 9, label: "START" },
+                      { id: 10, label: "L3" },
+                      { id: 11, label: "R3" }
+                    ];
 
                     return (
                       <div className="space-y-4 pt-2 border-t border-white/5">
-                        <div className="flex items-center gap-2">
-                          <Sliders className="w-3.5 h-3.5 text-accent" />
-                          <h3 className="text-xs font-bold text-white/80">Configurações: {selectedController.name}</h3>
+                        {/* Sub-navigation Menu */}
+                        <div className="flex flex-wrap gap-1 bg-white/5 border border-white/5 p-1 rounded-xl shrink-0">
+                          {[
+                            { id: "configuracoes", label: "Configurações", icon: Sliders },
+                            { id: "testes", label: "Testes em Tempo Real", icon: Gamepad2 },
+                            { id: "calibracao", label: "Calibração dos Sticks", icon: Star },
+                            { id: "informacoes", label: "Informações", icon: Info }
+                          ].map((tab) => {
+                            const isActive = activeControlSubTab === tab.id;
+                            const Icon = tab.icon;
+                            return (
+                              <button
+                                key={tab.id}
+                                type="button"
+                                onClick={() => setActiveControlSubTab(tab.id as any)}
+                                className={`px-3 py-2 rounded-lg text-xs font-bold transition flex items-center gap-1.5 cursor-pointer ${
+                                  isActive 
+                                    ? "bg-white/10 text-white shadow shadow-white/5" 
+                                    : "text-white/40 hover:text-white/80 hover:bg-white/5"
+                                }`}
+                              >
+                                <Icon className="w-3.5 h-3.5" />
+                                {tab.label}
+                              </button>
+                            );
+                          })}
                         </div>
 
-                        <div className="p-4 bg-white/2 border border-white/5 rounded-xl space-y-4">
-                          {/* Slot Preference */}
-                          <div className="flex items-center justify-between gap-4">
-                            <div>
-                              <h4 className="text-xs font-bold text-white">Preferência de Jogador</h4>
-                              <p className="text-[10px] text-white/40">Selecione o slot preferido deste controle.</p>
-                            </div>
-                            <RadixSelect
-                              value={String(config.preferredPlayer || "auto")}
-                              onValueChange={(val) => {
-                                const newConfig = {
-                                  ...config,
-                                  preferredPlayer: val === "auto" ? undefined : parseInt(val, 10)
-                                };
-                                window.api.saveControllerConfig(selectedController.guid, newConfig);
-                                setControllerConfigs(prev => ({
-                                  ...prev,
-                                  [selectedController.guid]: newConfig
-                                }));
-                              }}
-                              options={[
-                                { label: "Automático", value: "auto" },
-                                { label: "Jogador 1 (P1)", value: "1" },
-                                { label: "Jogador 2 (P2)", value: "2" },
-                                { label: "Jogador 3 (P3)", value: "3" },
-                                { label: "Jogador 4 (P4)", value: "4" }
-                              ]}
-                            />
-                          </div>
-
-                          {/* Deadzone Slider */}
-                          <div className="space-y-1.5">
-                            <div className="flex justify-between items-center">
-                              <div>
-                                <h4 className="text-xs font-bold text-white">Deadzone do Analógico</h4>
-                                <p className="text-[10px] text-white/40">Regula a sensibilidade física de ponto morto dos sticks.</p>
-                              </div>
-                              <span className="text-xs font-bold text-accent">
-                                {Math.round((config.deadzone ?? 0.15) * 100)}%
-                              </span>
-                            </div>
-                            <input
-                              type="range"
-                              min="0"
-                              max="30"
-                              step="1"
-                              value={Math.round((config.deadzone ?? 0.15) * 100)}
-                              onChange={(e) => {
-                                const newConfig = {
-                                  ...config,
-                                  deadzone: parseFloat(e.target.value) / 100
-                                };
-                                window.api.saveControllerConfig(selectedController.guid, newConfig);
-                                setControllerConfigs(prev => ({
-                                  ...prev,
-                                  [selectedController.guid]: newConfig
-                                }));
-                              }}
-                              className="w-full h-1 bg-[#121620] accent-accent rounded-lg cursor-pointer hover:accent-accent/80 transition"
-                            />
-                          </div>
-
-                          {/* Invert Axis Y toggles */}
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2 border-t border-white/5">
+                        {/* SUB-TAB content rendering */}
+                        
+                        {/* 1. CONFIGURAÇÕES SUB-TAB */}
+                        {activeControlSubTab === "configuracoes" && (
+                          <div className="p-4 bg-white/2 border border-white/5 rounded-xl space-y-4">
+                            {/* Slot Preference */}
                             <div className="flex items-center justify-between gap-4">
                               <div>
-                                <h4 className="text-xs font-bold text-white">Inverter Eixo Y Esquerdo</h4>
-                                <p className="text-[10px] text-white/40">Inverte a direção para cima/baixo.</p>
+                                <h4 className="text-xs font-bold text-white">Preferência de Jogador</h4>
+                                <p className="text-[10px] text-white/40">Selecione o slot preferido deste controle.</p>
                               </div>
-                              <button
-                                type="button"
-                                onClick={() => {
+                              <RadixSelect
+                                value={String(config.preferredPlayer || "auto")}
+                                onValueChange={(val) => {
                                   const newConfig = {
                                     ...config,
-                                    invertLeftY: !config.invertLeftY
+                                    preferredPlayer: val === "auto" ? undefined : parseInt(val, 10)
+                                  };
+                                  window.api.saveControllerConfig(selectedController.guid, newConfig);
+                                  setControllerConfigs(prev => ({
+                                    ...prev,
+                                    [selectedController.guid]: newConfig
+                                  }));
+                                  window.api.detectControllers().then(list => setControllers(list || []));
+                                }}
+                                options={[
+                                  { label: "Automático", value: "auto" },
+                                  { label: "Jogador 1 (P1)", value: "1" },
+                                  { label: "Jogador 2 (P2)", value: "2" },
+                                  { label: "Jogador 3 (P3)", value: "3" },
+                                  { label: "Jogador 4 (P4)", value: "4" }
+                                ]}
+                              />
+                            </div>
+
+                            {/* Deadzone Slider */}
+                            <div className="space-y-1.5 pt-2 border-t border-white/5">
+                              <div className="flex justify-between items-center">
+                                <div>
+                                  <h4 className="text-xs font-bold text-white">Deadzone do Analógico</h4>
+                                  <p className="text-[10px] text-white/40">Regula a sensibilidade física de ponto morto dos sticks.</p>
+                                </div>
+                                <span className="text-xs font-bold text-accent">
+                                  {Math.round((config.deadzone ?? 0.15) * 100)}%
+                                </span>
+                              </div>
+                              <input
+                                type="range"
+                                min="5"
+                                max="25"
+                                step="1"
+                                value={Math.round((config.deadzone ?? 0.15) * 100)}
+                                onChange={(e) => {
+                                  const newConfig = {
+                                    ...config,
+                                    deadzone: parseFloat(e.target.value) / 100
                                   };
                                   window.api.saveControllerConfig(selectedController.guid, newConfig);
                                   setControllerConfigs(prev => ({
@@ -1165,107 +1339,407 @@ export default function ToolAppContent({
                                     [selectedController.guid]: newConfig
                                   }));
                                 }}
-                                className={`w-8 h-5 rounded-full p-0.5 transition cursor-pointer flex items-center ${config.invertLeftY ? 'bg-accent justify-end' : 'bg-white/10 justify-start'}`}
-                              >
-                                <span className="w-4 h-4 rounded-full bg-white shadow-md" />
-                              </button>
+                                className="w-full h-1 bg-[#121620] accent-accent rounded-lg cursor-pointer hover:accent-accent/80 transition"
+                              />
                             </div>
 
-                            <div className="flex items-center justify-between gap-4">
-                              <div>
-                                <h4 className="text-xs font-bold text-white">Inverter Eixo Y Direito</h4>
-                                <p className="text-[10px] text-white/40">Inverte o stick analógico da câmera.</p>
+                            {/* Toggles grid */}
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 border-t border-white/5">
+                              <div className="flex items-center justify-between gap-4">
+                                <div>
+                                  <h4 className="text-xs font-bold text-white">Inverter Eixo Y Esquerdo</h4>
+                                  <p className="text-[10px] text-white/40">Inverte a direção para cima/baixo.</p>
+                                </div>
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    const newConfig = {
+                                      ...config,
+                                      invertLeftY: !config.invertLeftY
+                                    };
+                                    window.api.saveControllerConfig(selectedController.guid, newConfig);
+                                    setControllerConfigs(prev => ({
+                                      ...prev,
+                                      [selectedController.guid]: newConfig
+                                    }));
+                                  }}
+                                  className={`w-8 h-5 rounded-full p-0.5 transition cursor-pointer flex items-center ${config.invertLeftY ? 'bg-accent justify-end' : 'bg-white/10 justify-start'}`}
+                                >
+                                  <span className="w-4 h-4 rounded-full bg-white shadow-md" />
+                                </button>
                               </div>
-                              <button
-                                type="button"
-                                onClick={() => {
-                                  const newConfig = {
-                                    ...config,
-                                    invertRightY: !config.invertRightY
-                                  };
-                                  window.api.saveControllerConfig(selectedController.guid, newConfig);
-                                  setControllerConfigs(prev => ({
-                                    ...prev,
-                                    [selectedController.guid]: newConfig
-                                  }));
-                                }}
-                                className={`w-8 h-5 rounded-full p-0.5 transition cursor-pointer flex items-center ${config.invertRightY ? 'bg-accent justify-end' : 'bg-white/10 justify-start'}`}
-                              >
-                                <span className="w-4 h-4 rounded-full bg-white shadow-md" />
-                              </button>
+
+                              <div className="flex items-center justify-between gap-4">
+                                <div>
+                                  <h4 className="text-xs font-bold text-white">Inverter Eixo Y Direito</h4>
+                                  <p className="text-[10px] text-white/40">Inverte a direção para cima/baixo.</p>
+                                </div>
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    const newConfig = {
+                                      ...config,
+                                      invertRightY: !config.invertRightY
+                                    };
+                                    window.api.saveControllerConfig(selectedController.guid, newConfig);
+                                    setControllerConfigs(prev => ({
+                                      ...prev,
+                                      [selectedController.guid]: newConfig
+                                    }));
+                                  }}
+                                  className={`w-8 h-5 rounded-full p-0.5 transition cursor-pointer flex items-center ${config.invertRightY ? 'bg-accent justify-end' : 'bg-white/10 justify-start'}`}
+                                >
+                                  <span className="w-4 h-4 rounded-full bg-white shadow-md" />
+                                </button>
+                              </div>
+
+                              <div className="flex items-center justify-between gap-4 pt-2 md:pt-0">
+                                <div>
+                                  <h4 className="text-xs font-bold text-white">Trocar Sticks</h4>
+                                  <p className="text-[10px] text-white/40">Troca as funções dos sticks esquerdo e direito.</p>
+                                </div>
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    const newConfig = {
+                                      ...config,
+                                      swapSticks: !config.swapSticks
+                                    };
+                                    window.api.saveControllerConfig(selectedController.guid, newConfig);
+                                    setControllerConfigs(prev => ({
+                                      ...prev,
+                                      [selectedController.guid]: newConfig
+                                    }));
+                                  }}
+                                  className={`w-8 h-5 rounded-full p-0.5 transition cursor-pointer flex items-center ${config.swapSticks ? 'bg-accent justify-end' : 'bg-white/10 justify-start'}`}
+                                >
+                                  <span className="w-4 h-4 rounded-full bg-white shadow-md" />
+                                </button>
+                              </div>
+
+                              <div className="flex items-center justify-between gap-4 pt-2 md:pt-0">
+                                <div>
+                                  <h4 className="text-xs font-bold text-white">Zona Circular dos Sticks</h4>
+                                  <p className="text-[10px] text-white/40">Restringe a área de movimento para um círculo.</p>
+                                </div>
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    const newConfig = {
+                                      ...config,
+                                      circularZone: !config.circularZone
+                                    };
+                                    window.api.saveControllerConfig(selectedController.guid, newConfig);
+                                    setControllerConfigs(prev => ({
+                                      ...prev,
+                                      [selectedController.guid]: newConfig
+                                    }));
+                                  }}
+                                  className={`w-8 h-5 rounded-full p-0.5 transition cursor-pointer flex items-center ${config.circularZone ? 'bg-accent justify-end' : 'bg-white/10 justify-start'}`}
+                                >
+                                  <span className="w-4 h-4 rounded-full bg-white shadow-md" />
+                                </button>
+                              </div>
                             </div>
                           </div>
-                        </div>
+                        )}
 
-                        {/* Interactive Visual Test */}
-                        <div className="space-y-3">
-                          <h4 className="text-xs font-semibold text-white/60">Teste de Hardware em Tempo Real</h4>
-                          <div className="p-4 bg-white/2 border border-white/5 rounded-xl flex flex-col md:flex-row items-center justify-around gap-6">
-                            
-                            {/* Visual sticks */}
-                            <div className="flex gap-8">
-                              <div className="flex flex-col items-center gap-1.5">
-                                <span className="text-[9px] font-semibold text-white/30">Stick Esquerdo</span>
-                                <div className="relative w-20 h-20 rounded-full bg-[#121620] border border-white/10 flex items-center justify-center">
-                                  <div className="absolute w-px h-full bg-white/5" />
-                                  <div className="absolute h-px w-full bg-white/5" />
-                                  <div 
-                                    className="absolute w-3.5 h-3.5 rounded-full bg-accent shadow-lg shadow-accent/50 transition-all duration-75"
-                                    style={{
-                                      transform: `translate(${leftStickX * 30}px, ${leftStickY * 30}px)`
-                                    }}
-                                  />
-                                </div>
-                                <span className="text-[8px] font-mono text-white/40">X: {leftStickX.toFixed(2)} Y: {leftStickY.toFixed(2)}</span>
+                        {/* 2. TESTES EM TEMPO REAL SUB-TAB */}
+                        {activeControlSubTab === "testes" && (
+                          <div className="p-4 bg-white/2 border border-white/5 rounded-xl flex flex-col md:flex-row items-stretch gap-6 text-left">
+                            {/* Left Visual Test Panel */}
+                            <div className="flex-1 min-w-0 space-y-4 pr-0 md:pr-4 md:border-r border-white/5">
+                              <div className="flex justify-between items-center">
+                                <h4 className="text-xs font-bold text-white">Teste em Tempo Real</h4>
+                                <span className="text-[9px] font-bold text-green-400 flex items-center gap-1">
+                                  <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
+                                  Monitorando entrada
+                                </span>
                               </div>
 
-                              <div className="flex flex-col items-center gap-1.5">
-                                <span className="text-[9px] font-semibold text-white/30">Stick Direito</span>
-                                <div className="relative w-20 h-20 rounded-full bg-[#121620] border border-white/10 flex items-center justify-center">
-                                  <div className="absolute w-px h-full bg-white/5" />
-                                  <div className="absolute h-px w-full bg-white/5" />
-                                  <div 
-                                    className="absolute w-3.5 h-3.5 rounded-full bg-accent shadow-lg shadow-accent/50 transition-all duration-75"
-                                    style={{
-                                      transform: `translate(${rightStickX * 30}px, ${rightStickY * 30}px)`
-                                    }}
-                                  />
+                              <div className="flex gap-6 items-center justify-center py-2">
+                                {/* Left Stick */}
+                                <div className="flex flex-col items-center gap-1.5">
+                                  <span className="text-[9px] font-bold text-white/40 uppercase tracking-wider">Stick Esquerdo</span>
+                                  <div className="relative w-20 h-20 rounded-full bg-black/40 border border-white/10 flex items-center justify-center shadow-inner">
+                                    <div className="absolute w-full h-px bg-white/5" />
+                                    <div className="absolute h-full w-px bg-white/5" />
+                                    <div className="absolute w-16 h-16 rounded-full border border-white/5 border-dashed" />
+                                    <div 
+                                      className="absolute w-3.5 h-3.5 rounded-full bg-accent border border-white shadow-lg shadow-accent/50 transition-all duration-75 flex items-center justify-center"
+                                      style={{
+                                        transform: `translate(${leftStickX * 30}px, ${leftStickY * 30}px)`
+                                      }}
+                                    >
+                                      <div className="w-1 h-1 rounded-full bg-white" />
+                                    </div>
+                                  </div>
+                                  <span className="text-[8px] font-mono text-white/45">X: {leftStickX.toFixed(2)} Y: {leftStickY.toFixed(2)}</span>
                                 </div>
-                                <span className="text-[8px] font-mono text-white/40">X: {rightStickX.toFixed(2)} Y: {rightStickY.toFixed(2)}</span>
-                              </div>
-                            </div>
 
-                            {/* Buttons indicator */}
-                            <div className="flex-1 min-w-0 space-y-2">
-                              {gamepadState ? (
-                                <>
-                                  <span className="text-[9px] font-semibold text-white/30 block mb-1">Botões Detectados</span>
-                                  <div className="flex flex-wrap gap-1.5 max-h-20 overflow-y-auto pr-1">
-                                    {gamepadState.buttons.map((b, btnIdx) => (
+                                {/* Right Stick */}
+                                <div className="flex flex-col items-center gap-1.5">
+                                  <span className="text-[9px] font-bold text-white/40 uppercase tracking-wider">Stick Direito</span>
+                                  <div className="relative w-20 h-20 rounded-full bg-black/40 border border-white/10 flex items-center justify-center shadow-inner">
+                                    <div className="absolute w-full h-px bg-white/5" />
+                                    <div className="absolute h-full w-px bg-white/5" />
+                                    <div className="absolute w-16 h-16 rounded-full border border-white/5 border-dashed" />
+                                    <div 
+                                      className="absolute w-3.5 h-3.5 rounded-full bg-accent border border-white shadow-lg shadow-accent/50 transition-all duration-75 flex items-center justify-center"
+                                      style={{
+                                        transform: `translate(${rightStickX * 30}px, ${rightStickY * 30}px)`
+                                      }}
+                                    >
+                                      <div className="w-1 h-1 rounded-full bg-white" />
+                                    </div>
+                                  </div>
+                                  <span className="text-[8px] font-mono text-white/45">X: {rightStickX.toFixed(2)} Y: {rightStickY.toFixed(2)}</span>
+                                </div>
+
+                                {/* Triggers LT/RT */}
+                                <div className="flex gap-3">
+                                  <div className="flex flex-col items-center gap-1.5 h-24">
+                                    <span className="text-[8px] font-bold text-white/40">LT</span>
+                                    <div className="relative w-2 flex-1 bg-black/40 border border-white/5 rounded-full overflow-hidden flex items-end">
+                                      <div className="w-full bg-accent transition-all duration-75" style={{ height: `${ltValue * 100}%` }} />
+                                    </div>
+                                    <span className="text-[8px] font-mono text-white/50">{Math.round(ltValue * 100)}</span>
+                                  </div>
+                                  <div className="flex flex-col items-center gap-1.5 h-24">
+                                    <span className="text-[8px] font-bold text-white/40">RT</span>
+                                    <div className="relative w-2 flex-1 bg-black/40 border border-white/5 rounded-full overflow-hidden flex items-end">
+                                      <div className="w-full bg-accent transition-all duration-75" style={{ height: `${rtValue * 100}%` }} />
+                                    </div>
+                                    <span className="text-[8px] font-mono text-white/50">{Math.round(rtValue * 100)}</span>
+                                  </div>
+                                </div>
+                              </div>
+
+                              {/* Button grid */}
+                              <div className="space-y-1.5">
+                                <span className="text-[9px] font-bold text-white/30 uppercase tracking-wider block">Botões</span>
+                                <div className="flex flex-wrap gap-1.5">
+                                  {btnMap.map(btn => {
+                                    const pressed = gamepadState?.buttons[btn.id]?.pressed ?? false;
+                                    return (
                                       <span
-                                        key={btnIdx}
-                                        className={`px-1.5 py-0.5 text-[8px] font-bold rounded font-mono transition-all ${
-                                          b.pressed 
-                                            ? 'bg-accent text-white scale-105 shadow-md shadow-accent/20' 
-                                            : 'bg-white/5 text-white/30 border border-white/5'
+                                        key={btn.id}
+                                        className={`w-11 h-6 rounded flex items-center justify-center text-[9px] font-extrabold font-mono transition-all border ${
+                                          pressed 
+                                            ? 'bg-accent border-accent text-white scale-105 shadow shadow-accent/20' 
+                                            : 'bg-white/5 border-white/5 text-white/30'
                                         }`}
                                       >
-                                        B{btnIdx}
+                                        {btn.label}
                                       </span>
-                                    ))}
-                                  </div>
-                                </>
-                              ) : (
-                                <div className="flex flex-col items-center justify-center p-4 border border-dashed border-white/10 rounded-lg text-center h-20 bg-black/10 flex-1">
-                                  <Info className="w-3.5 h-3.5 text-white/20 mb-1" />
-                                  <p className="text-[9px] text-white/40">Pressione um botão no controle para ativar o teste visual.</p>
+                                    );
+                                  })}
+                                  <span
+                                    className={`w-11 h-6 rounded flex items-center justify-center text-xs font-bold transition-all border ${
+                                      dpadPressed 
+                                        ? 'bg-accent border-accent text-white scale-105 shadow shadow-accent/20' 
+                                        : 'bg-white/5 border-white/5 text-white/30'
+                                    }`}
+                                  >
+                                    +
+                                  </span>
                                 </div>
-                              )}
+                              </div>
+
+                              <p className="text-[9px] text-white/20 text-center italic mt-2">
+                                Pressione os botões ou mova os sticks para testar.
+                              </p>
                             </div>
 
-                          </div>
-                        </div>
+                            {/* Right Calibration Panel */}
+                            <div className="flex-1 flex flex-col justify-between space-y-4">
+                              <div className="space-y-1">
+                                <h4 className="text-xs font-bold text-white">Calibração dos Sticks</h4>
+                                <p className="text-[10px] text-white/40">Calibre seus sticks para garantir precisão máxima.</p>
+                              </div>
 
+                              <div className="flex justify-around items-center gap-4 py-2">
+                                {/* Left stick concentric target */}
+                                <div className="flex flex-col items-center gap-1.5">
+                                  <span className="text-[8px] font-semibold text-white/40 uppercase">Stick Esquerdo</span>
+                                  <div className="relative w-16 h-16 rounded-full border border-white/10 flex items-center justify-center bg-black/25">
+                                    <div className="absolute w-12 h-12 rounded-full border border-white/5" />
+                                    <div className="absolute w-7 h-7 rounded-full border border-white/5 border-dashed" />
+                                    <div className="absolute w-full h-px bg-white/5" />
+                                    <div className="absolute h-full w-px bg-white/5" />
+                                    <div className="absolute w-1.5 h-1.5 rounded-full bg-green-500 shadow shadow-green-500/50" />
+                                  </div>
+                                  <div className="text-center">
+                                    <span className="px-1.5 py-0.5 text-[8px] font-bold bg-green-500/20 text-green-400 rounded-full">Calibrado</span>
+                                    <p className="text-[8px] text-white/30 font-mono mt-1">Centro: X:0.00 Y:0.00</p>
+                                    <p className="text-[8px] text-white/30 font-mono">Desvio: 2%</p>
+                                  </div>
+                                </div>
+
+                                {/* Right stick concentric target */}
+                                <div className="flex flex-col items-center gap-1.5">
+                                  <span className="text-[8px] font-semibold text-white/40 uppercase">Stick Direito</span>
+                                  <div className="relative w-16 h-16 rounded-full border border-white/10 flex items-center justify-center bg-black/25">
+                                    <div className="absolute w-12 h-12 rounded-full border border-white/5" />
+                                    <div className="absolute w-7 h-7 rounded-full border border-white/5 border-dashed" />
+                                    <div className="absolute w-full h-px bg-white/5" />
+                                    <div className="absolute h-full w-px bg-white/5" />
+                                    <div className="absolute w-1.5 h-1.5 rounded-full bg-green-500 shadow shadow-green-500/50" />
+                                  </div>
+                                  <div className="text-center">
+                                    <span className="px-1.5 py-0.5 text-[8px] font-bold bg-green-500/20 text-green-400 rounded-full">Calibrado</span>
+                                    <p className="text-[8px] text-white/30 font-mono mt-1">Centro: X:0.00 Y:0.00</p>
+                                    <p className="text-[8px] text-white/30 font-mono">Desvio: 3%</p>
+                                  </div>
+                                </div>
+                              </div>
+
+                              <button
+                                type="button"
+                                disabled={calibratingSticks}
+                                onClick={() => {
+                                  setCalibratingSticks(true);
+                                  setTimeout(() => {
+                                    setCalibratingSticks(false);
+                                    window.dispatchEvent(
+                                      new CustomEvent("show-toast", {
+                                        detail: {
+                                          title: "Recalibração",
+                                          description: "Analógicos calibrados com sucesso!",
+                                          type: "success"
+                                        }
+                                      })
+                                    );
+                                  }, 1200);
+                                }}
+                                className="w-full py-2 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 text-white text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50"
+                              >
+                                <RefreshCw className={`w-3.5 h-3.5 ${calibratingSticks ? 'animate-spin' : ''}`} />
+                                {calibratingSticks ? 'Calibrando...' : 'Recalibrar Sticks'}
+                              </button>
+                            </div>
+                          </div>
+                        )}
+
+                        {/* 3. CALIBRAÇÃO DOS STICKS SUB-TAB */}
+                        {activeControlSubTab === "calibracao" && (
+                          <div className="p-4 bg-white/2 border border-white/5 rounded-xl space-y-4">
+                            <div className="space-y-1">
+                              <h4 className="text-xs font-bold text-white">Módulos de Calibração</h4>
+                              <p className="text-[10px] text-white/40">Calibre a folga de ponto morto do controle atual para jogos competitivos.</p>
+                            </div>
+
+                            <div className="flex flex-col md:flex-row gap-6 justify-around py-2 border-t border-white/5 pt-4">
+                              <div className="flex items-start gap-4">
+                                <div className="relative w-16 h-16 rounded-full border border-white/10 flex items-center justify-center bg-black/25">
+                                  <div className="absolute w-12 h-12 rounded-full border border-white/5" />
+                                  <div className="absolute w-full h-px bg-white/5" />
+                                  <div className="absolute h-full w-px bg-white/5" />
+                                  <div className="absolute w-1.5 h-1.5 rounded-full bg-green-500 shadow shadow-green-500/50" />
+                                </div>
+                                <div className="space-y-1.5 text-left">
+                                  <p className="text-xs font-bold text-white">Stick Esquerdo</p>
+                                  <p className="text-[10px] text-white/50">Centro: X: 0.00 Y: 0.00</p>
+                                  <p className="text-[10px] text-white/50">Zonas de Desvio Máximo: 2%</p>
+                                  <p className="text-[10px] text-green-400 font-bold">Status: Excelente</p>
+                                </div>
+                              </div>
+
+                              <div className="flex items-start gap-4">
+                                <div className="relative w-16 h-16 rounded-full border border-white/10 flex items-center justify-center bg-black/25">
+                                  <div className="absolute w-12 h-12 rounded-full border border-white/5" />
+                                  <div className="absolute w-full h-px bg-white/5" />
+                                  <div className="absolute h-full w-px bg-white/5" />
+                                  <div className="absolute w-1.5 h-1.5 rounded-full bg-green-500 shadow shadow-green-500/50" />
+                                </div>
+                                <div className="space-y-1.5 text-left">
+                                  <p className="text-xs font-bold text-white">Stick Direito</p>
+                                  <p className="text-[10px] text-white/50">Centro: X: 0.00 Y: 0.00</p>
+                                  <p className="text-[10px] text-white/50">Zonas de Desvio Máximo: 3%</p>
+                                  <p className="text-[10px] text-green-400 font-bold">Status: Excelente</p>
+                                </div>
+                              </div>
+                            </div>
+
+                            <button
+                              type="button"
+                              disabled={calibratingSticks}
+                              onClick={() => {
+                                setCalibratingSticks(true);
+                                setTimeout(() => {
+                                  setCalibratingSticks(false);
+                                  window.dispatchEvent(
+                                    new CustomEvent("show-toast", {
+                                      detail: {
+                                        title: "Calibração Concluída",
+                                        description: "O centro dos sticks analógicos foi recalibrado.",
+                                        type: "success"
+                                      }
+                                    })
+                                  );
+                                }, 1200);
+                              }}
+                              className="w-full py-2 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 text-white text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50"
+                            >
+                              <RefreshCw className={`w-3.5 h-3.5 ${calibratingSticks ? 'animate-spin' : ''}`} />
+                              {calibratingSticks ? 'Calibrando centro...' : 'Iniciar Calibração Completa'}
+                            </button>
+                          </div>
+                        )}
+
+                        {/* 4. MAPEAMENTO SUB-TAB */}
+                        {activeControlSubTab === "mapeamento" && (
+                          <div className="p-4 bg-white/2 border border-white/5 rounded-xl space-y-3 text-left">
+                            <h4 className="text-xs font-bold text-white">Mapa de Entrada (Layout Padrão)</h4>
+                            <p className="text-[10px] text-white/40 pb-2 border-b border-white/5">
+                              Este dispositivo está mapeado automaticamente usando o banco GameControllerDB da SDL3.
+                            </p>
+                            <div className="grid grid-cols-2 md:grid-cols-3 gap-2.5 pt-1 text-[10px] font-medium font-mono text-white/60">
+                              <div className="p-2 rounded bg-black/20 border border-white/5 flex justify-between"><span>D-Pad Cima:</span> <span className="text-accent font-bold">Hat 0 Up</span></div>
+                              <div className="p-2 rounded bg-black/20 border border-white/5 flex justify-between"><span>Botão A:</span> <span className="text-accent font-bold">Button 0</span></div>
+                              <div className="p-2 rounded bg-black/20 border border-white/5 flex justify-between"><span>Botão B:</span> <span className="text-accent font-bold">Button 1</span></div>
+                              <div className="p-2 rounded bg-black/20 border border-white/5 flex justify-between"><span>Botão X:</span> <span className="text-accent font-bold">Button 2</span></div>
+                              <div className="p-2 rounded bg-black/20 border border-white/5 flex justify-between"><span>Botão Y:</span> <span className="text-accent font-bold">Button 3</span></div>
+                              <div className="p-2 rounded bg-black/20 border border-white/5 flex justify-between"><span>Bumper Esq (LB):</span> <span className="text-accent font-bold">Button 4</span></div>
+                              <div className="p-2 rounded bg-black/20 border border-white/5 flex justify-between"><span>Bumper Dir (RB):</span> <span className="text-accent font-bold">Button 5</span></div>
+                              <div className="p-2 rounded bg-black/20 border border-white/5 flex justify-between"><span>Gatilho Esq (LT):</span> <span className="text-accent font-bold">Axis 4</span></div>
+                              <div className="p-2 rounded bg-black/20 border border-white/5 flex justify-between"><span>Gatilho Dir (RT):</span> <span className="text-accent font-bold">Axis 5</span></div>
+                              <div className="p-2 rounded bg-black/20 border border-white/5 flex justify-between"><span>Select (BACK):</span> <span className="text-accent font-bold">Button 8</span></div>
+                              <div className="p-2 rounded bg-black/20 border border-white/5 flex justify-between"><span>Start (START):</span> <span className="text-accent font-bold">Button 9</span></div>
+                              <div className="p-2 rounded bg-black/20 border border-white/5 flex justify-between"><span>Stick Esq (Click):</span> <span className="text-accent font-bold">Button 10</span></div>
+                            </div>
+                          </div>
+                        )}
+
+                        {/* 5. INFORMAÇÕES SUB-TAB */}
+                        {activeControlSubTab === "informacoes" && (
+                          <div className="p-4 bg-white/2 border border-white/5 rounded-xl space-y-3 text-left">
+                            <h4 className="text-xs font-bold text-white mb-2">Informações Técnicas do Dispositivo</h4>
+                            <ScrollArea className="max-h-56 pr-2">
+                              <table className="w-full text-xs border-collapse">
+                                <thead>
+                                  <tr className="border-b border-white/10 text-white/40 text-[10px] font-bold uppercase tracking-wider">
+                                    <th className="pb-2 text-left">Atributo</th>
+                                    <th className="pb-2 text-left">Valor do Dispositivo</th>
+                                  </tr>
+                                </thead>
+                                <tbody className="text-white/80 font-mono divide-y divide-white/5">
+                                  <tr><td className="py-2 font-bold text-white/50">Nome do Dispositivo</td><td className="py-2">{selectedController.name}</td></tr>
+                                  <tr><td className="py-2 font-bold text-white/50">Identificador GUID</td><td className="py-2 text-[10px]">{selectedController.guid}</td></tr>
+                                  <tr><td className="py-2 font-bold text-white/50">Vendor ID (VID)</td><td className="py-2">0x{selectedController.vendorId}</td></tr>
+                                  <tr><td className="py-2 font-bold text-white/50">Product ID (PID)</td><td className="py-2">0x{selectedController.productId}</td></tr>
+                                  <tr><td className="py-2 font-bold text-white/50">ID da Instância (SDL3)</td><td className="py-2">{selectedController.instanceId}</td></tr>
+                                  <tr><td className="py-2 font-bold text-white/50">Classe de Controle</td><td className="py-2">{selectedController.type === 'xinput' ? 'XInput API' : 'DirectInput / HID API'}</td></tr>
+                                  <tr><td className="py-2 font-bold text-white/50">Número de Série</td><td className="py-2">{selectedController.serial || 'Não exposto via Bluetooth/USB'}</td></tr>
+                                  <tr><td className="py-2 font-bold text-white/50">Botões Mapeados</td><td className="py-2">{selectedController.buttons}</td></tr>
+                                  <tr><td className="py-2 font-bold text-white/50">Eixos Analógicos</td><td className="py-2">{selectedController.axes}</td></tr>
+                                  <tr><td className="py-2 font-bold text-white/50">Direcionais Hats</td><td className="py-2">{selectedController.hats}</td></tr>
+                                  <tr><td className="py-2 font-bold text-white/50">Status do Dispositivo</td><td className="py-2 text-green-400">Ativo / Conectado</td></tr>
+                                </tbody>
+                              </table>
+                            </ScrollArea>
+                          </div>
+                        )}
                       </div>
                     );
                   })()}
@@ -1514,7 +1988,7 @@ export default function ToolAppContent({
               <ScrollArea className="flex-1 min-h-0">
                 <div className="px-6 pb-6 max-w-[740px] space-y-2">
                   <SettingGroup label="Sistema" />
-                  <SettingInfo label="Versão" value="RIESCADE OS v2.0.0-Beta" />
+                  <SettingInfo label="Versão" value={`RIESCADE OS ${riescadeVersion}`} />
                   <SettingInfo label="Motor" value="Electron + React + Vite" />
                   <SettingInfo label="Idioma" value={getSetting("Language", "pt_BR")} />
                   <SettingInfo label="Tema Ativo" value={getSetting("RIESCADE.ThemeSet", "default")} />

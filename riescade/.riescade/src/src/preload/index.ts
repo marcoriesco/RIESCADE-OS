@@ -55,6 +55,7 @@ const api = {
   getControllerState: (index: number) => ipcRenderer.invoke('get-controller-state', index),
   saveControllerConfig: (guid: string, config: any) => ipcRenderer.invoke('save-controller-config', { guid, config }),
   getControllerConfigs: () => ipcRenderer.invoke('get-controller-configs'),
+  rumbleController: (instanceId: string, durationMs: number) => ipcRenderer.invoke('rumble-controller', { instanceId, durationMs }),
 
   executeCommand: (command: string, data?: any) => ipcRenderer.send('system-command', command, data),
   openAppWindow: (type: 'system' | 'tool', id: string) => ipcRenderer.send('open-app-window', type, id),

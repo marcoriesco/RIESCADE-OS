@@ -29,6 +29,11 @@ declare global {
       getConfiguredControllers: () => Promise<any>
       saveInputConfig: (data: { deviceName: string; deviceGUID: string; mappings: any }) => Promise<boolean>
       getBluetoothDevices: () => Promise<any[]>
+      detectControllers: () => Promise<any[]>
+      getControllerState: (index: number) => Promise<any>
+      saveControllerConfig: (guid: string, config: any) => Promise<boolean>
+      getControllerConfigs: () => Promise<any>
+      rumbleController: (instanceId: string, durationMs: number) => Promise<boolean>
       executeCommand: (command: string, data?: any) => void
       openAppWindow: (type: 'system' | 'tool', id: string) => void
       minimizeWindow: () => void

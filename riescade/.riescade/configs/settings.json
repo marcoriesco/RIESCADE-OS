@@ -376,11 +376,11 @@
     "type": "bool"
   },
   "Window.tool-settings.X": {
-    "value": 164,
+    "value": 248,
     "type": "int"
   },
   "Window.tool-settings.Y": {
-    "value": 19,
+    "value": 16,
     "type": "int"
   },
   "Window.tool-settings.Width": {
@@ -388,7 +388,7 @@
     "type": "int"
   },
   "Window.tool-settings.Height": {
-    "value": 928,
+    "value": 971,
     "type": "int"
   },
   "Window.tool-collections.Maximized": {

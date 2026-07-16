@@ -59,7 +59,17 @@
     "pcsx2_vsync": "true",
     "fullboot": "true",
     "pcsx2_fastboot": "true",
-    "pcsx2_forcebios": "ps2-0230a-20080220.bin"
+    "pcsx2_forcebios": "ps2-0230a-20080220.bin",
+    "pcsx2_slot1_memory": "auto",
+    "UserHacks_HalfPixelOffset": "auto",
+    "UserHacks_round_sprite_offset": "auto",
+    "TextureOffsets": "auto",
+    "fmv_ratio": "auto",
+    "interlace": "auto",
+    "bilinear_filtering": "auto",
+    "texture_filtering": "auto",
+    "trilinear_filtering": "auto",
+    "anisotropic_filtering": "auto"
   },
   "pcsx2": {
     "TVShader": "0",
@@ -90,7 +100,9 @@
   "dolphin": {
     "internal_resolution": "3",
     "ratio": "16/9",
-    "dolphin_shaders": "(off)"
+    "dolphin_shaders": "(off)",
+    "ShaderCompilationMode": "auto",
+    "SafeTextureCacheColorSamples": "auto"
   },
   "ryujinx": {
     "res_scale": "1",
@@ -100,7 +112,19 @@
     "system_region": "USA",
     "memory_manager_mode": "HostMappedUnsafe",
     "backend_threading": "true",
-    "ryujinx_vsync": "0"
+    "ryujinx_vsync": "0",
+    "ryujinx_scaling_filter": "auto",
+    "ryujinx_antialiasing": "auto",
+    "max_anisotropy": "auto",
+    "backend": "auto",
+    "audio_backend": "auto",
+    "forcefullscreen": "true",
+    "ryujinx_padtype1": "auto",
+    "ryujinx_padtype2": "auto",
+    "ryujinx_padtype3": "auto",
+    "ryujinx_padtype4": "auto",
+    "ryujinx_maxcontrollers": "auto",
+    "ryujinx_network": "auto"
   },
   "ppsspp": {
     "ppsspp_ratio": "1",
@@ -120,5 +144,35 @@
   },
   "cemu": {
     "wiiu_language": "1"
+  },
+  "mame64": {
+    "mame_rotate": "auto",
+    "bgfxshaders": "auto",
+    "glslshaders": "auto",
+    "effect": "auto",
+    "noread_ini": "auto",
+    "mame_video_driver": "auto",
+    "bgfxbackend": "auto",
+    "mame_audio_driver": "auto",
+    "mame_joystick_driver": "auto",
+    "mame_ctrlr_profile": "auto",
+    "mame_mouse": "auto",
+    "mame_pedal": "auto",
+    "mame_lightgun": "auto",
+    "mame_paddle": "auto",
+    "mame_adstick": "auto",
+    "mame_dial": "auto",
+    "mame_trackball": "auto",
+    "mame_positional": "auto",
+    "mame_p4_forceindex": "auto",
+    "mame_p3_forceindex": "auto",
+    "mame_p2_forceindex": "auto",
+    "mame_p1_forceindex": "auto",
+    "mame_output": "auto"
+  },
+  "retroarch": {
+    "a5200_input_hack": "auto",
+    "a5200_mix_frames": "auto",
+    "a5200_controller1": "auto"
   }
 }

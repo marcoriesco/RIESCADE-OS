@@ -177,6 +177,9 @@ html, body, #root {
 }
 
 /* Dynamic Accent Colors */
+@utility accent-accent {
+  accent-color: var(--accent-color) !important;
+}
 @utility bg-accent {
   background-color: var(--accent-color) !important;
 }
