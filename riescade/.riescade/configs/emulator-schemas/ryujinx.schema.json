@@ -1,0 +1,141 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "ryujinx",
+  "name": "Ryujinx",
+  "description": "Emulador de Nintendo Switch.",
+  "icon": "ryujinx",
+  "configFiles": [{ "path": "portable/Config.json", "format": "json" }],
+  "globalMappings": {
+    "fullscreen": { "configKey": "forcefullscreen", "globalKey": "fullscreen" },
+    "vsync": { "configKey": "ryujinx_vsync", "globalKey": "vsync" }
+  },
+  "groups": [
+    {
+      "id": "graphics",
+      "title": "Gráficos",
+      "icon": "monitor",
+      "order": 1,
+      "options": [
+        {
+          "id": "ryujinx_vsync",
+          "label": "V-Sync",
+          "description": "Modo de sincronização vertical. Switch = 0, Switch Uncapped = 1, Mailbox = 2.",
+          "type": "select",
+          "default": "1",
+          "configKey": "ryujinx_vsync",
+          "inheritsGlobal": "vsync",
+          "values": [
+            { "label": "Switch (60 FPS)", "value": "0" },
+            { "label": "Switch Sem Limite", "value": "1" },
+            { "label": "Mailbox", "value": "2" }
+          ]
+        },
+        {
+          "id": "ryujinx_resolution_scale",
+          "label": "Escala de Resolução",
+          "description": "Multiplicador de resolução interna.",
+          "type": "select",
+          "default": "1",
+          "configKey": "ryujinx_resolution_scale",
+          "values": [
+            { "label": "1x Nativa (720p/1080p)", "value": "1" },
+            { "label": "2x (1440p/2160p)", "value": "2" },
+            { "label": "3x (2160p/3240p)", "value": "3" },
+            { "label": "4x (2880p/4320p)", "value": "4" }
+          ]
+        },
+        {
+          "id": "ryujinx_backend_threading",
+          "label": "Threading de Backend",
+          "description": "Multithreading para o backend gráfico. Auto usa todos os cores disponíveis.",
+          "type": "select",
+          "default": "Auto",
+          "configKey": "ryujinx_backend_threading",
+          "values": [
+            { "label": "Automático", "value": "Auto" },
+            { "label": "Desativado", "value": "Off" },
+            { "label": "Ativado", "value": "On" }
+          ]
+        },
+        {
+          "id": "ryujinx_anti_aliasing",
+          "label": "Anti-Aliasing",
+          "description": "Método de suavização de bordas.",
+          "type": "select",
+          "default": "None",
+          "configKey": "ryujinx_anti_aliasing",
+          "values": [
+            { "label": "Desativado", "value": "None" },
+            { "label": "FXAA", "value": "Fxaa" },
+            { "label": "SMAA Low", "value": "SmaaLow" },
+            { "label": "SMAA Medium", "value": "SmaaMedium" },
+            { "label": "SMAA High", "value": "SmaaHigh" },
+            { "label": "SMAA Ultra", "value": "SmaaUltra" }
+          ]
+        },
+        {
+          "id": "ryujinx_scaling_filter",
+          "label": "Filtro de Upscaling",
+          "description": "Algoritmo para upscaling da imagem.",
+          "type": "select",
+          "default": "Bilinear",
+          "configKey": "ryujinx_scaling_filter",
+          "values": [
+            { "label": "Bilinear", "value": "Bilinear" },
+            { "label": "Nearest", "value": "Nearest" },
+            { "label": "FSR", "value": "Fsr" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "system",
+      "title": "Sistema",
+      "icon": "cpu",
+      "order": 2,
+      "options": [
+        {
+          "id": "ryujinx_undock",
+          "label": "Modo Portátil (Undocked)",
+          "description": "Emula o Switch no modo portátil ao invés do modo dock.",
+          "type": "toggle",
+          "default": "false",
+          "configKey": "ryujinx_undock"
+        },
+        {
+          "id": "ryujinx_enable_ptc",
+          "label": "PPTC (Cache de Tradução)",
+          "description": "Cache de tradução persistente. Reduz o tempo de compilação nos próximos carregamentos.",
+          "type": "toggle",
+          "default": "true",
+          "configKey": "ryujinx_enable_ptc"
+        },
+        {
+          "id": "ryujinx_ignore_missing_services",
+          "label": "Ignorar Serviços Ausentes",
+          "description": "Ignora serviços do sistema não implementados. Pode ajudar com crashes em alguns jogos.",
+          "type": "toggle",
+          "default": "false",
+          "configKey": "ryujinx_ignore_missing_services"
+        },
+        {
+          "id": "ryujinx_language",
+          "label": "Idioma do Sistema",
+          "description": "Idioma simulado do sistema Switch.",
+          "type": "select",
+          "default": "AmericanEnglish",
+          "configKey": "ryujinx_language",
+          "values": [
+            { "label": "Inglês (EUA)", "value": "AmericanEnglish" },
+            { "label": "Português (BR)", "value": "BrazilianPortuguese" },
+            { "label": "Japonês", "value": "Japanese" },
+            { "label": "Francês", "value": "French" },
+            { "label": "Espanhol", "value": "Spanish" },
+            { "label": "Alemão", "value": "German" },
+            { "label": "Italiano", "value": "Italian" }
+          ]
+        }
+      ]
+    }
+  ]
+}

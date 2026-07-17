@@ -1,0 +1,220 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "xenia",
+  "name": "Xenia",
+  "description": "Emulador de Xbox 360.",
+  "icon": "xenia",
+  "configFiles": [{ "path": "xenia.config.toml", "format": "toml" }],
+  "globalMappings": {
+    "fullscreen": { "configKey": "forcefullscreen", "globalKey": "fullscreen" },
+    "vsync": { "configKey": "xenia_vsync", "globalKey": "vsync" },
+    "video_driver": { "configKey": "xenia_gpu", "globalKey": "video_driver" }
+  },
+  "groups": [
+    {
+      "id": "graphics",
+      "title": "Gráficos",
+      "icon": "monitor",
+      "order": 1,
+      "options": [
+        {
+          "id": "xenia_gpu",
+          "label": "GPU Backend",
+          "description": "API gráfica do Xenia.",
+          "type": "select",
+          "default": "any",
+          "configKey": "xenia_gpu",
+          "inheritsGlobal": "video_driver",
+          "values": [
+            { "label": "Automático", "value": "any" },
+            { "label": "Vulkan", "value": "vulkan" },
+            { "label": "Direct3D 12", "value": "d3d12" }
+          ]
+        },
+        {
+          "id": "xenia_vsync",
+          "label": "V-Sync",
+          "description": "Sincronização vertical.",
+          "type": "toggle",
+          "default": "true",
+          "configKey": "xenia_vsync",
+          "inheritsGlobal": "vsync"
+        },
+        {
+          "id": "xenia_resolution",
+          "label": "Escala de Resolução Interna",
+          "description": "Multiplicador de resolução. Formato: LarguraxAltura.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "xenia_resolution",
+          "inheritsGlobal": "resolution",
+          "values": [
+            { "label": "Automático (1x)", "value": "auto" },
+            { "label": "2x (2560x1440)", "value": "2_2" },
+            { "label": "3x (3840x2160)", "value": "3_3" },
+            { "label": "4x (5120x2880)", "value": "4_4" }
+          ]
+        },
+        {
+          "id": "postprocess_antialiasing",
+          "label": "Anti-Aliasing Pós-Processo",
+          "description": "Suavização de bordas em pós-processamento.",
+          "type": "select",
+          "default": "",
+          "configKey": "postprocess_antialiasing",
+          "values": [
+            { "label": "Desativado", "value": "" },
+            { "label": "FXAA", "value": "fxaa" },
+            { "label": "FXAA Extremo", "value": "fxaa_extreme" }
+          ]
+        },
+        {
+          "id": "xenia_allow_variable_refresh_rate_and_tearing",
+          "label": "Taxa de Atualização Variável (VRR)",
+          "description": "Permitir VRR e tearing para monitores compatíveis.",
+          "type": "toggle",
+          "default": "false",
+          "configKey": "xenia_allow_variable_refresh_rate_and_tearing"
+        }
+      ]
+    },
+    {
+      "id": "emulation",
+      "title": "Emulação",
+      "icon": "cpu",
+      "order": 2,
+      "options": [
+        {
+          "id": "license_mask",
+          "label": "License Mask",
+          "description": "Máscara de licença do jogo. 0 = padrão, 1 = bypass para alguns jogos.",
+          "type": "select",
+          "default": "0",
+          "configKey": "license_mask",
+          "values": [
+            { "label": "Padrão (0)", "value": "0" },
+            { "label": "Bypass (1)", "value": "1" }
+          ]
+        },
+        {
+          "id": "mount_cache",
+          "label": "Montar Cache",
+          "description": "Monta a partição de cache. Necessário para alguns jogos.",
+          "type": "toggle",
+          "default": "false",
+          "configKey": "mount_cache"
+        },
+        {
+          "id": "protect_zero",
+          "label": "Proteger Página Zero",
+          "description": "Protege a página zero de memória. Pode resolver crashes.",
+          "type": "toggle",
+          "default": "true",
+          "configKey": "protect_zero"
+        },
+        {
+          "id": "scribble_heap",
+          "label": "Scribble Heap",
+          "description": "Preenche a heap com dados aleatórios. Útil para debugging.",
+          "type": "toggle",
+          "default": "false",
+          "configKey": "scribble_heap"
+        },
+        {
+          "id": "xenia_lang",
+          "label": "Idioma do Sistema",
+          "description": "Idioma simulado do Xbox 360.",
+          "type": "select",
+          "default": "1",
+          "configKey": "xenia_lang",
+          "values": [
+            { "label": "Inglês", "value": "1" },
+            { "label": "Japonês", "value": "2" },
+            { "label": "Alemão", "value": "3" },
+            { "label": "Francês", "value": "4" },
+            { "label": "Espanhol", "value": "5" },
+            { "label": "Italiano", "value": "6" },
+            { "label": "Coreano", "value": "7" },
+            { "label": "Chinês Trad.", "value": "8" },
+            { "label": "Português", "value": "9" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "audio",
+      "title": "Áudio",
+      "icon": "volume2",
+      "order": 3,
+      "options": [
+        {
+          "id": "apu",
+          "label": "Backend de Áudio (APU)",
+          "description": "API de áudio do Xenia.",
+          "type": "select",
+          "default": "any",
+          "configKey": "apu",
+          "values": [
+            { "label": "Automático", "value": "any" },
+            { "label": "XAudio2", "value": "xaudio2" },
+            { "label": "SDL", "value": "sdl" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "input",
+      "title": "Controles",
+      "icon": "gamepad2",
+      "order": 4,
+      "options": [
+        {
+          "id": "xenia_hid",
+          "label": "Driver de Controle (HID)",
+          "description": "API para detecção de controles no Xenia.",
+          "type": "select",
+          "default": "any",
+          "configKey": "xenia_hid",
+          "values": [
+            { "label": "Automático", "value": "any" },
+            { "label": "XInput", "value": "xinput" },
+            { "label": "SDL", "value": "sdl" },
+            { "label": "Teclado", "value": "winkey" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "advanced",
+      "title": "Avançado",
+      "icon": "cog",
+      "order": 5,
+      "options": [
+        {
+          "id": "gpu_allow_invalid_fetch_constants",
+          "label": "Permitir Fetch Constants Inválidos",
+          "description": "Pode corrigir crashes em jogos específicos.",
+          "type": "toggle",
+          "default": "false",
+          "configKey": "gpu_allow_invalid_fetch_constants"
+        },
+        {
+          "id": "d3d12_readback_resolve",
+          "label": "D3D12 Readback Resolve",
+          "description": "Resolve renderização de readback via D3D12.",
+          "type": "toggle",
+          "default": "false",
+          "configKey": "d3d12_readback_resolve"
+        },
+        {
+          "id": "xenia_d3d12_debug",
+          "label": "Debug D3D12",
+          "description": "Ativar modo de debug do D3D12. Impacta performance severamente.",
+          "type": "toggle",
+          "default": "false",
+          "configKey": "xenia_d3d12_debug"
+        }
+      ]
+    }
+  ]
+}

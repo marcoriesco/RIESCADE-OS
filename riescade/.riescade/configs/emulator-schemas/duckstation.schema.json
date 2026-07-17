@@ -1,0 +1,40 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "duckstation",
+  "name": "DuckStation",
+  "description": "Emulador de PlayStation 1 com foco em precisão e performance.",
+  "icon": "duckstation",
+  "configFiles": [{ "path": "settings.ini", "format": "ini" }],
+  "globalMappings": {
+    "fullscreen": { "configKey": "forcefullscreen", "globalKey": "fullscreen" },
+    "vsync": { "configKey": "duckstation_vsync", "globalKey": "vsync" },
+    "video_driver": { "configKey": "duckstation_renderer", "globalKey": "video_driver" }
+  },
+  "groups": [
+    {
+      "id": "graphics",
+      "title": "Gráficos",
+      "icon": "monitor",
+      "order": 1,
+      "options": [
+        { "id": "duckstation_renderer", "label": "Renderizador", "description": "Backend gráfico.", "type": "select", "default": "D3D11", "configKey": "duckstation_renderer", "inheritsGlobal": "video_driver", "values": [{ "label": "Direct3D 11", "value": "D3D11" }, { "label": "Direct3D 12", "value": "D3D12" }, { "label": "Vulkan", "value": "Vulkan" }, { "label": "OpenGL", "value": "OpenGL" }, { "label": "Software", "value": "Software" }] },
+        { "id": "duckstation_vsync", "label": "V-Sync", "description": "Sincronização vertical.", "type": "toggle", "default": "true", "configKey": "duckstation_vsync", "inheritsGlobal": "vsync" },
+        { "id": "duckstation_internal_resolution", "label": "Resolução Interna", "description": "Multiplicador da resolução nativa do PS1.", "type": "select", "default": "3", "configKey": "duckstation_internal_resolution", "values": [{ "label": "1x Nativa (320x240)", "value": "1" }, { "label": "2x (640x480)", "value": "2" }, { "label": "3x (960x720)", "value": "3" }, { "label": "4x (1280x960)", "value": "4" }, { "label": "5x (1600x1200)", "value": "5" }, { "label": "6x (1920x1440)", "value": "6" }, { "label": "8x (2560x1920)", "value": "8" }, { "label": "10x (3200x2400)", "value": "10" }] },
+        { "id": "duckstation_texture_filter", "label": "Filtro de Textura", "description": "Suavização de texturas do PS1.", "type": "select", "default": "Nearest", "configKey": "duckstation_texture_filter", "values": [{ "label": "Nearest (Original)", "value": "Nearest" }, { "label": "Bilinear", "value": "Bilinear" }, { "label": "xBR", "value": "xBR" }, { "label": "JINC2", "value": "JINC2" }] },
+        { "id": "duckstation_pgxp", "label": "PGXP (Geometria de Precisão)", "description": "Corrige o wobble de vértices característico do PS1.", "type": "toggle", "default": "true", "configKey": "duckstation_pgxp" },
+        { "id": "duckstation_widescreen", "label": "Hack Widescreen", "description": "Força 16:9 em jogos que suportam.", "type": "toggle", "default": "false", "configKey": "duckstation_widescreen" },
+        { "id": "duckstation_true_color", "label": "True Color (24-bit)", "description": "Desabilita o dithering e usa cores verdadeiras de 24-bit.", "type": "toggle", "default": "true", "configKey": "duckstation_true_color" }
+      ]
+    },
+    {
+      "id": "emulation",
+      "title": "Emulação",
+      "icon": "cpu",
+      "order": 2,
+      "options": [
+        { "id": "duckstation_region", "label": "Região", "description": "Região do console PS1 simulado.", "type": "select", "default": "auto", "configKey": "duckstation_region", "values": [{ "label": "Automático", "value": "auto" }, { "label": "NTSC-U (América)", "value": "NTSC-U" }, { "label": "PAL (Europa)", "value": "PAL" }, { "label": "NTSC-J (Japão)", "value": "NTSC-J" }] },
+        { "id": "duckstation_fast_boot", "label": "Fast Boot", "description": "Pula a tela de boot do PS1.", "type": "toggle", "default": "true", "configKey": "duckstation_fast_boot" }
+      ]
+    }
+  ]
+}

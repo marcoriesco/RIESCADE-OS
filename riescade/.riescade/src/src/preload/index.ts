@@ -30,6 +30,12 @@ const api = {
   getEmulatorSettings: () => ipcRenderer.invoke('get-emulator-settings'),
   saveEmulatorSetting: (emulator: string, name: string, value: any) =>
     ipcRenderer.invoke('save-emulator-setting', emulator, name, value),
+  getEmulatorSchemas: () => ipcRenderer.invoke('get-emulator-schemas'),
+  getEmulatorSchema: (id: string) => ipcRenderer.invoke('get-emulator-schema', id),
+  getResolvedEmulatorSettings: (emulator: string) => ipcRenderer.invoke('get-resolved-emulator-settings', emulator),
+  resetEmulatorSetting: (emulator: string, key: string) => ipcRenderer.invoke('reset-emulator-setting', emulator, key),
+  resetAllEmulatorSettings: (emulator: string) => ipcRenderer.invoke('reset-all-emulator-settings', emulator),
+  reloadEmulatorSchemas: () => ipcRenderer.invoke('reload-emulator-schemas'),
   selectBgImage: () => ipcRenderer.invoke('select-bg-image'),
   selectBgVideo: () => ipcRenderer.invoke('select-bg-video'),
   getHostname: () => ipcRenderer.invoke('get-hostname'),

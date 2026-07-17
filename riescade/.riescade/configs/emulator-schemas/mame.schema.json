@@ -1,0 +1,14 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "mame", "name": "MAME", "description": "Emulador de máquinas arcade e sistemas antigos.", "icon": "mame",
+  "globalMappings": { "fullscreen": { "configKey": "forcefullscreen", "globalKey": "fullscreen" }, "vsync": { "configKey": "mame64_vsync", "globalKey": "vsync" }, "video_driver": { "configKey": "mame64_video", "globalKey": "video_driver" }, "audio_driver": { "configKey": "mame64_sound", "globalKey": "audio_driver" } },
+  "groups": [
+    { "id": "graphics", "title": "Gráficos", "icon": "monitor", "order": 1, "options": [
+      { "id": "mame64_video", "label": "Backend de Vídeo", "description": "API gráfica do MAME.", "type": "select", "default": "d3d", "configKey": "mame64_video", "inheritsGlobal": "video_driver", "values": [{ "label": "Direct3D", "value": "d3d" }, { "label": "OpenGL", "value": "opengl" }, { "label": "BGFX", "value": "bgfx" }, { "label": "GDI", "value": "gdi" }] },
+      { "id": "mame64_vsync", "label": "V-Sync", "description": "Sincronização vertical.", "type": "toggle", "default": "true", "configKey": "mame64_vsync", "inheritsGlobal": "vsync" }
+    ]},
+    { "id": "audio", "title": "Áudio", "icon": "volume2", "order": 2, "options": [
+      { "id": "mame64_sound", "label": "Backend de Áudio", "description": "API de áudio.", "type": "select", "default": "dsound", "configKey": "mame64_sound", "inheritsGlobal": "audio_driver", "values": [{ "label": "DirectSound", "value": "dsound" }, { "label": "PortAudio", "value": "portaudio" }] }
+    ]}
+  ]
+}

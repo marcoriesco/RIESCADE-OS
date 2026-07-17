@@ -1,0 +1,9 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "bigpemu", "name": "BigPEmu", "description": "Emulador de Atari Jaguar.", "icon": "bigpemu",
+  "configFiles": [{ "path": "userdata/BigPEmuConfig.bigpcfg", "format": "json" }],
+  "globalMappings": { "fullscreen": { "configKey": "forcefullscreen", "globalKey": "fullscreen" }, "vsync": { "configKey": "bigpemu_vsync", "globalKey": "vsync" } },
+  "groups": [{ "id": "graphics", "title": "Gráficos", "icon": "monitor", "order": 1, "options": [
+    { "id": "bigpemu_vsync", "label": "V-Sync", "description": "Sincronização vertical.", "type": "toggle", "default": "true", "configKey": "bigpemu_vsync", "inheritsGlobal": "vsync" }
+  ]}]
+}

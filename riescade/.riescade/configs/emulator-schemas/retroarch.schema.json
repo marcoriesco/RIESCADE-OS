@@ -1,0 +1,37 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "retroarch",
+  "name": "RetroArch",
+  "description": "Frontend de emulação com múltiplos cores para diversos consoles.",
+  "icon": "retroarch",
+  "configFiles": [{ "path": "retroarch.cfg", "format": "cfg" }],
+  "globalMappings": {
+    "fullscreen": { "configKey": "fullscreen", "globalKey": "fullscreen" },
+    "vsync": { "configKey": "video_vsync", "globalKey": "vsync" },
+    "video_driver": { "configKey": "video_driver", "globalKey": "video_driver" },
+    "audio_driver": { "configKey": "audio_driver", "globalKey": "audio_driver" },
+    "aspect_ratio": { "configKey": "retroarch_aspect_ratio", "globalKey": "aspect_ratio" }
+  },
+  "groups": [
+    {
+      "id": "graphics",
+      "title": "Gráficos",
+      "icon": "monitor",
+      "order": 1,
+      "options": [
+        { "id": "video_driver", "label": "Driver de Vídeo", "description": "Backend gráfico do RetroArch.", "type": "select", "default": "auto", "configKey": "video_driver", "inheritsGlobal": "video_driver", "values": [{ "label": "Automático", "value": "auto" }, { "label": "Vulkan", "value": "vulkan" }, { "label": "D3D11", "value": "d3d11" }, { "label": "D3D12", "value": "d3d12" }, { "label": "OpenGL", "value": "gl" }, { "label": "OpenGL Core", "value": "glcore" }] },
+        { "id": "video_vsync", "label": "V-Sync", "description": "Sincronização vertical.", "type": "toggle", "default": "true", "configKey": "video_vsync", "inheritsGlobal": "vsync" },
+        { "id": "retroarch_aspect_ratio", "label": "Proporção de Tela", "description": "Proporção de aspecto padrão para os cores.", "type": "select", "default": "auto", "configKey": "retroarch_aspect_ratio", "inheritsGlobal": "aspect_ratio", "values": [{ "label": "Automático", "value": "auto" }, { "label": "4:3", "value": "Fixed4x3" }, { "label": "16:9", "value": "Fixed16x9" }, { "label": "Esticar", "value": "Stretch" }] }
+      ]
+    },
+    {
+      "id": "audio",
+      "title": "Áudio",
+      "icon": "volume2",
+      "order": 2,
+      "options": [
+        { "id": "audio_driver", "label": "Driver de Áudio", "description": "Backend de áudio.", "type": "select", "default": "auto", "configKey": "audio_driver", "inheritsGlobal": "audio_driver", "values": [{ "label": "Automático", "value": "auto" }, { "label": "WASAPI", "value": "wasapi" }, { "label": "DirectSound", "value": "dsound" }, { "label": "XAudio2", "value": "xaudio" }] }
+      ]
+    }
+  ]
+}

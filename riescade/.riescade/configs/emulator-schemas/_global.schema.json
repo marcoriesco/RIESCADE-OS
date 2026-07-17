@@ -1,0 +1,210 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "global",
+  "name": "Configurações Globais",
+  "description": "Opções gerais aplicadas a todos os emuladores. Cada emulador pode sobrescrever individualmente.",
+  "icon": "settings",
+  "groups": [
+    {
+      "id": "video",
+      "title": "Vídeo",
+      "icon": "monitor",
+      "order": 1,
+      "options": [
+        {
+          "id": "fullscreen",
+          "label": "Tela Cheia",
+          "description": "Inicia os emuladores em modo tela cheia.",
+          "type": "toggle",
+          "default": "true",
+          "configKey": "fullscreen"
+        },
+        {
+          "id": "video_driver",
+          "label": "Driver de Vídeo",
+          "description": "API gráfica padrão utilizada pelos emuladores.",
+          "type": "select",
+          "default": "Vulkan",
+          "configKey": "video_driver",
+          "values": [
+            { "label": "Automático", "value": "auto" },
+            { "label": "Vulkan", "value": "Vulkan" },
+            { "label": "Direct3D 11", "value": "Direct3D11" },
+            { "label": "Direct3D 12", "value": "Direct3D12" },
+            { "label": "OpenGL", "value": "OpenGL" }
+          ]
+        },
+        {
+          "id": "vsync",
+          "label": "V-Sync",
+          "description": "Sincronização vertical para evitar tearing na imagem.",
+          "type": "toggle",
+          "default": "true",
+          "configKey": "vsync"
+        },
+        {
+          "id": "resolution",
+          "label": "Resolução",
+          "description": "Resolução de exibição dos emuladores.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "resolution",
+          "values": [
+            { "label": "Automático", "value": "auto" },
+            { "label": "720p (1280x720)", "value": "1280x720" },
+            { "label": "1080p (1920x1080)", "value": "1920x1080" },
+            { "label": "1440p (2560x1440)", "value": "2560x1440" },
+            { "label": "4K (3840x2160)", "value": "3840x2160" }
+          ]
+        },
+        {
+          "id": "aspect_ratio",
+          "label": "Proporção de Tela",
+          "description": "Proporção de aspecto padrão para os emuladores.",
+          "type": "select",
+          "default": "Fixed4x3",
+          "configKey": "aspect_ratio",
+          "values": [
+            { "label": "4:3", "value": "Fixed4x3" },
+            { "label": "16:9", "value": "Fixed16x9" },
+            { "label": "16:10", "value": "Fixed16x10" },
+            { "label": "Automático", "value": "auto" },
+            { "label": "Esticar", "value": "Stretch" }
+          ]
+        },
+        {
+          "id": "hdr",
+          "label": "HDR",
+          "description": "Ativar HDR para monitores compatíveis.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "hdr",
+          "values": [
+            { "label": "Automático", "value": "auto" },
+            { "label": "Ativado", "value": "true" },
+            { "label": "Desativado", "value": "false" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "display",
+      "title": "Display",
+      "icon": "monitor",
+      "order": 2,
+      "options": [
+        {
+          "id": "monitor_index",
+          "label": "Monitor",
+          "description": "Índice do monitor onde os jogos serão exibidos.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "monitor_index",
+          "values": [
+            { "label": "Automático", "value": "auto" },
+            { "label": "Monitor 1", "value": "0" },
+            { "label": "Monitor 2", "value": "1" },
+            { "label": "Monitor 3", "value": "2" },
+            { "label": "Monitor 4", "value": "3" }
+          ]
+        },
+        {
+          "id": "gpu_index",
+          "label": "GPU",
+          "description": "Selecione a placa de vídeo a ser utilizada.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "gpu_index",
+          "values": [
+            { "label": "Automático", "value": "auto" },
+            { "label": "GPU 1", "value": "0" },
+            { "label": "GPU 2", "value": "1" },
+            { "label": "GPU 3", "value": "2" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "audio",
+      "title": "Áudio",
+      "icon": "volume2",
+      "order": 3,
+      "options": [
+        {
+          "id": "audio_driver",
+          "label": "Driver de Áudio",
+          "description": "Backend de áudio utilizado pelos emuladores.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "audio_driver",
+          "values": [
+            { "label": "Automático", "value": "auto" },
+            { "label": "WASAPI", "value": "wasapi" },
+            { "label": "DirectSound", "value": "dsound" },
+            { "label": "XAudio2", "value": "xaudio2" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "visual",
+      "title": "Visual",
+      "icon": "palette",
+      "order": 4,
+      "options": [
+        {
+          "id": "shaders",
+          "label": "Shaders",
+          "description": "Pacote de shaders padrão aplicado aos emuladores.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "shaders",
+          "values": [
+            { "label": "Automático", "value": "auto" },
+            { "label": "Desativado", "value": "none" }
+          ]
+        },
+        {
+          "id": "bezels",
+          "label": "Bezels / Molduras",
+          "description": "Molduras decorativas ao redor da tela do jogo.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "bezels",
+          "values": [
+            { "label": "Automático", "value": "auto" },
+            { "label": "Desativado", "value": "none" }
+          ]
+        },
+        {
+          "id": "filters",
+          "label": "Filtros de Vídeo",
+          "description": "Filtros de pós-processamento de imagem.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "filters",
+          "values": [
+            { "label": "Automático", "value": "auto" },
+            { "label": "Desativado", "value": "none" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "social",
+      "title": "Social",
+      "icon": "share2",
+      "order": 5,
+      "options": [
+        {
+          "id": "discord",
+          "label": "Discord Rich Presence",
+          "description": "Mostrar o jogo atual no seu status do Discord.",
+          "type": "toggle",
+          "default": "false",
+          "configKey": "discord"
+        }
+      ]
+    }
+  ]
+}

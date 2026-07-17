@@ -1,0 +1,165 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "rpcs3",
+  "name": "RPCS3",
+  "description": "Emulador de PlayStation 3 de código aberto.",
+  "icon": "rpcs3",
+  "configFiles": [{ "path": "config/config.yml", "format": "yml" }],
+  "globalMappings": {
+    "fullscreen": { "configKey": "forcefullscreen", "globalKey": "fullscreen" },
+    "vsync": { "configKey": "rpcs3_vsync", "globalKey": "vsync" },
+    "video_driver": { "configKey": "gfxbackend", "globalKey": "video_driver" }
+  },
+  "groups": [
+    {
+      "id": "graphics",
+      "title": "Gráficos",
+      "icon": "monitor",
+      "order": 1,
+      "options": [
+        {
+          "id": "gfxbackend",
+          "label": "Backend Gráfico",
+          "description": "API de renderização do RPCS3.",
+          "type": "select",
+          "default": "Vulkan",
+          "configKey": "gfxbackend",
+          "inheritsGlobal": "video_driver",
+          "values": [
+            { "label": "Vulkan", "value": "Vulkan" },
+            { "label": "OpenGL", "value": "OpenGL" }
+          ]
+        },
+        {
+          "id": "rpcs3_vsync",
+          "label": "V-Sync",
+          "description": "Modo de sincronização vertical do RPCS3.",
+          "type": "select",
+          "default": "Adaptive",
+          "configKey": "rpcs3_vsync",
+          "inheritsGlobal": "vsync",
+          "values": [
+            { "label": "Desativado", "value": "Off" },
+            { "label": "Ativado", "value": "On" },
+            { "label": "Adaptativo", "value": "Adaptive" }
+          ]
+        },
+        {
+          "id": "rpcs3_internal_resolution",
+          "label": "Resolução Interna",
+          "description": "Escala de resolução interna (multiplicador).",
+          "type": "select",
+          "default": "auto",
+          "configKey": "rpcs3_internal_resolution",
+          "inheritsGlobal": "resolution",
+          "values": [
+            { "label": "Automático", "value": "auto" },
+            { "label": "1280x720 (HD)", "value": "1280x720" },
+            { "label": "1920x1080 (Full HD)", "value": "1920x1080" },
+            { "label": "2560x1440 (2K)", "value": "2560x1440" },
+            { "label": "3840x2160 (4K)", "value": "3840x2160" }
+          ]
+        },
+        {
+          "id": "rpcs3_stretch_to_display",
+          "label": "Esticar para Exibição",
+          "description": "Estica a imagem para preencher toda a tela.",
+          "type": "toggle",
+          "default": "false",
+          "configKey": "rpcs3_stretch_to_display"
+        },
+        {
+          "id": "rpcs3_fsr",
+          "label": "AMD FidelityFX (FSR)",
+          "description": "Upscaling via FidelityFX Super Resolution.",
+          "type": "toggle",
+          "default": "false",
+          "configKey": "rpcs3_fsr"
+        },
+        {
+          "id": "rpcs3_anti_aliasing",
+          "label": "Anti-Aliasing",
+          "description": "Suavização de bordas para melhorar a qualidade visual.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "rpcs3_anti_aliasing",
+          "values": [
+            { "label": "Automático", "value": "auto" },
+            { "label": "Desativado", "value": "Disabled" },
+            { "label": "FXAA", "value": "FXAA" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "emulation",
+      "title": "Emulação",
+      "icon": "cpu",
+      "order": 2,
+      "options": [
+        {
+          "id": "rpcs3_spu_block",
+          "label": "Bloco SPU",
+          "description": "Tamanho do bloco de compilação SPU. Mega melhora performance.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "rpcs3_spu_block",
+          "values": [
+            { "label": "Automático", "value": "auto" },
+            { "label": "Safe", "value": "Safe" },
+            { "label": "Mega", "value": "Mega" },
+            { "label": "Giga", "value": "Giga" }
+          ]
+        },
+        {
+          "id": "rpcs3_ppu_decoder",
+          "label": "Decodificador PPU",
+          "description": "Método de recompilação do PPU. Recompiler LLVM é mais rápido.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "rpcs3_ppu_decoder",
+          "values": [
+            { "label": "Automático", "value": "auto" },
+            { "label": "Interpreter", "value": "Interpreter" },
+            { "label": "Recompiler (LLVM)", "value": "Recompiler (LLVM)" }
+          ]
+        },
+        {
+          "id": "rpcs3_spu_decoder",
+          "label": "Decodificador SPU",
+          "description": "Método de recompilação do SPU.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "rpcs3_spu_decoder",
+          "values": [
+            { "label": "Automático", "value": "auto" },
+            { "label": "Interpreter", "value": "Interpreter" },
+            { "label": "Recompiler (ASMJIT)", "value": "Recompiler (ASMJIT)" },
+            { "label": "Recompiler (LLVM)", "value": "Recompiler (LLVM)" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "audio",
+      "title": "Áudio",
+      "icon": "volume2",
+      "order": 3,
+      "options": [
+        {
+          "id": "rpcs3_audio_backend",
+          "label": "Backend de Áudio",
+          "description": "API de áudio utilizada pelo RPCS3.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "rpcs3_audio_backend",
+          "values": [
+            { "label": "Automático", "value": "auto" },
+            { "label": "XAudio2", "value": "XAudio2" },
+            { "label": "Cubeb", "value": "Cubeb" }
+          ]
+        }
+      ]
+    }
+  ]
+}

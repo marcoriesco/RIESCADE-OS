@@ -1,0 +1,259 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "pcsx2x6",
+  "name": "PCSX2",
+  "description": "Emulador de PlayStation 2 — versão Qt moderna.",
+  "icon": "pcsx2",
+  "configFiles": [{ "path": "inis/PCSX2.ini", "format": "ini" }],
+  "globalMappings": {
+    "fullscreen": { "configKey": "forcefullscreen", "globalKey": "fullscreen" },
+    "vsync": { "configKey": "pcsx2_vsync", "globalKey": "vsync" },
+    "video_driver": { "configKey": "renderer", "globalKey": "video_driver" }
+  },
+  "groups": [
+    {
+      "id": "graphics",
+      "title": "Gráficos",
+      "icon": "monitor",
+      "order": 1,
+      "options": [
+        {
+          "id": "internalresolution",
+          "label": "Resolução Interna",
+          "description": "Multiplicador da resolução nativa do PS2 (512x448).",
+          "type": "select",
+          "default": "3",
+          "configKey": "internalresolution",
+          "values": [
+            { "label": "Nativa (1x)", "value": "1" },
+            { "label": "2x (1024x896)", "value": "2" },
+            { "label": "3x (1536x1344)", "value": "3" },
+            { "label": "4x (2048x1792)", "value": "4" },
+            { "label": "5x (2560x2240)", "value": "5" },
+            { "label": "6x (3072x2688)", "value": "6" },
+            { "label": "8x (4096x3584)", "value": "8" }
+          ]
+        },
+        {
+          "id": "TVShader",
+          "label": "TV Shader",
+          "description": "Aplica filtros visuais que simulam a aparência de uma TV CRT.",
+          "type": "select",
+          "default": "0",
+          "configKey": "TVShader",
+          "values": [
+            { "label": "Desativado", "value": "0" },
+            { "label": "Scanlines", "value": "1" },
+            { "label": "Diagonal", "value": "2" },
+            { "label": "Triangular", "value": "3" },
+            { "label": "Wave", "value": "4" }
+          ]
+        },
+        {
+          "id": "pcsx2_vsync",
+          "label": "V-Sync",
+          "description": "Sincronização vertical do PCSX2.",
+          "type": "toggle",
+          "default": "true",
+          "configKey": "pcsx2_vsync",
+          "inheritsGlobal": "vsync"
+        },
+        {
+          "id": "bilinear_filtering",
+          "label": "Filtragem Bilinear",
+          "description": "Suavização de texturas para reduzir pixels visíveis.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "bilinear_filtering",
+          "values": [
+            { "label": "Automático", "value": "auto" },
+            { "label": "Desativado", "value": "0" },
+            { "label": "Bilinear (Forçado)", "value": "1" },
+            { "label": "Bilinear (PS2)", "value": "2" },
+            { "label": "Bilinear (Forçado exceto sprites)", "value": "3" }
+          ]
+        },
+        {
+          "id": "anisotropic_filtering",
+          "label": "Filtragem Anisotrópica",
+          "description": "Melhora a nitidez de texturas em ângulos oblíquos.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "anisotropic_filtering",
+          "values": [
+            { "label": "Automático", "value": "auto" },
+            { "label": "Desativado", "value": "0" },
+            { "label": "2x", "value": "2" },
+            { "label": "4x", "value": "4" },
+            { "label": "8x", "value": "8" },
+            { "label": "16x", "value": "16" }
+          ]
+        },
+        {
+          "id": "texture_filtering",
+          "label": "Filtragem de Textura",
+          "description": "Método de filtragem de texturas do GS.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "texture_filtering",
+          "values": [
+            { "label": "Automático", "value": "auto" },
+            { "label": "Nearest", "value": "0" },
+            { "label": "Bilinear (Forçado)", "value": "1" },
+            { "label": "Bilinear (PS2)", "value": "2" },
+            { "label": "Bilinear (Forçado exceto sprites)", "value": "3" }
+          ]
+        },
+        {
+          "id": "trilinear_filtering",
+          "label": "Filtragem Trilinear",
+          "description": "Suavização entre níveis de mipmap para mais qualidade.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "trilinear_filtering",
+          "values": [
+            { "label": "Automático", "value": "auto" },
+            { "label": "Desativado", "value": "0" },
+            { "label": "Trilinear (PS2)", "value": "1" },
+            { "label": "Trilinear (Forçado)", "value": "2" }
+          ]
+        },
+        {
+          "id": "interlace",
+          "label": "Desentrelaçamento",
+          "description": "Método para converter vídeo entrelaçado em progressivo.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "interlace",
+          "values": [
+            { "label": "Automático", "value": "auto" },
+            { "label": "Desativado", "value": "0" },
+            { "label": "Weave (Top Field First)", "value": "1" },
+            { "label": "Weave (Bottom Field First)", "value": "2" },
+            { "label": "Bob (Top Field First)", "value": "3" },
+            { "label": "Bob (Bottom Field First)", "value": "4" },
+            { "label": "Blend (Top Field First)", "value": "5" },
+            { "label": "Blend (Bottom Field First)", "value": "6" },
+            { "label": "Adaptive", "value": "7" }
+          ]
+        },
+        {
+          "id": "fmv_ratio",
+          "label": "Proporção de FMV",
+          "description": "Proporção de tela para vídeos pré-renderizados (FMVs).",
+          "type": "select",
+          "default": "auto",
+          "configKey": "fmv_ratio",
+          "values": [
+            { "label": "Automático", "value": "auto" },
+            { "label": "Desativado", "value": "0" },
+            { "label": "4:3", "value": "1" },
+            { "label": "16:9", "value": "2" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hacks",
+      "title": "Correções / Hacks",
+      "icon": "wrench",
+      "order": 2,
+      "options": [
+        {
+          "id": "UserHacks_HalfPixelOffset",
+          "label": "Half Pixel Offset",
+          "description": "Corrige problemas de alinhamento de pixels em alguns jogos (God of War, Shadow of the Colossus).",
+          "type": "select",
+          "default": "auto",
+          "configKey": "UserHacks_HalfPixelOffset",
+          "values": [
+            { "label": "Automático", "value": "auto" },
+            { "label": "Desativado", "value": "0" },
+            { "label": "Normal (Vertex)", "value": "1" },
+            { "label": "Especial (Texture)", "value": "2" },
+            { "label": "Especial (Texture Agressivo)", "value": "3" },
+            { "label": "Alinhado ao Native Res", "value": "4" }
+          ]
+        },
+        {
+          "id": "UserHacks_round_sprite_offset",
+          "label": "Round Sprite Offset",
+          "description": "Corrige linhas entre sprites em alguns jogos 2D.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "UserHacks_round_sprite_offset",
+          "values": [
+            { "label": "Automático", "value": "auto" },
+            { "label": "Desativado", "value": "0" },
+            { "label": "Half", "value": "1" },
+            { "label": "Full", "value": "2" }
+          ]
+        },
+        {
+          "id": "TextureOffsets",
+          "label": "Offsets de Textura",
+          "description": "Correção de desalinhamento de texturas em alta resolução.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "TextureOffsets",
+          "values": [
+            { "label": "Automático", "value": "auto" },
+            { "label": "Desativado", "value": "0" },
+            { "label": "Ativado", "value": "1" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "emulation",
+      "title": "Emulação",
+      "icon": "cpu",
+      "order": 3,
+      "options": [
+        {
+          "id": "pcsx2_fastboot",
+          "label": "Fast Boot",
+          "description": "Pula a animação de boot do PS2 ao iniciar jogos.",
+          "type": "toggle",
+          "default": "true",
+          "configKey": "pcsx2_fastboot"
+        },
+        {
+          "id": "fullboot",
+          "label": "Full Boot",
+          "description": "Exige boot completo do PS2 (útil para BIOS e testes).",
+          "type": "toggle",
+          "default": "true",
+          "configKey": "fullboot"
+        },
+        {
+          "id": "pcsx2_forcebios",
+          "label": "Forçar BIOS",
+          "description": "Arquivo de BIOS específico para usar.",
+          "type": "select",
+          "default": "ps2-0230a-20080220.bin",
+          "configKey": "pcsx2_forcebios",
+          "values": [
+            { "label": "Automático", "value": "auto" },
+            { "label": "PS2 NTSC-U/C (v02.30)", "value": "ps2-0230a-20080220.bin" },
+            { "label": "PS2 PAL (v02.30)", "value": "ps2-0230e-20080220.bin" },
+            { "label": "PS2 NTSC-J (v02.30)", "value": "ps2-0230j-20080220.bin" }
+          ]
+        },
+        {
+          "id": "pcsx2_slot1_memory",
+          "label": "Memory Card Slot 1",
+          "description": "Configuração do Memory Card no slot 1.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "pcsx2_slot1_memory",
+          "values": [
+            { "label": "Automático (Compartilhado)", "value": "auto" },
+            { "label": "Por Jogo", "value": "pergame" },
+            { "label": "Desativado", "value": "disabled" }
+          ]
+        }
+      ]
+    }
+  ]
+}

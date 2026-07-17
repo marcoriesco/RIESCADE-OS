@@ -10,6 +10,7 @@ import { EmulatorParser } from './parsers/EmulatorParser'
 import { ThemeSettingsParser } from './parsers/ThemeSettingsParser'
 import { SystemService } from './services/SystemService'
 import { ScraperService } from './services/ScraperService'
+import { EmulatorSchemaService } from './services/EmulatorSchemaService'
 import { RomsWatcherService } from './services/RomsWatcherService'
 import { registerUpdaterIpc } from './services/UpdaterService'
 import { Game, System } from '../shared/types'
@@ -24,6 +25,7 @@ const launcherService = new LauncherService()
 const settingsParser = new SettingsParser()
 const systemService = new SystemService(libraryService)
 const scraperService = new ScraperService(libraryService)
+const emulatorSchemaService = new EmulatorSchemaService()
 
 // Configure Chromium GPU graphics backend switches based on user settings
 app.commandLine.appendSwitch('ignore-gpu-blocklist')
@@ -493,12 +495,73 @@ app.whenReady().then(() => {
     }
   })
 
+  function triggerLauncherConfig(emulator: string) {
+    if (emulator === 'global') return
+
+    const launcherPath = join(getRiescadePath(), 'launcher', 'riescadeLauncher.exe')
+    const retroBatPath = getRetroBatPath()
+    
+    // Map emulator ID to launcher's expected name if different
+    let launcherEmuName = emulator
+    if (emulator === 'retroarch') {
+      launcherEmuName = 'libretro'
+    }
+    
+    const cmd = `"${launcherPath}" -emulator "${launcherEmuName}" -system "${launcherEmuName}" -configure-only`
+    console.log(`[save-emulator-setting] Triggering live config write: ${cmd}`)
+    
+    exec(cmd, { cwd: retroBatPath }, (error, stdout, stderr) => {
+      if (error) {
+        console.error(`[save-emulator-setting] Failed to run live config for ${emulator}:`, error)
+        if (stderr) console.error(`[save-emulator-setting] stderr:`, stderr)
+      } else {
+        console.log(`[save-emulator-setting] Live config completed successfully for ${emulator}`)
+      }
+    })
+  }
+
   ipcMain.handle('save-emulator-setting', async (_, emulator: string, name: string, value: any) => {
     const emulatorParser = new EmulatorParser()
     emulatorParser.saveSetting(emulator, name, value)
     
     // Broadcast setting change to main window
     sendToMainWindow('emulator-setting-changed', { emulator, name, value })
+
+    // Trigger live config write
+    triggerLauncherConfig(emulator)
+  })
+
+  // ─── IPC: Emulator Schemas ───
+  ipcMain.handle('get-emulator-schemas', async () => {
+    return emulatorSchemaService.getSchemaList()
+  })
+
+  ipcMain.handle('get-emulator-schema', async (_, id: string) => {
+    return emulatorSchemaService.getSchema(id)
+  })
+
+  ipcMain.handle('get-resolved-emulator-settings', async (_, emulator: string) => {
+    const emulatorParser = new EmulatorParser()
+    return emulatorParser.getResolvedSettings(emulator)
+  })
+
+  ipcMain.handle('reset-emulator-setting', async (_, emulator: string, key: string) => {
+    const emulatorParser = new EmulatorParser()
+    emulatorParser.resetSetting(emulator, key)
+    sendToMainWindow('emulator-setting-changed', { emulator, name: key, value: 'auto' })
+    triggerLauncherConfig(emulator)
+  })
+
+  ipcMain.handle('reset-all-emulator-settings', async (_, emulator: string) => {
+    const emulatorParser = new EmulatorParser()
+    emulatorParser.resetAllSettings(emulator)
+    sendToMainWindow('emulator-settings-reset', { emulator })
+    triggerLauncherConfig(emulator)
+  })
+
+  ipcMain.handle('reload-emulator-schemas', async () => {
+    emulatorSchemaService.reload()
+    return emulatorSchemaService.getSchemaList()
   })
 
   ipcMain.handle('select-bg-image', async (event) => {

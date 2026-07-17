@@ -5,6 +5,7 @@ import { TOOL_APPS, getSystemTheme } from "../constants";
 import {
   SettingGroup, SettingToggle, SettingSelect, SettingSlider, SettingInput, SettingInfo
 } from "./SettingsComponents";
+import { EmulatorSettingsPanel } from "./EmulatorSettingsPanel";
 import { ScrollArea } from "./ScrollArea";
 import * as Select from "@radix-ui/react-select";
 
@@ -109,7 +110,9 @@ const EMULATOR_NAMES: Record<string, string> = {
   model3: "Supermodel (Model 3)",
   redream: "Redream",
   shadps4: "shadPS4",
-  vita3k: "Vita3K"
+  vita3k: "Vita3K",
+  eden: "Eden",
+  mame: "MAME"
 };
 
 const EMULATOR_DESCRIPTIONS: Record<string, string> = {
@@ -121,6 +124,7 @@ const EMULATOR_DESCRIPTIONS: Record<string, string> = {
   pcsx2x6: "Ajuste os parâmetros específicos do emulador PCSX2X6.",
   teknoparrot: "Ajuste os parâmetros específicos do emulador TeknoParrot.",
   mame64: "Ajuste os parâmetros específicos do emulador MAME64.",
+  mame: "Ajuste os parâmetros específicos do emulador MAME.",
   dolphin: "Ajuste os parâmetros específicos do emulador Dolphin.",
   ryujinx: "Ajuste os parâmetros específicos do emulador Ryujinx.",
   rpcs3: "Ajuste os parâmetros específicos do emulador RPCS3.",
@@ -134,7 +138,8 @@ const EMULATOR_DESCRIPTIONS: Record<string, string> = {
   model3: "Ajuste os parâmetros específicos do emulador Supermodel.",
   redream: "Ajuste os parâmetros específicos do emulador Redream.",
   shadps4: "Ajuste os parâmetros específicos do emulador shadPS4.",
-  vita3k: "Ajuste os parâmetros específicos do emulador Vita3K."
+  vita3k: "Ajuste os parâmetros específicos do emulador Vita3K.",
+  eden: "Ajuste os parâmetros específicos do emulador Eden (fork do Yuzu)."
 };
 
 export default function ToolAppContent({
@@ -155,6 +160,7 @@ export default function ToolAppContent({
   const [settingsCategory, setSettingsCategory] = useState<"all" | "tools" | "systems">("all");
   const [riescadeLogo, setRiescadeLogo] = useState<string>("");
   const [riescadeVersion, setRiescadeVersion] = useState<string>("v2.0.0-Beta");
+  const [emulatorSchemas, setEmulatorSchemas] = useState<{ id: string; name: string; description?: string }[]>([]);
 
   useEffect(() => {
     window.api.getRiescadeLogoPath().then((path) => {
@@ -163,6 +169,16 @@ export default function ToolAppContent({
     window.api.getVersion().then((res) => {
       if (res && res.app) {
         setRiescadeVersion(`v${res.app}`);
+      }
+    });
+    window.api.getEmulatorSchemas().then((list) => {
+      if (list) {
+        const sorted = [...list].sort((a, b) => {
+          if (a.id === 'global') return -1;
+          if (b.id === 'global') return 1;
+          return a.name.localeCompare(b.name);
+        });
+        setEmulatorSchemas(sorted);
       }
     });
   }, []);
@@ -846,22 +862,41 @@ export default function ToolAppContent({
                     </button>
                     {tab.id === "emuladores" && emuMenuOpen && (
                       <div className="flex flex-col gap-1 pl-4 border-l border-white/5 ml-5.5 my-1 max-h-[340px] overflow-y-auto pr-1 select-none scrollbar-thin">
-                        {Object.entries(EMULATOR_NAMES).map(([emuKey, emuName]) => (
-                          <button
-                            key={emuKey}
-                            onClick={() => {
-                              setActiveSettingsTab("emuladores");
-                              setActiveEmuSubmenu(emuKey);
-                            }}
-                            className={`cursor-pointer w-full text-left py-1.5 px-2 rounded-md text-[11px] font-medium transition ${
-                              activeSettingsTab === "emuladores" && activeEmuSubmenu === emuKey
-                                ? "text-accent font-bold bg-white/[0.04]"
-                                : "text-white/50 hover:text-white/80 hover:bg-white/[0.02]"
-                            }`}
-                          >
-                            {emuName}
-                          </button>
-                        ))}
+                        {emulatorSchemas.length > 0 ? (
+                          emulatorSchemas.map((schema) => (
+                            <button
+                              key={schema.id}
+                              onClick={() => {
+                                setActiveSettingsTab("emuladores");
+                                setActiveEmuSubmenu(schema.id);
+                              }}
+                              className={`cursor-pointer w-full text-left py-1.5 px-2 rounded-md text-[11px] font-medium transition ${
+                                activeSettingsTab === "emuladores" && activeEmuSubmenu === schema.id
+                                  ? "text-accent font-bold bg-white/[0.04]"
+                                  : "text-white/50 hover:text-white/80 hover:bg-white/[0.02]"
+                              }`}
+                            >
+                              {schema.name}
+                            </button>
+                          ))
+                        ) : (
+                          Object.entries(EMULATOR_NAMES).map(([emuKey, emuName]) => (
+                            <button
+                              key={emuKey}
+                              onClick={() => {
+                                setActiveSettingsTab("emuladores");
+                                setActiveEmuSubmenu(emuKey);
+                              }}
+                              className={`cursor-pointer w-full text-left py-1.5 px-2 rounded-md text-[11px] font-medium transition ${
+                                activeSettingsTab === "emuladores" && activeEmuSubmenu === emuKey
+                                  ? "text-accent font-bold bg-white/[0.04]"
+                                  : "text-white/50 hover:text-white/80 hover:bg-white/[0.02]"
+                              }`}
+                            >
+                              {emuName}
+                            </button>
+                          ))
+                        )}
                       </div>
                     )}
                   </div>
@@ -2235,23 +2270,34 @@ export default function ToolAppContent({
           )}
 
           {/* ===== TAB: EMULADORES ===== */}
-          {activeSettingsTab === "emuladores" && (
-            <div className="flex flex-col h-full overflow-hidden">
-              <div className="shrink-0 px-6 pt-8 pb-4 max-w-[740px]">
-                <h2 className="text-xl font-bold text-white mb-1">
-                  Configurações dos Emuladores - {EMULATOR_NAMES[activeEmuSubmenu] || (activeEmuSubmenu.charAt(0).toUpperCase() + activeEmuSubmenu.slice(1))}
-                </h2>
-                <p className="text-sm text-white/40">
-                  {EMULATOR_DESCRIPTIONS[activeEmuSubmenu] || `Ajuste os parâmetros específicos do emulador ${EMULATOR_NAMES[activeEmuSubmenu] || activeEmuSubmenu}.`}
-                </p>
-              </div>
+          {activeSettingsTab === "emuladores" && (() => {
+            const currentSchema = emulatorSchemas.find(s => s.id === activeEmuSubmenu);
+            const dispName = currentSchema ? currentSchema.name : (EMULATOR_NAMES[activeEmuSubmenu] || (activeEmuSubmenu.charAt(0).toUpperCase() + activeEmuSubmenu.slice(1)));
+            const dispDesc = currentSchema ? currentSchema.description : (EMULATOR_DESCRIPTIONS[activeEmuSubmenu] || `Ajuste os parâmetros específicos do emulador ${dispName}.`);
+            return (
+              <div className="flex flex-col h-full overflow-hidden">
+                <div className="shrink-0 px-6 pt-8 pb-4 max-w-[740px]">
+                  <h2 className="text-xl font-bold text-white mb-1">
+                    Configurações dos Emuladores - {dispName}
+                  </h2>
+                  <p className="text-sm text-white/40">
+                    {dispDesc}
+                  </p>
+                </div>
               <ScrollArea className="flex-1 min-h-0">
                 <div className="px-6 pb-6 max-w-[740px]">
+                  <EmulatorSettingsPanel
+                    emulatorId={activeEmuSubmenu}
+                    emulatorSettings={emulatorSettings}
+                    globalSettings={emulatorSettings?.['global']}
+                    onSaveEmulatorSetting={onSaveEmulatorSetting || (() => {})}
+                  />
                   {renderDynamicEmulatorSettings()}
                 </div>
               </ScrollArea>
             </div>
-          )}
+            );
+          })()}
 
           {/* ===== TAB: AVANÇADO ===== */}
           {activeSettingsTab === "avancado" && (

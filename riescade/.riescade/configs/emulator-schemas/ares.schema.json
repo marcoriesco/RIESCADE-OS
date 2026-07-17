@@ -1,0 +1,36 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "ares", "name": "Ares", "description": "Emulador multi-sistema (N64, SNES, Genesis, PSX, etc.).", "icon": "ares",
+  "configFiles": [{ "path": "settings.bml", "format": "bml" }],
+  "groups": [
+    { "id": "graphics", "title": "Gráficos", "icon": "monitor", "order": 1, "options": [
+      { "id": "ares_renderer", "label": "Driver de Vídeo", "description": "API gráfica.", "type": "select", "default": "OpenGL 3.2", "configKey": "ares_renderer", "values": [{ "label": "OpenGL 3.2", "value": "OpenGL 3.2" }, { "label": "Direct3D", "value": "Direct3D" }, { "label": "GDI", "value": "GDI" }] },
+      { "id": "ares_aspect", "label": "Modo de Saída", "description": "Modo de exibição da imagem.", "type": "select", "default": "Scale", "configKey": "ares_aspect", "values": [{ "label": "Escala", "value": "Scale" }, { "label": "Esticar", "value": "Stretch" }, { "label": "Centralizar", "value": "Center" }] },
+      { "id": "ares_aspectcorrection", "label": "Correção de Aspecto", "description": "Modo de correção de proporção.", "type": "select", "default": "Anamorphic", "configKey": "ares_aspectcorrection", "values": [{ "label": "Anamórfico", "value": "Anamorphic" }, { "label": "Desativado", "value": "None" }] },
+      { "id": "ares_luminance", "label": "Luminância", "description": "Ajuste de brilho (0.0 a 2.0).", "type": "input", "default": "1.0", "configKey": "ares_luminance" },
+      { "id": "ares_saturation", "label": "Saturação", "description": "Ajuste de saturação de cores (0.0 a 2.0).", "type": "input", "default": "1.0", "configKey": "ares_saturation" },
+      { "id": "ares_gamma", "label": "Gamma", "description": "Ajuste de gamma (0.0 a 2.0).", "type": "input", "default": "1.0", "configKey": "ares_gamma" },
+      { "id": "ares_colobleed", "label": "Color Bleed", "description": "Simula sangramento de cores de TVs CRT.", "type": "toggle", "default": "false", "configKey": "ares_colobleed" },
+      { "id": "ares_coloremulation", "label": "Emulação de Cores", "description": "Emula as cores do hardware original.", "type": "toggle", "default": "true", "configKey": "ares_coloremulation" },
+      { "id": "ares_interframe_blend", "label": "Blend Interframe", "description": "Mescla frames para simular efeitos de transparência.", "type": "toggle", "default": "true", "configKey": "ares_interframe_blend" },
+      { "id": "ares_overscan", "label": "Overscan", "description": "Mostra a área de overscan da imagem.", "type": "toggle", "default": "false", "configKey": "ares_overscan" },
+      { "id": "ares_weavedeinterlacing", "label": "Weave Deinterlacing", "description": "Modo de desentrelaçamento por weave.", "type": "toggle", "default": "true", "configKey": "ares_weavedeinterlacing" }
+    ]},
+    { "id": "n64", "title": "Nintendo 64", "icon": "cpu", "order": 2, "options": [
+      { "id": "ares_n64_quality", "label": "Qualidade N64", "description": "Qualidade de renderização para jogos N64.", "type": "select", "default": "HD", "configKey": "ares_n64_quality", "values": [{ "label": "SD", "value": "SD" }, { "label": "HD", "value": "HD" }, { "label": "Ultra HD", "value": "Ultra HD" }] },
+      { "id": "ares_pixel_accurate", "label": "Pixel Accurate", "description": "Renderização pixel-perfect para N64 (mais lento).", "type": "toggle", "default": "false", "configKey": "ares_pixel_accurate" },
+      { "id": "ares_supersampling", "label": "Supersampling", "description": "Anti-aliasing via supersampling.", "type": "toggle", "default": "false", "configKey": "ares_supersampling" },
+      { "id": "ares_ExpansionPak", "label": "Expansion Pak", "description": "Simular o Expansion Pak do N64 (necessário para alguns jogos).", "type": "toggle", "default": "true", "configKey": "ares_ExpansionPak" }
+    ]},
+    { "id": "audio", "title": "Áudio", "icon": "volume2", "order": 3, "options": [
+      { "id": "ares_audio_renderer", "label": "Driver de Áudio", "description": "API de áudio.", "type": "select", "default": "WASAPI", "configKey": "ares_audio_renderer", "values": [{ "label": "WASAPI", "value": "WASAPI" }, { "label": "DirectSound", "value": "DirectSound" }] },
+      { "id": "ares_audiosync", "label": "Sincronização de Áudio", "description": "Bloqueia o áudio para manter sincronia.", "type": "toggle", "default": "true", "configKey": "ares_audiosync" }
+    ]},
+    { "id": "emulation", "title": "Emulação", "icon": "settings", "order": 4, "options": [
+      { "id": "ares_fastboot", "label": "Fast Boot", "description": "Pula a animação de boot dos consoles.", "type": "toggle", "default": "false", "configKey": "ares_fastboot" },
+      { "id": "ares_region", "label": "Região Preferida", "description": "Região padrão para jogos multi-região.", "type": "select", "default": "NTSC-U", "configKey": "ares_region", "values": [{ "label": "NTSC-U (América)", "value": "NTSC-U" }, { "label": "NTSC-J (Japão)", "value": "NTSC-J" }, { "label": "PAL (Europa)", "value": "PAL" }] },
+      { "id": "rewind", "label": "Rewind", "description": "Permite rebobinar a emulação em tempo real.", "type": "toggle", "default": "false", "configKey": "rewind" },
+      { "id": "ares_runahead", "label": "Run-Ahead", "description": "Reduz a latência de input executando frames adiante.", "type": "toggle", "default": "false", "configKey": "ares_runahead" }
+    ]}
+  ]
+}

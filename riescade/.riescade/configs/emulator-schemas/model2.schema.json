@@ -1,0 +1,9 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "model2", "name": "Model 2 Emulator", "description": "Emulador de Sega Model 2 Arcade.", "icon": "model2",
+  "configFiles": [{ "path": "Emulator.ini", "format": "ini" }],
+  "globalMappings": { "fullscreen": { "configKey": "forcefullscreen", "globalKey": "fullscreen" }, "vsync": { "configKey": "model2_vsync", "globalKey": "vsync" } },
+  "groups": [{ "id": "graphics", "title": "Gráficos", "icon": "monitor", "order": 1, "options": [
+    { "id": "model2_vsync", "label": "V-Sync", "description": "Sincronização vertical.", "type": "toggle", "default": "true", "configKey": "model2_vsync", "inheritsGlobal": "vsync" }
+  ]}]
+}

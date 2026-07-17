@@ -3632,7 +3632,7 @@
     },
     {
       "name": "Windows",
-      "fullname": "Windows",
+      "fullname": "Games for Windows",
       "path": "~\\..\\roms\\windows",
       "extension": ".exe .bat .cmd .lnk .game .url .pc .win .windows .wine .7z .zip .rar .wsquashfs",
       "platform": "windows",

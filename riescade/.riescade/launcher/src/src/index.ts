@@ -335,6 +335,11 @@ async function main() {
     // Configure emulator/files before launching
     await generator.configure();
 
+    if (parsedArgs.flags.includes('configure-only')) {
+      Logger.info('Configure only flag detected. Exiting launcher after config phase.');
+      process.exit(0);
+    }
+
     // Get launch command
     const { executable, args } = generator.getLaunchCommand();
     Logger.info(`Spawning child process: "${executable}" ${args.join(' ')}`);

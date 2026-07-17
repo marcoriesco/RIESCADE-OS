@@ -1,0 +1,143 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "dolphin",
+  "name": "Dolphin",
+  "description": "Emulador de Nintendo GameCube e Wii.",
+  "icon": "dolphin",
+  "configFiles": [
+    { "path": "User/Config/Dolphin.ini", "format": "ini" },
+    { "path": "User/Config/GFX.ini", "format": "ini" }
+  ],
+  "globalMappings": {
+    "fullscreen": { "configKey": "forcefullscreen", "globalKey": "fullscreen" },
+    "vsync": { "configKey": "dolphin_vsync", "globalKey": "vsync" },
+    "video_driver": { "configKey": "dolphin_backend", "globalKey": "video_driver" }
+  },
+  "groups": [
+    {
+      "id": "graphics",
+      "title": "Gráficos",
+      "icon": "monitor",
+      "order": 1,
+      "options": [
+        {
+          "id": "dolphin_backend",
+          "label": "Backend Gráfico",
+          "description": "API de renderização do Dolphin.",
+          "type": "select",
+          "default": "Vulkan",
+          "configKey": "dolphin_backend",
+          "inheritsGlobal": "video_driver",
+          "values": [
+            { "label": "Vulkan", "value": "Vulkan" },
+            { "label": "Direct3D 11", "value": "D3D" },
+            { "label": "Direct3D 12", "value": "D3D12" },
+            { "label": "OpenGL", "value": "OGL" },
+            { "label": "Software", "value": "Software Renderer" }
+          ]
+        },
+        {
+          "id": "dolphin_vsync",
+          "label": "V-Sync",
+          "description": "Sincronização vertical do Dolphin.",
+          "type": "toggle",
+          "default": "true",
+          "configKey": "dolphin_vsync",
+          "inheritsGlobal": "vsync"
+        },
+        {
+          "id": "dolphin_aspect",
+          "label": "Proporção de Tela",
+          "description": "Proporção de aspecto durante o jogo.",
+          "type": "select",
+          "default": "0",
+          "configKey": "dolphin_aspect",
+          "values": [
+            { "label": "Automático", "value": "0" },
+            { "label": "Forçar 16:9", "value": "1" },
+            { "label": "Forçar 4:3", "value": "2" },
+            { "label": "Esticar para Janela", "value": "3" }
+          ]
+        },
+        {
+          "id": "dolphin_internal_resolution",
+          "label": "Resolução Interna (EFB)",
+          "description": "Multiplicador de resolução do framebuffer embutido.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "dolphin_internal_resolution",
+          "values": [
+            { "label": "Automático", "value": "auto" },
+            { "label": "1x Nativa (640x528)", "value": "1" },
+            { "label": "2x (1280x1056)", "value": "2" },
+            { "label": "3x (1920x1584)", "value": "3" },
+            { "label": "4x (2560x2112)", "value": "4" },
+            { "label": "5x (3200x2640)", "value": "5" },
+            { "label": "6x (3840x3168)", "value": "6" }
+          ]
+        },
+        {
+          "id": "dolphin_anti_aliasing",
+          "label": "Anti-Aliasing",
+          "description": "Suavização de bordas. Pode impactar performance.",
+          "type": "select",
+          "default": "0",
+          "configKey": "dolphin_anti_aliasing",
+          "values": [
+            { "label": "Desativado", "value": "0" },
+            { "label": "2x MSAA", "value": "2" },
+            { "label": "4x MSAA", "value": "4" },
+            { "label": "8x MSAA", "value": "8" }
+          ]
+        },
+        {
+          "id": "dolphin_shaders",
+          "label": "Compilação de Shaders",
+          "description": "Modo de compilação de shaders. Especializado pode ter stuttering inicial.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "dolphin_shaders",
+          "values": [
+            { "label": "Automático", "value": "auto" },
+            { "label": "Síncrono", "value": "synchronous" },
+            { "label": "Síncrono (Uber Shaders)", "value": "synchronous_ubershaders" },
+            { "label": "Assíncrono (Uber Shaders)", "value": "async_ubershaders" },
+            { "label": "Assíncrono (Skip Drawing)", "value": "async_skip" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "emulation",
+      "title": "Emulação",
+      "icon": "cpu",
+      "order": 2,
+      "options": [
+        {
+          "id": "dolphin_cheats",
+          "label": "Cheats / AR Codes",
+          "description": "Ativar suporte a Action Replay e Gecko codes.",
+          "type": "toggle",
+          "default": "false",
+          "configKey": "dolphin_cheats"
+        },
+        {
+          "id": "dolphin_speed_limit",
+          "label": "Limite de Velocidade",
+          "description": "Velocidade máxima de emulação (100% = velocidade nativa).",
+          "type": "select",
+          "default": "100",
+          "configKey": "dolphin_speed_limit",
+          "values": [
+            { "label": "Ilimitado", "value": "0" },
+            { "label": "50%", "value": "50" },
+            { "label": "75%", "value": "75" },
+            { "label": "100% (Nativo)", "value": "100" },
+            { "label": "150%", "value": "150" },
+            { "label": "200%", "value": "200" }
+          ]
+        }
+      ]
+    }
+  ]
+}

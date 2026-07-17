@@ -1,0 +1,19 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "eden",
+  "name": "Eden",
+  "description": "Emulador de Nintendo Switch (fork do Yuzu).",
+  "icon": "eden",
+  "configFiles": [{ "path": "user/config/qt-config.ini", "format": "ini" }],
+  "globalMappings": { "fullscreen": { "configKey": "forcefullscreen", "globalKey": "fullscreen" }, "vsync": { "configKey": "eden_vsync", "globalKey": "vsync" } },
+  "groups": [
+    { "id": "graphics", "title": "Gráficos", "icon": "monitor", "order": 1, "options": [
+      { "id": "eden_vsync", "label": "V-Sync", "description": "Modo de sincronização vertical. 0 = Off, 1 = FIFO, 2 = Mailbox.", "type": "select", "default": "1", "configKey": "eden_vsync", "inheritsGlobal": "vsync", "values": [{ "label": "Desativado", "value": "0" }, { "label": "FIFO (On)", "value": "1" }, { "label": "Mailbox", "value": "2" }] },
+      { "id": "eden_resolution_scale", "label": "Escala de Resolução", "description": "Multiplicador de resolução interna.", "type": "select", "default": "1", "configKey": "eden_resolution_scale", "values": [{ "label": "1x Nativa", "value": "1" }, { "label": "2x", "value": "2" }, { "label": "3x", "value": "3" }, { "label": "4x", "value": "4" }] },
+      { "id": "eden_anti_aliasing", "label": "Anti-Aliasing", "description": "Método de suavização.", "type": "select", "default": "None", "configKey": "eden_anti_aliasing", "values": [{ "label": "Desativado", "value": "None" }, { "label": "FXAA", "value": "FXAA" }, { "label": "SMAA", "value": "SMAA" }] }
+    ]},
+    { "id": "system", "title": "Sistema", "icon": "cpu", "order": 2, "options": [
+      { "id": "eden_undock", "label": "Modo Portátil (Undocked)", "description": "Emula o Switch no modo portátil.", "type": "toggle", "default": "false", "configKey": "eden_undock" }
+    ]}
+  ]
+}

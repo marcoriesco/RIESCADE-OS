@@ -21,6 +21,12 @@ declare global {
       saveSetting: (name: string, value: any, type: string) => Promise<any>
       getEmulatorSettings: () => Promise<any>
       saveEmulatorSetting: (emulator: string, name: string, value: any) => Promise<any>
+      getEmulatorSchemas: () => Promise<{ id: string; name: string; description?: string; icon?: string; groupCount: number; optionCount: number }[]>
+      getEmulatorSchema: (id: string) => Promise<any>
+      getResolvedEmulatorSettings: (emulator: string) => Promise<Record<string, { value: any; source: 'emulator' | 'global' | 'default' }>>
+      resetEmulatorSetting: (emulator: string, key: string) => Promise<void>
+      resetAllEmulatorSettings: (emulator: string) => Promise<void>
+      reloadEmulatorSchemas: () => Promise<any>
       getFeatures: () => Promise<any>
       selectBgImage: () => Promise<string | null>
       selectBgVideo: () => Promise<string | null>

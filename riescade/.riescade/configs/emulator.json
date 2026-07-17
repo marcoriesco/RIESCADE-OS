@@ -87,15 +87,16 @@
     "system_memory": "128"
   },
   "rpcs3": {
-    "rpcs3_internal_resolution": "100",
+    "rpcs3_internal_resolution": "1920x1080",
     "rpcs3_ratio": "16:9",
-    "rpcs3_vsync": "Full",
+    "rpcs3_vsync": "On",
     "ps3_region": "SCEA",
     "ps3_language": "Portuguese (Brazil)",
     "show_trophy": "true",
     "gfxbackend": "Vulkan",
     "stretchtodisplay": "true",
-    "rpcs3_fullscreen_mode": "Enable"
+    "rpcs3_fullscreen_mode": "Enable",
+    "rpcs3_stretch_to_display": "true"
   },
   "dolphin": {
     "internal_resolution": "3",
@@ -105,26 +106,12 @@
     "SafeTextureCacheColorSamples": "auto"
   },
   "ryujinx": {
-    "res_scale": "1",
-    "aspect_ratio": "Fixed16x9",
-    "ryujinx_undock": "true",
-    "switch_language": "BrazilianPortuguese",
-    "system_region": "USA",
-    "memory_manager_mode": "HostMappedUnsafe",
-    "backend_threading": "true",
-    "ryujinx_vsync": "0",
-    "ryujinx_scaling_filter": "auto",
-    "ryujinx_antialiasing": "auto",
-    "max_anisotropy": "auto",
-    "backend": "auto",
-    "audio_backend": "auto",
-    "forcefullscreen": "true",
-    "ryujinx_padtype1": "auto",
-    "ryujinx_padtype2": "auto",
-    "ryujinx_padtype3": "auto",
-    "ryujinx_padtype4": "auto",
-    "ryujinx_maxcontrollers": "auto",
-    "ryujinx_network": "auto"
+    "ryujinx_resolution_scale": "1",
+    "ryujinx_backend_threading": "Auto",
+    "ryujinx_anti_aliasing": "None",
+    "ryujinx_scaling_filter": "Fsr",
+    "ryujinx_language": "BrazilianPortuguese",
+    "ryujinx_vsync": "0"
   },
   "ppsspp": {
     "ppsspp_ratio": "1",
@@ -134,13 +121,19 @@
   "vita3k": {
     "resolution_multiplier": "2",
     "vita_vsync": "true",
-    "psvita_language": "17"
+    "psvita_language": "17",
+    "backend-renderer": "Vulkan",
+    "vita3k_vsync": "true",
+    "vita3k_resolution": "1",
+    "cpu_opt": "true",
+    "vita3k_fpshack": "true"
   },
   "shadps4": {
     "shadps4_isps4pro": "true",
     "shadps4_lang": "17",
     "shadps4_version": "default",
-    "forcefullscreen": "true"
+    "forcefullscreen": "true",
+    "shadps4_fullscreen_mode": "Exclusive"
   },
   "cemu": {
     "wiiu_language": "1"
@@ -170,9 +163,6 @@
     "mame_p1_forceindex": "auto",
     "mame_output": "auto"
   },
-  "retroarch": {
-    "a5200_input_hack": "auto",
-    "a5200_mix_frames": "auto",
-    "a5200_controller1": "auto"
-  }
+  "retroarch": {},
+  "eden": {}
 }

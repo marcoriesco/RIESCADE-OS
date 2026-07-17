@@ -1,0 +1,9 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "shadps4", "name": "shadPS4", "description": "Emulador de PlayStation 4 em desenvolvimento.", "icon": "shadps4",
+  "configFiles": [{ "path": "user/config.toml", "format": "toml" }],
+  "globalMappings": { "fullscreen": { "configKey": "forcefullscreen", "globalKey": "fullscreen" } },
+  "groups": [{ "id": "graphics", "title": "Gráficos", "icon": "monitor", "order": 1, "options": [
+    { "id": "shadps4_fullscreen_mode", "label": "Modo de Tela Cheia", "description": "Tipo de tela cheia ao iniciar.", "type": "select", "default": "Borderless", "configKey": "shadps4_fullscreen_mode", "values": [{ "label": "Borderless", "value": "Borderless" }, { "label": "Exclusivo", "value": "Exclusive" }, { "label": "Janela", "value": "Windowed" }] }
+  ]}]
+}

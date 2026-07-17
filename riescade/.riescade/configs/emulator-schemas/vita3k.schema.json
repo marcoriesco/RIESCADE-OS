@@ -1,0 +1,11 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "vita3k", "name": "Vita3K", "description": "Emulador de PlayStation Vita.", "icon": "vita3k",
+  "configFiles": [{ "path": "config.yml", "format": "yml" }],
+  "globalMappings": { "fullscreen": { "configKey": "forcefullscreen", "globalKey": "fullscreen" }, "vsync": { "configKey": "vita3k_vsync", "globalKey": "vsync" }, "video_driver": { "configKey": "backend-renderer", "globalKey": "video_driver" } },
+  "groups": [{ "id": "graphics", "title": "Gráficos", "icon": "monitor", "order": 1, "options": [
+    { "id": "vita3k_backend", "label": "Backend Gráfico", "description": "API de renderização.", "type": "select", "default": "Vulkan", "configKey": "backend-renderer", "inheritsGlobal": "video_driver", "values": [{ "label": "Vulkan", "value": "Vulkan" }, { "label": "OpenGL", "value": "OpenGL" }] },
+    { "id": "vita3k_vsync", "label": "V-Sync", "description": "Sincronização vertical.", "type": "toggle", "default": "true", "configKey": "vita3k_vsync", "inheritsGlobal": "vsync" },
+    { "id": "vita3k_resolution", "label": "Resolução Interna", "description": "Multiplicador da resolução do PS Vita (960x544).", "type": "select", "default": "1", "configKey": "vita3k_resolution", "values": [{ "label": "1x Nativa", "value": "1" }, { "label": "2x", "value": "2" }, { "label": "3x", "value": "3" }, { "label": "4x", "value": "4" }] }
+  ]}]
+}

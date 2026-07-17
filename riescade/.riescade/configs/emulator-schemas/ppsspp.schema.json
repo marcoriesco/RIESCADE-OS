@@ -1,0 +1,18 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "ppsspp",
+  "name": "PPSSPP",
+  "description": "Emulador de PlayStation Portable (PSP).",
+  "icon": "ppsspp",
+  "configFiles": [{ "path": "memstick/PSP/SYSTEM/ppsspp.ini", "format": "ini" }],
+  "globalMappings": { "fullscreen": { "configKey": "forcefullscreen", "globalKey": "fullscreen" }, "vsync": { "configKey": "ppsspp_vsync", "globalKey": "vsync" } },
+  "groups": [
+    { "id": "graphics", "title": "Gráficos", "icon": "monitor", "order": 1, "options": [
+      { "id": "ppsspp_vsync", "label": "V-Sync", "description": "Sincronização vertical.", "type": "toggle", "default": "true", "configKey": "ppsspp_vsync", "inheritsGlobal": "vsync" },
+      { "id": "ppsspp_internal_resolution", "label": "Resolução Interna", "description": "Multiplicador da resolução nativa do PSP (480x272).", "type": "select", "default": "3", "configKey": "ppsspp_internal_resolution", "values": [{ "label": "1x Nativa (480x272)", "value": "1" }, { "label": "2x (960x544)", "value": "2" }, { "label": "3x (1440x816)", "value": "3" }, { "label": "4x (1920x1088)", "value": "4" }, { "label": "5x (2400x1360)", "value": "5" }, { "label": "6x (2880x1632)", "value": "6" }, { "label": "8x (3840x2176)", "value": "8" }, { "label": "10x (4800x2720)", "value": "10" }] },
+      { "id": "ppsspp_texture_scaling", "label": "Escala de Textura", "description": "Upscaling de texturas do PSP.", "type": "select", "default": "1", "configKey": "ppsspp_texture_scaling", "values": [{ "label": "Desativado (1x)", "value": "1" }, { "label": "2x", "value": "2" }, { "label": "3x", "value": "3" }, { "label": "4x", "value": "4" }, { "label": "5x", "value": "5" }] },
+      { "id": "ppsspp_texture_filter", "label": "Tipo de Escala de Textura", "description": "Algoritmo de upscaling.", "type": "select", "default": "auto", "configKey": "ppsspp_texture_filter", "values": [{ "label": "Automático", "value": "auto" }, { "label": "xBRZ", "value": "xBRZ" }, { "label": "Hybrid", "value": "Hybrid" }, { "label": "Bicubic", "value": "Bicubic" }, { "label": "Hybrid + Bicubic", "value": "Hybrid+Bicubic" }] },
+      { "id": "ppsspp_anisotropic", "label": "Filtragem Anisotrópica", "description": "Melhora a nitidez de texturas em ângulos.", "type": "select", "default": "auto", "configKey": "ppsspp_anisotropic", "values": [{ "label": "Automático", "value": "auto" }, { "label": "Desativado", "value": "0" }, { "label": "2x", "value": "2" }, { "label": "4x", "value": "4" }, { "label": "8x", "value": "8" }, { "label": "16x", "value": "16" }] }
+    ]}
+  ]
+}
