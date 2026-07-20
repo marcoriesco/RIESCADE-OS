@@ -5,13 +5,36 @@
   "description": "Emulador de Nintendo GameCube e Wii.",
   "icon": "dolphin",
   "configFiles": [
-    { "path": "User/Config/Dolphin.ini", "format": "ini" },
-    { "path": "User/Config/GFX.ini", "format": "ini" }
+    {
+      "path": "User/Config/Dolphin.ini",
+      "format": "ini"
+    },
+    {
+      "path": "User/Config/GFX.ini",
+      "format": "ini"
+    }
   ],
   "globalMappings": {
-    "fullscreen": { "configKey": "forcefullscreen", "globalKey": "fullscreen" },
-    "vsync": { "configKey": "dolphin_vsync", "globalKey": "vsync" },
-    "video_driver": { "configKey": "dolphin_backend", "globalKey": "video_driver" }
+    "fullscreen": {
+      "configKey": "fullscreen",
+      "globalKey": "fullscreen"
+    },
+    "vsync": {
+      "configKey": "vsync",
+      "globalKey": "vsync"
+    },
+    "video_driver": {
+      "configKey": "video_driver",
+      "globalKey": "video_driver"
+    },
+    "aspect_ratio": {
+      "configKey": "aspect_ratio",
+      "globalKey": "aspect_ratio"
+    },
+    "shaders": {
+      "configKey": "shaders",
+      "globalKey": "shaders"
+    }
   },
   "groups": [
     {
@@ -21,42 +44,79 @@
       "order": 1,
       "options": [
         {
-          "id": "dolphin_backend",
+          "id": "fullscreen",
+          "label": "Tela Cheia",
+          "description": "Iniciar o emulador em modo tela cheia.",
+          "type": "toggle",
+          "default": "true",
+          "configKey": "fullscreen",
+          "inheritsGlobal": "fullscreen"
+        },
+        {
+          "id": "video_driver",
           "label": "Backend Gráfico",
           "description": "API de renderização do Dolphin.",
           "type": "select",
           "default": "Vulkan",
-          "configKey": "dolphin_backend",
+          "configKey": "video_driver",
           "inheritsGlobal": "video_driver",
           "values": [
-            { "label": "Vulkan", "value": "Vulkan" },
-            { "label": "Direct3D 11", "value": "D3D" },
-            { "label": "Direct3D 12", "value": "D3D12" },
-            { "label": "OpenGL", "value": "OGL" },
-            { "label": "Software", "value": "Software Renderer" }
+            {
+              "label": "Vulkan",
+              "value": "Vulkan"
+            },
+            {
+              "label": "Direct3D 11",
+              "value": "D3D"
+            },
+            {
+              "label": "Direct3D 12",
+              "value": "D3D12"
+            },
+            {
+              "label": "OpenGL",
+              "value": "OGL"
+            },
+            {
+              "label": "Software",
+              "value": "Software Renderer"
+            }
           ]
         },
         {
-          "id": "dolphin_vsync",
+          "id": "vsync",
           "label": "V-Sync",
           "description": "Sincronização vertical do Dolphin.",
           "type": "toggle",
           "default": "true",
-          "configKey": "dolphin_vsync",
+          "configKey": "vsync",
           "inheritsGlobal": "vsync"
         },
         {
-          "id": "dolphin_aspect",
+          "id": "aspect_ratio",
           "label": "Proporção de Tela",
           "description": "Proporção de aspecto durante o jogo.",
           "type": "select",
           "default": "0",
-          "configKey": "dolphin_aspect",
+          "configKey": "aspect_ratio",
+          "inheritsGlobal": "aspect_ratio",
           "values": [
-            { "label": "Automático", "value": "0" },
-            { "label": "Forçar 16:9", "value": "1" },
-            { "label": "Forçar 4:3", "value": "2" },
-            { "label": "Esticar para Janela", "value": "3" }
+            {
+              "label": "Automático",
+              "value": "0"
+            },
+            {
+              "label": "Forçar 16:9",
+              "value": "1"
+            },
+            {
+              "label": "Forçar 4:3",
+              "value": "2"
+            },
+            {
+              "label": "Esticar para Janela",
+              "value": "3"
+            }
           ]
         },
         {
@@ -67,13 +127,34 @@
           "default": "auto",
           "configKey": "dolphin_internal_resolution",
           "values": [
-            { "label": "Automático", "value": "auto" },
-            { "label": "1x Nativa (640x528)", "value": "1" },
-            { "label": "2x (1280x1056)", "value": "2" },
-            { "label": "3x (1920x1584)", "value": "3" },
-            { "label": "4x (2560x2112)", "value": "4" },
-            { "label": "5x (3200x2640)", "value": "5" },
-            { "label": "6x (3840x3168)", "value": "6" }
+            {
+              "label": "Automático",
+              "value": "auto"
+            },
+            {
+              "label": "1x Nativa (640x528)",
+              "value": "1"
+            },
+            {
+              "label": "2x (1280x1056)",
+              "value": "2"
+            },
+            {
+              "label": "3x (1920x1584)",
+              "value": "3"
+            },
+            {
+              "label": "4x (2560x2112)",
+              "value": "4"
+            },
+            {
+              "label": "5x (3200x2640)",
+              "value": "5"
+            },
+            {
+              "label": "6x (3840x3168)",
+              "value": "6"
+            }
           ]
         },
         {
@@ -84,25 +165,53 @@
           "default": "0",
           "configKey": "dolphin_anti_aliasing",
           "values": [
-            { "label": "Desativado", "value": "0" },
-            { "label": "2x MSAA", "value": "2" },
-            { "label": "4x MSAA", "value": "4" },
-            { "label": "8x MSAA", "value": "8" }
+            {
+              "label": "Desativado",
+              "value": "0"
+            },
+            {
+              "label": "2x MSAA",
+              "value": "2"
+            },
+            {
+              "label": "4x MSAA",
+              "value": "4"
+            },
+            {
+              "label": "8x MSAA",
+              "value": "8"
+            }
           ]
         },
         {
-          "id": "dolphin_shaders",
+          "id": "shaders",
           "label": "Compilação de Shaders",
-          "description": "Modo de compilação de shaders. Especializado pode ter stuttering inicial.",
+          "description": "Modo de compilação de shaders.",
           "type": "select",
           "default": "auto",
-          "configKey": "dolphin_shaders",
+          "configKey": "shaders",
+          "inheritsGlobal": "shaders",
           "values": [
-            { "label": "Automático", "value": "auto" },
-            { "label": "Síncrono", "value": "synchronous" },
-            { "label": "Síncrono (Uber Shaders)", "value": "synchronous_ubershaders" },
-            { "label": "Assíncrono (Uber Shaders)", "value": "async_ubershaders" },
-            { "label": "Assíncrono (Skip Drawing)", "value": "async_skip" }
+            {
+              "label": "Automático",
+              "value": "auto"
+            },
+            {
+              "label": "Síncrono",
+              "value": "synchronous"
+            },
+            {
+              "label": "Síncrono (Uber Shaders)",
+              "value": "synchronous_ubershaders"
+            },
+            {
+              "label": "Assíncrono (Uber Shaders)",
+              "value": "async_ubershaders"
+            },
+            {
+              "label": "Assíncrono (Skip Drawing)",
+              "value": "async_skip"
+            }
           ]
         }
       ]
@@ -129,12 +238,30 @@
           "default": "100",
           "configKey": "dolphin_speed_limit",
           "values": [
-            { "label": "Ilimitado", "value": "0" },
-            { "label": "50%", "value": "50" },
-            { "label": "75%", "value": "75" },
-            { "label": "100% (Nativo)", "value": "100" },
-            { "label": "150%", "value": "150" },
-            { "label": "200%", "value": "200" }
+            {
+              "label": "Ilimitado",
+              "value": "0"
+            },
+            {
+              "label": "50%",
+              "value": "50"
+            },
+            {
+              "label": "75%",
+              "value": "75"
+            },
+            {
+              "label": "100% (Nativo)",
+              "value": "100"
+            },
+            {
+              "label": "150%",
+              "value": "150"
+            },
+            {
+              "label": "200%",
+              "value": "200"
+            }
           ]
         }
       ]

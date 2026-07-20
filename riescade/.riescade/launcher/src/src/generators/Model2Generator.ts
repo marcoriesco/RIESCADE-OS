@@ -15,8 +15,8 @@ export class Model2Generator extends BaseGenerator {
     const configPath = join(model2Dir, 'Emulator.ini');
 
     try {
-      const fullscreen = (Config.getEmulatorSetting('model2', 'model2_fullscreen') ?? Config.getEmulatorSetting('model2', 'forcefullscreen') ?? Config.getEmulatorSetting('model2', 'fullscreen', 'true')) === 'true';
-      const vsync = (Config.getEmulatorSetting('model2', 'model2_vsync') ?? Config.getEmulatorSetting('model2', 'vsync', 'true')) === 'true';
+      const fullscreen = Config.getEmulatorSetting('model2', 'fullscreen', 'true') === 'true';
+      const vsync = Config.getEmulatorSetting('model2', 'vsync', 'true') === 'true';
 
       updateIniSetting(configPath, 'Renderer', 'AutoFull', fullscreen ? '1' : '0');
       updateIniSetting(configPath, 'Renderer', 'ForceSync', vsync ? '1' : '0');

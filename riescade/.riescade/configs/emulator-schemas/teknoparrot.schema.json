@@ -1,9 +1,9 @@
 {
   "$schema": "riescade-emulator-schema-v1",
   "id": "teknoparrot", "name": "TeknoParrot", "description": "Loader para jogos arcade modernos (Sega, Namco, etc.).", "icon": "teknoparrot",
-  "globalMappings": { "fullscreen": { "configKey": "forcefullscreen", "globalKey": "fullscreen" } },
+  "globalMappings": { "fullscreen": { "configKey": "fullscreen", "globalKey": "fullscreen" } },
   "groups": [{ "id": "interface", "title": "Interface", "icon": "monitor", "order": 1, "options": [
-    { "id": "teknoparrot_fullscreen", "label": "Tela Cheia", "description": "Iniciar jogos em tela cheia.", "type": "toggle", "default": "true", "configKey": "teknoparrot_fullscreen", "inheritsGlobal": "fullscreen" },
+    { "id": "fullscreen", "label": "Tela Cheia", "description": "Iniciar jogos em tela cheia.", "type": "toggle", "default": "true", "configKey": "fullscreen", "inheritsGlobal": "fullscreen" },
     { "id": "teknoparrot_minimize", "label": "Minimizar TeknoParrot", "description": "Minimiza a janela do TeknoParrot ao iniciar um jogo.", "type": "toggle", "default": "true", "configKey": "teknoparrot_minimize" }
   ]}]
 }

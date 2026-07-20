@@ -62,9 +62,9 @@ export class Vita3kGenerator extends BaseGenerator {
         }
       };
 
-      const fullscreen = (Config.getEmulatorSetting('vita3k', 'vita3k_fullscreen') ?? Config.getEmulatorSetting('vita3k', 'forcefullscreen') ?? Config.getEmulatorSetting('vita3k', 'fullscreen', 'true')) === 'true';
-      const vsync = (Config.getEmulatorSetting('vita3k', 'vita3k_vsync') ?? Config.getEmulatorSetting('vita3k', 'vsync', 'true')) === 'true';
-      const backend = Config.getEmulatorSetting('vita3k', 'backend-renderer') ?? Config.getEmulatorSetting('vita3k', 'backend', 'Vulkan');
+      const fullscreen = Config.getEmulatorSetting('vita3k', 'fullscreen', 'true') === 'true';
+      const vsync = Config.getEmulatorSetting('vita3k', 'vsync', 'true') === 'true';
+      const backend = Config.getEmulatorSetting('vita3k', 'video_driver', 'Vulkan');
 
       updateYmlSetting('boot-apps-full-screen', fullscreen);
       updateYmlSetting('v-sync', vsync);
@@ -107,7 +107,7 @@ export class Vita3kGenerator extends BaseGenerator {
 
     const commandArgs: string[] = [];
     
-    const fullscreen = (Config.getEmulatorSetting('vita3k', 'vita3k_fullscreen') ?? Config.getEmulatorSetting('vita3k', 'forcefullscreen') ?? Config.getEmulatorSetting('vita3k', 'fullscreen', 'true')) === 'true';
+    const fullscreen = Config.getEmulatorSetting('vita3k', 'fullscreen', 'true') === 'true';
     if (fullscreen) {
       commandArgs.push('--fullscreen');
     }

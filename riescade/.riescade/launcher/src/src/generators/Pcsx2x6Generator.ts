@@ -15,9 +15,9 @@ export class Pcsx2x6Generator extends BaseGenerator {
     const iniPath = join(pcsx2Dir, 'inis', 'PCSX2.ini');
 
     try {
-      const fullscreen = (Config.getEmulatorSetting('pcsx2x6', 'pcsx2x6_fullscreen') ?? Config.getEmulatorSetting('pcsx2x6', 'forcefullscreen') ?? Config.getEmulatorSetting('pcsx2x6', 'fullscreen', 'true')) === 'true';
-      const aspect = Config.getEmulatorSetting('pcsx2x6', 'pcsx2x6_aspectratio') ?? Config.getEmulatorSetting('pcsx2x6', 'ratio', '16:9');
-      const renderer = Config.getEmulatorSetting('pcsx2x6', 'pcsx2x6_renderer') ?? Config.getEmulatorSetting('pcsx2x6', 'renderer', '-1');
+      const fullscreen = Config.getEmulatorSetting('pcsx2x6', 'fullscreen', 'true') === 'true';
+      const aspect = Config.getEmulatorSetting('pcsx2x6', 'aspect_ratio', '16:9');
+      const renderer = Config.getEmulatorSetting('pcsx2x6', 'video_driver', '-1');
 
       updateIniSetting(iniPath, 'UI', 'StartFullscreen', fullscreen);
       updateIniSetting(iniPath, 'EmuCore/GS', 'AspectRatio', aspect);
@@ -39,7 +39,7 @@ export class Pcsx2x6Generator extends BaseGenerator {
       Logger.warn(`Pcsx2x6Generator: PCSX2x6 executable not found at ${exePath}. Falling back to default path.`);
     }
 
-    const fullscreen = (Config.getEmulatorSetting('pcsx2x6', 'pcsx2x6_fullscreen') ?? Config.getEmulatorSetting('pcsx2x6', 'forcefullscreen') ?? Config.getEmulatorSetting('pcsx2x6', 'fullscreen', 'true')) === 'true';
+    const fullscreen = Config.getEmulatorSetting('pcsx2x6', 'fullscreen', 'true') === 'true';
 
     const commandArgs: string[] = [
       '-batch',

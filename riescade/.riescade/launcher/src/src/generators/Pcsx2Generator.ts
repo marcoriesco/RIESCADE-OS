@@ -8,16 +8,18 @@ import { updateIniSetting } from '../utils/ini.js';
 
 export class Pcsx2Generator extends BaseGenerator {
   public configure(): void {
-    Logger.info(`Pcsx2Generator: Configuring PCSX2`);
+    const emuName = this.emulator.toLowerCase();
+    const resolvedEmu = (emuName === 'pcsx2qt' || emuName === 'pcsx2-16' || emuName === 'ps2') ? 'pcsx2' : emuName;
+    Logger.info(`Pcsx2Generator: Configuring ${resolvedEmu}`);
     
     const emulatorsDir = getEmulatorsPath();
-    const pcsx2Dir = join(emulatorsDir, 'pcsx2');
+    const pcsx2Dir = join(emulatorsDir, resolvedEmu);
     const iniPath = join(pcsx2Dir, 'inis', 'PCSX2.ini');
 
     try {
-      const fullscreen = (Config.getEmulatorSetting('pcsx2', 'pcsx2_fullscreen') ?? Config.getEmulatorSetting('pcsx2', 'forcefullscreen') ?? Config.getEmulatorSetting('pcsx2', 'fullscreen', 'true')) === 'true';
-      const aspect = Config.getEmulatorSetting('pcsx2', 'pcsx2_aspectratio') ?? Config.getEmulatorSetting('pcsx2', 'ratio', '16:9');
-      const renderer = Config.getEmulatorSetting('pcsx2', 'pcsx2_renderer') ?? Config.getEmulatorSetting('pcsx2', 'renderer', '-1');
+      const fullscreen = Config.getEmulatorSetting(resolvedEmu, 'fullscreen', 'true') === 'true';
+      const aspect = Config.getEmulatorSetting(resolvedEmu, 'aspect_ratio', '16:9');
+      const renderer = Config.getEmulatorSetting(resolvedEmu, 'video_driver', '-1');
 
       updateIniSetting(iniPath, 'UI', 'StartFullscreen', fullscreen);
       updateIniSetting(iniPath, 'EmuCore/GS', 'AspectRatio', aspect);
@@ -31,7 +33,9 @@ export class Pcsx2Generator extends BaseGenerator {
 
   public getLaunchCommand(): { executable: string; args: string[] } {
     const emulatorsDir = getEmulatorsPath();
-    const pcsx2Dir = join(emulatorsDir, 'pcsx2');
+    const emuName = this.emulator.toLowerCase();
+    const resolvedEmu = (emuName === 'pcsx2qt' || emuName === 'pcsx2-16' || emuName === 'ps2') ? 'pcsx2' : emuName;
+    const pcsx2Dir = join(emulatorsDir, resolvedEmu);
     
     // Check if pcsx2-qt.exe exists (v1.7+), otherwise fall back to pcsx2.exe (v1.6)
     let exePath = join(pcsx2Dir, 'pcsx2-qt.exe');
@@ -47,7 +51,7 @@ export class Pcsx2Generator extends BaseGenerator {
     }
 
     const commandArgs: string[] = [];
-    const fullscreen = (Config.getEmulatorSetting('pcsx2', 'pcsx2_fullscreen') ?? Config.getEmulatorSetting('pcsx2', 'forcefullscreen') ?? Config.getEmulatorSetting('pcsx2', 'fullscreen', 'true')) === 'true';
+    const fullscreen = Config.getEmulatorSetting(resolvedEmu, 'fullscreen', 'true') === 'true';
 
     if (isQt) {
       commandArgs.push('-batch');

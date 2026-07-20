@@ -120,8 +120,8 @@ export class TeknoParrotGenerator extends BaseGenerator {
     }
 
     // 8. Configure video and fullscreen options
-    const forceFsSetting = Config.getEmulatorSetting('teknoparrot', 'teknoparrot_fullscreen') ?? Config.getEmulatorSetting('teknoparrot', 'forcefullscreen', null);
-    const forceFs = forceFsSetting !== null ? (forceFsSetting === 'true' || forceFsSetting === true) : Config.getSetting('forcefullscreen', true);
+    const forceFsSetting = Config.getEmulatorSetting('teknoparrot', 'fullscreen', null);
+    const forceFs = forceFsSetting !== null ? (forceFsSetting === 'true' || forceFsSetting === true) : Config.getSetting('fullscreen', true);
     xml = this.setFieldValue(xml, 'Windowed', forceFs ? '0' : '1');
     xml = this.setFieldValue(xml, 'Borderless Fullscreen', '1');
 

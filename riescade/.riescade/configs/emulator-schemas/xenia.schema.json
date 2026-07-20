@@ -4,11 +4,29 @@
   "name": "Xenia",
   "description": "Emulador de Xbox 360.",
   "icon": "xenia",
-  "configFiles": [{ "path": "xenia.config.toml", "format": "toml" }],
+  "configFiles": [
+    {
+      "path": "xenia.config.toml",
+      "format": "toml"
+    }
+  ],
   "globalMappings": {
-    "fullscreen": { "configKey": "forcefullscreen", "globalKey": "fullscreen" },
-    "vsync": { "configKey": "xenia_vsync", "globalKey": "vsync" },
-    "video_driver": { "configKey": "xenia_gpu", "globalKey": "video_driver" }
+    "fullscreen": {
+      "configKey": "fullscreen",
+      "globalKey": "fullscreen"
+    },
+    "vsync": {
+      "configKey": "vsync",
+      "globalKey": "vsync"
+    },
+    "video_driver": {
+      "configKey": "video_driver",
+      "globalKey": "video_driver"
+    },
+    "resolution": {
+      "configKey": "resolution",
+      "globalKey": "resolution"
+    }
   },
   "groups": [
     {
@@ -18,41 +36,71 @@
       "order": 1,
       "options": [
         {
-          "id": "xenia_gpu",
+          "id": "fullscreen",
+          "label": "Tela Cheia",
+          "description": "Iniciar o emulador em modo tela cheia.",
+          "type": "toggle",
+          "default": "true",
+          "configKey": "fullscreen",
+          "inheritsGlobal": "fullscreen"
+        },
+        {
+          "id": "video_driver",
           "label": "GPU Backend",
           "description": "API gráfica do Xenia.",
           "type": "select",
           "default": "any",
-          "configKey": "xenia_gpu",
+          "configKey": "video_driver",
           "inheritsGlobal": "video_driver",
           "values": [
-            { "label": "Automático", "value": "any" },
-            { "label": "Vulkan", "value": "vulkan" },
-            { "label": "Direct3D 12", "value": "d3d12" }
+            {
+              "label": "Automático",
+              "value": "any"
+            },
+            {
+              "label": "Vulkan",
+              "value": "vulkan"
+            },
+            {
+              "label": "Direct3D 12",
+              "value": "d3d12"
+            }
           ]
         },
         {
-          "id": "xenia_vsync",
+          "id": "vsync",
           "label": "V-Sync",
           "description": "Sincronização vertical.",
           "type": "toggle",
           "default": "true",
-          "configKey": "xenia_vsync",
+          "configKey": "vsync",
           "inheritsGlobal": "vsync"
         },
         {
-          "id": "xenia_resolution",
+          "id": "resolution",
           "label": "Escala de Resolução Interna",
           "description": "Multiplicador de resolução. Formato: LarguraxAltura.",
           "type": "select",
           "default": "auto",
-          "configKey": "xenia_resolution",
+          "configKey": "resolution",
           "inheritsGlobal": "resolution",
           "values": [
-            { "label": "Automático (1x)", "value": "auto" },
-            { "label": "2x (2560x1440)", "value": "2_2" },
-            { "label": "3x (3840x2160)", "value": "3_3" },
-            { "label": "4x (5120x2880)", "value": "4_4" }
+            {
+              "label": "Automático (1x)",
+              "value": "auto"
+            },
+            {
+              "label": "2x (2560x1440)",
+              "value": "2_2"
+            },
+            {
+              "label": "3x (3840x2160)",
+              "value": "3_3"
+            },
+            {
+              "label": "4x (5120x2880)",
+              "value": "4_4"
+            }
           ]
         },
         {
@@ -63,9 +111,18 @@
           "default": "",
           "configKey": "postprocess_antialiasing",
           "values": [
-            { "label": "Desativado", "value": "" },
-            { "label": "FXAA", "value": "fxaa" },
-            { "label": "FXAA Extremo", "value": "fxaa_extreme" }
+            {
+              "label": "Desativado",
+              "value": ""
+            },
+            {
+              "label": "FXAA",
+              "value": "fxaa"
+            },
+            {
+              "label": "FXAA Extremo",
+              "value": "fxaa_extreme"
+            }
           ]
         },
         {
@@ -85,15 +142,21 @@
       "order": 2,
       "options": [
         {
-          "id": "license_mask",
+          "id": "xenia_license_mask",
           "label": "License Mask",
           "description": "Máscara de licença do jogo. 0 = padrão, 1 = bypass para alguns jogos.",
           "type": "select",
           "default": "0",
-          "configKey": "license_mask",
+          "configKey": "xenia_license_mask",
           "values": [
-            { "label": "Padrão (0)", "value": "0" },
-            { "label": "Bypass (1)", "value": "1" }
+            {
+              "label": "Padrão (0)",
+              "value": "0"
+            },
+            {
+              "label": "Bypass (1)",
+              "value": "1"
+            }
           ]
         },
         {
@@ -128,15 +191,42 @@
           "default": "1",
           "configKey": "xenia_lang",
           "values": [
-            { "label": "Inglês", "value": "1" },
-            { "label": "Japonês", "value": "2" },
-            { "label": "Alemão", "value": "3" },
-            { "label": "Francês", "value": "4" },
-            { "label": "Espanhol", "value": "5" },
-            { "label": "Italiano", "value": "6" },
-            { "label": "Coreano", "value": "7" },
-            { "label": "Chinês Trad.", "value": "8" },
-            { "label": "Português", "value": "9" }
+            {
+              "label": "Inglês",
+              "value": "1"
+            },
+            {
+              "label": "Japonês",
+              "value": "2"
+            },
+            {
+              "label": "Alemão",
+              "value": "3"
+            },
+            {
+              "label": "Francês",
+              "value": "4"
+            },
+            {
+              "label": "Espanhol",
+              "value": "5"
+            },
+            {
+              "label": "Italiano",
+              "value": "6"
+            },
+            {
+              "label": "Coreano",
+              "value": "7"
+            },
+            {
+              "label": "Chinês Trad.",
+              "value": "8"
+            },
+            {
+              "label": "Português",
+              "value": "9"
+            }
           ]
         }
       ]
@@ -155,9 +245,18 @@
           "default": "any",
           "configKey": "apu",
           "values": [
-            { "label": "Automático", "value": "any" },
-            { "label": "XAudio2", "value": "xaudio2" },
-            { "label": "SDL", "value": "sdl" }
+            {
+              "label": "Automático",
+              "value": "any"
+            },
+            {
+              "label": "XAudio2",
+              "value": "xaudio2"
+            },
+            {
+              "label": "SDL",
+              "value": "sdl"
+            }
           ]
         }
       ]
@@ -176,10 +275,22 @@
           "default": "any",
           "configKey": "xenia_hid",
           "values": [
-            { "label": "Automático", "value": "any" },
-            { "label": "XInput", "value": "xinput" },
-            { "label": "SDL", "value": "sdl" },
-            { "label": "Teclado", "value": "winkey" }
+            {
+              "label": "Automático",
+              "value": "any"
+            },
+            {
+              "label": "XInput",
+              "value": "xinput"
+            },
+            {
+              "label": "SDL",
+              "value": "sdl"
+            },
+            {
+              "label": "Teclado",
+              "value": "winkey"
+            }
           ]
         }
       ]

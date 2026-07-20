@@ -1,10 +1,77 @@
 {
   "$schema": "riescade-emulator-schema-v1",
-  "id": "redream", "name": "Redream", "description": "Emulador de Sega Dreamcast — rápido e simples.", "icon": "redream",
-  "configFiles": [{ "path": "redream.cfg", "format": "cfg" }],
-  "globalMappings": { "fullscreen": { "configKey": "forcefullscreen", "globalKey": "fullscreen" }, "vsync": { "configKey": "redream_vsync", "globalKey": "vsync" } },
-  "groups": [{ "id": "graphics", "title": "Gráficos", "icon": "monitor", "order": 1, "options": [
-    { "id": "redream_vsync", "label": "V-Sync", "description": "Sincronização vertical.", "type": "toggle", "default": "true", "configKey": "redream_vsync", "inheritsGlobal": "vsync" },
-    { "id": "redream_internal_resolution", "label": "Resolução Interna", "description": "Resolução de renderização.", "type": "select", "default": "2", "configKey": "redream_internal_resolution", "values": [{ "label": "1x (640x480)", "value": "1" }, { "label": "2x (1280x960)", "value": "2" }, { "label": "3x (1920x1440)", "value": "3" }, { "label": "4x (2560x1920)", "value": "4" }] }
-  ]}]
+  "id": "redream",
+  "name": "Redream",
+  "description": "Emulador de Sega Dreamcast — rápido e simples.",
+  "icon": "redream",
+  "configFiles": [
+    {
+      "path": "redream.cfg",
+      "format": "cfg"
+    }
+  ],
+  "globalMappings": {
+    "fullscreen": {
+      "configKey": "fullscreen",
+      "globalKey": "fullscreen"
+    },
+    "vsync": {
+      "configKey": "vsync",
+      "globalKey": "vsync"
+    }
+  },
+  "groups": [
+    {
+      "id": "graphics",
+      "title": "Gráficos",
+      "icon": "monitor",
+      "order": 1,
+      "options": [
+        {
+          "id": "fullscreen",
+          "label": "Tela Cheia",
+          "description": "Iniciar o emulador em modo tela cheia.",
+          "type": "toggle",
+          "default": "true",
+          "configKey": "fullscreen",
+          "inheritsGlobal": "fullscreen"
+        },
+        {
+          "id": "vsync",
+          "label": "V-Sync",
+          "description": "Sincronização vertical.",
+          "type": "toggle",
+          "default": "true",
+          "configKey": "vsync",
+          "inheritsGlobal": "vsync"
+        },
+        {
+          "id": "redream_internal_resolution",
+          "label": "Resolução Interna",
+          "description": "Resolução de renderização.",
+          "type": "select",
+          "default": "2",
+          "configKey": "redream_internal_resolution",
+          "values": [
+            {
+              "label": "1x (640x480)",
+              "value": "1"
+            },
+            {
+              "label": "2x (1280x960)",
+              "value": "2"
+            },
+            {
+              "label": "3x (1920x1440)",
+              "value": "3"
+            },
+            {
+              "label": "4x (2560x1920)",
+              "value": "4"
+            }
+          ]
+        }
+      ]
+    }
+  ]
 }

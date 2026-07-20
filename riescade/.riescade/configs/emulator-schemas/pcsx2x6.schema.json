@@ -1,8 +1,8 @@
 {
   "$schema": "riescade-emulator-schema-v1",
-  "id": "pcsx2",
-  "name": "PCSX2",
-  "description": "Emulador de PlayStation 2 — versão Qt moderna.",
+  "id": "pcsx2x6",
+  "name": "PCSX2X6",
+  "description": "Emulador de PlayStation 2 / System 246/256 — versão customizada para arcade.",
   "icon": "pcsx2",
   "configFiles": [
     {

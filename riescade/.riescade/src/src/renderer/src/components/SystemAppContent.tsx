@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState, useMemo, useCallback } from "react";
-import { Gamepad2, Heart, Loader2, Star, Play, ChevronRight, Maximize2, X, Search, Folder, ChevronLeft, HardDrive, ChevronDown, Check, MoreHorizontal, RefreshCw, BookOpen } from "lucide-react";
+import { Gamepad2, Heart, Loader2, Star, Play, ChevronRight, Maximize2, X, Search, Folder, ChevronLeft, HardDrive, ChevronDown, Check, MoreHorizontal, RefreshCw, BookOpen, Settings } from "lucide-react";
 import { System, Game } from "../types";
 import { ScrollArea } from "./ScrollArea";
 import { OverlayScrollbarsComponentRef } from "overlayscrollbars-react";
@@ -51,7 +51,7 @@ function RadixSelect({
 const missingMediaCache = new Set<string>();
 
 export default function SystemAppContent({
-  system, color, Icon, onLaunchGame, search: propSearch, setSearch: propSetSearch, onActiveGameArtChanged
+  system, color, Icon, onLaunchGame, search: propSearch, setSearch: propSetSearch, onActiveGameArtChanged, onOpenTool
 }: {
   systemName: string;
   system: System;
@@ -61,6 +61,7 @@ export default function SystemAppContent({
   search?: string;
   setSearch?: (s: string) => void;
   onActiveGameArtChanged?: (art: string | null) => void;
+  onOpenTool?: (toolId: string, subId?: string) => void;
 }) {
   const [localSearch, setLocalSearch] = useState("");
   const search = propSearch !== undefined ? propSearch : localSearch;
@@ -739,7 +740,7 @@ export default function SystemAppContent({
         if (emu.cores && emu.cores.length > 0) {
           emu.cores.forEach((core: string) => {
             choices.push({
-              label: `${emu.name} (${core})`,
+              label: `${emu.name.toUpperCase()} (${core.toUpperCase()})`,
               value: `${emu.name}:${core}`,
               emulator: emu.name,
               core: core
@@ -747,7 +748,7 @@ export default function SystemAppContent({
           });
         } else {
           choices.push({
-            label: emu.name,
+            label: emu.name.toUpperCase(),
             value: `${emu.name}:`,
             emulator: emu.name,
             core: ""
@@ -763,6 +764,19 @@ export default function SystemAppContent({
     if (!selectedGame.emulator || selectedGame.emulator === "auto") return "auto";
     return `${selectedGame.emulator}:${selectedGame.core || ""}`;
   }, [selectedGame]);
+
+  const emuToConfig = useMemo(() => {
+    if (selectValue === "auto") {
+      return system.emulators?.[0]?.name || null;
+    }
+    return selectValue.split(":")[0] || null;
+  }, [selectValue, system]);
+
+  const emuLabelToConfig = useMemo(() => {
+    if (!emuToConfig) return "";
+    // If it's pcsx2-nightly, let's keep the name as is or format nicely
+    return emuToConfig.toUpperCase();
+  }, [emuToConfig]);
 
   const handleEmulatorValueChangeForGame = (game: Game, val: string) => {
     let updatedGame = { ...game };
@@ -1640,6 +1654,17 @@ export default function SystemAppContent({
                     options={emulatorChoices.map(choice => ({ label: choice.label, value: choice.value }))}
                     placeholder="Padrão (Auto)"
                   />
+                  {emuToConfig && (
+                    <button
+                      onClick={() => {
+                        onOpenTool?.("settings", emuToConfig);
+                      }}
+                      className="mt-1 flex items-center justify-center gap-1.5 py-1.5 px-3 rounded bg-white/5 border border-white/5 hover:bg-white/10 hover:border-white/10 text-[10px] font-bold text-white/70 hover:text-white transition cursor-pointer select-none"
+                    >
+                      <Settings className="w-3.5 h-3.5 text-accent" />
+                      <span>CONFIGURAR {emuLabelToConfig}</span>
+                    </button>
+                  )}
                 </div>
 
                 {/* Play Button */}

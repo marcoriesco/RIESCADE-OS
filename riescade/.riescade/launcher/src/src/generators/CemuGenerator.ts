@@ -24,9 +24,9 @@ export class CemuGenerator extends BaseGenerator {
     try {
       let content = readFileSync(settingsPath, 'utf8');
 
-      const fullscreen = (Config.getEmulatorSetting('cemu', 'cemu_fullscreen') ?? Config.getEmulatorSetting('cemu', 'forcefullscreen') ?? Config.getEmulatorSetting('cemu', 'fullscreen', 'true')) === 'true';
-      const vsync = Config.getEmulatorSetting('cemu', 'cemu_vsync') ?? '1';
-      const renderer = Config.getEmulatorSetting('cemu', 'video_renderer') ?? '1'; // 1 = Vulkan, 0 = OpenGL
+      const fullscreen = Config.getEmulatorSetting('cemu', 'fullscreen', 'true') === 'true';
+      const vsync = Config.getEmulatorSetting('cemu', 'vsync', '1');
+      const renderer = Config.getEmulatorSetting('cemu', 'video_driver', '1'); // 1 = Vulkan, 0 = OpenGL
 
       // Regex updates for settings.xml
       content = content.replace(/<fullscreen>[^<]*<\/fullscreen>/g, `<fullscreen>${fullscreen ? 'true' : 'false'}</fullscreen>`);
@@ -53,7 +53,7 @@ export class CemuGenerator extends BaseGenerator {
       '-g',
       this.rom
     ];
-    const fullscreen = (Config.getEmulatorSetting('cemu', 'cemu_fullscreen') ?? Config.getEmulatorSetting('cemu', 'forcefullscreen') ?? Config.getEmulatorSetting('cemu', 'fullscreen', 'true')) === 'true';
+    const fullscreen = Config.getEmulatorSetting('cemu', 'fullscreen', 'true') === 'true';
 
     if (fullscreen) {
       commandArgs.push('-f');

@@ -184,27 +184,27 @@
     "type": "int"
   },
   "Taskbar.Icons": {
-    "value": "tool:settings,system:switch,system:teknoparrot,system:cps1,system:snes,system:namco2x6,system:laseractive,system:xbox360,system:arcade,system:ps3,system:ps4,system:Windows",
+    "value": "tool:settings,system:switch,system:teknoparrot,system:cps1,system:snes,system:xbox360,system:arcade,system:ps3,system:ps4,system:Windows,system:namco2x6",
     "type": "string"
   },
   "Window.system-switch.Maximized": {
-    "value": true,
+    "value": false,
     "type": "bool"
   },
   "Window.system-switch.X": {
-    "value": 609,
+    "value": 96,
     "type": "int"
   },
   "Window.system-switch.Y": {
-    "value": 75,
+    "value": 46,
     "type": "int"
   },
   "Window.system-switch.Width": {
-    "value": 1104,
+    "value": 1710,
     "type": "int"
   },
   "Window.system-switch.Height": {
-    "value": 860,
+    "value": 882,
     "type": "int"
   },
   "Window.system-teknoparrot.Maximized": {
@@ -484,7 +484,7 @@
     "type": "int"
   },
   "Window.system-laseractive.Height": {
-    "value": 850,
+    "value": 929,
     "type": "int"
   },
   "Window.system-3do.Maximized": {
@@ -608,7 +608,7 @@
     "type": "string"
   },
   "RIESCADE.PreferredMediaType.laseractive": {
-    "value": "logo",
+    "value": "cover",
     "type": "string"
   },
   "RIESCADE.PreferredMediaType.snes": {
@@ -704,7 +704,7 @@
     "type": "bool"
   },
   "RIESCADE.PreferredMediaType.Windows": {
-    "value": "cover3d",
+    "value": "cover",
     "type": "string"
   },
   "Window.system-hbmame.Maximized": {

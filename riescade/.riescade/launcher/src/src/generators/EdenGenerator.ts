@@ -24,9 +24,9 @@ export class EdenGenerator extends BaseGenerator {
     } catch (e) {}
 
     try {
-      const fullscreen = (Config.getEmulatorSetting(emuName, `${emuName}_fullscreen`) ?? Config.getEmulatorSetting(emuName, 'forcefullscreen') ?? Config.getEmulatorSetting(emuName, 'fullscreen', 'true')) === 'true';
-      const vsync = Config.getEmulatorSetting(emuName, `${emuName}_vsync`);
-      const docked = (Config.getEmulatorSetting(emuName, `${emuName}_undock`) ?? 'false') !== 'true';
+      const fullscreen = Config.getEmulatorSetting('eden', 'fullscreen', 'true') === 'true';
+      const vsync = Config.getEmulatorSetting('eden', 'vsync');
+      const docked = (Config.getEmulatorSetting('eden', 'eden_undock') ?? 'false') !== 'true';
 
       updateIniSetting(configPath, 'UI', 'fullscreen', fullscreen ? 'true' : 'false');
       updateIniSetting(configPath, 'UI', 'fullscreen\\default', 'false');
@@ -57,7 +57,7 @@ export class EdenGenerator extends BaseGenerator {
       Logger.warn(`EdenGenerator: Eden executable not found at ${exePath}.`);
     }
 
-    const fullscreen = (Config.getEmulatorSetting(emuName, `${emuName}_fullscreen`) ?? Config.getEmulatorSetting(emuName, 'fullscreen', 'true')) === 'true';
+    const fullscreen = Config.getEmulatorSetting('eden', 'fullscreen', 'true') === 'true';
 
     const launchArgs: string[] = [];
     if (fullscreen) {

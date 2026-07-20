@@ -33,9 +33,9 @@ export class XeniaGenerator extends BaseGenerator {
         }
       };
 
-      const fullscreen = (Config.getEmulatorSetting('xenia', 'xenia_fullscreen') ?? Config.getEmulatorSetting('xenia', 'forcefullscreen') ?? Config.getEmulatorSetting('xenia', 'fullscreen', 'false')) === 'true';
+      const fullscreen = Config.getEmulatorSetting('xenia', 'fullscreen', 'false') === 'true';
       
-      let gpu = Config.getEmulatorSetting('xenia', 'xenia_gpu') ?? Config.getEmulatorSetting('xenia', 'gpu', 'any');
+      let gpu = Config.getEmulatorSetting('xenia', 'video_driver', 'any');
       if (gpu === 'auto' || !gpu) {
         gpu = 'any';
       } else {
@@ -49,8 +49,8 @@ export class XeniaGenerator extends BaseGenerator {
         }
       }
 
-      const vsync = (Config.getEmulatorSetting('xenia', 'xenia_vsync') ?? Config.getEmulatorSetting('xenia', 'vsync', 'true')) === 'true';
-      const licenseMaskSetting = Config.getEmulatorSetting('xenia', 'xenia_license_mask') ?? Config.getEmulatorSetting('xenia', 'license_mask', '0');
+      const vsync = Config.getEmulatorSetting('xenia', 'vsync', 'true') === 'true';
+      const licenseMaskSetting = Config.getEmulatorSetting('xenia', 'xenia_license_mask', '0');
       const licenseMask = parseInt(licenseMaskSetting, 10);
 
       updateTomlSetting('fullscreen', fullscreen);
@@ -59,7 +59,7 @@ export class XeniaGenerator extends BaseGenerator {
       updateTomlSetting('license_mask', licenseMask);
 
       // Internal Resolution Scaling
-      const resolutionSetting = Config.getEmulatorSetting('xenia', 'xenia_resolution');
+      const resolutionSetting = Config.getEmulatorSetting('xenia', 'resolution');
       if (resolutionSetting) {
         const parts = resolutionSetting.split('_');
         if (parts.length === 2) {

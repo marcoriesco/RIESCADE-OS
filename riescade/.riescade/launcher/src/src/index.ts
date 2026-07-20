@@ -88,7 +88,7 @@ function getGenerator(args: LaunchArgs): BaseGenerator {
   if (emu === 'libretro' || emu === 'angle') {
     return new LibRetroGenerator(args);
   }
-  if (emu === 'pcsx2' || emu === 'pcsx2qt' || emu === 'pcsx2-16' || emu === 'ps2' || sys === 'ps2') {
+  if (emu === 'pcsx2' || emu === 'pcsx2-nightly' || emu === 'pcsx2qt' || emu === 'pcsx2-16' || emu === 'ps2' || sys === 'ps2') {
     return new Pcsx2Generator(args);
   }
   if (emu === 'pcsx2x6') {

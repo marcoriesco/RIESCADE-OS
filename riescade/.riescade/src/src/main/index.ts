@@ -750,6 +750,22 @@ app.whenReady().then(() => {
     return require('os').hostname()
   })
 
+  ipcMain.handle('check-battery-exists', async () => {
+    return new Promise<boolean>((resolve) => {
+      if (process.platform !== 'win32') {
+        resolve(false);
+        return;
+      }
+      exec('powershell -Command "Get-CimInstance Win32_Battery"', (error, stdout) => {
+        if (error) {
+          resolve(false);
+          return;
+        }
+        resolve(stdout.trim().length > 0);
+      });
+    });
+  })
+
   ipcMain.handle('clean-gamelists', async () => {
     return libraryService.cleanGamelists()
   })

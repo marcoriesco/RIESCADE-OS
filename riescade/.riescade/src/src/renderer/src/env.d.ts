@@ -28,6 +28,7 @@ declare global {
       resetAllEmulatorSettings: (emulator: string) => Promise<void>
       reloadEmulatorSchemas: () => Promise<any>
       getFeatures: () => Promise<any>
+      checkBatteryExists: () => Promise<boolean>
       selectBgImage: () => Promise<string | null>
       selectBgVideo: () => Promise<string | null>
       getThemeSettings: (themeName: string) => Promise<any>

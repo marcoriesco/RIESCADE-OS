@@ -15,8 +15,8 @@ export class FlycastGenerator extends BaseGenerator {
     const configPath = join(flycastDir, 'emu.cfg');
 
     try {
-      const fullscreen = (Config.getEmulatorSetting('flycast', 'flycast_fullscreen') ?? Config.getEmulatorSetting('flycast', 'forcefullscreen') ?? Config.getEmulatorSetting('flycast', 'fullscreen', 'true')) === 'true';
-      const vsync = (Config.getEmulatorSetting('flycast', 'flycast_vsync') ?? Config.getEmulatorSetting('flycast', 'vsync', 'true')) === 'true';
+      const fullscreen = Config.getEmulatorSetting('flycast', 'fullscreen', 'true') === 'true';
+      const vsync = Config.getEmulatorSetting('flycast', 'vsync', 'true') === 'true';
       
       updateIniSetting(configPath, 'config', 'window.fullscreen', fullscreen ? 'yes' : 'no');
       updateIniSetting(configPath, 'config', 'video.VSync', vsync ? 'yes' : 'no');

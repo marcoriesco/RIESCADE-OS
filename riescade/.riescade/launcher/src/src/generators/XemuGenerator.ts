@@ -15,7 +15,7 @@ export class XemuGenerator extends BaseGenerator {
     const configPath = join(xemuDir, 'xemu.toml');
 
     try {
-      const vsync = (Config.getEmulatorSetting('xemu', 'xemu_vsync') ?? Config.getEmulatorSetting('xemu', 'vsync', 'true')) === 'true';
+      const vsync = Config.getEmulatorSetting('xemu', 'vsync', 'true') === 'true';
       const renderScale = Config.getEmulatorSetting('xemu', 'render_scale') ?? '1';
 
       updateIniSetting(configPath, 'display.window', 'vsync', vsync ? 'true' : 'false');
@@ -40,7 +40,7 @@ export class XemuGenerator extends BaseGenerator {
       '-dvd',
       this.rom
     ];
-    const fullscreen = (Config.getEmulatorSetting('xemu', 'xemu_fullscreen') ?? Config.getEmulatorSetting('xemu', 'forcefullscreen') ?? Config.getEmulatorSetting('xemu', 'fullscreen', 'true')) === 'true';
+    const fullscreen = Config.getEmulatorSetting('xemu', 'fullscreen', 'true') === 'true';
 
     if (fullscreen) {
       commandArgs.push('-fullscreen');

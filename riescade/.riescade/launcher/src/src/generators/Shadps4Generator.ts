@@ -30,7 +30,7 @@ export class Shadps4Generator extends BaseGenerator {
     const configPath = join(shadps4Dir, 'user', 'config.toml');
 
     try {
-      const fullscreen = (Config.getEmulatorSetting('shadps4', 'shadps4_fullscreen') ?? Config.getEmulatorSetting('shadps4', 'forcefullscreen') ?? Config.getEmulatorSetting('shadps4', 'fullscreen', 'true')) === 'true';
+      const fullscreen = Config.getEmulatorSetting('shadps4', 'fullscreen', 'true') === 'true';
       
       updateIniSetting(configPath, 'GPU', 'Fullscreen', fullscreen ? 'true' : 'false');
       if (fullscreen) {

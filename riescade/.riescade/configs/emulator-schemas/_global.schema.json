@@ -27,7 +27,7 @@
           "default": "Vulkan",
           "configKey": "video_driver",
           "values": [
-            { "label": "Automático", "value": "auto" },
+            { "label": "AUTO", "value": "auto" },
             { "label": "Vulkan", "value": "Vulkan" },
             { "label": "Direct3D 11", "value": "Direct3D11" },
             { "label": "Direct3D 12", "value": "Direct3D12" },
@@ -50,7 +50,7 @@
           "default": "auto",
           "configKey": "resolution",
           "values": [
-            { "label": "Automático", "value": "auto" },
+            { "label": "AUTO", "value": "auto" },
             { "label": "720p (1280x720)", "value": "1280x720" },
             { "label": "1080p (1920x1080)", "value": "1920x1080" },
             { "label": "1440p (2560x1440)", "value": "2560x1440" },
@@ -65,10 +65,10 @@
           "default": "Fixed4x3",
           "configKey": "aspect_ratio",
           "values": [
+            { "label": "AUTO", "value": "auto" },
             { "label": "4:3", "value": "Fixed4x3" },
             { "label": "16:9", "value": "Fixed16x9" },
             { "label": "16:10", "value": "Fixed16x10" },
-            { "label": "Automático", "value": "auto" },
             { "label": "Esticar", "value": "Stretch" }
           ]
         },
@@ -80,7 +80,7 @@
           "default": "auto",
           "configKey": "hdr",
           "values": [
-            { "label": "Automático", "value": "auto" },
+            { "label": "AUTO", "value": "auto" },
             { "label": "Ativado", "value": "true" },
             { "label": "Desativado", "value": "false" }
           ]
@@ -101,7 +101,7 @@
           "default": "auto",
           "configKey": "monitor_index",
           "values": [
-            { "label": "Automático", "value": "auto" },
+            { "label": "AUTO", "value": "auto" },
             { "label": "Monitor 1", "value": "0" },
             { "label": "Monitor 2", "value": "1" },
             { "label": "Monitor 3", "value": "2" },
@@ -116,7 +116,7 @@
           "default": "auto",
           "configKey": "gpu_index",
           "values": [
-            { "label": "Automático", "value": "auto" },
+            { "label": "AUTO", "value": "auto" },
             { "label": "GPU 1", "value": "0" },
             { "label": "GPU 2", "value": "1" },
             { "label": "GPU 3", "value": "2" }
@@ -138,7 +138,7 @@
           "default": "auto",
           "configKey": "audio_driver",
           "values": [
-            { "label": "Automático", "value": "auto" },
+            { "label": "AUTO", "value": "auto" },
             { "label": "WASAPI", "value": "wasapi" },
             { "label": "DirectSound", "value": "dsound" },
             { "label": "XAudio2", "value": "xaudio2" }
@@ -160,7 +160,7 @@
           "default": "auto",
           "configKey": "shaders",
           "values": [
-            { "label": "Automático", "value": "auto" },
+            { "label": "AUTO", "value": "auto" },
             { "label": "Desativado", "value": "none" }
           ]
         },
@@ -172,7 +172,7 @@
           "default": "auto",
           "configKey": "bezels",
           "values": [
-            { "label": "Automático", "value": "auto" },
+            { "label": "AUTO", "value": "auto" },
             { "label": "Desativado", "value": "none" }
           ]
         },
@@ -184,7 +184,7 @@
           "default": "auto",
           "configKey": "filters",
           "values": [
-            { "label": "Automático", "value": "auto" },
+            { "label": "AUTO", "value": "auto" },
             { "label": "Desativado", "value": "none" }
           ]
         }

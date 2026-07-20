@@ -15,9 +15,9 @@ export class DuckstationGenerator extends BaseGenerator {
     const iniPath = join(duckstationDir, 'settings.ini');
 
     try {
-      const fullscreen = (Config.getEmulatorSetting('duckstation', 'duckstation_fullscreen') ?? Config.getEmulatorSetting('duckstation', 'forcefullscreen') ?? Config.getEmulatorSetting('duckstation', 'fullscreen', 'true')) === 'true';
-      const vsync = (Config.getEmulatorSetting('duckstation', 'duckstation_vsync') ?? Config.getEmulatorSetting('duckstation', 'vsync', 'true')) === 'true';
-      const renderer = Config.getEmulatorSetting('duckstation', 'duckstation_renderer') ?? Config.getEmulatorSetting('duckstation', 'renderer', 'D3D11');
+      const fullscreen = Config.getEmulatorSetting('duckstation', 'fullscreen', 'true') === 'true';
+      const vsync = Config.getEmulatorSetting('duckstation', 'vsync', 'true') === 'true';
+      const renderer = Config.getEmulatorSetting('duckstation', 'video_driver', 'D3D11');
 
       updateIniSetting(iniPath, 'Console', 'StartFullscreen', fullscreen);
       updateIniSetting(iniPath, 'Display', 'VSync', vsync);

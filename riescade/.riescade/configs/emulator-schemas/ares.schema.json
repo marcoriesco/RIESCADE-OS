@@ -4,7 +4,18 @@
   "name": "Ares",
   "description": "Emulador multi-sistema (N64, SNES, Genesis, PSX, etc.).",
   "icon": "ares",
-  "configFiles": [{ "path": "settings.bml", "format": "bml" }],
+  "configFiles": [
+    {
+      "path": "settings.bml",
+      "format": "bml"
+    }
+  ],
+  "globalMappings": {
+    "fullscreen": {
+      "configKey": "fullscreen",
+      "globalKey": "fullscreen"
+    }
+  },
   "groups": [
     {
       "id": "graphics",
@@ -13,6 +24,15 @@
       "order": 1,
       "options": [
         {
+          "id": "fullscreen",
+          "label": "Tela Cheia",
+          "description": "Iniciar o emulador em modo tela cheia.",
+          "type": "toggle",
+          "default": "true",
+          "configKey": "fullscreen",
+          "inheritsGlobal": "fullscreen"
+        },
+        {
           "id": "ares_renderer",
           "label": "Driver de Vídeo",
           "description": "API gráfica.",
@@ -20,9 +40,18 @@
           "default": "OpenGL 3.2",
           "configKey": "ares_renderer",
           "values": [
-            { "label": "OpenGL 3.2", "value": "OpenGL 3.2" },
-            { "label": "Direct3D", "value": "Direct3D" },
-            { "label": "GDI", "value": "GDI" }
+            {
+              "label": "OpenGL 4.6",
+              "value": "OpenGL 4.6"
+            },
+            {
+              "label": "OpenGL 3.2",
+              "value": "OpenGL 3.2"
+            },
+            {
+              "label": "Direct3D 9",
+              "value": "Direct3D 9.0"
+            }
           ]
         },
         {
@@ -33,9 +62,18 @@
           "default": "Scale",
           "configKey": "ares_aspect",
           "values": [
-            { "label": "Escala", "value": "Scale" },
-            { "label": "Esticar", "value": "Stretch" },
-            { "label": "Centralizar", "value": "Center" }
+            {
+              "label": "Escala",
+              "value": "Scale"
+            },
+            {
+              "label": "Esticar",
+              "value": "Stretch"
+            },
+            {
+              "label": "Centralizar",
+              "value": "Center"
+            }
           ]
         },
         {
@@ -46,8 +84,14 @@
           "default": "Anamorphic",
           "configKey": "ares_aspectcorrection",
           "values": [
-            { "label": "Anamórfico", "value": "Anamorphic" },
-            { "label": "Desativado", "value": "None" }
+            {
+              "label": "Anamórfico",
+              "value": "Anamorphic"
+            },
+            {
+              "label": "Desativado",
+              "value": "None"
+            }
           ]
         },
         {
@@ -130,8 +174,14 @@
           "default": "WASAPI",
           "configKey": "ares_audio_renderer",
           "values": [
-            { "label": "WASAPI", "value": "WASAPI" },
-            { "label": "DirectSound", "value": "DirectSound" }
+            {
+              "label": "WASAPI",
+              "value": "WASAPI"
+            },
+            {
+              "label": "DirectSound",
+              "value": "DirectSound"
+            }
           ]
         },
         {
@@ -166,9 +216,18 @@
           "default": "NTSC-U",
           "configKey": "ares_region",
           "values": [
-            { "label": "NTSC-U (América)", "value": "NTSC-U" },
-            { "label": "NTSC-J (Japão)", "value": "NTSC-J" },
-            { "label": "PAL (Europa)", "value": "PAL" }
+            {
+              "label": "NTSC-U (América)",
+              "value": "NTSC-U"
+            },
+            {
+              "label": "NTSC-J (Japão)",
+              "value": "NTSC-J"
+            },
+            {
+              "label": "PAL (Europa)",
+              "value": "PAL"
+            }
           ]
         },
         {
@@ -203,9 +262,18 @@
           "default": "HD",
           "configKey": "ares_n64_quality",
           "values": [
-            { "label": "SD", "value": "SD" },
-            { "label": "HD", "value": "HD" },
-            { "label": "Ultra HD", "value": "Ultra HD" }
+            {
+              "label": "SD",
+              "value": "SD"
+            },
+            {
+              "label": "HD",
+              "value": "HD"
+            },
+            {
+              "label": "Ultra HD",
+              "value": "Ultra HD"
+            }
           ]
         },
         {

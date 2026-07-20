@@ -40,10 +40,11 @@ export class Mame64Generator extends BaseGenerator {
       Logger.warn(`Mame64Generator: MAME executable not found at ${exePath}.`);
     }
 
-    const fullscreen = (Config.getEmulatorSetting('mame64', 'mame64_fullscreen') ?? Config.getEmulatorSetting('mame64', 'forcefullscreen') ?? Config.getEmulatorSetting('mame64', 'fullscreen', 'true')) === 'true';
-    const vsync = (Config.getEmulatorSetting('mame64', 'mame64_vsync') ?? Config.getEmulatorSetting('mame64', 'vsync', 'true')) === 'true';
-    const video = Config.getEmulatorSetting('mame64', 'mame64_video') ?? Config.getEmulatorSetting('mame64', 'video', 'd3d');
-    const sound = Config.getEmulatorSetting('mame64', 'mame64_sound') ?? Config.getEmulatorSetting('mame64', 'sound', 'dsound');
+    const fullscreen = Config.getEmulatorSetting('mame64', 'fullscreen', 'true') === 'true';
+    const vsync = Config.getEmulatorSetting('mame64', 'vsync', 'true') === 'true';
+    const video = Config.getEmulatorSetting('mame64', 'video_driver', 'd3d');
+    const sound = Config.getEmulatorSetting('mame64', 'audio_driver', 'dsound');
+    const aspect = Config.getEmulatorSetting('mame64', 'aspect_ratio', 'auto');
 
     const commandArgs: string[] = [
       '-skip_gameinfo',
@@ -66,6 +67,10 @@ export class Mame64Generator extends BaseGenerator {
       '-noka',
       vsync ? '-waitvsync' : '-nowaitvsync',
       fullscreen ? '-nowindow' : '-window',
+      ...(aspect === 'Fixed4x3' ? ['-aspect', '4:3', '-keepaspect'] :
+         aspect === 'Fixed16x9' ? ['-aspect', '16:9', '-keepaspect'] :
+         aspect === 'Fixed16x10' ? ['-aspect', '16:10', '-keepaspect'] :
+         aspect === 'Stretch' ? ['-nokeepaspect'] : ['-keepaspect']),
       '-mouse_device', 'mouse',
       '-ui_mouse',
       '-pedal_device', 'joystick',

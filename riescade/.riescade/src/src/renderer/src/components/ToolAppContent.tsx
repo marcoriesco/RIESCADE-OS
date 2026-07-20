@@ -163,6 +163,23 @@ export default function ToolAppContent({
   const [emulatorSchemas, setEmulatorSchemas] = useState<{ id: string; name: string; description?: string }[]>([]);
 
   useEffect(() => {
+    const handleNavigate = (e: any) => {
+      const data = e.detail;
+      if (data && data.tab) {
+        setActiveSettingsTab(data.tab);
+        if (data.subTab) {
+          setEmuMenuOpen(true);
+          setActiveEmuSubmenu(data.subTab);
+        }
+      }
+    };
+    window.addEventListener("navigate-settings", handleNavigate);
+    return () => {
+      window.removeEventListener("navigate-settings", handleNavigate);
+    };
+  }, []);
+
+  useEffect(() => {
     window.api.getRiescadeLogoPath().then((path) => {
       if (path) setRiescadeLogo(path);
     });

@@ -15,8 +15,8 @@
     "vsync": "true"
   },
   "ares": {
-    "ares_fullscreen": "true",
-    "ares_aspect": "Scale",
+    "fullscreen": "true",
+    "ares_aspect": "Stretch",
     "ares_aspectcorrection": "Anamorphic",
     "ares_gpusync": "sync",
     "ares_luminance": "1.0",
@@ -28,9 +28,9 @@
     "ares_overscan": "false",
     "ares_pixel_accurate": "false",
     "ares_region": "NTSC-U",
-    "ares_fastboot": "false",
+    "ares_fastboot": "true",
     "ares_runahead": "false",
-    "ares_renderer": "OpenGL 3.2",
+    "ares_renderer": "OpenGL 4.6",
     "ares_audio_renderer": "WASAPI",
     "ares_audiosync": "true",
     "ares_n64_quality": "HD",
@@ -44,19 +44,17 @@
     "buttonsInvert": "false"
   },
   "xenia": {
-    "xenia_fullscreen": "true",
+    "fullscreen": "true",
     "xenia_license_mask": "-1",
-    "xenia_gpu": "vulkan",
-    "xenia_resolution": "1_1",
+    "video_driver": "vulkan",
+    "resolution": "1_1",
     "xenia_lang": "9",
-    "xenia_hid": "sdl",
-    "videomode": "false",
-    "gpu": "auto"
+    "xenia_hid": "sdl"
   },
-  "pcsx2x6": {
+  "pcsx2": {
     "TVShader": "0",
     "internalresolution": "3",
-    "pcsx2_vsync": "true",
+    "vsync": "true",
     "fullboot": "true",
     "pcsx2_fastboot": "true",
     "pcsx2_forcebios": "ps2-0230a-20080220.bin",
@@ -71,11 +69,41 @@
     "trilinear_filtering": "auto",
     "anisotropic_filtering": "auto"
   },
-  "pcsx2": {
+  "pcsx2-nightly": {
     "TVShader": "0",
     "internalresolution": "3",
+    "vsync": "true",
     "fullboot": "true",
-    "pcsx2_fastboot": "true"
+    "pcsx2_fastboot": "true",
+    "pcsx2_forcebios": "ps2-0230a-20080220.bin",
+    "pcsx2_slot1_memory": "auto",
+    "UserHacks_HalfPixelOffset": "auto",
+    "UserHacks_round_sprite_offset": "auto",
+    "TextureOffsets": "auto",
+    "fmv_ratio": "auto",
+    "interlace": "auto",
+    "bilinear_filtering": "auto",
+    "texture_filtering": "auto",
+    "trilinear_filtering": "auto",
+    "anisotropic_filtering": "auto"
+  },
+  "pcsx2x6": {
+    "TVShader": "1",
+    "internalresolution": "3",
+    "vsync": "true",
+    "fullboot": "true",
+    "pcsx2_fastboot": "true",
+    "pcsx2_forcebios": "ps2-0230a-20080220.bin",
+    "pcsx2_slot1_memory": "auto",
+    "UserHacks_HalfPixelOffset": "auto",
+    "UserHacks_round_sprite_offset": "auto",
+    "TextureOffsets": "auto",
+    "fmv_ratio": "auto",
+    "interlace": "auto",
+    "bilinear_filtering": "auto",
+    "texture_filtering": "auto",
+    "trilinear_filtering": "auto",
+    "anisotropic_filtering": "auto"
   },
   "teknoparrot": {
     "tp_play_resolution": "1920p",
@@ -87,21 +115,19 @@
     "system_memory": "128"
   },
   "rpcs3": {
-    "rpcs3_internal_resolution": "1920x1080",
-    "rpcs3_ratio": "16:9",
-    "rpcs3_vsync": "On",
-    "ps3_region": "SCEA",
-    "ps3_language": "Portuguese (Brazil)",
+    "resolution": "1920x1080",
+    "aspect_ratio": "16:9",
+    "vsync": "On",
+    "rpcs3_region": "SCEA",
+    "rpcs3_language": "Portuguese (Brazil)",
     "show_trophy": "true",
-    "gfxbackend": "Vulkan",
-    "stretchtodisplay": "true",
-    "rpcs3_fullscreen_mode": "Enable",
+    "video_driver": "Vulkan",
     "rpcs3_stretch_to_display": "true"
   },
   "dolphin": {
-    "internal_resolution": "3",
-    "ratio": "16/9",
-    "dolphin_shaders": "(off)",
+    "resolution": "3",
+    "aspect_ratio": "16/9",
+    "shaders": "(off)",
     "ShaderCompilationMode": "auto",
     "SafeTextureCacheColorSamples": "auto"
   },
@@ -111,7 +137,7 @@
     "ryujinx_anti_aliasing": "None",
     "ryujinx_scaling_filter": "Fsr",
     "ryujinx_language": "BrazilianPortuguese",
-    "ryujinx_vsync": "0"
+    "vsync": "0"
   },
   "ppsspp": {
     "ppsspp_ratio": "1",
@@ -119,12 +145,10 @@
     "ppsspp_backend": "3 (VULKAN)"
   },
   "vita3k": {
-    "resolution_multiplier": "2",
-    "vita_vsync": "true",
-    "psvita_language": "17",
-    "backend-renderer": "Vulkan",
-    "vita3k_vsync": "true",
-    "vita3k_resolution": "1",
+    "resolution": "1",
+    "vsync": "true",
+    "vita3k_language": "17",
+    "video_driver": "Vulkan",
     "cpu_opt": "true",
     "vita3k_fpshack": "true"
   },
@@ -132,11 +156,11 @@
     "shadps4_isps4pro": "true",
     "shadps4_lang": "17",
     "shadps4_version": "default",
-    "forcefullscreen": "true",
+    "fullscreen": "true",
     "shadps4_fullscreen_mode": "Exclusive"
   },
   "cemu": {
-    "wiiu_language": "1"
+    "cemu_language": "1"
   },
   "mame64": {
     "mame_rotate": "auto",
@@ -165,12 +189,17 @@
   },
   "retroarch": {},
   "eden": {
-    "eden_vsync": "1",
+    "vsync": "1",
     "eden_resolution_scale": "1",
     "eden_anti_aliasing": "None",
     "eden_undock": "true"
   },
   "model2": {
-    "model2_vsync": "true"
+    "vsync": "true"
+  },
+  "citron": {
+    "vsync": "1",
+    "fullscreen": "true",
+    "citron_undock": "true"
   }
 }

@@ -4,11 +4,25 @@
   "name": "RPCS3",
   "description": "Emulador de PlayStation 3 de código aberto.",
   "icon": "rpcs3",
-  "configFiles": [{ "path": "config/config.yml", "format": "yml" }],
+  "configFiles": [
+    {
+      "path": "config/config.yml",
+      "format": "yml"
+    }
+  ],
   "globalMappings": {
-    "fullscreen": { "configKey": "forcefullscreen", "globalKey": "fullscreen" },
-    "vsync": { "configKey": "rpcs3_vsync", "globalKey": "vsync" },
-    "video_driver": { "configKey": "gfxbackend", "globalKey": "video_driver" }
+    "fullscreen": {
+      "configKey": "fullscreen",
+      "globalKey": "fullscreen"
+    },
+    "vsync": {
+      "configKey": "vsync",
+      "globalKey": "vsync"
+    },
+    "video_driver": {
+      "configKey": "video_driver",
+      "globalKey": "video_driver"
+    }
   },
   "groups": [
     {
@@ -18,46 +32,84 @@
       "order": 1,
       "options": [
         {
-          "id": "gfxbackend",
+          "id": "fullscreen",
+          "label": "Tela Cheia",
+          "description": "Iniciar o emulador em modo tela cheia.",
+          "type": "toggle",
+          "default": "true",
+          "configKey": "fullscreen",
+          "inheritsGlobal": "fullscreen"
+        },
+        {
+          "id": "video_driver",
           "label": "Backend Gráfico",
           "description": "API de renderização do RPCS3.",
           "type": "select",
           "default": "Vulkan",
-          "configKey": "gfxbackend",
+          "configKey": "video_driver",
           "inheritsGlobal": "video_driver",
           "values": [
-            { "label": "Vulkan", "value": "Vulkan" },
-            { "label": "OpenGL", "value": "OpenGL" }
+            {
+              "label": "Vulkan",
+              "value": "Vulkan"
+            },
+            {
+              "label": "OpenGL",
+              "value": "OpenGL"
+            }
           ]
         },
         {
-          "id": "rpcs3_vsync",
+          "id": "vsync",
           "label": "V-Sync",
           "description": "Modo de sincronização vertical do RPCS3.",
           "type": "select",
           "default": "Adaptive",
-          "configKey": "rpcs3_vsync",
+          "configKey": "vsync",
           "inheritsGlobal": "vsync",
           "values": [
-            { "label": "Desativado", "value": "Off" },
-            { "label": "Ativado", "value": "On" },
-            { "label": "Adaptativo", "value": "Adaptive" }
+            {
+              "label": "Desativado",
+              "value": "Off"
+            },
+            {
+              "label": "Ativado",
+              "value": "On"
+            },
+            {
+              "label": "Adaptativo",
+              "value": "Adaptive"
+            }
           ]
         },
         {
-          "id": "rpcs3_internal_resolution",
+          "id": "resolution",
           "label": "Resolução Interna",
-          "description": "Escala de resolução interna (multiplicador).",
+          "description": "Escala de resolução interna.",
           "type": "select",
           "default": "auto",
-          "configKey": "rpcs3_internal_resolution",
-          "inheritsGlobal": "resolution",
+          "configKey": "resolution",
           "values": [
-            { "label": "Automático", "value": "auto" },
-            { "label": "1280x720 (HD)", "value": "1280x720" },
-            { "label": "1920x1080 (Full HD)", "value": "1920x1080" },
-            { "label": "2560x1440 (2K)", "value": "2560x1440" },
-            { "label": "3840x2160 (4K)", "value": "3840x2160" }
+            {
+              "label": "Automático",
+              "value": "auto"
+            },
+            {
+              "label": "1280x720 (HD)",
+              "value": "1280x720"
+            },
+            {
+              "label": "1920x1080 (Full HD)",
+              "value": "1920x1080"
+            },
+            {
+              "label": "2560x1440 (2K)",
+              "value": "2560x1440"
+            },
+            {
+              "label": "3840x2160 (4K)",
+              "value": "3840x2160"
+            }
           ]
         },
         {
@@ -84,9 +136,18 @@
           "default": "auto",
           "configKey": "rpcs3_anti_aliasing",
           "values": [
-            { "label": "Automático", "value": "auto" },
-            { "label": "Desativado", "value": "Disabled" },
-            { "label": "FXAA", "value": "FXAA" }
+            {
+              "label": "Automático",
+              "value": "auto"
+            },
+            {
+              "label": "Desativado",
+              "value": "Disabled"
+            },
+            {
+              "label": "FXAA",
+              "value": "FXAA"
+            }
           ]
         }
       ]
@@ -105,23 +166,44 @@
           "default": "auto",
           "configKey": "rpcs3_spu_block",
           "values": [
-            { "label": "Automático", "value": "auto" },
-            { "label": "Safe", "value": "Safe" },
-            { "label": "Mega", "value": "Mega" },
-            { "label": "Giga", "value": "Giga" }
+            {
+              "label": "Automático",
+              "value": "auto"
+            },
+            {
+              "label": "Safe",
+              "value": "Safe"
+            },
+            {
+              "label": "Mega",
+              "value": "Mega"
+            },
+            {
+              "label": "Giga",
+              "value": "Giga"
+            }
           ]
         },
         {
           "id": "rpcs3_ppu_decoder",
           "label": "Decodificador PPU",
-          "description": "Método de recompilação do PPU. Recompiler LLVM é mais rápido.",
+          "description": "Método de recompilação do PPU.",
           "type": "select",
           "default": "auto",
           "configKey": "rpcs3_ppu_decoder",
           "values": [
-            { "label": "Automático", "value": "auto" },
-            { "label": "Interpreter", "value": "Interpreter" },
-            { "label": "Recompiler (LLVM)", "value": "Recompiler (LLVM)" }
+            {
+              "label": "Automático",
+              "value": "auto"
+            },
+            {
+              "label": "Interpreter",
+              "value": "Interpreter"
+            },
+            {
+              "label": "Recompiler (LLVM)",
+              "value": "Recompiler (LLVM)"
+            }
           ]
         },
         {
@@ -132,10 +214,22 @@
           "default": "auto",
           "configKey": "rpcs3_spu_decoder",
           "values": [
-            { "label": "Automático", "value": "auto" },
-            { "label": "Interpreter", "value": "Interpreter" },
-            { "label": "Recompiler (ASMJIT)", "value": "Recompiler (ASMJIT)" },
-            { "label": "Recompiler (LLVM)", "value": "Recompiler (LLVM)" }
+            {
+              "label": "Automático",
+              "value": "auto"
+            },
+            {
+              "label": "Interpreter",
+              "value": "Interpreter"
+            },
+            {
+              "label": "Recompiler (ASMJIT)",
+              "value": "Recompiler (ASMJIT)"
+            },
+            {
+              "label": "Recompiler (LLVM)",
+              "value": "Recompiler (LLVM)"
+            }
           ]
         }
       ]
@@ -154,9 +248,18 @@
           "default": "auto",
           "configKey": "rpcs3_audio_backend",
           "values": [
-            { "label": "Automático", "value": "auto" },
-            { "label": "XAudio2", "value": "XAudio2" },
-            { "label": "Cubeb", "value": "Cubeb" }
+            {
+              "label": "Automático",
+              "value": "auto"
+            },
+            {
+              "label": "XAudio2",
+              "value": "XAudio2"
+            },
+            {
+              "label": "Cubeb",
+              "value": "Cubeb"
+            }
           ]
         }
       ]

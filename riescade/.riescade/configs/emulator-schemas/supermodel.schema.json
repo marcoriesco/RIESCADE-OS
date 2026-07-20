@@ -1,14 +1,25 @@
 {
   "$schema": "riescade-emulator-schema-v1",
-  "id": "model2",
-  "name": "Model 2 Emulator",
-  "description": "Emulador de Sega Model 2 Arcade.",
-  "icon": "model2",
-  "configFiles": [{ "path": "Emulator.ini", "format": "ini" }],
+  "id": "supermodel",
+  "name": "Supermodel",
+  "description": "Emulador de Sega Model 3 Arcade.",
+  "icon": "model3",
   "globalMappings": {
-    "fullscreen": { "configKey": "fullscreen", "globalKey": "fullscreen" },
-    "vsync": { "configKey": "vsync", "globalKey": "vsync" }
+    "fullscreen": {
+      "configKey": "fullscreen",
+      "globalKey": "fullscreen"
+    },
+    "vsync": {
+      "configKey": "vsync",
+      "globalKey": "vsync"
+    }
   },
+  "configFiles": [
+    {
+      "path": "Config/Supermodel.ini",
+      "format": "ini"
+    }
+  ],
   "groups": [
     {
       "id": "graphics",

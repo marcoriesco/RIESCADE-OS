@@ -1,4 +1,4 @@
-import { readFileSync, existsSync } from 'fs';
+import { readFileSync, existsSync, readdirSync } from 'fs';
 import { join } from 'path';
 import { getConfigsPath } from './utils/paths.js';
 import { Logger } from './utils/logger.js';
@@ -34,6 +34,7 @@ export class Config {
   private static systems: any = null;
   private static features: any = null;
   private static emulatorConfig: Record<string, any> = {};
+  private static inheritanceMap: Record<string, Record<string, string>> = {};
   private static loaded = false;
 
   public static load() {
@@ -105,6 +106,9 @@ export class Config {
       Logger.warn(`emulator.json not found at ${emulatorFile}`);
     }
 
+    // Load emulator schemas for inheritance resolution
+    this.loadSchemas();
+
     this.loaded = true;
   }
 
@@ -115,120 +119,6 @@ export class Config {
     return item.value;
   }
 
-  private static readonly GLOBAL_KEY_MAP: Record<string, string> = {
-    // Fullscreen
-    'fullscreen': 'fullscreen',
-    'forcefullscreen': 'fullscreen',
-    'ares_fullscreen': 'fullscreen',
-    'bigpemu_fullscreen': 'fullscreen',
-    'cemu_fullscreen': 'fullscreen',
-    'dolphin_fullscreen': 'fullscreen',
-    'duckstation_fullscreen': 'fullscreen',
-    'flycast_fullscreen': 'fullscreen',
-    'mame64_fullscreen': 'fullscreen',
-    'model2_fullscreen': 'fullscreen',
-    'supermodel_fullscreen': 'fullscreen',
-    'pcsx2_fullscreen': 'fullscreen',
-    'pcsx2x6_fullscreen': 'fullscreen',
-    'ppsspp_fullscreen': 'fullscreen',
-    'redream_fullscreen': 'fullscreen',
-    'rpcs3_fullscreen': 'fullscreen',
-    'ryujinx_fullscreen': 'fullscreen',
-    'shadps4_fullscreen': 'fullscreen',
-    'teknoparrot_fullscreen': 'fullscreen',
-    'vita3k_fullscreen': 'fullscreen',
-    'xemu_fullscreen': 'fullscreen',
-    'xenia_fullscreen': 'fullscreen',
-    
-    // Video Driver
-    'backend': 'video_driver',
-    'dolphin_backend': 'video_driver',
-    'renderer': 'video_driver',
-    'video_renderer': 'video_driver',
-    'duckstation_renderer': 'video_driver',
-    'gfxbackend': 'video_driver',
-    'video': 'video_driver',
-    'mame64_video': 'video_driver',
-    'pcsx2_renderer': 'video_driver',
-    'pcsx2x6_renderer': 'video_driver',
-    'backend-renderer': 'video_driver',
-    'gpu': 'video_driver',
-    'xenia_gpu': 'video_driver',
-    'video_driver': 'video_driver',
-    
-    // Audio Driver
-    'sound': 'audio_driver',
-    'mame64_sound': 'audio_driver',
-    'audio_driver': 'audio_driver',
-    'ares_audio_renderer': 'audio_driver',
-    'audio_backend': 'audio_driver',
-    
-    // Resolution
-    'videomode': 'resolution',
-    'resolution': 'resolution',
-    'xenia_resolution': 'resolution',
-    'tp_play_resolution': 'resolution',
-    'rpcs3_internal_resolution': 'resolution',
-    'internal_resolution': 'resolution',
-    'res_scale': 'resolution',
-    'render_scale': 'resolution',
-    'internalresolution': 'resolution',
-    
-    // VSync
-    'vsync': 'vsync',
-    'bigpemu_vsync': 'vsync',
-    'cemu_vsync': 'vsync',
-    'dolphin_vsync': 'vsync',
-    'duckstation_vsync': 'vsync',
-    'flycast_vsync': 'vsync',
-    'mame64_vsync': 'vsync',
-    'model2_vsync': 'vsync',
-    'supermodel_vsync': 'vsync',
-    'pcsx2_vsync': 'vsync',
-    'ppsspp_vsync': 'vsync',
-    'redream_vsync': 'vsync',
-    'rpcs3_vsync': 'vsync',
-    'ryujinx_vsync': 'vsync',
-    'vita3k_vsync': 'vsync',
-    'xemu_vsync': 'vsync',
-    'xenia_vsync': 'vsync',
-    'video_vsync': 'vsync',
-    
-    // HDR
-    'enable_hdr': 'hdr',
-    'hdr': 'hdr',
-    
-    // Monitor Index
-    'MonitorIndex': 'monitor_index',
-    'monitor_index': 'monitor_index',
-    
-    // GPU Index
-    'GPUIndex': 'gpu_index',
-    'gpu_index': 'gpu_index',
-    
-    // Shaders
-    'shaderset': 'shaders',
-    'shaders': 'shaders',
-    'dolphin_shaders': 'shaders',
-    
-    // Bezels
-    'bezel': 'bezels',
-    'bezels': 'bezels',
-    
-    // Filters
-    'videofilters': 'filters',
-    'filters': 'filters',
-    
-    // Discord
-    'discord': 'discord',
-    'psvita.discord': 'discord',
-    'switch.discord': 'discord',
-
-    // Aspect Ratio
-    'aspect_ratio': 'aspect_ratio',
-    'retroarch_aspect_ratio': 'aspect_ratio'
-  };
-
   public static getEmulatorSetting(emulator: string, key: string, defaultValue?: any): any {
     this.load();
     const emuConfig = this.emulatorConfig[emulator];
@@ -236,7 +126,9 @@ export class Config {
 
     // Fall back to global if specific setting is not defined or set to 'auto'
     if ((val === undefined || val === 'auto') && emulator !== 'global') {
-      const globalKey = this.GLOBAL_KEY_MAP[key];
+      // Look up inheritance from schema
+      const emuInheritance = this.inheritanceMap[emulator];
+      const globalKey = emuInheritance?.[key];
       if (globalKey) {
         const globalConfig = this.emulatorConfig['global'];
         if (globalConfig) {
@@ -250,6 +142,56 @@ export class Config {
 
     if (val === undefined) return defaultValue;
     return val;
+  }
+
+  private static loadSchemas(): void {
+    const schemasDir = join(getConfigsPath(), 'emulator-schemas');
+    if (!existsSync(schemasDir)) return;
+
+    try {
+      const files = readdirSync(schemasDir)
+        .filter(f => f.endsWith('.schema.json') && !f.startsWith('_'));
+
+      for (const file of files) {
+        try {
+          const raw = readFileSync(join(schemasDir, file), 'utf8');
+          const schema = JSON.parse(raw);
+          const emulatorId = schema.id;
+          if (!emulatorId) continue;
+
+          const mappings: Record<string, string> = {};
+
+          // Extract from globalMappings (primary source)
+          if (schema.globalMappings) {
+            for (const mapping of Object.values(schema.globalMappings)) {
+              const m = mapping as any;
+              if (m.configKey && m.globalKey) {
+                mappings[m.configKey] = m.globalKey;
+              }
+            }
+          }
+
+          // Also extract from options with inheritsGlobal
+          for (const group of schema.groups || []) {
+            for (const option of (group as any).options || []) {
+              if (option.inheritsGlobal && option.configKey) {
+                mappings[option.configKey] = option.inheritsGlobal;
+              }
+            }
+          }
+
+          if (Object.keys(mappings).length > 0) {
+            this.inheritanceMap[emulatorId] = mappings;
+          }
+        } catch (err) {
+          Logger.error(`Failed to parse emulator schema: ${file}`, err);
+        }
+      }
+
+      Logger.debug(`Loaded inheritance mappings for ${Object.keys(this.inheritanceMap).length} emulators`);
+    } catch (err) {
+      Logger.error(`Failed to read emulator-schemas directory`, err);
+    }
   }
 
   public static getInputConfig(): InputJson {

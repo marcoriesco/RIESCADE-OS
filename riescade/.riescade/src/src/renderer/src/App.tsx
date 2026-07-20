@@ -49,6 +49,78 @@ export default function App() {
   const [settings, setSettings] = useState<any>({});
   const [emulatorSettings, setEmulatorSettings] = useState<any>({});
   const [appVersion, setAppVersion] = useState("2.0.2");
+  const [taskbarContextMenu, setTaskbarContextMenu] = useState<{
+    x: number;
+    y: number;
+    item: { id: string; type: "system" | "tool"; appId: string; name: string; icon: any; logo?: string; color?: string };
+    isPinned: boolean;
+  } | null>(null);
+  const [showQuickSettings, setShowQuickSettings] = useState(false);
+  const [batteryState, setBatteryState] = useState<{ level: number; charging: boolean; hasBattery: boolean } | null>(null);
+  const [isOnline, setIsOnline] = useState(navigator.onLine);
+  const [volume, setVolume] = useState<number>(() => {
+    const saved = localStorage.getItem("riescade_volume");
+    return saved !== null ? parseInt(saved, 10) : 80;
+  });
+
+  const handleVolumeChange = (newVal: number) => {
+    setVolume(newVal);
+    localStorage.setItem("riescade_volume", String(newVal));
+  };
+
+  useEffect(() => {
+    const handleOnline = () => setIsOnline(true);
+    const handleOffline = () => setIsOnline(false);
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
+  }, []);
+
+  useEffect(() => {
+    let active = true;
+    let cleanup: (() => void) | undefined;
+
+    window.api.checkBatteryExists().then((exists) => {
+      if (!active) return;
+      if (!exists) {
+        setBatteryState({ level: 100, charging: true, hasBattery: false });
+        return;
+      }
+      
+      if ('getBattery' in navigator) {
+        (navigator as any).getBattery().then((batt: any) => {
+          if (!active) return;
+          const updateBattery = () => {
+            setBatteryState({
+              level: Math.round(batt.level * 100),
+              charging: batt.charging,
+              hasBattery: true
+            });
+          };
+          updateBattery();
+          batt.addEventListener('levelchange', updateBattery);
+          batt.addEventListener('chargingchange', updateBattery);
+          
+          cleanup = () => {
+            batt.removeEventListener('levelchange', updateBattery);
+            batt.removeEventListener('chargingchange', updateBattery);
+          };
+        }).catch(() => {
+          setBatteryState(null);
+        });
+      }
+    });
+
+    return () => {
+      active = false;
+      if (cleanup) cleanup();
+    };
+  }, []);
+
+
 
   const handleSaveSetting = useCallback((name: string, value: any, type: "string" | "bool" | "int" | "float") => {
     window.api.saveSetting(name, value, type).then(() => {
@@ -349,6 +421,38 @@ export default function App() {
       return updated;
     });
   }, [handleSaveSetting]);
+
+  const togglePinTaskbar = useCallback((type: "system" | "tool", appId: string) => {
+    const current = getTaskbarIcons();
+    const itemKey = `${type}:${appId}`;
+    const next = current.includes(itemKey) ? current.filter(x => x !== itemKey) : [...current, itemKey];
+    handleSaveSetting("Taskbar.Icons", next.join(","), "string");
+  }, [getTaskbarIcons, handleSaveSetting]);
+
+  const handleTaskbarContextMenu = useCallback((e: React.MouseEvent, item: any, isPinned: boolean) => {
+    e.preventDefault();
+    setTaskbarContextMenu({
+      x: e.clientX,
+      y: e.clientY,
+      item,
+      isPinned
+    });
+  }, []);
+
+  const handleTogglePin = useCallback(() => {
+    if (!taskbarContextMenu) return;
+    const { type, appId } = taskbarContextMenu.item;
+    togglePinTaskbar(type, appId);
+    setTaskbarContextMenu(null);
+  }, [taskbarContextMenu, togglePinTaskbar]);
+
+  const handleCloseWindow = useCallback(() => {
+    if (!taskbarContextMenu) return;
+    const { type, appId } = taskbarContextMenu.item;
+    const winKey = `${type}-${appId}`;
+    closeVirtualWindow(winKey);
+    setTaskbarContextMenu(null);
+  }, [taskbarContextMenu, closeVirtualWindow]);
 
   const renderSystemMenu = (systemName: string) => {
     const system = systems.find(s => s.name === systemName);
@@ -735,10 +839,21 @@ export default function App() {
   }, []);
 
   // Open App - Opens virtual windows
-  const openApp = useCallback((type: "system" | "tool", appId: string) => {
+  const openApp = useCallback((type: "system" | "tool", appId: string, subId?: string) => {
     setLauncherOpen(false);
-    openVirtualWindow(type, appId);
-  }, [openVirtualWindow]);
+    
+    if (windowType !== "desktop") {
+      window.api.openAppWindow(type, appId);
+    } else {
+      openVirtualWindow(type, appId);
+    }
+
+    if (appId === "settings" && subId) {
+      setTimeout(() => {
+        window.dispatchEvent(new CustomEvent("navigate-settings", { detail: { tab: "emuladores", subTab: subId } }));
+      }, 200);
+    }
+  }, [windowType, openVirtualWindow]);
 
   // Determine Dynamic Background
   const activeBg = useMemo(() => {
@@ -1107,6 +1222,7 @@ export default function App() {
               Icon={theme.icon}
               onLaunchGame={handleLaunchGame}
               onActiveGameArtChanged={setActiveGameArt}
+              onOpenTool={(toolId, subId) => openApp('tool', toolId, subId)}
             />
           </div>
         </div>
@@ -1203,6 +1319,7 @@ export default function App() {
                 Icon={theme.icon}
                 onLaunchGame={handleLaunchGame}
                 onActiveGameArtChanged={setActiveGameArt}
+                onOpenTool={(toolId, subId) => openApp('tool', toolId, subId)}
               />
             </div>
           </div>
@@ -1377,6 +1494,7 @@ export default function App() {
                   Icon={Icon}
                   onLaunchGame={handleLaunchGame}
                   onActiveGameArtChanged={setActiveGameArt}
+                  onOpenTool={(toolId, subId) => openApp('tool', toolId, subId)}
                 />
               ) : (
                 <ToolAppContent
@@ -1618,6 +1736,7 @@ export default function App() {
                           setDragOverIndex(null);
                         }}
                         onClick={() => openApp(item.type, item.appId)}
+                        onContextMenu={(e) => handleTaskbarContextMenu(e, item, true)}
                         className={`relative w-11 h-11 rounded-xl bg-white/5 hover:bg-white/10 flex items-center justify-center transition-all group cursor-pointer ${
                           draggedIndex === idx ? "opacity-40" : ""
                         } ${
@@ -1682,6 +1801,7 @@ export default function App() {
                         <Tooltip.Trigger asChild>
                           <button
                             onClick={() => openApp(item.type, item.appId)}
+                            onContextMenu={(e) => handleTaskbarContextMenu(e, item, false)}
                             className="relative w-11 h-11 rounded-xl bg-white/5 hover:bg-white/10 flex items-center justify-center transition group animate-in zoom-in-95 duration-200 cursor-pointer"
                           >
                             <div className="w-7 h-7 flex items-center justify-center pointer-events-none">
@@ -1713,9 +1833,59 @@ export default function App() {
 
             {/* System tray */}
             <div className="flex items-center gap-2 px-3 text-white/80">
-              <Wifi className="w-4 h-4 text-white/60" />
-              <Volume2 className="w-4 h-4 text-white/60" />
-              <Battery className="w-4 h-4 text-white/60" />
+              <Tooltip.Root>
+                <Tooltip.Trigger asChild>
+                  <button 
+                    onClick={() => setShowQuickSettings(prev => !prev)}
+                    className="hover:scale-105 transition cursor-pointer flex items-center justify-center p-1 rounded hover:bg-white/10"
+                  >
+                    <Wifi className="w-4 h-4 text-white/60 hover:text-white" />
+                  </button>
+                </Tooltip.Trigger>
+                <Tooltip.Portal>
+                  <Tooltip.Content className="tooltip-content" side="top" sideOffset={8}>
+                    {isOnline ? "Rede: Conectado" : "Rede: Desconectado"}
+                    <Tooltip.Arrow className="tooltip-arrow" width={10} height={5} />
+                  </Tooltip.Content>
+                </Tooltip.Portal>
+              </Tooltip.Root>
+
+              <Tooltip.Root>
+                <Tooltip.Trigger asChild>
+                  <button 
+                    onClick={() => setShowQuickSettings(prev => !prev)}
+                    className="hover:scale-105 transition cursor-pointer flex items-center justify-center p-1 rounded hover:bg-white/10"
+                  >
+                    <Volume2 className="w-4 h-4 text-white/60 hover:text-white" />
+                  </button>
+                </Tooltip.Trigger>
+                <Tooltip.Portal>
+                  <Tooltip.Content className="tooltip-content" side="top" sideOffset={8}>
+                    {`Volume: ${volume}%`}
+                    <Tooltip.Arrow className="tooltip-arrow" width={10} height={5} />
+                  </Tooltip.Content>
+                </Tooltip.Portal>
+              </Tooltip.Root>
+
+              {batteryState?.hasBattery && (
+                <Tooltip.Root>
+                  <Tooltip.Trigger asChild>
+                    <button 
+                      onClick={() => setShowQuickSettings(prev => !prev)}
+                      className="hover:scale-105 transition cursor-pointer flex items-center justify-center p-1 rounded hover:bg-white/10"
+                    >
+                      <Battery className="w-4 h-4 text-white/60 hover:text-white" />
+                    </button>
+                  </Tooltip.Trigger>
+                  <Tooltip.Portal>
+                    <Tooltip.Content className="tooltip-content" side="top" sideOffset={8}>
+                      {`Bateria: ${batteryState.level}% (${batteryState.charging ? 'Carregando' : 'Descarregando'})`}
+                      <Tooltip.Arrow className="tooltip-arrow" width={10} height={5} />
+                    </Tooltip.Content>
+                  </Tooltip.Portal>
+                </Tooltip.Root>
+              )}
+
               {showFps && (
                 <span className="text-[10px] font-sans text-white/50 tracking-wide select-none ml-1 bg-white/5 px-1.5 py-0.5 rounded border border-white/5 shrink-0">
                   FPS <span className="font-bold">{fps}</span>
@@ -1737,11 +1907,22 @@ export default function App() {
                   </Tooltip.Portal>
                 </Tooltip.Root>
               ))}
-              <div className="text-xs leading-tight ml-1 flex text-right gap-1 pl-3">
-                <span className="font-semibold text-white capitalize">{now.toLocaleDateString("pt-BR", { month: "short" })}</span>
-                <span className="font-semibold text-white">{now.toLocaleDateString("pt-BR", { day: "2-digit" })}</span>
-                <span className="font-semibold text-white">{now.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}</span>
-              </div>
+
+              <Tooltip.Root>
+                <Tooltip.Trigger asChild>
+                  <div className="text-xs leading-tight ml-1 flex text-right gap-1 pl-3 cursor-help">
+                    <span className="font-semibold text-white capitalize">{now.toLocaleDateString("pt-BR", { month: "short" })}</span>
+                    <span className="font-semibold text-white">{now.toLocaleDateString("pt-BR", { day: "2-digit" })}</span>
+                    <span className="font-semibold text-white">{now.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}</span>
+                  </div>
+                </Tooltip.Trigger>
+                <Tooltip.Portal>
+                  <Tooltip.Content className="tooltip-content" side="top" sideOffset={8}>
+                    {now.toLocaleDateString("pt-BR", { weekday: "long", day: "numeric", month: "long", year: "numeric" })}
+                    <Tooltip.Arrow className="tooltip-arrow" width={10} height={5} />
+                  </Tooltip.Content>
+                </Tooltip.Portal>
+              </Tooltip.Root>
             </div>
 
           </div>
@@ -1920,6 +2101,95 @@ export default function App() {
       </div>
       </div>
       </div>
+      {showQuickSettings && (
+        <>
+          <div className="fixed inset-0 z-[80]" onClick={() => setShowQuickSettings(false)} />
+          <div className="fixed bottom-16 right-4 z-[85] glass-strong rounded-2xl border border-white/10 p-4 w-72 shadow-2xl animate-in slide-in-from-bottom-3 duration-200">
+            <div className="flex items-center justify-between mb-4">
+              <span className="text-xs font-bold text-white/40 uppercase tracking-wider">Painel de Controle</span>
+              <button onClick={() => setShowQuickSettings(false)} className="text-white/60 hover:text-white transition cursor-pointer">
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+            
+            <div className="space-y-4">
+              {/* Network status */}
+              <div className="flex items-center gap-3 bg-white/5 border border-white/5 p-2.5 rounded-xl">
+                <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${isOnline ? 'bg-emerald-500/20 text-emerald-400' : 'bg-red-500/20 text-red-400'}`}>
+                  <Wifi className="w-4 h-4" />
+                </div>
+                <div className="flex flex-col text-left">
+                  <span className="text-xs font-bold text-white">{isOnline ? "Conectado" : "Desconectado"}</span>
+                  <span className="text-[10px] text-white/40">{isOnline ? "Rede Wi-Fi ativa" : "Sem acesso à internet"}</span>
+                </div>
+              </div>
+
+              {/* Battery status (if detected) */}
+              {batteryState?.hasBattery && (
+                <div className="flex items-center gap-3 bg-white/5 border border-white/5 p-2.5 rounded-xl">
+                  <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${batteryState.charging ? 'bg-amber-500/20 text-amber-400' : 'bg-blue-500/20 text-blue-400'}`}>
+                    <Battery className="w-4 h-4" />
+                  </div>
+                  <div className="flex flex-col text-left">
+                    <span className="text-xs font-bold text-white">{batteryState.level}%</span>
+                    <span className="text-[10px] text-white/40">{batteryState.charging ? "Carregando" : "Na bateria"}</span>
+                  </div>
+                </div>
+              )}
+
+              {/* Volume status */}
+              <div className="flex flex-col gap-2 bg-white/5 border border-white/5 p-3 rounded-xl">
+                <div className="flex items-center justify-between">
+                  <span className="text-[11px] font-bold text-white/60">Volume</span>
+                  <span className="text-[11px] font-bold text-accent">{volume}%</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Volume2 className="w-4 h-4 text-white/55 animate-pulse" />
+                  <input 
+                    type="range"
+                    min="0"
+                    max="100"
+                    value={volume}
+                    onChange={(e) => handleVolumeChange(parseInt(e.target.value, 10))}
+                    className="flex-1 accent-range cursor-pointer h-1 rounded-lg bg-white/10 outline-none"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
+
+      {taskbarContextMenu && (
+        <>
+          <div className="fixed inset-0 z-[9999]" onClick={() => setTaskbarContextMenu(null)} onContextMenu={(e) => { e.preventDefault(); setTaskbarContextMenu(null); }} />
+          <div 
+            className="fixed z-[10000] bg-[#0d0d0d]/95 backdrop-blur-md border border-white/10 rounded-xl shadow-2xl p-1.5 min-w-[220px] animate-in zoom-in-95 duration-100"
+            style={{ 
+              bottom: `${window.innerHeight - taskbarContextMenu.y + 10}px`,
+              left: `${Math.min(taskbarContextMenu.x, window.innerWidth - 240)}px`
+            }}
+          >
+            <button
+              onClick={handleTogglePin}
+              className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-xs hover:bg-white/10 text-left transition cursor-pointer text-white/80 hover:text-white"
+            >
+              <MoreHorizontal className="w-4 h-4 text-accent" />
+              <span>{taskbarContextMenu.isPinned ? "Desafixar da Barra de tarefas" : "Fixar na barra de tarefas"}</span>
+            </button>
+            {virtualWindows.some(w => w.appId === taskbarContextMenu.item.appId && w.type === taskbarContextMenu.item.type) && (
+              <button
+                onClick={handleCloseWindow}
+                className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-xs hover:bg-red-500/20 text-left transition cursor-pointer text-red-400 hover:text-red-300"
+              >
+                <X className="w-4 h-4" />
+                <span>Fechar janela</span>
+              </button>
+            )}
+          </div>
+        </>
+      )}
+
       {renderToasts()}
       <Toast.Viewport className="fixed top-6 left-1/2 -translate-x-1/2 z-[10000] flex flex-col gap-2 w-80 max-w-full m-0 list-none outline-none items-center" />
     </Toast.Provider>

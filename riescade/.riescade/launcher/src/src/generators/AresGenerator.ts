@@ -139,8 +139,8 @@ export class AresGenerator extends BaseGenerator {
     commandArgs.push('--no-file-prompt');
 
     // Fullscreen flag if enabled in configuration
-    const isFullscreen = Config.getEmulatorSetting('ares', 'ares_fullscreen', 'false') === 'true' || 
-                         Config.getEmulatorSetting('ares', 'ares_fullscreen', 'false') === true;
+    const isFullscreen = Config.getEmulatorSetting('ares', 'fullscreen', 'false') === 'true' || 
+                         Config.getEmulatorSetting('ares', 'fullscreen', 'false') === true;
     if (isFullscreen) {
       commandArgs.push('--fullscreen');
     }

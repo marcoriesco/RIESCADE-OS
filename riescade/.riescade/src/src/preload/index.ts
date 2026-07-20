@@ -87,6 +87,7 @@ const api = {
   getRiescadeLogoPath: () => ipcRenderer.invoke('get-riescade-logo-path'),
   checkMediaFolders: (systemPath: string) => ipcRenderer.invoke('check-media-folders', systemPath),
   getFeatures: () => ipcRenderer.invoke('get-features'),
+  checkBatteryExists: () => ipcRenderer.invoke('check-battery-exists'),
 
   // DB Manager APIs
   dbGetGamesPaginated: (system: string, page: number, pageSize: number, search: string, sortBy: string, sortDir: string) =>
