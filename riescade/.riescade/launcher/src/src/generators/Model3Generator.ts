@@ -15,8 +15,8 @@ export class Model3Generator extends BaseGenerator {
     const configPath = join(model3Dir, 'Config', 'Supermodel.ini');
 
     try {
-      const fullscreen = (Config.getEmulatorSetting('supermodel', 'fullscreen') ?? Config.getEmulatorSetting('supermodel', 'forcefullscreen') ?? Config.getEmulatorSetting('supermodel', 'supermodel_fullscreen', 'true')) === 'true';
-      const vsync = (Config.getEmulatorSetting('supermodel', 'vsync') ?? Config.getEmulatorSetting('supermodel', 'supermodel_vsync', 'true')) === 'true';
+      const fullscreen = (Config.getEmulatorSetting('supermodel', 'supermodel_fullscreen') ?? Config.getEmulatorSetting('supermodel', 'forcefullscreen') ?? Config.getEmulatorSetting('supermodel', 'fullscreen', 'true')) === 'true';
+      const vsync = (Config.getEmulatorSetting('supermodel', 'supermodel_vsync') ?? Config.getEmulatorSetting('supermodel', 'vsync', 'true')) === 'true';
 
       updateIniSetting(configPath, 'Global', 'FullScreen', fullscreen ? '1' : '0');
       updateIniSetting(configPath, 'Global', 'VSync', vsync ? '1' : '0');

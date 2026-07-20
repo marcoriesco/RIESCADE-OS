@@ -15,9 +15,9 @@ export class Pcsx2Generator extends BaseGenerator {
     const iniPath = join(pcsx2Dir, 'inis', 'PCSX2.ini');
 
     try {
-      const fullscreen = (Config.getEmulatorSetting('pcsx2', 'fullscreen') ?? Config.getEmulatorSetting('pcsx2', 'forcefullscreen') ?? Config.getEmulatorSetting('pcsx2', 'pcsx2_fullscreen', 'true')) === 'true';
-      const aspect = Config.getEmulatorSetting('pcsx2', 'ratio') ?? Config.getEmulatorSetting('pcsx2', 'pcsx2_aspectratio', '16:9');
-      const renderer = Config.getEmulatorSetting('pcsx2', 'renderer') ?? Config.getEmulatorSetting('pcsx2', 'pcsx2_renderer', '-1');
+      const fullscreen = (Config.getEmulatorSetting('pcsx2', 'pcsx2_fullscreen') ?? Config.getEmulatorSetting('pcsx2', 'forcefullscreen') ?? Config.getEmulatorSetting('pcsx2', 'fullscreen', 'true')) === 'true';
+      const aspect = Config.getEmulatorSetting('pcsx2', 'pcsx2_aspectratio') ?? Config.getEmulatorSetting('pcsx2', 'ratio', '16:9');
+      const renderer = Config.getEmulatorSetting('pcsx2', 'pcsx2_renderer') ?? Config.getEmulatorSetting('pcsx2', 'renderer', '-1');
 
       updateIniSetting(iniPath, 'UI', 'StartFullscreen', fullscreen);
       updateIniSetting(iniPath, 'EmuCore/GS', 'AspectRatio', aspect);
@@ -47,7 +47,7 @@ export class Pcsx2Generator extends BaseGenerator {
     }
 
     const commandArgs: string[] = [];
-    const fullscreen = (Config.getEmulatorSetting('pcsx2', 'fullscreen') ?? Config.getEmulatorSetting('pcsx2', 'forcefullscreen') ?? Config.getEmulatorSetting('pcsx2', 'pcsx2_fullscreen', 'true')) === 'true';
+    const fullscreen = (Config.getEmulatorSetting('pcsx2', 'pcsx2_fullscreen') ?? Config.getEmulatorSetting('pcsx2', 'forcefullscreen') ?? Config.getEmulatorSetting('pcsx2', 'fullscreen', 'true')) === 'true';
 
     if (isQt) {
       commandArgs.push('-batch');

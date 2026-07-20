@@ -40,10 +40,10 @@ export class Mame64Generator extends BaseGenerator {
       Logger.warn(`Mame64Generator: MAME executable not found at ${exePath}.`);
     }
 
-    const fullscreen = (Config.getEmulatorSetting('mame64', 'fullscreen') ?? Config.getEmulatorSetting('mame64', 'forcefullscreen') ?? Config.getEmulatorSetting('mame64', 'mame64_fullscreen', 'true')) === 'true';
-    const vsync = (Config.getEmulatorSetting('mame64', 'vsync') ?? Config.getEmulatorSetting('mame64', 'mame64_vsync', 'true')) === 'true';
-    const video = Config.getEmulatorSetting('mame64', 'video') ?? Config.getEmulatorSetting('mame64', 'mame64_video', 'd3d');
-    const sound = Config.getEmulatorSetting('mame64', 'sound') ?? Config.getEmulatorSetting('mame64', 'mame64_sound', 'dsound');
+    const fullscreen = (Config.getEmulatorSetting('mame64', 'mame64_fullscreen') ?? Config.getEmulatorSetting('mame64', 'forcefullscreen') ?? Config.getEmulatorSetting('mame64', 'fullscreen', 'true')) === 'true';
+    const vsync = (Config.getEmulatorSetting('mame64', 'mame64_vsync') ?? Config.getEmulatorSetting('mame64', 'vsync', 'true')) === 'true';
+    const video = Config.getEmulatorSetting('mame64', 'mame64_video') ?? Config.getEmulatorSetting('mame64', 'video', 'd3d');
+    const sound = Config.getEmulatorSetting('mame64', 'mame64_sound') ?? Config.getEmulatorSetting('mame64', 'sound', 'dsound');
 
     const commandArgs: string[] = [
       '-skip_gameinfo',

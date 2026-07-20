@@ -22,8 +22,8 @@ export class BigPemuGenerator extends BaseGenerator {
       const content = readFileSync(configPath, 'utf8');
       const json = JSON.parse(content);
 
-      const fullscreen = (Config.getEmulatorSetting('bigpemu', 'fullscreen') ?? Config.getEmulatorSetting('bigpemu', 'forcefullscreen') ?? Config.getEmulatorSetting('bigpemu', 'bigpemu_fullscreen', 'true')) === 'true';
-      const vsync = (Config.getEmulatorSetting('bigpemu', 'vsync') ?? Config.getEmulatorSetting('bigpemu', 'bigpemu_vsync', 'true')) === 'true';
+      const fullscreen = (Config.getEmulatorSetting('bigpemu', 'bigpemu_fullscreen') ?? Config.getEmulatorSetting('bigpemu', 'forcefullscreen') ?? Config.getEmulatorSetting('bigpemu', 'fullscreen', 'true')) === 'true';
+      const vsync = (Config.getEmulatorSetting('bigpemu', 'bigpemu_vsync') ?? Config.getEmulatorSetting('bigpemu', 'vsync', 'true')) === 'true';
 
       if (json.video) {
         json.video.fullscreen = fullscreen;

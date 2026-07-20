@@ -33,9 +33,9 @@ export class XeniaGenerator extends BaseGenerator {
         }
       };
 
-      const fullscreen = (Config.getEmulatorSetting('xenia', 'fullscreen') ?? Config.getEmulatorSetting('xenia', 'forcefullscreen') ?? Config.getEmulatorSetting('xenia', 'xenia_fullscreen', 'false')) === 'true';
+      const fullscreen = (Config.getEmulatorSetting('xenia', 'xenia_fullscreen') ?? Config.getEmulatorSetting('xenia', 'forcefullscreen') ?? Config.getEmulatorSetting('xenia', 'fullscreen', 'false')) === 'true';
       
-      let gpu = Config.getEmulatorSetting('xenia', 'gpu') ?? Config.getEmulatorSetting('xenia', 'xenia_gpu', 'any');
+      let gpu = Config.getEmulatorSetting('xenia', 'xenia_gpu') ?? Config.getEmulatorSetting('xenia', 'gpu', 'any');
       if (gpu === 'auto' || !gpu) {
         gpu = 'any';
       } else {
@@ -49,8 +49,8 @@ export class XeniaGenerator extends BaseGenerator {
         }
       }
 
-      const vsync = (Config.getEmulatorSetting('xenia', 'vsync') ?? Config.getEmulatorSetting('xenia', 'xenia_vsync', 'true')) === 'true';
-      const licenseMaskSetting = Config.getEmulatorSetting('xenia', 'license_mask') ?? Config.getEmulatorSetting('xenia', 'xenia_license_mask', '0');
+      const vsync = (Config.getEmulatorSetting('xenia', 'xenia_vsync') ?? Config.getEmulatorSetting('xenia', 'vsync', 'true')) === 'true';
+      const licenseMaskSetting = Config.getEmulatorSetting('xenia', 'xenia_license_mask') ?? Config.getEmulatorSetting('xenia', 'license_mask', '0');
       const licenseMask = parseInt(licenseMaskSetting, 10);
 
       updateTomlSetting('fullscreen', fullscreen);

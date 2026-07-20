@@ -16,10 +16,10 @@ export class DolphinGenerator extends BaseGenerator {
     const gfxIniPath = join(dolphinDir, 'User', 'Config', 'GFX.ini');
 
     try {
-      const fullscreen = (Config.getEmulatorSetting('dolphin', 'fullscreen') ?? Config.getEmulatorSetting('dolphin', 'forcefullscreen') ?? Config.getEmulatorSetting('dolphin', 'dolphin_fullscreen', 'true')) === 'true';
-      const backend = Config.getEmulatorSetting('dolphin', 'backend') ?? Config.getEmulatorSetting('dolphin', 'dolphin_backend', 'Vulkan');
-      const aspect = Config.getEmulatorSetting('dolphin', 'aspect') ?? Config.getEmulatorSetting('dolphin', 'dolphin_aspect', '0');
-      const vsync = (Config.getEmulatorSetting('dolphin', 'vsync') ?? Config.getEmulatorSetting('dolphin', 'dolphin_vsync', 'true')) === 'true';
+      const fullscreen = (Config.getEmulatorSetting('dolphin', 'dolphin_fullscreen') ?? Config.getEmulatorSetting('dolphin', 'forcefullscreen') ?? Config.getEmulatorSetting('dolphin', 'fullscreen', 'true')) === 'true';
+      const backend = Config.getEmulatorSetting('dolphin', 'dolphin_backend') ?? Config.getEmulatorSetting('dolphin', 'backend', 'Vulkan');
+      const aspect = Config.getEmulatorSetting('dolphin', 'dolphin_aspect') ?? Config.getEmulatorSetting('dolphin', 'aspect', '0');
+      const vsync = (Config.getEmulatorSetting('dolphin', 'dolphin_vsync') ?? Config.getEmulatorSetting('dolphin', 'vsync', 'true')) === 'true';
 
       // Dolphin.ini updates
       updateIniSetting(dolphinIniPath, 'Display', 'Fullscreen', fullscreen ? 'True' : 'False');
@@ -44,7 +44,7 @@ export class DolphinGenerator extends BaseGenerator {
       Logger.warn(`DolphinGenerator: Dolphin executable not found at ${exePath}. Falling back to default path.`);
     }
 
-    const fullscreen = (Config.getEmulatorSetting('dolphin', 'fullscreen') ?? Config.getEmulatorSetting('dolphin', 'forcefullscreen') ?? Config.getEmulatorSetting('dolphin', 'dolphin_fullscreen', 'true')) === 'true';
+    const fullscreen = (Config.getEmulatorSetting('dolphin', 'dolphin_fullscreen') ?? Config.getEmulatorSetting('dolphin', 'forcefullscreen') ?? Config.getEmulatorSetting('dolphin', 'fullscreen', 'true')) === 'true';
 
     const commandArgs: string[] = [
       '-b', // Run in batch mode (nogui)

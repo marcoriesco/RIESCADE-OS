@@ -193,7 +193,6 @@ export default function ToolAppContent({
     totalBytes?: number;
   }>({ status: 'idle' });
 
-  const [features, setFeatures] = useState<any>(null);
   const [testingConnection, setTestingConnection] = useState(false);
   const [testResult, setTestResult] = useState<{ success: boolean; message: string } | null>(null);
 
@@ -491,14 +490,6 @@ export default function ToolAppContent({
   }, [wizardStep, selectedController]);
 
   useEffect(() => {
-    window.api.getFeatures().then(res => {
-      setFeatures(res);
-    }).catch(err => {
-      console.error("Failed to load features.json:", err);
-    });
-  }, []);
-
-  useEffect(() => {
     const unsub = window.api.on('update-progress', (_event: any, data: any) => {
       if (data && data.status === 'downloading') {
         setUpdateState(prev => ({
@@ -657,142 +648,6 @@ export default function ToolAppContent({
       onSaveSetting("Taskbar.Icons", next.join(","), "string");
     };
 
-    const renderDynamicEmulatorSettings = () => {
-      if (!features) {
-        return (
-          <div className="flex flex-col items-center justify-center py-12 gap-3">
-            <RefreshCw className="w-6 h-6 text-accent animate-spin" />
-            <span className="text-xs text-white/40 font-medium">Carregando esquemas de configurações...</span>
-          </div>
-        );
-      }
-
-      const nameAliases: Record<string, string> = {
-        "pcsx2x6": "pcsx2",
-        "model2": "m2emulator",
-        "model3": "supermodel"
-      };
-
-      const targetName = nameAliases[activeEmuSubmenu] || activeEmuSubmenu;
-      const emuData = features.emulators?.find((e: any) => {
-        if (!e.name) return false;
-        const names = e.name.split(',').map((n: string) => n.trim().toLowerCase());
-        const targetNames = targetName.split(',').map((n: string) => n.trim().toLowerCase());
-        return names.some((n: string) => targetNames.includes(n));
-      });
-
-      if (!emuData) {
-        return (
-          <div className="text-sm text-white/40 text-center py-12">
-            Nenhum esquema de configuração dinâmica encontrado para "{activeEmuSubmenu}".
-          </div>
-        );
-      }
-
-      let coreData = emuData;
-      if (emuData.cores && emuData.cores.length > 0) {
-        coreData = emuData.cores[0];
-      }
-
-      const rawShared = coreData.sharedFeatures || [];
-      const rawFeatures = coreData.featuresList || [];
-
-      const resolvedFeatures: any[] = [];
-
-      // Resolve shared features
-      rawShared.forEach((ref: any) => {
-        const found = features.sharedFeatures?.featuresList?.find((f: any) => f.value === ref.value);
-        if (found) {
-          resolvedFeatures.push({
-            ...found,
-            group: ref.group || found.group || "Geral",
-            submenu: ref.submenu || found.submenu || "",
-            order: ref.order !== undefined ? ref.order : (found.order || 999)
-          });
-        }
-      });
-
-      // Add custom features
-      rawFeatures.forEach((f: any) => {
-        resolvedFeatures.push({
-          ...f,
-          group: f.group || "Geral",
-          submenu: f.submenu || "",
-          order: f.order !== undefined ? f.order : 999
-        });
-      });
-
-      // Remove duplicates
-      const uniqueFeaturesMap = new Map<string, any>();
-      resolvedFeatures.forEach(f => {
-        uniqueFeaturesMap.set(f.value, f);
-      });
-      const finalFeatures = Array.from(uniqueFeaturesMap.values());
-
-      // Sort by order
-      finalFeatures.sort((a, b) => (a.order || 999) - (b.order || 999));
-
-      // Group by group
-      const groups: Record<string, any[]> = {};
-      finalFeatures.forEach(f => {
-        const gName = f.group || "Configurações";
-        if (!groups[gName]) {
-          groups[gName] = [];
-        }
-        groups[gName].push(f);
-      });
-
-      return (
-        <div className="space-y-6 animate-in fade-in duration-150">
-          {Object.entries(groups).map(([groupLabel, items]) => (
-            <div key={groupLabel} className="space-y-2">
-              <SettingGroup label={groupLabel} />
-              {items.map((item: any) => {
-                if (item.choices && item.choices.length > 0) {
-                  const options = item.choices.map((c: any) => ({
-                    label: String(c.name),
-                    value: String(c.value)
-                  }));
-                  return (
-                    <SettingSelect
-                      key={item.value}
-                      label={item.name}
-                      name={item.value}
-                      desc={item.description}
-                      options={options}
-                      ctx={emuCtx}
-                    />
-                  );
-                } else if (item.preset === "slider" || item.preset === "sliderauto") {
-                  return (
-                    <SettingSlider
-                      key={item.value}
-                      label={item.name}
-                      name={item.value}
-                      desc={item.description}
-                      min={item.min !== undefined ? item.min : 0}
-                      max={item.max !== undefined ? item.max : 100}
-                      step={item.step !== undefined ? item.step : 1}
-                      ctx={emuCtx}
-                    />
-                  );
-                } else {
-                  return (
-                    <SettingToggle
-                      key={item.value}
-                      label={item.name}
-                      name={item.value}
-                      desc={item.description}
-                      ctx={emuCtx}
-                    />
-                  );
-                }
-              })}
-            </div>
-          ))}
-        </div>
-      );
-    };
 
     // --- Settings tabs definition ---
     const settingsTabs = SETTINGS_TABS;
@@ -2292,7 +2147,6 @@ export default function ToolAppContent({
                     globalSettings={emulatorSettings?.['global']}
                     onSaveEmulatorSetting={onSaveEmulatorSetting || (() => {})}
                   />
-                  {renderDynamicEmulatorSettings()}
                 </div>
               </ScrollArea>
             </div>

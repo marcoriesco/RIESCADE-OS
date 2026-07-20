@@ -25,7 +25,7 @@ export class RyujinxGenerator extends BaseGenerator {
       const content = readFileSync(configPath, 'utf8');
       const json = JSON.parse(content);
 
-      const fullscreen = (Config.getEmulatorSetting('ryujinx', 'fullscreen') ?? Config.getEmulatorSetting('ryujinx', 'forcefullscreen') ?? Config.getEmulatorSetting('ryujinx', 'ryujinx_fullscreen', 'true')) === 'true';
+      const fullscreen = (Config.getEmulatorSetting('ryujinx', 'ryujinx_fullscreen') ?? Config.getEmulatorSetting('ryujinx', 'forcefullscreen') ?? Config.getEmulatorSetting('ryujinx', 'fullscreen', 'true')) === 'true';
       const vsync = Config.getEmulatorSetting('ryujinx', 'ryujinx_vsync');
       const docked = (Config.getEmulatorSetting('ryujinx', 'ryujinx_undock') ?? 'false') !== 'true';
 

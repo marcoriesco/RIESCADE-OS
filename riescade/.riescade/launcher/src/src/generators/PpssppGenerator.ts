@@ -18,8 +18,8 @@ export class PpssppGenerator extends BaseGenerator {
     }
 
     try {
-      const fullscreen = (Config.getEmulatorSetting('ppsspp', 'fullscreen') ?? Config.getEmulatorSetting('ppsspp', 'forcefullscreen') ?? Config.getEmulatorSetting('ppsspp', 'ppsspp_fullscreen', 'true')) === 'true';
-      const vsync = (Config.getEmulatorSetting('ppsspp', 'vsync') ?? Config.getEmulatorSetting('ppsspp', 'ppsspp_vsync', 'true')) === 'true';
+      const fullscreen = (Config.getEmulatorSetting('ppsspp', 'ppsspp_fullscreen') ?? Config.getEmulatorSetting('ppsspp', 'forcefullscreen') ?? Config.getEmulatorSetting('ppsspp', 'fullscreen', 'true')) === 'true';
+      const vsync = (Config.getEmulatorSetting('ppsspp', 'ppsspp_vsync') ?? Config.getEmulatorSetting('ppsspp', 'vsync', 'true')) === 'true';
       
       updateIniSetting(iniPath, 'Graphics', 'FullScreen', fullscreen ? 'True' : 'False');
       updateIniSetting(iniPath, 'Graphics', 'VSync', vsync ? 'True' : 'False');

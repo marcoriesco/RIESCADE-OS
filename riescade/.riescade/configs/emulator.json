@@ -164,5 +164,13 @@
     "mame_output": "auto"
   },
   "retroarch": {},
-  "eden": {}
+  "eden": {
+    "eden_vsync": "1",
+    "eden_resolution_scale": "1",
+    "eden_anti_aliasing": "None",
+    "eden_undock": "true"
+  },
+  "model2": {
+    "model2_vsync": "true"
+  }
 }

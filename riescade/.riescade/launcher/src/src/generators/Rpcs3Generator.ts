@@ -21,8 +21,8 @@ export class Rpcs3Generator extends BaseGenerator {
     try {
       let content = readFileSync(configPath, 'utf8');
 
-      const renderer = Config.getEmulatorSetting('rpcs3', 'renderer') ?? Config.getEmulatorSetting('rpcs3', 'gfxbackend', 'Vulkan');
-      const vsync = Config.getEmulatorSetting('rpcs3', 'vsync') ?? Config.getEmulatorSetting('rpcs3', 'rpcs3_vsync', 'Adaptive');
+      const renderer = Config.getEmulatorSetting('rpcs3', 'rpcs3_renderer') ?? Config.getEmulatorSetting('rpcs3', 'renderer') ?? Config.getEmulatorSetting('rpcs3', 'gfxbackend', 'Vulkan');
+      const vsync = Config.getEmulatorSetting('rpcs3', 'rpcs3_vsync') ?? Config.getEmulatorSetting('rpcs3', 'vsync', 'Adaptive');
 
       // Simple line-by-line replacements
       const lines = content.split('\n');
@@ -52,7 +52,7 @@ export class Rpcs3Generator extends BaseGenerator {
     }
 
     const commandArgs: string[] = [this.rom];
-    const fullscreen = (Config.getEmulatorSetting('rpcs3', 'fullscreen') ?? Config.getEmulatorSetting('rpcs3', 'forcefullscreen') ?? Config.getEmulatorSetting('rpcs3', 'rpcs3_fullscreen', 'true')) === 'true';
+    const fullscreen = (Config.getEmulatorSetting('rpcs3', 'rpcs3_fullscreen') ?? Config.getEmulatorSetting('rpcs3', 'forcefullscreen') ?? Config.getEmulatorSetting('rpcs3', 'fullscreen', 'true')) === 'true';
 
     commandArgs.push('--no-gui');
     if (fullscreen) {

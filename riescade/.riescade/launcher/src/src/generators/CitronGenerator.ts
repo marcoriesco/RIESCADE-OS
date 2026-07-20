@@ -23,7 +23,7 @@ export class CitronGenerator extends BaseGenerator {
     } catch (e) {}
 
     try {
-      const fullscreen = (Config.getEmulatorSetting('citron', 'fullscreen') ?? Config.getEmulatorSetting('citron', 'forcefullscreen') ?? Config.getEmulatorSetting('citron', 'citron_fullscreen', 'true')) === 'true';
+      const fullscreen = (Config.getEmulatorSetting('citron', 'citron_fullscreen') ?? Config.getEmulatorSetting('citron', 'forcefullscreen') ?? Config.getEmulatorSetting('citron', 'fullscreen', 'true')) === 'true';
       const vsync = Config.getEmulatorSetting('citron', 'citron_vsync');
       const docked = (Config.getEmulatorSetting('citron', 'citron_undock') ?? 'false') !== 'true';
 
@@ -54,7 +54,7 @@ export class CitronGenerator extends BaseGenerator {
       Logger.warn(`CitronGenerator: Citron executable not found at ${exePath}.`);
     }
 
-    const fullscreen = (Config.getEmulatorSetting('citron', 'fullscreen') ?? Config.getEmulatorSetting('citron', 'citron_fullscreen', 'true')) === 'true';
+    const fullscreen = (Config.getEmulatorSetting('citron', 'citron_fullscreen') ?? Config.getEmulatorSetting('citron', 'fullscreen', 'true')) === 'true';
 
     const launchArgs: string[] = [];
     if (fullscreen) {

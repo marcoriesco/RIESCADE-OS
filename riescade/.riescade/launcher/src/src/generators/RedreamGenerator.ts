@@ -15,8 +15,8 @@ export class RedreamGenerator extends BaseGenerator {
     const configPath = join(redreamDir, 'redream.cfg');
 
     try {
-      const fullscreen = (Config.getEmulatorSetting('redream', 'fullscreen') ?? Config.getEmulatorSetting('redream', 'forcefullscreen') ?? Config.getEmulatorSetting('redream', 'redream_fullscreen', 'true')) === 'true';
-      const vsync = (Config.getEmulatorSetting('redream', 'vsync') ?? Config.getEmulatorSetting('redream', 'redream_vsync', 'true')) === 'true';
+      const fullscreen = (Config.getEmulatorSetting('redream', 'redream_fullscreen') ?? Config.getEmulatorSetting('redream', 'forcefullscreen') ?? Config.getEmulatorSetting('redream', 'fullscreen', 'true')) === 'true';
+      const vsync = (Config.getEmulatorSetting('redream', 'redream_vsync') ?? Config.getEmulatorSetting('redream', 'vsync', 'true')) === 'true';
 
       updateIniSetting(configPath, '', 'fullmode', fullscreen ? 'borderless fullscreen' : 'windowed');
       updateIniSetting(configPath, '', 'mode', fullscreen ? 'borderless fullscreen' : 'windowed');

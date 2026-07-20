@@ -120,7 +120,7 @@ export class TeknoParrotGenerator extends BaseGenerator {
     }
 
     // 8. Configure video and fullscreen options
-    const forceFsSetting = Config.getEmulatorSetting('teknoparrot', 'forcefullscreen') ?? Config.getEmulatorSetting('teknoparrot', 'teknoparrot_fullscreen', null);
+    const forceFsSetting = Config.getEmulatorSetting('teknoparrot', 'teknoparrot_fullscreen') ?? Config.getEmulatorSetting('teknoparrot', 'forcefullscreen', null);
     const forceFs = forceFsSetting !== null ? (forceFsSetting === 'true' || forceFsSetting === true) : Config.getSetting('forcefullscreen', true);
     xml = this.setFieldValue(xml, 'Windowed', forceFs ? '0' : '1');
     xml = this.setFieldValue(xml, 'Borderless Fullscreen', '1');
@@ -164,7 +164,7 @@ export class TeknoParrotGenerator extends BaseGenerator {
       `--profile=${this.profileName}.xml`
     ];
 
-    const minimizeSetting = Config.getEmulatorSetting('teknoparrot', 'minimize') ?? Config.getEmulatorSetting('teknoparrot', 'teknoparrot_minimize', null);
+    const minimizeSetting = Config.getEmulatorSetting('teknoparrot', 'teknoparrot_minimize') ?? Config.getEmulatorSetting('teknoparrot', 'minimize', null);
     const minimize = minimizeSetting !== null ? (minimizeSetting === 'true' || minimizeSetting === true) : Config.getSetting('tp_minimize', true);
     if (minimize) {
       commandArgs.push('--startMinimized');
