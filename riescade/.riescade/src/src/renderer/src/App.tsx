@@ -6,7 +6,7 @@ import {
 } from "lucide-react";
 import * as Toast from '@radix-ui/react-toast';
 import * as Tooltip from '@radix-ui/react-tooltip';
-import { System, Game, WinState } from "./types";
+import { System, Game, WinState, hasMultipleEmulators } from "./types";
 import { TOOL_APPS, getSystemTheme } from "./constants";
 import SystemAppContent from "./components/SystemAppContent";
 import ToolAppContent from "./components/ToolAppContent";
@@ -536,69 +536,73 @@ export default function App() {
                   <span>{isTaskbar ? "Remover da Taskbar" : "Adicionar à Taskbar"}</span>
                 </button>
 
-                <div className="h-px bg-white/10 my-1.5" />
+                {hasMultipleEmulators(system) && (
+                  <>
+                    <div className="h-px bg-white/10 my-1.5" />
 
-                <div className="px-3 py-1 text-[10px] text-white/40 uppercase font-semibold tracking-wider">
-                  Emuladores
-                </div>
+                    <div className="px-3 py-1 text-[10px] text-white/40 uppercase font-semibold tracking-wider">
+                      Emuladores
+                    </div>
 
-                <button
-                  onClick={() => {
-                    handleSaveSetting(`${systemName}.emulator`, "auto", "string");
-                    handleSaveSetting(`${systemName}.core`, "auto", "string");
-                    setOpenMenuSystemId(null);
-                  }}
-                  className={`w-full flex items-center justify-between px-3 py-1.5 rounded-lg text-xs hover:bg-white/10 text-left transition ${
-                    (settings[`${systemName}.emulator`]?.value === "auto" || !settings[`${systemName}.emulator`]?.value)
-                      ? "text-accent font-semibold"
-                      : "text-white/80"
-                  }`}
-                >
-                  <span>Padrão (Auto)</span>
-                  {(settings[`${systemName}.emulator`]?.value === "auto" || !settings[`${systemName}.emulator`]?.value) && <span className="text-[10px]">●</span>}
-                </button>
+                    <button
+                      onClick={() => {
+                        handleSaveSetting(`${systemName}.emulator`, "auto", "string");
+                        handleSaveSetting(`${systemName}.core`, "auto", "string");
+                        setOpenMenuSystemId(null);
+                      }}
+                      className={`w-full flex items-center justify-between px-3 py-1.5 rounded-lg text-xs hover:bg-white/10 text-left transition ${
+                        (settings[`${systemName}.emulator`]?.value === "auto" || !settings[`${systemName}.emulator`]?.value)
+                          ? "text-accent font-semibold"
+                          : "text-white/80"
+                      }`}
+                    >
+                      <span>Padrão (Auto)</span>
+                      {(settings[`${systemName}.emulator`]?.value === "auto" || !settings[`${systemName}.emulator`]?.value) && <span className="text-[10px]">●</span>}
+                    </button>
 
-                {system?.emulators?.map((emu: any) => {
-                  if (emu.cores && emu.cores.length > 0) {
-                    return emu.cores.map((core: string) => {
-                      const isSelected = settings[`${systemName}.emulator`]?.value === emu.name && settings[`${systemName}.core`]?.value === core;
-                      return (
-                        <button
-                          key={`${emu.name}:${core}`}
-                          onClick={() => {
-                            handleSaveSetting(`${systemName}.emulator`, emu.name, "string");
-                            handleSaveSetting(`${systemName}.core`, core, "string");
-                            setOpenMenuSystemId(null);
-                          }}
-                          className={`w-full flex items-center justify-between px-3 py-1.5 rounded-lg text-xs hover:bg-white/10 text-left transition ${
-                            isSelected ? "text-accent font-semibold" : "text-white/80"
-                          }`}
-                        >
-                          <span className="truncate uppercase">{emu.name} ({core})</span>
-                          {isSelected && <span className="text-[10px]">●</span>}
-                        </button>
-                      );
-                    });
-                  } else {
-                    const isSelected = settings[`${systemName}.emulator`]?.value === emu.name && (!settings[`${systemName}.core`]?.value || settings[`${systemName}.core`]?.value === "auto");
-                    return (
-                      <button
-                        key={emu.name}
-                        onClick={() => {
-                          handleSaveSetting(`${systemName}.emulator`, emu.name, "string");
-                          handleSaveSetting(`${systemName}.core`, "", "string");
-                          setOpenMenuSystemId(null);
-                        }}
-                        className={`w-full flex items-center justify-between px-3 py-1.5 rounded-lg text-xs hover:bg-white/10 text-left transition ${
-                          isSelected ? "text-accent font-semibold" : "text-white/80"
-                        }`}
-                      >
-                        <span className="truncate uppercase">{emu.name}</span>
-                        {isSelected && <span className="text-[10px]">●</span>}
-                      </button>
-                    );
-                  }
-                })}
+                    {system?.emulators?.map((emu: any) => {
+                      if (emu.cores && emu.cores.length > 0) {
+                        return emu.cores.map((core: string) => {
+                          const isSelected = settings[`${systemName}.emulator`]?.value === emu.name && settings[`${systemName}.core`]?.value === core;
+                          return (
+                            <button
+                              key={`${emu.name}:${core}`}
+                              onClick={() => {
+                                handleSaveSetting(`${systemName}.emulator`, emu.name, "string");
+                                handleSaveSetting(`${systemName}.core`, core, "string");
+                                setOpenMenuSystemId(null);
+                              }}
+                              className={`w-full flex items-center justify-between px-3 py-1.5 rounded-lg text-xs hover:bg-white/10 text-left transition ${
+                                isSelected ? "text-accent font-semibold" : "text-white/80"
+                              }`}
+                            >
+                              <span className="truncate uppercase">{emu.name} ({core})</span>
+                              {isSelected && <span className="text-[10px]">●</span>}
+                            </button>
+                          );
+                        });
+                      } else {
+                        const isSelected = settings[`${systemName}.emulator`]?.value === emu.name && (!settings[`${systemName}.core`]?.value || settings[`${systemName}.core`]?.value === "auto");
+                        return (
+                          <button
+                            key={emu.name}
+                            onClick={() => {
+                              handleSaveSetting(`${systemName}.emulator`, emu.name, "string");
+                              handleSaveSetting(`${systemName}.core`, "", "string");
+                              setOpenMenuSystemId(null);
+                            }}
+                            className={`w-full flex items-center justify-between px-3 py-1.5 rounded-lg text-xs hover:bg-white/10 text-left transition ${
+                              isSelected ? "text-accent font-semibold" : "text-white/80"
+                            }`}
+                          >
+                            <span className="truncate uppercase">{emu.name}</span>
+                            {isSelected && <span className="text-[10px]">●</span>}
+                          </button>
+                        );
+                      }
+                    })}
+                  </>
+                )}
               </div>
             </>
           )}
@@ -1140,69 +1144,73 @@ export default function App() {
                     <span>{isTaskbar ? "Remover da Taskbar" : "Adicionar à Taskbar"}</span>
                   </button>
 
-                  <div className="h-px bg-white/10 my-1.5" />
+                  {hasMultipleEmulators(system) && (
+                    <>
+                      <div className="h-px bg-white/10 my-1.5" />
 
-                  <div className="px-3 py-1 text-[10px] text-white/40 uppercase font-semibold tracking-wider">
-                    Emuladores
-                  </div>
+                      <div className="px-3 py-1 text-[10px] text-white/40 uppercase font-semibold tracking-wider">
+                        Emuladores
+                      </div>
 
-                  <button
-                    onClick={() => {
-                      handleSaveSetting(`${systemName}.emulator`, "auto", "string");
-                      handleSaveSetting(`${systemName}.core`, "auto", "string");
-                      setMenuOpen(false);
-                    }}
-                    className={`w-full flex items-center justify-between px-3 py-1.5 rounded-lg text-xs hover:bg-white/10 text-left transition ${
-                      (settings[`${systemName}.emulator`]?.value === "auto" || !settings[`${systemName}.emulator`]?.value)
-                        ? "text-accent font-semibold"
-                        : "text-white/80"
-                    }`}
-                  >
-                    <span>Padrão (Auto)</span>
-                    {(settings[`${systemName}.emulator`]?.value === "auto" || !settings[`${systemName}.emulator`]?.value) && <span className="text-[10px]">●</span>}
-                  </button>
+                      <button
+                        onClick={() => {
+                          handleSaveSetting(`${systemName}.emulator`, "auto", "string");
+                          handleSaveSetting(`${systemName}.core`, "auto", "string");
+                          setMenuOpen(false);
+                        }}
+                        className={`w-full flex items-center justify-between px-3 py-1.5 rounded-lg text-xs hover:bg-white/10 text-left transition ${
+                          (settings[`${systemName}.emulator`]?.value === "auto" || !settings[`${systemName}.emulator`]?.value)
+                            ? "text-accent font-semibold"
+                            : "text-white/80"
+                        }`}
+                      >
+                        <span>Padrão (Auto)</span>
+                        {(settings[`${systemName}.emulator`]?.value === "auto" || !settings[`${systemName}.emulator`]?.value) && <span className="text-[10px]">●</span>}
+                      </button>
 
-                  {system?.emulators?.map((emu: any) => {
-                    if (emu.cores && emu.cores.length > 0) {
-                      return emu.cores.map((core: string) => {
-                        const isSelected = settings[`${systemName}.emulator`]?.value === emu.name && settings[`${systemName}.core`]?.value === core;
-                        return (
-                          <button
-                            key={`${emu.name}:${core}`}
-                            onClick={() => {
-                              handleSaveSetting(`${systemName}.emulator`, emu.name, "string");
-                              handleSaveSetting(`${systemName}.core`, core, "string");
-                              setMenuOpen(false);
-                            }}
-                            className={`w-full flex items-center justify-between px-3 py-1.5 rounded-lg text-xs hover:bg-white/10 text-left transition ${
-                              isSelected ? "text-accent font-semibold" : "text-white/80"
-                            }`}
-                          >
-                            <span className="truncate uppercase">{emu.name} ({core})</span>
-                            {isSelected && <span className="text-[10px]">●</span>}
-                          </button>
-                        );
-                      });
-                    } else {
-                      const isSelected = settings[`${systemName}.emulator`]?.value === emu.name && (!settings[`${systemName}.core`]?.value || settings[`${systemName}.core`]?.value === "auto");
-                      return (
-                        <button
-                          key={emu.name}
-                          onClick={() => {
-                            handleSaveSetting(`${systemName}.emulator`, emu.name, "string");
-                            handleSaveSetting(`${systemName}.core`, "", "string");
-                            setMenuOpen(false);
-                          }}
-                          className={`w-full flex items-center justify-between px-3 py-1.5 rounded-lg text-xs hover:bg-white/10 text-left transition ${
-                            isSelected ? "text-accent font-semibold" : "text-white/80"
-                          }`}
-                        >
-                          <span className="truncate uppercase">{emu.name}</span>
-                          {isSelected && <span className="text-[10px]">●</span>}
-                        </button>
-                      );
-                    }
-                  })}
+                      {system?.emulators?.map((emu: any) => {
+                        if (emu.cores && emu.cores.length > 0) {
+                          return emu.cores.map((core: string) => {
+                            const isSelected = settings[`${systemName}.emulator`]?.value === emu.name && settings[`${systemName}.core`]?.value === core;
+                            return (
+                              <button
+                                key={`${emu.name}:${core}`}
+                                onClick={() => {
+                                  handleSaveSetting(`${systemName}.emulator`, emu.name, "string");
+                                  handleSaveSetting(`${systemName}.core`, core, "string");
+                                  setMenuOpen(false);
+                                }}
+                                className={`w-full flex items-center justify-between px-3 py-1.5 rounded-lg text-xs hover:bg-white/10 text-left transition ${
+                                  isSelected ? "text-accent font-semibold" : "text-white/80"
+                                }`}
+                              >
+                                <span className="truncate uppercase">{emu.name} ({core})</span>
+                                {isSelected && <span className="text-[10px]">●</span>}
+                              </button>
+                            );
+                          });
+                        } else {
+                          const isSelected = settings[`${systemName}.emulator`]?.value === emu.name && (!settings[`${systemName}.core`]?.value || settings[`${systemName}.core`]?.value === "auto");
+                          return (
+                            <button
+                              key={emu.name}
+                              onClick={() => {
+                                handleSaveSetting(`${systemName}.emulator`, emu.name, "string");
+                                handleSaveSetting(`${systemName}.core`, "", "string");
+                                setMenuOpen(false);
+                              }}
+                              className={`w-full flex items-center justify-between px-3 py-1.5 rounded-lg text-xs hover:bg-white/10 text-left transition ${
+                                isSelected ? "text-accent font-semibold" : "text-white/80"
+                              }`}
+                            >
+                              <span className="truncate uppercase">{emu.name}</span>
+                              {isSelected && <span className="text-[10px]">●</span>}
+                            </button>
+                          );
+                        }
+                      })}
+                    </>
+                  )}
                 </div>
               </>
             )}

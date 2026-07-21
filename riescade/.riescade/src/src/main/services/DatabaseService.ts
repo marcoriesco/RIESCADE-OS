@@ -1113,6 +1113,7 @@ export class DatabaseService {
     cover: '.webp',
     cover3d: '.webp',
     coverback: '.webp',
+    cartridge: '.webp',
     manual: '.pdf',
     mix: '.webp'
   }
@@ -1148,6 +1149,7 @@ export class DatabaseService {
       cover: buildMediaPath('cover'),
       cover3d: buildMediaPath('cover3d'),
       coverback: buildMediaPath('coverback'),
+      cartridge: buildMediaPath('cartridge'),
       manual: buildMediaPath('manual'),
       mix: buildMediaPath('mix'),
       rating: row.rating != null ? row.rating : undefined,

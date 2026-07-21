@@ -227,6 +227,7 @@ export class ScraperService {
       const downloadCover = this.settingsParser.getSetting('ScrapperDownloadCover', 'bool') ?? true
       const downloadCover3D = this.settingsParser.getSetting('ScrapperDownloadCover3D', 'bool') ?? true
       const downloadCoverBack = this.settingsParser.getSetting('ScrapperDownloadCoverBack', 'bool') ?? true
+      const downloadCartridge = this.settingsParser.getSetting('ScrapperDownloadCartridge', 'bool') ?? true
       const downloadLogo = this.settingsParser.getSetting('ScrapperDownloadLogo', 'bool') ?? true
       const downloadMarquee = this.settingsParser.getSetting('ScrapperDownloadMarquee', 'bool') ?? true
       const downloadScreenshot = this.settingsParser.getSetting('ScrapperDownloadScreenshot', 'bool') ?? true
@@ -549,6 +550,9 @@ export class ScraperService {
 
           // 5. Cover Back
           await handleMediaDownload(downloadCoverBack, ['box-2D-back', 'box-back', 'box-3D-back'], 'coverback', ['coverback'])
+
+          // 5.1 Cartridge
+          await handleMediaDownload(downloadCartridge, ['media-cartridge', 'cartridge', 'picture-cartridge'], 'cartridge', ['cartridge'])
 
           // 6. Logo (Wheel)
           await handleMediaDownload(downloadLogo, ['wheel', 'wheel-hd', 'wheel-steel'], 'logo', ['logo'])

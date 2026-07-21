@@ -184,7 +184,7 @@
     "type": "int"
   },
   "Taskbar.Icons": {
-    "value": "tool:settings,system:switch,system:teknoparrot,system:snes,system:xbox360,system:arcade,system:ps2,system:ps3,system:ps4,system:Windows",
+    "value": "tool:settings,system:switch,system:teknoparrot,system:snes,system:xbox360,system:arcade,system:ps2,system:ps3,system:ps4,system:Windows,system:pinballfx3",
     "type": "string"
   },
   "Window.system-switch.Maximized": {
@@ -842,5 +842,21 @@
   "Window.system-ps2.Height": {
     "value": 874,
     "type": "int"
+  },
+  "Window.system-opengoal.Maximized": {
+    "value": true,
+    "type": "bool"
+  },
+  "Window.system-pinballfx3.Maximized": {
+    "value": true,
+    "type": "bool"
+  },
+  "RIESCADE.PreferredMediaType.pinballfx3": {
+    "value": "cover",
+    "type": "string"
+  },
+  "Window.system-pinballfx2.Maximized": {
+    "value": true,
+    "type": "bool"
   }
 }

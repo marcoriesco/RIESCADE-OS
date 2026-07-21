@@ -345,7 +345,7 @@ app.whenReady().then(() => {
   ipcMain.handle('check-media-folders', async (_, systemPath: string) => {
     const fs = require('fs')
     const { join } = require('path')
-    const folders = ['cover', 'cover3d', 'coverback', 'fanart', 'logo', 'marquee', 'screenshot', 'title', 'mix', 'video', 'manual']
+    const folders = ['cover', 'cover3d', 'coverback', 'cartridge', 'fanart', 'logo', 'marquee', 'screenshot', 'title', 'mix', 'video', 'manual']
     const results: Record<string, boolean> = {}
 
     if (!systemPath || systemPath.startsWith('virtual://') || systemPath === 'collections') {

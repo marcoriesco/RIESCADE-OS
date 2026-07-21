@@ -696,8 +696,10 @@ async function main() {
                      executable.toLowerCase().endsWith('.bat') || 
                      executable.toLowerCase().endsWith('.cmd');
 
+    const spawnExecutable = (useShell && !executable.startsWith('"')) ? `"${executable}"` : executable;
+
     // Spawn the child process
-    const child = spawn(executable, args, {
+    const child = spawn(spawnExecutable, args, {
       stdio: ['inherit', 'pipe', 'pipe'],
       detached: false,
       cwd: dirname(executable),

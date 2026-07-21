@@ -2125,6 +2125,7 @@ export default function ToolAppContent({
                   <SettingToggle label="Capa 2D (Cover)" name="ScrapperDownloadCover" ctx={ctx} />
                   <SettingToggle label="Capa 3D" name="ScrapperDownloadCover3D" ctx={ctx} />
                   <SettingToggle label="Verso da Capa (Cover Back)" name="ScrapperDownloadCoverBack" ctx={ctx} />
+                  <SettingToggle label="Cartucho (Cartridge)" name="ScrapperDownloadCartridge" ctx={ctx} />
                   <SettingToggle label="Logo (Wheel)" name="ScrapperDownloadLogo" ctx={ctx} />
                   <SettingToggle label="Marquee" name="ScrapperDownloadMarquee" ctx={ctx} />
                   <SettingToggle label="Captura de Tela (Screenshot)" name="ScrapperDownloadScreenshot" ctx={ctx} />

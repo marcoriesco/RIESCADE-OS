@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState, useMemo, useCallback } from "react";
 import { Gamepad2, Heart, Loader2, Star, Play, ChevronRight, Maximize2, X, Search, Folder, ChevronLeft, HardDrive, ChevronDown, Check, MoreHorizontal, RefreshCw, BookOpen, Settings } from "lucide-react";
-import { System, Game } from "../types";
+import { System, Game, hasMultipleEmulators } from "../types";
 import { ScrollArea } from "./ScrollArea";
 import { OverlayScrollbarsComponentRef } from "overlayscrollbars-react";
 import * as Select from "@radix-ui/react-select";
@@ -143,6 +143,7 @@ export default function SystemAppContent({
     cover: true,
     cover3d: false,
     coverback: false,
+    cartridge: false,
     fanart: false,
     logo: false,
     marquee: false,
@@ -183,6 +184,7 @@ export default function SystemAppContent({
           cover: true,
           cover3d: false,
           coverback: false,
+          cartridge: false,
           fanart: false,
           logo: false,
           marquee: false,
@@ -200,6 +202,7 @@ export default function SystemAppContent({
         cover: true,
         cover3d: true,
         coverback: true,
+        cartridge: true,
         fanart: true,
         logo: true,
         marquee: true,
@@ -320,6 +323,9 @@ export default function SystemAppContent({
         break;
       case 'coverback':
         mediaPath = g.coverback;
+        break;
+      case 'cartridge':
+        mediaPath = g.cartridge;
         break;
       case 'fanart':
         mediaPath = g.fanart;
@@ -759,6 +765,10 @@ export default function SystemAppContent({
     return choices;
   }, [system]);
 
+  const canSwitchEmulator = useMemo(() => {
+    return hasMultipleEmulators(system);
+  }, [system]);
+
   const selectValue = useMemo(() => {
     if (!selectedGame) return "auto";
     if (!selectedGame.emulator || selectedGame.emulator === "auto") return "auto";
@@ -991,7 +1001,7 @@ export default function SystemAppContent({
                 {/* Media Switcher Buttons */}
                 {!(system.name === 'collections' && activeCollection === null) && (
                   <div className="flex flex-wrap items-center bg-white/5 border border-white/5 p-1 rounded-lg gap-0.5 shadow-inner backdrop-blur-md max-w-full">
-                    {['cover', 'cover3d', 'coverback', 'fanart', 'logo', 'marquee', 'screenshot', 'title', 'mix'].map((type) => {
+                    {['cover', 'cover3d', 'coverback', 'cartridge', 'fanart', 'logo', 'marquee', 'screenshot', 'title', 'mix'].map((type) => {
                       const isAvailable = availableMediaTypes[type];
                       if (!isAvailable) return null;
                       const isActive = preferredMediaType === type;
@@ -1646,26 +1656,28 @@ export default function SystemAppContent({
                 })()}
 
                 {/* Emulator/Core Select Option */}
-                <div className="flex flex-col gap-1.5 text-left">
-                  <span className="text-[10px] text-white/40 uppercase tracking-wider font-bold">Emulador / Core</span>
-                  <RadixSelect
-                    value={selectValue}
-                    onValueChange={handleEmulatorValueChange}
-                    options={emulatorChoices.map(choice => ({ label: choice.label, value: choice.value }))}
-                    placeholder="Padrão (Auto)"
-                  />
-                  {emuToConfig && (
-                    <button
-                      onClick={() => {
-                        onOpenTool?.("settings", emuToConfig);
-                      }}
-                      className="mt-1 flex items-center justify-center gap-1.5 py-1.5 px-3 rounded bg-white/5 border border-white/5 hover:bg-white/10 hover:border-white/10 text-[10px] font-bold text-white/70 hover:text-white transition cursor-pointer select-none"
-                    >
-                      <Settings className="w-3.5 h-3.5 text-accent" />
-                      <span>CONFIGURAR {emuLabelToConfig}</span>
-                    </button>
-                  )}
-                </div>
+                {canSwitchEmulator && (
+                  <div className="flex flex-col gap-1.5 text-left">
+                    <span className="text-[10px] text-white/40 uppercase tracking-wider font-bold">Emulador / Core</span>
+                    <RadixSelect
+                      value={selectValue}
+                      onValueChange={handleEmulatorValueChange}
+                      options={emulatorChoices.map(choice => ({ label: choice.label, value: choice.value }))}
+                      placeholder="Padrão (Auto)"
+                    />
+                    {emuToConfig && (
+                      <button
+                        onClick={() => {
+                          onOpenTool?.("settings", emuToConfig);
+                        }}
+                        className="mt-1 flex items-center justify-center gap-1.5 py-1.5 px-3 rounded bg-white/5 border border-white/5 hover:bg-white/10 hover:border-white/10 text-[10px] font-bold text-white/70 hover:text-white transition cursor-pointer select-none"
+                      >
+                        <Settings className="w-3.5 h-3.5 text-accent" />
+                        <span>CONFIGURAR {emuLabelToConfig}</span>
+                      </button>
+                    )}
+                  </div>
+                )}
 
                 {/* Play Button */}
                 <div className="flex flex-col gap-2 mt-auto pt-3">
@@ -1962,11 +1974,8 @@ export default function SystemAppContent({
               <span>Buscar metadados (Scrape)</span>
             </button>
 
-            {/* Separator */}
-            <div className="my-1 border-t border-white/5" />
-
             {/* Change Emulator Submenu */}
-            {(() => {
+            {canSwitchEmulator && (() => {
               const menuGame = games[gameContextMenu.index];
               const menuGameSelectValue = !menuGame
                 ? "auto"
@@ -1976,39 +1985,42 @@ export default function SystemAppContent({
               const submenuOnLeft = gameContextMenu.x > window.innerWidth - 440;
 
               return (
-                <div className="relative group/sub">
-                  <button className="w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs hover:bg-white/10 text-left transition cursor-pointer text-white/80 hover:text-white">
-                    <span className="flex items-center gap-2.5">
-                      <Gamepad2 className="w-4 h-4 text-amber-500" />
-                      <span>Trocar emulador</span>
-                    </span>
-                    <ChevronRight className="w-3.5 h-3.5 text-white/40" />
-                  </button>
-                  
-                  {/* Submenu list */}
-                  <div 
-                    className={`absolute top-0 w-52 bg-[#0d0d0d]/95 backdrop-blur-md border border-white/10 rounded-xl shadow-2xl p-2 z-50 text-white hidden group-hover/sub:block ${
-                      submenuOnLeft ? "right-full mr-1" : "left-full ml-1"
-                    }`}
-                  >
-                    {emulatorChoices.map(choice => {
-                      const isSelected = menuGameSelectValue === choice.value;
-                      return (
-                        <button
-                          key={choice.value}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleEmulatorValueChangeForGame(menuGame, choice.value);
-                          }}
-                          className="w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg text-xs hover:bg-white/10 text-left transition cursor-pointer text-white/80 hover:text-white"
-                        >
-                          <span className="truncate pr-2">{choice.label}</span>
-                          {isSelected && <Check className="w-3.5 h-3.5 text-accent shrink-0" />}
-                        </button>
-                      );
-                    })}
+                <>
+                  <div className="my-1 border-t border-white/5" />
+                  <div className="relative group/sub">
+                    <button className="w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs hover:bg-white/10 text-left transition cursor-pointer text-white/80 hover:text-white">
+                      <span className="flex items-center gap-2.5">
+                        <Gamepad2 className="w-4 h-4 text-amber-500" />
+                        <span>Trocar emulador</span>
+                      </span>
+                      <ChevronRight className="w-3.5 h-3.5 text-white/40" />
+                    </button>
+                    
+                    {/* Submenu list */}
+                    <div 
+                      className={`absolute top-0 w-52 bg-[#0d0d0d]/95 backdrop-blur-md border border-white/10 rounded-xl shadow-2xl p-2 z-50 text-white hidden group-hover/sub:block ${
+                        submenuOnLeft ? "right-full mr-1" : "left-full ml-1"
+                      }`}
+                    >
+                      {emulatorChoices.map(choice => {
+                        const isSelected = menuGameSelectValue === choice.value;
+                        return (
+                          <button
+                            key={choice.value}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleEmulatorValueChangeForGame(menuGame, choice.value);
+                            }}
+                            className="w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg text-xs hover:bg-white/10 text-left transition cursor-pointer text-white/80 hover:text-white"
+                          >
+                            <span className="truncate pr-2">{choice.label}</span>
+                            {isSelected && <Check className="w-3.5 h-3.5 text-accent shrink-0" />}
+                          </button>
+                        );
+                      })}
+                    </div>
                   </div>
-                </div>
+                </>
               );
             })()}
           </div>

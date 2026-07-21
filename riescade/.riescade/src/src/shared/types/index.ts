@@ -54,6 +54,7 @@ export interface Game {
   cover?: string
   cover3d?: string
   coverback?: string
+  cartridge?: string
   logo?: string
   screenshot?: string
   title?: string

@@ -3694,10 +3694,6 @@
         {
           "name": "windows",
           "cores": []
-        },
-        {
-          "name": "pinballfx",
-          "cores": ["steam", "nonsteam"]
         }
       ]
     },
@@ -3713,10 +3709,6 @@
         {
           "name": "windows",
           "cores": []
-        },
-        {
-          "name": "pinballfx",
-          "cores": ["steam", "nonsteam"]
         }
       ]
     },
@@ -3732,10 +3724,6 @@
         {
           "name": "windows",
           "cores": []
-        },
-        {
-          "name": "pinballfx",
-          "cores": ["steam", "nonsteam"]
         }
       ]
     },
@@ -3751,10 +3739,6 @@
         {
           "name": "windows",
           "cores": []
-        },
-        {
-          "name": "pinballfx",
-          "cores": ["steam", "nonsteam"]
         }
       ]
     },

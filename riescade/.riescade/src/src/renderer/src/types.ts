@@ -53,6 +53,8 @@ export type Game = {
   screenshot?: string;
   cover?: string;
   cover3d?: string;
+  coverback?: string;
+  cartridge?: string;
   logo?: string;
   title?: string;
   sortname?: string;
@@ -85,3 +87,17 @@ export type SettingsCtx = {
   isBoolOn: (name: string) => boolean;
   saveSetting: (name: string, value: any, type?: "string" | "bool" | "int" | "float") => void;
 };
+
+export function hasMultipleEmulators(system?: System | null): boolean {
+  if (!system || !system.emulators || system.emulators.length === 0) return false;
+  let count = 0;
+  system.emulators.forEach((emu: any) => {
+    if (emu.cores && emu.cores.length > 0) {
+      count += emu.cores.length;
+    } else {
+      count += 1;
+    }
+  });
+  return count > 1;
+}
+
