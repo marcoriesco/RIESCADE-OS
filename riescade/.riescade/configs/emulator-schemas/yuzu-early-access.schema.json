@@ -2,7 +2,7 @@
   "$schema": "riescade-emulator-schema-v1",
   "id": "yuzu-early-access",
   "name": "YUZU-EARLY-ACCESS",
-  "description": "Configurações para o emulador YUZU-EARLY-ACCESS geradas a partir do es_features.cfg.",
+  "description": "Configurações para o emulador YUZU-EARLY-ACCESS",
   "icon": "yuzu-early-access",
   "configFiles": [],
   "globalMappings": {},

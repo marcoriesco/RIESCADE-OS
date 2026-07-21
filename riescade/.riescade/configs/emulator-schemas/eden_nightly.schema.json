@@ -1,9 +1,9 @@
 {
   "$schema": "riescade-emulator-schema-v1",
-  "id": "citron",
-  "name": "CITRON",
-  "description": "Configurações para o emulador CITRON",
-  "icon": "citron",
+  "id": "eden-nightly",
+  "name": "EDEN Nightly",
+  "description": "Configurações para o emulador EDEN Nightly",
+  "icon": "eden",
   "configFiles": [],
   "globalMappings": {},
   "groups": [
@@ -14,17 +14,13 @@
       "order": 1,
       "options": [
         {
-          "id": "citron_resolution_setup",
+          "id": "eden_resolution_setup",
           "label": "Resolução Interna",
           "description": "Improve fidelity of 3D models at the cost of increased performance requirements.",
           "type": "select",
           "default": "auto",
-          "configKey": "citron_resolution_setup",
+          "configKey": "eden_resolution_setup",
           "values": [
-            {
-              "label": "1x (720p/1080p)",
-              "value": "3"
-            },
             {
               "label": "0.25x (180p/270p)",
               "value": "0"
@@ -38,56 +34,56 @@
               "value": "2"
             },
             {
-              "label": "1.25x (900p/1350p)",
-              "value": "12"
+              "label": "1x (720p/1080p)",
+              "value": "3"
             },
             {
-              "label": "1.5x (1080p/1620p)",
+              "label": "1.25x (900p/1350p)",
               "value": "4"
             },
             {
-              "label": "1.75x (1260p/1890p)",
-              "value": "13"
-            },
-            {
-              "label": "2x (1440p/2160p)",
+              "label": "1.5x (1080p/1620p)",
               "value": "5"
             },
             {
-              "label": "3x (2160p/3240p)",
+              "label": "2x (1440p/2160p)",
               "value": "6"
             },
             {
-              "label": "4x (2880p/4320p)",
+              "label": "3x (2160p/3240p)",
               "value": "7"
             },
             {
-              "label": "5x (3600p/5400p)",
+              "label": "4x (2880p/4320p)",
               "value": "8"
             },
             {
-              "label": "6x (4320p/6480p)",
+              "label": "5x (3600p/5400p)",
               "value": "9"
             },
             {
-              "label": "7x (5040p/7560p)",
+              "label": "6x (4320p/6480p)",
               "value": "10"
             },
             {
-              "label": "8x (5760p/8640p)",
+              "label": "7x (5040p/7560p)",
               "value": "11"
+            },
+            {
+              "label": "8x (5760p/8640p)",
+              "value": "12"
             }
           ],
           "realKey": "resolution_setup",
           "realSection": "Renderer",
-          "realFile": "Citron.Generator.cs"
+          "realFile": "Eden.Generator.cs"
         },
         {
-          "id": "citron_use_vsync",
+          "id": "eden_use_vsync",
           "label": "Sincronização Vertical (V-Sync)",
           "type": "select",
           "default": "auto",
-          "configKey": "citron_use_vsync",
+          "configKey": "eden_use_vsync",
           "values": [
             {
               "label": "FIFO (Vsync Ativado)",
@@ -108,14 +104,14 @@
           ],
           "realKey": "use_vsync",
           "realSection": "Renderer",
-          "realFile": "Citron.Generator.cs"
+          "realFile": "Eden.Generator.cs"
         },
         {
-          "id": "citron_ratio",
+          "id": "eden_ratio",
           "label": "Proporção de Tela",
           "type": "select",
           "default": "auto",
-          "configKey": "citron_ratio",
+          "configKey": "eden_ratio",
           "values": [
             {
               "label": "Padrão",
@@ -134,62 +130,54 @@
               "value": "3"
             },
             {
-              "label": "FORCE 32/9",
-              "value": "4"
-            },
-            {
               "label": "Esticar",
-              "value": "5"
+              "value": "4"
             }
           ],
           "realKey": "aspect_ratio",
           "realSection": "Renderer",
-          "realFile": "Citron.Generator.cs"
+          "realFile": "Eden.Generator.cs"
         },
         {
-          "id": "citron_gpu_accuracy",
+          "id": "eden_gpu_accuracy",
           "label": "GPU ACCURACY",
           "description": "Padrão is 'HIGH', set to 'NORMAL' to increase performance at the cost of accuracy.",
           "type": "select",
           "default": "auto",
-          "configKey": "citron_gpu_accuracy",
+          "configKey": "eden_gpu_accuracy",
           "values": [
             {
               "label": "HIGH",
-              "value": "2"
-            },
-            {
-              "label": "LOW",
-              "value": "0"
-            },
-            {
-              "label": "NORMAL",
               "value": "1"
             },
             {
+              "label": "NORMAL",
+              "value": "0"
+            },
+            {
               "label": "EXTREME (VERY SLOW)",
-              "value": "3"
+              "value": "2"
             }
           ],
           "realKey": "gpu_accuracy",
           "realSection": "Renderer",
-          "realFile": "Citron.Generator.cs"
+          "realFile": "Eden.Generator.cs"
         },
         {
-          "id": "citron_use_asynchronous_shaders",
+          "id": "eden_use_asynchronous_shaders",
           "label": "USE ASYNCHRONOUS SHADER COMPILATION",
           "description": "Can reduce lags when compiling shaders, experimental.",
           "type": "toggle",
           "default": "auto",
-          "configKey": "citron_use_asynchronous_shaders"
+          "configKey": "eden_use_asynchronous_shaders"
         },
         {
-          "id": "citron_astc_recompression",
+          "id": "eden_astc_recompression",
           "label": "ASTC RECOMPRESSION",
           "description": "For games using ASTC textures, switch to medium when using 6GB VRAM GPU and low when using 4GB-2GB VRAM GPU.",
           "type": "select",
           "default": "auto",
-          "configKey": "citron_astc_recompression",
+          "configKey": "eden_astc_recompression",
           "values": [
             {
               "label": "UNCOMPRESSED (Padrão, best quality)",
@@ -206,15 +194,15 @@
           ],
           "realKey": "astc_recompression",
           "realSection": "Renderer",
-          "realFile": "Citron.Generator.cs"
+          "realFile": "Eden.Generator.cs"
         },
         {
-          "id": "citron_anti_aliasing",
+          "id": "eden_anti_aliasing",
           "label": "Anti-Aliasing (FXAA)",
           "description": "Set Anti Aliasing for rendered content.",
           "type": "select",
           "default": "auto",
-          "configKey": "citron_anti_aliasing",
+          "configKey": "eden_anti_aliasing",
           "values": [
             {
               "label": "Nenhum",
@@ -227,23 +215,19 @@
             {
               "label": "SMAA",
               "value": "2"
-            },
-            {
-              "label": "TAA",
-              "value": "3"
             }
           ],
           "realKey": "anti_aliasing",
           "realSection": "Renderer",
-          "realFile": "Citron.Generator.cs"
+          "realFile": "Eden.Generator.cs"
         },
         {
-          "id": "citron_scaling_filter",
+          "id": "eden_scaling_filter",
           "label": "SCALING FILTER",
           "description": "Set scaling filter for rendered content.",
           "type": "select",
           "default": "auto",
-          "configKey": "citron_scaling_filter",
+          "configKey": "eden_scaling_filter",
           "values": [
             {
               "label": "Nearest Neighbor",
@@ -258,53 +242,57 @@
               "value": "2"
             },
             {
-              "label": "Lanczos",
-              "value": "6"
-            },
-            {
               "label": "Gaussian",
               "value": "3"
             },
             {
-              "label": "ScaleForce",
+              "label": "Lanczos",
               "value": "4"
             },
             {
-              "label": "ScaleFX",
+              "label": "ScaleForce",
               "value": "5"
             },
             {
-              "label": "AMD's FidelityFX",
+              "label": "AMD's FidelityFX Super Resolution",
+              "value": "6"
+            },
+            {
+              "label": "Area",
               "value": "7"
             },
             {
-              "label": "AMD's FidelityFX 2.0",
+              "label": "MMPX",
+              "value": "12"
+            },
+            {
+              "label": "Zero-Tangent",
               "value": "8"
             },
             {
-              "label": "CRT EASY MODE",
+              "label": "B-Spline",
               "value": "9"
             },
             {
-              "label": "CRT ROYALE",
+              "label": "Mitchell",
               "value": "10"
             },
             {
-              "label": "CAS",
+              "label": "Spline-1",
               "value": "11"
             }
           ],
           "realKey": "scaling_filter",
           "realSection": "Renderer",
-          "realFile": "Citron.Generator.cs"
+          "realFile": "Eden.Generator.cs"
         },
         {
-          "id": "citron_anisotropy",
+          "id": "eden_anisotropy",
           "label": "Filtragem Anisotrópica",
           "description": "Enhance the quality of textures Ativado surface.",
           "type": "select",
           "default": "auto",
-          "configKey": "citron_anisotropy",
+          "configKey": "eden_anisotropy",
           "values": [
             {
               "label": "Padrão",
@@ -325,11 +313,51 @@
             {
               "label": "16x",
               "value": "5"
+            },
+            {
+              "label": "32x",
+              "value": "6"
+            },
+            {
+              "label": "64x",
+              "value": "7"
+            },
+            {
+              "label": "Nenhum",
+              "value": "8"
             }
           ],
           "realKey": "max_anisotropy",
           "realSection": "Renderer",
-          "realFile": "Citron.Generator.cs"
+          "realFile": "Eden.Generator.cs"
+        },
+        {
+          "id": "eden_backend",
+          "label": "Vídeo",
+          "type": "select",
+          "default": "auto",
+          "configKey": "eden_backend",
+          "values": [
+            {
+              "label": "OPENGL GLSL",
+              "value": "0"
+            },
+            {
+              "label": "VULKAN",
+              "value": "1"
+            },
+            {
+              "label": "OPENGL GLASM (NVIDIA)",
+              "value": "3"
+            },
+            {
+              "label": "OPENGL SPIR-V (AMD)",
+              "value": "4"
+            }
+          ],
+          "realKey": "backend",
+          "realSection": "Renderer",
+          "realFile": "Eden.Generator.cs"
         }
       ]
     },
@@ -340,11 +368,11 @@
       "order": 2,
       "options": [
         {
-          "id": "citron_language",
+          "id": "eden_language",
           "label": "LANGUAGE",
           "type": "select",
           "default": "auto",
-          "configKey": "citron_language",
+          "configKey": "eden_language",
           "values": [
             {
               "label": "American English",
@@ -421,15 +449,15 @@
           ],
           "realKey": "language_index",
           "realSection": "System",
-          "realFile": "Citron.Generator.cs"
+          "realFile": "Eden.Generator.cs"
         },
         {
-          "id": "citron_region_value",
+          "id": "eden_region_value",
           "label": "REGION",
           "description": "Force the region of the system.",
           "type": "select",
           "default": "auto",
-          "configKey": "citron_region_value",
+          "configKey": "eden_region_value",
           "values": [
             {
               "label": "JAPAN",
@@ -462,23 +490,23 @@
           ],
           "realKey": "region_index\\\\default",
           "realSection": "System",
-          "realFile": "Citron.Generator.cs"
+          "realFile": "Eden.Generator.cs"
         },
         {
-          "id": "citron_undock",
+          "id": "eden_undock",
           "label": "USE UNDOCKED MODE",
           "description": "Can increase performance Ativado some lower-end systems.",
           "type": "toggle",
           "default": "auto",
-          "configKey": "citron_undock"
+          "configKey": "eden_undock"
         },
         {
-          "id": "citron_cpu_accuracy",
+          "id": "eden_cpu_accuracy",
           "label": "CPU ACCURACY",
           "description": "Leave Automático as Padrão except the game requires specific setting.",
           "type": "select",
           "default": "auto",
-          "configKey": "citron_cpu_accuracy",
+          "configKey": "eden_cpu_accuracy",
           "values": [
             {
               "label": "ACCURATE",
@@ -495,24 +523,24 @@
           ],
           "realKey": "cpu_accuracy",
           "realSection": "Cpu",
-          "realFile": "Citron.Generator.cs"
+          "realFile": "Eden.Generator.cs"
         },
         {
-          "id": "citron_multicore",
+          "id": "eden_multicore",
           "label": "MULTICORE CPU Emulação",
           "type": "toggle",
           "default": "auto",
-          "configKey": "citron_multicore",
+          "configKey": "eden_multicore",
           "realKey": "use_multi_core",
           "realSection": "Core",
-          "realFile": "Citron.Generator.cs"
+          "realFile": "Eden.Generator.cs"
         },
         {
-          "id": "citron_memory",
+          "id": "eden_memory",
           "label": "RAM SIZE",
           "type": "select",
           "default": "auto",
-          "configKey": "citron_memory",
+          "configKey": "eden_memory",
           "values": [
             {
               "label": "4GB (Padrão)",
@@ -533,19 +561,11 @@
             {
               "label": "12GB (Unsafe)",
               "value": "4"
-            },
-            {
-              "label": "14GB (Unsafe)",
-              "value": "5"
-            },
-            {
-              "label": "16GB (Unsafe)",
-              "value": "6"
             }
           ],
           "realKey": "memory_layout_mode",
           "realSection": "Core",
-          "realFile": "Citron.Generator.cs"
+          "realFile": "Eden.Generator.cs"
         }
       ]
     },
@@ -556,11 +576,11 @@
       "order": 4,
       "options": [
         {
-          "id": "citron_sound_index",
+          "id": "eden_sound_index",
           "label": "Áudio CHANNELS",
           "type": "select",
           "default": "auto",
-          "configKey": "citron_sound_index",
+          "configKey": "eden_sound_index",
           "values": [
             {
               "label": "STEREO",
@@ -577,15 +597,19 @@
           ],
           "realKey": "sound_index",
           "realSection": "System",
-          "realFile": "Citron.Generator.cs"
+          "realFile": "Eden.Generator.cs"
         },
         {
-          "id": "citron_audio_backend",
+          "id": "eden_audio_backend",
           "label": "Áudio",
           "type": "select",
           "default": "auto",
-          "configKey": "citron_audio_backend",
+          "configKey": "eden_audio_backend",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "CUBEB",
               "value": "cubeb"
@@ -593,15 +617,11 @@
             {
               "label": "SDL2",
               "value": "sdl2"
-            },
-            {
-              "label": "OPENAL",
-              "value": "openal"
             }
           ],
           "realKey": "output_engine",
           "realSection": "Audio",
-          "realFile": "Citron.Generator.cs"
+          "realFile": "Eden.Generator.cs"
         }
       ]
     },
@@ -612,19 +632,19 @@
       "order": 5,
       "options": [
         {
-          "id": "citron_norawinput",
+          "id": "eden_norawinput",
           "label": "DISABLE RAW INPUT",
           "type": "toggle",
           "default": "auto",
-          "configKey": "citron_norawinput"
+          "configKey": "eden_norawinput"
         },
         {
-          "id": "citron_player_0_type",
+          "id": "eden_player_0_type",
           "label": "PLAYER 1 CONTROLLER TYPE",
           "description": "Sets the player controller type.",
           "type": "select",
           "default": "auto",
-          "configKey": "citron_player_0_type",
+          "configKey": "eden_player_0_type",
           "values": [
             {
               "label": "PRO CONTROLLER",
@@ -653,11 +673,11 @@
           ]
         },
         {
-          "id": "citron_player_1_type",
+          "id": "eden_player_1_type",
           "label": "PLAYER 2 CONTROLLER TYPE",
           "type": "select",
           "default": "auto",
-          "configKey": "citron_player_1_type",
+          "configKey": "eden_player_1_type",
           "values": [
             {
               "label": "PRO CONTROLLER",
@@ -682,11 +702,11 @@
           ]
         },
         {
-          "id": "citron_player_2_type",
+          "id": "eden_player_2_type",
           "label": "PLAYER 3 CONTROLLER TYPE",
           "type": "select",
           "default": "auto",
-          "configKey": "citron_player_2_type",
+          "configKey": "eden_player_2_type",
           "values": [
             {
               "label": "PRO CONTROLLER",
@@ -711,11 +731,11 @@
           ]
         },
         {
-          "id": "citron_player_3_type",
+          "id": "eden_player_3_type",
           "label": "PLAYER 4 CONTROLLER TYPE",
           "type": "select",
           "default": "auto",
-          "configKey": "citron_player_3_type",
+          "configKey": "eden_player_3_type",
           "values": [
             {
               "label": "PRO CONTROLLER",
@@ -756,34 +776,34 @@
           "configKey": "switch_gamepadbuttons"
         },
         {
-          "id": "citron_deadzone",
+          "id": "eden_deadzone",
           "label": "ANALOG DEADZONE",
           "type": "slider",
           "default": "auto",
-          "configKey": "citron_deadzone",
+          "configKey": "eden_deadzone",
           "min": 0,
           "max": 50,
           "step": 5,
           "suffix": "%"
         },
         {
-          "id": "citron_range",
+          "id": "eden_range",
           "label": "ANALOG RANGE",
           "type": "slider",
           "default": "auto",
-          "configKey": "citron_range",
+          "configKey": "eden_range",
           "min": 50,
           "max": 150,
           "step": 10,
           "suffix": "%"
         },
         {
-          "id": "citron_controller_applet",
+          "id": "eden_controller_applet",
           "label": "DISABLE CONTROLLER APPLET",
           "description": "Disable the controller applet that appears in multiplayer games to select the connected controllers.",
           "type": "toggle",
           "default": "auto",
-          "configKey": "citron_controller_applet"
+          "configKey": "eden_controller_applet"
         }
       ]
     }

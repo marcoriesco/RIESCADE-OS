@@ -2,7 +2,7 @@
   "$schema": "riescade-emulator-schema-v1",
   "id": "corsixth",
   "name": "CORSIXTH",
-  "description": "Configurações para o emulador CORSIXTH geradas a partir do es_features.cfg.",
+  "description": "Configurações para o emulador CORSIXTH",
   "icon": "corsixth",
   "configFiles": [],
   "globalMappings": {},

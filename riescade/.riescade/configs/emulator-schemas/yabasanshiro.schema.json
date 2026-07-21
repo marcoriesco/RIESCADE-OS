@@ -2,7 +2,7 @@
   "$schema": "riescade-emulator-schema-v1",
   "id": "yabasanshiro",
   "name": "YABASANSHIRO",
-  "description": "Configurações para o emulador YABASANSHIRO geradas a partir do es_features.cfg.",
+  "description": "Configurações para o emulador YABASANSHIRO",
   "icon": "yabasanshiro",
   "configFiles": [],
   "globalMappings": {},

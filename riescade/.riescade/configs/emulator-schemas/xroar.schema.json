@@ -2,7 +2,7 @@
   "$schema": "riescade-emulator-schema-v1",
   "id": "xroar",
   "name": "XROAR",
-  "description": "Configurações para o emulador XROAR geradas a partir do es_features.cfg.",
+  "description": "Configurações para o emulador XROAR",
   "icon": "xroar",
   "configFiles": [],
   "globalMappings": {},

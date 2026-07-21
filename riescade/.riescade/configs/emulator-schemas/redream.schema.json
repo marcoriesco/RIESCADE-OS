@@ -2,7 +2,7 @@
   "$schema": "riescade-emulator-schema-v1",
   "id": "redream",
   "name": "REDREAM",
-  "description": "Configurações para o emulador REDREAM geradas a partir do es_features.cfg.",
+  "description": "Configurações para o emulador REDREAM",
   "icon": "redream",
   "configFiles": [],
   "globalMappings": {},

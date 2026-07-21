@@ -2,7 +2,7 @@
   "$schema": "riescade-emulator-schema-v1",
   "id": "ppsspp",
   "name": "PPSSPP",
-  "description": "Configurações para o emulador PPSSPP geradas a partir do es_features.cfg.",
+  "description": "Configurações para o emulador PPSSPP",
   "icon": "ppsspp",
   "configFiles": [],
   "globalMappings": {},

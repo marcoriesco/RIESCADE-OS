@@ -2,7 +2,7 @@
   "$schema": "riescade-emulator-schema-v1",
   "id": "azahar",
   "name": "AZAHAR",
-  "description": "Configurações para o emulador AZAHAR geradas a partir do es_features.cfg.",
+  "description": "Configurações para o emulador AZAHAR",
   "icon": "azahar",
   "configFiles": [],
   "globalMappings": {},

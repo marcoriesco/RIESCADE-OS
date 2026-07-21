@@ -2,7 +2,7 @@
   "$schema": "riescade-emulator-schema-v1",
   "id": "citra-canary",
   "name": "CITRA-CANARY",
-  "description": "Configurações para o emulador CITRA-CANARY geradas a partir do es_features.cfg.",
+  "description": "Configurações para o emulador CITRA-CANARY",
   "icon": "citra-canary",
   "configFiles": [],
   "globalMappings": {},

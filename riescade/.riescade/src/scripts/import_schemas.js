@@ -425,7 +425,7 @@ for (const emu of emulatorsArray) {
       $schema: 'riescade-emulator-schema-v1',
       id: emuId,
       name: emuId.toUpperCase(),
-      description: `Configurações para o emulador ${emuId.toUpperCase()} geradas a partir do es_features.cfg.`,
+      description: `Configurações para o emulador ${emuId.toUpperCase()}`,
       icon: emuId,
       configFiles: [],
       globalMappings: globalMappings,

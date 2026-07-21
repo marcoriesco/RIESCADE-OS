@@ -2,7 +2,7 @@
   "$schema": "riescade-emulator-schema-v1",
   "id": "powerbomberman",
   "name": "POWERBOMBERMAN",
-  "description": "Configurações para o emulador POWERBOMBERMAN geradas a partir do es_features.cfg.",
+  "description": "Configurações para o emulador POWERBOMBERMAN",
   "icon": "powerbomberman",
   "configFiles": [],
   "globalMappings": {},

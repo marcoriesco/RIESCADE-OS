@@ -2,7 +2,7 @@
   "$schema": "riescade-emulator-schema-v1",
   "id": "dhewm3",
   "name": "DHEWM3",
-  "description": "Configurações para o emulador DHEWM3 geradas a partir do es_features.cfg.",
+  "description": "Configurações para o emulador DHEWM3",
   "icon": "dhewm3",
   "configFiles": [],
   "globalMappings": {},

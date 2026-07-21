@@ -2,7 +2,7 @@
   "$schema": "riescade-emulator-schema-v1",
   "id": "sonicretrocd",
   "name": "SONICRETROCD",
-  "description": "Configurações para o emulador SONICRETROCD geradas a partir do es_features.cfg.",
+  "description": "Configurações para o emulador SONICRETROCD",
   "icon": "sonicretrocd",
   "configFiles": [],
   "globalMappings": {},

@@ -2,7 +2,7 @@
   "$schema": "riescade-emulator-schema-v1",
   "id": "ymir",
   "name": "YMIR",
-  "description": "Configurações para o emulador YMIR geradas a partir do es_features.cfg.",
+  "description": "Configurações para o emulador YMIR",
   "icon": "ymir",
   "configFiles": [],
   "globalMappings": {},

@@ -2,7 +2,7 @@
   "$schema": "riescade-emulator-schema-v1",
   "id": "xenia",
   "name": "XENIA",
-  "description": "Configurações para o emulador XENIA geradas a partir do es_features.cfg.",
+  "description": "Configurações para o emulador XENIA",
   "icon": "xenia",
   "configFiles": [],
   "globalMappings": {},

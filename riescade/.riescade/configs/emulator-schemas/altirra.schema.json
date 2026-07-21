@@ -2,7 +2,7 @@
   "$schema": "riescade-emulator-schema-v1",
   "id": "altirra",
   "name": "ALTIRRA",
-  "description": "Configurações para o emulador ALTIRRA geradas a partir do es_features.cfg.",
+  "description": "Configurações para o emulador ALTIRRA",
   "icon": "altirra",
   "configFiles": [],
   "globalMappings": {},

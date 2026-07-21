@@ -2,7 +2,7 @@
   "$schema": "riescade-emulator-schema-v1",
   "id": "simcoupe",
   "name": "SIMCOUPE",
-  "description": "Configurações para o emulador SIMCOUPE geradas a partir do es_features.cfg.",
+  "description": "Configurações para o emulador SIMCOUPE",
   "icon": "simcoupe",
   "configFiles": [],
   "globalMappings": {},

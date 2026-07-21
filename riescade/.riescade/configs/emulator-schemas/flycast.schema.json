@@ -2,7 +2,7 @@
   "$schema": "riescade-emulator-schema-v1",
   "id": "flycast",
   "name": "FLYCAST",
-  "description": "Configurações para o emulador FLYCAST geradas a partir do es_features.cfg.",
+  "description": "Configurações para o emulador FLYCAST",
   "icon": "flycast",
   "configFiles": [],
   "globalMappings": {},

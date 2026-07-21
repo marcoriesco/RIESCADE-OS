@@ -2,7 +2,7 @@
   "$schema": "riescade-emulator-schema-v1",
   "id": "mame64",
   "name": "MAME64",
-  "description": "Configurações para o emulador MAME64 geradas a partir do es_features.cfg.",
+  "description": "Configurações para o emulador MAME64",
   "icon": "mame64",
   "configFiles": [],
   "globalMappings": {},

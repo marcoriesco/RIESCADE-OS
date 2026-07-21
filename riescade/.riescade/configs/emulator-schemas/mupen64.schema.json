@@ -2,7 +2,7 @@
   "$schema": "riescade-emulator-schema-v1",
   "id": "mupen64",
   "name": "MUPEN64",
-  "description": "Configurações para o emulador MUPEN64 geradas a partir do es_features.cfg.",
+  "description": "Configurações para o emulador MUPEN64",
   "icon": "mupen64",
   "configFiles": [],
   "globalMappings": {

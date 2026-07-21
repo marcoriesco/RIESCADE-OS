@@ -2,7 +2,7 @@
   "$schema": "riescade-emulator-schema-v1",
   "id": "2ship",
   "name": "2SHIP",
-  "description": "Configurações para o emulador 2SHIP geradas a partir do es_features.cfg.",
+  "description": "Configurações para o emulador 2SHIP",
   "icon": "2ship",
   "configFiles": [],
   "globalMappings": {},

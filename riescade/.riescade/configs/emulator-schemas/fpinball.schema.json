@@ -2,7 +2,7 @@
   "$schema": "riescade-emulator-schema-v1",
   "id": "fpinball",
   "name": "FPINBALL",
-  "description": "Configurações para o emulador FPINBALL geradas a partir do es_features.cfg.",
+  "description": "Configurações para o emulador FPINBALL",
   "icon": "fpinball",
   "configFiles": [],
   "globalMappings": {

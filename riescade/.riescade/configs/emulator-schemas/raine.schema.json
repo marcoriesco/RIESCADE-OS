@@ -2,7 +2,7 @@
   "$schema": "riescade-emulator-schema-v1",
   "id": "raine",
   "name": "RAINE",
-  "description": "Configurações para o emulador RAINE geradas a partir do es_features.cfg.",
+  "description": "Configurações para o emulador RAINE",
   "icon": "raine",
   "configFiles": [],
   "globalMappings": {},

@@ -2,7 +2,7 @@
   "$schema": "riescade-emulator-schema-v1",
   "id": "libretro",
   "name": "LIBRETRO",
-  "description": "Configurações para o emulador LIBRETRO geradas a partir do es_features.cfg.",
+  "description": "Configurações para o emulador LIBRETRO",
   "icon": "libretro",
   "configFiles": [],
   "globalMappings": {},

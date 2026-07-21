@@ -2,7 +2,7 @@
   "$schema": "riescade-emulator-schema-v1",
   "id": "openbor",
   "name": "OPENBOR",
-  "description": "Configurações para o emulador OPENBOR geradas a partir do es_features.cfg.",
+  "description": "Configurações para o emulador OPENBOR",
   "icon": "openbor",
   "configFiles": [],
   "globalMappings": {

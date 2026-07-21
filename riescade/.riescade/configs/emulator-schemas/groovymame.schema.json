@@ -2,7 +2,7 @@
   "$schema": "riescade-emulator-schema-v1",
   "id": "groovymame",
   "name": "GROOVYMAME",
-  "description": "Configurações para o emulador GROOVYMAME geradas a partir do es_features.cfg.",
+  "description": "Configurações para o emulador GROOVYMAME",
   "icon": "groovymame",
   "configFiles": [],
   "globalMappings": {},

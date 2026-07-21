@@ -2,7 +2,7 @@
   "$schema": "riescade-emulator-schema-v1",
   "id": "applewin",
   "name": "APPLEWIN",
-  "description": "Configurações para o emulador APPLEWIN geradas a partir do es_features.cfg.",
+  "description": "Configurações para o emulador APPLEWIN",
   "icon": "applewin",
   "configFiles": [],
   "globalMappings": {},

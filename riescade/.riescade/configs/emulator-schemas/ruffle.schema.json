@@ -2,7 +2,7 @@
   "$schema": "riescade-emulator-schema-v1",
   "id": "ruffle",
   "name": "RUFFLE",
-  "description": "Configurações para o emulador RUFFLE geradas a partir do es_features.cfg.",
+  "description": "Configurações para o emulador RUFFLE",
   "icon": "ruffle",
   "configFiles": [],
   "globalMappings": {},

@@ -2,7 +2,7 @@
   "$schema": "riescade-emulator-schema-v1",
   "id": "oricutron",
   "name": "ORICUTRON",
-  "description": "Configurações para o emulador ORICUTRON geradas a partir do es_features.cfg.",
+  "description": "Configurações para o emulador ORICUTRON",
   "icon": "oricutron",
   "configFiles": [],
   "globalMappings": {},

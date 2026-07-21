@@ -2,7 +2,7 @@
   "$schema": "riescade-emulator-schema-v1",
   "id": "eden",
   "name": "EDEN",
-  "description": "Configurações para o emulador EDEN geradas a partir do es_features.cfg.",
+  "description": "Configurações para o emulador EDEN",
   "icon": "eden",
   "configFiles": [],
   "globalMappings": {},
@@ -606,6 +606,10 @@
           "default": "auto",
           "configKey": "eden_audio_backend",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "CUBEB",
               "value": "cubeb"

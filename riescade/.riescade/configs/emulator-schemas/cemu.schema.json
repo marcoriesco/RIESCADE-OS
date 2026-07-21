@@ -2,7 +2,7 @@
   "$schema": "riescade-emulator-schema-v1",
   "id": "cemu",
   "name": "CEMU",
-  "description": "Configurações para o emulador CEMU geradas a partir do es_features.cfg.",
+  "description": "Configurações para o emulador CEMU",
   "icon": "cemu",
   "configFiles": [],
   "globalMappings": {},

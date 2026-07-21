@@ -2,7 +2,7 @@
   "$schema": "riescade-emulator-schema-v1",
   "id": "bsyndrome",
   "name": "BSYNDROME",
-  "description": "Configurações para o emulador BSYNDROME geradas a partir do es_features.cfg.",
+  "description": "Configurações para o emulador BSYNDROME",
   "icon": "bsyndrome",
   "configFiles": [],
   "globalMappings": {},

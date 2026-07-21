@@ -2,7 +2,7 @@
   "$schema": "riescade-emulator-schema-v1",
   "id": "desmume",
   "name": "DESMUME",
-  "description": "Configurações para o emulador DESMUME geradas a partir do es_features.cfg.",
+  "description": "Configurações para o emulador DESMUME",
   "icon": "desmume",
   "configFiles": [],
   "globalMappings": {},

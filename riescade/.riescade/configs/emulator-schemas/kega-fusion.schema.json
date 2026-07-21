@@ -2,7 +2,7 @@
   "$schema": "riescade-emulator-schema-v1",
   "id": "kega-fusion",
   "name": "KEGA-FUSION",
-  "description": "Configurações para o emulador KEGA-FUSION geradas a partir do es_features.cfg.",
+  "description": "Configurações para o emulador KEGA-FUSION",
   "icon": "kega-fusion",
   "configFiles": [],
   "globalMappings": {},

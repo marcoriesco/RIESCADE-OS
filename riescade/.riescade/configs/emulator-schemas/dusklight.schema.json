@@ -2,7 +2,7 @@
   "$schema": "riescade-emulator-schema-v1",
   "id": "dusklight",
   "name": "DUSKLIGHT",
-  "description": "Configurações para o emulador DUSKLIGHT geradas a partir do es_features.cfg.",
+  "description": "Configurações para o emulador DUSKLIGHT",
   "icon": "dusklight",
   "configFiles": [],
   "globalMappings": {},

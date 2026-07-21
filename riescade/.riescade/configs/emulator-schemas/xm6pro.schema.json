@@ -2,7 +2,7 @@
   "$schema": "riescade-emulator-schema-v1",
   "id": "xm6pro",
   "name": "XM6PRO",
-  "description": "Configurações para o emulador XM6PRO geradas a partir do es_features.cfg.",
+  "description": "Configurações para o emulador XM6PRO",
   "icon": "xm6pro",
   "configFiles": [],
   "globalMappings": {},

@@ -2,7 +2,7 @@
   "$schema": "riescade-emulator-schema-v1",
   "id": "mednafen",
   "name": "MEDNAFEN",
-  "description": "Configurações para o emulador MEDNAFEN geradas a partir do es_features.cfg.",
+  "description": "Configurações para o emulador MEDNAFEN",
   "icon": "mednafen",
   "configFiles": [],
   "globalMappings": {},

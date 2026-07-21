@@ -2,7 +2,7 @@
   "$schema": "riescade-emulator-schema-v1",
   "id": "supermodel",
   "name": "SUPERMODEL",
-  "description": "Configurações para o emulador SUPERMODEL geradas a partir do es_features.cfg.",
+  "description": "Configurações para o emulador SUPERMODEL",
   "icon": "supermodel",
   "configFiles": [],
   "globalMappings": {},

@@ -2,7 +2,7 @@
   "$schema": "riescade-emulator-schema-v1",
   "id": "cxbx",
   "name": "CXBX",
-  "description": "Configurações para o emulador CXBX geradas a partir do es_features.cfg.",
+  "description": "Configurações para o emulador CXBX",
   "icon": "cxbx",
   "configFiles": [],
   "globalMappings": {

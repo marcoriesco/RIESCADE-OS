@@ -2,7 +2,7 @@
   "$schema": "riescade-emulator-schema-v1",
   "id": "pcsx2",
   "name": "PCSX2",
-  "description": "Configurações para o emulador PCSX2 geradas a partir do es_features.cfg.",
+  "description": "Configurações para o emulador PCSX2",
   "icon": "pcsx2",
   "configFiles": [],
   "globalMappings": {

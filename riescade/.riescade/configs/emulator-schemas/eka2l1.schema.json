@@ -2,7 +2,7 @@
   "$schema": "riescade-emulator-schema-v1",
   "id": "eka2l1",
   "name": "EKA2L1",
-  "description": "Configurações para o emulador EKA2L1 geradas a partir do es_features.cfg.",
+  "description": "Configurações para o emulador EKA2L1",
   "icon": "eka2l1",
   "configFiles": [],
   "globalMappings": {},

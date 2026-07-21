@@ -2,7 +2,7 @@
   "$schema": "riescade-emulator-schema-v1",
   "id": "exowin9x",
   "name": "EXOWIN9X",
-  "description": "Configurações para o emulador EXOWIN9X geradas a partir do es_features.cfg.",
+  "description": "Configurações para o emulador EXOWIN9X",
   "icon": "exowin9x",
   "configFiles": [],
   "globalMappings": {},

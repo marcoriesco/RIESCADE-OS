@@ -2,7 +2,7 @@
   "$schema": "riescade-emulator-schema-v1",
   "id": "dolphin-triforce",
   "name": "DOLPHIN-TRIFORCE",
-  "description": "Configurações para o emulador DOLPHIN-TRIFORCE geradas a partir do es_features.cfg.",
+  "description": "Configurações para o emulador DOLPHIN-TRIFORCE",
   "icon": "dolphin-triforce",
   "configFiles": [],
   "globalMappings": {

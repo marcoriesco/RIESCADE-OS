@@ -2,7 +2,7 @@
   "$schema": "riescade-emulator-schema-v1",
   "id": "dosbox-pure",
   "name": "DOSBOX-PURE",
-  "description": "Configurações para o emulador DOSBOX-PURE geradas a partir do es_features.cfg.",
+  "description": "Configurações para o emulador DOSBOX-PURE",
   "icon": "dosbox-pure",
   "configFiles": [],
   "globalMappings": {},

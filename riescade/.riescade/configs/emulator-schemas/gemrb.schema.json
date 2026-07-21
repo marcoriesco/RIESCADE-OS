@@ -2,7 +2,7 @@
   "$schema": "riescade-emulator-schema-v1",
   "id": "gemrb",
   "name": "GEMRB",
-  "description": "Configurações para o emulador GEMRB geradas a partir do es_features.cfg.",
+  "description": "Configurações para o emulador GEMRB",
   "icon": "gemrb",
   "configFiles": [],
   "globalMappings": {},

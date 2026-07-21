@@ -2,7 +2,7 @@
   "$schema": "riescade-emulator-schema-v1",
   "id": "hbmame",
   "name": "HBMAME",
-  "description": "Configurações para o emulador HBMAME geradas a partir do es_features.cfg.",
+  "description": "Configurações para o emulador HBMAME",
   "icon": "hbmame",
   "configFiles": [],
   "globalMappings": {},

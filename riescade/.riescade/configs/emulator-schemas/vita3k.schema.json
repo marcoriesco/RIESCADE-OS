@@ -2,7 +2,7 @@
   "$schema": "riescade-emulator-schema-v1",
   "id": "vita3k",
   "name": "VITA3K",
-  "description": "Configurações para o emulador VITA3K geradas a partir do es_features.cfg.",
+  "description": "Configurações para o emulador VITA3K",
   "icon": "vita3k",
   "configFiles": [],
   "globalMappings": {},

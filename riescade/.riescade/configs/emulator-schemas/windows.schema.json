@@ -2,7 +2,7 @@
   "$schema": "riescade-emulator-schema-v1",
   "id": "windows",
   "name": "WINDOWS",
-  "description": "Configurações para o emulador WINDOWS geradas a partir do es_features.cfg.",
+  "description": "Configurações para o emulador WINDOWS",
   "icon": "windows",
   "configFiles": [],
   "globalMappings": {},
@@ -16,7 +16,7 @@
         {
           "id": "steam_wait",
           "label": "WAIT TIME",
-          "description": "Padrão is 30 seconds, define time to wait for the game to launch before returning to RetroBat game list.",
+          "description": "Padrão is 30 seconds, define time to wait for the game to launch before returning to RIESCADE game list.",
           "type": "select",
           "default": "auto",
           "configKey": "steam_wait",

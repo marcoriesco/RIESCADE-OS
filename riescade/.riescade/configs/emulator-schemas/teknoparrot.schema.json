@@ -2,7 +2,7 @@
   "$schema": "riescade-emulator-schema-v1",
   "id": "teknoparrot",
   "name": "TEKNOPARROT",
-  "description": "Configurações para o emulador TEKNOPARROT geradas a partir do es_features.cfg.",
+  "description": "Configurações para o emulador TEKNOPARROT",
   "icon": "teknoparrot",
   "configFiles": [],
   "globalMappings": {},

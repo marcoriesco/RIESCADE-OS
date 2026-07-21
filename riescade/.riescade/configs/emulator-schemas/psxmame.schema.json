@@ -2,7 +2,7 @@
   "$schema": "riescade-emulator-schema-v1",
   "id": "psxmame",
   "name": "PSXMAME",
-  "description": "Configurações para o emulador PSXMAME geradas a partir do es_features.cfg.",
+  "description": "Configurações para o emulador PSXMAME",
   "icon": "psxmame",
   "configFiles": [],
   "globalMappings": {},

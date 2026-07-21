@@ -2,7 +2,7 @@
   "$schema": "riescade-emulator-schema-v1",
   "id": "dosbox-staging",
   "name": "DOSBOX-STAGING",
-  "description": "Configurações para o emulador DOSBOX-STAGING geradas a partir do es_features.cfg.",
+  "description": "Configurações para o emulador DOSBOX-STAGING",
   "icon": "dosbox-staging",
   "configFiles": [],
   "globalMappings": {},

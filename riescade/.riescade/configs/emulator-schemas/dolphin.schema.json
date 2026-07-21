@@ -2,7 +2,7 @@
   "$schema": "riescade-emulator-schema-v1",
   "id": "dolphin",
   "name": "DOLPHIN",
-  "description": "Configurações para o emulador DOLPHIN geradas a partir do es_features.cfg.",
+  "description": "Configurações para o emulador DOLPHIN",
   "icon": "dolphin",
   "configFiles": [],
   "globalMappings": {

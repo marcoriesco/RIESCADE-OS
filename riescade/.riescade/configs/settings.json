@@ -372,7 +372,7 @@
     "type": "int"
   },
   "Window.tool-settings.Maximized": {
-    "value": false,
+    "value": true,
     "type": "bool"
   },
   "Window.tool-settings.X": {

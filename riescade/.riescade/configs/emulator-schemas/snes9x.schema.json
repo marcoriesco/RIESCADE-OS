@@ -2,7 +2,7 @@
   "$schema": "riescade-emulator-schema-v1",
   "id": "snes9x",
   "name": "SNES9X",
-  "description": "Configurações para o emulador SNES9X geradas a partir do es_features.cfg.",
+  "description": "Configurações para o emulador SNES9X",
   "icon": "snes9x",
   "configFiles": [],
   "globalMappings": {},

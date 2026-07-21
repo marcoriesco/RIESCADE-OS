@@ -2,7 +2,7 @@
   "$schema": "riescade-emulator-schema-v1",
   "id": "citra",
   "name": "CITRA",
-  "description": "Configurações para o emulador CITRA geradas a partir do es_features.cfg.",
+  "description": "Configurações para o emulador CITRA",
   "icon": "citra",
   "configFiles": [],
   "globalMappings": {},

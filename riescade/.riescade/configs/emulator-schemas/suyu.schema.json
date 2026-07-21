@@ -2,7 +2,7 @@
   "$schema": "riescade-emulator-schema-v1",
   "id": "suyu",
   "name": "SUYU",
-  "description": "Configurações para o emulador SUYU geradas a partir do es_features.cfg.",
+  "description": "Configurações para o emulador SUYU",
   "icon": "suyu",
   "configFiles": [],
   "globalMappings": {},

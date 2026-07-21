@@ -2,7 +2,7 @@
   "$schema": "riescade-emulator-schema-v1",
   "id": "raze",
   "name": "RAZE",
-  "description": "Configurações para o emulador RAZE geradas a partir do es_features.cfg.",
+  "description": "Configurações para o emulador RAZE",
   "icon": "raze",
   "configFiles": [],
   "globalMappings": {},

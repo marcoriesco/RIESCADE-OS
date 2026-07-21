@@ -2,7 +2,7 @@
   "$schema": "riescade-emulator-schema-v1",
   "id": "capriceforever",
   "name": "CAPRICEFOREVER",
-  "description": "Configurações para o emulador CAPRICEFOREVER geradas a partir do es_features.cfg.",
+  "description": "Configurações para o emulador CAPRICEFOREVER",
   "icon": "capriceforever",
   "configFiles": [],
   "globalMappings": {},

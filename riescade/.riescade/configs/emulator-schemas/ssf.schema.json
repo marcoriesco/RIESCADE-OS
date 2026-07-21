@@ -2,7 +2,7 @@
   "$schema": "riescade-emulator-schema-v1",
   "id": "ssf",
   "name": "SSF",
-  "description": "Configurações para o emulador SSF geradas a partir do es_features.cfg.",
+  "description": "Configurações para o emulador SSF",
   "icon": "ssf",
   "configFiles": [],
   "globalMappings": {},

@@ -2,7 +2,7 @@
   "$schema": "riescade-emulator-schema-v1",
   "id": "scummvm",
   "name": "SCUMMVM",
-  "description": "Configurações para o emulador SCUMMVM geradas a partir do es_features.cfg.",
+  "description": "Configurações para o emulador SCUMMVM",
   "icon": "scummvm",
   "configFiles": [],
   "globalMappings": {
