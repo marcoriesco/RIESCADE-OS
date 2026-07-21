@@ -184,7 +184,7 @@
     "type": "int"
   },
   "Taskbar.Icons": {
-    "value": "tool:settings,system:switch,system:teknoparrot,system:cps1,system:snes,system:xbox360,system:arcade,system:ps3,system:ps4,system:Windows,system:namco2x6",
+    "value": "tool:settings,system:switch,system:teknoparrot,system:snes,system:xbox360,system:arcade,system:ps3,system:ps4,system:Windows,system:ps2",
     "type": "string"
   },
   "Window.system-switch.Maximized": {
@@ -372,23 +372,23 @@
     "type": "int"
   },
   "Window.tool-settings.Maximized": {
-    "value": true,
+    "value": false,
     "type": "bool"
   },
   "Window.tool-settings.X": {
-    "value": 248,
+    "value": 115,
     "type": "int"
   },
   "Window.tool-settings.Y": {
-    "value": 16,
+    "value": 34,
     "type": "int"
   },
   "Window.tool-settings.Width": {
-    "value": 1520,
+    "value": 1625,
     "type": "int"
   },
   "Window.tool-settings.Height": {
-    "value": 971,
+    "value": 925,
     "type": "int"
   },
   "Window.tool-collections.Maximized": {
@@ -818,5 +818,29 @@
   "RIESCADE.PreferredMediaType.switch": {
     "value": "cover",
     "type": "string"
+  },
+  "Window.system-ps2.Maximized": {
+    "value": false,
+    "type": "bool"
+  },
+  "RIESCADE.PreferredMediaType.ps2": {
+    "value": "cover",
+    "type": "string"
+  },
+  "Window.system-ps2.X": {
+    "value": 125,
+    "type": "int"
+  },
+  "Window.system-ps2.Y": {
+    "value": 70,
+    "type": "int"
+  },
+  "Window.system-ps2.Width": {
+    "value": 1365,
+    "type": "int"
+  },
+  "Window.system-ps2.Height": {
+    "value": 874,
+    "type": "int"
   }
 }

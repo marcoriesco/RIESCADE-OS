@@ -384,21 +384,21 @@ public class Program {
                 while (true) {
                     if (SDL_WaitEventTimeout(ref ev, 50)) {
                         // 1. Device connection/disconnection events
-                        if (ev.type == 0x605) { // SDL_EVENT_JOYSTICK_ADDED
-                            OpenDevice(ev.jaxis.which);
-                            System.Threading.Thread.Sleep(50);
-                            Console.WriteLine(GetDevicesJson());
-                        } else if (ev.type == 0x606) { // SDL_EVENT_JOYSTICK_REMOVED
-                            CloseDevice(ev.jaxis.which);
-                            System.Threading.Thread.Sleep(50);
-                            Console.WriteLine(GetDevicesJson());
-                        } else if (ev.type == 0x653) { // SDL_EVENT_GAMEPAD_ADDED
-                            OpenDevice(ev.gbutton.which);
-                            System.Threading.Thread.Sleep(50);
-                            Console.WriteLine(GetDevicesJson());
-                        } else if (ev.type == 0x654) { // SDL_EVENT_GAMEPAD_REMOVED
-                            CloseDevice(ev.gbutton.which);
-                            System.Threading.Thread.Sleep(50);
+                        if (ev.type == 0x605 || ev.type == 0x606 || ev.type == 0x653 || ev.type == 0x654) {
+                            if (ev.type == 0x605 || ev.type == 0x653) {
+                                OpenDevice(ev.type == 0x605 ? ev.jaxis.which : ev.gbutton.which);
+                            } else if (ev.type == 0x606 || ev.type == 0x654) {
+                                CloseDevice(ev.type == 0x606 ? ev.jaxis.which : ev.gbutton.which);
+                            }
+                            System.Threading.Thread.Sleep(150);
+                            SDL_Event pendingEv = new SDL_Event();
+                            while (SDL_PollEvent(ref pendingEv)) {
+                                if (pendingEv.type == 0x605 || pendingEv.type == 0x653) {
+                                    OpenDevice(pendingEv.type == 0x605 ? pendingEv.jaxis.which : pendingEv.gbutton.which);
+                                } else if (pendingEv.type == 0x606 || pendingEv.type == 0x654) {
+                                    CloseDevice(pendingEv.type == 0x606 ? pendingEv.jaxis.which : pendingEv.gbutton.which);
+                                }
+                            }
                             Console.WriteLine(GetDevicesJson());
                         }
 

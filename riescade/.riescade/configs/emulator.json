@@ -53,7 +53,7 @@
   },
   "pcsx2": {
     "TVShader": "0",
-    "internalresolution": "3",
+    "internalresolution": "4",
     "vsync": "true",
     "fullboot": "true",
     "pcsx2_fastboot": "true",

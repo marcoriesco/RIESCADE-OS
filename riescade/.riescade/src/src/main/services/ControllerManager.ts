@@ -519,8 +519,9 @@ public class Program {
                     if (SDL_WaitEventTimeout(ref ev, 100)) {
                         // ADDED (0x605 or 0x653) and REMOVED (0x606 or 0x654)
                         if (ev.type == 0x605 || ev.type == 0x606 || ev.type == 0x653 || ev.type == 0x654) {
-                            System.Threading.Thread.Sleep(50);
-                            while (SDL_PollEvent(ref ev)) { }
+                            System.Threading.Thread.Sleep(150);
+                            SDL_Event pendingEv = new SDL_Event();
+                            while (SDL_PollEvent(ref pendingEv)) { }
                             Console.WriteLine(GetDevicesJson());
                         }
                     }
@@ -634,7 +635,19 @@ public class Program {
     return this.connectedControllers
   }
 
+  private updateDebounceTimer: NodeJS.Timeout | null = null
+
   private handleSdlPadsUpdate(sdlPads: any[]): void {
+    if (this.updateDebounceTimer) {
+      clearTimeout(this.updateDebounceTimer)
+    }
+
+    this.updateDebounceTimer = setTimeout(() => {
+      this.processSdlPadsUpdate(sdlPads)
+    }, 100)
+  }
+
+  private processSdlPadsUpdate(sdlPads: any[]): void {
     const list: ControllerInfo[] = []
 
     sdlPads.forEach(pad => {
@@ -677,16 +690,17 @@ public class Program {
 
     const assigned = this.rebuildPlayerAssignments(list)
 
-    const previousNames = this.connectedControllers.map(c => `${c.name}(P${c.playerIndex + 1})`).join(', ')
-    const currentNames = assigned.map(c => `${c.name}(P${c.playerIndex + 1})`).join(', ')
+    const previousNames = this.connectedControllers.map(c => `${c.guid}:${c.name}(P${c.playerIndex + 1})`).join(', ')
+    const currentNames = assigned.map(c => `${c.guid}:${c.name}(P${c.playerIndex + 1})`).join(', ')
 
     if (previousNames !== currentNames) {
       this.log(`Controllers list changed (watch): [${currentNames}]`)
-    }
-
-    this.connectedControllers = assigned
-    if (this.onUpdateCallback) {
-      this.onUpdateCallback(assigned)
+      this.connectedControllers = assigned
+      if (this.onUpdateCallback) {
+        this.onUpdateCallback(assigned)
+      }
+    } else {
+      this.connectedControllers = assigned
     }
   }
 

@@ -393,4 +393,17 @@ html, body, #root {
   transform-origin: center center;
 }
 
+/* Aero Snap Preview Overlay */
+.snap-preview {
+  background: var(--accent-color-light, rgba(139, 92, 246, 0.15));
+  border: 1px solid var(--accent-color-focus, rgba(139, 92, 246, 0.4));
+  box-shadow: 0 0 40px -10px var(--accent-color-light), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: all 0.22s cubic-bezier(0.25, 1, 0.5, 1);
+  pointer-events: none;
+  z-index: 9999;
+}
+
 

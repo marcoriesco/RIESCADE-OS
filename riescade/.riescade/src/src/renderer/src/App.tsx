@@ -199,8 +199,21 @@ export default function App() {
       const detail = (e as CustomEvent).detail;
       const id = Math.random().toString(36).substring(2, 9);
       
-      // Add the toast
-      setToasts((prev) => [...prev, { id, ...detail, open: true }]);
+      let added = false;
+      setToasts((prev) => {
+        // Prevent duplicate open toasts for same controller or same title/description
+        const existingIdx = prev.findIndex((t) => t.open && (
+          (t.title === detail.title && t.description === detail.description) ||
+          (detail.type === "controller" && t.type === "controller" && t.title === detail.title)
+        ));
+
+        if (existingIdx !== -1) {
+          return prev.map((t, idx) => idx === existingIdx ? { ...t, description: detail.description } : t);
+        }
+
+        added = true;
+        return [...prev, { id, ...detail, open: true }];
+      });
       
       // Auto-dismiss after 3 seconds, independent of window focus/blur/hover
       setTimeout(() => {
@@ -330,22 +343,32 @@ export default function App() {
     root.style.setProperty("--accent-color-glass", glassColor);
   }, [settings]);
 
+  const prevControllersRef = useRef<any[]>([]);
+
   // Listen for native controllers updates from Electron main process
   useEffect(() => {
     // 1. Load initial connected controllers
     window.api.detectControllers().then((initial: any[]) => {
-      setControllers(initial || []);
+      const list = initial || [];
+      setControllers(list);
+      prevControllersRef.current = list;
     });
 
     // 2. Listen to hot-plug updates
     const unsubscribe = window.api.on('controllers-updated', (_, newControllers: any[]) => {
-      setControllers((prev: any[]) => {
-        const prevGuids = prev.map(c => c.guid);
-        const newGuids = newControllers.map(c => c.guid);
+      const updatedList = newControllers || [];
+      const prevList = prevControllersRef.current;
 
+      const prevGuids = prevList.map(c => c.guid || c.instanceId);
+      const newGuids = updatedList.map(c => c.guid || c.instanceId);
+
+      const showNotifications = settings["ShowControllerNotifications"]?.value !== false && settings["ShowControllerNotifications"]?.value !== "false";
+
+      if (showNotifications) {
         // Find connected ones
-        newControllers.forEach(c => {
-          if (!prevGuids.includes(c.guid)) {
+        updatedList.forEach(c => {
+          const key = c.guid || c.instanceId;
+          if (!prevGuids.includes(key)) {
             window.dispatchEvent(
               new CustomEvent("show-toast", {
                 detail: {
@@ -359,8 +382,9 @@ export default function App() {
         });
 
         // Find disconnected ones
-        prev.forEach(c => {
-          if (!newGuids.includes(c.guid)) {
+        prevList.forEach(c => {
+          const key = c.guid || c.instanceId;
+          if (!newGuids.includes(key)) {
             window.dispatchEvent(
               new CustomEvent("show-toast", {
                 detail: {
@@ -372,15 +396,16 @@ export default function App() {
             );
           }
         });
+      }
 
-        return newControllers;
-      });
+      prevControllersRef.current = updatedList;
+      setControllers(updatedList);
     });
 
     return () => {
       unsubscribe();
     };
-  }, []);
+  }, [settings]);
 
   // Helper callbacks for virtual windows
   const focusVirtualWindow = useCallback((id: string) => {
