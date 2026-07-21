@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState, useMemo, useCallback } from "react";
-import { Gamepad2, Heart, Loader2, Star, Play, ChevronRight, Maximize2, X, Search, Folder, ChevronLeft, HardDrive, ChevronDown, Check, MoreHorizontal, RefreshCw, BookOpen, Settings } from "lucide-react";
+import { Gamepad2, Heart, Loader2, Star, Play, ChevronRight, Maximize2, X, Search, Folder, ChevronLeft, HardDrive, ChevronDown, Check, MoreHorizontal, RefreshCw, BookOpen, Settings, Edit3, Save } from "lucide-react";
 import { System, Game, hasMultipleEmulators } from "../types";
 import { ScrollArea } from "./ScrollArea";
 import { OverlayScrollbarsComponentRef } from "overlayscrollbars-react";
@@ -48,10 +48,12 @@ function RadixSelect({
 }
 
 
+import { playUISound } from "../utils/audioManager";
+
 const missingMediaCache = new Set<string>();
 
 export default function SystemAppContent({
-  system, color, Icon, onLaunchGame, search: propSearch, setSearch: propSetSearch, onActiveGameArtChanged, onOpenTool
+  system, color, Icon, onLaunchGame, search: propSearch, setSearch: propSetSearch, onActiveGameArtChanged, onOpenTool, settings
 }: {
   systemName: string;
   system: System;
@@ -61,7 +63,8 @@ export default function SystemAppContent({
   search?: string;
   setSearch?: (s: string) => void;
   onActiveGameArtChanged?: (art: string | null) => void;
-  onOpenTool?: (toolId: string, subId?: string) => void;
+  onOpenTool?: (toolId: string, subId?: string, coreId?: string) => void;
+  settings?: any;
 }) {
   const [localSearch, setLocalSearch] = useState("");
   const search = propSearch !== undefined ? propSearch : localSearch;
@@ -107,6 +110,32 @@ export default function SystemAppContent({
   } | null>(null);
   const [showSavesSidebar, setShowSavesSidebar] = useState(false);
   const [sidebarTab, setSidebarTab] = useState<"collections" | "saves">("collections");
+  const [showMetadataSidebar, setShowMetadataSidebar] = useState(false);
+  const [metaForm, setMetaForm] = useState<{
+    name: string;
+    developer: string;
+    publisher: string;
+    releasedate: string;
+    genre: string;
+    players: string;
+    rating: string;
+    desc: string;
+    gamefamily: string;
+    region: string;
+    lang: string;
+  }>({
+    name: "",
+    developer: "",
+    publisher: "",
+    releasedate: "",
+    genre: "",
+    players: "",
+    rating: "",
+    desc: "",
+    gamefamily: "",
+    region: "",
+    lang: ""
+  });
 
   const [isScraping, setIsScraping] = useState(false);
   const [showManualSearchModal, setShowManualSearchModal] = useState(false);
@@ -632,10 +661,12 @@ export default function SystemAppContent({
         console.error("[SystemAppContent] Error loading getCustomCollections:", err);
         setAllCollections([]);
       });
+      setShowMetadataSidebar(false);
     } else {
       setSaveStates([]);
       setGameCollections([]);
       setAllCollections([]);
+      setShowMetadataSidebar(false);
     }
   }, [selectedGame]);
 
@@ -712,6 +743,41 @@ export default function SystemAppContent({
       : `file:///${rawVideo.replace(/\\/g, '/')}`;
   }, [selectedGame]);
 
+  const masterVolume = useMemo(() => {
+    const sVal = settings?.["Volume"]?.value;
+    if (sVal !== undefined && sVal !== null && sVal !== "") {
+      const parsed = parseInt(String(sVal), 10);
+      if (!isNaN(parsed)) return parsed;
+    }
+    return 80;
+  }, [settings]);
+
+  const enableSounds = useMemo(() => {
+    return settings?.["EnableSounds"]?.value !== false && settings?.["EnableSounds"]?.value !== "false";
+  }, [settings]);
+
+  const videoAudioEnabled = useMemo(() => {
+    return settings?.["VideoAudio"]?.value !== false && settings?.["VideoAudio"]?.value !== "false";
+  }, [settings]);
+
+  const isNavFirstRender = useRef(true);
+  useEffect(() => {
+    if (isNavFirstRender.current) {
+      isNavFirstRender.current = false;
+      return;
+    }
+    playUISound('navigate', masterVolume, enableSounds);
+  }, [selectedIdx, masterVolume, enableSounds]);
+
+  useEffect(() => {
+    if (videoUrl) {
+      window.dispatchEvent(new CustomEvent("video-playback-changed", { detail: { playing: true } }));
+      return () => {
+        window.dispatchEvent(new CustomEvent("video-playback-changed", { detail: { playing: false } }));
+      };
+    }
+  }, [videoUrl]);
+
   // Synchronize active game art background with the main window
   useEffect(() => {
     let gameArtUrl: string | null = null;
@@ -743,10 +809,11 @@ export default function SystemAppContent({
     
     if (system && system.emulators) {
       system.emulators.forEach((emu: any) => {
+        const emuDisplayName = (emu.name === 'libretro' ? 'retroarch' : emu.name).toUpperCase();
         if (emu.cores && emu.cores.length > 0) {
           emu.cores.forEach((core: string) => {
             choices.push({
-              label: `${emu.name.toUpperCase()} (${core.toUpperCase()})`,
+              label: `${emuDisplayName} (${core.toUpperCase()})`,
               value: `${emu.name}:${core}`,
               emulator: emu.name,
               core: core
@@ -754,7 +821,7 @@ export default function SystemAppContent({
           });
         } else {
           choices.push({
-            label: emu.name.toUpperCase(),
+            label: emuDisplayName,
             value: `${emu.name}:`,
             emulator: emu.name,
             core: ""
@@ -775,18 +842,32 @@ export default function SystemAppContent({
     return `${selectedGame.emulator}:${selectedGame.core || ""}`;
   }, [selectedGame]);
 
-  const emuToConfig = useMemo(() => {
+  const selectedCoreToConfig = useMemo(() => {
     if (selectValue === "auto") {
-      return system.emulators?.[0]?.name || null;
+      return system.emulators?.[0]?.cores?.[0] || "";
     }
-    return selectValue.split(":")[0] || null;
+    return selectValue.split(":")[1] || "";
+  }, [selectValue, system]);
+
+  const emuToConfig = useMemo(() => {
+    let raw = "";
+    if (selectValue === "auto") {
+      raw = system.emulators?.[0]?.name || "";
+    } else {
+      raw = selectValue.split(":")[0] || "";
+    }
+    if (!raw) return null;
+    return raw === "libretro" ? "retroarch" : raw;
   }, [selectValue, system]);
 
   const emuLabelToConfig = useMemo(() => {
     if (!emuToConfig) return "";
-    // If it's pcsx2-nightly, let's keep the name as is or format nicely
-    return emuToConfig.toUpperCase();
-  }, [emuToConfig]);
+    const nameStr = emuToConfig === "libretro" ? "RETROARCH" : emuToConfig.toUpperCase();
+    if (selectedCoreToConfig) {
+      return `${nameStr} (${selectedCoreToConfig.toUpperCase()})`;
+    }
+    return nameStr;
+  }, [emuToConfig, selectedCoreToConfig]);
 
   const handleEmulatorValueChangeForGame = (game: Game, val: string) => {
     let updatedGame = { ...game };
@@ -826,6 +907,58 @@ export default function SystemAppContent({
         })
       );
     });
+  };
+
+  const handleOpenMetadataSidebar = useCallback(() => {
+    if (!selectedGame) return;
+    const g = selectedGame as any;
+    setMetaForm({
+      name: selectedGame.name || "",
+      developer: selectedGame.developer || g.Developer || "",
+      publisher: selectedGame.publisher || g.Publisher || "",
+      releasedate: selectedGame.releasedate || g.ReleaseDate || "",
+      genre: selectedGame.genre || g.Genre || "",
+      players: selectedGame.players ? String(selectedGame.players) : g.Players ? String(g.Players) : "",
+      rating: selectedGame.rating !== undefined ? String(selectedGame.rating) : g.Rating !== undefined ? String(g.Rating) : "",
+      desc: selectedGame.desc || g.Desc || "",
+      gamefamily: selectedGame.gamefamily || "",
+      region: selectedGame.region || "",
+      lang: selectedGame.lang || ""
+    });
+    setShowSavesSidebar(false);
+    setShowMetadataSidebar(true);
+  }, [selectedGame]);
+
+  const handleSaveMetadata = async () => {
+    if (!selectedGame) return;
+    const updatedGame: Game = {
+      ...selectedGame,
+      name: metaForm.name,
+      developer: metaForm.developer,
+      publisher: metaForm.publisher,
+      releasedate: metaForm.releasedate,
+      genre: metaForm.genre,
+      players: metaForm.players,
+      rating: metaForm.rating ? parseFloat(metaForm.rating) : 0,
+      desc: metaForm.desc,
+      gamefamily: metaForm.gamefamily,
+      region: metaForm.region,
+      lang: metaForm.lang
+    };
+
+    await window.api.updateGame(system.name, updatedGame);
+    setGames(prev => prev.map(g => g.path === selectedGame.path ? updatedGame : g));
+    setShowMetadataSidebar(false);
+
+    window.dispatchEvent(
+      new CustomEvent("show-toast", {
+        detail: {
+          title: "Metadados Atualizados",
+          description: updatedGame.name,
+          type: "success"
+        }
+      })
+    );
   };
 
   return (
@@ -1223,10 +1356,149 @@ export default function SystemAppContent({
 
         {/* Right Details Panel */}
         {selectedGame && (
-          <ScrollArea className="w-[20vw] min-w-[250px] bg-black/50 p-6 select-none">
-            {showSavesSidebar ? (
+          <ScrollArea className="w-[20vw] min-w-[250px] bg-black/50 p-6 select-none overflow-hidden">
+            {showMetadataSidebar ? (
+              /* Metadata Editor Sidebar */
+              <div key="metadata-sidebar" className="flex flex-col gap-4 h-full animate-slide-in-right">
+                {/* Header */}
+                <div className="flex items-start justify-between border-b border-white/10 pb-3">
+                  <div className="flex flex-col min-w-0 pr-4">
+                    <div className="flex items-center gap-2">
+                      <Edit3 className="w-4 h-4 text-emerald-400 shrink-0" />
+                      <h3 className="font-bold text-sm text-white/95 truncate">Editar Metadados</h3>
+                    </div>
+                    <span className="text-[10px] text-white/40 mt-0.5 truncate">{selectedGame.name}</span>
+                  </div>
+                  <button
+                    onClick={() => setShowMetadataSidebar(false)}
+                    className="w-6 h-6 rounded-full flex items-center justify-center text-white bg-accent hover:bg-accent-hover hover:scale-105 transition duration-200 cursor-pointer shrink-0"
+                  >
+                    <X className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+
+                {/* Form Fields Scroll */}
+                <div className="flex-1 overflow-y-auto pr-1 flex flex-col gap-3 text-xs text-left">
+                  <div className="flex flex-col gap-1">
+                    <label className="text-[10px] font-bold uppercase text-white/40 tracking-wider">Nome do Jogo</label>
+                    <input
+                      type="text"
+                      value={metaForm.name}
+                      onChange={e => setMetaForm(prev => ({ ...prev, name: e.target.value }))}
+                      className="w-full bg-[#1a1a1a] border border-white/10 rounded-md px-3 py-1.5 text-white text-xs focus:outline-none focus:border-emerald-400 transition"
+                    />
+                  </div>
+
+                  <div className="flex flex-col gap-1">
+                    <label className="text-[10px] font-bold uppercase text-white/40 tracking-wider">Gênero</label>
+                    <input
+                      type="text"
+                      value={metaForm.genre}
+                      onChange={e => setMetaForm(prev => ({ ...prev, genre: e.target.value }))}
+                      className="w-full bg-[#1a1a1a] border border-white/10 rounded-md px-3 py-1.5 text-white text-xs focus:outline-none focus:border-emerald-400 transition"
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-2">
+                    <div className="flex flex-col gap-1">
+                      <label className="text-[10px] font-bold uppercase text-white/40 tracking-wider">Desenvolvedor</label>
+                      <input
+                        type="text"
+                        value={metaForm.developer}
+                        onChange={e => setMetaForm(prev => ({ ...prev, developer: e.target.value }))}
+                        className="w-full bg-[#1a1a1a] border border-white/10 rounded-md px-3 py-1.5 text-white text-xs focus:outline-none focus:border-emerald-400 transition"
+                      />
+                    </div>
+                    <div className="flex flex-col gap-1">
+                      <label className="text-[10px] font-bold uppercase text-white/40 tracking-wider">Publicadora</label>
+                      <input
+                        type="text"
+                        value={metaForm.publisher}
+                        onChange={e => setMetaForm(prev => ({ ...prev, publisher: e.target.value }))}
+                        className="w-full bg-[#1a1a1a] border border-white/10 rounded-md px-3 py-1.5 text-white text-xs focus:outline-none focus:border-emerald-400 transition"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-2">
+                    <div className="flex flex-col gap-1">
+                      <label className="text-[10px] font-bold uppercase text-white/40 tracking-wider">Data Lançamento</label>
+                      <input
+                        type="text"
+                        placeholder="YYYYMMDD"
+                        value={metaForm.releasedate}
+                        onChange={e => setMetaForm(prev => ({ ...prev, releasedate: e.target.value }))}
+                        className="w-full bg-[#1a1a1a] border border-white/10 rounded-md px-3 py-1.5 text-white text-xs focus:outline-none focus:border-emerald-400 transition"
+                      />
+                    </div>
+                    <div className="flex flex-col gap-1">
+                      <label className="text-[10px] font-bold uppercase text-white/40 tracking-wider">Jogadores</label>
+                      <input
+                        type="text"
+                        placeholder="1-2"
+                        value={metaForm.players}
+                        onChange={e => setMetaForm(prev => ({ ...prev, players: e.target.value }))}
+                        className="w-full bg-[#1a1a1a] border border-white/10 rounded-md px-3 py-1.5 text-white text-xs focus:outline-none focus:border-emerald-400 transition"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-2">
+                    <div className="flex flex-col gap-1">
+                      <label className="text-[10px] font-bold uppercase text-white/40 tracking-wider">Avaliação (0 - 1.0)</label>
+                      <input
+                        type="number"
+                        step="0.1"
+                        min="0"
+                        max="1"
+                        value={metaForm.rating}
+                        onChange={e => setMetaForm(prev => ({ ...prev, rating: e.target.value }))}
+                        className="w-full bg-[#1a1a1a] border border-white/10 rounded-md px-3 py-1.5 text-white text-xs focus:outline-none focus:border-emerald-400 transition"
+                      />
+                    </div>
+                    <div className="flex flex-col gap-1">
+                      <label className="text-[10px] font-bold uppercase text-white/40 tracking-wider">Região</label>
+                      <input
+                        type="text"
+                        placeholder="us, eu, jp"
+                        value={metaForm.region}
+                        onChange={e => setMetaForm(prev => ({ ...prev, region: e.target.value }))}
+                        className="w-full bg-[#1a1a1a] border border-white/10 rounded-md px-3 py-1.5 text-white text-xs focus:outline-none focus:border-emerald-400 transition"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="flex flex-col gap-1">
+                    <label className="text-[10px] font-bold uppercase text-white/40 tracking-wider">Descrição</label>
+                    <textarea
+                      rows={4}
+                      value={metaForm.desc}
+                      onChange={e => setMetaForm(prev => ({ ...prev, desc: e.target.value }))}
+                      className="w-full bg-[#1a1a1a] border border-white/10 rounded-md p-2.5 text-white text-xs leading-relaxed focus:outline-none focus:border-emerald-400 transition resize-none"
+                    />
+                  </div>
+                </div>
+
+                {/* Action buttons footer */}
+                <div className="flex items-center gap-2 pt-3 border-t border-white/10 mt-auto">
+                  <button
+                    onClick={() => setShowMetadataSidebar(false)}
+                    className="flex-1 py-2 px-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-md text-xs font-semibold text-white/70 transition cursor-pointer"
+                  >
+                    Cancelar
+                  </button>
+                  <button
+                    onClick={handleSaveMetadata}
+                    className="flex-1 py-2 px-3 bg-emerald-500 hover:bg-emerald-600 rounded-md text-xs font-bold text-white shadow-lg transition flex items-center justify-center gap-1.5 cursor-pointer"
+                  >
+                    <Save className="w-3.5 h-3.5" />
+                    <span>Salvar</span>
+                  </button>
+                </div>
+              </div>
+            ) : showSavesSidebar ? (
               /* Saves & Coleções Sidebar */
-              <div className="flex flex-col gap-4 h-full">
+              <div key="saves-sidebar" className="flex flex-col gap-4 h-full animate-slide-in-right">
                 {/* Header */}
                 <div className="flex items-start justify-between">
                   <div className="flex flex-col min-w-0 pr-6">
@@ -1444,7 +1716,7 @@ export default function SystemAppContent({
                       src={videoUrl} 
                       autoPlay 
                       loop 
-                      muted 
+                      muted={!videoAudioEnabled} 
                       playsInline
                       className="w-full h-full object-cover" 
                     />
@@ -1552,6 +1824,17 @@ export default function SystemAppContent({
                             <span>{selectedGame.favorite ? "Remover dos Favoritos" : "Favoritar"}</span>
                           </button>
 
+                          <button
+                            onClick={() => {
+                              setShowContextMenu(false);
+                              handleOpenMetadataSidebar();
+                            }}
+                            className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs hover:bg-white/10 text-left transition cursor-pointer text-white/80 hover:text-white"
+                          >
+                            <Edit3 className="w-4 h-4 text-emerald-400" />
+                            <span>Editar metadados</span>
+                          </button>
+
                           {/* Separator */}
                           <div className="my-1 border-t border-white/5" />
 
@@ -1582,6 +1865,18 @@ export default function SystemAppContent({
                     {/* Popper/Tooltip */}
                     <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-black text-[10px] text-white rounded opacity-0 group-hover:opacity-100 transition duration-150 pointer-events-none whitespace-nowrap z-50 shadow-xl border border-white/10">
                       {selectedGame.favorite ? "Remover dos Favoritos" : "Adicionar aos Favoritos"}
+                    </span>
+                  </button>
+
+                  <button
+                    onClick={handleOpenMetadataSidebar}
+                    className="flex items-center justify-center p-2 bg-[#1a1a1a] hover:bg-white/5 border border-white/5 rounded-md transition cursor-pointer relative group text-white/80"
+                  >
+                    <Edit3 className="w-4 h-4 text-white/60 group-hover:text-emerald-400 transition-colors" />
+                    
+                    {/* Popper/Tooltip */}
+                    <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-black text-[10px] text-white rounded opacity-0 group-hover:opacity-100 transition duration-150 pointer-events-none whitespace-nowrap z-50 shadow-xl border border-white/10">
+                      Editar Metadados
                     </span>
                   </button>
 
@@ -1668,7 +1963,7 @@ export default function SystemAppContent({
                     {emuToConfig && (
                       <button
                         onClick={() => {
-                          onOpenTool?.("settings", emuToConfig);
+                          onOpenTool?.("settings", emuToConfig, selectedCoreToConfig);
                         }}
                         className="mt-1 flex items-center justify-center gap-1.5 py-1.5 px-3 rounded bg-white/5 border border-white/5 hover:bg-white/10 hover:border-white/10 text-[10px] font-bold text-white/70 hover:text-white transition cursor-pointer select-none"
                       >

@@ -37,11 +37,8 @@ export type Game = {
   fanart?: string;
   wheel?: string;
   emulator?: string;
-  core?: string; // Appears in App.tsx line 1288
-  titleshot?: string;
+  core?: string;
   mix?: string;
-  boxback?: string;
-  bezel?: string;
   manual?: string;
   magazine?: string;
   map?: string;

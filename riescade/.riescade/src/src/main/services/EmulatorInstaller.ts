@@ -196,7 +196,8 @@ function getFolderContainingExe(extractDir: string, exeName: string): string {
 export class EmulatorInstaller {
   public static async checkStatus(emulatorName: string, sourceUrl?: string): Promise<EmulatorStatus> {
     const retroBatPath = getRetroBatPath()
-    const relExe = EMULATOR_EXES[emulatorName]
+    const targetEmu = emulatorName === 'libretro' ? 'retroarch' : emulatorName
+    const relExe = EMULATOR_EXES[targetEmu] || EMULATOR_EXES[emulatorName]
     const fullExePath = relExe ? join(retroBatPath, 'emulators', relExe) : ''
     const installed = !!fullExePath && existsSync(fullExePath)
 
@@ -275,7 +276,8 @@ export class EmulatorInstaller {
     onProgress: (pct: number) => void
   ): Promise<void> {
     const retroBatPath = getRetroBatPath()
-    const relExe = EMULATOR_EXES[emulatorName]
+    const targetEmu = emulatorName === 'libretro' ? 'retroarch' : emulatorName
+    const relExe = EMULATOR_EXES[targetEmu] || EMULATOR_EXES[emulatorName]
     if (!relExe) {
       throw new Error(`Emulator ${emulatorName} has no registered executable path.`)
     }

@@ -54,13 +54,17 @@ interface EmulatorSettingsPanelProps {
   emulatorSettings: any
   globalSettings?: any
   onSaveEmulatorSetting: (emulator: string, name: string, value: any) => void
+  initialGroup?: string
+  initialCore?: string
 }
 
 export const EmulatorSettingsPanel: React.FC<EmulatorSettingsPanelProps> = ({
   emulatorId,
   emulatorSettings,
   globalSettings,
-  onSaveEmulatorSetting
+  onSaveEmulatorSetting,
+  initialGroup,
+  initialCore
 }) => {
   const [schema, setSchema] = useState<EmulatorSchema | null>(null)
   const [resolvedSettings, setResolvedSettings] = useState<Record<string, { value: any; source: string }>>({})
@@ -85,8 +89,16 @@ export const EmulatorSettingsPanel: React.FC<EmulatorSettingsPanelProps> = ({
           setSchema(schemaData)
           setResolvedSettings(resolved || {})
           if (schemaData?.groups?.length > 0) {
-            setActiveGroupId(schemaData.groups[0].id)
+            const targetGroup = initialGroup && schemaData.groups.some((g: any) => g.id === initialGroup)
+              ? initialGroup
+              : schemaData.groups[0].id
+            setActiveGroupId(targetGroup)
           }
+
+          if (initialCore) {
+            onSaveEmulatorSetting(emulatorId, 'retroarch_core', initialCore)
+          }
+
           setLoading(false)
         }
       } catch (err) {
@@ -100,7 +112,7 @@ export const EmulatorSettingsPanel: React.FC<EmulatorSettingsPanelProps> = ({
 
     loadData()
     return () => { cancelled = true }
-  }, [emulatorId])
+  }, [emulatorId, initialGroup, initialCore])
 
   // Get the effective value for a config key
   const getEffectiveValue = useCallback((configKey: string, defaultValue?: string): string => {

@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useRef, useState, useMemo } from "react"
 import {
   Search, Power, X, Minus, Square, Gamepad2, Monitor,
   Folder, Grid3x3, Wifi, Volume2, Battery, Loader2,
-  MoreHorizontal, Heart, Download, Check, AlertTriangle
+  MoreHorizontal, Heart, Download, Check, AlertTriangle, Play
 } from "lucide-react";
 import * as Toast from '@radix-ui/react-toast';
 import * as Tooltip from '@radix-ui/react-tooltip';
@@ -15,6 +15,7 @@ import VirtualWindow from "./components/VirtualWindow";
 import defaultBg from '../../main/resources/default.webp';
 import defaultVideo from '../../main/resources/default.mp4';
 import riescadeLogo from '../../main/resources/riescade.webp';
+import { playUISound } from "./utils/audioManager";
 
 
 const DEFAULT_SYSTEM_BG = "radial-gradient(1200px 800px at 20% 10%, rgb(35 35 35) 0%, transparent 60%), radial-gradient(1000px 700px at 85% 90%, rgb(12 12 12) 0%, transparent 55%), linear-gradient(rgb(4 4 4) 0%, rgb(22 22 22) 100%)";
@@ -55,6 +56,13 @@ export default function App() {
     item: { id: string; type: "system" | "tool"; appId: string; name: string; icon: any; logo?: string; color?: string };
     isPinned: boolean;
   } | null>(null);
+  const [startMenuContextMenu, setStartMenuContextMenu] = useState<{
+    x: number;
+    y: number;
+    type: "system" | "tool";
+    appId: string;
+    name: string;
+  } | null>(null);
   const [showQuickSettings, setShowQuickSettings] = useState(false);
   const [batteryState, setBatteryState] = useState<{ level: number; charging: boolean; hasBattery: boolean } | null>(null);
   const [isOnline, setIsOnline] = useState(navigator.onLine);
@@ -66,7 +74,141 @@ export default function App() {
   const handleVolumeChange = (newVal: number) => {
     setVolume(newVal);
     localStorage.setItem("riescade_volume", String(newVal));
+    handleSaveSetting("Volume", newVal, "int");
   };
+
+  // Audio & Background Music State & Logic
+  const bgAudioRef = useRef<HTMLAudioElement | null>(null);
+  const [currentPlaylist, setCurrentPlaylist] = useState<{ name: string; relativePath: string; url: string }[]>([]);
+  const [currentTrackIndex, setCurrentTrackIndex] = useState<number>(0);
+  const [isVideoDucked, setIsVideoDucked] = useState(false);
+
+  // Sync Audio Settings
+  const masterVolume = useMemo(() => {
+    const sVal = settings["Volume"]?.value;
+    if (sVal !== undefined && sVal !== null && sVal !== "") {
+      const parsed = parseInt(String(sVal), 10);
+      if (!isNaN(parsed)) return parsed;
+    }
+    return volume;
+  }, [settings, volume]);
+
+  const musicVolume = useMemo(() => {
+    const sVal = settings["MusicVolume"]?.value;
+    if (sVal !== undefined && sVal !== null && sVal !== "") {
+      const parsed = parseInt(String(sVal), 10);
+      if (!isNaN(parsed)) return parsed;
+    }
+    return 50;
+  }, [settings]);
+
+  const isMusicEnabled = useMemo(() => {
+    return settings["audio.bgmusic"]?.value !== false && settings["audio.bgmusic"]?.value !== "false";
+  }, [settings]);
+
+  const displayTitles = useMemo(() => {
+    return settings["audio.display_titles"]?.value !== false && settings["audio.display_titles"]?.value !== "false";
+  }, [settings]);
+
+  const perSystemMusic = useMemo(() => {
+    return settings["audio.persystem"]?.value !== false && settings["audio.persystem"]?.value !== "false";
+  }, [settings]);
+
+  const useFavoriteMusic = useMemo(() => {
+    return settings["audio.useFavoriteMusic"]?.value === true || settings["audio.useFavoriteMusic"]?.value === "true";
+  }, [settings]);
+
+  const videoLowersMusic = useMemo(() => {
+    return settings["VideoLowersMusic"]?.value !== false && settings["VideoLowersMusic"]?.value !== "false";
+  }, [settings]);
+
+  const showVolumePopup = useMemo(() => {
+    return settings["VolumePopup"]?.value !== false && settings["VolumePopup"]?.value !== "false";
+  }, [settings]);
+
+
+
+  // Apply effective music volume & video ducking
+  useEffect(() => {
+    if (!bgAudioRef.current) return;
+    let baseVol = (musicVolume / 100) * (masterVolume / 100);
+    if (isVideoDucked && videoLowersMusic) {
+      baseVol *= 0.15;
+    }
+    bgAudioRef.current.volume = Math.max(0, Math.min(1, baseVol));
+
+    if (!isMusicEnabled) {
+      bgAudioRef.current.pause();
+    } else if (bgAudioRef.current.paused && currentPlaylist.length > 0 && bgAudioRef.current.src) {
+      bgAudioRef.current.play().catch(() => {});
+    }
+  }, [masterVolume, musicVolume, isMusicEnabled, isVideoDucked, videoLowersMusic, currentPlaylist]);
+
+  // Play track when track index or playlist changes
+  useEffect(() => {
+    if (!bgAudioRef.current) return;
+    if (!isMusicEnabled || currentPlaylist.length === 0) {
+      bgAudioRef.current.pause();
+      return;
+    }
+
+    const track = currentPlaylist[currentTrackIndex % currentPlaylist.length];
+    if (track) {
+      bgAudioRef.current.src = track.url;
+      let baseVol = (musicVolume / 100) * (masterVolume / 100);
+      if (isVideoDucked && videoLowersMusic) {
+        baseVol *= 0.15;
+      }
+      bgAudioRef.current.volume = Math.max(0, Math.min(1, baseVol));
+      bgAudioRef.current.play().then(() => {
+        if (displayTitles) {
+          window.dispatchEvent(new CustomEvent("show-toast", {
+            detail: {
+              title: "🎵 Tocando Música",
+              description: track.name,
+              type: "info"
+            }
+          }));
+        }
+      }).catch(() => {});
+    }
+  }, [currentTrackIndex, currentPlaylist, isMusicEnabled]);
+
+  const handleMusicEnded = () => {
+    if (currentPlaylist.length > 0) {
+      setCurrentTrackIndex(prev => (prev + 1) % currentPlaylist.length);
+    }
+  };
+
+  // Listen to video-playback event from SystemAppContent
+  useEffect(() => {
+    const handleVideoPlayback = (e: any) => {
+      if (e.detail) {
+        setIsVideoDucked(Boolean(e.detail.playing));
+      }
+    };
+    window.addEventListener("video-playback-changed", handleVideoPlayback);
+    return () => {
+      window.removeEventListener("video-playback-changed", handleVideoPlayback);
+    };
+  }, []);
+
+  // Show volume popup toast when masterVolume changes
+  const prevVolRef = useRef(masterVolume);
+  useEffect(() => {
+    if (prevVolRef.current !== masterVolume) {
+      prevVolRef.current = masterVolume;
+      if (showVolumePopup) {
+        window.dispatchEvent(new CustomEvent("show-toast", {
+          detail: {
+            title: "Volume do Sistema",
+            description: `${masterVolume}%`,
+            type: "info"
+          }
+        }));
+      }
+    }
+  }, [masterVolume, showVolumePopup]);
 
   useEffect(() => {
     const handleOnline = () => setIsOnline(true);
@@ -447,6 +589,13 @@ export default function App() {
     });
   }, [handleSaveSetting]);
 
+  const togglePinDesktop = useCallback((type: "system" | "tool", appId: string) => {
+    const current = getDesktopIcons();
+    const itemKey = `${type}:${appId}`;
+    const next = current.includes(itemKey) ? current.filter(x => x !== itemKey) : [...current, itemKey];
+    handleSaveSetting("Desktop.Icons", next.join(","), "string");
+  }, [getDesktopIcons, handleSaveSetting]);
+
   const togglePinTaskbar = useCallback((type: "system" | "tool", appId: string) => {
     const current = getTaskbarIcons();
     const itemKey = `${type}:${appId}`;
@@ -746,6 +895,59 @@ export default function App() {
     };
   }, [windowType, toolId, toolApp]);
 
+  // Determine active system name if user is in a system window
+  const activeSystemName = useMemo(() => {
+    if (windowType === 'system' && systemName) {
+      return systemName;
+    }
+    return null;
+  }, [windowType, systemName]);
+
+  // Load background music playlist based on active system and settings
+  useEffect(() => {
+    let cancelled = false;
+
+    const fetchTracks = async () => {
+      let rawTracks: any[] = [];
+      if (perSystemMusic && activeSystemName) {
+        rawTracks = await window.api.getMusicFiles(`systems/${activeSystemName}`);
+        if (rawTracks.length === 0) {
+          rawTracks = await window.api.getMusicFiles("systems");
+        }
+      }
+
+      if (rawTracks.length === 0 && useFavoriteMusic) {
+        rawTracks = await window.api.getMusicFiles("favorites");
+      }
+
+      if (rawTracks.length === 0) {
+        rawTracks = await window.api.getMusicFiles();
+      }
+
+      const formatted = (rawTracks || []).map(item => {
+        if (typeof item === 'string') {
+          const parts = item.split('/');
+          const fileName = parts[parts.length - 1];
+          const cleanName = fileName.replace(/\.[^/.]+$/, '').replace(/_/g, ' ');
+          return {
+            name: cleanName,
+            relativePath: item,
+            url: item.startsWith('http') || item.startsWith('file://') ? item : `file:///${item.replace(/\\/g, '/')}`
+          };
+        }
+        return item;
+      });
+
+      if (!cancelled) {
+        setCurrentPlaylist(formatted);
+        setCurrentTrackIndex(0);
+      }
+    };
+
+    fetchTracks();
+    return () => { cancelled = true; };
+  }, [activeSystemName, perSystemMusic, useFavoriteMusic]);
+
   // Fast boot: Skip overlay synchronized loader inside standalone windows
   const [libraryLoading, setLibraryLoading] = useState(windowType === null);
   const [loadingProgress, setLoadingProgress] = useState(0);
@@ -868,7 +1070,7 @@ export default function App() {
   }, []);
 
   // Open App - Opens virtual windows
-  const openApp = useCallback((type: "system" | "tool", appId: string, subId?: string) => {
+  const openApp = useCallback((type: "system" | "tool", appId: string, subId?: string, coreId?: string) => {
     setLauncherOpen(false);
     
     if (windowType !== "desktop") {
@@ -878,8 +1080,16 @@ export default function App() {
     }
 
     if (appId === "settings" && subId) {
+      const targetSub = subId === "libretro" ? "retroarch" : subId;
       setTimeout(() => {
-        window.dispatchEvent(new CustomEvent("navigate-settings", { detail: { tab: "emuladores", subTab: subId } }));
+        window.dispatchEvent(new CustomEvent("navigate-settings", { 
+          detail: { 
+            tab: "emuladores", 
+            subTab: targetSub,
+            initialGroup: targetSub === "retroarch" && coreId ? "cores" : undefined,
+            initialCore: coreId
+          } 
+        }));
       }, 200);
     }
   }, [windowType, openVirtualWindow]);
@@ -967,7 +1177,7 @@ export default function App() {
       if (realSystem) targetSystem = realSystem;
     }
 
-    let emulatorName = 'libretro';
+    let emulatorName = 'retroarch';
     if (game.emulator && game.emulator !== 'auto') {
       emulatorName = game.emulator;
     } else {
@@ -977,6 +1187,10 @@ export default function App() {
       } else if (targetSystem.emulators?.[0]?.name) {
         emulatorName = targetSystem.emulators[0].name;
       }
+    }
+
+    if (emulatorName === 'libretro') {
+      emulatorName = 'retroarch';
     }
 
     window.api.checkEmulatorStatus(emulatorName, targetSystem.name).then((status: any) => {
@@ -1255,7 +1469,8 @@ export default function App() {
               Icon={theme.icon}
               onLaunchGame={handleLaunchGame}
               onActiveGameArtChanged={setActiveGameArt}
-              onOpenTool={(toolId, subId) => openApp('tool', toolId, subId)}
+              onOpenTool={(toolId, subId, coreId) => openApp('tool', toolId, subId, coreId)}
+              settings={settings}
             />
           </div>
         </div>
@@ -1352,7 +1567,8 @@ export default function App() {
                 Icon={theme.icon}
                 onLaunchGame={handleLaunchGame}
                 onActiveGameArtChanged={setActiveGameArt}
-                onOpenTool={(toolId, subId) => openApp('tool', toolId, subId)}
+                onOpenTool={(toolId, subId, coreId) => openApp('tool', toolId, subId, coreId)}
+              settings={settings}
               />
             </div>
           </div>
@@ -1527,7 +1743,8 @@ export default function App() {
                   Icon={Icon}
                   onLaunchGame={handleLaunchGame}
                   onActiveGameArtChanged={setActiveGameArt}
-                  onOpenTool={(toolId, subId) => openApp('tool', toolId, subId)}
+                  onOpenTool={(toolId, subId, coreId) => openApp('tool', toolId, subId, coreId)}
+              settings={settings}
                 />
               ) : (
                 <ToolAppContent
@@ -1620,16 +1837,33 @@ export default function App() {
                   .map(app => {
                     const ToolIcon = app.icon;
                     return (
-                      <button
-                        key={app.id}
-                        onClick={() => openApp("tool", app.id)}
-                        className="flex flex-col items-center gap-2 p-3 rounded-xl hover:bg-white/10 transition group"
-                      >
-                        <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${app.color} flex items-center justify-center shadow-lg group-hover:scale-105 transition`}>
-                          <ToolIcon className="w-6 h-6 text-white" />
-                        </div>
-                        <span className="text-xs text-white/90 text-center leading-tight">{app.name}</span>
-                      </button>
+                      <div key={app.id} className="relative group">
+                        <button
+                          onClick={() => openApp("tool", app.id)}
+                          onContextMenu={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            setStartMenuContextMenu({ x: e.clientX, y: e.clientY, type: "tool", appId: app.id, name: app.name });
+                          }}
+                          className="w-full flex flex-col items-center gap-2 p-3 rounded-xl hover:bg-white/10 transition group/btn relative cursor-pointer"
+                        >
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              const rect = e.currentTarget.getBoundingClientRect();
+                              setStartMenuContextMenu({ x: rect.left, y: rect.bottom + 4, type: "tool", appId: app.id, name: app.name });
+                            }}
+                            className="absolute top-1 right-1 w-6 h-6 rounded-full bg-black/40 hover:bg-white/20 opacity-0 group-hover/btn:opacity-100 flex items-center justify-center text-white/70 hover:text-white transition z-10 cursor-pointer"
+                            title="Opções"
+                          >
+                            <MoreHorizontal className="w-3.5 h-3.5" />
+                          </button>
+                          <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${app.color} flex items-center justify-center shadow-lg group-hover/btn:scale-105 transition`}>
+                            <ToolIcon className="w-6 h-6 text-white" />
+                          </div>
+                          <span className="text-xs text-white/90 text-center leading-tight">{app.name}</span>
+                        </button>
+                      </div>
                     );
                   })}
               </div>
@@ -1642,22 +1876,39 @@ export default function App() {
                     const theme = getSystemTheme(sys.name);
                     const SysIcon = theme.icon;
                     return (
-                      <button
-                        key={sys.name}
-                        onClick={() => openApp("system", sys.name)}
-                        className="flex flex-col items-center gap-2 p-3 rounded-xl hover:bg-white/10 transition group"
-                      >
-                        <div className="w-20 h-20 flex items-center justify-center">
-                          {sys.logo ? (
-                            <img src={sys.logo} alt={sys.fullname} className="h-full object-contain max-w-full filter drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)] group-hover:scale-105 transition-all" />
-                          ) : (
-                            <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${theme.color} flex items-center justify-center shadow-lg group-hover:scale-105 transition`}>
-                              <SysIcon className="w-6 h-6 text-white" />
-                            </div>
-                          )}
-                        </div>
-                        <span className="text-xs text-white/90 text-center leading-tight truncate w-full">{sys.fullname}</span>
-                      </button>
+                      <div key={sys.name} className="relative group">
+                        <button
+                          onClick={() => openApp("system", sys.name)}
+                          onContextMenu={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            setStartMenuContextMenu({ x: e.clientX, y: e.clientY, type: "system", appId: sys.name, name: sys.fullname });
+                          }}
+                          className="w-full flex flex-col items-center gap-2 p-3 rounded-xl hover:bg-white/10 transition group/btn relative cursor-pointer"
+                        >
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              const rect = e.currentTarget.getBoundingClientRect();
+                              setStartMenuContextMenu({ x: rect.left, y: rect.bottom + 4, type: "system", appId: sys.name, name: sys.fullname });
+                            }}
+                            className="absolute top-1 right-1 w-6 h-6 rounded-full bg-black/40 hover:bg-white/20 opacity-0 group-hover/btn:opacity-100 flex items-center justify-center text-white/70 hover:text-white transition z-10 cursor-pointer"
+                            title="Opções"
+                          >
+                            <MoreHorizontal className="w-3.5 h-3.5" />
+                          </button>
+                          <div className="w-20 h-20 flex items-center justify-center">
+                            {sys.logo ? (
+                              <img src={sys.logo} alt={sys.fullname} className="h-full object-contain max-w-full filter drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)] group-hover/btn:scale-105 transition-all" />
+                            ) : (
+                              <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${theme.color} flex items-center justify-center shadow-lg group-hover/btn:scale-105 transition`}>
+                                <SysIcon className="w-6 h-6 text-white" />
+                              </div>
+                            )}
+                          </div>
+                          <span className="text-xs text-white/90 text-center leading-tight truncate w-full">{sys.fullname}</span>
+                        </button>
+                      </div>
                     );
                   })}
               </div>
@@ -1680,6 +1931,72 @@ export default function App() {
               </button>
             </div>
           </div>
+
+          {startMenuContextMenu && (
+            <>
+              <div 
+                className="fixed inset-0 z-[9999]" 
+                onClick={(e) => { e.stopPropagation(); setStartMenuContextMenu(null); }} 
+                onContextMenu={(e) => { e.preventDefault(); e.stopPropagation(); setStartMenuContextMenu(null); }}
+              />
+              <div 
+                className="fixed z-[10000] w-56 bg-[#0d0d0d]/95 backdrop-blur-md border border-white/10 rounded-xl shadow-2xl p-1.5 text-white animate-in fade-in zoom-in-95 duration-100"
+                style={{ 
+                  left: Math.min(startMenuContextMenu.x, window.innerWidth - 240), 
+                  top: Math.min(startMenuContextMenu.y, window.innerHeight - 180) 
+                }}
+                onClick={(e) => e.stopPropagation()}
+              >
+                <div className="px-3 py-1.5 text-[10px] uppercase font-bold text-white/40 tracking-wider truncate border-b border-white/5 mb-1">
+                  {startMenuContextMenu.name}
+                </div>
+
+                <button
+                  onClick={() => {
+                    openApp(startMenuContextMenu.type, startMenuContextMenu.appId);
+                    setStartMenuContextMenu(null);
+                  }}
+                  className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs hover:bg-white/10 text-left transition cursor-pointer"
+                >
+                  <Play className="w-4 h-4 text-accent" />
+                  <span>Abrir</span>
+                </button>
+
+                {(() => {
+                  const desktopIcons = getDesktopIcons();
+                  const taskbarIcons = getTaskbarIcons();
+                  const itemKey = `${startMenuContextMenu.type}:${startMenuContextMenu.appId}`;
+                  const isDesktop = desktopIcons.includes(itemKey);
+                  const isTaskbar = taskbarIcons.includes(itemKey);
+                  return (
+                    <>
+                      <button
+                        onClick={() => {
+                          togglePinDesktop(startMenuContextMenu.type, startMenuContextMenu.appId);
+                          setStartMenuContextMenu(null);
+                        }}
+                        className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs hover:bg-white/10 text-left transition cursor-pointer"
+                      >
+                        <Monitor className="w-4 h-4 text-blue-400" />
+                        <span>{isDesktop ? "Remover do Desktop" : "Fixar no Desktop"}</span>
+                      </button>
+
+                      <button
+                        onClick={() => {
+                          togglePinTaskbar(startMenuContextMenu.type, startMenuContextMenu.appId);
+                          setStartMenuContextMenu(null);
+                        }}
+                        className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs hover:bg-white/10 text-left transition cursor-pointer"
+                      >
+                        <Grid3x3 className="w-4 h-4 text-cyan-400" />
+                        <span>{isTaskbar ? "Remover da Taskbar" : "Fixar na Taskbar"}</span>
+                      </button>
+                    </>
+                  );
+                })()}
+              </div>
+            </>
+          )}
         </div>
 
       {/* Overlay behind the taskbar */}
@@ -2223,6 +2540,7 @@ export default function App() {
         </>
       )}
 
+      <audio ref={bgAudioRef} onEnded={handleMusicEnded} className="hidden" />
       {renderToasts()}
       <Toast.Viewport className="fixed top-6 left-1/2 -translate-x-1/2 z-[10000] flex flex-col gap-2 w-80 max-w-full m-0 list-none outline-none items-center" />
     </Toast.Provider>

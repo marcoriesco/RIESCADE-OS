@@ -162,6 +162,9 @@ export default function ToolAppContent({
   const [riescadeVersion, setRiescadeVersion] = useState<string>("v2.0.0-Beta");
   const [emulatorSchemas, setEmulatorSchemas] = useState<{ id: string; name: string; description?: string }[]>([]);
 
+  const [initialGroup, setInitialGroup] = useState<string | undefined>();
+  const [initialCore, setInitialCore] = useState<string | undefined>();
+
   useEffect(() => {
     const handleNavigate = (e: any) => {
       const data = e.detail;
@@ -169,7 +172,10 @@ export default function ToolAppContent({
         setActiveSettingsTab(data.tab);
         if (data.subTab) {
           setEmuMenuOpen(true);
-          setActiveEmuSubmenu(data.subTab);
+          const targetSub = data.subTab === "libretro" ? "retroarch" : data.subTab;
+          setActiveEmuSubmenu(targetSub);
+          setInitialGroup(data.initialGroup);
+          setInitialCore(data.initialCore);
         }
       }
     };
@@ -735,39 +741,55 @@ export default function ToolAppContent({
                     {tab.id === "emuladores" && emuMenuOpen && (
                       <div className="flex flex-col gap-1 pl-4 border-l border-white/5 ml-5.5 my-1 max-h-[340px] overflow-y-auto pr-1 select-none scrollbar-thin">
                         {emulatorSchemas.length > 0 ? (
-                          emulatorSchemas.map((schema) => (
-                            <button
-                              key={schema.id}
-                              onClick={() => {
-                                setActiveSettingsTab("emuladores");
-                                setActiveEmuSubmenu(schema.id);
-                              }}
-                              className={`cursor-pointer w-full text-left py-1.5 px-2 rounded-md text-[11px] font-medium transition ${
-                                activeSettingsTab === "emuladores" && activeEmuSubmenu === schema.id
-                                  ? "text-accent font-bold bg-white/[0.04]"
-                                  : "text-white/50 hover:text-white/80 hover:bg-white/[0.02]"
-                              }`}
-                            >
-                              {schema.name}
-                            </button>
-                          ))
+                          emulatorSchemas.map((schema) => {
+                            const isSelected = activeSettingsTab === "emuladores" && activeEmuSubmenu === schema.id;
+                            return (
+                              <button
+                                key={schema.id}
+                                ref={(node) => {
+                                  if (node && isSelected) {
+                                    setTimeout(() => node.scrollIntoView({ block: "nearest", behavior: "smooth" }), 100);
+                                  }
+                                }}
+                                onClick={() => {
+                                  setActiveSettingsTab("emuladores");
+                                  setActiveEmuSubmenu(schema.id);
+                                }}
+                                className={`cursor-pointer w-full text-left py-1.5 px-2 rounded-md text-[11px] font-medium transition ${
+                                  isSelected
+                                    ? "text-accent font-bold bg-white/[0.04]"
+                                    : "text-white/50 hover:text-white/80 hover:bg-white/[0.02]"
+                                }`}
+                              >
+                                {schema.name}
+                              </button>
+                            );
+                          })
                         ) : (
-                          Object.entries(EMULATOR_NAMES).map(([emuKey, emuName]) => (
-                            <button
-                              key={emuKey}
-                              onClick={() => {
-                                setActiveSettingsTab("emuladores");
-                                setActiveEmuSubmenu(emuKey);
-                              }}
-                              className={`cursor-pointer w-full text-left py-1.5 px-2 rounded-md text-[11px] font-medium transition ${
-                                activeSettingsTab === "emuladores" && activeEmuSubmenu === emuKey
-                                  ? "text-accent font-bold bg-white/[0.04]"
-                                  : "text-white/50 hover:text-white/80 hover:bg-white/[0.02]"
-                              }`}
-                            >
-                              {emuName}
-                            </button>
-                          ))
+                          Object.entries(EMULATOR_NAMES).map(([emuKey, emuName]) => {
+                            const isSelected = activeSettingsTab === "emuladores" && activeEmuSubmenu === emuKey;
+                            return (
+                              <button
+                                key={emuKey}
+                                ref={(node) => {
+                                  if (node && isSelected) {
+                                    setTimeout(() => node.scrollIntoView({ block: "nearest", behavior: "smooth" }), 100);
+                                  }
+                                }}
+                                onClick={() => {
+                                  setActiveSettingsTab("emuladores");
+                                  setActiveEmuSubmenu(emuKey);
+                                }}
+                                className={`cursor-pointer w-full text-left py-1.5 px-2 rounded-md text-[11px] font-medium transition ${
+                                  isSelected
+                                    ? "text-accent font-bold bg-white/[0.04]"
+                                    : "text-white/50 hover:text-white/80 hover:bg-white/[0.02]"
+                                }`}
+                              >
+                                {emuName}
+                              </button>
+                            );
+                          })
                         )}
                       </div>
                     )}
@@ -2012,19 +2034,15 @@ export default function ToolAppContent({
                   <SettingToggle label="Mostrar Popup de Volume" name="VolumePopup" ctx={ctx} />
 
                   <SettingGroup label="Música" />
-                  <SettingToggle label="Música no Menu" name="audio.bgmusic" ctx={ctx} />
-                  <SettingToggle label="Exibir Títulos das Músicas" name="audio.display_titles" ctx={ctx} />
-                  <SettingSlider label="Tempo de Exibição do Título" name="audio.display_titles_time" min={2} max={120} step={2} suffix="s" ctx={ctx} />
-                  <SettingToggle label="Música Específica por Sistema" name="audio.persystem" ctx={ctx} />
-                  <SettingToggle label="Tocar Música do Tema" name="audio.thememusics" ctx={ctx} />
-                  <SettingToggle label="Baixar Música ao Reproduzir Vídeo" name="VideoLowersMusic" ctx={ctx} />
-                  <SettingToggle label="Tocar Apenas Favoritas" name="audio.useFavoriteMusic" ctx={ctx} />
+                  <SettingToggle label="Ativar Música" name="audio.bgmusic" ctx={ctx} />
+                  <SettingToggle label="Mostrar Popup dos Títulos das Músicas" name="audio.display_titles" ctx={ctx} />
+                  <SettingToggle label="Tocar Música Específica por Sistema" desc="Ao abrir um sistema tocar a musica especifica daquele Sistema (/music/systems)" name="audio.persystem" ctx={ctx} />
+                  <SettingToggle label="Tocar Apenas Favoritas" desc="Tocar de fundo as músicas que estão na pasta de favoritas (/music/favorites)" name="audio.useFavoriteMusic" ctx={ctx} />
+                  <SettingToggle label="Baixar volume ao reproduzir Vídeo" name="VideoLowersMusic" ctx={ctx} />
 
                   <SettingGroup label="Sons" />
                   <SettingToggle label="Sons de Navegação" name="EnableSounds" ctx={ctx} />
                   <SettingToggle label="Áudio na Prévia de Vídeo" name="VideoAudio" ctx={ctx} />
-
-
                 </div>
               </ScrollArea>
             </div>
@@ -2164,6 +2182,8 @@ export default function ToolAppContent({
                     emulatorSettings={emulatorSettings}
                     globalSettings={emulatorSettings?.['global']}
                     onSaveEmulatorSetting={onSaveEmulatorSetting || (() => {})}
+                    initialGroup={initialGroup}
+                    initialCore={initialCore}
                   />
                 </div>
               </ScrollArea>
@@ -3148,11 +3168,8 @@ export default function ToolAppContent({
                         { field: "marquee", name: "Logotipo / Marquee" },
                         { field: "thumbnail", name: "Capa 3D / Miniatura (Thumbnail)" },
                         { field: "fanart", name: "Arte de Fundo (Fanart)" },
-                        { field: "titleshot", name: "Captura de Tela do Título (Titleshot)" },
                         { field: "wheel", name: "Logotipo Redondo (Wheel)" },
                         { field: "mix", name: "Imagem Composta (Mix)" },
-                        { field: "boxback", name: "Capa Traseira (Boxback)" },
-                        { field: "bezel", name: "Moldura Decorativa (Bezel)" },
                         { field: "manual", name: "Manual de Instruções" },
                         { field: "magazine", name: "Revista Escaneada (Magazine)" },
                         { field: "map", name: "Mapa do Jogo" }

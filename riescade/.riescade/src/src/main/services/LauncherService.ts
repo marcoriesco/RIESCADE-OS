@@ -92,7 +92,7 @@ export class LauncherService {
 
       // Setup arguments
       const settingsParser = new SettingsParser()
-      let emulator = 'libretro'
+      let emulator = 'retroarch'
       let core = ''
 
       // 1. Resolve Emulator
@@ -107,6 +107,10 @@ export class LauncherService {
         }
       }
 
+      if (emulator === 'libretro') {
+        emulator = 'retroarch'
+      }
+
       // 2. Resolve Core
       if (game.core && game.core !== 'auto') {
         core = game.core
@@ -114,14 +118,21 @@ export class LauncherService {
         const hasGameEmulatorOverride = game.emulator && game.emulator !== 'auto'
         const systemWideCore = settingsParser.getSetting(`${system.name}.core`, 'string')
 
+        const findMatchingEmulator = () => {
+          return system.emulators?.find(e => 
+            e.name === emulator || 
+            (emulator === 'retroarch' && (e.name === 'retroarch' || e.name === 'libretro'))
+          )
+        }
+
         if (hasGameEmulatorOverride) {
-          const selectedEmulator = system.emulators?.find(e => e.name === emulator)
+          const selectedEmulator = findMatchingEmulator()
           core = selectedEmulator?.cores?.[0] || ''
         } else {
           if (systemWideCore && systemWideCore !== 'auto') {
             core = systemWideCore
           } else {
-            const selectedEmulator = system.emulators?.find(e => e.name === emulator)
+            const selectedEmulator = findMatchingEmulator()
             if (selectedEmulator) {
               core = selectedEmulator.cores?.[0] || ''
             } else if (system.emulators?.[0]) {
@@ -131,7 +142,9 @@ export class LauncherService {
         }
       }
 
-      const selectedEmulator = system.emulators?.find(e => e.name === emulator)
+      const selectedEmulator = system.emulators?.find(e => 
+        e.name === emulator || (emulator === 'retroarch' && (e.name === 'retroarch' || e.name === 'libretro'))
+      )
       if (selectedEmulator && selectedEmulator.command) {
         // Parse command line arguments respecting double quotes first
         const parseCommandArgs = (cmdLine: string): string[] => {

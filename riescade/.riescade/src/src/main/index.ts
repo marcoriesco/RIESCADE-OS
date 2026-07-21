@@ -16,7 +16,7 @@ import { registerUpdaterIpc } from './services/UpdaterService'
 import { Game, System } from '../shared/types'
 import { ControllerManager } from './services/ControllerManager'
 import { watch, FSWatcher, readFileSync, existsSync, writeFileSync, mkdirSync, statSync } from 'fs'
-import { getRetroBatPath, getConfigPath, getResourcesPath, getRiescadePath, getDatabasePath } from './utils/paths'
+import { getRetroBatPath, getConfigPath, getResourcesPath, getRiescadePath, getDatabasePath, getMusicPath } from './utils/paths'
 import { XMLParser, XMLBuilder } from 'fast-xml-parser'
 import { SYSTEM_TO_SCREENSCRAPER_PLATFORM } from './services/ScraperService'
 
@@ -503,8 +503,8 @@ app.whenReady().then(() => {
     
     // Map emulator ID to launcher's expected name if different
     let launcherEmuName = emulator
-    if (emulator === 'retroarch') {
-      launcherEmuName = 'libretro'
+    if (emulator === 'libretro') {
+      launcherEmuName = 'retroarch'
     }
     
     const cmd = `"${launcherPath}" -emulator "${launcherEmuName}" -system "${launcherEmuName}" -configure-only`
@@ -537,26 +537,30 @@ app.whenReady().then(() => {
   })
 
   ipcMain.handle('get-emulator-schema', async (_, id: string) => {
-    return emulatorSchemaService.getSchema(id)
+    const targetId = id === 'libretro' ? 'retroarch' : id
+    return emulatorSchemaService.getSchema(targetId)
   })
 
   ipcMain.handle('get-resolved-emulator-settings', async (_, emulator: string) => {
+    const targetEmu = emulator === 'libretro' ? 'retroarch' : emulator
     const emulatorParser = new EmulatorParser()
-    return emulatorParser.getResolvedSettings(emulator)
+    return emulatorParser.getResolvedSettings(targetEmu)
   })
 
   ipcMain.handle('reset-emulator-setting', async (_, emulator: string, key: string) => {
+    const targetEmu = emulator === 'libretro' ? 'retroarch' : emulator
     const emulatorParser = new EmulatorParser()
-    emulatorParser.resetSetting(emulator, key)
-    sendToMainWindow('emulator-setting-changed', { emulator, name: key, value: 'auto' })
-    triggerLauncherConfig(emulator)
+    emulatorParser.resetSetting(targetEmu, key)
+    sendToMainWindow('emulator-setting-changed', { emulator: targetEmu, name: key, value: 'auto' })
+    triggerLauncherConfig(targetEmu)
   })
 
   ipcMain.handle('reset-all-emulator-settings', async (_, emulator: string) => {
+    const targetEmu = emulator === 'libretro' ? 'retroarch' : emulator
     const emulatorParser = new EmulatorParser()
-    emulatorParser.resetAllSettings(emulator)
-    sendToMainWindow('emulator-settings-reset', { emulator })
-    triggerLauncherConfig(emulator)
+    emulatorParser.resetAllSettings(targetEmu)
+    sendToMainWindow('emulator-settings-reset', { emulator: targetEmu })
+    triggerLauncherConfig(targetEmu)
   })
 
   ipcMain.handle('reload-emulator-schemas', async () => {
@@ -866,23 +870,39 @@ app.whenReady().then(() => {
 
   ipcMain.handle('get-music-files', async (_, subfolder?: string) => {
     try {
-      const { readdirSync, statSync } = require('fs')
-      const { extname } = require('path')
-      const baseDir = join(getConfigPath(), 'music')
+      const { readdirSync, statSync, existsSync, mkdirSync } = require('fs')
+      const { extname, basename } = require('path')
+      const baseDir = getMusicPath()
       const targetDir = subfolder ? join(baseDir, subfolder) : baseDir
+      
+      if (!existsSync(baseDir)) {
+        mkdirSync(baseDir, { recursive: true })
+      }
+      if (!existsSync(join(baseDir, 'systems'))) {
+        mkdirSync(join(baseDir, 'systems'), { recursive: true })
+      }
+      if (!existsSync(join(baseDir, 'favorites'))) {
+        mkdirSync(join(baseDir, 'favorites'), { recursive: true })
+      }
       
       if (!existsSync(targetDir)) return []
       
       const files = readdirSync(targetDir)
-      const allowedExtensions = ['.mp3', '.ogg', '.wav', '.mp4', '.m4a', '.aac']
+      const allowedExtensions = ['.mp3', '.ogg', '.wav', '.mp4', '.m4a', '.flac', '.aac']
       
-      const results: string[] = []
+      const results: { name: string; relativePath: string; url: string }[] = []
       for (const file of files) {
         const fullPath = join(targetDir, file)
         const stat = statSync(fullPath)
         if (stat.isFile() && allowedExtensions.includes(extname(file).toLowerCase())) {
           const relPath = subfolder ? `${subfolder}/${file}` : file
-          results.push(relPath)
+          const cleanName = basename(file, extname(file)).replace(/_/g, ' ')
+          const fileUrl = `file:///${fullPath.replace(/\\/g, '/')}`
+          results.push({
+            name: cleanName,
+            relativePath: relPath,
+            url: fileUrl
+          })
         }
       }
       return results
@@ -893,7 +913,7 @@ app.whenReady().then(() => {
   })
 
   ipcMain.handle('get-music-path', async () => {
-    return join(getConfigPath(), 'music')
+    return getMusicPath()
   })
 
   ipcMain.handle('start-scrape', async (event, options?: { systemName?: string; gamePath?: string }) => {

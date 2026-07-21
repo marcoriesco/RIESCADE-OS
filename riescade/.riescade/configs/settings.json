@@ -8,7 +8,7 @@
     "type": "bool"
   },
   "VideoLowersMusic": {
-    "value": false,
+    "value": true,
     "type": "bool"
   },
   "audio.bgmusic": {
@@ -376,11 +376,11 @@
     "type": "bool"
   },
   "Window.tool-settings.X": {
-    "value": 170,
+    "value": 176,
     "type": "int"
   },
   "Window.tool-settings.Y": {
-    "value": 32,
+    "value": 73,
     "type": "int"
   },
   "Window.tool-settings.Width": {
@@ -612,7 +612,7 @@
     "type": "string"
   },
   "RIESCADE.PreferredMediaType.snes": {
-    "value": "cover",
+    "value": "fanart",
     "type": "string"
   },
   "RIESCADE.PreferredMediaType.arcade": {
@@ -856,6 +856,26 @@
     "type": "string"
   },
   "Window.system-pinballfx2.Maximized": {
+    "value": true,
+    "type": "bool"
+  },
+  "Window.system-atari2600.Maximized": {
+    "value": true,
+    "type": "bool"
+  },
+  "Window.system-gog.Maximized": {
+    "value": true,
+    "type": "bool"
+  },
+  "RIESCADE.PreferredMediaType.atari2600": {
+    "value": "cover",
+    "type": "string"
+  },
+  "audio.useFavoriteMusic": {
+    "value": true,
+    "type": "bool"
+  },
+  "VideoAudio": {
     "value": true,
     "type": "bool"
   }
