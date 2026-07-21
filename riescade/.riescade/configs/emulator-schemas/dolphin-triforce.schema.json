@@ -1,0 +1,823 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "dolphin-triforce",
+  "name": "DOLPHIN-TRIFORCE",
+  "description": "Configurações para o emulador DOLPHIN-TRIFORCE geradas a partir do es_features.cfg.",
+  "icon": "dolphin-triforce",
+  "configFiles": [],
+  "globalMappings": {
+    "ratio": {
+      "configKey": "ratio",
+      "globalKey": "aspect_ratio"
+    }
+  },
+  "groups": [
+    {
+      "id": "graphics",
+      "title": "Gráficos",
+      "icon": "monitor",
+      "order": 1,
+      "options": [
+        {
+          "id": "dolphin_shaders",
+          "label": "Conjunto de Shaders",
+          "type": "select",
+          "default": "auto",
+          "configKey": "dolphin_shaders",
+          "values": [
+            {
+              "label": "Nenhum",
+              "value": "(off)"
+            },
+            {
+              "label": "ACID METAL",
+              "value": "acidmetal"
+            },
+            {
+              "label": "ACID TRIP",
+              "value": "acidtrip"
+            },
+            {
+              "label": "ACID TRIP 2",
+              "value": "acidtrip2"
+            },
+            {
+              "label": "Automático TOON",
+              "value": "auto_toon"
+            },
+            {
+              "label": "Automático TOON 2",
+              "value": "auto_toon2"
+            },
+            {
+              "label": "BAD BLOOM",
+              "value": "bad_bloom"
+            },
+            {
+              "label": "BRIGHTEN",
+              "value": "brighten"
+            },
+            {
+              "label": "CHRISMAS",
+              "value": "chrismas"
+            },
+            {
+              "label": "EMBOSS",
+              "value": "emboss"
+            },
+            {
+              "label": "GRAYSCALE",
+              "value": "grayscale"
+            },
+            {
+              "label": "INVERT",
+              "value": "invert"
+            },
+            {
+              "label": "LENS DISTORTION",
+              "value": "lens_distortion"
+            },
+            {
+              "label": "MAD WORLD",
+              "value": "mad_world"
+            },
+            {
+              "label": "NIGHT VISION",
+              "value": "nightvision"
+            },
+            {
+              "label": "POSTERIZE",
+              "value": "posterize"
+            },
+            {
+              "label": "SEPIA",
+              "value": "sepia"
+            },
+            {
+              "label": "SKETCHY",
+              "value": "sketchy"
+            },
+            {
+              "label": "TOXIC",
+              "value": "toxic"
+            }
+          ],
+          "realKey": "PostProcessingShader",
+          "realSection": "Enhancements",
+          "realFile": "Dolphin.Generator.cs"
+        },
+        {
+          "id": "ratio",
+          "label": "Proporção de Tela",
+          "type": "select",
+          "default": "auto",
+          "configKey": "ratio",
+          "values": [
+            {
+              "label": "16/9",
+              "value": "16/9"
+            },
+            {
+              "label": "4/3",
+              "value": "4/3"
+            },
+            {
+              "label": "STRETCHED",
+              "value": "Stretched"
+            }
+          ],
+          "inheritsGlobal": "aspect_ratio",
+          "realKey": "ratio",
+          "realFile": "Dolphin.Generator.cs"
+        },
+        {
+          "id": "internal_resolution",
+          "label": "Resolução Interna",
+          "type": "select",
+          "default": "auto",
+          "configKey": "internal_resolution",
+          "values": [
+            {
+              "label": "1X (640x528)",
+              "value": "1"
+            },
+            {
+              "label": "2X (720P)",
+              "value": "2"
+            },
+            {
+              "label": "3X (1080P)",
+              "value": "3"
+            },
+            {
+              "label": "4X (1440P)",
+              "value": "4"
+            },
+            {
+              "label": "5X",
+              "value": "5"
+            },
+            {
+              "label": "6X (4K)",
+              "value": "6"
+            },
+            {
+              "label": "7X",
+              "value": "7"
+            },
+            {
+              "label": "8X (5K)",
+              "value": "8"
+            },
+            {
+              "label": "9X",
+              "value": "9"
+            },
+            {
+              "label": "10X",
+              "value": "10"
+            },
+            {
+              "label": "11X",
+              "value": "11"
+            },
+            {
+              "label": "12X (8K)",
+              "value": "12"
+            }
+          ],
+          "realKey": "InternalResolution",
+          "realSection": "Settings",
+          "realFile": "Dolphin.Generator.cs"
+        },
+        {
+          "id": "dolphin_vsync",
+          "label": "Sincronização Vertical (V-Sync)",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "dolphin_vsync",
+          "realKey": "VSync",
+          "realSection": "Hardware",
+          "realFile": "Dolphin.Generator.cs"
+        },
+        {
+          "id": "WaitForShadersBeforeStarting",
+          "label": "COMPILE SHADERS BEFORE STARTING",
+          "description": "May reduce stuttering a the cost of longer delay to start a game.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "WaitForShadersBeforeStarting",
+          "realKey": "WaitForShadersBeforeStarting",
+          "realSection": "Settings",
+          "realFile": "Dolphin.Generator.cs"
+        },
+        {
+          "id": "anisotropic_filtering",
+          "label": "Filtragem Anisotrópica",
+          "description": "Enhance the quality of textures Ativado surface. May make textures look better in some games, but may break certain effects in rare cases.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "anisotropic_filtering",
+          "values": [
+            {
+              "label": "Não",
+              "value": "0"
+            },
+            {
+              "label": "2x",
+              "value": "1"
+            },
+            {
+              "label": "4x",
+              "value": "2"
+            },
+            {
+              "label": "8x",
+              "value": "3"
+            },
+            {
+              "label": "16x",
+              "value": "4"
+            }
+          ],
+          "realKey": "MaxAnisotropy",
+          "realSection": "Enhancements",
+          "realFile": "Dolphin.Generator.cs"
+        },
+        {
+          "id": "antialiasing",
+          "label": "Anti-Aliasing (FXAA)",
+          "description": "Set Anti Aliasing for rendered content. A dangerous option to enable in Dolphin. Setting this too high will quickly cause a bandwidth bottleneck Ativado your GPU. Worse yet, these settings may cause various graphical effects in games to be sampled incorrectly.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "antialiasing",
+          "values": [
+            {
+              "label": "Não",
+              "value": "1"
+            },
+            {
+              "label": "2x",
+              "value": "2"
+            },
+            {
+              "label": "4x",
+              "value": "4"
+            },
+            {
+              "label": "8x",
+              "value": "8"
+            }
+          ],
+          "realKey": "MSAA",
+          "realSection": "Settings",
+          "realFile": "Dolphin.Generator.cs"
+        },
+        {
+          "id": "ssaa",
+          "label": "Anti-Aliasing (FXAA) MODE",
+          "description": "SSAA offers better quality at the cost of performance.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "ssaa",
+          "values": [
+            {
+              "label": "MSAA",
+              "value": "0"
+            },
+            {
+              "label": "SSAA",
+              "value": "1"
+            }
+          ],
+          "realKey": "SSAA",
+          "realSection": "Settings",
+          "realFile": "Dolphin.Generator.cs"
+        },
+        {
+          "id": "ForceFiltering",
+          "label": "FORCE TEXTURES FILTERING",
+          "description": "Filter all textures. Including any that the game explicitly sets as unfiltered. Disabled by Padrão.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "ForceFiltering",
+          "values": [
+            {
+              "label": "Não",
+              "value": "0"
+            },
+            {
+              "label": "NEAREST NEIGHBOR",
+              "value": "1"
+            },
+            {
+              "label": "LINEAR",
+              "value": "2"
+            }
+          ],
+          "realKey": "ForceTextureFiltering",
+          "realSection": "Enhancements",
+          "realFile": "Dolphin.Generator.cs"
+        },
+        {
+          "id": "dolphin_crop",
+          "label": "CROP",
+          "description": "Crop the picture from its native aspect ratio to 4:3 or 16:9",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "dolphin_crop",
+          "realKey": "Crop",
+          "realSection": "Settings",
+          "realFile": "Dolphin.Generator.cs"
+        },
+        {
+          "id": "dolphin_gfxbackend",
+          "label": "Vídeo",
+          "description": "Select which graphics API to use internally.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "dolphin_gfxbackend",
+          "values": [
+            {
+              "label": "OPENGL",
+              "value": "OGL"
+            },
+            {
+              "label": "VULKAN",
+              "value": "Vulkan"
+            },
+            {
+              "label": "DIRECTX 11",
+              "value": "D3D"
+            },
+            {
+              "label": "DIRECTX 12",
+              "value": "D3D12"
+            }
+          ],
+          "realKey": "GFXBackend",
+          "realSection": "Core",
+          "realFile": "Dolphin.Generator.cs"
+        },
+        {
+          "id": "fzeroax_motor_revd",
+          "label": "F-ZERO DISABLE MOTOR SETUP (rev d)",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "fzeroax_motor_revd"
+        },
+        {
+          "id": "fzeroax_motor_reve",
+          "label": "F-ZERO DISABLE MOTOR SETUP (rev e)",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "fzeroax_motor_reve"
+        },
+        {
+          "id": "fzeroaxmr_motor",
+          "label": "F-ZERO MONSTER RIDE DISABLE MOTOR SETUP",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "fzeroaxmr_motor"
+        },
+        {
+          "id": "fzeroaxmr_cycraft",
+          "label": "F-ZERO MONSTER RIDE BYPASS CYCRAFT",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "fzeroaxmr_cycraft"
+        },
+        {
+          "id": "mkgp_namcam",
+          "label": "MKGP DISABLE NAMCAM",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "mkgp_namcam"
+        },
+        {
+          "id": "mkgp_linkcheck",
+          "label": "MKGP SKIP LINK CHECK",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "mkgp_linkcheck"
+        },
+        {
+          "id": "mkgp2_namcam",
+          "label": "MKGP-2 DISABLE NAMCAM",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "mkgp2_namcam"
+        },
+        {
+          "id": "mkgp2_linkcheck_us",
+          "label": "MKGP-2 SKIP LINK CHECK (US)",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "mkgp2_linkcheck_us"
+        },
+        {
+          "id": "mkgp2_linkcheck_jp",
+          "label": "MKGP-2 SKIP LINK CHECK (JAP)",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "mkgp2_linkcheck_jp"
+        }
+      ]
+    },
+    {
+      "id": "emulation",
+      "title": "Emulação",
+      "icon": "cpu",
+      "order": 2,
+      "options": [
+        {
+          "id": "ShaderCompilationMode",
+          "label": "SHADERS COMPILATION METHOD",
+          "description": "Reduce stuttering a the cost of much longer delay to start a game and high GPU usage.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "ShaderCompilationMode",
+          "values": [
+            {
+              "label": "HYBRID",
+              "value": "2"
+            },
+            {
+              "label": "SPECIALIZED",
+              "value": "0"
+            },
+            {
+              "label": "EXCLUSIVE",
+              "value": "1"
+            },
+            {
+              "label": "SKIP DRAWING",
+              "value": "3"
+            }
+          ],
+          "realKey": "ShaderCompilationMode",
+          "realSection": "Settings",
+          "realFile": "Dolphin.Generator.cs"
+        },
+        {
+          "id": "gamecube_language",
+          "label": "LANGUAGE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "gamecube_language",
+          "values": [
+            {
+              "label": "Deutsch",
+              "value": "1"
+            },
+            {
+              "label": "English",
+              "value": "0"
+            },
+            {
+              "label": "Español",
+              "value": "3"
+            },
+            {
+              "label": "Français",
+              "value": "2"
+            },
+            {
+              "label": "Italiano",
+              "value": "4"
+            },
+            {
+              "label": "Nederlands",
+              "value": "5"
+            }
+          ],
+          "realKey": "SelectedLanguage",
+          "realSection": "Core",
+          "realFile": "Dolphin.Generator.cs"
+        },
+        {
+          "id": "enable_mmu",
+          "label": "MEMORY MANAGEMENT UNIT",
+          "description": "Enable the Memory Management Unit. Required for some games.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "enable_mmu",
+          "realKey": "MMU",
+          "realSection": "Core",
+          "realFile": "Dolphin.Generator.cs"
+        },
+        {
+          "id": "dolphin_cputhread",
+          "label": "DUAL CORE CPU THREAD",
+          "description": "Run games faster. A powerful option for gaining performance that has Não downsides some of the time. May cause various random issues caused by splitting the CPU and GPU threads onto different cores.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "dolphin_cputhread",
+          "realKey": "CPUThread",
+          "realSection": "Core",
+          "realFile": "Dolphin.Generator.cs"
+        },
+        {
+          "id": "enable_fastdisc",
+          "label": "FAST DISK SPEED",
+          "description": "Improve the loading of discs of the emulated game.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "enable_fastdisc",
+          "realKey": "FastDiscSpeed",
+          "realSection": "Core",
+          "realFile": "Dolphin.Generator.cs"
+        },
+        {
+          "id": "OnScreenDisplayMessages",
+          "label": "NOTIFICATIONS",
+          "description": "Display or not Ativado-screen notifications.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "OnScreenDisplayMessages",
+          "realKey": "OnScreenDisplayMessages",
+          "realSection": "Interface",
+          "realFile": "Dolphin.Generator.cs"
+        },
+        {
+          "id": "dolphin_showfps",
+          "label": "SHOW FPS",
+          "description": "Shows performance statistics.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "dolphin_showfps",
+          "values": [
+            {
+              "label": "Não",
+              "value": "no"
+            },
+            {
+              "label": "ONLY FPS",
+              "value": "fps_only"
+            },
+            {
+              "label": "FULL STATISTICS",
+              "value": "full"
+            }
+          ],
+          "realKey": "dolphin_showfps",
+          "realFile": "Dolphin.Generator.cs"
+        },
+        {
+          "id": "mkgp2_bootcheck_us",
+          "label": "MKGP-2 SKIP BOOT CHECKS (US)",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "mkgp2_bootcheck_us"
+        },
+        {
+          "id": "mkgp2_bootcheck_jp",
+          "label": "MKGP-2 SKIP BOOT CHECKS (JAP)",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "mkgp2_bootcheck_jp"
+        },
+        {
+          "id": "vs4_bypass_code",
+          "label": "VS4 BYPASS BOOT",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "vs4_bypass_code"
+        },
+        {
+          "id": "vs42006_bypass_code",
+          "label": "VS4 2006 BYPASS BOOT",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "vs42006_bypass_code"
+        },
+        {
+          "id": "vs42006jap_bypass_boot",
+          "label": "VS4 2006 BYPASS BOOT (JAP)",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "vs42006jap_bypass_boot"
+        }
+      ]
+    },
+    {
+      "id": "hacks",
+      "title": "Correções / Hacks",
+      "icon": "wrench",
+      "order": 3,
+      "options": [
+        {
+          "id": "widescreen_hack",
+          "label": "WIDESCREEN",
+          "description": "Display the emulated framebuffer at a widescreen aspect ratio. Get best results with full 3D games.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "widescreen_hack"
+        },
+        {
+          "id": "EFBEmulateFormatChanges",
+          "label": "IGNORE EFB FORMAT (HACK)",
+          "description": "Improve performance in many game. Disabling this may avoid graphical defect in some other games.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "EFBEmulateFormatChanges",
+          "realKey": "EFBEmulateFormatChanges",
+          "realSection": "Hacks",
+          "realFile": "Dolphin.Generator.cs"
+        },
+        {
+          "id": "EFBCopies",
+          "label": "STORE EFB COPIES (HACK)",
+          "description": "Many games need copies to textures only, but if you're seeing blacked out or missing graphics, you might need to choose copies to RAM.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "EFBCopies",
+          "values": [
+            {
+              "label": "TO TEXTURE",
+              "value": "efb_to_texture_defer"
+            },
+            {
+              "label": "TO TEXTURE AND RAM",
+              "value": "efb_to_ram_defer"
+            },
+            {
+              "label": "DON'T DEFER COPIES TO RAM",
+              "value": "efb_to_ram"
+            }
+          ],
+          "realKey": "EFBCopies",
+          "realFile": "Dolphin.Generator.cs"
+        },
+        {
+          "id": "EFBScaledCopy",
+          "label": "SCALED EFB COPY (HACK)",
+          "description": "Greatly inscrease the quality of textures generated using render-to-texture effects. Enabled by Padrão. Disabling it may avoid crashes for games using custom textures.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "EFBScaledCopy",
+          "realKey": "EFBScaledCopy",
+          "realSection": "Hacks",
+          "realFile": "Dolphin.Generator.cs"
+        },
+        {
+          "id": "perf_hacks",
+          "label": "PERFORMANCE MODE",
+          "description": "Improves the Emulação performance at the cost of accuracy.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "perf_hacks"
+        },
+        {
+          "id": "fzeroaxmr_slowdown",
+          "label": "F-ZERO MONSTER RIDE SOLWDOWN FIX",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "fzeroaxmr_slowdown"
+        },
+        {
+          "id": "mkgp_loopfix",
+          "label": "MKGP LOOP FIX",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "mkgp_loopfix"
+        },
+        {
+          "id": "mkgp_slowfix",
+          "label": "MKGP SLOWDOWN FIX",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "mkgp_slowfix"
+        },
+        {
+          "id": "mkgp2_loopfix",
+          "label": "MKGP-2 LOOP FIX",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "mkgp2_loopfix"
+        },
+        {
+          "id": "mkgp2_loopfix_jpn",
+          "label": "MKGP-2 LOOP FIX (JAP)",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "mkgp2_loopfix_jpn"
+        },
+        {
+          "id": "mkgp2_slowdownfix_us",
+          "label": "MKGP-2 SLOWDOWN FIX (US)",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "mkgp2_slowdownfix_us"
+        },
+        {
+          "id": "mkgp2_slowdownfix_jp",
+          "label": "MKGP-2 SLOWDOWN FIX (JAP)",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "mkgp2_slowdownfix_jp"
+        }
+      ]
+    },
+    {
+      "id": "audio",
+      "title": "Áudio",
+      "icon": "volume2",
+      "order": 4,
+      "options": [
+        {
+          "id": "dolphin_audiobackend",
+          "label": "Áudio",
+          "description": "Select which Áudio engine to use internally.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "dolphin_audiobackend",
+          "values": [
+            {
+              "label": "CUBEB",
+              "value": "Cubeb"
+            },
+            {
+              "label": "WASAPI",
+              "value": "WASAPI (Exclusive Mode)"
+            }
+          ],
+          "realKey": "Backend",
+          "realSection": "DSP",
+          "realFile": "Dolphin.Generator.cs"
+        }
+      ]
+    },
+    {
+      "id": "controls",
+      "title": "Controles",
+      "icon": "gamepad2",
+      "order": 5,
+      "options": [
+        {
+          "id": "input_forceSDL",
+          "label": "FORCE SDL DRIVER FOR GAMEPAD",
+          "description": "Force usage of SDL driver for controllers, set this if more than 4 controllers are used, as XInput limits to 4 players.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "input_forceSDL"
+        },
+        {
+          "id": "triforce_mapping",
+          "label": "CONTROLLER LAYOUT",
+          "type": "select",
+          "default": "auto",
+          "configKey": "triforce_mapping",
+          "values": [
+            {
+              "label": "STANDARD",
+              "value": "standard"
+            },
+            {
+              "label": "MARIO KART GP",
+              "value": "mk"
+            },
+            {
+              "label": "F ZERO",
+              "value": "fzero"
+            },
+            {
+              "label": "VIRTUA STRIKER",
+              "value": "vs4"
+            },
+            {
+              "label": "VIRTUA STRIKER 2002",
+              "value": "vs2002"
+            }
+          ],
+          "realKey": "triforce_mapping",
+          "realFile": "Dolphin.TriforceControllers.cs"
+        },
+        {
+          "id": "triforce_deadzone",
+          "label": "JOYSTICK DEADZONE",
+          "description": "Use this only if the analog stick is drifting.",
+          "type": "slider",
+          "default": "auto",
+          "configKey": "triforce_deadzone",
+          "min": 0,
+          "max": 50,
+          "step": 2,
+          "suffix": "%"
+        },
+        {
+          "id": "triforce_sensitivity",
+          "label": "JOYSTICK SENSITIVITY",
+          "description": "Decrease if too sensitive, decreasing too much might prevent from going full range.",
+          "type": "slider",
+          "default": "auto",
+          "configKey": "triforce_sensitivity",
+          "min": 60,
+          "max": 120,
+          "step": 2,
+          "suffix": "%"
+        }
+      ]
+    }
+  ]
+}

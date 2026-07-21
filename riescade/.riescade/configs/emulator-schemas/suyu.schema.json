@@ -1,0 +1,732 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "suyu",
+  "name": "SUYU",
+  "description": "Configurações para o emulador SUYU geradas a partir do es_features.cfg.",
+  "icon": "suyu",
+  "configFiles": [],
+  "globalMappings": {},
+  "groups": [
+    {
+      "id": "graphics",
+      "title": "Gráficos",
+      "icon": "monitor",
+      "order": 1,
+      "options": [
+        {
+          "id": "resolution_setup",
+          "label": "Resolução Interna",
+          "description": "Improve fidelity of 3D models at the cost of increased performance requirements.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "resolution_setup",
+          "values": [
+            {
+              "label": "0.5x (360p/540p)",
+              "value": "0"
+            },
+            {
+              "label": "0.75x (540p/810p)",
+              "value": "1"
+            },
+            {
+              "label": "1x (720p/1080p)",
+              "value": "2"
+            },
+            {
+              "label": "1.5x (1080p/1620p)",
+              "value": "3"
+            },
+            {
+              "label": "2x (1440p/2160p)",
+              "value": "4"
+            },
+            {
+              "label": "3x (2160p/3240p)",
+              "value": "5"
+            },
+            {
+              "label": "4x (2880p/4320p)",
+              "value": "6"
+            },
+            {
+              "label": "5x (3600p/5400p)",
+              "value": "7"
+            },
+            {
+              "label": "6x (4320p/6480p)",
+              "value": "8"
+            },
+            {
+              "label": "7x (5040p/7560p)",
+              "value": "9"
+            },
+            {
+              "label": "8x (5760p/8640p)",
+              "value": "10"
+            }
+          ],
+          "realKey": "resolution_setup",
+          "realSection": "Renderer",
+          "realFile": "Suyu.Generator.cs"
+        },
+        {
+          "id": "use_vsync",
+          "label": "Sincronização Vertical (V-Sync)",
+          "type": "select",
+          "default": "auto",
+          "configKey": "use_vsync",
+          "values": [
+            {
+              "label": "FIFO (Vsync Ativado)",
+              "value": "2"
+            },
+            {
+              "label": "Não",
+              "value": "0"
+            },
+            {
+              "label": "Sim (MAILBOX) - Vulkan only",
+              "value": "1"
+            },
+            {
+              "label": "FIFO RELAX - vulkan only",
+              "value": "3"
+            }
+          ],
+          "realKey": "use_vsync",
+          "realSection": "Renderer",
+          "realFile": "Suyu.Generator.cs"
+        },
+        {
+          "id": "suyu_ratio",
+          "label": "Proporção de Tela",
+          "type": "select",
+          "default": "auto",
+          "configKey": "suyu_ratio",
+          "values": [
+            {
+              "label": "Padrão",
+              "value": "0"
+            },
+            {
+              "label": "FORCE 4/3",
+              "value": "1"
+            },
+            {
+              "label": "FORCE 21/9",
+              "value": "2"
+            },
+            {
+              "label": "FORCE 16/10",
+              "value": "3"
+            },
+            {
+              "label": "Esticar",
+              "value": "4"
+            }
+          ],
+          "realKey": "aspect_ratio",
+          "realSection": "Renderer",
+          "realFile": "Suyu.Generator.cs"
+        },
+        {
+          "id": "gpu_accuracy",
+          "label": "GPU ACCURACY",
+          "description": "Padrão is 'HIGH', set to 'NORMAL' to increase performance at the cost of accuracy.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "gpu_accuracy",
+          "values": [
+            {
+              "label": "HIGH",
+              "value": "1"
+            },
+            {
+              "label": "NORMAL",
+              "value": "0"
+            },
+            {
+              "label": "EXTREME (VERY SLOW)",
+              "value": "2"
+            }
+          ],
+          "realKey": "gpu_accuracy",
+          "realSection": "Renderer",
+          "realFile": "Suyu.Generator.cs"
+        },
+        {
+          "id": "use_asynchronous_shaders",
+          "label": "USE ASYNCHRONOUS SHADER COMPILATION",
+          "description": "Can reduce lags when compiling shaders, experimental.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "use_asynchronous_shaders"
+        },
+        {
+          "id": "astc_recompression",
+          "label": "ASTC RECOMPRESSION",
+          "description": "For games using ASTC textures, switch to medium when using 6GB VRAM GPU and low when using 4GB-2GB VRAM GPU.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "astc_recompression",
+          "values": [
+            {
+              "label": "UNCOMPRESSED (Padrão, best quality)",
+              "value": "0"
+            },
+            {
+              "label": "MEDIUM QUALITY",
+              "value": "2"
+            },
+            {
+              "label": "LOW QUALITY",
+              "value": "1"
+            }
+          ],
+          "realKey": "astc_recompression",
+          "realSection": "Renderer",
+          "realFile": "Suyu.Generator.cs"
+        },
+        {
+          "id": "anti_aliasing",
+          "label": "Anti-Aliasing (FXAA)",
+          "description": "Set Anti Aliasing for rendered content.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "anti_aliasing",
+          "values": [
+            {
+              "label": "Nenhum",
+              "value": "0"
+            },
+            {
+              "label": "FXAA",
+              "value": "1"
+            },
+            {
+              "label": "MSAA",
+              "value": "2"
+            }
+          ],
+          "realKey": "anti_aliasing",
+          "realSection": "Renderer",
+          "realFile": "Suyu.Generator.cs"
+        },
+        {
+          "id": "scaling_filter",
+          "label": "SCALING FILTER",
+          "description": "Set scaling filter for rendered content.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "scaling_filter",
+          "values": [
+            {
+              "label": "Nearest Neighbor",
+              "value": "0"
+            },
+            {
+              "label": "Bilinear",
+              "value": "1"
+            },
+            {
+              "label": "Bicubic",
+              "value": "2"
+            },
+            {
+              "label": "Gaussian",
+              "value": "3"
+            },
+            {
+              "label": "ScaleForce",
+              "value": "4"
+            },
+            {
+              "label": "AMD's FidelityFX Super Resolution",
+              "value": "5"
+            }
+          ],
+          "realKey": "scaling_filter",
+          "realSection": "Renderer",
+          "realFile": "Suyu.Generator.cs"
+        },
+        {
+          "id": "suyu_anisotropy",
+          "label": "Filtragem Anisotrópica",
+          "description": "Enhance the quality of textures Ativado surface.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "suyu_anisotropy",
+          "values": [
+            {
+              "label": "Padrão",
+              "value": "1"
+            },
+            {
+              "label": "2x",
+              "value": "2"
+            },
+            {
+              "label": "4x",
+              "value": "3"
+            },
+            {
+              "label": "8x",
+              "value": "4"
+            },
+            {
+              "label": "16x",
+              "value": "5"
+            }
+          ],
+          "realKey": "max_anisotropy",
+          "realSection": "Renderer",
+          "realFile": "Suyu.Generator.cs"
+        },
+        {
+          "id": "backend",
+          "label": "Vídeo",
+          "type": "select",
+          "default": "auto",
+          "configKey": "backend",
+          "values": [
+            {
+              "label": "OPENGL",
+              "value": "0"
+            },
+            {
+              "label": "VULKAN",
+              "value": "1"
+            }
+          ],
+          "realKey": "backend",
+          "realSection": "Renderer",
+          "realFile": "Suyu.Generator.cs"
+        }
+      ]
+    },
+    {
+      "id": "emulation",
+      "title": "Emulação",
+      "icon": "cpu",
+      "order": 2,
+      "options": [
+        {
+          "id": "suyu_language",
+          "label": "LANGUAGE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "suyu_language",
+          "values": [
+            {
+              "label": "American English",
+              "value": "1"
+            },
+            {
+              "label": "日本語 (Japanese)",
+              "value": "0"
+            },
+            {
+              "label": "Français",
+              "value": "2"
+            },
+            {
+              "label": "Español",
+              "value": "5"
+            },
+            {
+              "label": "Deutsch",
+              "value": "3"
+            },
+            {
+              "label": "Italiano",
+              "value": "4"
+            },
+            {
+              "label": "Nederlands",
+              "value": "8"
+            },
+            {
+              "label": "Português",
+              "value": "9"
+            },
+            {
+              "label": "Русский (Russian)",
+              "value": "10"
+            },
+            {
+              "label": "한국어 (Korean)",
+              "value": "7"
+            },
+            {
+              "label": "Chinese",
+              "value": "6"
+            },
+            {
+              "label": "Taiwanese",
+              "value": "11"
+            },
+            {
+              "label": "British",
+              "value": "12"
+            },
+            {
+              "label": "French (Canadian)",
+              "value": "13"
+            },
+            {
+              "label": "Spanish (Latin America)",
+              "value": "14"
+            },
+            {
+              "label": "简化字 (Chinese - simplified)",
+              "value": "15"
+            },
+            {
+              "label": "簡化字 (Chinese - traditional)",
+              "value": "16"
+            },
+            {
+              "label": "Português (Brazil)",
+              "value": "17"
+            }
+          ],
+          "realKey": "language_index",
+          "realSection": "System",
+          "realFile": "Suyu.Generator.cs"
+        },
+        {
+          "id": "suyu_region_value",
+          "label": "REGION",
+          "description": "Force the region of the system.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "suyu_region_value",
+          "values": [
+            {
+              "label": "JAPAN",
+              "value": "0"
+            },
+            {
+              "label": "USA",
+              "value": "1"
+            },
+            {
+              "label": "EUROPE",
+              "value": "2"
+            },
+            {
+              "label": "AUSTRALIA",
+              "value": "3"
+            },
+            {
+              "label": "CHINA",
+              "value": "4"
+            },
+            {
+              "label": "KOREA",
+              "value": "5"
+            },
+            {
+              "label": "TAIWAN",
+              "value": "6"
+            }
+          ],
+          "realKey": "region_index\\\\default",
+          "realSection": "System",
+          "realFile": "Suyu.Generator.cs"
+        },
+        {
+          "id": "suyu_undock",
+          "label": "USE UNDOCKED MODE",
+          "description": "Can increase performance Ativado some lower-end systems.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "suyu_undock"
+        },
+        {
+          "id": "cpu_accuracy",
+          "label": "CPU ACCURACY",
+          "description": "Leave Automático as Padrão except the game requires specific setting.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "cpu_accuracy",
+          "values": [
+            {
+              "label": "ACCURATE",
+              "value": "1"
+            },
+            {
+              "label": "UNSAFE",
+              "value": "2"
+            },
+            {
+              "label": "PARANOID",
+              "value": "3"
+            }
+          ],
+          "realKey": "cpu_accuracy",
+          "realSection": "Cpu",
+          "realFile": "Suyu.Generator.cs"
+        },
+        {
+          "id": "suyu_multicore",
+          "label": "MULTICORE CPU Emulação",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "suyu_multicore",
+          "realKey": "use_multi_core",
+          "realSection": "Core",
+          "realFile": "Suyu.Generator.cs"
+        },
+        {
+          "id": "suyu_memory",
+          "label": "RAM SIZE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "suyu_memory",
+          "values": [
+            {
+              "label": "4GB (Padrão)",
+              "value": "0"
+            },
+            {
+              "label": "6GB (Unsafe)",
+              "value": "1"
+            },
+            {
+              "label": "8GB (Unsafe)",
+              "value": "2"
+            }
+          ],
+          "realKey": "memory_layout_mode",
+          "realSection": "Core",
+          "realFile": "Suyu.Generator.cs"
+        }
+      ]
+    },
+    {
+      "id": "audio",
+      "title": "Áudio",
+      "icon": "volume2",
+      "order": 4,
+      "options": [
+        {
+          "id": "sound_index",
+          "label": "Áudio CHANNELS",
+          "type": "select",
+          "default": "auto",
+          "configKey": "sound_index",
+          "values": [
+            {
+              "label": "STEREO",
+              "value": "1"
+            },
+            {
+              "label": "SURROUND",
+              "value": "2"
+            },
+            {
+              "label": "MONO",
+              "value": "0"
+            }
+          ],
+          "realKey": "sound_index",
+          "realSection": "System",
+          "realFile": "Suyu.Generator.cs"
+        },
+        {
+          "id": "audio_backend",
+          "label": "Áudio",
+          "type": "select",
+          "default": "auto",
+          "configKey": "audio_backend",
+          "values": [
+            {
+              "label": "CUBEB",
+              "value": "cubeb"
+            },
+            {
+              "label": "SDL2",
+              "value": "sdl2"
+            }
+          ],
+          "realKey": "output_engine",
+          "realSection": "Audio",
+          "realFile": "Suyu.Generator.cs"
+        }
+      ]
+    },
+    {
+      "id": "controls",
+      "title": "Controles",
+      "icon": "gamepad2",
+      "order": 5,
+      "options": [
+        {
+          "id": "suyu_norawinput",
+          "label": "DISABLE RAW INPUT",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "suyu_norawinput"
+        },
+        {
+          "id": "player_0_type",
+          "label": "PLAYER 1 CONTROLLER TYPE",
+          "description": "Sets the player controller type.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "player_0_type",
+          "values": [
+            {
+              "label": "PRO CONTROLLER",
+              "value": "0"
+            },
+            {
+              "label": "DUAL JOYCON",
+              "value": "1"
+            },
+            {
+              "label": "LEFT JOYCON",
+              "value": "2"
+            },
+            {
+              "label": "RIGHT JOYCON",
+              "value": "3"
+            },
+            {
+              "label": "HANDHELD",
+              "value": "4"
+            },
+            {
+              "label": "GAMECUBE",
+              "value": "5"
+            }
+          ]
+        },
+        {
+          "id": "player_1_type",
+          "label": "PLAYER 2 CONTROLLER TYPE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "player_1_type",
+          "values": [
+            {
+              "label": "PRO CONTROLLER",
+              "value": "0"
+            },
+            {
+              "label": "DUAL JOYCON",
+              "value": "1"
+            },
+            {
+              "label": "LEFT JOYCON",
+              "value": "2"
+            },
+            {
+              "label": "RIGHT JOYCON",
+              "value": "3"
+            },
+            {
+              "label": "GAMECUBE",
+              "value": "5"
+            }
+          ]
+        },
+        {
+          "id": "player_2_type",
+          "label": "PLAYER 3 CONTROLLER TYPE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "player_2_type",
+          "values": [
+            {
+              "label": "PRO CONTROLLER",
+              "value": "0"
+            },
+            {
+              "label": "DUAL JOYCON",
+              "value": "1"
+            },
+            {
+              "label": "LEFT JOYCON",
+              "value": "2"
+            },
+            {
+              "label": "RIGHT JOYCON",
+              "value": "3"
+            },
+            {
+              "label": "GAMECUBE",
+              "value": "5"
+            }
+          ]
+        },
+        {
+          "id": "player_3_type",
+          "label": "PLAYER 4 CONTROLLER TYPE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "player_3_type",
+          "values": [
+            {
+              "label": "PRO CONTROLLER",
+              "value": "0"
+            },
+            {
+              "label": "DUAL JOYCON",
+              "value": "1"
+            },
+            {
+              "label": "LEFT JOYCON",
+              "value": "2"
+            },
+            {
+              "label": "RIGHT JOYCON",
+              "value": "3"
+            },
+            {
+              "label": "GAMECUBE",
+              "value": "5"
+            }
+          ]
+        },
+        {
+          "id": "switch_enable_motion",
+          "label": "ENABLE MOTION",
+          "description": "Can only be used if the controller is compatible with motion control.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "switch_enable_motion"
+        },
+        {
+          "id": "switch_gamepadbuttons",
+          "label": "INVERT FACE BUTTONS",
+          "description": "Invert A/B and X/Y buttons.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "switch_gamepadbuttons"
+        },
+        {
+          "id": "suyu_deadzone",
+          "label": "ANALOG DEADZONE",
+          "type": "slider",
+          "default": "auto",
+          "configKey": "suyu_deadzone",
+          "min": 0,
+          "max": 50,
+          "step": 5,
+          "suffix": "%"
+        },
+        {
+          "id": "suyu_controller_applet",
+          "label": "DISABLE CONTROLLER APPLET",
+          "description": "Disable the controller applet that appears in multiplayer games to select the connected controllers.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "suyu_controller_applet"
+        }
+      ]
+    }
+  ]
+}

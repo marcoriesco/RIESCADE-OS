@@ -1,0 +1,210 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "gopher64",
+  "name": "GOPHER64",
+  "description": "Configurações para o emulador GOPHER64 geradas a partir do es_features.cfg.",
+  "icon": "gopher64",
+  "configFiles": [],
+  "globalMappings": {},
+  "groups": [
+    {
+      "id": "graphics",
+      "title": "Gráficos",
+      "icon": "monitor",
+      "order": 1,
+      "options": [
+        {
+          "id": "gopher64_resolution",
+          "label": "Resolução Interna",
+          "type": "select",
+          "default": "auto",
+          "configKey": "gopher64_resolution",
+          "values": [
+            {
+              "label": "1X",
+              "value": "1"
+            },
+            {
+              "label": "2X",
+              "value": "2"
+            },
+            {
+              "label": "4X",
+              "value": "4"
+            },
+            {
+              "label": "8X",
+              "value": "8"
+            }
+          ],
+          "realKey": "upscale",
+          "realFile": "Gopher64.Generator.cs"
+        },
+        {
+          "id": "gopher64_widescreen",
+          "label": "Esticar TO SCREEN",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "gopher64_widescreen",
+          "realKey": "widescreen",
+          "realFile": "Gopher64.Generator.cs"
+        }
+      ]
+    },
+    {
+      "id": "emulation",
+      "title": "Emulação",
+      "icon": "cpu",
+      "order": 2,
+      "options": [
+        {
+          "id": "gopher64_disable_expansion_pak",
+          "label": "DISABLE EXPANSION PACK",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "gopher64_disable_expansion_pak",
+          "realKey": "disable_expansion_pak",
+          "realFile": "Gopher64.Generator.cs"
+        }
+      ]
+    },
+    {
+      "id": "controls",
+      "title": "Controles",
+      "icon": "gamepad2",
+      "order": 5,
+      "options": [
+        {
+          "id": "mupen64_inputprofile1",
+          "label": "CONTROLLER LAYOUT P1",
+          "description": "Select between the different controller layouts.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "mupen64_inputprofile1",
+          "values": [
+            {
+              "label": "C-BUTTONS=RIGHT-STICK Z=LEFT-TRIGGER",
+              "value": "c_stick_zl"
+            },
+            {
+              "label": "C-BUTTONS=FACE Z=LEFT-TRIGGER",
+              "value": "c_face_zl"
+            },
+            {
+              "label": "C-BUTTONS=RIGHT-STICK Z=RIGHT-TRIGGER",
+              "value": "c_stick"
+            },
+            {
+              "label": "C-BUTTONS=FACE Z=RIGHT-TRIGGER",
+              "value": "c_face"
+            },
+            {
+              "label": "XBOX",
+              "value": "xbox"
+            }
+          ]
+        },
+        {
+          "id": "mupen64_inputprofile2",
+          "label": "CONTROLLER LAYOUT P2",
+          "type": "select",
+          "default": "auto",
+          "configKey": "mupen64_inputprofile2",
+          "values": [
+            {
+              "label": "C-BUTTONS=RIGHT-STICK Z=LEFT-TRIGGER",
+              "value": "c_stick_zl"
+            },
+            {
+              "label": "C-BUTTONS=FACE Z=LEFT-TRIGGER",
+              "value": "c_face_zl"
+            },
+            {
+              "label": "C-BUTTONS=RIGHT-STICK Z=RIGHT-TRIGGER",
+              "value": "c_stick"
+            },
+            {
+              "label": "C-BUTTONS=FACE Z=RIGHT-TRIGGER",
+              "value": "c_face"
+            },
+            {
+              "label": "XBOX",
+              "value": "xbox"
+            }
+          ]
+        },
+        {
+          "id": "mupen64_inputprofile3",
+          "label": "CONTROLLER LAYOUT P3",
+          "type": "select",
+          "default": "auto",
+          "configKey": "mupen64_inputprofile3",
+          "values": [
+            {
+              "label": "C-BUTTONS=RIGHT-STICK Z=LEFT-TRIGGER",
+              "value": "c_stick_zl"
+            },
+            {
+              "label": "C-BUTTONS=FACE Z=LEFT-TRIGGER",
+              "value": "c_face_zl"
+            },
+            {
+              "label": "C-BUTTONS=RIGHT-STICK Z=RIGHT-TRIGGER",
+              "value": "c_stick"
+            },
+            {
+              "label": "C-BUTTONS=FACE Z=RIGHT-TRIGGER",
+              "value": "c_face"
+            },
+            {
+              "label": "XBOX",
+              "value": "xbox"
+            }
+          ]
+        },
+        {
+          "id": "mupen64_inputprofile4",
+          "label": "CONTROLLER LAYOUT P4",
+          "type": "select",
+          "default": "auto",
+          "configKey": "mupen64_inputprofile4",
+          "values": [
+            {
+              "label": "C-BUTTONS=RIGHT-STICK Z=LEFT-TRIGGER",
+              "value": "c_stick_zl"
+            },
+            {
+              "label": "C-BUTTONS=FACE Z=LEFT-TRIGGER",
+              "value": "c_face_zl"
+            },
+            {
+              "label": "C-BUTTONS=RIGHT-STICK Z=RIGHT-TRIGGER",
+              "value": "c_stick"
+            },
+            {
+              "label": "C-BUTTONS=FACE Z=RIGHT-TRIGGER",
+              "value": "c_face"
+            },
+            {
+              "label": "XBOX",
+              "value": "xbox"
+            }
+          ]
+        },
+        {
+          "id": "gopher64_deadzone",
+          "label": "ANALOG DEADZONE",
+          "type": "slider",
+          "default": "auto",
+          "configKey": "gopher64_deadzone",
+          "min": 1,
+          "max": 50,
+          "step": 5,
+          "suffix": "%",
+          "realKey": "deadzone",
+          "realFile": "Gopher64.Controllers.cs"
+        }
+      ]
+    }
+  ]
+}

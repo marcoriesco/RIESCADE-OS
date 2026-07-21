@@ -1,0 +1,468 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "melonds",
+  "name": "MELONDS",
+  "description": "Configurações para o emulador MELONDS geradas a partir do es_features.cfg.",
+  "icon": "melonds",
+  "configFiles": [],
+  "globalMappings": {},
+  "groups": [
+    {
+      "id": "graphics",
+      "title": "Gráficos",
+      "icon": "monitor",
+      "order": 1,
+      "options": [
+        {
+          "id": "melonds_internal_resolution",
+          "label": "Resolução Interna",
+          "description": "Resolution can only be changed when using OpenGL Vídeo driver.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "melonds_internal_resolution",
+          "values": [
+            {
+              "label": "NATIVE (256x192)",
+              "value": "1"
+            },
+            {
+              "label": "2x",
+              "value": "2"
+            },
+            {
+              "label": "3x",
+              "value": "3"
+            },
+            {
+              "label": "4x",
+              "value": "4"
+            },
+            {
+              "label": "5x (1280x960)",
+              "value": "5"
+            },
+            {
+              "label": "6x",
+              "value": "6"
+            },
+            {
+              "label": "7x",
+              "value": "7"
+            },
+            {
+              "label": "8x (2048x1536)",
+              "value": "8"
+            },
+            {
+              "label": "9x",
+              "value": "9"
+            },
+            {
+              "label": "10x",
+              "value": "10"
+            },
+            {
+              "label": "11x",
+              "value": "11"
+            },
+            {
+              "label": "12x",
+              "value": "12"
+            },
+            {
+              "label": "13x",
+              "value": "13"
+            },
+            {
+              "label": "14x",
+              "value": "14"
+            },
+            {
+              "label": "15x",
+              "value": "15"
+            },
+            {
+              "label": "16x",
+              "value": "16"
+            }
+          ],
+          "realKey": "ScaleFactor",
+          "realSection": "3D.GL",
+          "realFile": "MelonDS.Generator.cs"
+        },
+        {
+          "id": "melonds_ratio_top",
+          "label": "Proporção de Tela TOP SCREEN",
+          "description": "Change aspect ratio for top screen.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "melonds_ratio_top",
+          "values": [
+            {
+              "label": "4:3",
+              "value": "0"
+            },
+            {
+              "label": "5:3",
+              "value": "4"
+            },
+            {
+              "label": "16:9",
+              "value": "1"
+            },
+            {
+              "label": "21:9",
+              "value": "2"
+            },
+            {
+              "label": "ADJUST TO FIT",
+              "value": "3"
+            }
+          ],
+          "realKey": "ScreenAspectTop",
+          "realSection": "Instance0.Window0",
+          "realFile": "MelonDS.Generator.cs"
+        },
+        {
+          "id": "melonds_ratio_bottom",
+          "label": "Proporção de Tela BOTTOM SCREEN",
+          "description": "Change aspect ratio for bottom screen.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "melonds_ratio_bottom",
+          "values": [
+            {
+              "label": "4:3",
+              "value": "0"
+            },
+            {
+              "label": "5:3",
+              "value": "4"
+            },
+            {
+              "label": "16:9",
+              "value": "1"
+            },
+            {
+              "label": "21:9",
+              "value": "2"
+            },
+            {
+              "label": "ADJUST TO FIT",
+              "value": "3"
+            }
+          ],
+          "realKey": "ScreenAspectBot",
+          "realSection": "Instance0.Window0",
+          "realFile": "MelonDS.Generator.cs"
+        },
+        {
+          "id": "melonds_vsync",
+          "label": "Sincronização Vertical (V-Sync)",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "melonds_vsync",
+          "realKey": "VSync",
+          "realSection": "Screen",
+          "realFile": "MelonDS.Generator.cs"
+        },
+        {
+          "id": "melonds_screen_layout",
+          "label": "SCREEN LAYOUT POSITIONING",
+          "description": "Choose the disposition of the emulated screens.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "melonds_screen_layout",
+          "values": [
+            {
+              "label": "NATURAL",
+              "value": "0"
+            },
+            {
+              "label": "VERTICAL",
+              "value": "1"
+            },
+            {
+              "label": "HORIZONTAL",
+              "value": "2"
+            },
+            {
+              "label": "HYBRID",
+              "value": "3"
+            }
+          ],
+          "realKey": "ScreenLayout",
+          "realSection": "Instance0.Window0",
+          "realFile": "MelonDS.Generator.cs"
+        },
+        {
+          "id": "melonds_swapscreen",
+          "label": "SWAP SCREEN",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "melonds_swapscreen",
+          "realKey": "ScreenSwap",
+          "realSection": "Instance0.Window0",
+          "realFile": "MelonDS.Generator.cs"
+        },
+        {
+          "id": "melonds_screen_sizing",
+          "label": "SCREEN SIZING",
+          "type": "select",
+          "default": "auto",
+          "configKey": "melonds_screen_sizing",
+          "values": [
+            {
+              "label": "EVEN (SAME SIZE)",
+              "value": "0"
+            },
+            {
+              "label": "EMPHASIZE TOP",
+              "value": "1"
+            },
+            {
+              "label": "EMPHASIZE BOTTOM",
+              "value": "2"
+            },
+            {
+              "label": "TOP ONLY",
+              "value": "4"
+            },
+            {
+              "label": "BOTTOM ONLY",
+              "value": "5"
+            }
+          ],
+          "realKey": "ScreenSizing",
+          "realSection": "Instance0.Window0",
+          "realFile": "MelonDS.Generator.cs"
+        },
+        {
+          "id": "melonds_screengap",
+          "label": "SCREEN GAP",
+          "description": "Configure gap between both screens in pixels.",
+          "type": "slider",
+          "default": "auto",
+          "configKey": "melonds_screengap",
+          "min": 0,
+          "max": 128,
+          "step": 2,
+          "suffix": "px",
+          "realKey": "ScreenGap",
+          "realSection": "Instance0.Window0",
+          "realFile": "MelonDS.Generator.cs"
+        },
+        {
+          "id": "melonds_rotate",
+          "label": "ROTATE SCREEN",
+          "type": "select",
+          "default": "auto",
+          "configKey": "melonds_rotate",
+          "values": [
+            {
+              "label": "Não",
+              "value": "0"
+            },
+            {
+              "label": "90 DEGREES CLOCKWISE",
+              "value": "1"
+            },
+            {
+              "label": "180 DEGREES",
+              "value": "2"
+            },
+            {
+              "label": "270 DEGREES CLOCKWISE",
+              "value": "3"
+            }
+          ],
+          "realKey": "ScreenRotation",
+          "realSection": "Instance0.Window0",
+          "realFile": "MelonDS.Generator.cs"
+        },
+        {
+          "id": "melonds_polygon",
+          "label": "GL - IMPROVE POLYGON RENDERING",
+          "description": "Improve polygon rendering when using OpenGL renderer.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "melonds_polygon",
+          "realKey": "BetterPolygons",
+          "realSection": "3D.GL",
+          "realFile": "MelonDS.Generator.cs"
+        },
+        {
+          "id": "melonds_renderer",
+          "label": "Vídeo",
+          "type": "select",
+          "default": "auto",
+          "configKey": "melonds_renderer",
+          "values": [
+            {
+              "label": "OPENGL(COMPUTE SHADERS)",
+              "value": "2"
+            },
+            {
+              "label": "OPENGL",
+              "value": "1"
+            },
+            {
+              "label": "SOFTWARE",
+              "value": "0"
+            }
+          ],
+          "realKey": "Renderer",
+          "realSection": "3D",
+          "realFile": "MelonDS.Generator.cs"
+        }
+      ]
+    },
+    {
+      "id": "emulation",
+      "title": "Emulação",
+      "icon": "cpu",
+      "order": 2,
+      "options": [
+        {
+          "id": "melonds_console",
+          "label": "CONSOLE TYPE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "melonds_console",
+          "values": [
+            {
+              "label": "DS",
+              "value": "ds"
+            },
+            {
+              "label": "DSi",
+              "value": "dsi"
+            }
+          ],
+          "realKey": "melonds_console",
+          "realFile": "MelonDS.Generator.cs"
+        },
+        {
+          "id": "melonds_firmware_language",
+          "label": "CONSOLE LANGUAGE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "melonds_firmware_language",
+          "values": [
+            {
+              "label": "English",
+              "value": "1"
+            },
+            {
+              "label": "Français",
+              "value": "2"
+            },
+            {
+              "label": "日本語 (Japanese)",
+              "value": "0"
+            },
+            {
+              "label": "Español",
+              "value": "5"
+            },
+            {
+              "label": "Deutsch",
+              "value": "3"
+            },
+            {
+              "label": "Italiano",
+              "value": "4"
+            }
+          ],
+          "realKey": "Language",
+          "realSection": "Instance0.Firmware",
+          "realFile": "MelonDS.Generator.cs"
+        },
+        {
+          "id": "melonds_externalBIOS",
+          "label": "USE EXTERNAL BIOS",
+          "description": "Use the BIOS located in RetroBat 'bios' folder, Required to boot to BIOS.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "melonds_externalBIOS"
+        },
+        {
+          "id": "melonds_boottobios",
+          "label": "BOOT TO BIOS",
+          "description": "Boot directly into the DS BIOS menu, needs external bios to be activated.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "melonds_boottobios",
+          "realKey": "DirectBoot",
+          "realSection": "Emu",
+          "realFile": "MelonDS.Generator.cs"
+        },
+        {
+          "id": "melonds_cheats",
+          "label": "Ativar Cheats / Trapaças",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "melonds_cheats",
+          "realKey": "EnableCheats",
+          "realSection": "Instance0",
+          "realFile": "MelonDS.Generator.cs"
+        },
+        {
+          "id": "slowmo_toggle",
+          "label": "SLOW MOTION BEHAVIOR",
+          "description": "Define whether the 'slow-motion' shortcuts acts as a toggle or needs to be held.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "slowmo_toggle",
+          "values": [
+            {
+              "label": "HOLD",
+              "value": "0"
+            },
+            {
+              "label": "TOGGLE",
+              "value": "1"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "controls",
+      "title": "Controles",
+      "icon": "gamepad2",
+      "order": 5,
+      "options": [
+        {
+          "id": "melonds_leftstick",
+          "label": "USE ANALOG STICK",
+          "description": "Use Left analog stick instead of D-PAD for Controles.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "melonds_leftstick"
+        },
+        {
+          "id": "melonds_micInputType",
+          "label": "MICROPHONE Emulação",
+          "description": "Define the sound that the emulated microphone will receive .",
+          "type": "select",
+          "default": "auto",
+          "configKey": "melonds_micInputType",
+          "values": [
+            {
+              "label": "REAL MICROPHONE",
+              "value": "1"
+            },
+            {
+              "label": "BLOW",
+              "value": "2"
+            }
+          ],
+          "realKey": "InputType",
+          "realSection": "Mic",
+          "realFile": "MelonDS.Generator.cs"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,678 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "mupen64",
+  "name": "MUPEN64",
+  "description": "Configurações para o emulador MUPEN64 geradas a partir do es_features.cfg.",
+  "icon": "mupen64",
+  "configFiles": [],
+  "globalMappings": {
+    "ratio": {
+      "configKey": "ratio",
+      "globalKey": "aspect_ratio"
+    }
+  },
+  "groups": [
+    {
+      "id": "graphics",
+      "title": "Gráficos",
+      "icon": "monitor",
+      "order": 1,
+      "options": [
+        {
+          "id": "resolution",
+          "label": "Resolução Interna",
+          "type": "select",
+          "default": "auto",
+          "configKey": "resolution",
+          "values": [
+            {
+              "label": "SAME AS OUTPUT",
+              "value": "0"
+            },
+            {
+              "label": "NATIVE",
+              "value": "1"
+            },
+            {
+              "label": "2x",
+              "value": "2"
+            },
+            {
+              "label": "3x",
+              "value": "3"
+            },
+            {
+              "label": "4X",
+              "value": "4"
+            },
+            {
+              "label": "5X",
+              "value": "5"
+            },
+            {
+              "label": "6X",
+              "value": "6"
+            },
+            {
+              "label": "7X",
+              "value": "7"
+            },
+            {
+              "label": "8X",
+              "value": "8"
+            },
+            {
+              "label": "9X",
+              "value": "9"
+            },
+            {
+              "label": "10X",
+              "value": "10"
+            },
+            {
+              "label": "11X",
+              "value": "11"
+            },
+            {
+              "label": "12X",
+              "value": "12"
+            },
+            {
+              "label": "13X",
+              "value": "13"
+            },
+            {
+              "label": "14X",
+              "value": "14"
+            },
+            {
+              "label": "15X",
+              "value": "15"
+            },
+            {
+              "label": "16X",
+              "value": "16"
+            }
+          ],
+          "realKey": "GFX_Plugin",
+          "realSection": "Rosalie's Mupen GUI Core",
+          "realFile": "Mupen64.Generator.cs"
+        },
+        {
+          "id": "parallel_upscaling",
+          "label": "Resolução Interna (PARALLEL)",
+          "type": "select",
+          "default": "auto",
+          "configKey": "parallel_upscaling",
+          "values": [
+            {
+              "label": "1x",
+              "value": "1"
+            },
+            {
+              "label": "2x",
+              "value": "2"
+            },
+            {
+              "label": "4x",
+              "value": "4"
+            },
+            {
+              "label": "8x",
+              "value": "8"
+            }
+          ],
+          "realKey": "Upscaling",
+          "realSection": "Video-Parallel",
+          "realFile": "Mupen64.Generator.cs"
+        },
+        {
+          "id": "ratio",
+          "label": "Proporção de Tela",
+          "type": "select",
+          "default": "auto",
+          "configKey": "ratio",
+          "values": [
+            {
+              "label": "4:3",
+              "value": "1"
+            },
+            {
+              "label": "16:9",
+              "value": "2"
+            },
+            {
+              "label": "Esticar",
+              "value": "0"
+            },
+            {
+              "label": "ADJUST TO FIT 4:3",
+              "value": "3"
+            },
+            {
+              "label": "ADJUST TO FIT 16:9",
+              "value": "4"
+            }
+          ],
+          "inheritsGlobal": "aspect_ratio",
+          "realKey": "forceNoBezel",
+          "realFile": "Mupen64.Generator.cs"
+        },
+        {
+          "id": "vsync",
+          "label": "Sincronização Vertical (V-Sync)",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "vsync"
+        },
+        {
+          "id": "mupen_CropOverscan",
+          "label": "CROP OVERSCAN",
+          "description": "Zooms in to hide black borders. Borders are different per game.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "mupen_CropOverscan",
+          "values": [
+            {
+              "label": "Desativado",
+              "value": "none"
+            },
+            {
+              "label": "BORDERS 8 - TOP BOTTOM 12",
+              "value": "t12_b12_l8_r8"
+            },
+            {
+              "label": "BOTTOM 15 - TOP 12 - LEFT 18 - RIGHT 13",
+              "value": "t12_b15_l18_r13"
+            },
+            {
+              "label": "TOP 8 - BOTTOM 8",
+              "value": "t8_b8_l0_r0"
+            },
+            {
+              "label": "LEFT 8 - RIGHT 8",
+              "value": "t0_b0_l8_r8"
+            },
+            {
+              "label": "LEFT 8",
+              "value": "t0_b0_l8_r0"
+            },
+            {
+              "label": "8 ALL SIDES",
+              "value": "t8_b8_l8_r8"
+            }
+          ],
+          "realKey": "mupen_CropOverscan",
+          "realFile": "Mupen64.Generator.cs"
+        },
+        {
+          "id": "mupen64plus-parallel-rdp-native-texture-lod",
+          "label": "NATIVE TEXTURE LOD",
+          "description": "Use native texture LOD computation when upscaling.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "mupen64plus-parallel-rdp-native-texture-lod",
+          "realKey": "NativeTextLOD",
+          "realSection": "Video-Parallel",
+          "realFile": "Mupen64.Generator.cs"
+        },
+        {
+          "id": "rmg_NativeTextRECT",
+          "label": "ENABLE NATIVE RES 2D TEXTRECTS",
+          "description": "Can fix misaligned 2D images like mario kart character selection.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "rmg_NativeTextRECT",
+          "realKey": "NativeTextRECT",
+          "realSection": "Video-Parallel",
+          "realFile": "Mupen64.Generator.cs"
+        },
+        {
+          "id": "antialiasing",
+          "label": "Anti-Aliasing (FXAA)",
+          "description": "Set Anti Aliasing for rendered content.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "antialiasing",
+          "values": [
+            {
+              "label": "Não",
+              "value": "0"
+            },
+            {
+              "label": "FXAA",
+              "value": "1"
+            },
+            {
+              "label": "MSAA 2X",
+              "value": "2"
+            },
+            {
+              "label": "MSAA 4X",
+              "value": "4"
+            },
+            {
+              "label": "MSAA 8X",
+              "value": "8"
+            }
+          ],
+          "realKey": "antialiasing",
+          "realFile": "Mupen64.Generator.cs"
+        },
+        {
+          "id": "anisotropic_filtering",
+          "label": "Filtragem Anisotrópica",
+          "description": "Enhance the quality of textures Ativado surface.",
+          "type": "slider",
+          "default": "auto",
+          "configKey": "anisotropic_filtering",
+          "min": 0,
+          "max": 16,
+          "step": 1,
+          "suffix": "x",
+          "realKey": "texture\\\\anisotropy",
+          "realSection": "User",
+          "realFile": "Mupen64.Generator.cs"
+        },
+        {
+          "id": "hires_textures",
+          "label": "CUSTOM TEXTURES",
+          "description": "Replace original textures with custom textures pack.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "hires_textures"
+        },
+        {
+          "id": "gfxplugin",
+          "label": "Vídeo",
+          "type": "select",
+          "default": "auto",
+          "configKey": "gfxplugin",
+          "values": [
+            {
+              "label": "GLIDEN64",
+              "value": "glide"
+            },
+            {
+              "label": "PARALLEL",
+              "value": "parallel"
+            },
+            {
+              "label": "ANGRYLION",
+              "value": "angrylion"
+            }
+          ],
+          "realKey": "gfxplugin",
+          "realFile": "Mupen64.Generator.cs"
+        }
+      ]
+    },
+    {
+      "id": "emulation",
+      "title": "Emulação",
+      "icon": "cpu",
+      "order": 2,
+      "options": [
+        {
+          "id": "show_gui",
+          "label": "SHOW EMULATOR GUI",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "show_gui"
+        },
+        {
+          "id": "cpucore",
+          "label": "CPU CORE",
+          "description": "Use interpreter for best compatibility, dynarec for performance.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "cpucore",
+          "values": [
+            {
+              "label": "pure interpreter",
+              "value": "0"
+            },
+            {
+              "label": "cached interpreter",
+              "value": "1"
+            },
+            {
+              "label": "dynamic recompiler",
+              "value": "2"
+            }
+          ],
+          "realKey": "cpucore",
+          "realFile": "Mupen64.Generator.cs"
+        },
+        {
+          "id": "rsp_plugin",
+          "label": "RSP PLUGIN",
+          "description": "Reality Signal Processor plugin, forced to LLE when Vídeo driver is set to Parallel.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "rsp_plugin",
+          "values": [
+            {
+              "label": "HLE Emulação RSP",
+              "value": "mupen64plus-rsp-hle.dll"
+            },
+            {
+              "label": "Static Interpreter",
+              "value": "mupen64plus-rsp-cxd4.dll"
+            },
+            {
+              "label": "LLE RSP",
+              "value": "mupen64plus-rsp-parallel.dll"
+            }
+          ],
+          "realKey": "RSP_Plugin",
+          "realSection": "Rosalie's Mupen GUI Core",
+          "realFile": "Mupen64.Generator.cs"
+        }
+      ]
+    },
+    {
+      "id": "controls",
+      "title": "Controles",
+      "icon": "gamepad2",
+      "order": 5,
+      "options": [
+        {
+          "id": "inputplugin",
+          "label": "INPUT",
+          "type": "select",
+          "default": "auto",
+          "configKey": "inputplugin",
+          "values": [
+            {
+              "label": "MUPEN STANDARD",
+              "value": "RMG-Input.dll"
+            },
+            {
+              "label": "GAMECUBE ADAPTER",
+              "value": "mupen64plus_input_gca.dll"
+            },
+            {
+              "label": "RAPHNET ADAPTATOR",
+              "value": "mupen64plus-input-raphnetraw.dll"
+            }
+          ],
+          "realKey": "INPUT_Plugin",
+          "realSection": "Rosalie's Mupen GUI Core",
+          "realFile": "Mupen64.Generator.cs"
+        },
+        {
+          "id": "mupen64_inputprofile1",
+          "label": "CONTROLLER LAYOUT P1",
+          "description": "Select between the different controller layouts.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "mupen64_inputprofile1",
+          "values": [
+            {
+              "label": "C-BUTTONS=RIGHT-STICK Z=LEFT-TRIGGER",
+              "value": "c_stick_zl"
+            },
+            {
+              "label": "C-BUTTONS=FACE Z=LEFT-TRIGGER",
+              "value": "c_face_zl"
+            },
+            {
+              "label": "C-BUTTONS=RIGHT-STICK Z=RIGHT-TRIGGER",
+              "value": "c_stick"
+            },
+            {
+              "label": "C-BUTTONS=FACE Z=RIGHT-TRIGGER",
+              "value": "c_face"
+            },
+            {
+              "label": "XBOX",
+              "value": "xbox"
+            }
+          ]
+        },
+        {
+          "id": "mupen64_pak1",
+          "label": "P1 CONTROLLER EXTENSION",
+          "description": "Choose the extension attached to the controller.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "mupen64_pak1",
+          "values": [
+            {
+              "label": "MEMORY PACK",
+              "value": "0"
+            },
+            {
+              "label": "RUMBLE PACK",
+              "value": "1"
+            },
+            {
+              "label": "TRANSFER PACK",
+              "value": "2"
+            },
+            {
+              "label": "Nenhum",
+              "value": "3"
+            }
+          ],
+          "realKey": "mupen64_pak1",
+          "realFile": "Mupen64.Controllers.cs"
+        },
+        {
+          "id": "mupen64_inputprofile2",
+          "label": "CONTROLLER LAYOUT P2",
+          "type": "select",
+          "default": "auto",
+          "configKey": "mupen64_inputprofile2",
+          "values": [
+            {
+              "label": "C-BUTTONS=RIGHT-STICK Z=LEFT-TRIGGER",
+              "value": "c_stick_zl"
+            },
+            {
+              "label": "C-BUTTONS=FACE Z=LEFT-TRIGGER",
+              "value": "c_face_zl"
+            },
+            {
+              "label": "C-BUTTONS=RIGHT-STICK Z=RIGHT-TRIGGER",
+              "value": "c_stick"
+            },
+            {
+              "label": "C-BUTTONS=FACE Z=RIGHT-TRIGGER",
+              "value": "c_face"
+            },
+            {
+              "label": "XBOX",
+              "value": "xbox"
+            }
+          ]
+        },
+        {
+          "id": "mupen64_pak2",
+          "label": "P2 CONTROLLER EXTENSION",
+          "type": "select",
+          "default": "auto",
+          "configKey": "mupen64_pak2",
+          "values": [
+            {
+              "label": "MEMORY PACK",
+              "value": "0"
+            },
+            {
+              "label": "RUMBLE PACK",
+              "value": "1"
+            },
+            {
+              "label": "Nenhum",
+              "value": "3"
+            }
+          ]
+        },
+        {
+          "id": "mupen64_inputprofile3",
+          "label": "CONTROLLER LAYOUT P3",
+          "type": "select",
+          "default": "auto",
+          "configKey": "mupen64_inputprofile3",
+          "values": [
+            {
+              "label": "C-BUTTONS=RIGHT-STICK Z=LEFT-TRIGGER",
+              "value": "c_stick_zl"
+            },
+            {
+              "label": "C-BUTTONS=FACE Z=LEFT-TRIGGER",
+              "value": "c_face_zl"
+            },
+            {
+              "label": "C-BUTTONS=RIGHT-STICK Z=RIGHT-TRIGGER",
+              "value": "c_stick"
+            },
+            {
+              "label": "C-BUTTONS=FACE Z=RIGHT-TRIGGER",
+              "value": "c_face"
+            },
+            {
+              "label": "XBOX",
+              "value": "xbox"
+            }
+          ]
+        },
+        {
+          "id": "mupen64_pak3",
+          "label": "P3 CONTROLLER EXTENSION",
+          "type": "select",
+          "default": "auto",
+          "configKey": "mupen64_pak3",
+          "values": [
+            {
+              "label": "MEMORY PACK",
+              "value": "0"
+            },
+            {
+              "label": "RUMBLE PACK",
+              "value": "1"
+            },
+            {
+              "label": "Nenhum",
+              "value": "3"
+            }
+          ]
+        },
+        {
+          "id": "mupen64_inputprofile4",
+          "label": "CONTROLLER LAYOUT P4",
+          "type": "select",
+          "default": "auto",
+          "configKey": "mupen64_inputprofile4",
+          "values": [
+            {
+              "label": "C-BUTTONS=RIGHT-STICK Z=LEFT-TRIGGER",
+              "value": "c_stick_zl"
+            },
+            {
+              "label": "C-BUTTONS=FACE Z=LEFT-TRIGGER",
+              "value": "c_face_zl"
+            },
+            {
+              "label": "C-BUTTONS=RIGHT-STICK Z=RIGHT-TRIGGER",
+              "value": "c_stick"
+            },
+            {
+              "label": "C-BUTTONS=FACE Z=RIGHT-TRIGGER",
+              "value": "c_face"
+            },
+            {
+              "label": "XBOX",
+              "value": "xbox"
+            }
+          ]
+        },
+        {
+          "id": "mupen64_pak4",
+          "label": "P4 CONTROLLER EXTENSION",
+          "type": "select",
+          "default": "auto",
+          "configKey": "mupen64_pak4",
+          "values": [
+            {
+              "label": "MEMORY PACK",
+              "value": "0"
+            },
+            {
+              "label": "RUMBLE PACK",
+              "value": "1"
+            },
+            {
+              "label": "Nenhum",
+              "value": "3"
+            }
+          ]
+        },
+        {
+          "id": "n64_pad",
+          "label": "USE N64-LIKE CONTROLLER",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "n64_pad"
+        },
+        {
+          "id": "mupen64_pak_system",
+          "label": "TRANSFER PACK SYSTEM",
+          "description": "Select the source system for the transfer pack between GB and GBC.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "mupen64_pak_system",
+          "values": [
+            {
+              "label": "GB",
+              "value": "gb"
+            },
+            {
+              "label": "GBC",
+              "value": "gbc"
+            }
+          ]
+        },
+        {
+          "id": "mupen64_pak_rom",
+          "label": "TRANSFER PACK ROM",
+          "description": "Enter the first characters of the game rom used to transfer data.",
+          "type": "input",
+          "default": "auto",
+          "configKey": "mupen64_pak_rom"
+        },
+        {
+          "id": "mupen64_pak_save",
+          "label": "TRANSFER PACK SAVE FILE",
+          "description": "Enter the first characters of the save file used to transfer data.",
+          "type": "input",
+          "default": "auto",
+          "configKey": "mupen64_pak_save"
+        },
+        {
+          "id": "mupen64_deadzone",
+          "label": "JOYSTICK DEADZONE",
+          "type": "slider",
+          "default": "auto",
+          "configKey": "mupen64_deadzone",
+          "min": 0,
+          "max": 50,
+          "step": 2,
+          "suffix": "%"
+        },
+        {
+          "id": "mupen64_sensitivity",
+          "label": "ANALOG SENSITIVITY",
+          "type": "slider",
+          "default": "auto",
+          "configKey": "mupen64_sensitivity",
+          "min": 70,
+          "max": 130,
+          "step": 5,
+          "suffix": "%"
+        }
+      ]
+    }
+  ]
+}

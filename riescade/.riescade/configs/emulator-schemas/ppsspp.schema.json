@@ -2,24 +2,10 @@
   "$schema": "riescade-emulator-schema-v1",
   "id": "ppsspp",
   "name": "PPSSPP",
-  "description": "Emulador de PlayStation Portable (PSP).",
+  "description": "Configurações para o emulador PPSSPP geradas a partir do es_features.cfg.",
   "icon": "ppsspp",
-  "configFiles": [
-    {
-      "path": "memstick/PSP/SYSTEM/ppsspp.ini",
-      "format": "ini"
-    }
-  ],
-  "globalMappings": {
-    "fullscreen": {
-      "configKey": "fullscreen",
-      "globalKey": "fullscreen"
-    },
-    "vsync": {
-      "configKey": "vsync",
-      "globalKey": "vsync"
-    }
-  },
+  "configFiles": [],
+  "globalMappings": {},
   "groups": [
     {
       "id": "graphics",
@@ -28,156 +14,642 @@
       "order": 1,
       "options": [
         {
-          "id": "fullscreen",
-          "label": "Tela Cheia",
-          "description": "Iniciar o emulador em modo tela cheia.",
-          "type": "toggle",
-          "default": "true",
-          "configKey": "fullscreen",
-          "inheritsGlobal": "fullscreen"
-        },
-        {
-          "id": "vsync",
-          "label": "V-Sync",
-          "description": "Sincronização vertical.",
-          "type": "toggle",
-          "default": "true",
-          "configKey": "vsync",
-          "inheritsGlobal": "vsync"
-        },
-        {
-          "id": "ppsspp_internal_resolution",
+          "id": "ppsspp_resolution",
           "label": "Resolução Interna",
-          "description": "Multiplicador da resolução nativa do PSP (480x272).",
           "type": "select",
-          "default": "3",
-          "configKey": "ppsspp_internal_resolution",
+          "default": "auto",
+          "configKey": "ppsspp_resolution",
           "values": [
             {
-              "label": "1x Nativa (480x272)",
+              "label": "NATIVE",
               "value": "1"
             },
             {
-              "label": "2x (960x544)",
+              "label": "x2",
               "value": "2"
             },
             {
-              "label": "3x (1440x816)",
+              "label": "x3",
               "value": "3"
             },
             {
-              "label": "4x (1920x1088)",
+              "label": "x4",
               "value": "4"
             },
             {
-              "label": "5x (2400x1360)",
+              "label": "x5",
               "value": "5"
             },
             {
-              "label": "6x (2880x1632)",
+              "label": "x6",
               "value": "6"
             },
             {
-              "label": "8x (3840x2176)",
+              "label": "x7",
+              "value": "7"
+            },
+            {
+              "label": "x8",
               "value": "8"
             },
             {
-              "label": "10x (4800x2720)",
+              "label": "x9",
+              "value": "9"
+            },
+            {
+              "label": "x10",
               "value": "10"
             }
-          ]
+          ],
+          "realKey": "InternalResolution",
+          "realSection": "Graphics",
+          "realFile": "Ppsspp.Generator.cs"
         },
         {
-          "id": "ppsspp_texture_scaling",
-          "label": "Escala de Textura",
-          "description": "Upscaling de texturas do PSP.",
+          "id": "ppsspp_ratio",
+          "label": "Proporção de Tela",
           "type": "select",
-          "default": "1",
-          "configKey": "ppsspp_texture_scaling",
+          "default": "auto",
+          "configKey": "ppsspp_ratio",
           "values": [
             {
-              "label": "Desativado (1x)",
+              "label": "16:9",
               "value": "1"
             },
             {
-              "label": "2x",
-              "value": "2"
+              "label": "4:3",
+              "value": "0.75"
             },
             {
-              "label": "3x",
-              "value": "3"
+              "label": "1:1",
+              "value": "0.5625"
             },
             {
-              "label": "4x",
-              "value": "4"
-            },
-            {
-              "label": "5x",
-              "value": "5"
+              "label": "Esticar",
+              "value": "stretch"
             }
-          ]
+          ],
+          "realKey": "ppsspp_ratio",
+          "realFile": "Ppsspp.Generator.cs"
         },
         {
-          "id": "ppsspp_texture_filter",
-          "label": "Tipo de Escala de Textura",
-          "description": "Algoritmo de upscaling.",
-          "type": "select",
+          "id": "ppsspp_vsync",
+          "label": "Sincronização Vertical (V-Sync)",
+          "type": "toggle",
           "default": "auto",
-          "configKey": "ppsspp_texture_filter",
-          "values": [
-            {
-              "label": "Automático",
-              "value": "auto"
-            },
-            {
-              "label": "xBRZ",
-              "value": "xBRZ"
-            },
-            {
-              "label": "Hybrid",
-              "value": "Hybrid"
-            },
-            {
-              "label": "Bicubic",
-              "value": "Bicubic"
-            },
-            {
-              "label": "Hybrid + Bicubic",
-              "value": "Hybrid+Bicubic"
-            }
-          ]
+          "configKey": "ppsspp_vsync",
+          "realKey": "VSync",
+          "realSection": "Graphics",
+          "realFile": "Ppsspp.Generator.cs"
         },
         {
-          "id": "ppsspp_anisotropic",
-          "label": "Filtragem Anisotrópica",
-          "description": "Melhora a nitidez de texturas em ângulos.",
+          "id": "Integer_Scaling",
+          "label": "INTEGER SCALING",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "Integer_Scaling"
+        },
+        {
+          "id": "ppsspp_shader",
+          "label": "Conjunto de Shaders",
+          "description": "Select a shader to apply.",
           "type": "select",
           "default": "auto",
-          "configKey": "ppsspp_anisotropic",
+          "configKey": "ppsspp_shader",
           "values": [
             {
-              "label": "Automático",
-              "value": "auto"
+              "label": "GLSL HQ x4",
+              "value": "4xHqGLSL"
             },
+            {
+              "label": "5xBR",
+              "value": "5xBR"
+            },
+            {
+              "label": "5xBR-lv2",
+              "value": "5xBR-lv2"
+            },
+            {
+              "label": "BEAD",
+              "value": "Bead"
+            },
+            {
+              "label": "BEAD + PSP COLOR",
+              "value": "Bead + PSP Color"
+            },
+            {
+              "label": "COLOR ANTIALIASING",
+              "value": "AAColor"
+            },
+            {
+              "label": "BICUBIC UPSCALER",
+              "value": "UpscaleBicubic"
+            },
+            {
+              "label": "BLOOM",
+              "value": "Bloom"
+            },
+            {
+              "label": "BLOOM(Não BLUR)",
+              "value": "BloomNoBlur"
+            },
+            {
+              "label": "CRT",
+              "value": "CRT"
+            },
+            {
+              "label": "CARTOON",
+              "value": "Cartoon"
+            },
+            {
+              "label": "COLOR CORRECTION",
+              "value": "ColorCorrection"
+            },
+            {
+              "label": "DOT",
+              "value": "Dot"
+            },
+            {
+              "label": "DOT + PSP COLOR",
+              "value": "Dot + PSP Color"
+            },
+            {
+              "label": "FAKE REFLECTIONS",
+              "value": "FakeReflections"
+            },
+            {
+              "label": "FXAA",
+              "value": "FXAA"
+            },
+            {
+              "label": "LCD PERSISTENCE",
+              "value": "LCDPersistence"
+            },
+            {
+              "label": "LCD1X SHARP",
+              "value": "LCD1x Sharp"
+            },
+            {
+              "label": "LCD1X SHARP + PSP COLOR",
+              "value": "LCD1x Sharp + PSP Color"
+            },
+            {
+              "label": "LCD3X",
+              "value": "LCD3x"
+            },
+            {
+              "label": "LCD3X + PSP COLOR",
+              "value": "LCD3x + PSP Color"
+            },
+            {
+              "label": "NATURAL COLORS",
+              "value": "Natural"
+            },
+            {
+              "label": "NATURAL COLORS (Não BLUR)",
+              "value": "NaturalA"
+            },
+            {
+              "label": "PSP COLOR",
+              "value": "PSPColor"
+            },
+            {
+              "label": "SCANLINES",
+              "value": "Scanlines"
+            },
+            {
+              "label": "SHARPEN",
+              "value": "Sharpen"
+            },
+            {
+              "label": "UPSCALE SHARP BILINEAR",
+              "value": "UpscaleSharpBilinear"
+            },
+            {
+              "label": "UPSCALE SPLINE36",
+              "value": "UpscaleSpline36"
+            },
+            {
+              "label": "GAUSSIAN (SSAA)",
+              "value": "SSAA(Gauss)"
+            },
+            {
+              "label": "Vídeo SMOOTHING AA",
+              "value": "VideoSmoothingAA"
+            },
+            {
+              "label": "VIGNETTE",
+              "value": "Vignette"
+            },
+            {
+              "label": "ZFAST LCD",
+              "value": "zfast LCD"
+            },
+            {
+              "label": "ZFAST LCD + PSP COLOR",
+              "value": "zfast LCD + PSP Color"
+            },
+            {
+              "label": "ZFAST LCD HD",
+              "value": "zfast LCD HD"
+            },
+            {
+              "label": "ZFAST LCD HD + PSP COLOR",
+              "value": "zfast LCD HD + PSP Color"
+            }
+          ],
+          "realKey": "PostShader1",
+          "realSection": "PostShaderList",
+          "realFile": "Ppsspp.Generator.cs"
+        },
+        {
+          "id": "ppsspp_msaa",
+          "label": "ANTI ALIASING (MSAA)",
+          "description": "Set Multi-Sampled Anti Aliasing level for rendered content.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "ppsspp_msaa",
+          "values": [
             {
               "label": "Desativado",
               "value": "0"
             },
             {
-              "label": "2x",
+              "label": "2X",
+              "value": "1"
+            },
+            {
+              "label": "4X",
               "value": "2"
             },
             {
-              "label": "4x",
+              "label": "8X",
+              "value": "3"
+            }
+          ],
+          "realKey": "MultiSampleLevel",
+          "realSection": "Graphics",
+          "realFile": "Ppsspp.Generator.cs"
+        },
+        {
+          "id": "ppsspp_textureenhancement",
+          "label": "UPSCALE FILTER",
+          "description": "Choose between various texture enhancement filters.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "ppsspp_textureenhancement",
+          "values": [
+            {
+              "label": "xBRZ",
+              "value": "0"
+            },
+            {
+              "label": "Hybrid",
+              "value": "1"
+            },
+            {
+              "label": "Bicubic",
+              "value": "2"
+            },
+            {
+              "label": "Hybrid + Bicubic",
+              "value": "3"
+            },
+            {
+              "label": "HARDWARE 2xBRZ (VULKAN ONLY)",
+              "value": "Tex2xBRZ"
+            },
+            {
+              "label": "HARDWARE 4xBRZ (VULKAN ONLY)",
+              "value": "Tex4xBRZ"
+            },
+            {
+              "label": "HARDWARE MMPX (VULKAN ONLY)",
+              "value": "TexMMPX"
+            }
+          ],
+          "realKey": "TexHardwareScaling",
+          "realSection": "Graphics",
+          "realFile": "Ppsspp.Generator.cs"
+        },
+        {
+          "id": "ppsspp_textureenhancement_level",
+          "label": "TEXTURE UPSCALING",
+          "description": "Choose level of textures scaling.",
+          "type": "slider",
+          "default": "auto",
+          "configKey": "ppsspp_textureenhancement_level",
+          "min": 1,
+          "max": 5,
+          "step": 1,
+          "suffix": "x",
+          "realKey": "TexScalingLevel",
+          "realSection": "Graphics",
+          "realFile": "Ppsspp.Generator.cs"
+        },
+        {
+          "id": "ppsspp_anisotropicfilter",
+          "label": "ANISOTROPIC FILTER",
+          "description": "Enhance the quality of textures Ativado surface.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "ppsspp_anisotropicfilter",
+          "values": [
+            {
+              "label": "Desativado",
+              "value": "0"
+            },
+            {
+              "label": "2X",
+              "value": "1"
+            },
+            {
+              "label": "4X",
+              "value": "2"
+            },
+            {
+              "label": "8X",
+              "value": "3"
+            },
+            {
+              "label": "16X",
+              "value": "4"
+            }
+          ],
+          "realKey": "AnisotropyLevel",
+          "realSection": "Graphics",
+          "realFile": "Ppsspp.Generator.cs"
+        },
+        {
+          "id": "ppsspp_texture_filtering",
+          "label": "Filtragem de Texturas",
+          "description": "Select texture filtering mode.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "ppsspp_texture_filtering",
+          "values": [
+            {
+              "label": "NEAREST NEIGHBOR",
+              "value": "2"
+            },
+            {
+              "label": "LINEAR",
+              "value": "3"
+            },
+            {
+              "label": "Automático MAX QUALITY",
+              "value": "4"
+            }
+          ],
+          "realKey": "TextureFiltering",
+          "realSection": "Graphics",
+          "realFile": "Ppsspp.Generator.cs"
+        },
+        {
+          "id": "ppsspp_smart2d",
+          "label": "SMART 2D Filtragem de Texturas",
+          "description": "Enhance the quality of 2D textures.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "ppsspp_smart2d",
+          "realKey": "Smart2DTexFiltering",
+          "realSection": "Graphics",
+          "realFile": "Ppsspp.Generator.cs"
+        },
+        {
+          "id": "ppsspp_texture_replacement",
+          "label": "CUSTOM TEXTURES",
+          "description": "Replace original textures with custom textures pack (\\saves\\psp\\TEXTURES\\%GAMEID%).",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "ppsspp_texture_replacement",
+          "realKey": "ReplaceTextures",
+          "realSection": "Graphics",
+          "realFile": "Ppsspp.Generator.cs"
+        },
+        {
+          "id": "ppsspp_TexDeposterize",
+          "label": "ENHANCE TEXTURES",
+          "description": "Fix the banding that might appear in upscaled textures.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "ppsspp_TexDeposterize",
+          "realKey": "TexDeposterize",
+          "realSection": "Graphics",
+          "realFile": "Ppsspp.Generator.cs"
+        },
+        {
+          "id": "ppsspp_backend",
+          "label": "Vídeo",
+          "type": "select",
+          "default": "auto",
+          "configKey": "ppsspp_backend",
+          "values": [
+            {
+              "label": "OPENGL",
+              "value": "0 (OPENGL)"
+            },
+            {
+              "label": "DIRECT3D 11",
+              "value": "2 (DIRECT3D11)"
+            },
+            {
+              "label": "VULKAN",
+              "value": "3 (VULKAN)"
+            }
+          ],
+          "realKey": "GraphicsBackend",
+          "realSection": "Graphics",
+          "realFile": "Ppsspp.Generator.cs"
+        }
+      ]
+    },
+    {
+      "id": "emulation",
+      "title": "Emulação",
+      "icon": "cpu",
+      "order": 2,
+      "options": [
+        {
+          "id": "ppsspp_frame_skipping",
+          "label": "FRAMESKIP",
+          "description": "Skip frames to improve performance (smoothless).",
+          "type": "slider",
+          "default": "auto",
+          "configKey": "ppsspp_frame_skipping",
+          "min": 0,
+          "max": 8,
+          "step": 1,
+          "realKey": "FrameSkip",
+          "realSection": "Graphics",
+          "realFile": "Ppsspp.Generator.cs"
+        },
+        {
+          "id": "ppsspp_frameskip_type",
+          "label": "FRAMESKIP TYPE",
+          "description": "Type of Frame skipping.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "ppsspp_frameskip_type",
+          "values": [
+            {
+              "label": "NUMBER OF FRAMES",
+              "value": "0"
+            },
+            {
+              "label": "Automático",
+              "value": "auto"
+            }
+          ],
+          "realKey": "ppsspp_frameskip_type",
+          "realFile": "Ppsspp.Generator.cs"
+        },
+        {
+          "id": "ppsspp_lang",
+          "label": "LANGUAGE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "ppsspp_lang",
+          "values": [
+            {
+              "label": "English (US)",
+              "value": "1"
+            },
+            {
+              "label": "Français",
+              "value": "2"
+            },
+            {
+              "label": "Deutsch",
               "value": "4"
             },
             {
-              "label": "8x",
-              "value": "8"
+              "label": "Español",
+              "value": "3"
             },
             {
-              "label": "16x",
-              "value": "16"
+              "label": "Italiano",
+              "value": "5"
+            },
+            {
+              "label": "Nederlands",
+              "value": "6"
+            },
+            {
+              "label": "Portugues",
+              "value": "7"
+            },
+            {
+              "label": "日本語 (Japanese)",
+              "value": "0"
+            },
+            {
+              "label": "简化字 (Chinese - simplified)",
+              "value": "10"
+            },
+            {
+              "label": "簡化字 (Chinese - traditional)",
+              "value": "11"
+            },
+            {
+              "label": "한국어 (Korean)",
+              "value": "9"
+            },
+            {
+              "label": "Русский",
+              "value": "8"
+            }
+          ],
+          "realKey": "GameLanguage",
+          "realSection": "SystemParam",
+          "realFile": "Ppsspp.Generator.cs"
+        },
+        {
+          "id": "ppsspp_cheats",
+          "label": "Ativar Cheats / Trapaças",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "ppsspp_cheats",
+          "realKey": "EnableCheats",
+          "realSection": "General",
+          "realFile": "Ppsspp.Generator.cs"
+        }
+      ]
+    },
+    {
+      "id": "audio",
+      "title": "Áudio",
+      "icon": "volume2",
+      "order": 4,
+      "options": [
+        {
+          "id": "ppsspp_audiobackend",
+          "label": "Áudio",
+          "type": "select",
+          "default": "auto",
+          "configKey": "ppsspp_audiobackend",
+          "values": [
+            {
+              "label": "DIRECTSOUND (compatible)",
+              "value": "1"
+            },
+            {
+              "label": "WASAPI (fast)",
+              "value": "2"
+            }
+          ],
+          "realKey": "AudioBackend",
+          "realSection": "Sound",
+          "realFile": "Ppsspp.Generator.cs"
+        }
+      ]
+    },
+    {
+      "id": "controls",
+      "title": "Controles",
+      "icon": "gamepad2",
+      "order": 5,
+      "options": [
+        {
+          "id": "ppsspp_mouse",
+          "label": "USE MOUSE",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "ppsspp_mouse"
+        },
+        {
+          "id": "ppsspp_confirmbutton",
+          "label": "USE O TO CONFIRM (EAST)",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "ppsspp_confirmbutton"
+        },
+        {
+          "id": "ppsspp_forceindex",
+          "label": "FORCE CONTROLLER INDEX",
+          "type": "select",
+          "default": "auto",
+          "configKey": "ppsspp_forceindex",
+          "values": [
+            {
+              "label": "1",
+              "value": "0"
+            },
+            {
+              "label": "2",
+              "value": "1"
+            },
+            {
+              "label": "3",
+              "value": "2"
+            },
+            {
+              "label": "4",
+              "value": "3"
+            },
+            {
+              "label": "5",
+              "value": "4"
             }
           ]
         }

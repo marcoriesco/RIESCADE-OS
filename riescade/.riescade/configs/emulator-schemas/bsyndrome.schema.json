@@ -1,0 +1,40 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "bsyndrome",
+  "name": "BSYNDROME",
+  "description": "Configurações para o emulador BSYNDROME geradas a partir do es_features.cfg.",
+  "icon": "bsyndrome",
+  "configFiles": [],
+  "globalMappings": {},
+  "groups": [
+    {
+      "id": "graphics",
+      "title": "Gráficos",
+      "icon": "monitor",
+      "order": 1,
+      "options": [
+        {
+          "id": "bsyndrome_aspect",
+          "label": "Proporção de Tela",
+          "type": "select",
+          "default": "auto",
+          "configKey": "bsyndrome_aspect",
+          "values": [
+            {
+              "label": "Padrão",
+              "value": "default"
+            },
+            {
+              "label": "4/3",
+              "value": "4:3"
+            },
+            {
+              "label": "16/9",
+              "value": "16:9"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

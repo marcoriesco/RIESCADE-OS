@@ -1,0 +1,185 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "openmsx",
+  "name": "OPENMSX",
+  "description": "Configurações para o emulador OPENMSX geradas a partir do es_features.cfg.",
+  "icon": "openmsx",
+  "configFiles": [],
+  "globalMappings": {},
+  "groups": [
+    {
+      "id": "graphics",
+      "title": "Gráficos",
+      "icon": "monitor",
+      "order": 1,
+      "options": [
+        {
+          "id": "msx_vsync",
+          "label": "Sincronização Vertical (V-Sync)",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "msx_vsync"
+        },
+        {
+          "id": "msx_fullscreen",
+          "label": "Desativar Tela Cheia",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "msx_fullscreen"
+        },
+        {
+          "id": "msx_scale",
+          "label": "UPSCALE RATIO",
+          "type": "slider",
+          "default": "auto",
+          "configKey": "msx_scale",
+          "min": 2,
+          "max": 4,
+          "step": 1,
+          "suffix": "x"
+        },
+        {
+          "id": "msx_scale_algo",
+          "label": "UPSCALE ALGORYTHM",
+          "description": "Select the algorythm used for upscaling.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "msx_scale_algo",
+          "values": [
+            {
+              "label": "SIMPLE",
+              "value": "simple"
+            },
+            {
+              "label": "TV",
+              "value": "TV"
+            },
+            {
+              "label": "HQ",
+              "value": "hq"
+            },
+            {
+              "label": "HQ LITE",
+              "value": "hqlite"
+            },
+            {
+              "label": "RGB TRIPLET",
+              "value": "RGBtriplet"
+            },
+            {
+              "label": "SCALE NX",
+              "value": "ScaleNx"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "emulation",
+      "title": "Emulação",
+      "icon": "cpu",
+      "order": 2,
+      "options": [
+        {
+          "id": "msx_loadfullspeed",
+          "label": "FAST LOADING",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "msx_loadfullspeed"
+        }
+      ]
+    },
+    {
+      "id": "audio",
+      "title": "Áudio",
+      "icon": "volume2",
+      "order": 4,
+      "options": [
+        {
+          "id": "msx_resampler",
+          "label": "RESAMPLER",
+          "type": "select",
+          "default": "auto",
+          "configKey": "msx_resampler",
+          "values": [
+            {
+              "label": "BLIP (Good speed\\quality)",
+              "value": "blip"
+            },
+            {
+              "label": "FAST (Low Quality)",
+              "value": "fast"
+            },
+            {
+              "label": "HQ (Best)",
+              "value": "hq"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "controls",
+      "title": "Controles",
+      "icon": "gamepad2",
+      "order": 5,
+      "options": [
+        {
+          "id": "msx_custom_gamepad",
+          "label": "USE USER JOYSTICK SCRIPT",
+          "description": "Override RetroBat gamepad mapping with user own mapping placed in emulator script folder.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "msx_custom_gamepad",
+          "values": [
+            {
+              "label": "USER MAPPING 1",
+              "value": "userjoystick1"
+            },
+            {
+              "label": "USER MAPPING 2",
+              "value": "userjoystick2"
+            },
+            {
+              "label": "USER MAPPING 3",
+              "value": "userjoystick3"
+            }
+          ]
+        },
+        {
+          "id": "msx_joytype",
+          "label": "JOYSTICK TYPE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "msx_joytype",
+          "values": [
+            {
+              "label": "MSX JOYSTICK",
+              "value": "msxjoystick"
+            },
+            {
+              "label": "MEGADRIVE JOYSTICK",
+              "value": "joymega"
+            }
+          ]
+        },
+        {
+          "id": "msx_useStick",
+          "label": "USE LEFT STICK",
+          "description": "Use analog stick instead of dpad.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "msx_useStick"
+        },
+        {
+          "id": "msx_mouse",
+          "label": "USE MOUSE",
+          "description": "Plug a mouse in joyport, this will remove plugged joysticks.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "msx_mouse"
+        }
+      ]
+    }
+  ]
+}

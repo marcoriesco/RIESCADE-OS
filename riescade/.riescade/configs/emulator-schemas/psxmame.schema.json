@@ -1,0 +1,284 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "psxmame",
+  "name": "PSXMAME",
+  "description": "Configurações para o emulador PSXMAME geradas a partir do es_features.cfg.",
+  "icon": "psxmame",
+  "configFiles": [],
+  "globalMappings": {},
+  "groups": [
+    {
+      "id": "graphics",
+      "title": "Gráficos",
+      "icon": "monitor",
+      "order": 1,
+      "options": [
+        {
+          "id": "psxmame_window",
+          "label": "RUN IN A WINDOW",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "psxmame_window",
+          "realKey": "window",
+          "realFile": "PSXMame.Generator.cs"
+        },
+        {
+          "id": "psxmame_gpu_plugin",
+          "label": "GPU RENDERING PLUGIN",
+          "description": "Select the GPU plugin, RetroBat options will not work Ativado non-Padrão plugin, they can be configured from emulators folder with config.exe.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "psxmame_gpu_plugin",
+          "values": [
+            {
+              "label": "OPENGL (Padrão)",
+              "value": "ogl_renderer.znc"
+            },
+            {
+              "label": "D3D",
+              "value": "d3d_renderer.znc"
+            },
+            {
+              "label": "PETE OPENGL 2",
+              "value": "gpuPeteOpenGL2.dll"
+            },
+            {
+              "label": "BLADESOFT",
+              "value": "gpuBladeSoft-1.64.dll"
+            },
+            {
+              "label": "PEOPS OPENGL",
+              "value": "gpuPeopsOpenGL.dll"
+            }
+          ],
+          "realKey": "gpu_plugin_name",
+          "realFile": "PSXMame.Generator.cs"
+        },
+        {
+          "id": "psxmame_antialiasing",
+          "label": "Anti-Aliasing (FXAA)",
+          "description": "Enable antialiasing, smooth polygons edges.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "psxmame_antialiasing",
+          "realKey": "antialias",
+          "realFile": "PSXMame.Generator.cs"
+        },
+        {
+          "id": "psxmame_scanlines",
+          "label": "ENABLE SCANLINES",
+          "type": "select",
+          "default": "auto",
+          "configKey": "psxmame_scanlines",
+          "values": [
+            {
+              "label": "Não",
+              "value": "0"
+            },
+            {
+              "label": "BLACK SCANLINES",
+              "value": "1"
+            },
+            {
+              "label": "BRIGHT SCANLINES",
+              "value": "2"
+            }
+          ],
+          "realKey": "gpu_scanline",
+          "realFile": "PSXMame.Generator.cs"
+        },
+        {
+          "id": "psxmame_depth32",
+          "label": "COLOR DEPTH",
+          "type": "select",
+          "default": "auto",
+          "configKey": "psxmame_depth32",
+          "values": [
+            {
+              "label": "32 BITS",
+              "value": "1"
+            },
+            {
+              "label": "16 BITS",
+              "value": "0"
+            }
+          ]
+        },
+        {
+          "id": "psxmame_filtering",
+          "label": "TEXTURE FILTERING",
+          "description": "Can cause glitches.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "psxmame_filtering",
+          "values": [
+            {
+              "label": "Não",
+              "value": "0"
+            },
+            {
+              "label": "LOW",
+              "value": "1"
+            },
+            {
+              "label": "MEDIUM",
+              "value": "2"
+            },
+            {
+              "label": "HIGH",
+              "value": "3"
+            }
+          ],
+          "realKey": "gpu_filtering",
+          "realFile": "PSXMame.Generator.cs"
+        },
+        {
+          "id": "psxmame_video",
+          "label": "Vídeo",
+          "type": "select",
+          "default": "auto",
+          "configKey": "psxmame_video",
+          "values": [
+            {
+              "label": "GDI",
+              "value": "gdi"
+            },
+            {
+              "label": "DIRECT DRAW",
+              "value": "ddraw"
+            },
+            {
+              "label": "DIRECT 3D",
+              "value": "d3d"
+            }
+          ],
+          "realKey": "video",
+          "realFile": "PSXMame.Generator.cs"
+        }
+      ]
+    },
+    {
+      "id": "emulation",
+      "title": "Emulação",
+      "icon": "cpu",
+      "order": 2,
+      "options": [
+        {
+          "id": "psxmame_frameskipping",
+          "label": "FRAMESKIP",
+          "description": "Skip frames to improve performance (smoothless).",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "psxmame_frameskipping"
+        },
+        {
+          "id": "psxmame_fps",
+          "label": "DISPLAY FPS",
+          "description": "Show FPS overlay in-game.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "psxmame_fps"
+        },
+        {
+          "id": "psxmame_throttle",
+          "label": "THROTTLE",
+          "description": "Padrão is Ativado, use this setting to remove the 60hz limit, might break games.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "psxmame_throttle",
+          "realKey": "throttle",
+          "realFile": "PSXMame.Generator.cs"
+        },
+        {
+          "id": "psxmame_cheats",
+          "label": "Ativar Cheats / Trapaças",
+          "description": "Cheats need to be placed in 'cheats\\psxmame' folder.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "psxmame_cheats"
+        },
+        {
+          "id": "psxmame_sleep",
+          "label": "SLEEP WHEN POSSIBLE",
+          "description": "Padrão Ativado.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "psxmame_sleep",
+          "realKey": "sleep",
+          "realFile": "PSXMame.Generator.cs"
+        }
+      ]
+    },
+    {
+      "id": "audio",
+      "title": "Áudio",
+      "icon": "volume2",
+      "order": 4,
+      "options": [
+        {
+          "id": "psxmame_samplerate",
+          "label": "SAMPLE RATE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "psxmame_samplerate",
+          "values": [
+            {
+              "label": "48000",
+              "value": "48000"
+            },
+            {
+              "label": "44100",
+              "value": "44100"
+            },
+            {
+              "label": "22050",
+              "value": "22050"
+            },
+            {
+              "label": "11025",
+              "value": "11025"
+            }
+          ],
+          "realKey": "samplerate",
+          "realFile": "PSXMame.Generator.cs"
+        }
+      ]
+    },
+    {
+      "id": "controls",
+      "title": "Controles",
+      "icon": "gamepad2",
+      "order": 5,
+      "options": [
+        {
+          "id": "psxmame_controller_configmode",
+          "label": "CONTROLLER PROFILE",
+          "description": "Select 'game specific' to use game specific cfg file located in emulators\\psxmame\\ctrlr folder.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "psxmame_controller_configmode",
+          "values": [
+            {
+              "label": "RETROBAT Automático",
+              "value": "retrobat_auto"
+            },
+            {
+              "label": "GAME SPECIFIC",
+              "value": "per_game"
+            }
+          ],
+          "realKey": "psxmame_controller_configmode",
+          "realFile": "PSXMame.Generator.cs"
+        },
+        {
+          "id": "psxmame_analog_to_dpad",
+          "label": "ANALOG TO D-PAD",
+          "description": "Use left stick as d-pad.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "psxmame_analog_to_dpad"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,256 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "zinc",
+  "name": "ZINC",
+  "description": "Configurações para o emulador ZINC geradas a partir do es_features.cfg.",
+  "icon": "zinc",
+  "configFiles": [],
+  "globalMappings": {},
+  "groups": [
+    {
+      "id": "graphics",
+      "title": "Gráficos",
+      "icon": "monitor",
+      "order": 1,
+      "options": [
+        {
+          "id": "zinc_colordepth",
+          "label": "COLOR DEPTH",
+          "type": "select",
+          "default": "auto",
+          "configKey": "zinc_colordepth",
+          "values": [
+            {
+              "label": "32 bits",
+              "value": "32"
+            },
+            {
+              "label": "16 bits",
+              "value": "16"
+            }
+          ],
+          "realKey": "ColorDepth",
+          "realFile": "Zinc.Generator.cs"
+        },
+        {
+          "id": "zinc_scanlines",
+          "label": "SCANLINES",
+          "type": "select",
+          "default": "auto",
+          "configKey": "zinc_scanlines",
+          "values": [
+            {
+              "label": "Nenhum",
+              "value": "0"
+            },
+            {
+              "label": "BLACK",
+              "value": "1"
+            },
+            {
+              "label": "BRIGHT",
+              "value": "2"
+            }
+          ],
+          "realKey": "ScanLines",
+          "realFile": "Zinc.Generator.cs"
+        },
+        {
+          "id": "zinc_renderer",
+          "label": "Vídeo",
+          "type": "select",
+          "default": "auto",
+          "configKey": "zinc_renderer",
+          "values": [
+            {
+              "label": "OPENGL",
+              "value": "ogl"
+            },
+            {
+              "label": "DIRECT3D",
+              "value": "d3d"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "emulation",
+      "title": "Emulação",
+      "icon": "cpu",
+      "order": 2,
+      "options": [
+        {
+          "id": "zinc_frameskip",
+          "label": "FRAMESKIP",
+          "description": "Skip frames to improve performance (smoothless).",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "zinc_frameskip",
+          "realKey": "FrameSkipping",
+          "realFile": "Zinc.Generator.cs"
+        },
+        {
+          "id": "zinc_fps",
+          "label": "SHOW FPS",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "zinc_fps",
+          "realKey": "ShowFPS",
+          "realFile": "Zinc.Generator.cs"
+        }
+      ]
+    },
+    {
+      "id": "controls",
+      "title": "Controles",
+      "icon": "gamepad2",
+      "order": 5,
+      "options": [
+        {
+          "id": "zinc_controller_config",
+          "label": "CONTROLLER CONFIGURATION METHOD",
+          "description": "'PRE-DEFINED' uses the config files located in the emulator 'cfg' folder, 'DYNAMIC' generates configuration based Ativado profile selected in 'Controles' Configurações Avançadas.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "zinc_controller_config",
+          "values": [
+            {
+              "label": "DYNAMIC PROFILE",
+              "value": "autoconfig"
+            },
+            {
+              "label": "PRE-DEFINED FILES",
+              "value": "predefined"
+            },
+            {
+              "label": "Nenhum",
+              "value": "none"
+            }
+          ],
+          "realKey": "zinc_controller_config",
+          "realFile": "Zinc.Controllers.cs"
+        },
+        {
+          "id": "zinc_control_scheme",
+          "label": "CONTROL SCHEME",
+          "description": "Select controller layout to use when using 'Dynamic Profile' option.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "zinc_control_scheme",
+          "values": [
+            {
+              "label": "STANDARD",
+              "value": "standard"
+            },
+            {
+              "label": "STREET FIGHTER",
+              "value": "sf"
+            },
+            {
+              "label": "SOUL EDGE",
+              "value": "edge"
+            },
+            {
+              "label": "TEKKEN",
+              "value": "tekken"
+            }
+          ],
+          "realKey": "zinc_control_scheme",
+          "realFile": "Zinc.Controllers.cs"
+        },
+        {
+          "id": "zinc_digital",
+          "label": "USE DPAD",
+          "description": "By Padrão zinc maps the left stick for movement, use this option to switch to d-pad.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "zinc_digital"
+        },
+        {
+          "id": "zinc_p1_forceindex",
+          "label": "FORCE PLAYER 1 PAD INDEX",
+          "description": "Force P1 pad index, can be useful when using a controller Ativado an arcade machine.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "zinc_p1_forceindex",
+          "values": [
+            {
+              "label": "1",
+              "value": "1"
+            },
+            {
+              "label": "2",
+              "value": "2"
+            },
+            {
+              "label": "3",
+              "value": "3"
+            },
+            {
+              "label": "4",
+              "value": "4"
+            },
+            {
+              "label": "5",
+              "value": "5"
+            },
+            {
+              "label": "6",
+              "value": "6"
+            },
+            {
+              "label": "7",
+              "value": "7"
+            },
+            {
+              "label": "8",
+              "value": "8"
+            }
+          ]
+        },
+        {
+          "id": "zinc_p2_forceindex",
+          "label": "FORCE PLAYER 2 PAD INDEX",
+          "type": "select",
+          "default": "auto",
+          "configKey": "zinc_p2_forceindex",
+          "values": [
+            {
+              "label": "1",
+              "value": "1"
+            },
+            {
+              "label": "2",
+              "value": "2"
+            },
+            {
+              "label": "3",
+              "value": "3"
+            },
+            {
+              "label": "4",
+              "value": "4"
+            },
+            {
+              "label": "5",
+              "value": "5"
+            },
+            {
+              "label": "6",
+              "value": "6"
+            },
+            {
+              "label": "7",
+              "value": "7"
+            },
+            {
+              "label": "8",
+              "value": "8"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,177 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "gemrb",
+  "name": "GEMRB",
+  "description": "Configurações para o emulador GEMRB geradas a partir do es_features.cfg.",
+  "icon": "gemrb",
+  "configFiles": [],
+  "globalMappings": {},
+  "groups": [
+    {
+      "id": "graphics",
+      "title": "Gráficos",
+      "icon": "monitor",
+      "order": 1,
+      "options": [
+        {
+          "id": "resolution",
+          "label": "Resolução Interna",
+          "description": "Depending Ativado games, higher resolution than 640x480 might not work. You maybe need to install a widescreen mod. Type a resolution like '1920x1080' or 'desktop' to run a game with your desktop resolution or leave empty for game's native res.",
+          "type": "input",
+          "default": "auto",
+          "configKey": "resolution"
+        },
+        {
+          "id": "SpriteFogOfWar",
+          "label": "FOG OF WAR",
+          "description": "For nostalgia. By Padrão it looks like accelerated FoW in BG2",
+          "type": "select",
+          "default": "auto",
+          "configKey": "SpriteFogOfWar",
+          "values": [
+            {
+              "label": "ACCELERATED",
+              "value": "0"
+            },
+            {
+              "label": "SPRITE",
+              "value": "1"
+            }
+          ]
+        },
+        {
+          "id": "Bpp",
+          "label": "BITS PER PIXEL",
+          "type": "select",
+          "default": "auto",
+          "configKey": "Bpp",
+          "values": [
+            {
+              "label": "32",
+              "value": "32"
+            },
+            {
+              "label": "16",
+              "value": "16"
+            }
+          ]
+        },
+        {
+          "id": "Logging",
+          "label": "LOGGING",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "Logging"
+        },
+        {
+          "id": "DrawFPS",
+          "label": "SHOW FPS",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "DrawFPS"
+        },
+        {
+          "id": "DebugMode",
+          "label": "DEVELOPER MODE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "DebugMode",
+          "values": [
+            {
+              "label": "Desativado",
+              "value": "0"
+            },
+            {
+              "label": "count references",
+              "value": "1"
+            },
+            {
+              "label": "display cutscene warnings",
+              "value": "2"
+            },
+            {
+              "label": "display variable warnings",
+              "value": "4"
+            },
+            {
+              "label": "display action warnings",
+              "value": "8"
+            },
+            {
+              "label": "display trigger warnings",
+              "value": "16"
+            },
+            {
+              "label": "enable views debug mode",
+              "value": "32"
+            },
+            {
+              "label": "enable window debug mode",
+              "value": "64"
+            },
+            {
+              "label": "enable font debug mode",
+              "value": "128"
+            },
+            {
+              "label": "enable text debug mode",
+              "value": "256"
+            },
+            {
+              "label": "enable pathfinding debug mode",
+              "value": "512"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "emulation",
+      "title": "Emulação",
+      "icon": "cpu",
+      "order": 2,
+      "options": [
+        {
+          "id": "Encoding",
+          "label": "LANGUAGE ENCODING",
+          "description": "Specific language font encoding used by the game.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "Encoding",
+          "values": [
+            {
+              "label": "Padrão",
+              "value": "default"
+            },
+            {
+              "label": "GERMAN",
+              "value": "german"
+            },
+            {
+              "label": "POLISH",
+              "value": "polish"
+            },
+            {
+              "label": "CZECH",
+              "value": "czech"
+            }
+          ]
+        },
+        {
+          "id": "SkipIntroVideos",
+          "label": "Vídeo INTRO",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "SkipIntroVideos"
+        },
+        {
+          "id": "EnableCheatKeys",
+          "label": "CHEAT KEYS",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "EnableCheatKeys"
+        }
+      ]
+    }
+  ]
+}

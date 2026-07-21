@@ -1,0 +1,463 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "m2emulator",
+  "name": "M2EMULATOR",
+  "description": "Configurações para o emulador M2EMULATOR geradas a partir do es_features.cfg.",
+  "icon": "m2emulator",
+  "configFiles": [],
+  "globalMappings": {},
+  "groups": [
+    {
+      "id": "graphics",
+      "title": "Gráficos",
+      "icon": "monitor",
+      "order": 1,
+      "options": [
+        {
+          "id": "VSync",
+          "label": "VSYNC",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "VSync",
+          "realKey": "ForceSync",
+          "realSection": "Renderer",
+          "realFile": "Model2.Generator.cs"
+        },
+        {
+          "id": "m2_widescreen",
+          "label": "ASPECT RATIO",
+          "type": "select",
+          "default": "auto",
+          "configKey": "m2_widescreen",
+          "values": [
+            {
+              "label": "4:3",
+              "value": "0"
+            },
+            {
+              "label": "16:9",
+              "value": "1"
+            }
+          ]
+        },
+        {
+          "id": "bilinear_filtering",
+          "label": "Filtragem Bilinear",
+          "description": "Use Filtragem Bilinear to smooth the overall picture.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "bilinear_filtering",
+          "realKey": "Bilinear",
+          "realSection": "Renderer",
+          "realFile": "Model2.Generator.cs"
+        },
+        {
+          "id": "trilinear_filtering",
+          "label": "Filtragem Trilinear",
+          "description": "Control the texture tri-filtering of the Emulação.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "trilinear_filtering",
+          "realKey": "Trilinear",
+          "realSection": "Renderer",
+          "realFile": "Model2.Generator.cs"
+        },
+        {
+          "id": "m2_ForceManaged",
+          "label": "FORCE MANAGED TEXTURES",
+          "description": "Use this if the emulator crashes after loading or doesn't show anything.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "m2_ForceManaged",
+          "realKey": "ForceManaged",
+          "realSection": "Renderer",
+          "realFile": "Model2.Generator.cs"
+        },
+        {
+          "id": "m2_fsaa",
+          "label": "Anti-Aliasing (FXAA)",
+          "description": "Enable full screen antialiasing in Direct3D, smooth polygons edges.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "m2_fsaa",
+          "realKey": "FSAA",
+          "realSection": "Renderer",
+          "realFile": "Model2.Generator.cs"
+        }
+      ]
+    },
+    {
+      "id": "emulation",
+      "title": "Emulação",
+      "icon": "cpu",
+      "order": 2,
+      "options": [
+        {
+          "id": "m2_AutoMip",
+          "label": "Automático MIPMAP",
+          "description": "Enables Direct3D Automipmap generation.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "m2_AutoMip",
+          "realKey": "AutoMip",
+          "realSection": "Renderer",
+          "realFile": "Model2.Generator.cs"
+        },
+        {
+          "id": "m2_enable_service",
+          "label": "SERVICE MODE",
+          "description": "Enable R3 as Service button to enter settings.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "m2_enable_service"
+        }
+      ]
+    },
+    {
+      "id": "controls",
+      "title": "Controles",
+      "icon": "gamepad2",
+      "order": 5,
+      "options": [
+        {
+          "id": "m2_joystick_driver",
+          "label": "CONTROLLER",
+          "type": "select",
+          "default": "auto",
+          "configKey": "m2_joystick_driver",
+          "values": [
+            {
+              "label": "XINPUT",
+              "value": "xinput"
+            },
+            {
+              "label": "DINPUT",
+              "value": "dinput"
+            }
+          ],
+          "realKey": "m2_joystick_driver",
+          "realFile": "Model2.Generator.cs"
+        },
+        {
+          "id": "m2_racingshoulder",
+          "label": "USE SHOULDER BUTTONS FOR RACING GAMES",
+          "description": "Use R1 and L1 to accelerate and brake in racing games, only compatible with 'Automático' gear shifting.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "m2_racingshoulder"
+        },
+        {
+          "id": "m2_joystick_autoconfig",
+          "label": "TYPE OF AUTOCONFIGURATION",
+          "description": "'Templates' option copies files located in 'emulators\\m2emulator\\templatescfg' folder instead of performing dynamic autoconfiguration.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "m2_joystick_autoconfig",
+          "values": [
+            {
+              "label": "DYNAMIC",
+              "value": "dynamic"
+            },
+            {
+              "label": "TEMPLATES",
+              "value": "template"
+            }
+          ],
+          "realKey": "m2_joystick_autoconfig",
+          "realFile": "Model2.Controllers.cs"
+        },
+        {
+          "id": "m2_indexswitch",
+          "label": "SWITCH JOYPAD INDEX",
+          "description": "When using XInput, this option will switch gamepads 1 and 2.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "m2_indexswitch"
+        },
+        {
+          "id": "m2_forcep1index",
+          "label": "FORCE PLAYER 1 PAD INDEX",
+          "description": "Force P1 pad index, can be useful when using a controller Ativado an arcade machine.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "m2_forcep1index",
+          "values": [
+            {
+              "label": "1",
+              "value": "1"
+            },
+            {
+              "label": "2",
+              "value": "2"
+            },
+            {
+              "label": "3",
+              "value": "3"
+            },
+            {
+              "label": "4",
+              "value": "4"
+            },
+            {
+              "label": "5",
+              "value": "5"
+            },
+            {
+              "label": "6",
+              "value": "6"
+            },
+            {
+              "label": "7",
+              "value": "7"
+            },
+            {
+              "label": "8",
+              "value": "8"
+            }
+          ]
+        },
+        {
+          "id": "m2_forcep2index",
+          "label": "FORCE PLAYER 2 PAD INDEX",
+          "description": "Force P2 pad index, can be useful when using a controller Ativado an arcade machine.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "m2_forcep2index",
+          "values": [
+            {
+              "label": "1",
+              "value": "1"
+            },
+            {
+              "label": "2",
+              "value": "2"
+            },
+            {
+              "label": "3",
+              "value": "3"
+            },
+            {
+              "label": "4",
+              "value": "4"
+            },
+            {
+              "label": "5",
+              "value": "5"
+            },
+            {
+              "label": "6",
+              "value": "6"
+            },
+            {
+              "label": "7",
+              "value": "7"
+            },
+            {
+              "label": "8",
+              "value": "8"
+            }
+          ]
+        },
+        {
+          "id": "use_demulshooter",
+          "label": "USE DEMULSHOOTER",
+          "description": "Launch DemulShooter for gun games.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "use_demulshooter"
+        },
+        {
+          "id": "m2_rawinput",
+          "label": "ENABLE RAWINPUT",
+          "description": "Force Rawinput, there should be ne need to force this to Ativado.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "m2_rawinput",
+          "realKey": "UseRawInput",
+          "realSection": "Input",
+          "realFile": "Model2.Generator.cs"
+        },
+        {
+          "id": "m2_crosshair",
+          "label": "SHOW CROSSHAIR",
+          "description": "Enable crosshairs in shooting games, options (DS) are only compatible with DemulShooter.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "m2_crosshair",
+          "values": [
+            {
+              "label": "Não",
+              "value": "0"
+            },
+            {
+              "label": "Sim(DS TYPE 1)",
+              "value": "1"
+            },
+            {
+              "label": "DS TYPE 2",
+              "value": "2"
+            },
+            {
+              "label": "DS TYPE 3",
+              "value": "3"
+            },
+            {
+              "label": "DS TYPE 4",
+              "value": "4"
+            },
+            {
+              "label": "DS TYPE 5",
+              "value": "5"
+            },
+            {
+              "label": "DS TYPE 6",
+              "value": "6"
+            }
+          ],
+          "realKey": "m2_crosshair",
+          "realFile": "Model2.Generator.cs"
+        },
+        {
+          "id": "m2_gun_kb",
+          "label": "FORCE KEYBOARD FOR START/COIN",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "m2_gun_kb"
+        },
+        {
+          "id": "m2_rawinput_p1",
+          "label": "P1 MOUSE INDEX",
+          "description": "Define mouse index to use for player 1.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "m2_rawinput_p1",
+          "values": [
+            {
+              "label": 0,
+              "value": "0"
+            },
+            {
+              "label": "1",
+              "value": "1"
+            },
+            {
+              "label": "2",
+              "value": "2"
+            },
+            {
+              "label": "3",
+              "value": "3"
+            },
+            {
+              "label": "4",
+              "value": "4"
+            },
+            {
+              "label": "5",
+              "value": "5"
+            }
+          ],
+          "realKey": "RawDevP1",
+          "realSection": "Input",
+          "realFile": "Model2.Guns.cs"
+        },
+        {
+          "id": "m2_rawinput_p2",
+          "label": "P2 MOUSE INDEX",
+          "description": "Define mouse index to use for player 2.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "m2_rawinput_p2",
+          "values": [
+            {
+              "label": 0,
+              "value": "0"
+            },
+            {
+              "label": "1",
+              "value": "1"
+            },
+            {
+              "label": "2",
+              "value": "2"
+            },
+            {
+              "label": "3",
+              "value": "3"
+            },
+            {
+              "label": "4",
+              "value": "4"
+            },
+            {
+              "label": "5",
+              "value": "5"
+            }
+          ],
+          "realKey": "RawDevP2",
+          "realSection": "Input",
+          "realFile": "Model2.Guns.cs"
+        },
+        {
+          "id": "ds_output",
+          "label": "OUTPUT GAME DATA",
+          "description": "Enable this option when using mamehooker with LEDs, solenoids, rumble...",
+          "type": "select",
+          "default": "auto",
+          "configKey": "ds_output",
+          "values": [
+            {
+              "label": "TO WINDOW",
+              "value": "win"
+            },
+            {
+              "label": "TO NETWORK",
+              "value": "net"
+            },
+            {
+              "label": "TO BOTH",
+              "value": "both"
+            }
+          ]
+        },
+        {
+          "id": "ds_verbose",
+          "label": "VERBOSE MODE",
+          "description": "Enable verbose mode for debugging.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "ds_verbose"
+        },
+        {
+          "id": "use_mamehooker",
+          "label": "USE MAMEHOOKER",
+          "description": "Launch MameHooker for outputs management.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "use_mamehooker"
+        },
+        {
+          "id": "m2_force_feedback",
+          "label": "ENABLE FORCE FEEDBACK",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "m2_force_feedback",
+          "realKey": "EnableFF",
+          "realSection": "Input",
+          "realFile": "Model2.Generator.cs"
+        },
+        {
+          "id": "m2_HoldGears",
+          "label": "HOLD GEARS",
+          "description": "Set to Sim to return to Neutral in driving games when the gear shift key is released.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "m2_HoldGears",
+          "realKey": "HoldGears",
+          "realSection": "Input",
+          "realFile": "Model2.Generator.cs"
+        }
+      ]
+    }
+  ]
+}

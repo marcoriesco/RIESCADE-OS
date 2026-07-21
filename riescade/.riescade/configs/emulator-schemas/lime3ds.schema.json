@@ -1,0 +1,344 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "lime3ds",
+  "name": "LIME3DS",
+  "description": "Configurações para o emulador LIME3DS geradas a partir do es_features.cfg.",
+  "icon": "lime3ds",
+  "configFiles": [],
+  "globalMappings": {},
+  "groups": [
+    {
+      "id": "graphics",
+      "title": "Gráficos",
+      "icon": "monitor",
+      "order": 1,
+      "options": [
+        {
+          "id": "lime_resolution_factor",
+          "label": "Resolução Interna",
+          "type": "select",
+          "default": "auto",
+          "configKey": "lime_resolution_factor",
+          "values": [
+            {
+              "label": "NATIVE (400x240)",
+              "value": "1"
+            },
+            {
+              "label": "2X",
+              "value": "2"
+            },
+            {
+              "label": "3X",
+              "value": "3"
+            },
+            {
+              "label": "4X",
+              "value": "4"
+            },
+            {
+              "label": "5X",
+              "value": "5"
+            },
+            {
+              "label": "6X",
+              "value": "6"
+            },
+            {
+              "label": "7X",
+              "value": "7"
+            },
+            {
+              "label": "8X",
+              "value": "8"
+            },
+            {
+              "label": "9X",
+              "value": "9"
+            },
+            {
+              "label": "10X",
+              "value": "10"
+            }
+          ],
+          "realKey": "resolution_factor\\\\default",
+          "realSection": "Renderer",
+          "realFile": "Lime3ds.Generator.cs"
+        },
+        {
+          "id": "lime_layout_option",
+          "label": "SCREEN LAYOUT POSITIONING",
+          "description": "Choose the disposition of the emulated screens.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "lime_layout_option",
+          "values": [
+            {
+              "label": "TOP-BOTTOM SCREEN",
+              "value": "0"
+            },
+            {
+              "label": "SINGLE SCREEN ONLY",
+              "value": "1"
+            },
+            {
+              "label": "LARGE SCREEN / SMALL SCREEN",
+              "value": "2"
+            },
+            {
+              "label": "SIDE BY SIDE",
+              "value": "3"
+            },
+            {
+              "label": "SEPARATED WINDOWS",
+              "value": "4"
+            },
+            {
+              "label": "HYBRID",
+              "value": "5"
+            }
+          ],
+          "realKey": "layout_option",
+          "realSection": "Layout",
+          "realFile": "Lime3ds.Generator.cs"
+        },
+        {
+          "id": "lime_swap_screen",
+          "label": "SWAP SCREEN",
+          "description": "Set the bottom screen as prominent.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "lime_swap_screen"
+        },
+        {
+          "id": "lime_texture_filter",
+          "label": "TEXTURE FILTERING",
+          "type": "select",
+          "default": "auto",
+          "configKey": "lime_texture_filter",
+          "values": [
+            {
+              "label": "Nenhum",
+              "value": "0"
+            },
+            {
+              "label": "ANIME4K",
+              "value": "1"
+            },
+            {
+              "label": "BICUBIC",
+              "value": "2"
+            },
+            {
+              "label": "SCALEFORCE",
+              "value": "3"
+            },
+            {
+              "label": "xBRZ",
+              "value": "4"
+            },
+            {
+              "label": "MMPX",
+              "value": "5"
+            }
+          ],
+          "realKey": "texture_filter",
+          "realSection": "Renderer",
+          "realFile": "Lime3ds.Generator.cs"
+        },
+        {
+          "id": "lime_custom_textures",
+          "label": "CUSTOM TEXTURES",
+          "description": "Replace original textures with custom textures pack.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "lime_custom_textures"
+        },
+        {
+          "id": "lime_PreloadTextures",
+          "label": "PREFETCH CUSTOM TEXTURES",
+          "description": "Preload custom textures Ativado startup.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "lime_PreloadTextures"
+        },
+        {
+          "id": "graphics_api",
+          "label": "Vídeo",
+          "type": "select",
+          "default": "auto",
+          "configKey": "graphics_api",
+          "values": [
+            {
+              "label": "SOFTWARE",
+              "value": "0"
+            },
+            {
+              "label": "OPENGL",
+              "value": "1"
+            },
+            {
+              "label": "VULKAN",
+              "value": "2"
+            }
+          ],
+          "realKey": "graphics_api",
+          "realSection": "Renderer",
+          "realFile": "Lime3ds.Generator.cs"
+        }
+      ]
+    },
+    {
+      "id": "emulation",
+      "title": "Emulação",
+      "icon": "cpu",
+      "order": 2,
+      "options": [
+        {
+          "id": "lime_region_value",
+          "label": "REGION",
+          "description": "Force the region of the system.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "lime_region_value",
+          "values": [
+            {
+              "label": "USA",
+              "value": "1"
+            },
+            {
+              "label": "EUROPE",
+              "value": "2"
+            },
+            {
+              "label": "JAPAN",
+              "value": "0"
+            },
+            {
+              "label": "AUSTRALIA",
+              "value": "3"
+            },
+            {
+              "label": "CHINA",
+              "value": "4"
+            },
+            {
+              "label": "KOREA",
+              "value": "5"
+            },
+            {
+              "label": "TAIWAN",
+              "value": "6"
+            }
+          ],
+          "realKey": "region_value\\\\default",
+          "realSection": "System",
+          "realFile": "Lime3ds.Generator.cs"
+        },
+        {
+          "id": "n3ds_language",
+          "label": "LANGUAGE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "n3ds_language",
+          "values": [
+            {
+              "label": "Japanese",
+              "value": "0"
+            },
+            {
+              "label": "English",
+              "value": "1"
+            },
+            {
+              "label": "Français",
+              "value": "2"
+            },
+            {
+              "label": "Deutsch",
+              "value": "3"
+            },
+            {
+              "label": "Italiano",
+              "value": "4"
+            },
+            {
+              "label": "Español",
+              "value": "5"
+            },
+            {
+              "label": "简化字 (Chinese - simplified)",
+              "value": "6"
+            },
+            {
+              "label": "한국어 (Korean)",
+              "value": "7"
+            },
+            {
+              "label": "Nederlands",
+              "value": "8"
+            },
+            {
+              "label": "Português",
+              "value": "9"
+            },
+            {
+              "label": "Русский (Russian)",
+              "value": "10"
+            },
+            {
+              "label": "簡化字 (Chinese - traditional)",
+              "value": "11"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "controls",
+      "title": "Controles",
+      "icon": "gamepad2",
+      "order": 5,
+      "options": [
+        {
+          "id": "gamepadbuttons",
+          "label": "INVERT FACE BUTTONS",
+          "description": "Invert A/B and X/Y buttons.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "gamepadbuttons"
+        },
+        {
+          "id": "n3ds_motion",
+          "label": "USE MOTION",
+          "description": "Enable motion control (gyro) either with mouse or with compatible controller.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "n3ds_motion",
+          "values": [
+            {
+              "label": "MOUSE",
+              "value": "mouse"
+            },
+            {
+              "label": "CONTROLLER",
+              "value": "sdl"
+            },
+            {
+              "label": "CEMUHOOK",
+              "value": "cemuhook"
+            }
+          ]
+        },
+        {
+          "id": "lime3ds_touchprofile",
+          "label": "USE TOUCH PROFILE",
+          "description": "Enter touch profile to load.",
+          "type": "input",
+          "default": "auto",
+          "configKey": "lime3ds_touchprofile"
+        }
+      ]
+    }
+  ]
+}

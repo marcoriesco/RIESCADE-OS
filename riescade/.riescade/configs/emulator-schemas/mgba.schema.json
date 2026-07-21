@@ -1,0 +1,221 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "mgba",
+  "name": "MGBA",
+  "description": "Configurações para o emulador MGBA geradas a partir do es_features.cfg.",
+  "icon": "mgba",
+  "configFiles": [],
+  "globalMappings": {},
+  "groups": [
+    {
+      "id": "graphics",
+      "title": "Gráficos",
+      "icon": "monitor",
+      "order": 1,
+      "options": [
+        {
+          "id": "internal_resolution",
+          "label": "Resolução Interna",
+          "type": "select",
+          "default": "auto",
+          "configKey": "internal_resolution",
+          "values": [
+            {
+              "label": "1X (240x160)",
+              "value": "1"
+            },
+            {
+              "label": "2X",
+              "value": "2"
+            },
+            {
+              "label": "3X (720x480)",
+              "value": "3"
+            },
+            {
+              "label": "4X",
+              "value": "4"
+            },
+            {
+              "label": "5X (1200x800)",
+              "value": "5"
+            },
+            {
+              "label": "6X (1440x960)",
+              "value": "6"
+            },
+            {
+              "label": "7X",
+              "value": "7"
+            },
+            {
+              "label": "8X (1920x1280)",
+              "value": "8"
+            },
+            {
+              "label": "9X",
+              "value": "9"
+            },
+            {
+              "label": "10X",
+              "value": "10"
+            },
+            {
+              "label": "11X",
+              "value": "11"
+            },
+            {
+              "label": "12X (2880x1920)",
+              "value": "12"
+            },
+            {
+              "label": "13X",
+              "value": "13"
+            },
+            {
+              "label": "14X",
+              "value": "14"
+            },
+            {
+              "label": "15X",
+              "value": "15"
+            },
+            {
+              "label": "16X (3840x2560)",
+              "value": "16"
+            }
+          ],
+          "realKey": "videoScale",
+          "realSection": "ports.qt",
+          "realFile": "mGBA.Generator.cs"
+        },
+        {
+          "id": "mgba_shader",
+          "label": "Conjunto de Shaders",
+          "type": "select",
+          "default": "auto",
+          "configKey": "mgba_shader",
+          "values": [
+            {
+              "label": "AGB001",
+              "value": "agb001.shader"
+            },
+            {
+              "label": "AGS001",
+              "value": "ags001.shader"
+            },
+            {
+              "label": "FISH",
+              "value": "fish.shader"
+            },
+            {
+              "label": "GBA COLOR",
+              "value": "gba-color.shader"
+            },
+            {
+              "label": "LCD",
+              "value": "lcd.shader"
+            },
+            {
+              "label": "MOTION BLUR",
+              "value": "motion_blur.shader"
+            },
+            {
+              "label": "PIXELATE",
+              "value": "pixelate.shader"
+            },
+            {
+              "label": "SCANLINES",
+              "value": "scanlines.shader"
+            },
+            {
+              "label": "SOFTEN",
+              "value": "soften.shader"
+            },
+            {
+              "label": "VBA PIXELATE",
+              "value": "vba_pixelate.shader"
+            },
+            {
+              "label": "VIGNETTE",
+              "value": "vignette.shader"
+            },
+            {
+              "label": "WIIU",
+              "value": "wiiu.shader"
+            },
+            {
+              "label": "XBR LEVEL 2",
+              "value": "xbr-lv2.shader"
+            },
+            {
+              "label": "XBR LEVEL 3",
+              "value": "xbr-lv3.shader"
+            }
+          ],
+          "realKey": "shader",
+          "realSection": "ports.qt",
+          "realFile": "mGBA.Generator.cs"
+        },
+        {
+          "id": "mgba_s_interframe_blending",
+          "label": "INTERFRAME BLENDING",
+          "description": "Blend pixels from multiple successive frames to simulate LCD ghosting.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "mgba_s_interframe_blending",
+          "realKey": "interframeBlending",
+          "realSection": "ports.qt",
+          "realFile": "mGBA.Generator.cs"
+        },
+        {
+          "id": "mgba_renderer",
+          "label": "Vídeo",
+          "type": "select",
+          "default": "auto",
+          "configKey": "mgba_renderer",
+          "values": [
+            {
+              "label": "OPENGL",
+              "value": "0"
+            },
+            {
+              "label": "SOFTWARE",
+              "value": "1"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "emulation",
+      "title": "Emulação",
+      "icon": "cpu",
+      "order": 2,
+      "options": [
+        {
+          "id": "mgba_skipbios",
+          "label": "SKIP BIOS",
+          "description": "Skips the BIOS boot animation when loading content.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "mgba_skipbios",
+          "realKey": "skipBios",
+          "realSection": "ports.qt",
+          "realFile": "mGBA.Generator.cs"
+        },
+        {
+          "id": "mgba_fps",
+          "label": "DISPLAY FPS",
+          "description": "Show FPS overlay in-game.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "mgba_fps",
+          "realKey": "showFps",
+          "realSection": "ports.qt",
+          "realFile": "mGBA.Generator.cs"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "vkquake",
+  "name": "VKQUAKE",
+  "description": "Configurações para o emulador VKQUAKE geradas a partir do es_features.cfg.",
+  "icon": "vkquake",
+  "configFiles": [],
+  "globalMappings": {},
+  "groups": [
+    {
+      "id": "graphics",
+      "title": "Gráficos",
+      "icon": "monitor",
+      "order": 1,
+      "options": [
+        {
+          "id": "vkquake_vsync",
+          "label": "Sincronização Vertical (V-Sync)",
+          "type": "select",
+          "default": "auto",
+          "configKey": "vkquake_vsync",
+          "values": [
+            {
+              "label": "Desativado",
+              "value": "0"
+            },
+            {
+              "label": "Ativado",
+              "value": "1"
+            },
+            {
+              "label": "Triplo BUFFER",
+              "value": "2"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

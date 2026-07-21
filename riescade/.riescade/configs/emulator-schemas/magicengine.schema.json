@@ -1,0 +1,376 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "magicengine",
+  "name": "MAGICENGINE",
+  "description": "Configurações para o emulador MAGICENGINE geradas a partir do es_features.cfg.",
+  "icon": "magicengine",
+  "configFiles": [],
+  "globalMappings": {},
+  "groups": [
+    {
+      "id": "graphics",
+      "title": "Gráficos",
+      "icon": "monitor",
+      "order": 1,
+      "options": [
+        {
+          "id": "magicengine_ratio",
+          "label": "Proporção de Tela",
+          "type": "select",
+          "default": "auto",
+          "configKey": "magicengine_ratio",
+          "values": [
+            {
+              "label": "4/3",
+              "value": "0,1"
+            },
+            {
+              "label": "3/2",
+              "value": "0,2"
+            },
+            {
+              "label": "Nenhum",
+              "value": "0,0"
+            }
+          ],
+          "realKey": "screen_ratio",
+          "realSection": "video",
+          "realFile": "MagicEngine.Generator.cs"
+        },
+        {
+          "id": "magicengine_vsync",
+          "label": "Sincronização Vertical (V-Sync)",
+          "description": "Use the HGH FREQUENCY value for screens with higher refresh rate.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "magicengine_vsync",
+          "values": [
+            {
+              "label": "NORMAL",
+              "value": "0,1"
+            },
+            {
+              "label": "HIGH FREQUENCY",
+              "value": "0,2"
+            },
+            {
+              "label": "DISABLED",
+              "value": "0,0"
+            }
+          ],
+          "realKey": "vsync",
+          "realSection": "video",
+          "realFile": "MagicEngine.Generator.cs"
+        },
+        {
+          "id": "magicengine_hires",
+          "label": "HIGH RESOLUTION",
+          "description": "Use a high-res filter to improve rendering.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "magicengine_hires",
+          "realKey": "high_res",
+          "realSection": "video",
+          "realFile": "MagicEngine.Generator.cs"
+        },
+        {
+          "id": "magicengine_scanlines",
+          "label": "SCANLINES",
+          "type": "select",
+          "default": "auto",
+          "configKey": "magicengine_scanlines",
+          "values": [
+            {
+              "label": "Nenhum",
+              "value": "0,0"
+            },
+            {
+              "label": "LOW",
+              "value": "0,10"
+            },
+            {
+              "label": "MEDIUM",
+              "value": "0,20"
+            },
+            {
+              "label": "HIGH",
+              "value": "0,30"
+            },
+            {
+              "label": "VERY HIGH",
+              "value": "0,40"
+            }
+          ],
+          "realKey": "scanlines",
+          "realSection": "video",
+          "realFile": "MagicEngine.Generator.cs"
+        },
+        {
+          "id": "magicengine_renderer",
+          "label": "Vídeo",
+          "type": "select",
+          "default": "auto",
+          "configKey": "magicengine_renderer",
+          "values": [
+            {
+              "label": "OPENGL",
+              "value": "1"
+            },
+            {
+              "label": "DIRECT3D",
+              "value": "0"
+            }
+          ],
+          "realKey": "driver",
+          "realSection": "video",
+          "realFile": "MagicEngine.Generator.cs"
+        }
+      ]
+    },
+    {
+      "id": "emulation",
+      "title": "Emulação",
+      "icon": "cpu",
+      "order": 2,
+      "options": [
+        {
+          "id": "magicengine_frameskip",
+          "label": "FRAMESKIP",
+          "description": "Skip frames to improve performance (smoothless).",
+          "type": "slider",
+          "default": "auto",
+          "configKey": "magicengine_frameskip",
+          "min": 0,
+          "max": 10,
+          "step": 1,
+          "realKey": "frameskip",
+          "realSection": "video",
+          "realFile": "MagicEngine.Generator.cs"
+        },
+        {
+          "id": "magicengine_language",
+          "label": "LANGUAGE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "magicengine_language",
+          "values": [
+            {
+              "label": "ENGLISH",
+              "value": "0"
+            },
+            {
+              "label": "FRENCH",
+              "value": "1"
+            },
+            {
+              "label": "JAPANESE",
+              "value": "2"
+            }
+          ],
+          "realKey": "language",
+          "realSection": "misc",
+          "realFile": "MagicEngine.Generator.cs"
+        },
+        {
+          "id": "magicengine_showfps",
+          "label": "SHOW FPS",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "magicengine_showfps",
+          "realKey": "fps_counter",
+          "realSection": "misc",
+          "realFile": "MagicEngine.Generator.cs"
+        }
+      ]
+    },
+    {
+      "id": "controls",
+      "title": "Controles",
+      "icon": "gamepad2",
+      "order": 5,
+      "options": [
+        {
+          "id": "magicengine_p1_forceindex",
+          "label": "FORCE PLAYER 1 PAD INDEX",
+          "description": "Force P1 pad index, can be useful when using a controller Ativado an arcade machine.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "magicengine_p1_forceindex",
+          "values": [
+            {
+              "label": 0,
+              "value": "0"
+            },
+            {
+              "label": "1",
+              "value": "1"
+            },
+            {
+              "label": "2",
+              "value": "2"
+            },
+            {
+              "label": "3",
+              "value": "3"
+            },
+            {
+              "label": "4",
+              "value": "4"
+            },
+            {
+              "label": "5",
+              "value": "5"
+            },
+            {
+              "label": "6",
+              "value": "6"
+            },
+            {
+              "label": "7",
+              "value": "7"
+            },
+            {
+              "label": "8",
+              "value": "8"
+            }
+          ]
+        },
+        {
+          "id": "magicengine_p2_forceindex",
+          "label": "FORCE PLAYER 2 PAD INDEX",
+          "type": "select",
+          "default": "auto",
+          "configKey": "magicengine_p2_forceindex",
+          "values": [
+            {
+              "label": 0,
+              "value": "0"
+            },
+            {
+              "label": "1",
+              "value": "1"
+            },
+            {
+              "label": "2",
+              "value": "2"
+            },
+            {
+              "label": "3",
+              "value": "3"
+            },
+            {
+              "label": "4",
+              "value": "4"
+            },
+            {
+              "label": "5",
+              "value": "5"
+            },
+            {
+              "label": "6",
+              "value": "6"
+            },
+            {
+              "label": "7",
+              "value": "7"
+            },
+            {
+              "label": "8",
+              "value": "8"
+            }
+          ]
+        },
+        {
+          "id": "magicengine_p3_forceindex",
+          "label": "FORCE PLAYER 3 PAD INDEX",
+          "type": "select",
+          "default": "auto",
+          "configKey": "magicengine_p3_forceindex",
+          "values": [
+            {
+              "label": 0,
+              "value": "0"
+            },
+            {
+              "label": "1",
+              "value": "1"
+            },
+            {
+              "label": "2",
+              "value": "2"
+            },
+            {
+              "label": "3",
+              "value": "3"
+            },
+            {
+              "label": "4",
+              "value": "4"
+            },
+            {
+              "label": "5",
+              "value": "5"
+            },
+            {
+              "label": "6",
+              "value": "6"
+            },
+            {
+              "label": "7",
+              "value": "7"
+            },
+            {
+              "label": "8",
+              "value": "8"
+            }
+          ]
+        },
+        {
+          "id": "magicengine_p4_forceindex",
+          "label": "FORCE PLAYER 4 PAD INDEX",
+          "type": "select",
+          "default": "auto",
+          "configKey": "magicengine_p4_forceindex",
+          "values": [
+            {
+              "label": 0,
+              "value": "0"
+            },
+            {
+              "label": "1",
+              "value": "1"
+            },
+            {
+              "label": "2",
+              "value": "2"
+            },
+            {
+              "label": "3",
+              "value": "3"
+            },
+            {
+              "label": "4",
+              "value": "4"
+            },
+            {
+              "label": "5",
+              "value": "5"
+            },
+            {
+              "label": "6",
+              "value": "6"
+            },
+            {
+              "label": "7",
+              "value": "7"
+            },
+            {
+              "label": "8",
+              "value": "8"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

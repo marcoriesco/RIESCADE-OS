@@ -1,0 +1,339 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "scummvm",
+  "name": "SCUMMVM",
+  "description": "Configurações para o emulador SCUMMVM geradas a partir do es_features.cfg.",
+  "icon": "scummvm",
+  "configFiles": [],
+  "globalMappings": {
+    "ratio": {
+      "configKey": "ratio",
+      "globalKey": "aspect_ratio"
+    }
+  },
+  "groups": [
+    {
+      "id": "graphics",
+      "title": "Gráficos",
+      "icon": "monitor",
+      "order": 1,
+      "options": [
+        {
+          "id": "vsync",
+          "label": "Sincronização Vertical (V-Sync)",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "vsync"
+        },
+        {
+          "id": "scumm_rotation",
+          "label": "ROTATE SCREEN",
+          "type": "select",
+          "default": "auto",
+          "configKey": "scumm_rotation",
+          "values": [
+            {
+              "label": "Não",
+              "value": "0"
+            },
+            {
+              "label": "CLOCKWISE",
+              "value": "90"
+            },
+            {
+              "label": "180 DEGREES",
+              "value": "180"
+            },
+            {
+              "label": "COUNTER-CLOCKWISE",
+              "value": "270"
+            }
+          ],
+          "realKey": "rotation_mode",
+          "realSection": "scummvm",
+          "realFile": "ScummVm.Generator.cs"
+        },
+        {
+          "id": "scaler",
+          "label": "Vídeo SCALER",
+          "type": "select",
+          "default": "auto",
+          "configKey": "scaler",
+          "values": [
+            {
+              "label": "Normal 1x",
+              "value": "normal1"
+            },
+            {
+              "label": "Normal 2x",
+              "value": "normal2"
+            },
+            {
+              "label": "Normal 3x",
+              "value": "normal3"
+            },
+            {
+              "label": "Normal 4x",
+              "value": "normal4"
+            },
+            {
+              "label": "Normal 5x",
+              "value": "normal5"
+            },
+            {
+              "label": "HQ 2x",
+              "value": "hq2"
+            },
+            {
+              "label": "HQ 3x",
+              "value": "hq3"
+            },
+            {
+              "label": "Edge 2x",
+              "value": "edge2"
+            },
+            {
+              "label": "Edge 3x",
+              "value": "edge3"
+            },
+            {
+              "label": "AdvMame 2x",
+              "value": "advmame2"
+            },
+            {
+              "label": "AdvMame 3x",
+              "value": "advmame3"
+            },
+            {
+              "label": "AdvMame 4x",
+              "value": "advmame4"
+            },
+            {
+              "label": "Sai 2x",
+              "value": "sai2"
+            },
+            {
+              "label": "SuperSai 2x",
+              "value": "supersai2"
+            },
+            {
+              "label": "SuperEagle 2x",
+              "value": "supereagle2"
+            },
+            {
+              "label": "PM 2x",
+              "value": "pm2"
+            },
+            {
+              "label": "DotMatrix 2x",
+              "value": "dotmatrix2"
+            },
+            {
+              "label": "TV 2x",
+              "value": "tv2"
+            }
+          ],
+          "realKey": "scale_factor",
+          "realSection": "scummvm",
+          "realFile": "ScummVm.Generator.cs"
+        },
+        {
+          "id": "antialiasing",
+          "label": "Anti-Aliasing (FXAA)",
+          "description": "Set Anti Aliasing for rendered content.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "antialiasing",
+          "values": [
+            {
+              "label": "Não",
+              "value": "0"
+            },
+            {
+              "label": "2X",
+              "value": "2"
+            },
+            {
+              "label": "4X",
+              "value": "4"
+            },
+            {
+              "label": "8X",
+              "value": "8"
+            },
+            {
+              "label": "16X",
+              "value": "16"
+            }
+          ],
+          "realKey": "antialiasing",
+          "realSection": "scummvm",
+          "realFile": "ScummVm.Generator.cs"
+        },
+        {
+          "id": "gfx_mode",
+          "label": "Vídeo",
+          "type": "select",
+          "default": "auto",
+          "configKey": "gfx_mode",
+          "values": [
+            {
+              "label": "OPENGL",
+              "value": "opengl"
+            },
+            {
+              "label": "SDL SURFACE",
+              "value": "surfacesdl"
+            }
+          ],
+          "realKey": "gfx_mode",
+          "realSection": "scummvm",
+          "realFile": "ScummVm.Generator.cs"
+        }
+      ]
+    },
+    {
+      "id": "emulation",
+      "title": "Emulação",
+      "icon": "cpu",
+      "order": 2,
+      "options": [
+        {
+          "id": "render_mode",
+          "label": "RENDER METHOD",
+          "type": "select",
+          "default": "auto",
+          "configKey": "render_mode",
+          "values": [
+            {
+              "label": "HERCULES GREEN",
+              "value": "hercGreen"
+            },
+            {
+              "label": "HERCULES AMBER",
+              "value": "hercAmber"
+            },
+            {
+              "label": "CGA",
+              "value": "cga"
+            },
+            {
+              "label": "EGA",
+              "value": "ega"
+            },
+            {
+              "label": "VGA",
+              "value": "vga"
+            },
+            {
+              "label": "AMIGA",
+              "value": "amiga"
+            },
+            {
+              "label": "FM TOWNS",
+              "value": "fmtowns"
+            },
+            {
+              "label": "PC-9821 (256 colors)",
+              "value": "pc98-256c"
+            },
+            {
+              "label": "PC-9801 (16 colors)",
+              "value": "pc98-16c"
+            },
+            {
+              "label": "PC-9801 (8 colors)",
+              "value": "pc98-8c"
+            },
+            {
+              "label": "APPLE 2 GS",
+              "value": "2gs"
+            },
+            {
+              "label": "ATARI ST",
+              "value": "atari"
+            },
+            {
+              "label": "MACINTOSH",
+              "value": "macintosh"
+            },
+            {
+              "label": "MACINTOSH BW",
+              "value": "macintoshbw"
+            },
+            {
+              "label": "VGA GreyScale",
+              "value": "vgaGrey"
+            },
+            {
+              "label": "WINDOWS 256 COLORS",
+              "value": "win256c"
+            },
+            {
+              "label": "WINDOWS 16 COLORS",
+              "value": "win16c"
+            }
+          ],
+          "realKey": "render_mode",
+          "realSection": "scummvm",
+          "realFile": "ScummVm.Generator.cs"
+        },
+        {
+          "id": "unsupported_games",
+          "label": "ALLOW UNSUPPORTED GAMES",
+          "description": "Disable warning when running games that are not fully supported.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "unsupported_games"
+        }
+      ]
+    },
+    {
+      "id": "hacks",
+      "title": "Correções / Hacks",
+      "icon": "wrench",
+      "order": 3,
+      "options": [
+        {
+          "id": "ratio",
+          "label": "DISABLE RATIO CORRECTION",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "ratio",
+          "inheritsGlobal": "aspect_ratio"
+        }
+      ]
+    },
+    {
+      "id": "audio",
+      "title": "Áudio",
+      "icon": "volume2",
+      "order": 4,
+      "options": [
+        {
+          "id": "scumm_subtitles",
+          "label": "TEXT AND VOICES",
+          "type": "select",
+          "default": "auto",
+          "configKey": "scumm_subtitles",
+          "values": [
+            {
+              "label": "BOTH",
+              "value": "both"
+            },
+            {
+              "label": "SUBTITLES ONLY",
+              "value": "subtitles"
+            },
+            {
+              "label": "VOICE ONLY",
+              "value": "voice"
+            }
+          ],
+          "realKey": "scumm_subtitles",
+          "realFile": "ScummVm.Generator.cs"
+        }
+      ]
+    }
+  ]
+}

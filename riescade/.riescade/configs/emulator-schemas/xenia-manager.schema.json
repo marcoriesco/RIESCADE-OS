@@ -1,0 +1,720 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "xenia-manager",
+  "name": "XENIA-MANAGER",
+  "description": "Configurações para o emulador XENIA-MANAGER geradas a partir do es_features.cfg.",
+  "icon": "xenia-manager",
+  "configFiles": [],
+  "globalMappings": {},
+  "groups": [
+    {
+      "id": "graphics",
+      "title": "Gráficos",
+      "icon": "monitor",
+      "order": 1,
+      "options": [
+        {
+          "id": "xenia_resolution",
+          "label": "Resolução Interna",
+          "type": "select",
+          "default": "auto",
+          "configKey": "xenia_resolution",
+          "values": [
+            {
+              "label": "1280x720 (Padrão)",
+              "value": "1_1"
+            },
+            {
+              "label": "2560x1440",
+              "value": "2_2"
+            },
+            {
+              "label": "3840x2160",
+              "value": "3_3"
+            },
+            {
+              "label": "5120x2880",
+              "value": "4_4"
+            }
+          ]
+        },
+        {
+          "id": "xenia_widescreen",
+          "label": "ASPECT RATIO",
+          "type": "select",
+          "default": "auto",
+          "configKey": "xenia_widescreen",
+          "values": [
+            {
+              "label": "16:9",
+              "value": "true"
+            },
+            {
+              "label": "4:3",
+              "value": "false"
+            }
+          ]
+        },
+        {
+          "id": "vsync",
+          "label": "Sincronização Vertical (V-Sync)",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "vsync"
+        },
+        {
+          "id": "xenia_internal_display_resolution",
+          "label": "INTERNAL GAME RESOLUTION",
+          "description": "Allow game that support different resolutions to be rendered in specific resolution.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "xenia_internal_display_resolution",
+          "values": [
+            {
+              "label": "1280x720 (Padrão)",
+              "value": "8"
+            },
+            {
+              "label": "640x480",
+              "value": "0"
+            },
+            {
+              "label": "640x576",
+              "value": "1"
+            },
+            {
+              "label": "720x480",
+              "value": "2"
+            },
+            {
+              "label": "720x576",
+              "value": "3"
+            },
+            {
+              "label": "800x600",
+              "value": "4"
+            },
+            {
+              "label": "848x480",
+              "value": "5"
+            },
+            {
+              "label": "1024x768",
+              "value": "6"
+            },
+            {
+              "label": "1152x864",
+              "value": "7"
+            },
+            {
+              "label": "1280x768",
+              "value": "9"
+            },
+            {
+              "label": "1280x960",
+              "value": "10"
+            },
+            {
+              "label": "1280x1024",
+              "value": "11"
+            },
+            {
+              "label": "1360x768",
+              "value": "12"
+            },
+            {
+              "label": "1440x900",
+              "value": "13"
+            },
+            {
+              "label": "1680x1050",
+              "value": "14"
+            },
+            {
+              "label": "1920x540",
+              "value": "15"
+            },
+            {
+              "label": "1920x1080 (MIGHT BREAK)",
+              "value": "16"
+            }
+          ]
+        },
+        {
+          "id": "xenia_async_shader_compilation",
+          "label": "USE ASYNCHRONOUS SHADER COMPILATION",
+          "description": "Can reduce lags when compiling shaders but also can create artifacts.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "xenia_async_shader_compilation"
+        },
+        {
+          "id": "xenia_video_standard",
+          "label": "Vídeo STANDARD",
+          "description": "Enables switching between different Vídeo signals.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "xenia_video_standard",
+          "values": [
+            {
+              "label": "NTSC",
+              "value": "1"
+            },
+            {
+              "label": "NTSC-J",
+              "value": "2"
+            },
+            {
+              "label": "PAL",
+              "value": "3"
+            }
+          ]
+        },
+        {
+          "id": "xenia_avpack",
+          "label": "AV PACK",
+          "description": "Select Vídeo mode (type of cable).",
+          "type": "select",
+          "default": "auto",
+          "configKey": "xenia_avpack",
+          "values": [
+            {
+              "label": "HDMI (Padrão)",
+              "value": "8"
+            },
+            {
+              "label": "TV PAL 60",
+              "value": "7"
+            },
+            {
+              "label": "VGA",
+              "value": "6"
+            },
+            {
+              "label": "PAL-60 COMPOSITE S-Vídeo",
+              "value": "5"
+            },
+            {
+              "label": "HDMI+A",
+              "value": "4"
+            },
+            {
+              "label": "480P COMPONENT (HD)",
+              "value": "3"
+            },
+            {
+              "label": "PAL-60 SCART",
+              "value": "2"
+            },
+            {
+              "label": "PAL-60 COMPONENT (SD)",
+              "value": "0"
+            }
+          ]
+        },
+        {
+          "id": "xenia_pal50",
+          "label": "USE PAL 50HZ",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "xenia_pal50"
+        },
+        {
+          "id": "render_target_path",
+          "label": "RENDER TARGET PATH",
+          "description": "Render target Emulação path to use. rtv/fbo offers better performance, rov/fsi highest accuracy.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "render_target_path",
+          "values": [
+            {
+              "label": "RTV/FBO",
+              "value": "performance"
+            },
+            {
+              "label": "ROV/FSI",
+              "value": "accuracy"
+            }
+          ],
+          "realKey": "render_target_path",
+          "realFile": "Xenia.Generator.cs"
+        },
+        {
+          "id": "gpu_allow_invalid_fetch_constants",
+          "label": "ALLOW INVALID FETCH",
+          "description": "Allow texture and vertex fetch constants with invalid type, can be used to bypass fetch errors in certain games.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "gpu_allow_invalid_fetch_constants"
+        },
+        {
+          "id": "readback_resolve",
+          "label": "READBACK RESOLVE",
+          "description": "Read render-to-texture results Ativado the CPU. This may be needed in some games but causes mid-frame synchronization, so it has a huge performance impact.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "readback_resolve",
+          "values": [
+            {
+              "label": "FAST",
+              "value": "fast"
+            },
+            {
+              "label": "FULL",
+              "value": "full"
+            },
+            {
+              "label": "Nenhum",
+              "value": "none"
+            }
+          ]
+        },
+        {
+          "id": "query_occlusion_sample_lower_threshold",
+          "label": "QUERY OCCLUSION SAMPLE LOW",
+          "description": "Setting this to 0 means everything is reported as occluded, required for Forza Motorsport 4.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "query_occlusion_sample_lower_threshold",
+          "values": [
+            {
+              "label": "80",
+              "value": "80"
+            },
+            {
+              "label": 0,
+              "value": "0"
+            },
+            {
+              "label": "-1",
+              "value": "-1"
+            }
+          ]
+        },
+        {
+          "id": "query_occlusion_sample_upper_threshold",
+          "label": "QUERY OCCLUSION SAMPLE HIGH",
+          "description": "Setting this to 0 means everything is reported as occluded, required for Forza Motorsport 4.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "query_occlusion_sample_upper_threshold",
+          "values": [
+            {
+              "label": "100",
+              "value": "100"
+            },
+            {
+              "label": 0,
+              "value": "0"
+            }
+          ],
+          "realKey": "query_occlusion_sample_upper_threshold",
+          "realFile": "Xenia.Generator.cs"
+        },
+        {
+          "id": "xenia_queue_priority",
+          "label": "QUEUE PRIORITY",
+          "description": "Setting this to 1 can increase performance.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "xenia_queue_priority",
+          "values": [
+            {
+              "label": "NORMAL",
+              "value": "0"
+            },
+            {
+              "label": "HIGH",
+              "value": "1"
+            }
+          ]
+        },
+        {
+          "id": "xenia_framerate_limit",
+          "label": "FRAMERATE LIMIT",
+          "description": "Defaults to 60, when set to 0, and VSYNC is enabled.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "xenia_framerate_limit",
+          "values": [
+            {
+              "label": "60 (Padrão)",
+              "value": "60"
+            },
+            {
+              "label": "30",
+              "value": "30"
+            },
+            {
+              "label": "0 (UNLIMITED)",
+              "value": "0"
+            }
+          ]
+        },
+        {
+          "id": "postprocess_antialiasing",
+          "label": "Anti-Aliasing (FXAA)",
+          "description": "Post-processing Anti-Aliasing (FXAA) effect to apply to the image output of the game.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "postprocess_antialiasing",
+          "values": [
+            {
+              "label": "Nenhum",
+              "value": "off"
+            },
+            {
+              "label": "FXAA",
+              "value": "fxaa"
+            },
+            {
+              "label": "FXAA EXTREME",
+              "value": "fxaa_extreme"
+            }
+          ]
+        },
+        {
+          "id": "postprocess_scaling_and_sharpening",
+          "label": "SCALING FILTER",
+          "description": "Post-processing scaling filter to apply to the image output of the game.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "postprocess_scaling_and_sharpening",
+          "values": [
+            {
+              "label": "BILINEAR",
+              "value": "bilinear"
+            },
+            {
+              "label": "CAS",
+              "value": "cas"
+            },
+            {
+              "label": "FSR",
+              "value": "fsr"
+            },
+            {
+              "label": "NEAREST NEIGHBOR",
+              "value": "nearest"
+            }
+          ]
+        },
+        {
+          "id": "xenia_allow_variable_refresh_rate_and_tearing",
+          "label": "VRR",
+          "description": "Allow using variable refresh rate Ativado displays supporting it. Ativado displays not supporting VRR, screen tearing may occur in certain cases.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "xenia_allow_variable_refresh_rate_and_tearing"
+        },
+        {
+          "id": "xenia_anisotropic_override",
+          "label": "Filtragem Anisotrópica",
+          "description": "Enhance the quality of textures Ativado surface.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "xenia_anisotropic_override",
+          "values": [
+            {
+              "label": "DISABLED",
+              "value": "0"
+            },
+            {
+              "label": "1x",
+              "value": "1"
+            },
+            {
+              "label": "2x",
+              "value": "2"
+            },
+            {
+              "label": "4x",
+              "value": "3"
+            },
+            {
+              "label": "8x",
+              "value": "4"
+            },
+            {
+              "label": "16x",
+              "value": "5"
+            }
+          ]
+        },
+        {
+          "id": "gpu",
+          "label": "Vídeo",
+          "type": "select",
+          "default": "auto",
+          "configKey": "gpu",
+          "values": [
+            {
+              "label": "DIRECT3D12",
+              "value": "d3d12"
+            },
+            {
+              "label": "VULKAN",
+              "value": "vulkan"
+            }
+          ],
+          "realKey": "render_target_path",
+          "realFile": "Xenia.Generator.cs"
+        }
+      ]
+    },
+    {
+      "id": "emulation",
+      "title": "Emulação",
+      "icon": "cpu",
+      "order": 2,
+      "options": [
+        {
+          "id": "xenia_lang",
+          "label": "LANGUAGE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "xenia_lang",
+          "values": [
+            {
+              "label": "English",
+              "value": "1"
+            },
+            {
+              "label": "日本語 (Japanese)",
+              "value": "2"
+            },
+            {
+              "label": "Deutsch",
+              "value": "3"
+            },
+            {
+              "label": "Français",
+              "value": "4"
+            },
+            {
+              "label": "Español",
+              "value": "5"
+            },
+            {
+              "label": "Italiano",
+              "value": "6"
+            },
+            {
+              "label": "한국어 (Korean)",
+              "value": "7"
+            },
+            {
+              "label": "簡化字 (Chinese - traditional)",
+              "value": "8"
+            },
+            {
+              "label": "简化字 (Chinese - simplified)",
+              "value": "17"
+            },
+            {
+              "label": "Português",
+              "value": "9"
+            },
+            {
+              "label": "Polski",
+              "value": "11"
+            },
+            {
+              "label": "Русский (Russian)",
+              "value": "12"
+            },
+            {
+              "label": "Nederlands",
+              "value": "16"
+            },
+            {
+              "label": "Svenska",
+              "value": "13"
+            },
+            {
+              "label": "Türkçe",
+              "value": "14"
+            },
+            {
+              "label": "Norsk",
+              "value": "15"
+            }
+          ]
+        },
+        {
+          "id": "license_mask",
+          "label": "LICENCE MASK",
+          "description": "Set license mask for activated content (ALL LICENCES is Generally a bad idea, could lead to undefined behavior).",
+          "type": "select",
+          "default": "auto",
+          "configKey": "license_mask",
+          "values": [
+            {
+              "label": "FIRST LICENCE ENABLED",
+              "value": "1"
+            },
+            {
+              "label": "Não LICENCES",
+              "value": "0"
+            },
+            {
+              "label": "ALL LICENCES ENABLED",
+              "value": "-1"
+            }
+          ]
+        },
+        {
+          "id": "mount_cache",
+          "label": "MOUNT CACHE",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "mount_cache"
+        },
+        {
+          "id": "xenia_clear_memory_page_state",
+          "label": "REFRESH MEMORY PAGES STATE",
+          "description": "Refresh state of memory pages to enable gpu written data. (Use for 'Team Ninja' Games to fix missing character models).",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "xenia_clear_memory_page_state"
+        },
+        {
+          "id": "scribble_heap",
+          "label": "SCRIBBLE HEAP",
+          "description": "Scribble 0xCD into all allocated heap memory.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "scribble_heap"
+        },
+        {
+          "id": "protect_zero",
+          "label": "PROTECT ZERO",
+          "description": "Hack needed for some games.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "protect_zero"
+        },
+        {
+          "id": "xenia_d3d12_debug",
+          "label": "ENABLE D3D DEBUG LAYER",
+          "description": "Hack needed for some games (Too Human).",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "xenia_d3d12_debug"
+        },
+        {
+          "id": "break_on_unimplemented_instructions",
+          "label": "BREAK Ativado UNIMPLEMENTED INSTRUCTIONS",
+          "description": "Break to the host debugger (or crash if Não debugger attached) if an unimplemented PowerPC instruction is encountered.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "break_on_unimplemented_instructions"
+        },
+        {
+          "id": "xenia_profile1",
+          "label": "PROFILE PLAYER 1",
+          "description": "Select the profile to assign to the player.",
+          "type": "input",
+          "default": "auto",
+          "configKey": "xenia_profile1"
+        },
+        {
+          "id": "xenia_profile2",
+          "label": "PROFILE PLAYER 2",
+          "type": "input",
+          "default": "auto",
+          "configKey": "xenia_profile2"
+        },
+        {
+          "id": "xenia_profile3",
+          "label": "PROFILE PLAYER 3",
+          "type": "input",
+          "default": "auto",
+          "configKey": "xenia_profile3"
+        },
+        {
+          "id": "xenia_profile4",
+          "label": "PROFILE PLAYER 4",
+          "type": "input",
+          "default": "auto",
+          "configKey": "xenia_profile4"
+        }
+      ]
+    },
+    {
+      "id": "hacks",
+      "title": "Correções / Hacks",
+      "icon": "wrench",
+      "order": 3,
+      "options": [
+        {
+          "id": "xenia_patches",
+          "label": "ENABLE PATCHES",
+          "description": "Enables custom patching functionality.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "xenia_patches"
+        }
+      ]
+    },
+    {
+      "id": "audio",
+      "title": "Áudio",
+      "icon": "volume2",
+      "order": 4,
+      "options": [
+        {
+          "id": "apu",
+          "label": "Áudio",
+          "type": "select",
+          "default": "auto",
+          "configKey": "apu",
+          "values": [
+            {
+              "label": "NOP",
+              "value": "nop"
+            },
+            {
+              "label": "SDL",
+              "value": "sdl"
+            },
+            {
+              "label": "XAUDIO2",
+              "value": "xaudio2"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "controls",
+      "title": "Controles",
+      "icon": "gamepad2",
+      "order": 5,
+      "options": [
+        {
+          "id": "xenia_hid",
+          "label": "CONTROLLER TYPE",
+          "description": "Use winkey for keyboard, xinput if you have a XBOX controller, sdl for other type of controllers.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "xenia_hid",
+          "values": [
+            {
+              "label": "SDL",
+              "value": "sdl"
+            },
+            {
+              "label": "XBOX CONTROLLER",
+              "value": "xinput"
+            },
+            {
+              "label": "KEYBOARD",
+              "value": "winkey"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

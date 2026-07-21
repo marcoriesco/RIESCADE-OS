@@ -1,0 +1,520 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "project64",
+  "name": "PROJECT64",
+  "description": "Configurações para o emulador PROJECT64 geradas a partir do es_features.cfg.",
+  "icon": "project64",
+  "configFiles": [],
+  "globalMappings": {},
+  "groups": [
+    {
+      "id": "graphics",
+      "title": "Gráficos",
+      "icon": "monitor",
+      "order": 1,
+      "options": [
+        {
+          "id": "p64_shader",
+          "label": "Conjunto de Shaders",
+          "description": "Efficient graphics filters improving the rendering of games.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "p64_shader",
+          "values": [
+            {
+              "label": "Não",
+              "value": "0"
+            },
+            {
+              "label": "STORE",
+              "value": "1"
+            },
+            {
+              "label": "X2",
+              "value": "2"
+            },
+            {
+              "label": "X2SAI",
+              "value": "3"
+            },
+            {
+              "label": "HQ2X",
+              "value": "4"
+            },
+            {
+              "label": "HQ2XS",
+              "value": "5"
+            },
+            {
+              "label": "LQ2X",
+              "value": "6"
+            },
+            {
+              "label": "LQ2XS",
+              "value": "7"
+            },
+            {
+              "label": "HQ4X",
+              "value": "8"
+            },
+            {
+              "label": "2XBRZ",
+              "value": "9"
+            },
+            {
+              "label": "3XBRZ",
+              "value": "10"
+            },
+            {
+              "label": "4XBRZ",
+              "value": "11"
+            },
+            {
+              "label": "5XBRZ",
+              "value": "12"
+            },
+            {
+              "label": "6XBRZ",
+              "value": "13"
+            }
+          ],
+          "realKey": "textureFilter\\\\txEnhancementMode",
+          "realSection": "User",
+          "realFile": "Project64.Generator.cs"
+        },
+        {
+          "id": "p64_resolution",
+          "label": "Resolução Interna",
+          "type": "slider",
+          "default": "auto",
+          "configKey": "p64_resolution",
+          "min": 0,
+          "max": 16,
+          "step": 1,
+          "suffix": "x",
+          "realKey": "frameBufferEmulation\\\\nativeResFactor",
+          "realSection": "User",
+          "realFile": "Project64.Generator.cs"
+        },
+        {
+          "id": "p64_ratio",
+          "label": "Proporção de Tela",
+          "type": "select",
+          "default": "auto",
+          "configKey": "p64_ratio",
+          "values": [
+            {
+              "label": "4:3",
+              "value": "1"
+            },
+            {
+              "label": "16:9",
+              "value": "2"
+            },
+            {
+              "label": "TRY TO ADJUST GAME TO FIT",
+              "value": "3"
+            },
+            {
+              "label": "Esticar",
+              "value": "0"
+            }
+          ],
+          "realKey": "frameBufferEmulation\\\\aspect",
+          "realSection": "User",
+          "realFile": "Project64.Generator.cs"
+        },
+        {
+          "id": "p64_vsync",
+          "label": "VSYNC",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "p64_vsync",
+          "realKey": "video\\\\verticalSync",
+          "realSection": "User",
+          "realFile": "Project64.Generator.cs"
+        },
+        {
+          "id": "p64_threadedvideo",
+          "label": "THREADED Vídeo",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "p64_threadedvideo",
+          "realKey": "video\\\\threadedVideo",
+          "realSection": "User",
+          "realFile": "Project64.Generator.cs"
+        },
+        {
+          "id": "p64_videocustom",
+          "label": "ENABLE CUSTOM PER-GAME SETTING",
+          "description": "Enable this to use your owned Project64 per-game settings.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "p64_videocustom",
+          "realKey": "generalEmulation\\\\enableCustomSettings",
+          "realSection": "User",
+          "realFile": "Project64.Generator.cs"
+        },
+        {
+          "id": "p64_antialiasing",
+          "label": "Anti-Aliasing (FXAA)",
+          "description": "Set Anti Aliasing for rendered content.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "p64_antialiasing",
+          "values": [
+            {
+              "label": "Nenhum",
+              "value": "none"
+            },
+            {
+              "label": "FXAA",
+              "value": "fxaa"
+            },
+            {
+              "label": "2X MSAA",
+              "value": "msaa2"
+            },
+            {
+              "label": "4X MSAA",
+              "value": "msaa4"
+            },
+            {
+              "label": "8X MSAA",
+              "value": "msaa8"
+            },
+            {
+              "label": "16X MSAA",
+              "value": "msaa16"
+            }
+          ],
+          "realKey": "texture\\\\maxMultiSampling",
+          "realSection": "User",
+          "realFile": "Project64.Generator.cs"
+        },
+        {
+          "id": "p64_anisotropy",
+          "label": "Filtragem Anisotrópica",
+          "type": "slider",
+          "default": "auto",
+          "configKey": "p64_anisotropy",
+          "min": 0,
+          "max": 16,
+          "step": 1,
+          "suffix": "x",
+          "realKey": "texture\\\\anisotropy",
+          "realSection": "User",
+          "realFile": "Project64.Generator.cs"
+        },
+        {
+          "id": "p64_bilinear",
+          "label": "Filtragem Bilinear MODE",
+          "description": "Select a Filtragem Bilinear method.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "p64_bilinear",
+          "values": [
+            {
+              "label": "STANDARD",
+              "value": "1"
+            },
+            {
+              "label": "3 POINT (ORIGINAL)",
+              "value": "0"
+            }
+          ],
+          "realKey": "texture\\\\bilinearMode",
+          "realSection": "User",
+          "realFile": "Project64.Generator.cs"
+        },
+        {
+          "id": "p64_nativerestexrects",
+          "label": "RENDER 2D ELEMENTS IN N64 RESOLUTION",
+          "type": "select",
+          "default": "auto",
+          "configKey": "p64_nativerestexrects",
+          "values": [
+            {
+              "label": "DISABLE",
+              "value": "0"
+            },
+            {
+              "label": "ENABLE (OPTIMIZED)",
+              "value": "1"
+            },
+            {
+              "label": "ENABLE (UNOPTIMIZED)",
+              "value": "2"
+            }
+          ],
+          "realKey": "graphics2D\\\\enableNativeResTexrects",
+          "realSection": "User",
+          "realFile": "Project64.Generator.cs"
+        },
+        {
+          "id": "p64_texture_filter",
+          "label": "Filtragem de Texturas",
+          "description": "Select texture filtering mode.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "p64_texture_filter",
+          "values": [
+            {
+              "label": "Não",
+              "value": "0"
+            },
+            {
+              "label": "Smooth 1",
+              "value": "1"
+            },
+            {
+              "label": "Smooth 2",
+              "value": "2"
+            },
+            {
+              "label": "Smooth 3",
+              "value": "3"
+            },
+            {
+              "label": "Smooth 4",
+              "value": "4"
+            },
+            {
+              "label": "Sharp 1",
+              "value": "5"
+            },
+            {
+              "label": "Sharp 2",
+              "value": "6"
+            }
+          ],
+          "realKey": "textureFilter\\\\txFilterMode",
+          "realSection": "User",
+          "realFile": "Project64.Generator.cs"
+        },
+        {
+          "id": "p64_custom_textures",
+          "label": "CUSTOM TEXTURES",
+          "description": "Replace original textures with custom textures pack.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "p64_custom_textures",
+          "realKey": "textureFilter\\\\txHiresEnable",
+          "realSection": "User",
+          "realFile": "Project64.Generator.cs"
+        }
+      ]
+    },
+    {
+      "id": "emulation",
+      "title": "Emulação",
+      "icon": "cpu",
+      "order": 2,
+      "options": [
+        {
+          "id": "p64_raphnet",
+          "label": "USE RAPHNET ADAPTER",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "p64_raphnet"
+        },
+        {
+          "id": "p64_perfstats",
+          "label": "SHOW PERFORMANCE STATISTICS",
+          "description": "Display different levels of informations about statistics of performance.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "p64_perfstats",
+          "values": [
+            {
+              "label": "Desativado",
+              "value": "off"
+            },
+            {
+              "label": "FPS ONLY",
+              "value": "fps"
+            },
+            {
+              "label": "STATISTICS",
+              "value": "all"
+            }
+          ],
+          "realKey": "video\\\\fxaa",
+          "realSection": "User",
+          "realFile": "Project64.Generator.cs"
+        }
+      ]
+    },
+    {
+      "id": "hacks",
+      "title": "Correções / Hacks",
+      "icon": "wrench",
+      "order": 3,
+      "options": [
+        {
+          "id": "p64_correcttexrectcoords",
+          "label": "FIX BLACK LINES BETWEEN 2D ELEMENTS",
+          "type": "select",
+          "default": "auto",
+          "configKey": "p64_correcttexrectcoords",
+          "values": [
+            {
+              "label": "NEVER",
+              "value": "0"
+            },
+            {
+              "label": "ALWAYS",
+              "value": "2"
+            },
+            {
+              "label": "FOR ADJACENT 2D ELEMENTS",
+              "value": "1"
+            }
+          ],
+          "realKey": "graphics2D\\\\correctTexrectCoords",
+          "realSection": "User",
+          "realFile": "Project64.Generator.cs"
+        }
+      ]
+    },
+    {
+      "id": "controls",
+      "title": "Controles",
+      "icon": "gamepad2",
+      "order": 5,
+      "options": [
+        {
+          "id": "mupen64_inputprofile1",
+          "label": "CONTROLLER LAYOUT P1",
+          "description": "Select between the different controller layouts.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "mupen64_inputprofile1",
+          "values": [
+            {
+              "label": "C-BUTTONS=RIGHT-STICK Z=LEFT-TRIGGER",
+              "value": "c_stick_zl"
+            },
+            {
+              "label": "C-BUTTONS=FACE Z=LEFT-TRIGGER",
+              "value": "c_face_zl"
+            },
+            {
+              "label": "C-BUTTONS=RIGHT-STICK Z=RIGHT-TRIGGER",
+              "value": "c_stick"
+            },
+            {
+              "label": "C-BUTTONS=FACE Z=RIGHT-TRIGGER",
+              "value": "c_face"
+            },
+            {
+              "label": "XBOX",
+              "value": "xbox"
+            }
+          ]
+        },
+        {
+          "id": "mupen64_inputprofile2",
+          "label": "CONTROLLER LAYOUT P2",
+          "description": "Select between the different controller layouts.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "mupen64_inputprofile2",
+          "values": [
+            {
+              "label": "C-BUTTONS=RIGHT-STICK Z=LEFT-TRIGGER",
+              "value": "c_stick_zl"
+            },
+            {
+              "label": "C-BUTTONS=FACE Z=LEFT-TRIGGER",
+              "value": "c_face_zl"
+            },
+            {
+              "label": "C-BUTTONS=RIGHT-STICK Z=RIGHT-TRIGGER",
+              "value": "c_stick"
+            },
+            {
+              "label": "C-BUTTONS=FACE Z=RIGHT-TRIGGER",
+              "value": "c_face"
+            },
+            {
+              "label": "XBOX",
+              "value": "xbox"
+            }
+          ]
+        },
+        {
+          "id": "mupen64_inputprofile3",
+          "label": "CONTROLLER LAYOUT P3",
+          "description": "Select between the different controller layouts.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "mupen64_inputprofile3",
+          "values": [
+            {
+              "label": "C-BUTTONS=RIGHT-STICK Z=LEFT-TRIGGER",
+              "value": "c_stick_zl"
+            },
+            {
+              "label": "C-BUTTONS=FACE Z=LEFT-TRIGGER",
+              "value": "c_face_zl"
+            },
+            {
+              "label": "C-BUTTONS=RIGHT-STICK Z=RIGHT-TRIGGER",
+              "value": "c_stick"
+            },
+            {
+              "label": "C-BUTTONS=FACE Z=RIGHT-TRIGGER",
+              "value": "c_face"
+            },
+            {
+              "label": "XBOX",
+              "value": "xbox"
+            }
+          ]
+        },
+        {
+          "id": "mupen64_inputprofile4",
+          "label": "CONTROLLER LAYOUT P4",
+          "description": "Select between the different controller layouts.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "mupen64_inputprofile4",
+          "values": [
+            {
+              "label": "C-BUTTONS=RIGHT-STICK Z=LEFT-TRIGGER",
+              "value": "c_stick_zl"
+            },
+            {
+              "label": "C-BUTTONS=FACE Z=LEFT-TRIGGER",
+              "value": "c_face_zl"
+            },
+            {
+              "label": "C-BUTTONS=RIGHT-STICK Z=RIGHT-TRIGGER",
+              "value": "c_stick"
+            },
+            {
+              "label": "C-BUTTONS=FACE Z=RIGHT-TRIGGER",
+              "value": "c_face"
+            },
+            {
+              "label": "XBOX",
+              "value": "xbox"
+            }
+          ]
+        },
+        {
+          "id": "p64_deadzone",
+          "label": "JOYSTICK DEADZONE",
+          "type": "slider",
+          "default": "auto",
+          "configKey": "p64_deadzone",
+          "min": 0,
+          "max": 50,
+          "step": 2,
+          "suffix": "%"
+        }
+      ]
+    }
+  ]
+}

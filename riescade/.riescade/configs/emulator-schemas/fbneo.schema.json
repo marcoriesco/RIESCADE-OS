@@ -1,0 +1,232 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "fbneo",
+  "name": "FBNEO",
+  "description": "Configurações para o emulador FBNEO geradas a partir do es_features.cfg.",
+  "icon": "fbneo",
+  "configFiles": [],
+  "globalMappings": {},
+  "groups": [
+    {
+      "id": "graphics",
+      "title": "Gráficos",
+      "icon": "monitor",
+      "order": 1,
+      "options": [
+        {
+          "id": "VerticalMonitorIndex",
+          "label": "VERTICAL MONITOR INDEX",
+          "description": "Vertical games will be displayed Ativado the monitor corresponding to the selected index.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "VerticalMonitorIndex",
+          "values": [
+            {
+              "label": "1",
+              "value": "1"
+            },
+            {
+              "label": "2",
+              "value": "2"
+            },
+            {
+              "label": "3",
+              "value": "3"
+            },
+            {
+              "label": "4",
+              "value": "4"
+            },
+            {
+              "label": "5",
+              "value": "5"
+            },
+            {
+              "label": "6",
+              "value": "6"
+            },
+            {
+              "label": "7",
+              "value": "7"
+            },
+            {
+              "label": "8",
+              "value": "8"
+            },
+            {
+              "label": "9",
+              "value": "9"
+            },
+            {
+              "label": "10",
+              "value": "10"
+            }
+          ],
+          "realKey": "HorScreen",
+          "realFile": "Fbneo.Generator.cs"
+        },
+        {
+          "id": "fbneo_force60hz",
+          "label": "FORCE 60HZ",
+          "description": "Forces 60Hz refresh rate.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "fbneo_force60hz",
+          "realKey": "bForce60Hz",
+          "realFile": "Fbneo.Generator.cs"
+        },
+        {
+          "id": "fbneo_scanlines",
+          "label": "SCANLINES",
+          "type": "select",
+          "default": "auto",
+          "configKey": "fbneo_scanlines",
+          "values": [
+            {
+              "label": "Nenhum",
+              "value": "0"
+            },
+            {
+              "label": "LIGHT",
+              "value": "-1061109568"
+            },
+            {
+              "label": "MODERATE",
+              "value": "-2139062144"
+            },
+            {
+              "label": "INTENSE",
+              "value": "1094795585"
+            },
+            {
+              "label": "VERY INTENSE",
+              "value": "max"
+            }
+          ],
+          "realKey": "bVidScanlines",
+          "realFile": "Fbneo.Generator.cs"
+        },
+        {
+          "id": "fbneo_renderer",
+          "label": "Vídeo",
+          "type": "select",
+          "default": "auto",
+          "configKey": "fbneo_renderer",
+          "values": [
+            {
+              "label": "DIRECTX9",
+              "value": "3"
+            },
+            {
+              "label": "DIRECTX9 (ALT)",
+              "value": "4"
+            },
+            {
+              "label": "BASIC",
+              "value": "0"
+            },
+            {
+              "label": "SOFTX",
+              "value": "2"
+            }
+          ],
+          "realKey": "nVidSelect",
+          "realFile": "Fbneo.Generator.cs"
+        }
+      ]
+    },
+    {
+      "id": "emulation",
+      "title": "Emulação",
+      "icon": "cpu",
+      "order": 2,
+      "options": [
+        {
+          "id": "fbneo_hiscore",
+          "label": "ENABLE HISCORES",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "fbneo_hiscore",
+          "realKey": "EnableHiscores",
+          "realFile": "Fbneo.Generator.cs"
+        },
+        {
+          "id": "fbneo_runahead",
+          "label": "ENABLE RUN-AHEAD",
+          "description": "Enable run-ahead mode for the reduction of input lag.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "fbneo_runahead",
+          "realKey": "bRunAhead",
+          "realFile": "Fbneo.Generator.cs"
+        }
+      ]
+    },
+    {
+      "id": "hacks",
+      "title": "Correções / Hacks",
+      "icon": "wrench",
+      "order": 3,
+      "options": [
+        {
+          "id": "fbneo_ips",
+          "label": "ENABLE IPS PATCH",
+          "description": "Enable ips patches.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "fbneo_ips"
+        },
+        {
+          "id": "fbneo_patch",
+          "label": "ENABLE IPS PATCH",
+          "description": "Specify IPS patch to enable, if not set all patches defined in ips .ini will be used.",
+          "type": "input",
+          "default": "auto",
+          "configKey": "fbneo_patch"
+        }
+      ]
+    },
+    {
+      "id": "audio",
+      "title": "Áudio",
+      "icon": "volume2",
+      "order": 4,
+      "options": [
+        {
+          "id": "fbneo_audiodriver",
+          "label": "Áudio",
+          "type": "select",
+          "default": "auto",
+          "configKey": "fbneo_audiodriver",
+          "values": [
+            {
+              "label": "DIRECT SOUND",
+              "value": "0"
+            },
+            {
+              "label": "XAUDIO 2",
+              "value": "1"
+            }
+          ],
+          "realKey": "nAudSelect",
+          "realFile": "Fbneo.Generator.cs"
+        }
+      ]
+    },
+    {
+      "id": "controls",
+      "title": "Controles",
+      "icon": "gamepad2",
+      "order": 5,
+      "options": [
+        {
+          "id": "fbneo_dinput_index",
+          "label": "USE ALTERNATE INDEX",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "fbneo_dinput_index"
+        }
+      ]
+    }
+  ]
+}

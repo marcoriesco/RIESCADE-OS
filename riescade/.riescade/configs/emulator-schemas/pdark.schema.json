@@ -1,0 +1,103 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "pdark",
+  "name": "PDARK",
+  "description": "Configurações para o emulador PDARK geradas a partir do es_features.cfg.",
+  "icon": "pdark",
+  "configFiles": [],
+  "globalMappings": {},
+  "groups": [
+    {
+      "id": "graphics",
+      "title": "Gráficos",
+      "icon": "monitor",
+      "order": 1,
+      "options": [
+        {
+          "id": "pdark_vsync",
+          "label": "VSYNC",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "pdark_vsync"
+        },
+        {
+          "id": "pdark_texturefilter",
+          "label": "Filtragem de Texturas",
+          "description": "Control the texture filtering of the Emulação.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "pdark_texturefilter",
+          "values": [
+            {
+              "label": "BILINEAR",
+              "value": "1"
+            },
+            {
+              "label": "NEAREST NEIGHBOR",
+              "value": "0"
+            },
+            {
+              "label": "THREE POINT",
+              "value": "2"
+            }
+          ]
+        },
+        {
+          "id": "pdark_detailtexture",
+          "label": "DETAIL TEXTURES",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "pdark_detailtexture"
+        }
+      ]
+    },
+    {
+      "id": "emulation",
+      "title": "Emulação",
+      "icon": "cpu",
+      "order": 2,
+      "options": [
+        {
+          "id": "pdark_region",
+          "label": "REGION",
+          "type": "select",
+          "default": "auto",
+          "configKey": "pdark_region",
+          "values": [
+            {
+              "label": "Europe",
+              "value": "EUR"
+            },
+            {
+              "label": "USA",
+              "value": "USA"
+            },
+            {
+              "label": "Japan",
+              "value": "JPN"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "controls",
+      "title": "Controles",
+      "icon": "gamepad2",
+      "order": 5,
+      "options": [
+        {
+          "id": "pdark_rumble",
+          "label": "RUMBLE STRENGTH",
+          "type": "slider",
+          "default": "auto",
+          "configKey": "pdark_rumble",
+          "min": 0,
+          "max": 1,
+          "step": 0.1,
+          "suffix": "%"
+        }
+      ]
+    }
+  ]
+}

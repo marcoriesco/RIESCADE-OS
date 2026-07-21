@@ -1,0 +1,287 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "mesen",
+  "name": "MESEN",
+  "description": "Configurações para o emulador MESEN geradas a partir do es_features.cfg.",
+  "icon": "mesen",
+  "configFiles": [],
+  "globalMappings": {},
+  "groups": [
+    {
+      "id": "graphics",
+      "title": "Gráficos",
+      "icon": "monitor",
+      "order": 1,
+      "options": [
+        {
+          "id": "mesen_filter",
+          "label": "Conjunto de Shaders",
+          "description": "Efficient graphics filters improving the rendering of games.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "mesen_filter",
+          "values": [
+            {
+              "label": "Nenhum",
+              "value": "None"
+            },
+            {
+              "label": "NTSC (blargg)",
+              "value": "NtscBlargg"
+            },
+            {
+              "label": "NTSC (bisqwit) - NES ONLY",
+              "value": "NtscBisqwit"
+            },
+            {
+              "label": "XBRZ 2x",
+              "value": "xBRZ2x"
+            },
+            {
+              "label": "XBRZ 3x",
+              "value": "xBRZ3x"
+            },
+            {
+              "label": "XBRZ 4x",
+              "value": "xBRZ4x"
+            },
+            {
+              "label": "XBRZ 5x",
+              "value": "xBRZ5x"
+            },
+            {
+              "label": "XBRZ 6x",
+              "value": "xBRZ6x"
+            },
+            {
+              "label": "HQ 2x",
+              "value": "HQ2x"
+            },
+            {
+              "label": "HQ 3x",
+              "value": "HQ3x"
+            },
+            {
+              "label": "HQ 4x",
+              "value": "HQ4x"
+            },
+            {
+              "label": "SCALE 2x",
+              "value": "Scale2x"
+            },
+            {
+              "label": "SCALE 3x",
+              "value": "Scale3x"
+            },
+            {
+              "label": "SCALE 4x",
+              "value": "Scale4x"
+            },
+            {
+              "label": "2x SAI",
+              "value": "_2xSai"
+            },
+            {
+              "label": "SUPER 2x SAI",
+              "value": "Super2xSai"
+            },
+            {
+              "label": "SUPER EAGLE",
+              "value": "SuperEagle"
+            },
+            {
+              "label": "PRESCALE 2x",
+              "value": "Prescale2x"
+            },
+            {
+              "label": "PRESCALE 3x",
+              "value": "Prescale3x"
+            },
+            {
+              "label": "PRESCALE 4x",
+              "value": "Prescale4x"
+            },
+            {
+              "label": "PRESCALE 6x",
+              "value": "Prescale6x"
+            },
+            {
+              "label": "PRESCALE 8x",
+              "value": "Prescale8x"
+            },
+            {
+              "label": "PRESCALE 10x",
+              "value": "Prescale10x"
+            }
+          ],
+          "realKey": "VideoFilter",
+          "realFile": "Mesen.Generator.cs"
+        },
+        {
+          "id": "mesen_ratio",
+          "label": "Proporção de Tela",
+          "type": "select",
+          "default": "auto",
+          "configKey": "mesen_ratio",
+          "values": [
+            {
+              "label": "Não STRETCHING",
+              "value": "NoStretching"
+            },
+            {
+              "label": "NTSC (8:7)",
+              "value": "NTSC"
+            },
+            {
+              "label": "PAL (11:8)",
+              "value": "PAL"
+            },
+            {
+              "label": "STANDARD (4:3)",
+              "value": "Standard"
+            },
+            {
+              "label": "WIDE (16:9)",
+              "value": "Widescreen"
+            }
+          ],
+          "realKey": "AspectRatio",
+          "realFile": "Mesen.Generator.cs"
+        },
+        {
+          "id": "mesen_vsync",
+          "label": "Sincronização Vertical (V-Sync)",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "mesen_vsync",
+          "realKey": "VerticalSync",
+          "realFile": "Mesen.Generator.cs"
+        },
+        {
+          "id": "mesen_scanlines",
+          "label": "SCANLINES",
+          "type": "slider",
+          "default": "auto",
+          "configKey": "mesen_scanlines",
+          "min": 0,
+          "max": 100,
+          "step": 5,
+          "realKey": "ScanlineIntensity",
+          "realFile": "Mesen.Generator.cs"
+        },
+        {
+          "id": "bilinear_filtering",
+          "label": "Filtragem Bilinear",
+          "description": "Use Filtragem Bilinear to smooth the overall picture.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "bilinear_filtering",
+          "realKey": "UseBilinearInterpolation",
+          "realFile": "Mesen.Generator.cs"
+        }
+      ]
+    },
+    {
+      "id": "emulation",
+      "title": "Emulação",
+      "icon": "cpu",
+      "order": 2,
+      "options": [
+        {
+          "id": "mesen_autosave",
+          "label": "AUTOSAVE FREQUENCY",
+          "description": "Activate autosave feature and define delay between autosaves.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "mesen_autosave",
+          "values": [
+            {
+              "label": "Desativado",
+              "value": "false"
+            },
+            {
+              "label": "EVERY MINUTE",
+              "value": "1"
+            },
+            {
+              "label": "EVERY 2 MINUTES",
+              "value": "2"
+            },
+            {
+              "label": "EVERY 3 MINUTES",
+              "value": "3"
+            },
+            {
+              "label": "EVERY 4 MINUTES",
+              "value": "4"
+            },
+            {
+              "label": "EVERY 5 MINUTES",
+              "value": "5"
+            }
+          ],
+          "realKey": "EnableAutoSaveState",
+          "realFile": "Mesen.Generator.cs"
+        },
+        {
+          "id": "mesen_runahead",
+          "label": "RUN-AHEAD FRAMES",
+          "type": "slider",
+          "default": "auto",
+          "configKey": "mesen_runahead",
+          "min": 0,
+          "max": 10,
+          "step": 1,
+          "realKey": "RunAheadFrames",
+          "realFile": "Mesen.Generator.cs"
+        },
+        {
+          "id": "mesen_osd",
+          "label": "NOTIFICATIONS",
+          "description": "Show notifications.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "mesen_osd",
+          "realKey": "DisableOsd",
+          "realFile": "Mesen.Generator.cs"
+        },
+        {
+          "id": "mesen_fps",
+          "label": "SHOW FPS",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "mesen_fps",
+          "realKey": "ShowFps",
+          "realFile": "Mesen.Generator.cs"
+        },
+        {
+          "id": "mesen_timecounter",
+          "label": "SHOW GAME TIME COUNTER",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "mesen_timecounter",
+          "realKey": "ShowGameTimer",
+          "realFile": "Mesen.Generator.cs"
+        }
+      ]
+    },
+    {
+      "id": "hacks",
+      "title": "Correções / Hacks",
+      "icon": "wrench",
+      "order": 3,
+      "options": [
+        {
+          "id": "mesen_patches",
+          "label": "SOFTPATCHING",
+          "description": "Enables custom patching functionality.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "mesen_patches",
+          "realKey": "AutoLoadPatches",
+          "realFile": "Mesen.Generator.cs"
+        }
+      ]
+    }
+  ]
+}

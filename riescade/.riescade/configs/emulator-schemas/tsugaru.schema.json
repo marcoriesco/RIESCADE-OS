@@ -1,0 +1,10 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "tsugaru",
+  "name": "TSUGARU",
+  "description": "Configurações para o emulador TSUGARU geradas a partir do es_features.cfg.",
+  "icon": "tsugaru",
+  "configFiles": [],
+  "globalMappings": {},
+  "groups": []
+}

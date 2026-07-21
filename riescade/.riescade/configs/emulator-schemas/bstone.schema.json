@@ -1,0 +1,168 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "bstone",
+  "name": "BSTONE",
+  "description": "Configurações para o emulador BSTONE geradas a partir do es_features.cfg.",
+  "icon": "bstone",
+  "configFiles": [],
+  "globalMappings": {},
+  "groups": [
+    {
+      "id": "graphics",
+      "title": "Gráficos",
+      "icon": "monitor",
+      "order": 1,
+      "options": [
+        {
+          "id": "bstone_vsync",
+          "label": "Sincronização Vertical (V-Sync)",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "bstone_vsync"
+        },
+        {
+          "id": "bstone_widescreen",
+          "label": "WIDESCREEN",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "bstone_widescreen"
+        },
+        {
+          "id": "bstone_antialiasing",
+          "label": "Anti-Aliasing (FXAA)",
+          "description": "Set Anti Aliasing for rendered content.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "bstone_antialiasing",
+          "values": [
+            {
+              "label": "Não",
+              "value": "0"
+            },
+            {
+              "label": "2X",
+              "value": "2"
+            },
+            {
+              "label": "4X",
+              "value": "4"
+            },
+            {
+              "label": "8X",
+              "value": "8"
+            },
+            {
+              "label": "16X",
+              "value": "16"
+            }
+          ]
+        },
+        {
+          "id": "bstone_texture_filter",
+          "label": "TEXTURE FILTERING",
+          "type": "select",
+          "default": "auto",
+          "configKey": "bstone_texture_filter",
+          "values": [
+            {
+              "label": "NEAREST NEIGHBOR",
+              "value": "nearest"
+            },
+            {
+              "label": "LINEAR",
+              "value": "linear"
+            }
+          ]
+        },
+        {
+          "id": "bstone_upscale_filter",
+          "label": "UPSCALE FILTER",
+          "type": "select",
+          "default": "auto",
+          "configKey": "bstone_upscale_filter",
+          "values": [
+            {
+              "label": "xBRZ 2x",
+              "value": "2"
+            },
+            {
+              "label": "xBRZ 3x",
+              "value": "3"
+            },
+            {
+              "label": "xBRZ 4x",
+              "value": "4"
+            },
+            {
+              "label": "xBRZ 5x",
+              "value": "5"
+            },
+            {
+              "label": "xBRZ 6x",
+              "value": "6"
+            },
+            {
+              "label": "Nenhum",
+              "value": "none"
+            }
+          ]
+        },
+        {
+          "id": "bstone_anisotropy",
+          "label": "Filtragem Anisotrópica",
+          "description": "Enhance the quality of textures Ativado surface.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "bstone_anisotropy",
+          "values": [
+            {
+              "label": "Desativado",
+              "value": "1"
+            },
+            {
+              "label": "2x",
+              "value": "2"
+            },
+            {
+              "label": "4x",
+              "value": "4"
+            },
+            {
+              "label": "8x",
+              "value": "8"
+            },
+            {
+              "label": "16x",
+              "value": "16"
+            }
+          ]
+        },
+        {
+          "id": "bstone_renderer",
+          "label": "Vídeo",
+          "type": "select",
+          "default": "auto",
+          "configKey": "bstone_renderer",
+          "values": [
+            {
+              "label": "GLES 2.0",
+              "value": "gles_2_0"
+            },
+            {
+              "label": "OPENGL 2.0",
+              "value": "gl_2_0"
+            },
+            {
+              "label": "GLCORE 3.2",
+              "value": "gl_3_2_c"
+            },
+            {
+              "label": "SOFTWARE",
+              "value": "software"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

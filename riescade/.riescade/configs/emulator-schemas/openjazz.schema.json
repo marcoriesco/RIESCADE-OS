@@ -1,0 +1,96 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "openjazz",
+  "name": "OPENJAZZ",
+  "description": "Configurações para o emulador OPENJAZZ geradas a partir do es_features.cfg.",
+  "icon": "openjazz",
+  "configFiles": [],
+  "globalMappings": {},
+  "groups": [
+    {
+      "id": "graphics",
+      "title": "Gráficos",
+      "icon": "monitor",
+      "order": 1,
+      "options": [
+        {
+          "id": "openjazz_resolution",
+          "label": "Resolução Interna",
+          "type": "select",
+          "default": "auto",
+          "configKey": "openjazz_resolution",
+          "values": [
+            {
+              "label": "320x200",
+              "value": "320x200"
+            },
+            {
+              "label": "320x240",
+              "value": "320x240"
+            },
+            {
+              "label": "640x400",
+              "value": "640x400"
+            },
+            {
+              "label": "640x480",
+              "value": "640x480"
+            },
+            {
+              "label": "960x600",
+              "value": "960x600"
+            },
+            {
+              "label": "960x720",
+              "value": "960x720"
+            },
+            {
+              "label": "1024x640",
+              "value": "1024x640"
+            },
+            {
+              "label": "1024x720",
+              "value": "1024x720"
+            },
+            {
+              "label": "1280x720",
+              "value": "1280x720"
+            },
+            {
+              "label": "1280x800",
+              "value": "1280x800"
+            },
+            {
+              "label": "1400x864",
+              "value": "1400x864"
+            },
+            {
+              "label": "1440x900",
+              "value": "1440x900"
+            },
+            {
+              "label": "1440x1024",
+              "value": "1440x1024"
+            },
+            {
+              "label": "1440x1080",
+              "value": "1440x1080"
+            },
+            {
+              "label": "1600x1024",
+              "value": "1600x1024"
+            },
+            {
+              "label": "1600x1080",
+              "value": "1600x1080"
+            },
+            {
+              "label": "1920x1080",
+              "value": "1920x1080"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

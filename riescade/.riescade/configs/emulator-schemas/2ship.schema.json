@@ -1,0 +1,278 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "2ship",
+  "name": "2SHIP",
+  "description": "Configurações para o emulador 2SHIP geradas a partir do es_features.cfg.",
+  "icon": "2ship",
+  "configFiles": [],
+  "globalMappings": {},
+  "groups": [
+    {
+      "id": "graphics",
+      "title": "Gráficos",
+      "icon": "monitor",
+      "order": 1,
+      "options": [
+        {
+          "id": "vsync",
+          "label": "Sincronização Vertical (V-Sync)",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "vsync"
+        }
+      ]
+    },
+    {
+      "id": "emulation",
+      "title": "Emulação",
+      "icon": "cpu",
+      "order": 2,
+      "options": [
+        {
+          "id": "ship2_resolution",
+          "label": "Resolução Interna",
+          "type": "select",
+          "default": "auto",
+          "configKey": "ship2_resolution",
+          "values": [
+            {
+              "label": "2X(480)",
+              "value": "480"
+            },
+            {
+              "label": "FULL HD",
+              "value": "1080"
+            },
+            {
+              "label": "4K",
+              "value": "2160"
+            },
+            {
+              "label": "NATIVE",
+              "value": "240"
+            },
+            {
+              "label": "3X(720)",
+              "value": "720"
+            },
+            {
+              "label": "4X(960)",
+              "value": "960"
+            },
+            {
+              "label": "5X(1200)",
+              "value": "1200"
+            },
+            {
+              "label": "6X(1440)",
+              "value": "1440"
+            }
+          ]
+        },
+        {
+          "id": "ship2_ratio",
+          "label": "Proporção de Tela",
+          "type": "select",
+          "default": "auto",
+          "configKey": "ship2_ratio",
+          "values": [
+            {
+              "label": "NATIVE (4:3)",
+              "value": "native"
+            },
+            {
+              "label": "WIDESCREEN (16:9)",
+              "value": "widescreen"
+            },
+            {
+              "label": "3DS (5:3)",
+              "value": "3ds"
+            },
+            {
+              "label": "16:10",
+              "value": "16:10"
+            },
+            {
+              "label": "ULTRAWIDE (21:9)",
+              "value": "ultrawide"
+            }
+          ]
+        },
+        {
+          "id": "ship2_texturefilter",
+          "label": "Filtragem de Texturas",
+          "type": "select",
+          "default": "auto",
+          "configKey": "ship2_texturefilter",
+          "values": [
+            {
+              "label": "THREE POINT",
+              "value": "0"
+            },
+            {
+              "label": "LINEAR",
+              "value": "1"
+            },
+            {
+              "label": "Nenhum",
+              "value": "2"
+            }
+          ]
+        },
+        {
+          "id": "ship2_msaa",
+          "label": "ANTI ALIASING (MSAA)",
+          "description": "Multi-Sampling Anti Aliasing level.",
+          "type": "slider",
+          "default": "auto",
+          "configKey": "ship2_msaa",
+          "min": 1,
+          "max": 8,
+          "step": 1,
+          "suffix": "x"
+        },
+        {
+          "id": "ship2_matchfps",
+          "label": "MATCH FPS TO DISPLAY RATE",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "ship2_matchfps"
+        },
+        {
+          "id": "ship2_fps",
+          "label": "TARGET FPS",
+          "type": "slider",
+          "default": "auto",
+          "configKey": "ship2_fps",
+          "min": 20,
+          "max": 360,
+          "step": 5
+        },
+        {
+          "id": "ship2_backend",
+          "label": "Vídeo",
+          "type": "select",
+          "default": "auto",
+          "configKey": "ship2_backend",
+          "values": [
+            {
+              "label": "DIRECTX",
+              "value": "0_DirectX"
+            },
+            {
+              "label": "OPENGL",
+              "value": "1_OpenGL"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "audio",
+      "title": "Áudio",
+      "icon": "volume2",
+      "order": 4,
+      "options": [
+        {
+          "id": "ship2_audiobackend",
+          "label": "Áudio",
+          "type": "select",
+          "default": "auto",
+          "configKey": "ship2_audiobackend",
+          "values": [
+            {
+              "label": "WASAPI",
+              "value": "wasapi"
+            },
+            {
+              "label": "SDL",
+              "value": "sdl"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "controls",
+      "title": "Controles",
+      "icon": "gamepad2",
+      "order": 5,
+      "options": [
+        {
+          "id": "ship_controllayout",
+          "label": "CONTROL LAYOUT",
+          "type": "select",
+          "default": "auto",
+          "configKey": "ship_controllayout",
+          "values": [
+            {
+              "label": "STANDARD (Z LEFTTRIGGER)",
+              "value": "z_left"
+            },
+            {
+              "label": "STANDARD (Z RIGHTTRIGGER)",
+              "value": "z_right"
+            }
+          ]
+        },
+        {
+          "id": "n64_pad",
+          "label": "USE N64-LIKE CONTROLLER",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "n64_pad"
+        },
+        {
+          "id": "ship_deadzone",
+          "label": "ANALOG DEADZONE",
+          "description": "Ignore analog stick movement below this threshold.",
+          "type": "slider",
+          "default": "auto",
+          "configKey": "ship_deadzone",
+          "min": 0,
+          "max": 50,
+          "step": 2,
+          "suffix": "%"
+        },
+        {
+          "id": "ship_rumble",
+          "label": "ENABLE RUMBLE",
+          "description": "Enables joypad rumble.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "ship_rumble"
+        },
+        {
+          "id": "ship_rumblestrength",
+          "label": "RUMBLE STRENGTH",
+          "type": "slider",
+          "default": "auto",
+          "configKey": "ship_rumblestrength",
+          "min": 0,
+          "max": 100,
+          "step": 5,
+          "suffix": "%"
+        },
+        {
+          "id": "ship_gyro",
+          "label": "ENABLE MOTION",
+          "description": "Can only be used if the controller is compatible with motion control.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "ship_gyro"
+        },
+        {
+          "id": "ship_gyroSensivity",
+          "label": "GYRO SENSITIVITY",
+          "type": "slider",
+          "default": "auto",
+          "configKey": "ship_gyroSensivity",
+          "min": 0,
+          "max": 1,
+          "step": 0.05,
+          "suffix": "%"
+        }
+      ]
+    }
+  ]
+}

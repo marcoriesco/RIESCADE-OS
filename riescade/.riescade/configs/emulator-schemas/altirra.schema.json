@@ -1,0 +1,223 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "altirra",
+  "name": "ALTIRRA",
+  "description": "Configurações para o emulador ALTIRRA geradas a partir do es_features.cfg.",
+  "icon": "altirra",
+  "configFiles": [],
+  "globalMappings": {},
+  "groups": [
+    {
+      "id": "graphics",
+      "title": "Gráficos",
+      "icon": "monitor",
+      "order": 1,
+      "options": [
+        {
+          "id": "altirra_ctia",
+          "label": "CTIA Vídeo CHIP",
+          "description": "A few very early games require CTIA chip to display properly.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "altirra_ctia"
+        },
+        {
+          "id": "altirra_renderer",
+          "label": "Vídeo",
+          "type": "select",
+          "default": "auto",
+          "configKey": "altirra_renderer",
+          "values": [
+            {
+              "label": "DIRECT3D 11",
+              "value": "d3d11"
+            },
+            {
+              "label": "DIRECT3D 9",
+              "value": "d3d9"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "emulation",
+      "title": "Emulação",
+      "icon": "cpu",
+      "order": 2,
+      "options": [
+        {
+          "id": "altirra_autoprofile",
+          "label": "SELECT PROFILE AUTOMATICALLY",
+          "description": "Let ALTIRRA choose the profile based Ativado the game.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "altirra_autoprofile"
+        },
+        {
+          "id": "altirra_kernel",
+          "label": "KERNEL",
+          "type": "select",
+          "default": "auto",
+          "configKey": "altirra_kernel",
+          "values": [
+            {
+              "label": "Padrão",
+              "value": "default"
+            },
+            {
+              "label": "INTERNAL",
+              "value": "internal"
+            }
+          ],
+          "realKey": "altirra_kernel",
+          "realFile": "Altirra.Generator.cs"
+        },
+        {
+          "id": "altirra_machine",
+          "label": "FORCE MACHINE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "altirra_machine",
+          "values": [
+            {
+              "label": "ATARI 800",
+              "value": "800"
+            },
+            {
+              "label": "ATARI 5200",
+              "value": "5200"
+            },
+            {
+              "label": "ATARI XEGS",
+              "value": "XEGS"
+            },
+            {
+              "label": "ATARI 1200XL",
+              "value": "1200XL"
+            },
+            {
+              "label": "ATARI 600XL/800XL",
+              "value": "XL"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "controls",
+      "title": "Controles",
+      "icon": "gamepad2",
+      "order": 5,
+      "options": [
+        {
+          "id": "altirra_inputdriver",
+          "label": "INPUT",
+          "type": "select",
+          "default": "auto",
+          "configKey": "altirra_inputdriver",
+          "values": [
+            {
+              "label": "DIRECTINPUT",
+              "value": "dinput"
+            },
+            {
+              "label": "XINPUT",
+              "value": "xinput"
+            }
+          ],
+          "realKey": "altirra_inputdriver",
+          "realFile": "Altirra.Controllers.cs"
+        },
+        {
+          "id": "altirra_joyport2",
+          "label": "FORCE USE OF PORT 2",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "altirra_joyport2"
+        },
+        {
+          "id": "altirra_usestick",
+          "label": "USE LEFT STICK",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "altirra_usestick"
+        },
+        {
+          "id": "altirra_forcepadindex1",
+          "label": "FORCE PLAYER 1 PAD INDEX",
+          "type": "select",
+          "default": "auto",
+          "configKey": "altirra_forcepadindex1",
+          "values": [
+            {
+              "label": "1",
+              "value": "1"
+            },
+            {
+              "label": "3",
+              "value": "3"
+            },
+            {
+              "label": "4",
+              "value": "4"
+            },
+            {
+              "label": "5",
+              "value": "5"
+            },
+            {
+              "label": "6",
+              "value": "6"
+            },
+            {
+              "label": "7",
+              "value": "7"
+            },
+            {
+              "label": "8",
+              "value": "8"
+            }
+          ]
+        },
+        {
+          "id": "altirra_forcepadindex2",
+          "label": "FORCE PLAYER 2 PAD INDEX",
+          "type": "select",
+          "default": "auto",
+          "configKey": "altirra_forcepadindex2",
+          "values": [
+            {
+              "label": "1",
+              "value": "1"
+            },
+            {
+              "label": "3",
+              "value": "3"
+            },
+            {
+              "label": "4",
+              "value": "4"
+            },
+            {
+              "label": "5",
+              "value": "5"
+            },
+            {
+              "label": "6",
+              "value": "6"
+            },
+            {
+              "label": "7",
+              "value": "7"
+            },
+            {
+              "label": "8",
+              "value": "8"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

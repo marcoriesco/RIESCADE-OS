@@ -1,0 +1,973 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "jzintv",
+  "name": "JZINTV",
+  "description": "Configurações para o emulador JZINTV geradas a partir do es_features.cfg.",
+  "icon": "jzintv",
+  "configFiles": [],
+  "globalMappings": {},
+  "groups": [
+    {
+      "id": "graphics",
+      "title": "Gráficos",
+      "icon": "monitor",
+      "order": 1,
+      "options": [
+        {
+          "id": "jzintv_internal_resolution",
+          "label": "Resolução Interna",
+          "type": "select",
+          "default": "auto",
+          "configKey": "jzintv_internal_resolution",
+          "values": [
+            {
+              "label": "320x200,8bpp",
+              "value": "0"
+            },
+            {
+              "label": "640x480,8bpp",
+              "value": "1"
+            },
+            {
+              "label": "320x240,16bpp",
+              "value": "2"
+            },
+            {
+              "label": "1024x768,8bpp",
+              "value": "3"
+            },
+            {
+              "label": "1680x1050,8bpp",
+              "value": "4"
+            },
+            {
+              "label": "800x400,16bpp",
+              "value": "5"
+            },
+            {
+              "label": "1600x1200,32bpp",
+              "value": "6"
+            },
+            {
+              "label": "3280x1200,32bpp",
+              "value": "7"
+            }
+          ]
+        },
+        {
+          "id": "jzintv_bitdepth",
+          "label": "BIT DEPTH",
+          "type": "select",
+          "default": "auto",
+          "configKey": "jzintv_bitdepth",
+          "values": [
+            {
+              "label": "8bpp",
+              "value": "8"
+            },
+            {
+              "label": "16bpp",
+              "value": "16"
+            },
+            {
+              "label": "32bpp",
+              "value": "32"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "emulation",
+      "title": "Emulação",
+      "icon": "cpu",
+      "order": 2,
+      "options": [
+        {
+          "id": "jzintv_useECS",
+          "label": "ENABLE ECS",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "jzintv_useECS"
+        },
+        {
+          "id": "jzintv_usePAL",
+          "label": "FORCE PAL",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "jzintv_usePAL"
+        },
+        {
+          "id": "jzintv_gram_size",
+          "label": "GRAM SIZE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "jzintv_gram_size",
+          "values": [
+            {
+              "label": "64 tiles (standard)",
+              "value": "0"
+            },
+            {
+              "label": "128 tiles",
+              "value": "1"
+            },
+            {
+              "label": "256 tiles (INTV88)",
+              "value": "2"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hacks",
+      "title": "Correções / Hacks",
+      "icon": "wrench",
+      "order": 3,
+      "options": [
+        {
+          "id": "jzintv_inputfile",
+          "label": "USE OWN KBHACK FILE",
+          "type": "input",
+          "default": "auto",
+          "configKey": "jzintv_inputfile"
+        }
+      ]
+    },
+    {
+      "id": "controls",
+      "title": "Controles",
+      "icon": "gamepad2",
+      "order": 5,
+      "options": [
+        {
+          "id": "intv_right_pad",
+          "label": "USE RIGHT PAD FOR PLAYER 1",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "intv_right_pad"
+        },
+        {
+          "id": "intv_joystick_push",
+          "label": "JOYSTICK PUSH VALUE",
+          "type": "slider",
+          "default": "auto",
+          "configKey": "intv_joystick_push",
+          "min": 0,
+          "max": 100,
+          "step": 3,
+          "suffix": "%"
+        },
+        {
+          "id": "intv_joystick_rels",
+          "label": "JOYSTICK RELS VALUE",
+          "type": "slider",
+          "default": "auto",
+          "configKey": "intv_joystick_rels",
+          "min": 0,
+          "max": 100,
+          "step": 3,
+          "suffix": "%"
+        },
+        {
+          "id": "intv_button_a",
+          "label": "SOUTH FACE BUTTON",
+          "type": "select",
+          "default": "auto",
+          "configKey": "intv_button_a",
+          "values": [
+            {
+              "label": "TOP SIDE BUTTONS",
+              "value": "A_T"
+            },
+            {
+              "label": "LOWER LEFT BUTTON",
+              "value": "A_L"
+            },
+            {
+              "label": "LOWER RIGHT BUTTON",
+              "value": "A_R"
+            },
+            {
+              "label": "KP0",
+              "value": "KP0"
+            },
+            {
+              "label": "KP1",
+              "value": "KP1"
+            },
+            {
+              "label": "KP2",
+              "value": "KP2"
+            },
+            {
+              "label": "KP3",
+              "value": "KP3"
+            },
+            {
+              "label": "KP4",
+              "value": "KP4"
+            },
+            {
+              "label": "KP5",
+              "value": "KP5"
+            },
+            {
+              "label": "KP6",
+              "value": "KP6"
+            },
+            {
+              "label": "KP7",
+              "value": "KP7"
+            },
+            {
+              "label": "KP8",
+              "value": "KP8"
+            },
+            {
+              "label": "KP9",
+              "value": "KP9"
+            },
+            {
+              "label": "KP CLEAR",
+              "value": "KPC"
+            },
+            {
+              "label": "KP ENTER",
+              "value": "KPE"
+            },
+            {
+              "label": "Não MAPPING",
+              "value": "NA"
+            }
+          ]
+        },
+        {
+          "id": "intv_button_b",
+          "label": "EAST FACE BUTTON",
+          "type": "select",
+          "default": "auto",
+          "configKey": "intv_button_b",
+          "values": [
+            {
+              "label": "TOP SIDE BUTTONS",
+              "value": "A_T"
+            },
+            {
+              "label": "LOWER LEFT BUTTON",
+              "value": "A_L"
+            },
+            {
+              "label": "LOWER RIGHT BUTTON",
+              "value": "A_R"
+            },
+            {
+              "label": "KP0",
+              "value": "KP0"
+            },
+            {
+              "label": "KP1",
+              "value": "KP1"
+            },
+            {
+              "label": "KP2",
+              "value": "KP2"
+            },
+            {
+              "label": "KP3",
+              "value": "KP3"
+            },
+            {
+              "label": "KP4",
+              "value": "KP4"
+            },
+            {
+              "label": "KP5",
+              "value": "KP5"
+            },
+            {
+              "label": "KP6",
+              "value": "KP6"
+            },
+            {
+              "label": "KP7",
+              "value": "KP7"
+            },
+            {
+              "label": "KP8",
+              "value": "KP8"
+            },
+            {
+              "label": "KP9",
+              "value": "KP9"
+            },
+            {
+              "label": "KP CLEAR",
+              "value": "KPC"
+            },
+            {
+              "label": "KP ENTER",
+              "value": "KPE"
+            },
+            {
+              "label": "Não MAPPING",
+              "value": "NA"
+            }
+          ]
+        },
+        {
+          "id": "intv_button_x",
+          "label": "NORTH FACE BUTTON",
+          "type": "select",
+          "default": "auto",
+          "configKey": "intv_button_x",
+          "values": [
+            {
+              "label": "TOP SIDE BUTTONS",
+              "value": "A_T"
+            },
+            {
+              "label": "LOWER LEFT BUTTON",
+              "value": "A_L"
+            },
+            {
+              "label": "LOWER RIGHT BUTTON",
+              "value": "A_R"
+            },
+            {
+              "label": "KP0",
+              "value": "KP0"
+            },
+            {
+              "label": "KP1",
+              "value": "KP1"
+            },
+            {
+              "label": "KP2",
+              "value": "KP2"
+            },
+            {
+              "label": "KP3",
+              "value": "KP3"
+            },
+            {
+              "label": "KP4",
+              "value": "KP4"
+            },
+            {
+              "label": "KP5",
+              "value": "KP5"
+            },
+            {
+              "label": "KP6",
+              "value": "KP6"
+            },
+            {
+              "label": "KP7",
+              "value": "KP7"
+            },
+            {
+              "label": "KP8",
+              "value": "KP8"
+            },
+            {
+              "label": "KP9",
+              "value": "KP9"
+            },
+            {
+              "label": "KP CLEAR",
+              "value": "KPC"
+            },
+            {
+              "label": "KP ENTER",
+              "value": "KPE"
+            },
+            {
+              "label": "Não MAPPING",
+              "value": "NA"
+            }
+          ]
+        },
+        {
+          "id": "intv_button_y",
+          "label": "WEST FACE BUTTON",
+          "type": "select",
+          "default": "auto",
+          "configKey": "intv_button_y",
+          "values": [
+            {
+              "label": "TOP SIDE BUTTONS",
+              "value": "A_T"
+            },
+            {
+              "label": "LOWER LEFT BUTTON",
+              "value": "A_L"
+            },
+            {
+              "label": "LOWER RIGHT BUTTON",
+              "value": "A_R"
+            },
+            {
+              "label": "KP0",
+              "value": "KP0"
+            },
+            {
+              "label": "KP1",
+              "value": "KP1"
+            },
+            {
+              "label": "KP2",
+              "value": "KP2"
+            },
+            {
+              "label": "KP3",
+              "value": "KP3"
+            },
+            {
+              "label": "KP4",
+              "value": "KP4"
+            },
+            {
+              "label": "KP5",
+              "value": "KP5"
+            },
+            {
+              "label": "KP6",
+              "value": "KP6"
+            },
+            {
+              "label": "KP7",
+              "value": "KP7"
+            },
+            {
+              "label": "KP8",
+              "value": "KP8"
+            },
+            {
+              "label": "KP9",
+              "value": "KP9"
+            },
+            {
+              "label": "KP CLEAR",
+              "value": "KPC"
+            },
+            {
+              "label": "KP ENTER",
+              "value": "KPE"
+            },
+            {
+              "label": "Não MAPPING",
+              "value": "NA"
+            }
+          ]
+        },
+        {
+          "id": "intv_button_leftshoulder",
+          "label": "LEFT SHOULDER",
+          "type": "select",
+          "default": "auto",
+          "configKey": "intv_button_leftshoulder",
+          "values": [
+            {
+              "label": "TOP SIDE BUTTONS",
+              "value": "A_T"
+            },
+            {
+              "label": "LOWER LEFT BUTTON",
+              "value": "A_L"
+            },
+            {
+              "label": "LOWER RIGHT BUTTON",
+              "value": "A_R"
+            },
+            {
+              "label": "KP0",
+              "value": "KP0"
+            },
+            {
+              "label": "KP1",
+              "value": "KP1"
+            },
+            {
+              "label": "KP2",
+              "value": "KP2"
+            },
+            {
+              "label": "KP3",
+              "value": "KP3"
+            },
+            {
+              "label": "KP4",
+              "value": "KP4"
+            },
+            {
+              "label": "KP5",
+              "value": "KP5"
+            },
+            {
+              "label": "KP6",
+              "value": "KP6"
+            },
+            {
+              "label": "KP7",
+              "value": "KP7"
+            },
+            {
+              "label": "KP8",
+              "value": "KP8"
+            },
+            {
+              "label": "KP9",
+              "value": "KP9"
+            },
+            {
+              "label": "KP CLEAR",
+              "value": "KPC"
+            },
+            {
+              "label": "KP ENTER",
+              "value": "KPE"
+            },
+            {
+              "label": "Não MAPPING",
+              "value": "NA"
+            }
+          ]
+        },
+        {
+          "id": "intv_button_rightshoulder",
+          "label": "RIGHT SHOULDER",
+          "type": "select",
+          "default": "auto",
+          "configKey": "intv_button_rightshoulder",
+          "values": [
+            {
+              "label": "TOP SIDE BUTTONS",
+              "value": "A_T"
+            },
+            {
+              "label": "LOWER LEFT BUTTON",
+              "value": "A_L"
+            },
+            {
+              "label": "LOWER RIGHT BUTTON",
+              "value": "A_R"
+            },
+            {
+              "label": "KP0",
+              "value": "KP0"
+            },
+            {
+              "label": "KP1",
+              "value": "KP1"
+            },
+            {
+              "label": "KP2",
+              "value": "KP2"
+            },
+            {
+              "label": "KP3",
+              "value": "KP3"
+            },
+            {
+              "label": "KP4",
+              "value": "KP4"
+            },
+            {
+              "label": "KP5",
+              "value": "KP5"
+            },
+            {
+              "label": "KP6",
+              "value": "KP6"
+            },
+            {
+              "label": "KP7",
+              "value": "KP7"
+            },
+            {
+              "label": "KP8",
+              "value": "KP8"
+            },
+            {
+              "label": "KP9",
+              "value": "KP9"
+            },
+            {
+              "label": "KP CLEAR",
+              "value": "KPC"
+            },
+            {
+              "label": "KP ENTER",
+              "value": "KPE"
+            },
+            {
+              "label": "Não MAPPING",
+              "value": "NA"
+            }
+          ]
+        },
+        {
+          "id": "intv_button_leftstick",
+          "label": "LEFT STICK BUTTON",
+          "type": "select",
+          "default": "auto",
+          "configKey": "intv_button_leftstick",
+          "values": [
+            {
+              "label": "TOP SIDE BUTTONS",
+              "value": "A_T"
+            },
+            {
+              "label": "LOWER LEFT BUTTON",
+              "value": "A_L"
+            },
+            {
+              "label": "LOWER RIGHT BUTTON",
+              "value": "A_R"
+            },
+            {
+              "label": "KP0",
+              "value": "KP0"
+            },
+            {
+              "label": "KP1",
+              "value": "KP1"
+            },
+            {
+              "label": "KP2",
+              "value": "KP2"
+            },
+            {
+              "label": "KP3",
+              "value": "KP3"
+            },
+            {
+              "label": "KP4",
+              "value": "KP4"
+            },
+            {
+              "label": "KP5",
+              "value": "KP5"
+            },
+            {
+              "label": "KP6",
+              "value": "KP6"
+            },
+            {
+              "label": "KP7",
+              "value": "KP7"
+            },
+            {
+              "label": "KP8",
+              "value": "KP8"
+            },
+            {
+              "label": "KP9",
+              "value": "KP9"
+            },
+            {
+              "label": "KP CLEAR",
+              "value": "KPC"
+            },
+            {
+              "label": "KP ENTER",
+              "value": "KPE"
+            },
+            {
+              "label": "Não MAPPING",
+              "value": "NA"
+            }
+          ]
+        },
+        {
+          "id": "intv_button_rightstick",
+          "label": "RIGHT STICK BUTTON",
+          "type": "select",
+          "default": "auto",
+          "configKey": "intv_button_rightstick",
+          "values": [
+            {
+              "label": "TOP SIDE BUTTONS",
+              "value": "A_T"
+            },
+            {
+              "label": "LOWER LEFT BUTTON",
+              "value": "A_L"
+            },
+            {
+              "label": "LOWER RIGHT BUTTON",
+              "value": "A_R"
+            },
+            {
+              "label": "KP0",
+              "value": "KP0"
+            },
+            {
+              "label": "KP1",
+              "value": "KP1"
+            },
+            {
+              "label": "KP2",
+              "value": "KP2"
+            },
+            {
+              "label": "KP3",
+              "value": "KP3"
+            },
+            {
+              "label": "KP4",
+              "value": "KP4"
+            },
+            {
+              "label": "KP5",
+              "value": "KP5"
+            },
+            {
+              "label": "KP6",
+              "value": "KP6"
+            },
+            {
+              "label": "KP7",
+              "value": "KP7"
+            },
+            {
+              "label": "KP8",
+              "value": "KP8"
+            },
+            {
+              "label": "KP9",
+              "value": "KP9"
+            },
+            {
+              "label": "KP CLEAR",
+              "value": "KPC"
+            },
+            {
+              "label": "KP ENTER",
+              "value": "KPE"
+            },
+            {
+              "label": "Não MAPPING",
+              "value": "NA"
+            }
+          ]
+        },
+        {
+          "id": "intv_button_lefttrigger",
+          "label": "LEFT TRIGGER",
+          "type": "select",
+          "default": "auto",
+          "configKey": "intv_button_lefttrigger",
+          "values": [
+            {
+              "label": "TOP SIDE BUTTONS",
+              "value": "A_T"
+            },
+            {
+              "label": "LOWER LEFT BUTTON",
+              "value": "A_L"
+            },
+            {
+              "label": "LOWER RIGHT BUTTON",
+              "value": "A_R"
+            },
+            {
+              "label": "KP0",
+              "value": "KP0"
+            },
+            {
+              "label": "KP1",
+              "value": "KP1"
+            },
+            {
+              "label": "KP2",
+              "value": "KP2"
+            },
+            {
+              "label": "KP3",
+              "value": "KP3"
+            },
+            {
+              "label": "KP4",
+              "value": "KP4"
+            },
+            {
+              "label": "KP5",
+              "value": "KP5"
+            },
+            {
+              "label": "KP6",
+              "value": "KP6"
+            },
+            {
+              "label": "KP7",
+              "value": "KP7"
+            },
+            {
+              "label": "KP8",
+              "value": "KP8"
+            },
+            {
+              "label": "KP9",
+              "value": "KP9"
+            },
+            {
+              "label": "KP CLEAR",
+              "value": "KPC"
+            },
+            {
+              "label": "KP ENTER",
+              "value": "KPE"
+            },
+            {
+              "label": "Não MAPPING",
+              "value": "NA"
+            }
+          ]
+        },
+        {
+          "id": "intv_button_righttrigger",
+          "label": "RIGHT TRIGGER",
+          "type": "select",
+          "default": "auto",
+          "configKey": "intv_button_righttrigger",
+          "values": [
+            {
+              "label": "TOP SIDE BUTTONS",
+              "value": "A_T"
+            },
+            {
+              "label": "LOWER LEFT BUTTON",
+              "value": "A_L"
+            },
+            {
+              "label": "LOWER RIGHT BUTTON",
+              "value": "A_R"
+            },
+            {
+              "label": "KP0",
+              "value": "KP0"
+            },
+            {
+              "label": "KP1",
+              "value": "KP1"
+            },
+            {
+              "label": "KP2",
+              "value": "KP2"
+            },
+            {
+              "label": "KP3",
+              "value": "KP3"
+            },
+            {
+              "label": "KP4",
+              "value": "KP4"
+            },
+            {
+              "label": "KP5",
+              "value": "KP5"
+            },
+            {
+              "label": "KP6",
+              "value": "KP6"
+            },
+            {
+              "label": "KP7",
+              "value": "KP7"
+            },
+            {
+              "label": "KP8",
+              "value": "KP8"
+            },
+            {
+              "label": "KP9",
+              "value": "KP9"
+            },
+            {
+              "label": "KP CLEAR",
+              "value": "KPC"
+            },
+            {
+              "label": "KP ENTER",
+              "value": "KPE"
+            },
+            {
+              "label": "Não MAPPING",
+              "value": "NA"
+            }
+          ]
+        },
+        {
+          "id": "intv_button_dpad",
+          "label": "DPAD",
+          "type": "select",
+          "default": "auto",
+          "configKey": "intv_button_dpad",
+          "values": [
+            {
+              "label": "KEYPAD",
+              "value": "keypad"
+            },
+            {
+              "label": "DIRECTIONS",
+              "value": "directions"
+            },
+            {
+              "label": "OPPOSITE PAD DIRECTIONS",
+              "value": "directionsopposite"
+            },
+            {
+              "label": "Não MAPPING",
+              "value": "na"
+            }
+          ]
+        },
+        {
+          "id": "intv_button_leftjoy",
+          "label": "LEFT STICK",
+          "type": "select",
+          "default": "auto",
+          "configKey": "intv_button_leftjoy",
+          "values": [
+            {
+              "label": "DIRECTIONS",
+              "value": "directions"
+            },
+            {
+              "label": "OPPOSITE PAD DIRECTIONS",
+              "value": "directionsopposite"
+            },
+            {
+              "label": "Não MAPPING",
+              "value": "na"
+            }
+          ]
+        },
+        {
+          "id": "intv_button_rightjoy",
+          "label": "RIGHT STICK",
+          "type": "select",
+          "default": "auto",
+          "configKey": "intv_button_rightjoy",
+          "values": [
+            {
+              "label": "DIRECTIONS",
+              "value": "directions"
+            },
+            {
+              "label": "OPPOSITE PAD DIRECTIONS",
+              "value": "directionsopposite"
+            },
+            {
+              "label": "Não MAPPING",
+              "value": "na"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

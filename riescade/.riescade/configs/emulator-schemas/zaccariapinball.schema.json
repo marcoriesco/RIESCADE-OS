@@ -1,0 +1,94 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "zaccariapinball",
+  "name": "ZACCARIAPINBALL",
+  "description": "Configurações para o emulador ZACCARIAPINBALL geradas a partir do es_features.cfg.",
+  "icon": "zaccariapinball",
+  "configFiles": [],
+  "globalMappings": {},
+  "groups": [
+    {
+      "id": "graphics",
+      "title": "Gráficos",
+      "icon": "monitor",
+      "order": 1,
+      "options": [
+        {
+          "id": "zaccaria_rotate",
+          "label": "ROTATE SCREEN",
+          "type": "select",
+          "default": "auto",
+          "configKey": "zaccaria_rotate",
+          "values": [
+            {
+              "label": "LEFT",
+              "value": "left"
+            },
+            {
+              "label": "RIGHT",
+              "value": "right"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "emulation",
+      "title": "Emulação",
+      "icon": "cpu",
+      "order": 2,
+      "options": [
+        {
+          "id": "zaccaria_players",
+          "label": "NUMBER OF PLAYERS",
+          "type": "select",
+          "default": "auto",
+          "configKey": "zaccaria_players",
+          "values": [
+            {
+              "label": "1",
+              "value": "1"
+            },
+            {
+              "label": "2",
+              "value": "2"
+            },
+            {
+              "label": "3",
+              "value": "3"
+            },
+            {
+              "label": "4",
+              "value": "4"
+            }
+          ]
+        },
+        {
+          "id": "zaccaria_gamemode",
+          "label": "GAME MODE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "zaccaria_gamemode",
+          "values": [
+            {
+              "label": "CLASSIC ARCADE",
+              "value": "classic_arcade"
+            },
+            {
+              "label": "CLASSIC SIMULATION",
+              "value": "classic_simulation"
+            },
+            {
+              "label": "CLASSIC USER",
+              "value": "classic_user"
+            },
+            {
+              "label": "90 SECONDES",
+              "value": "90sec"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

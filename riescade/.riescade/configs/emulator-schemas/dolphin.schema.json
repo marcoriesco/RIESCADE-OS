@@ -1,39 +1,14 @@
 {
   "$schema": "riescade-emulator-schema-v1",
   "id": "dolphin",
-  "name": "Dolphin",
-  "description": "Emulador de Nintendo GameCube e Wii.",
+  "name": "DOLPHIN",
+  "description": "Configurações para o emulador DOLPHIN geradas a partir do es_features.cfg.",
   "icon": "dolphin",
-  "configFiles": [
-    {
-      "path": "User/Config/Dolphin.ini",
-      "format": "ini"
-    },
-    {
-      "path": "User/Config/GFX.ini",
-      "format": "ini"
-    }
-  ],
+  "configFiles": [],
   "globalMappings": {
-    "fullscreen": {
-      "configKey": "fullscreen",
-      "globalKey": "fullscreen"
-    },
-    "vsync": {
-      "configKey": "vsync",
-      "globalKey": "vsync"
-    },
-    "video_driver": {
-      "configKey": "video_driver",
-      "globalKey": "video_driver"
-    },
-    "aspect_ratio": {
-      "configKey": "aspect_ratio",
+    "ratio": {
+      "configKey": "ratio",
       "globalKey": "aspect_ratio"
-    },
-    "shaders": {
-      "configKey": "shaders",
-      "globalKey": "shaders"
     }
   },
   "groups": [
@@ -44,175 +19,645 @@
       "order": 1,
       "options": [
         {
-          "id": "fullscreen",
-          "label": "Tela Cheia",
-          "description": "Iniciar o emulador em modo tela cheia.",
-          "type": "toggle",
-          "default": "true",
-          "configKey": "fullscreen",
-          "inheritsGlobal": "fullscreen"
-        },
-        {
-          "id": "video_driver",
-          "label": "Backend Gráfico",
-          "description": "API de renderização do Dolphin.",
-          "type": "select",
-          "default": "Vulkan",
-          "configKey": "video_driver",
-          "inheritsGlobal": "video_driver",
-          "values": [
-            {
-              "label": "Vulkan",
-              "value": "Vulkan"
-            },
-            {
-              "label": "Direct3D 11",
-              "value": "D3D"
-            },
-            {
-              "label": "Direct3D 12",
-              "value": "D3D12"
-            },
-            {
-              "label": "OpenGL",
-              "value": "OGL"
-            },
-            {
-              "label": "Software",
-              "value": "Software Renderer"
-            }
-          ]
-        },
-        {
-          "id": "vsync",
-          "label": "V-Sync",
-          "description": "Sincronização vertical do Dolphin.",
-          "type": "toggle",
-          "default": "true",
-          "configKey": "vsync",
-          "inheritsGlobal": "vsync"
-        },
-        {
-          "id": "aspect_ratio",
-          "label": "Proporção de Tela",
-          "description": "Proporção de aspecto durante o jogo.",
-          "type": "select",
-          "default": "0",
-          "configKey": "aspect_ratio",
-          "inheritsGlobal": "aspect_ratio",
-          "values": [
-            {
-              "label": "Automático",
-              "value": "0"
-            },
-            {
-              "label": "Forçar 16:9",
-              "value": "1"
-            },
-            {
-              "label": "Forçar 4:3",
-              "value": "2"
-            },
-            {
-              "label": "Esticar para Janela",
-              "value": "3"
-            }
-          ]
-        },
-        {
-          "id": "dolphin_internal_resolution",
-          "label": "Resolução Interna (EFB)",
-          "description": "Multiplicador de resolução do framebuffer embutido.",
+          "id": "dolphin_shaders",
+          "label": "Conjunto de Shaders",
           "type": "select",
           "default": "auto",
-          "configKey": "dolphin_internal_resolution",
+          "configKey": "dolphin_shaders",
           "values": [
             {
-              "label": "Automático",
-              "value": "auto"
+              "label": "Nenhum",
+              "value": "(off)"
             },
             {
-              "label": "1x Nativa (640x528)",
+              "label": "16 BIT",
+              "value": "16bit"
+            },
+            {
+              "label": "32 BITS",
+              "value": "32bit"
+            },
+            {
+              "label": "ACID METAL",
+              "value": "acidmetal"
+            },
+            {
+              "label": "ACID TRIP",
+              "value": "acidtrip"
+            },
+            {
+              "label": "ACID TRIP 2",
+              "value": "acidtrip2"
+            },
+            {
+              "label": "ASCII ART",
+              "value": "asciiart"
+            },
+            {
+              "label": "Automático TOON",
+              "value": "auto_toon"
+            },
+            {
+              "label": "Automático TOON 2",
+              "value": "auto_toon2"
+            },
+            {
+              "label": "Automático HDR",
+              "value": "AutoHDR"
+            },
+            {
+              "label": "BAD BLOOM",
+              "value": "bad_bloom"
+            },
+            {
+              "label": "BRIGHTEN",
+              "value": "brighten"
+            },
+            {
+              "label": "CHRISMAS",
+              "value": "chrismas"
+            },
+            {
+              "label": "COOL",
+              "value": "cool1"
+            },
+            {
+              "label": "DARKET BRIGHTER",
+              "value": "darkerbrighter"
+            },
+            {
+              "label": "EMBOSS",
+              "value": "emboss"
+            },
+            {
+              "label": "FIRE",
+              "value": "fire"
+            },
+            {
+              "label": "FIRE 2",
+              "value": "fire2"
+            },
+            {
+              "label": "FIRE WATER",
+              "value": "firewater"
+            },
+            {
+              "label": "FXAA",
+              "value": "FXAA"
+            },
+            {
+              "label": "GRAYSCALE",
+              "value": "grayscale"
+            },
+            {
+              "label": "GRAYSCALE 2",
+              "value": "grayscale2"
+            },
+            {
+              "label": "INTERGER SCALING",
+              "value": "integer_scaling"
+            },
+            {
+              "label": "INVERT",
+              "value": "invert"
+            },
+            {
+              "label": "INVERT BLUE",
+              "value": "invert_blue"
+            },
+            {
+              "label": "INVERTED OUTLINE",
+              "value": "invertedoutline"
+            },
+            {
+              "label": "LENS DISTORTION",
+              "value": "lens_distortion"
+            },
+            {
+              "label": "MAD WORLD",
+              "value": "mad_world"
+            },
+            {
+              "label": "NIGHT VISION",
+              "value": "nightvision"
+            },
+            {
+              "label": "NIGHT VISION 2",
+              "value": "nightvision2"
+            },
+            {
+              "label": "NIGHT VISION 2 SCANLINES",
+              "value": "nightvision2scanlines"
+            },
+            {
+              "label": "PERCEPTUAL HDR",
+              "value": "PerceptualHDR"
+            },
+            {
+              "label": "POSTERIZE",
+              "value": "posterize"
+            },
+            {
+              "label": "POSTERIZE 2",
+              "value": "posterize2"
+            },
+            {
+              "label": "PRIMARY COLORS",
+              "value": "primarycolors"
+            },
+            {
+              "label": "SEPIA",
+              "value": "sepia"
+            },
+            {
+              "label": "SKETCHY",
+              "value": "sketchy"
+            },
+            {
+              "label": "SPOOKEY",
+              "value": "spookey1"
+            },
+            {
+              "label": "SPOOKEY 2",
+              "value": "spookey2"
+            },
+            {
+              "label": "SUNSET",
+              "value": "sunset"
+            },
+            {
+              "label": "SWAP RGB_BGR",
+              "value": "swap_RGB_BGR"
+            },
+            {
+              "label": "SWAP RGB_BRG",
+              "value": "swap_RGB_BRG"
+            },
+            {
+              "label": "SWAP RGB_GBR",
+              "value": "swap_RGB_GBR"
+            },
+            {
+              "label": "SWAP RGB_GRB",
+              "value": "swap_RGB_GRB"
+            },
+            {
+              "label": "SWAP RGB_RBG",
+              "value": "swap_RGB_RBG"
+            },
+            {
+              "label": "TOXIC",
+              "value": "toxic"
+            }
+          ],
+          "realKey": "PostProcessingShader",
+          "realSection": "Enhancements",
+          "realFile": "Dolphin.Generator.cs"
+        },
+        {
+          "id": "hdr_shoulder_pow",
+          "label": "HDR SHOULDER POW",
+          "type": "slider",
+          "default": "auto",
+          "configKey": "hdr_shoulder_pow",
+          "min": 1,
+          "max": 10,
+          "step": 0.25,
+          "realKey": "AUTO_HDR_SHOULDER_POW",
+          "realSection": "AutoHDR-options",
+          "realFile": "Dolphin.Generator.cs"
+        },
+        {
+          "id": "hdr_start_alpha",
+          "label": "SHOULDER START ALPHA",
+          "type": "slider",
+          "default": "auto",
+          "configKey": "hdr_start_alpha",
+          "min": 0,
+          "max": 1,
+          "step": 0.05,
+          "realKey": "AUTO_HDR_SHOULDER_START_ALPHA",
+          "realSection": "AutoHDR-options",
+          "realFile": "Dolphin.Generator.cs"
+        },
+        {
+          "id": "hdr_max_nits",
+          "label": "MAX NITS",
+          "type": "slider",
+          "default": "auto",
+          "configKey": "hdr_max_nits",
+          "min": 100,
+          "max": 2000,
+          "step": 100,
+          "realKey": "HDR_DISPLAY_MAX_NITS",
+          "realSection": "AutoHDR-options",
+          "realFile": "Dolphin.Generator.cs"
+        },
+        {
+          "id": "hdr_amplification",
+          "label": "HDR AMPLIFICATION",
+          "type": "slider",
+          "default": "auto",
+          "configKey": "hdr_amplification",
+          "min": 1,
+          "max": 6,
+          "step": 0.25,
+          "realKey": "AMPLIFICATION",
+          "realSection": "PerceptualHDR-options",
+          "realFile": "Dolphin.Generator.cs"
+        },
+        {
+          "id": "ratio",
+          "label": "Proporção de Tela",
+          "type": "select",
+          "default": "auto",
+          "configKey": "ratio",
+          "values": [
+            {
+              "label": "16/9",
+              "value": "16/9"
+            },
+            {
+              "label": "4/3",
+              "value": "4/3"
+            },
+            {
+              "label": "STRETCHED",
+              "value": "Stretched"
+            }
+          ],
+          "inheritsGlobal": "aspect_ratio",
+          "realKey": "ratio",
+          "realFile": "Dolphin.Generator.cs"
+        },
+        {
+          "id": "internal_resolution",
+          "label": "Resolução Interna",
+          "type": "select",
+          "default": "auto",
+          "configKey": "internal_resolution",
+          "values": [
+            {
+              "label": "1X (640x528)",
               "value": "1"
             },
             {
-              "label": "2x (1280x1056)",
+              "label": "2X (720P)",
               "value": "2"
             },
             {
-              "label": "3x (1920x1584)",
+              "label": "3X (1080P)",
               "value": "3"
             },
             {
-              "label": "4x (2560x2112)",
+              "label": "4X (1440P)",
               "value": "4"
             },
             {
-              "label": "5x (3200x2640)",
+              "label": "5X",
               "value": "5"
             },
             {
-              "label": "6x (3840x3168)",
+              "label": "6X (4K)",
               "value": "6"
+            },
+            {
+              "label": "7X",
+              "value": "7"
+            },
+            {
+              "label": "8X (5K)",
+              "value": "8"
+            },
+            {
+              "label": "9X",
+              "value": "9"
+            },
+            {
+              "label": "10X",
+              "value": "10"
+            },
+            {
+              "label": "11X",
+              "value": "11"
+            },
+            {
+              "label": "12X (8K)",
+              "value": "12"
             }
-          ]
+          ],
+          "realKey": "InternalResolution",
+          "realSection": "Settings",
+          "realFile": "Dolphin.Generator.cs"
         },
         {
-          "id": "dolphin_anti_aliasing",
-          "label": "Anti-Aliasing",
-          "description": "Suavização de bordas. Pode impactar performance.",
+          "id": "dolphin_vsync",
+          "label": "Sincronização Vertical (V-Sync)",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "dolphin_vsync",
+          "realKey": "VSync",
+          "realSection": "Hardware",
+          "realFile": "Dolphin.Generator.cs"
+        },
+        {
+          "id": "WaitForShadersBeforeStarting",
+          "label": "COMPILE SHADERS BEFORE STARTING",
+          "description": "May reduce stuttering a the cost of longer delay to start a game.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "WaitForShadersBeforeStarting",
+          "realKey": "WaitForShadersBeforeStarting",
+          "realSection": "Settings",
+          "realFile": "Dolphin.Generator.cs"
+        },
+        {
+          "id": "EnableGPUTextureDecoding",
+          "label": "ENABLE GPU-TEXTURE-DECODING",
+          "description": "Can increase performance when using powerful GPU.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "EnableGPUTextureDecoding",
+          "realKey": "EnableGPUTextureDecoding",
+          "realSection": "Settings",
+          "realFile": "Dolphin.Generator.cs"
+        },
+        {
+          "id": "SafeTextureCacheColorSamples",
+          "label": "TEXTURE CACHE ACCURACY",
+          "description": "Reduce stuttering a the cost of much longer delay to start a game and high GPU usage.",
           "type": "select",
-          "default": "0",
-          "configKey": "dolphin_anti_aliasing",
+          "default": "auto",
+          "configKey": "SafeTextureCacheColorSamples",
           "values": [
             {
-              "label": "Desativado",
+              "label": "RAPID",
+              "value": "128"
+            },
+            {
+              "label": "SAFE",
               "value": "0"
             },
             {
-              "label": "2x MSAA",
+              "label": "INTERMEDIATE",
+              "value": "512"
+            }
+          ],
+          "realKey": "SafeTextureCacheColorSamples",
+          "realSection": "Settings",
+          "realFile": "Dolphin.Generator.cs"
+        },
+        {
+          "id": "VertexRounding",
+          "label": "VERTEX ROUNDING",
+          "description": "Can fix some games when using a non-native resolution by rounding 2D edges.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "VertexRounding",
+          "realKey": "VertexRounding",
+          "realSection": "Hacks",
+          "realFile": "Dolphin.Generator.cs"
+        },
+        {
+          "id": "anisotropic_filtering",
+          "label": "Filtragem Anisotrópica",
+          "description": "Enhance the quality of textures Ativado surface. May make textures look better in some games, but may break certain effects in rare cases.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "anisotropic_filtering",
+          "values": [
+            {
+              "label": "Não",
+              "value": "0"
+            },
+            {
+              "label": "2x",
+              "value": "1"
+            },
+            {
+              "label": "4x",
               "value": "2"
             },
             {
-              "label": "4x MSAA",
+              "label": "8x",
+              "value": "3"
+            },
+            {
+              "label": "16x",
+              "value": "4"
+            }
+          ],
+          "realKey": "MaxAnisotropy",
+          "realSection": "Enhancements",
+          "realFile": "Dolphin.Generator.cs"
+        },
+        {
+          "id": "antialiasing",
+          "label": "Anti-Aliasing (FXAA)",
+          "description": "Set Anti Aliasing for rendered content. A dangerous option to enable in Dolphin. Setting this too high will quickly cause a bandwidth bottleneck Ativado your GPU. Worse yet, these settings may cause various graphical effects in games to be sampled incorrectly.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "antialiasing",
+          "values": [
+            {
+              "label": "Não",
+              "value": "1"
+            },
+            {
+              "label": "2x",
+              "value": "2"
+            },
+            {
+              "label": "4x",
               "value": "4"
             },
             {
-              "label": "8x MSAA",
+              "label": "8x",
               "value": "8"
+            },
+            {
+              "label": "16x",
+              "value": "16"
+            },
+            {
+              "label": "32x",
+              "value": "32"
             }
-          ]
+          ],
+          "realKey": "MSAA",
+          "realSection": "Settings",
+          "realFile": "Dolphin.Generator.cs"
         },
         {
-          "id": "shaders",
-          "label": "Compilação de Shaders",
-          "description": "Modo de compilação de shaders.",
+          "id": "ssaa",
+          "label": "Anti-Aliasing (FXAA) MODE",
+          "description": "SSAA offers better quality at the cost of performance.",
           "type": "select",
           "default": "auto",
-          "configKey": "shaders",
-          "inheritsGlobal": "shaders",
+          "configKey": "ssaa",
           "values": [
             {
-              "label": "Automático",
-              "value": "auto"
+              "label": "MSAA",
+              "value": "0"
             },
             {
-              "label": "Síncrono",
-              "value": "synchronous"
-            },
-            {
-              "label": "Síncrono (Uber Shaders)",
-              "value": "synchronous_ubershaders"
-            },
-            {
-              "label": "Assíncrono (Uber Shaders)",
-              "value": "async_ubershaders"
-            },
-            {
-              "label": "Assíncrono (Skip Drawing)",
-              "value": "async_skip"
+              "label": "SSAA",
+              "value": "1"
             }
-          ]
+          ],
+          "realKey": "SSAA",
+          "realSection": "Settings",
+          "realFile": "Dolphin.Generator.cs"
+        },
+        {
+          "id": "ForceFiltering",
+          "label": "FORCE TEXTURES FILTERING",
+          "description": "Filter all textures. Including any that the game explicitly sets as unfiltered. Disabled by Padrão.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "ForceFiltering",
+          "values": [
+            {
+              "label": "Não",
+              "value": "0"
+            },
+            {
+              "label": "NEAREST NEIGHBOR",
+              "value": "1"
+            },
+            {
+              "label": "LINEAR",
+              "value": "2"
+            }
+          ],
+          "realKey": "ForceTextureFiltering",
+          "realSection": "Enhancements",
+          "realFile": "Dolphin.Generator.cs"
+        },
+        {
+          "id": "OutputResampling",
+          "label": "OUTPUT RESAMPLING",
+          "description": "Specify filter to use for upscaling.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "OutputResampling",
+          "values": [
+            {
+              "label": "Padrão",
+              "value": "0"
+            },
+            {
+              "label": "BILINEAR",
+              "value": "1"
+            },
+            {
+              "label": "BICUBIC(B-SPLINE)",
+              "value": "2"
+            },
+            {
+              "label": "BICUBIC(MITCHELL NETRAVALI)",
+              "value": "3"
+            },
+            {
+              "label": "BICUBIC(CATMULL ROM)",
+              "value": "4"
+            },
+            {
+              "label": "BILINEAR NET",
+              "value": "5"
+            },
+            {
+              "label": "ZONE SAMPLING",
+              "value": "6"
+            }
+          ],
+          "realKey": "OutputResampling",
+          "realSection": "Enhancements",
+          "realFile": "Dolphin.Generator.cs"
+        },
+        {
+          "id": "dolphin_crop",
+          "label": "CROP",
+          "description": "Crop the picture from its native aspect ratio to 4:3 or 16:9",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "dolphin_crop",
+          "realKey": "Crop",
+          "realSection": "Settings",
+          "realFile": "Dolphin.Generator.cs"
+        },
+        {
+          "id": "hires_textures",
+          "label": "CUSTOM TEXTURES",
+          "description": "Replace original textures with custom textures pack.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "hires_textures",
+          "realKey": "HiresTextures",
+          "realSection": "Settings",
+          "realFile": "Dolphin.Generator.cs"
+        },
+        {
+          "id": "CacheHiresTextures",
+          "label": "PREFETCH CUSTOM TEXTURES",
+          "description": "Cache custom textures to system RAM Ativado startup.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "CacheHiresTextures",
+          "realKey": "CacheHiresTextures",
+          "realSection": "Settings",
+          "realFile": "Dolphin.Generator.cs"
+        },
+        {
+          "id": "dolphin_graphicsmods",
+          "label": "ENABLE MODS",
+          "description": "Load mods from User\\Load\\GraphicsMods folder.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "dolphin_graphicsmods",
+          "realKey": "EnableMods",
+          "realSection": "Settings",
+          "realFile": "Dolphin.Generator.cs"
+        },
+        {
+          "id": "manual_texture_sampling",
+          "label": "MANUAL TEXTURE SAMPLING",
+          "description": "Allow for correct Emulação of texture wrapping, but comes at a cost of performance.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "manual_texture_sampling",
+          "realKey": "FastTextureSampling",
+          "realSection": "Hacks",
+          "realFile": "Dolphin.Generator.cs"
+        },
+        {
+          "id": "dolphin_gfxbackend",
+          "label": "Vídeo",
+          "description": "Select which graphics API to use internally.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "dolphin_gfxbackend",
+          "values": [
+            {
+              "label": "OPENGL",
+              "value": "OGL"
+            },
+            {
+              "label": "VULKAN",
+              "value": "Vulkan"
+            },
+            {
+              "label": "DIRECTX 11",
+              "value": "D3D"
+            },
+            {
+              "label": "DIRECTX 12",
+              "value": "D3D12"
+            }
+          ],
+          "realKey": "GFXBackend",
+          "realSection": "Core",
+          "realFile": "Dolphin.Generator.cs"
         }
       ]
     },
@@ -223,46 +668,322 @@
       "order": 2,
       "options": [
         {
-          "id": "dolphin_cheats",
-          "label": "Cheats / AR Codes",
-          "description": "Ativar suporte a Action Replay e Gecko codes.",
-          "type": "toggle",
-          "default": "false",
-          "configKey": "dolphin_cheats"
-        },
-        {
-          "id": "dolphin_speed_limit",
-          "label": "Limite de Velocidade",
-          "description": "Velocidade máxima de emulação (100% = velocidade nativa).",
+          "id": "ShaderCompilationMode",
+          "label": "SHADERS COMPILATION METHOD",
+          "description": "Reduce stuttering a the cost of much longer delay to start a game and high GPU usage.",
           "type": "select",
-          "default": "100",
-          "configKey": "dolphin_speed_limit",
+          "default": "auto",
+          "configKey": "ShaderCompilationMode",
           "values": [
             {
-              "label": "Ilimitado",
+              "label": "HYBRID",
+              "value": "2"
+            },
+            {
+              "label": "SPECIALIZED",
               "value": "0"
             },
             {
-              "label": "50%",
-              "value": "50"
+              "label": "EXCLUSIVE",
+              "value": "1"
             },
             {
-              "label": "75%",
-              "value": "75"
-            },
-            {
-              "label": "100% (Nativo)",
-              "value": "100"
-            },
-            {
-              "label": "150%",
-              "value": "150"
-            },
-            {
-              "label": "200%",
-              "value": "200"
+              "label": "SKIP DRAWING",
+              "value": "3"
             }
-          ]
+          ],
+          "realKey": "ShaderCompilationMode",
+          "realSection": "Settings",
+          "realFile": "Dolphin.Generator.cs"
+        },
+        {
+          "id": "VISkip",
+          "label": "IGNORE VBI",
+          "description": "Skip VBI when lag is detected, helps with Áudio stuttering when Emulação speed decreases.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "VISkip",
+          "realKey": "VISkip",
+          "realSection": "Hacks",
+          "realFile": "Dolphin.Generator.cs"
+        },
+        {
+          "id": "enable_cheats",
+          "label": "Ativar Cheats / Trapaças",
+          "description": "Enable the effects of the chosen Action Replay and Gecko codes for a game.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "enable_cheats",
+          "realKey": "EnableCheats",
+          "realSection": "Core",
+          "realFile": "Dolphin.Generator.cs"
+        },
+        {
+          "id": "enable_mmu",
+          "label": "MEMORY MANAGEMENT UNIT",
+          "description": "Enable the Memory Management Unit. Required for some games.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "enable_mmu",
+          "realKey": "MMU",
+          "realSection": "Core",
+          "realFile": "Dolphin.Generator.cs"
+        },
+        {
+          "id": "dolphin_cputhread",
+          "label": "DUAL CORE CPU THREAD",
+          "description": "Run games faster. A powerful option for gaining performance that has Não downsides some of the time. May cause various random issues caused by splitting the CPU and GPU threads onto different cores.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "dolphin_cputhread",
+          "realKey": "CPUThread",
+          "realSection": "Core",
+          "realFile": "Dolphin.Generator.cs"
+        },
+        {
+          "id": "enable_fastdisc",
+          "label": "FAST DISK SPEED",
+          "description": "Improve the loading of discs of the emulated game.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "enable_fastdisc",
+          "realKey": "FastDiscSpeed",
+          "realSection": "Core",
+          "realFile": "Dolphin.Generator.cs"
+        },
+        {
+          "id": "dolphin_gui",
+          "label": "SHOW GUI",
+          "description": "Display or not Ativado-screen notifications.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "dolphin_gui"
+        },
+        {
+          "id": "OnScreenDisplayMessages",
+          "label": "NOTIFICATIONS",
+          "description": "Display or not Ativado-screen notifications.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "OnScreenDisplayMessages",
+          "realKey": "OnScreenDisplayMessages",
+          "realSection": "Interface",
+          "realFile": "Dolphin.Generator.cs"
+        },
+        {
+          "id": "dolphin_showfps",
+          "label": "SHOW FPS",
+          "description": "Shows performance statistics.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "dolphin_showfps",
+          "values": [
+            {
+              "label": "Não",
+              "value": "no"
+            },
+            {
+              "label": "ONLY FPS",
+              "value": "fps_only"
+            },
+            {
+              "label": "FULL STATISTICS",
+              "value": "full"
+            }
+          ],
+          "realKey": "dolphin_showfps",
+          "realFile": "Dolphin.Generator.cs"
+        }
+      ]
+    },
+    {
+      "id": "hacks",
+      "title": "Correções / Hacks",
+      "icon": "wrench",
+      "order": 3,
+      "options": [
+        {
+          "id": "widescreen_hack",
+          "label": "WIDESCREEN",
+          "description": "Display the emulated framebuffer at a widescreen aspect ratio. Get best results with full 3D games.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "widescreen_hack"
+        },
+        {
+          "id": "EFBScaledCopy",
+          "label": "SCALED EFB COPY (HACK)",
+          "description": "Greatly increase the quality of textures generated using render-to-texture effects. Enabled by Padrão. Disabling it may avoid crashes for games using custom textures.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "EFBScaledCopy",
+          "realKey": "EFBScaledCopy",
+          "realSection": "Hacks",
+          "realFile": "Dolphin.Generator.cs"
+        },
+        {
+          "id": "EFBAccessEnable",
+          "label": "SKIP EFB ACCESS FROM CPU(HACK)",
+          "description": "Improves performance in some games but will skip all EFB-based effects.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "EFBAccessEnable",
+          "realKey": "EFBAccessEnable",
+          "realSection": "Hacks",
+          "realFile": "Dolphin.Generator.cs"
+        },
+        {
+          "id": "EFBEmulateFormatChanges",
+          "label": "IGNORE EFB FORMAT CHANGES(HACK)",
+          "description": "Improve performance in many game. Disabling this may avoid graphical defect in some other games.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "EFBEmulateFormatChanges",
+          "realKey": "EFBEmulateFormatChanges",
+          "realSection": "Hacks",
+          "realFile": "Dolphin.Generator.cs"
+        },
+        {
+          "id": "EFBCopies",
+          "label": "STORE EFB COPIES (HACK)",
+          "description": "Many games need copies to textures only, but if you're seeing blacked out or missing graphics, you might need to choose copies to RAM.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "EFBCopies",
+          "values": [
+            {
+              "label": "TO TEXTURE",
+              "value": "efb_to_texture_defer"
+            },
+            {
+              "label": "TO TEXTURE AND RAM",
+              "value": "efb_to_ram_defer"
+            },
+            {
+              "label": "DON'T DEFER COPIES TO RAM",
+              "value": "efb_to_ram"
+            }
+          ],
+          "realKey": "EFBCopies",
+          "realFile": "Dolphin.Generator.cs"
+        },
+        {
+          "id": "dolphin_xfbtotexture",
+          "label": "STORE XFB COPIES TO TEXTURE ONLY(HACK)",
+          "description": "Padrão enabled, can be problematic for few games.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "dolphin_xfbtotexture",
+          "realKey": "XFBToTextureEnable",
+          "realSection": "Hacks",
+          "realFile": "Dolphin.Generator.cs"
+        },
+        {
+          "id": "perf_hacks",
+          "label": "PERFORMANCE MODE",
+          "description": "Improves the Emulação performance at the cost of accuracy.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "perf_hacks"
+        }
+      ]
+    },
+    {
+      "id": "audio",
+      "title": "Áudio",
+      "icon": "volume2",
+      "order": 4,
+      "options": [
+        {
+          "id": "enable_dpl2",
+          "label": "ENABLE DOLBY PRO LOGIC 2",
+          "description": "Enable Dolby Pro Logic II decoder in compatible games and 5.1 speakers.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "enable_dpl2"
+        },
+        {
+          "id": "dolphin_audiobackend",
+          "label": "Áudio",
+          "description": "Select which Áudio engine to use internally.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "dolphin_audiobackend",
+          "values": [
+            {
+              "label": "CUBEB",
+              "value": "Cubeb"
+            },
+            {
+              "label": "OPENAL",
+              "value": "OpenAL"
+            },
+            {
+              "label": "WASAPI",
+              "value": "WASAPI (Exclusive Mode)"
+            }
+          ],
+          "realKey": "Backend",
+          "realSection": "DSP",
+          "realFile": "Dolphin.Generator.cs"
+        }
+      ]
+    },
+    {
+      "id": "controls",
+      "title": "Controles",
+      "icon": "gamepad2",
+      "order": 5,
+      "options": [
+        {
+          "id": "dolphin_mouse_cursor",
+          "label": "SHOW MOUSE CURSOR",
+          "type": "select",
+          "default": "auto",
+          "configKey": "dolphin_mouse_cursor",
+          "values": [
+            {
+              "label": "WHEN MOVING",
+              "value": "2"
+            },
+            {
+              "label": "NEVER",
+              "value": "0"
+            },
+            {
+              "label": "ALWAYS",
+              "value": "1"
+            }
+          ],
+          "realKey": "CursorVisibility",
+          "realSection": "Interface",
+          "realFile": "Dolphin.Generator.cs"
+        },
+        {
+          "id": "input_forceSDL",
+          "label": "FORCE SDL DRIVER FOR GAMEPAD",
+          "description": "Force usage of SDL driver for controllers, set this if more than 4 controllers are used, as XInput limits to 4 players.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "input_forceSDL"
+        },
+        {
+          "id": "input_sdldinput",
+          "label": "ENABLE DIRECT INPUT DRIVER",
+          "description": "Enabling this might cause some issues for 8BitDo controllers.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "input_sdldinput",
+          "realKey": "SDL_JOYSTICK_DIRECTINPUT",
+          "realSection": "SDL_Hints",
+          "realFile": "Dolphin.Generator.cs"
+        },
+        {
+          "id": "gc_pad",
+          "label": "USE GAMECUBE-LIKE CONTROLLER",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "gc_pad"
         }
       ]
     }

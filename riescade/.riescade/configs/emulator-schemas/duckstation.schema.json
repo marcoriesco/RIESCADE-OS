@@ -1,29 +1,11 @@
 {
   "$schema": "riescade-emulator-schema-v1",
   "id": "duckstation",
-  "name": "DuckStation",
-  "description": "Emulador de PlayStation 1 com foco em precisão e performance.",
+  "name": "DUCKSTATION",
+  "description": "Configurações para o emulador DUCKSTATION geradas a partir do es_features.cfg.",
   "icon": "duckstation",
-  "configFiles": [
-    {
-      "path": "settings.ini",
-      "format": "ini"
-    }
-  ],
-  "globalMappings": {
-    "fullscreen": {
-      "configKey": "fullscreen",
-      "globalKey": "fullscreen"
-    },
-    "vsync": {
-      "configKey": "vsync",
-      "globalKey": "vsync"
-    },
-    "video_driver": {
-      "configKey": "video_driver",
-      "globalKey": "video_driver"
-    }
-  },
+  "configFiles": [],
+  "globalMappings": {},
   "groups": [
     {
       "id": "graphics",
@@ -32,106 +14,205 @@
       "order": 1,
       "options": [
         {
-          "id": "fullscreen",
-          "label": "Tela Cheia",
-          "description": "Iniciar o emulador em modo tela cheia.",
-          "type": "toggle",
-          "default": "true",
-          "configKey": "fullscreen",
-          "inheritsGlobal": "fullscreen"
-        },
-        {
-          "id": "video_driver",
-          "label": "Renderizador",
-          "description": "Backend gráfico.",
-          "type": "select",
-          "default": "D3D11",
-          "configKey": "video_driver",
-          "inheritsGlobal": "video_driver",
-          "values": [
-            {
-              "label": "Direct3D 11",
-              "value": "D3D11"
-            },
-            {
-              "label": "Direct3D 12",
-              "value": "D3D12"
-            },
-            {
-              "label": "Vulkan",
-              "value": "Vulkan"
-            },
-            {
-              "label": "OpenGL",
-              "value": "OpenGL"
-            },
-            {
-              "label": "Software",
-              "value": "Software"
-            }
-          ]
-        },
-        {
-          "id": "vsync",
-          "label": "V-Sync",
-          "description": "Sincronização vertical.",
-          "type": "toggle",
-          "default": "true",
-          "configKey": "vsync",
-          "inheritsGlobal": "vsync"
-        },
-        {
-          "id": "duckstation_internal_resolution",
+          "id": "internal_resolution",
           "label": "Resolução Interna",
-          "description": "Multiplicador da resolução nativa do PS1.",
           "type": "select",
-          "default": "3",
-          "configKey": "duckstation_internal_resolution",
+          "default": "auto",
+          "configKey": "internal_resolution",
           "values": [
             {
-              "label": "1x Nativa (320x240)",
+              "label": "1X (NATIVE)",
               "value": "1"
             },
             {
-              "label": "2x (640x480)",
+              "label": "2X",
               "value": "2"
             },
             {
-              "label": "3x (960x720)",
+              "label": "3X (720P)",
               "value": "3"
             },
             {
-              "label": "4x (1280x960)",
+              "label": "4X",
               "value": "4"
             },
             {
-              "label": "5x (1600x1200)",
+              "label": "5X (1080P)",
               "value": "5"
             },
             {
-              "label": "6x (1920x1440)",
+              "label": "6X (1440P)",
               "value": "6"
             },
             {
-              "label": "8x (2560x1920)",
+              "label": "7X",
+              "value": "7"
+            },
+            {
+              "label": "8X",
               "value": "8"
             },
             {
-              "label": "10x (3200x2400)",
+              "label": "9X (4K)",
+              "value": "9"
+            },
+            {
+              "label": "10X",
               "value": "10"
+            },
+            {
+              "label": "11X",
+              "value": "11"
+            },
+            {
+              "label": "12X",
+              "value": "12"
+            },
+            {
+              "label": "13X",
+              "value": "13"
+            },
+            {
+              "label": "14X",
+              "value": "14"
+            },
+            {
+              "label": "15X",
+              "value": "15"
+            },
+            {
+              "label": "16X",
+              "value": "16"
+            },
+            {
+              "label": "17X",
+              "value": "17"
+            },
+            {
+              "label": "18X",
+              "value": "18"
+            },
+            {
+              "label": "19X",
+              "value": "19"
+            },
+            {
+              "label": "20X",
+              "value": "20"
             }
-          ]
+          ],
+          "realKey": "ResolutionScale",
+          "realSection": "GPU",
+          "realFile": "Duckstation.Generator.cs"
         },
         {
-          "id": "duckstation_texture_filter",
-          "label": "Filtro de Textura",
-          "description": "Suavização de texturas do PS1.",
+          "id": "psx_ratio",
+          "label": "Proporção de Tela",
           "type": "select",
-          "default": "Nearest",
-          "configKey": "duckstation_texture_filter",
+          "default": "auto",
+          "configKey": "psx_ratio",
           "values": [
             {
-              "label": "Nearest (Original)",
+              "label": "NATIVE",
+              "value": "Auto (Game Native)"
+            },
+            {
+              "label": "4/3",
+              "value": "4:3"
+            },
+            {
+              "label": "16/9",
+              "value": "16:9"
+            },
+            {
+              "label": "19/9",
+              "value": "19:9"
+            },
+            {
+              "label": "20/9",
+              "value": "20:9"
+            },
+            {
+              "label": "PAR 1:1",
+              "value": "PAR 1:1"
+            },
+            {
+              "label": "Esticar",
+              "value": "Stretch To Fill"
+            }
+          ],
+          "realKey": "AspectRatio",
+          "realSection": "Display",
+          "realFile": "Duckstation.Generator.cs"
+        },
+        {
+          "id": "VSync",
+          "label": "Sincronização Vertical (V-Sync)",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "VSync",
+          "realKey": "VSync",
+          "realSection": "Display",
+          "realFile": "Duckstation.Generator.cs"
+        },
+        {
+          "id": "duckstation_deinterlace",
+          "label": "DEINTERLACING MODE",
+          "description": "Some game might require interlaced rendering.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "duckstation_deinterlace",
+          "values": [
+            {
+              "label": "PROGRESSIVE",
+              "value": "Progressive"
+            },
+            {
+              "label": "Adaptável",
+              "value": "Adaptive"
+            },
+            {
+              "label": "WEAVE",
+              "value": "Weave"
+            },
+            {
+              "label": "BLEND (Blur)",
+              "value": "Blend"
+            },
+            {
+              "label": "DISABLED",
+              "value": "Disabled"
+            }
+          ],
+          "realKey": "DeinterlacingMode",
+          "realSection": "GPU",
+          "realFile": "Duckstation.Generator.cs"
+        },
+        {
+          "id": "disable_fullscreen",
+          "label": "Desativar Tela Cheia",
+          "description": "Use this option if duckstation is not displaying Ativado the correct monitor.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "disable_fullscreen"
+        },
+        {
+          "id": "duckstation_internalBezel",
+          "label": "USE INTERNAL BEZEL",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "duckstation_internalBezel"
+        },
+        {
+          "id": "Texture_Enhancement",
+          "label": "Filtragem de Texturas",
+          "description": "Smooths out the blockyness of magnified textures Ativado 3D objects by using filtering.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "Texture_Enhancement",
+          "values": [
+            {
+              "label": "Nearest Neighbor",
               "value": "Nearest"
             },
             {
@@ -139,38 +220,275 @@
               "value": "Bilinear"
             },
             {
-              "label": "xBR",
-              "value": "xBR"
+              "label": "Bilinear (Não Edge Blending)",
+              "value": "BilinearBinAlpha"
             },
             {
               "label": "JINC2",
               "value": "JINC2"
+            },
+            {
+              "label": "JINC2 (Não Edge Blending)",
+              "value": "JINC2BinAlpha"
+            },
+            {
+              "label": "xBR",
+              "value": "xBR"
+            },
+            {
+              "label": "xBR (Não Edge Blending)",
+              "value": "xBRBinAlpha"
             }
-          ]
+          ],
+          "realKey": "TextureFilter",
+          "realSection": "GPU",
+          "realFile": "Duckstation.Generator.cs"
         },
         {
-          "id": "duckstation_pgxp",
-          "label": "PGXP (Geometria de Precisão)",
-          "description": "Corrige o wobble de vértices característico do PS1.",
-          "type": "toggle",
-          "default": "true",
-          "configKey": "duckstation_pgxp"
+          "id": "duck_shaders",
+          "label": "SHADER",
+          "description": "Enable this to use Duckstation's provided shaders.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "duck_shaders",
+          "values": [
+            {
+              "label": "FXAA",
+              "value": "anti-aliasing/fxaa"
+            },
+            {
+              "label": "CCALIBRATOR",
+              "value": "Cccalibrator"
+            },
+            {
+              "label": "CRT-LOTTES",
+              "value": "crt-lottes"
+            },
+            {
+              "label": "DOLPHIN CRT HYLLIAN",
+              "value": "dolphinfx/crt/CRT-HYLLIAN"
+            },
+            {
+              "label": "DOLPHIN EDGE SMOOTHING DDT",
+              "value": "dolphinfx/edge-smoothing/DDT"
+            },
+            {
+              "label": "DOLPHIN EDGE SMOOTHING XBR",
+              "value": "dolphinfx/edge-smoothing/XBR"
+            },
+            {
+              "label": "DOLPHIN PIXELLATE",
+              "value": "dolphinfx/pixel-art/PIXELLATE"
+            },
+            {
+              "label": "DOLPHIN SCANLINES",
+              "value": "dolphinfx/scanlines"
+            },
+            {
+              "label": "SUPER XBR",
+              "value": "edge-smoothing/super-xbr"
+            },
+            {
+              "label": "INTERPOLATION BICUBIC",
+              "value": "interpolation/bicubic"
+            },
+            {
+              "label": "CRT NEW PIXIE",
+              "value": "CRT-NewPixie"
+            },
+            {
+              "label": "CRT-LOTTES 2",
+              "value": "CRTLottes2"
+            },
+            {
+              "label": "DALTONIZE",
+              "value": "Daltonize"
+            },
+            {
+              "label": "DEBAND",
+              "value": "Deband"
+            },
+            {
+              "label": "FILM GRAIN",
+              "value": "FilmGrain2"
+            },
+            {
+              "label": "LUT",
+              "value": "LUT"
+            },
+            {
+              "label": "MULTI-LUT",
+              "value": "misc/multi-LUT"
+            },
+            {
+              "label": "NTSC ADAPTIVE LITE",
+              "value": "ntsc/ntsc-adaptive-lite"
+            },
+            {
+              "label": "SCANLINES ABS",
+              "value": "scanlines-abs"
+            },
+            {
+              "label": "SIMPLE BRIGHTNESS",
+              "value": "simple-brightness"
+            },
+            {
+              "label": "SIMPLE FLIP",
+              "value": "simple-flip"
+            },
+            {
+              "label": "SIMPLE GAMMA",
+              "value": "simple-gamma"
+            },
+            {
+              "label": "SIMPLE SHARPEN",
+              "value": "simple-sharpen"
+            },
+            {
+              "label": "UI MASK",
+              "value": "UIMask"
+            }
+          ],
+          "realKey": "ShaderName",
+          "realSection": "PostProcessing/Stage1",
+          "realFile": "Duckstation.Generator.cs"
         },
         {
-          "id": "duckstation_widescreen",
-          "label": "Hack Widescreen",
-          "description": "Força 16:9 em jogos que suportam.",
-          "type": "toggle",
-          "default": "false",
-          "configKey": "duckstation_widescreen"
+          "id": "duck_msaa",
+          "label": "MULTISAMPLE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "duck_msaa",
+          "values": [
+            {
+              "label": "Nenhum",
+              "value": "msaa_1"
+            },
+            {
+              "label": "2x MSAA",
+              "value": "msaa_2"
+            },
+            {
+              "label": "4x MSAA",
+              "value": "msaa_4"
+            },
+            {
+              "label": "8x MSAA",
+              "value": "msaa_8"
+            },
+            {
+              "label": "2x SSAA",
+              "value": "ssaa_2"
+            },
+            {
+              "label": "4x SSAA",
+              "value": "ssaa_4"
+            },
+            {
+              "label": "8x SSAA",
+              "value": "ssaa_8"
+            }
+          ],
+          "realKey": "PGXPPreserveProjFP",
+          "realSection": "GPU",
+          "realFile": "Duckstation.Generator.cs"
         },
         {
-          "id": "duckstation_true_color",
-          "label": "True Color (24-bit)",
-          "description": "Desabilita o dithering e usa cores verdadeiras de 24-bit.",
+          "id": "duck_ditheringmode",
+          "label": "TRUE COLORS - 24 BITS",
+          "description": "Controles how dithering is applied.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "duck_ditheringmode",
+          "values": [
+            {
+              "label": "TRUE COLOR",
+              "value": "TrueColor"
+            },
+            {
+              "label": "TRUE COLOR (FULL)",
+              "value": "TrueColorFull"
+            },
+            {
+              "label": "UNSCALED",
+              "value": "Unscaled"
+            },
+            {
+              "label": "UNSCALED (SHADER BLENDING)",
+              "value": "UnscaledShaderBlend"
+            },
+            {
+              "label": "SCALED",
+              "value": "Scaled"
+            },
+            {
+              "label": "SCALED (SHADER BLENDING)",
+              "value": "ScaledShaderBlend"
+            }
+          ],
+          "realKey": "DitheringMode",
+          "realSection": "GPU",
+          "realFile": "Duckstation.Generator.cs"
+        },
+        {
+          "id": "duck_custom_textures",
+          "label": "CUSTOM TEXTURES",
+          "description": "Replace original textures with custom textures pack.",
           "type": "toggle",
-          "default": "true",
-          "configKey": "duckstation_true_color"
+          "default": "auto",
+          "configKey": "duck_custom_textures"
+        },
+        {
+          "id": "duck_preload_textures",
+          "label": "PREFETCH CUSTOM TEXTURES",
+          "description": "Preload custom textures Ativado startup.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "duck_preload_textures"
+        },
+        {
+          "id": "duckstation_optimalframepacing",
+          "label": "OPTIMAL FRAME PACING",
+          "description": "Enable this if you have a gsync/freesync monitor, can cause Áudio glitches.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "duckstation_optimalframepacing",
+          "realKey": "OptimalFramePacing",
+          "realSection": "Display",
+          "realFile": "Duckstation.Generator.cs"
+        },
+        {
+          "id": "gfxbackend",
+          "label": "Vídeo",
+          "description": "Select which graphics API to use internally.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "gfxbackend",
+          "values": [
+            {
+              "label": "OpenGL",
+              "value": "OpenGL"
+            },
+            {
+              "label": "Vulkan",
+              "value": "Vulkan"
+            },
+            {
+              "label": "DirectX 11",
+              "value": "D3D11"
+            },
+            {
+              "label": "DirectX 12",
+              "value": "D3D12"
+            },
+            {
+              "label": "SOFTWARE",
+              "value": "Software"
+            }
+          ],
+          "realKey": "Renderer",
+          "realSection": "GPU",
+          "realFile": "Duckstation.Generator.cs"
         }
       ]
     },
@@ -181,38 +499,493 @@
       "order": 2,
       "options": [
         {
-          "id": "duckstation_region",
-          "label": "Região",
-          "description": "Região do console PS1 simulado.",
+          "id": "fullboot",
+          "label": "SKIP BIOS",
+          "description": "Skips the BIOS boot animation displayed when loading content.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "fullboot",
+          "realKey": "PatchFastBoot",
+          "realSection": "BIOS",
+          "realFile": "Duckstation.Generator.cs"
+        },
+        {
+          "id": "psx_region",
+          "label": "CONSOLE REGION",
           "type": "select",
           "default": "auto",
-          "configKey": "duckstation_region",
+          "configKey": "psx_region",
           "values": [
             {
-              "label": "Automático",
-              "value": "auto"
-            },
-            {
-              "label": "NTSC-U (América)",
-              "value": "NTSC-U"
-            },
-            {
-              "label": "PAL (Europa)",
+              "label": "PAL",
               "value": "PAL"
             },
             {
-              "label": "NTSC-J (Japão)",
+              "label": "NTSC US",
+              "value": "NTSC-U"
+            },
+            {
+              "label": "NTSC JAPAN",
               "value": "NTSC-J"
+            }
+          ],
+          "realKey": "Region",
+          "realSection": "Console",
+          "realFile": "Duckstation.Generator.cs"
+        },
+        {
+          "id": "duck_bios",
+          "label": "FORCE BIOS",
+          "type": "select",
+          "default": "auto",
+          "configKey": "duck_bios",
+          "values": [
+            {
+              "label": "PSX Ativado PSP BIOS",
+              "value": "psxonpsp660.bin"
+            },
+            {
+              "label": "PS1 JP (SCPH5500)",
+              "value": "scph5500.bin"
+            },
+            {
+              "label": "PS1 US (SCPH5501)",
+              "value": "scph5501.bin"
+            },
+            {
+              "label": "PS1 EU (SCPH5502)",
+              "value": "scph5502.bin"
+            },
+            {
+              "label": "Version 2.0 (SCPH1001)",
+              "value": "scph1001.bin"
+            },
+            {
+              "label": "Version 4.1 (SCPH7001)",
+              "value": "scph7001.bin"
+            },
+            {
+              "label": "Version 4.5 (SCPH101)",
+              "value": "scph101.bin"
+            }
+          ],
+          "realKey": "PathNTSCJ",
+          "realSection": "BIOS",
+          "realFile": "Duckstation.Generator.cs"
+        },
+        {
+          "id": "ExecutionMode",
+          "label": "CPU DECODER",
+          "description": "Recompiler is fastest, Interpreter is more accurate.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "ExecutionMode",
+          "values": [
+            {
+              "label": "Recompiler (fastest)",
+              "value": "Recompiler"
+            },
+            {
+              "label": "Cached Interpreter (fast)",
+              "value": "CachedInterpreter"
+            },
+            {
+              "label": "Interpreter (slowest)",
+              "value": "Interpreter"
+            }
+          ],
+          "realKey": "ExecutionMode",
+          "realSection": "CPU",
+          "realFile": "Duckstation.Generator.cs"
+        },
+        {
+          "id": "duckstation_memcardtype",
+          "label": "MEMORY CARD TYPE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "duckstation_memcardtype",
+          "values": [
+            {
+              "label": "PER GAME (TITLE)",
+              "value": "PerGameTitle"
+            },
+            {
+              "label": "SHARED",
+              "value": "Shared"
+            },
+            {
+              "label": "PER GAME (FILE TITLE)",
+              "value": "PerGameFileTitle"
+            },
+            {
+              "label": "PER GAME (ID)",
+              "value": "PerGame"
+            }
+          ],
+          "realKey": "Card1Type",
+          "realSection": "MemoryCards",
+          "realFile": "Duckstation.Generator.cs"
+        },
+        {
+          "id": "duckstation_disable_enhancement",
+          "label": "DISABLE ALL ENHANCEMENTS",
+          "description": "This will run game without any selected graphical or cpu enhancement.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "duckstation_disable_enhancement",
+          "realKey": "DisableAllEnhancements",
+          "realSection": "Main",
+          "realFile": "Duckstation.Generator.cs"
+        },
+        {
+          "id": "duckstation_ram",
+          "label": "ENABLE 8MB RAM",
+          "description": "Enable additional developer ram, might break games.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "duckstation_ram",
+          "realKey": "Enable8MBRAM",
+          "realSection": "Console",
+          "realFile": "Duckstation.Generator.cs"
+        },
+        {
+          "id": "duck_EmulationSpeed",
+          "label": "Emulação SPEED",
+          "type": "slider",
+          "default": "auto",
+          "configKey": "duck_EmulationSpeed",
+          "min": 0.5,
+          "max": 2,
+          "step": 0.1,
+          "suffix": "x",
+          "realKey": "EmulationSpeed",
+          "realSection": "Main",
+          "realFile": "Duckstation.Generator.cs"
+        },
+        {
+          "id": "runahead",
+          "label": "RUN-AHEAD FRAMES",
+          "type": "slider",
+          "default": "auto",
+          "configKey": "runahead",
+          "min": 0,
+          "max": 10,
+          "step": 1,
+          "realKey": "RunaheadFrameCount",
+          "realSection": "Main",
+          "realFile": "Duckstation.Generator.cs"
+        },
+        {
+          "id": "performance_overlay",
+          "label": "PERFORMANCE STATISTICS",
+          "description": "Show performance statistics overlay in-game.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "performance_overlay",
+          "values": [
+            {
+              "label": "Desativado",
+              "value": "off"
+            },
+            {
+              "label": "FPS ONLY",
+              "value": "simple"
+            },
+            {
+              "label": "DETAILED",
+              "value": "detailed"
+            }
+          ],
+          "realKey": "performance_overlay",
+          "realFile": "Duckstation.Generator.cs"
+        },
+        {
+          "id": "duckstation_osd_enabled",
+          "label": "OSD MESSAGES",
+          "description": "Show emulator notifications.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "duckstation_osd_enabled",
+          "realKey": "ShowOSDMessages",
+          "realSection": "Display",
+          "realFile": "Duckstation.Generator.cs"
+        }
+      ]
+    },
+    {
+      "id": "hacks",
+      "title": "Correções / Hacks",
+      "icon": "wrench",
+      "order": 3,
+      "options": [
+        {
+          "id": "Widescreen_Hack",
+          "label": "WIDESCREEN",
+          "description": "Display the emulated framebuffer at a widescreen aspect ratio. Get best results with full 3D games.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "Widescreen_Hack",
+          "realKey": "WidescreenHack",
+          "realSection": "GPU",
+          "realFile": "Duckstation.Generator.cs"
+        },
+        {
+          "id": "duck_pgxp",
+          "label": "TEXTURE CORRECTION(PGXP)",
+          "description": "Eliminates distortion and warping of textures when upscaling.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "duck_pgxp"
+        }
+      ]
+    },
+    {
+      "id": "audio",
+      "title": "Áudio",
+      "icon": "volume2",
+      "order": 4,
+      "options": [
+        {
+          "id": "audiobackend",
+          "label": "Áudio",
+          "type": "select",
+          "default": "auto",
+          "configKey": "audiobackend",
+          "values": [
+            {
+              "label": "CUBEB",
+              "value": "Cubeb"
+            },
+            {
+              "label": "SDL",
+              "value": "SDL"
+            }
+          ],
+          "realKey": "Backend",
+          "realSection": "Audio",
+          "realFile": "Duckstation.Generator.cs"
+        }
+      ]
+    },
+    {
+      "id": "controls",
+      "title": "Controles",
+      "icon": "gamepad2",
+      "order": 5,
+      "options": [
+        {
+          "id": "input_forceSDL",
+          "label": "FORCE SDL DRIVER FOR GAMEPAD",
+          "description": "Force usage of SDL driver for controllers, set this if more than 4 controllers are used, as XInput limits to 4 players.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "input_forceSDL"
+        },
+        {
+          "id": "duck_controller1",
+          "label": "PLAYER 1 CONTROLLER TYPE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "duck_controller1",
+          "values": [
+            {
+              "label": "DUALSHOCK",
+              "value": "AnalogController"
+            },
+            {
+              "label": "DIGITAL CONTROLLER",
+              "value": "DigitalController"
+            },
+            {
+              "label": "ANALOG JOYSTICK",
+              "value": "AnalogJoystick"
+            },
+            {
+              "label": "GUNCON",
+              "value": "GunCon"
+            },
+            {
+              "label": "MOUSE",
+              "value": "PlayStationMouse"
+            }
+          ],
+          "realKey": "duck_controller1",
+          "realFile": "Duckstation.Guns.cs"
+        },
+        {
+          "id": "duck_controller2",
+          "label": "PLAYER 2 CONTROLLER TYPE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "duck_controller2",
+          "values": [
+            {
+              "label": "DUALSHOCK",
+              "value": "AnalogController"
+            },
+            {
+              "label": "DIGITAL CONTROLLER",
+              "value": "DigitalController"
+            },
+            {
+              "label": "ANALOG JOYSTICK",
+              "value": "AnalogJoystick"
+            },
+            {
+              "label": "MOUSE",
+              "value": "PlayStationMouse"
             }
           ]
         },
         {
-          "id": "duckstation_fast_boot",
-          "label": "Fast Boot",
-          "description": "Pula a tela de boot do PS1.",
+          "id": "duck_controller3",
+          "label": "PLAYER 3 CONTROLLER TYPE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "duck_controller3",
+          "values": [
+            {
+              "label": "DUALSHOCK",
+              "value": "AnalogController"
+            },
+            {
+              "label": "DIGITAL CONTROLLER",
+              "value": "DigitalController"
+            },
+            {
+              "label": "ANALOG JOYSTICK",
+              "value": "AnalogJoystick"
+            }
+          ]
+        },
+        {
+          "id": "duck_controller4",
+          "label": "PLAYER 4 CONTROLLER TYPE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "duck_controller4",
+          "values": [
+            {
+              "label": "DUALSHOCK",
+              "value": "AnalogController"
+            },
+            {
+              "label": "DIGITAL CONTROLLER",
+              "value": "DigitalController"
+            },
+            {
+              "label": "ANALOG JOYSTICK",
+              "value": "AnalogJoystick"
+            }
+          ]
+        },
+        {
+          "id": "psx_triggerswap",
+          "label": "USE TRIGGERS TO BRAKE/ACCELERATE",
+          "description": "Can be useful for Gran Turismo, triggers will be mapped to right analog stick.",
           "type": "toggle",
-          "default": "true",
-          "configKey": "duckstation_fast_boot"
+          "default": "auto",
+          "configKey": "psx_triggerswap"
+        },
+        {
+          "id": "stick_deadzone",
+          "label": "JOYSTICK DEADZONE",
+          "description": "Use this only if the analog stick is drifting.",
+          "type": "slider",
+          "default": "auto",
+          "configKey": "stick_deadzone",
+          "min": 0,
+          "max": 0.5,
+          "step": 0.02,
+          "suffix": "%"
+        },
+        {
+          "id": "trigger_deadzone",
+          "label": "ANALOG TRIGGER DEADZONE",
+          "description": "Sets the deadzone of the Gamepad analog triggers.",
+          "type": "slider",
+          "default": "auto",
+          "configKey": "trigger_deadzone",
+          "min": 0,
+          "max": 0.5,
+          "step": 0.02,
+          "suffix": "%"
+        },
+        {
+          "id": "duck_custom_crosshair",
+          "label": "CROSSHAIR",
+          "description": "Place custom 'crosshair.png' file in 'cross' subfolder of the emulator.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "duck_custom_crosshair"
+        },
+        {
+          "id": "duck_crosshair",
+          "label": "CROSSHAIR SIZE",
+          "description": "Values above 1.00 will increase size, values below will reduce.",
+          "type": "slider",
+          "default": "auto",
+          "configKey": "duck_crosshair",
+          "min": 0,
+          "max": 2,
+          "step": 0.1,
+          "suffix": "%"
+        },
+        {
+          "id": "duck_gun_ab",
+          "label": "GUN MAPPING A/B",
+          "description": "Define how to map A and B buttons of the GunCon, this is useful for games like Time Crisis.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "duck_gun_ab",
+          "values": [
+            {
+              "label": "Keyboard PageUp/PageDown",
+              "value": "key_1"
+            },
+            {
+              "label": "Keyboard K/L",
+              "value": "key_2"
+            },
+            {
+              "label": "Keyboard 1/5",
+              "value": "key_6"
+            },
+            {
+              "label": "Keyboard LEFT/RIGHT",
+              "value": "key_3"
+            },
+            {
+              "label": "Keyboard VOL+/VOL-",
+              "value": "key_5"
+            },
+            {
+              "label": "Wiimote mode 2 LEFT/PLUS",
+              "value": "key_4"
+            },
+            {
+              "label": "CONTROLLER A/B",
+              "value": "controller_1"
+            }
+          ],
+          "realKey": "duck_gun_ab",
+          "realFile": "Duckstation.Guns.cs"
+        },
+        {
+          "id": "duck_gunp2",
+          "label": "MAP GUN TO PLAYER 2",
+          "description": "Plug the GunCon in port 2, to use for Die Hard Trilogy.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "duck_gunp2"
+        },
+        {
+          "id": "gun_invert",
+          "label": "INVERT TRIGGER AND SECONDARY BUTTON",
+          "description": "Activate this when using WiiZapper to invert trigger and reload buttons.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "gun_invert"
         }
       ]
     }

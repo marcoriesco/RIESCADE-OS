@@ -1,25 +1,11 @@
 {
   "$schema": "riescade-emulator-schema-v1",
   "id": "xemu",
-  "name": "Xemu",
-  "description": "Emulador de Xbox Original.",
+  "name": "XEMU",
+  "description": "Configurações para o emulador XEMU geradas a partir do es_features.cfg.",
   "icon": "xemu",
-  "configFiles": [
-    {
-      "path": "xemu.toml",
-      "format": "toml"
-    }
-  ],
-  "globalMappings": {
-    "fullscreen": {
-      "configKey": "fullscreen",
-      "globalKey": "fullscreen"
-    },
-    "vsync": {
-      "configKey": "vsync",
-      "globalKey": "vsync"
-    }
-  },
+  "configFiles": [],
+  "globalMappings": {},
   "groups": [
     {
       "id": "graphics",
@@ -28,52 +14,327 @@
       "order": 1,
       "options": [
         {
-          "id": "fullscreen",
-          "label": "Tela Cheia",
-          "description": "Iniciar o emulador em modo tela cheia.",
-          "type": "toggle",
-          "default": "true",
-          "configKey": "fullscreen",
-          "inheritsGlobal": "fullscreen"
-        },
-        {
-          "id": "vsync",
-          "label": "V-Sync",
-          "description": "Sincronização vertical.",
-          "type": "toggle",
-          "default": "true",
-          "configKey": "vsync",
-          "inheritsGlobal": "vsync"
+          "id": "xemu_ratio",
+          "label": "Proporção de Tela",
+          "type": "select",
+          "default": "auto",
+          "configKey": "xemu_ratio",
+          "values": [
+            {
+              "label": "NATIVE",
+              "value": "native"
+            },
+            {
+              "label": "4:3",
+              "value": "4x3"
+            },
+            {
+              "label": "16:9",
+              "value": "16x9"
+            }
+          ],
+          "realKey": "aspect_ratio",
+          "realSection": "display.ui",
+          "realFile": "Xemu.Generator.cs"
         },
         {
           "id": "render_scale",
-          "label": "Escala de Renderização",
-          "description": "Multiplicador da resolução interna do Xbox.",
+          "label": "Resolução Interna",
           "type": "select",
-          "default": "1",
+          "default": "auto",
           "configKey": "render_scale",
           "values": [
             {
-              "label": "1x Nativa",
+              "label": "1X (NATIVE)",
               "value": "1"
             },
             {
-              "label": "2x",
+              "label": "2X",
               "value": "2"
             },
             {
-              "label": "3x",
+              "label": "3X",
               "value": "3"
             },
             {
-              "label": "4x",
+              "label": "4X",
               "value": "4"
             },
             {
-              "label": "5x",
+              "label": "5X",
               "value": "5"
+            },
+            {
+              "label": "6X",
+              "value": "6"
+            },
+            {
+              "label": "7X",
+              "value": "7"
+            },
+            {
+              "label": "8X",
+              "value": "8"
+            },
+            {
+              "label": "9X",
+              "value": "9"
+            },
+            {
+              "label": "10X",
+              "value": "10"
+            }
+          ],
+          "realKey": "surface_scale",
+          "realSection": "display.quality",
+          "realFile": "Xemu.Generator.cs"
+        },
+        {
+          "id": "vsync",
+          "label": "Sincronização Vertical (V-Sync)",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "vsync",
+          "realKey": "vsync",
+          "realSection": "display.window",
+          "realFile": "Xemu.Generator.cs"
+        },
+        {
+          "id": "xemu_scale",
+          "label": "DISPLAY MODE",
+          "description": "Define how the game fits or scales into the window.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "xemu_scale",
+          "values": [
+            {
+              "label": "Center",
+              "value": "center"
+            },
+            {
+              "label": "Scale",
+              "value": "scale"
+            },
+            {
+              "label": "Esticar",
+              "value": "stretch"
+            }
+          ],
+          "realKey": "fit",
+          "realSection": "display.ui",
+          "realFile": "Xemu.Generator.cs"
+        },
+        {
+          "id": "xemu_avpack",
+          "label": "EMULATED Vídeo SIGNAL",
+          "type": "select",
+          "default": "auto",
+          "configKey": "xemu_avpack",
+          "values": [
+            {
+              "label": "HDTV",
+              "value": "hdtv"
+            },
+            {
+              "label": "SCART",
+              "value": "scart"
+            },
+            {
+              "label": "VGA",
+              "value": "vga"
+            },
+            {
+              "label": "RFU",
+              "value": "rfu"
+            },
+            {
+              "label": "S-Vídeo",
+              "value": "svideo"
+            },
+            {
+              "label": "COMPOSITE",
+              "value": "composite"
+            }
+          ],
+          "realKey": "avpack",
+          "realSection": "sys",
+          "realFile": "Xemu.Generator.cs"
+        },
+        {
+          "id": "xemu_cache_shaders",
+          "label": "SHADER CACHE",
+          "description": "Pre-coompile shader cache at game startup, leave Ativado for less stuttering in game.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "xemu_cache_shaders",
+          "realKey": "cache_shaders",
+          "realSection": "perf",
+          "realFile": "Xemu.Generator.cs"
+        },
+        {
+          "id": "xemu_renderer",
+          "label": "Vídeo",
+          "type": "select",
+          "default": "auto",
+          "configKey": "xemu_renderer",
+          "values": [
+            {
+              "label": "OPENGL",
+              "value": "OPENGL"
+            },
+            {
+              "label": "VULKAN",
+              "value": "VULKAN"
+            }
+          ],
+          "realKey": "renderer",
+          "realSection": "display",
+          "realFile": "Xemu.Generator.cs"
+        }
+      ]
+    },
+    {
+      "id": "emulation",
+      "title": "Emulação",
+      "icon": "cpu",
+      "order": 2,
+      "options": [
+        {
+          "id": "system_memory",
+          "label": "MEMORY",
+          "description": "The maximum RAM memory available for the system.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "system_memory",
+          "values": [
+            {
+              "label": "128MB",
+              "value": "128"
+            },
+            {
+              "label": "64MB",
+              "value": "64"
+            }
+          ],
+          "realKey": "mem_limit",
+          "realSection": "sys",
+          "realFile": "Xemu.Generator.cs"
+        },
+        {
+          "id": "xemu_flashrom",
+          "label": "FORCE BIOS",
+          "type": "select",
+          "default": "auto",
+          "configKey": "xemu_flashrom",
+          "values": [
+            {
+              "label": "COMPLEX 4627",
+              "value": "Complex_4627.bin"
+            },
+            {
+              "label": "CERBIOS",
+              "value": "Cerbios.bin"
+            },
+            {
+              "label": "COMPLEX 4627 V1.03",
+              "value": "Complex_4627v1.03.bin"
+            }
+          ],
+          "realKey": "flashrom_path",
+          "realSection": "sys.files",
+          "realFile": "Xemu.Generator.cs"
+        },
+        {
+          "id": "xbox_language",
+          "label": "LANGUAGE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "xbox_language",
+          "values": [
+            {
+              "label": "English",
+              "value": "1"
+            },
+            {
+              "label": "日本語 (Japanese)",
+              "value": "2"
+            },
+            {
+              "label": "Deutsch",
+              "value": "3"
+            },
+            {
+              "label": "Français",
+              "value": "4"
+            },
+            {
+              "label": "Español",
+              "value": "5"
+            },
+            {
+              "label": "Italiano",
+              "value": "6"
+            },
+            {
+              "label": "한국어 (Korean)",
+              "value": "7"
+            },
+            {
+              "label": "简体中文 (Chinese)",
+              "value": "8"
+            },
+            {
+              "label": "Português",
+              "value": "9"
             }
           ]
+        },
+        {
+          "id": "show_boot",
+          "label": "SKIP BOOT",
+          "description": "Padrão is Ativado, disable to show XBOX boot animation.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "show_boot",
+          "realKey": "skip_boot_anim",
+          "realSection": "general",
+          "realFile": "Xemu.Generator.cs"
+        },
+        {
+          "id": "menubar",
+          "label": "SHOW MENU BAR",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "menubar"
+        },
+        {
+          "id": "xemu_notifications",
+          "label": "SHOW NOTIFICATIONS",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "xemu_notifications",
+          "realKey": "show_notifications",
+          "realSection": "display.ui",
+          "realFile": "Xemu.Generator.cs"
+        }
+      ]
+    },
+    {
+      "id": "audio",
+      "title": "Áudio",
+      "icon": "volume2",
+      "order": 4,
+      "options": [
+        {
+          "id": "xemu_dsp",
+          "label": "DSP Emulação",
+          "description": "Enable Digital Sound Processor. Enhance sound accuracy at the cost of inscreased performance requirements.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "xemu_dsp",
+          "realKey": "use_dsp",
+          "realSection": "audio",
+          "realFile": "Xemu.Generator.cs"
         }
       ]
     }

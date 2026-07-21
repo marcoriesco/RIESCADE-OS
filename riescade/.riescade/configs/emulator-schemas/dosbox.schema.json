@@ -1,0 +1,10 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "dosbox",
+  "name": "DOSBOX",
+  "description": "Configurações para o emulador DOSBOX geradas a partir do es_features.cfg.",
+  "icon": "dosbox",
+  "configFiles": [],
+  "globalMappings": {},
+  "groups": []
+}

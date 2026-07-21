@@ -1,0 +1,1493 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "bizhawk",
+  "name": "BIZHAWK",
+  "description": "Configurações para o emulador BIZHAWK geradas a partir do es_features.cfg.",
+  "icon": "bizhawk",
+  "configFiles": [],
+  "globalMappings": {},
+  "groups": [
+    {
+      "id": "graphics",
+      "title": "Gráficos",
+      "icon": "monitor",
+      "order": 1,
+      "options": [
+        {
+          "id": "bizhawk_filter",
+          "label": "DISPLAY FILTER",
+          "type": "select",
+          "default": "auto",
+          "configKey": "bizhawk_filter",
+          "values": [
+            {
+              "label": "Nenhum",
+              "value": "0"
+            },
+            {
+              "label": "HQ2x",
+              "value": "1"
+            },
+            {
+              "label": "SCANLINES",
+              "value": "2"
+            }
+          ],
+          "realKey": "TargetDisplayFilter",
+          "realFile": "Bizhawk.Generator.cs"
+        },
+        {
+          "id": "bizhawk_vsync",
+          "label": "Sincronização Vertical (V-Sync)",
+          "type": "select",
+          "default": "auto",
+          "configKey": "bizhawk_vsync",
+          "values": [
+            {
+              "label": "Sim",
+              "value": "true"
+            },
+            {
+              "label": "Não",
+              "value": "false"
+            },
+            {
+              "label": "ALTERNATE",
+              "value": "alternate"
+            }
+          ],
+          "realKey": "bizhawk_vsync",
+          "realFile": "Bizhawk.Generator.cs"
+        },
+        {
+          "id": "bizhawk_finalfilter",
+          "label": "UPSCALE FILTER",
+          "description": "Specify filter to use for upscaling.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "bizhawk_finalfilter",
+          "values": [
+            {
+              "label": "Nenhum",
+              "value": "0"
+            },
+            {
+              "label": "BILINEAR",
+              "value": "1"
+            },
+            {
+              "label": "BICUBIC",
+              "value": "2"
+            }
+          ],
+          "realKey": "DispFinalFilter",
+          "realFile": "Bizhawk.Generator.cs"
+        },
+        {
+          "id": "bizhawk_scanlines_intensity",
+          "label": "SCANLINE INTENSITY",
+          "description": "This setting can only be used with the 'scanlines' filter.",
+          "type": "slider",
+          "default": "auto",
+          "configKey": "bizhawk_scanlines_intensity",
+          "min": 0,
+          "max": 100,
+          "step": 2,
+          "suffix": "%",
+          "realKey": "TargetScanlineFilterIntensity",
+          "realFile": "Bizhawk.Generator.cs"
+        },
+        {
+          "id": "bizhawk_renderer",
+          "label": "Vídeo",
+          "type": "select",
+          "default": "auto",
+          "configKey": "bizhawk_renderer",
+          "values": [
+            {
+              "label": "DIRECT3D 9",
+              "value": "2"
+            },
+            {
+              "label": "OPENGL",
+              "value": "0"
+            },
+            {
+              "label": "GDI+",
+              "value": "1"
+            }
+          ],
+          "realKey": "DispMethod",
+          "realFile": "Bizhawk.Generator.cs"
+        },
+        {
+          "id": "bizhawk_3ds_layoutmode",
+          "label": "SCREEN LAYOUT POSITIONING",
+          "description": "Choose the disposition of the emulated screens.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "bizhawk_3ds_layoutmode",
+          "values": [
+            {
+              "label": "TOP-BOTTOM SCREEN",
+              "value": "0"
+            },
+            {
+              "label": "SINGLE SCREEN ONLY",
+              "value": "1"
+            },
+            {
+              "label": "LARGE SCREEN / SMALL SCREEN",
+              "value": "2"
+            },
+            {
+              "label": "SIDE BY SIDE",
+              "value": "3"
+            }
+          ],
+          "realKey": "LayoutOption",
+          "realFile": "Bizhawk.CoreOptions.cs"
+        },
+        {
+          "id": "bizhawk_3ds_swapscreen",
+          "label": "SWAP SCREEN",
+          "description": "Set the bottom screen as prominent.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "bizhawk_3ds_swapscreen",
+          "realKey": "SwapScreen",
+          "realFile": "Bizhawk.CoreOptions.cs"
+        },
+        {
+          "id": "bizhawk_3ds_vertical",
+          "label": "ROTATE SCREEN (VERTICAL)",
+          "description": "Set the bottom screen as prominent.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "bizhawk_3ds_vertical",
+          "realKey": "UprightScreen",
+          "realFile": "Bizhawk.CoreOptions.cs"
+        },
+        {
+          "id": "bizhawk_3ds_asyncshaders",
+          "label": "USE ASYNCHRONOUS SHADER COMPILATION",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "bizhawk_3ds_asyncshaders",
+          "realKey": "AsyncShaderCompilation",
+          "realFile": "Bizhawk.CoreOptions.cs"
+        },
+        {
+          "id": "bizhawk_3ds_texturefilter",
+          "label": "Filtragem de Texturas",
+          "type": "select",
+          "default": "auto",
+          "configKey": "bizhawk_3ds_texturefilter",
+          "values": [
+            {
+              "label": "Nenhum",
+              "value": "0"
+            },
+            {
+              "label": "ANIME4K",
+              "value": "1"
+            },
+            {
+              "label": "BICUBIC",
+              "value": "2"
+            },
+            {
+              "label": "SCALEFORCE",
+              "value": "3"
+            },
+            {
+              "label": "xBRZ",
+              "value": "4"
+            },
+            {
+              "label": "MMPX",
+              "value": "5"
+            }
+          ],
+          "realKey": "TextureFilter",
+          "realFile": "Bizhawk.CoreOptions.cs"
+        },
+        {
+          "id": "bizhawk_3ds_texturesampling",
+          "label": "TEXTURE SAMPLING",
+          "description": "Control the texture filtering of the Emulação.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "bizhawk_3ds_texturesampling",
+          "values": [
+            {
+              "label": "GAME CONTROLLED",
+              "value": "0"
+            },
+            {
+              "label": "NEAREST NEIGHBOR",
+              "value": "1"
+            },
+            {
+              "label": "LINEAR",
+              "value": "2"
+            }
+          ],
+          "realKey": "TextureSampling",
+          "realFile": "Bizhawk.CoreOptions.cs"
+        },
+        {
+          "id": "bizhawk_3ds_filtermode",
+          "label": "ENABLE LINEAR FILTERING",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "bizhawk_3ds_filtermode",
+          "realKey": "FilterMode",
+          "realFile": "Bizhawk.CoreOptions.cs"
+        },
+        {
+          "id": "bizhawk_3ds_renderer",
+          "label": "DISABLE HARDWARE RENDERER",
+          "description": "Disable hardware renderer, can increase compatibility.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "bizhawk_3ds_renderer",
+          "realKey": "GraphicsApi",
+          "realFile": "Bizhawk.CoreOptions.cs"
+        },
+        {
+          "id": "bizhawk_melonds_layout",
+          "label": "SCREEN LAYOUT POSITIONING",
+          "description": "Choose the disposition of the emulated screens.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "bizhawk_melonds_layout",
+          "values": [
+            {
+              "label": "NATURAL",
+              "value": "0"
+            },
+            {
+              "label": "VERTICAL",
+              "value": "1"
+            },
+            {
+              "label": "HORIZONTAL",
+              "value": "2"
+            },
+            {
+              "label": "TOP SCREEN ONLY",
+              "value": "3"
+            },
+            {
+              "label": "BOTTOM SCREEN ONLY",
+              "value": "4"
+            }
+          ],
+          "realKey": "ScreenLayout",
+          "realFile": "Bizhawk.CoreOptions.cs"
+        },
+        {
+          "id": "bizhawk_melonds_screeninvert",
+          "label": "INVERT SCREENS",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "bizhawk_melonds_screeninvert",
+          "realKey": "ScreenInvert",
+          "realFile": "Bizhawk.CoreOptions.cs"
+        },
+        {
+          "id": "bizhawk_melonds_rotate",
+          "label": "ROTATE SCREEN",
+          "description": "Screen rotation is not compatible with horizontal layout.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "bizhawk_melonds_rotate",
+          "values": [
+            {
+              "label": "Não",
+              "value": "0"
+            },
+            {
+              "label": "90 DEGREES CLOCKWISE",
+              "value": "1"
+            },
+            {
+              "label": "180 DEGREES",
+              "value": "2"
+            },
+            {
+              "label": "270 DEGREES CLOCKWISE",
+              "value": "3"
+            }
+          ],
+          "realKey": "ScreenRotation",
+          "realFile": "Bizhawk.CoreOptions.cs"
+        },
+        {
+          "id": "bizhawk_n64_resolution",
+          "label": "Resolução Interna",
+          "type": "select",
+          "default": "auto",
+          "configKey": "bizhawk_n64_resolution",
+          "values": [
+            {
+              "label": "320x240",
+              "value": "320x240"
+            },
+            {
+              "label": "400x300",
+              "value": "400x300"
+            },
+            {
+              "label": "480x360",
+              "value": "480x360"
+            },
+            {
+              "label": "512x384",
+              "value": "512x384"
+            },
+            {
+              "label": "640x480",
+              "value": "640x480"
+            },
+            {
+              "label": "800x600",
+              "value": "800x600"
+            },
+            {
+              "label": "1024x768 (HD Ready)",
+              "value": "1024x768"
+            },
+            {
+              "label": "1152x864",
+              "value": "1152x864"
+            },
+            {
+              "label": "1280x960",
+              "value": "1280x960"
+            },
+            {
+              "label": "1400x1050 (Full HD)",
+              "value": "1400x1050"
+            },
+            {
+              "label": "1600x1200",
+              "value": "1600x1200"
+            },
+            {
+              "label": "1920x1440 (2K)",
+              "value": "1920x1440"
+            },
+            {
+              "label": "2048x1536",
+              "value": "2048x1536"
+            },
+            {
+              "label": "2880x2160 (4K)",
+              "value": "2880x2160"
+            }
+          ],
+          "realKey": "$type",
+          "realFile": "Bizhawk.CoreOptions.cs"
+        },
+        {
+          "id": "bizhawk_n64_gfx",
+          "label": "GFX PLUGIN",
+          "description": "Use 'GLideN64' for best HLE performance, 'ParaLLEl' for accuracy.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "bizhawk_n64_gfx",
+          "values": [
+            {
+              "label": "GLIDE N64",
+              "value": "4"
+            },
+            {
+              "label": "GLIDE64",
+              "value": "1"
+            },
+            {
+              "label": "GLIDE64 mk2",
+              "value": "2"
+            },
+            {
+              "label": "RICE",
+              "value": "0"
+            },
+            {
+              "label": "ANGRYLION",
+              "value": "5"
+            }
+          ],
+          "realKey": "VideoPlugin",
+          "realFile": "Bizhawk.CoreOptions.cs"
+        },
+        {
+          "id": "bizhawk_sms_format",
+          "label": "Vídeo FORMAT",
+          "description": "Select a Vídeo format for output.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "bizhawk_sms_format",
+          "values": [
+            {
+              "label": "NTSC",
+              "value": "0"
+            },
+            {
+              "label": "PAL",
+              "value": "1"
+            }
+          ],
+          "realKey": "DisplayType",
+          "realFile": "Bizhawk.CoreOptions.cs"
+        }
+      ]
+    },
+    {
+      "id": "emulation",
+      "title": "Emulação",
+      "icon": "cpu",
+      "order": 2,
+      "options": [
+        {
+          "id": "bizhawk_fps",
+          "label": "DISPLAY FPS",
+          "description": "Show FPS overlay in-game.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "bizhawk_fps",
+          "realKey": "DisplayFps",
+          "realFile": "Bizhawk.Generator.cs"
+        },
+        {
+          "id": "bizhawk_A26_difficulty",
+          "label": "DIFFICULTY SWITCH",
+          "description": "Set the Atari 2600 difficulty switch.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "bizhawk_A26_difficulty",
+          "values": [
+            {
+              "label": "ADVANCED",
+              "value": "true"
+            },
+            {
+              "label": "BEGINNER",
+              "value": "false"
+            }
+          ],
+          "realKey": "LeftDifficulty",
+          "realFile": "Bizhawk.CoreOptions.cs"
+        },
+        {
+          "id": "bizhawk_n64_cpucore",
+          "label": "CPU MODE",
+          "description": "Use interpreter for best compatibility.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "bizhawk_n64_cpucore",
+          "values": [
+            {
+              "label": "INTERPRETER",
+              "value": "0"
+            },
+            {
+              "label": "RECOMPILER",
+              "value": "1"
+            }
+          ],
+          "realKey": "Core",
+          "realFile": "Bizhawk.CoreOptions.cs"
+        },
+        {
+          "id": "bizhawk_channelf_version",
+          "label": "CONSOLE MODEL",
+          "type": "select",
+          "default": "auto",
+          "configKey": "bizhawk_channelf_version",
+          "values": [
+            {
+              "label": "CHANNELF",
+              "value": "0"
+            },
+            {
+              "label": "CHANNELF II",
+              "value": "1"
+            }
+          ],
+          "realKey": "Version",
+          "realFile": "Bizhawk.CoreOptions.cs"
+        },
+        {
+          "id": "bizhawk_channelf_region",
+          "label": "CONSOLE REGION",
+          "type": "select",
+          "default": "auto",
+          "configKey": "bizhawk_channelf_region",
+          "values": [
+            {
+              "label": "NTSC",
+              "value": "0"
+            },
+            {
+              "label": "PAL",
+              "value": "1"
+            }
+          ],
+          "realKey": "Region",
+          "realFile": "Bizhawk.CoreOptions.cs"
+        },
+        {
+          "id": "bizhawk_wswan_language",
+          "label": "CONSOLE LANGUAGE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "bizhawk_wswan_language",
+          "values": [
+            {
+              "label": "ENGLISH",
+              "value": "1"
+            },
+            {
+              "label": "JAPANESE",
+              "value": "0"
+            }
+          ],
+          "realKey": "Language",
+          "realFile": "Bizhawk.CoreOptions.cs"
+        },
+        {
+          "id": "bizhawk_3ds_region",
+          "label": "REGION",
+          "description": "Force the region of the system.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "bizhawk_3ds_region",
+          "values": [
+            {
+              "label": "EUROPE",
+              "value": "2"
+            },
+            {
+              "label": "USA",
+              "value": "1"
+            },
+            {
+              "label": "AUSTRALIA",
+              "value": "3"
+            },
+            {
+              "label": "CHINA",
+              "value": "4"
+            },
+            {
+              "label": "JAPAN",
+              "value": "0"
+            },
+            {
+              "label": "KOREA",
+              "value": "5"
+            },
+            {
+              "label": "TAIWAN",
+              "value": "6"
+            }
+          ],
+          "realKey": "RegionValue",
+          "realFile": "Bizhawk.CoreOptions.cs"
+        },
+        {
+          "id": "bizhawk_3ds_language",
+          "label": "LANGUAGE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "bizhawk_3ds_language",
+          "values": [
+            {
+              "label": "English",
+              "value": "1"
+            },
+            {
+              "label": "日本語 (Japanese)",
+              "value": "0"
+            },
+            {
+              "label": "Français",
+              "value": "2"
+            },
+            {
+              "label": "Español",
+              "value": "5"
+            },
+            {
+              "label": "Deutsch",
+              "value": "3"
+            },
+            {
+              "label": "Italiano",
+              "value": "4"
+            },
+            {
+              "label": "Nederlands",
+              "value": "8"
+            },
+            {
+              "label": "Português",
+              "value": "9"
+            },
+            {
+              "label": "Русский (Russian)",
+              "value": "10"
+            },
+            {
+              "label": "한국어 (Korean)",
+              "value": "7"
+            },
+            {
+              "label": "簡化字 (Chinese - traditional)",
+              "value": "11"
+            },
+            {
+              "label": "简化字 (Chinese - simplified)",
+              "value": "6"
+            }
+          ],
+          "realKey": "CFGSystemLanguage",
+          "realFile": "Bizhawk.CoreOptions.cs"
+        },
+        {
+          "id": "bizhawk_3ds_new3ds",
+          "label": "3DS MODEL",
+          "description": "Force the region of the system.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "bizhawk_3ds_new3ds",
+          "values": [
+            {
+              "label": "NEW 3DS",
+              "value": "1"
+            },
+            {
+              "label": "3DS",
+              "value": "0"
+            }
+          ],
+          "realKey": "IsNew3ds",
+          "realFile": "Bizhawk.CoreOptions.cs"
+        },
+        {
+          "id": "bizhawk_3ds_virtualSD",
+          "label": "DISABLE VIRTUAL SD CARD",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "bizhawk_3ds_virtualSD",
+          "realKey": "UseVirtualSd",
+          "realFile": "Bizhawk.CoreOptions.cs"
+        },
+        {
+          "id": "bizhawk_3ds_cpuJIT",
+          "label": "DISABLE CPU JIT",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "bizhawk_3ds_cpuJIT",
+          "realKey": "UseCpuJit",
+          "realFile": "Bizhawk.CoreOptions.cs"
+        },
+        {
+          "id": "bizhawk_gb_bios",
+          "label": "USE EXTERNAL BIOS",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "bizhawk_gb_bios"
+        },
+        {
+          "id": "bizhawk_md_region",
+          "label": "CONSOLE REGION",
+          "type": "select",
+          "default": "auto",
+          "configKey": "bizhawk_md_region",
+          "values": [
+            {
+              "label": "USA",
+              "value": "1"
+            },
+            {
+              "label": "EUROPE",
+              "value": "2"
+            },
+            {
+              "label": "JAPAN_NTSC",
+              "value": "3"
+            },
+            {
+              "label": "JAPAN_PAL",
+              "value": "4"
+            }
+          ],
+          "realKey": "Region",
+          "realFile": "Bizhawk.CoreOptions.cs"
+        },
+        {
+          "id": "bizhawk_jaguar_forcePAL",
+          "label": "FORCE PAL",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "bizhawk_jaguar_forcePAL",
+          "realKey": "NTSC",
+          "realFile": "Bizhawk.CoreOptions.cs"
+        },
+        {
+          "id": "bizhawk_melonds_dsi",
+          "label": "CONSOLE TYPE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "bizhawk_melonds_dsi",
+          "values": [
+            {
+              "label": "DS",
+              "value": "0"
+            },
+            {
+              "label": "DSi",
+              "value": "1"
+            }
+          ],
+          "realKey": "bizhawk_melonds_dsi",
+          "realFile": "Bizhawk.CoreOptions.cs"
+        },
+        {
+          "id": "bizhawk_melonds_externalBIOS",
+          "label": "USE EXTERNAL BIOS",
+          "description": "Use the BIOS located in RetroBat 'bios' folder, Required to boot to BIOS.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "bizhawk_melonds_externalBIOS",
+          "realKey": "UseRealBIOS",
+          "realFile": "Bizhawk.CoreOptions.cs"
+        },
+        {
+          "id": "bizhawk_melonds_boottobios",
+          "label": "BOOT TO BIOS",
+          "description": "Boot directly into the DS BIOS menu, needs external bios to be activated.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "bizhawk_melonds_boottobios",
+          "realKey": "SkipFirmware",
+          "realFile": "Bizhawk.CoreOptions.cs"
+        },
+        {
+          "id": "bizhawk_gba_skipbios",
+          "label": "SKIP BIOS",
+          "description": "Enabled by Padrão.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "bizhawk_gba_skipbios",
+          "realKey": "SkipBios",
+          "realFile": "Bizhawk.CoreOptions.cs"
+        },
+        {
+          "id": "bizhawk_n64_rsp",
+          "label": "RSP PLUGIN",
+          "description": "Reality Signal Processor plugin.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "bizhawk_n64_rsp",
+          "values": [
+            {
+              "label": "HLE",
+              "value": "0"
+            },
+            {
+              "label": "cxd4 LLE",
+              "value": "2"
+            }
+          ],
+          "realKey": "Rsp",
+          "realFile": "Bizhawk.CoreOptions.cs"
+        },
+        {
+          "id": "bizhawk_ngp_language",
+          "label": "CONSOLE LANGUAGE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "bizhawk_ngp_language",
+          "values": [
+            {
+              "label": "ENGLISH",
+              "value": "english"
+            },
+            {
+              "label": "JAPANESE",
+              "value": "japanese"
+            }
+          ],
+          "realKey": "ngp.language",
+          "realFile": "Bizhawk.CoreOptions.cs"
+        },
+        {
+          "id": "nes_region",
+          "label": "Vídeo FORMAT",
+          "type": "select",
+          "default": "auto",
+          "configKey": "nes_region",
+          "values": [
+            {
+              "label": "NTSC",
+              "value": "1"
+            },
+            {
+              "label": "PAL",
+              "value": "2"
+            },
+            {
+              "label": "DENDY",
+              "value": "3"
+            }
+          ],
+          "realKey": "RegionOverride",
+          "realFile": "Bizhawk.CoreOptions.cs"
+        },
+        {
+          "id": "bizhawk_psx_region",
+          "label": "CONSOLE REGION",
+          "type": "select",
+          "default": "auto",
+          "configKey": "bizhawk_psx_region",
+          "values": [
+            {
+              "label": "EUROPE",
+              "value": "eu"
+            },
+            {
+              "label": "JAPAN",
+              "value": "jp"
+            },
+            {
+              "label": "US",
+              "value": "na"
+            }
+          ],
+          "realKey": "psx.region_default",
+          "realFile": "Bizhawk.CoreOptions.cs"
+        },
+        {
+          "id": "bizhawk_psx_original_bios",
+          "label": "USE SCPH LEGACY BIOS",
+          "description": "RetroBat will use by Padrão psxonpsp BIOS, enable this option to force usage of legacy SCPH550X bios file.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "bizhawk_psx_original_bios"
+        },
+        {
+          "id": "bizhawk_o2_g7400",
+          "label": "EMULATE G7400",
+          "description": "Run system with G7400 BIOS and features.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "bizhawk_o2_g7400",
+          "realKey": "G7400_Enable",
+          "realFile": "Bizhawk.CoreOptions.cs"
+        },
+        {
+          "id": "bizhawk_saturn_language",
+          "label": "BIOS LANGUAGE",
+          "description": "BIOS language can affect the language of some games.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "bizhawk_saturn_language",
+          "values": [
+            {
+              "label": "English",
+              "value": "english"
+            },
+            {
+              "label": "Japanese",
+              "value": "japanese"
+            },
+            {
+              "label": "Français",
+              "value": "french"
+            },
+            {
+              "label": "Deutsch",
+              "value": "german"
+            },
+            {
+              "label": "Italiano",
+              "value": "italian"
+            },
+            {
+              "label": "Español",
+              "value": "spanish"
+            }
+          ],
+          "realKey": "ss.smpc.autortc.lang",
+          "realFile": "Bizhawk.CoreOptions.cs"
+        },
+        {
+          "id": "bizhawk_saturn_region",
+          "label": "CONSOLE REGION",
+          "description": "Force saturn region if autodetect fails.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "bizhawk_saturn_region",
+          "values": [
+            {
+              "label": "JAPAN",
+              "value": "japanese"
+            },
+            {
+              "label": "NORTH AMERICA",
+              "value": "na"
+            },
+            {
+              "label": "EUROPE",
+              "value": "eu"
+            },
+            {
+              "label": "SOUTH KOREA",
+              "value": "kr"
+            },
+            {
+              "label": "TAIWAN",
+              "value": "tw"
+            },
+            {
+              "label": "CHINA",
+              "value": "as"
+            },
+            {
+              "label": "BRAZIL",
+              "value": "br"
+            },
+            {
+              "label": "LATIN AMERICA",
+              "value": "la"
+            }
+          ],
+          "realKey": "ss.region_autodetect",
+          "realFile": "Bizhawk.CoreOptions.cs"
+        },
+        {
+          "id": "bizhawk_saturn_expansion",
+          "label": "EXPANSION CART",
+          "description": "Force saturn expansion cart if autodetect fails.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "bizhawk_saturn_expansion",
+          "values": [
+            {
+              "label": "Nenhum",
+              "value": "none"
+            },
+            {
+              "label": "BACKUP MEMORY (512kb)",
+              "value": "backup"
+            },
+            {
+              "label": "1MB EXTENDED RAM",
+              "value": "extram1"
+            },
+            {
+              "label": "4MB EXTENDED RAM",
+              "value": "extram4"
+            },
+            {
+              "label": "16MB EXTENDED RAM",
+              "value": "cs1ram16"
+            }
+          ],
+          "realKey": "ss.cart",
+          "realFile": "Bizhawk.CoreOptions.cs"
+        },
+        {
+          "id": "bizhawk_sms_region",
+          "label": "CONSOLE REGION",
+          "type": "select",
+          "default": "auto",
+          "configKey": "bizhawk_sms_region",
+          "values": [
+            {
+              "label": "EXPORT (EU/US)",
+              "value": "0"
+            },
+            {
+              "label": "JAPAN",
+              "value": "1"
+            },
+            {
+              "label": "KOREA",
+              "value": "2"
+            }
+          ],
+          "realKey": "ConsoleRegion",
+          "realFile": "Bizhawk.CoreOptions.cs"
+        },
+        {
+          "id": "bizhawk_sms_bios",
+          "label": "USE SMS BIOS",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "bizhawk_sms_bios",
+          "realKey": "UseBios",
+          "realFile": "Bizhawk.CoreOptions.cs"
+        },
+        {
+          "id": "bizhawk_zx_machine",
+          "label": "MACHINE TYPE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "bizhawk_zx_machine",
+          "values": [
+            {
+              "label": "ZX SPECTRUM 16",
+              "value": "0"
+            },
+            {
+              "label": "ZX SPECTRUM 48",
+              "value": "1"
+            },
+            {
+              "label": "ZX SPECTRUM 128",
+              "value": "2"
+            },
+            {
+              "label": "ZX SPECTRUM 128 Plus2",
+              "value": "3"
+            },
+            {
+              "label": "ZX SPECTRUM 128 Plus2a",
+              "value": "4"
+            },
+            {
+              "label": "ZX SPECTRUM 128 Plus3",
+              "value": "5"
+            },
+            {
+              "label": "PENTAGON 128",
+              "value": "6"
+            }
+          ],
+          "realKey": "MachineType",
+          "realFile": "Bizhawk.CoreOptions.cs"
+        }
+      ]
+    },
+    {
+      "id": "hacks",
+      "title": "Correções / Hacks",
+      "icon": "wrench",
+      "order": 3,
+      "options": [
+        {
+          "id": "bizhawk_fixed_ratio",
+          "label": "MAINTAIN ASPECT RATIO",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "bizhawk_fixed_ratio",
+          "realKey": "DispFixAspectRatio",
+          "realFile": "Bizhawk.Generator.cs"
+        }
+      ]
+    },
+    {
+      "id": "audio",
+      "title": "Áudio",
+      "icon": "volume2",
+      "order": 4,
+      "options": [
+        {
+          "id": "bizhawk_audiooutput",
+          "label": "Áudio",
+          "type": "select",
+          "default": "auto",
+          "configKey": "bizhawk_audiooutput",
+          "values": [
+            {
+              "label": "DIRECT SOUND",
+              "value": "0"
+            },
+            {
+              "label": "XAUDIO2",
+              "value": "1"
+            },
+            {
+              "label": "OPENAL",
+              "value": "2"
+            }
+          ],
+          "realKey": "SoundOutputMethod",
+          "realFile": "Bizhawk.Generator.cs"
+        },
+        {
+          "id": "bizhawk_md_lowpass",
+          "label": "Áudio FILTER",
+          "description": "Enables a low pass Áudio filter to soften the harsh sound of some games.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "bizhawk_md_lowpass",
+          "realKey": "Filter",
+          "realFile": "Bizhawk.CoreOptions.cs"
+        },
+        {
+          "id": "bizhawk_sms_fm",
+          "label": "ENABLE FM CHIP",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "bizhawk_sms_fm",
+          "realKey": "EnableFm",
+          "realFile": "Bizhawk.CoreOptions.cs"
+        }
+      ]
+    },
+    {
+      "id": "controls",
+      "title": "Controles",
+      "icon": "gamepad2",
+      "order": 5,
+      "options": [
+        {
+          "id": "bizhawk_deadzone",
+          "label": "ANALOG DEADZONE",
+          "description": "Sets the deadzone of the Gamepad analog sticks.",
+          "type": "slider",
+          "default": "auto",
+          "configKey": "bizhawk_deadzone",
+          "min": 0,
+          "max": 0.5,
+          "step": 0.02,
+          "suffix": "%"
+        },
+        {
+          "id": "ares64_inputprofile",
+          "label": "CONTROLLER LAYOUT",
+          "description": "Select between the different controller layouts.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "ares64_inputprofile",
+          "values": [
+            {
+              "label": "Z=LEFT-TRIGGER",
+              "value": "zl"
+            },
+            {
+              "label": "Z=RIGHT-TRIGGER",
+              "value": "zr"
+            },
+            {
+              "label": "XBOX",
+              "value": "xbox"
+            }
+          ],
+          "realKey": "ares64_inputprofile",
+          "realFile": "Bizhawk.Controllers.cs"
+        },
+        {
+          "id": "bizhawk_n64_pak1",
+          "label": "P1 CONTROLLER EXTENSION",
+          "description": "Choose the extension attached to the controller.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "bizhawk_n64_pak1",
+          "values": [
+            {
+              "label": "Nenhum",
+              "value": "1"
+            },
+            {
+              "label": "MEMORY",
+              "value": "2"
+            },
+            {
+              "label": "RUMBLE PACK",
+              "value": "3"
+            }
+          ],
+          "realKey": "P1Controller",
+          "realFile": "Bizhawk.CoreOptions.cs"
+        },
+        {
+          "id": "bizhawk_n64_pak2",
+          "label": "P2 CONTROLLER EXTENSION",
+          "type": "select",
+          "default": "auto",
+          "configKey": "bizhawk_n64_pak2",
+          "values": [
+            {
+              "label": "Nenhum",
+              "value": "1"
+            },
+            {
+              "label": "MEMORY",
+              "value": "2"
+            },
+            {
+              "label": "RUMBLE PACK",
+              "value": "3"
+            }
+          ],
+          "realKey": "P2Controller",
+          "realFile": "Bizhawk.CoreOptions.cs"
+        },
+        {
+          "id": "bizhawk_n64_pak3",
+          "label": "P3 CONTROLLER EXTENSION",
+          "type": "select",
+          "default": "auto",
+          "configKey": "bizhawk_n64_pak3",
+          "values": [
+            {
+              "label": "Nenhum",
+              "value": "1"
+            },
+            {
+              "label": "MEMORY",
+              "value": "2"
+            },
+            {
+              "label": "RUMBLE PACK",
+              "value": "3"
+            }
+          ],
+          "realKey": "P3Controller",
+          "realFile": "Bizhawk.CoreOptions.cs"
+        },
+        {
+          "id": "bizhawk_n64_pak4",
+          "label": "P4 CONTROLLER EXTENSION",
+          "type": "select",
+          "default": "auto",
+          "configKey": "bizhawk_n64_pak4",
+          "values": [
+            {
+              "label": "Nenhum",
+              "value": "1"
+            },
+            {
+              "label": "MEMORY",
+              "value": "2"
+            },
+            {
+              "label": "RUMBLE PACK",
+              "value": "3"
+            }
+          ],
+          "realKey": "P4Controller",
+          "realFile": "Bizhawk.CoreOptions.cs"
+        },
+        {
+          "id": "n64_pad",
+          "label": "USE N64-LIKE CONTROLLER",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "n64_pad"
+        },
+        {
+          "id": "bizhawk_swapcontrols",
+          "label": "SWAP CONTROLLERS",
+          "description": "Set this for games that require controller in port 2.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "bizhawk_swapcontrols"
+        },
+        {
+          "id": "bizhawk3ds_analog_function",
+          "label": "RIGHT STICK FUNCTION",
+          "description": "Define the function of the right joystick.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "bizhawk3ds_analog_function",
+          "values": [
+            {
+              "label": "C-STICK AND TOUCHSCREEN POINTER",
+              "value": "C-Stick and Touchscreen Pointer"
+            },
+            {
+              "label": "TOUCHSCREEN POINTER",
+              "value": "Touchscreen Pointer"
+            },
+            {
+              "label": "C-STICK",
+              "value": "C-Stick"
+            }
+          ],
+          "realKey": "Touch",
+          "realFile": "Bizhawk.Controllers.cs"
+        },
+        {
+          "id": "gamepadbuttons",
+          "label": "INVERT FACE BUTTONS",
+          "description": "Invert A/B and X/Y buttons.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "gamepadbuttons"
+        },
+        {
+          "id": "megadrive_control_layout",
+          "label": "BUTTON LAYOUT",
+          "type": "select",
+          "default": "auto",
+          "configKey": "megadrive_control_layout",
+          "values": [
+            {
+              "label": "L/R as X/Z",
+              "value": "lr_xz"
+            },
+            {
+              "label": "L/R as Z/C",
+              "value": "lr_zc"
+            },
+            {
+              "label": "L/R as Y/Z",
+              "value": "lr_yz"
+            },
+            {
+              "label": "L/R as Y/B",
+              "value": "lr_yb"
+            },
+            {
+              "label": "L/R as B/Y",
+              "value": "lr_by"
+            }
+          ]
+        },
+        {
+          "id": "md_3buttons",
+          "label": "USE 3 BUTTON CONTROLLER",
+          "description": "Padrão emulated pad is a 6-button pad.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "md_3buttons",
+          "realKey": "UseSixButton",
+          "realFile": "Bizhawk.CoreOptions.cs"
+        },
+        {
+          "id": "md_pad",
+          "label": "USE GENESIS-LIKE CONTROLLER",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "md_pad"
+        },
+        {
+          "id": "bizhawk_intv_padtype",
+          "label": "CONTROLLER TYPE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "bizhawk_intv_padtype",
+          "values": [
+            {
+              "label": "STANDARD (DISC)",
+              "value": "Standard (Analog Disc)"
+            },
+            {
+              "label": "STANDARD",
+              "value": "Standard Controller"
+            }
+          ],
+          "realKey": "_port1",
+          "realFile": "Bizhawk.CoreOptions.cs"
+        },
+        {
+          "id": "bizhawk_nds_mouse",
+          "label": "USE MOUSE",
+          "description": "Enable the use of the mouse for touchscreen instead of right stick.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "bizhawk_nds_mouse"
+        },
+        {
+          "id": "bizhawk_gba_turbo",
+          "label": "ENABLE TURBO",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "bizhawk_gba_turbo"
+        },
+        {
+          "id": "rotate_buttons",
+          "label": "ROTATE BUTTONS",
+          "description": "Rotate face buttons to change layout.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "rotate_buttons"
+        },
+        {
+          "id": "bizhawk_psx_digital",
+          "label": "USE DIGITAL CONTROLLERS",
+          "description": "Set this to use original PSX Gamepad instead of Dualshock.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "bizhawk_psx_digital"
+        },
+        {
+          "id": "psx_triggerswap",
+          "label": "USE TRIGGERS TO BRAKE/ACCELERATE",
+          "description": "Can be useful for Gran Turismo, triggers will be mapped to right analog stick.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "psx_triggerswap"
+        },
+        {
+          "id": "bizhawk_psx_mouse",
+          "label": "USE MOUSE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "bizhawk_psx_mouse",
+          "values": [
+            {
+              "label": "PORT 1",
+              "value": "1"
+            },
+            {
+              "label": "PORT 2",
+              "value": "2"
+            },
+            {
+              "label": "BOTH PORTS",
+              "value": "both"
+            }
+          ],
+          "realKey": "0",
+          "realFile": "Bizhawk.CoreOptions.cs"
+        },
+        {
+          "id": "saturn_padlayout",
+          "label": "BUTTON LAYOUT",
+          "type": "select",
+          "default": "auto",
+          "configKey": "saturn_padlayout",
+          "values": [
+            {
+              "label": "L/R as Z/C",
+              "value": "lr_zc"
+            },
+            {
+              "label": "L/R as Y/Z",
+              "value": "lr_yz"
+            },
+            {
+              "label": "L/R as X/Z",
+              "value": "lr_xz"
+            }
+          ]
+        },
+        {
+          "id": "saturn_invert_triggers",
+          "label": "INVERT TRIGGERS AND SHOULDERS",
+          "description": "Use shoulder buttons for L and R instead of triggers.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "saturn_invert_triggers"
+        },
+        {
+          "id": "saturn_pad",
+          "label": "USE SATURN-LIKE CONTROLLER",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "saturn_pad"
+        }
+      ]
+    }
+  ]
+}

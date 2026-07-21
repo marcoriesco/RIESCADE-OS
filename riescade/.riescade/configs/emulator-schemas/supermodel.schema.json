@@ -1,25 +1,11 @@
 {
   "$schema": "riescade-emulator-schema-v1",
   "id": "supermodel",
-  "name": "Supermodel",
-  "description": "Emulador de Sega Model 3 Arcade.",
-  "icon": "model3",
-  "globalMappings": {
-    "fullscreen": {
-      "configKey": "fullscreen",
-      "globalKey": "fullscreen"
-    },
-    "vsync": {
-      "configKey": "vsync",
-      "globalKey": "vsync"
-    }
-  },
-  "configFiles": [
-    {
-      "path": "Config/Supermodel.ini",
-      "format": "ini"
-    }
-  ],
+  "name": "SUPERMODEL",
+  "description": "Configurações para o emulador SUPERMODEL geradas a partir do es_features.cfg.",
+  "icon": "supermodel",
+  "configFiles": [],
+  "globalMappings": {},
   "groups": [
     {
       "id": "graphics",
@@ -28,22 +14,457 @@
       "order": 1,
       "options": [
         {
-          "id": "fullscreen",
-          "label": "Tela Cheia",
-          "description": "Iniciar o emulador em modo tela cheia.",
+          "id": "m3_vsync",
+          "label": "Sincronização Vertical (V-Sync)",
           "type": "toggle",
-          "default": "true",
-          "configKey": "fullscreen",
-          "inheritsGlobal": "fullscreen"
+          "default": "auto",
+          "configKey": "m3_vsync",
+          "realKey": "VSync",
+          "realSection": " Global ",
+          "realFile": "Model3.Generator.cs"
         },
         {
-          "id": "vsync",
-          "label": "V-Sync",
-          "description": "Sincronização vertical.",
+          "id": "widescreen",
+          "label": "WIDESCREEN",
+          "description": "Enable widescreen may cause rendering issues.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "widescreen",
+          "values": [
+            {
+              "label": "Desativado",
+              "value": "0"
+            },
+            {
+              "label": "Ativado",
+              "value": "1"
+            },
+            {
+              "label": "Esticar",
+              "value": "2"
+            }
+          ],
+          "realKey": "widescreen",
+          "realFile": "Model3.Generator.cs"
+        },
+        {
+          "id": "new3Dengine",
+          "label": "NEW 3D ENGINE",
+          "description": "Padrão is Ativado, setting to Desativado might fix compatibility for older GPU.",
           "type": "toggle",
-          "default": "true",
-          "configKey": "vsync",
-          "inheritsGlobal": "vsync"
+          "default": "auto",
+          "configKey": "new3Dengine",
+          "realKey": "New3DEngine",
+          "realSection": " Global ",
+          "realFile": "Model3.Generator.cs"
+        },
+        {
+          "id": "quadRendering",
+          "label": "QUAD RENDERING",
+          "description": "Enable proper quad rendering. For higher end systems.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "quadRendering",
+          "realKey": "QuadRendering",
+          "realSection": " Global ",
+          "realFile": "Model3.Generator.cs"
+        },
+        {
+          "id": "m3_supersampling",
+          "label": "Anti-Aliasing (FXAA)",
+          "type": "slider",
+          "default": "auto",
+          "configKey": "m3_supersampling",
+          "min": 0,
+          "max": 8,
+          "step": 1,
+          "suffix": "x"
+        }
+      ]
+    },
+    {
+      "id": "emulation",
+      "title": "Emulação",
+      "icon": "cpu",
+      "order": 2,
+      "options": [
+        {
+          "id": "throttle",
+          "label": "THROTTLE",
+          "description": "Padrão is Ativado, use this setting to remove the 60hz limit, might break games.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "throttle",
+          "realKey": "Throttle",
+          "realSection": " Global ",
+          "realFile": "Model3.Generator.cs"
+        },
+        {
+          "id": "m3_service",
+          "label": "ENABLE SERVICE MENU",
+          "description": "Switch this Ativado to activate service menu via R3 and L3 buttons.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "m3_service"
+        },
+        {
+          "id": "m3_ppc_frequency",
+          "label": "POWERPC FREQUENCY",
+          "description": "Sets the PowerPC frequency in MHz. The Padrão is 50.",
+          "type": "slider",
+          "default": "auto",
+          "configKey": "m3_ppc_frequency",
+          "min": 20,
+          "max": 200,
+          "step": 5,
+          "suffix": "Mhz",
+          "realKey": "PowerPCFrequency",
+          "realSection": " Global ",
+          "realFile": "Model3.Generator.cs"
+        },
+        {
+          "id": "m3_thread",
+          "label": "DISABLE MULTITHREADING",
+          "description": "Useful for single-threaded processors.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "m3_thread",
+          "realKey": "MultiThreaded",
+          "realSection": " Global ",
+          "realFile": "Model3.Generator.cs"
+        },
+        {
+          "id": "m3_fps",
+          "label": "SHOW FPS",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "m3_fps",
+          "realKey": "ShowFrameRate",
+          "realSection": " Global ",
+          "realFile": "Model3.Generator.cs"
+        }
+      ]
+    },
+    {
+      "id": "controls",
+      "title": "Controles",
+      "icon": "gamepad2",
+      "order": 5,
+      "options": [
+        {
+          "id": "inputdriver",
+          "label": "INPUT",
+          "description": "Force input driver. Defaults to 'sdl', 'dinput' if multiguns is enabled.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "inputdriver",
+          "values": [
+            {
+              "label": "SDL",
+              "value": "sdlgamepad"
+            },
+            {
+              "label": "XINPUT",
+              "value": "xinput"
+            },
+            {
+              "label": "DINPUT",
+              "value": "dinput"
+            },
+            {
+              "label": "SDL(OLD)",
+              "value": "sdl"
+            }
+          ],
+          "realKey": "inputdriver",
+          "realFile": "Model3.Controllers.cs"
+        },
+        {
+          "id": "model3_p1index",
+          "label": "FORCE PLAYER 1 PAD INDEX",
+          "description": "Force P1 pad index, can be useful when using a controller Ativado an arcade machine.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "model3_p1index",
+          "values": [
+            {
+              "label": "1",
+              "value": "1"
+            },
+            {
+              "label": "2",
+              "value": "2"
+            },
+            {
+              "label": "3",
+              "value": "3"
+            },
+            {
+              "label": "4",
+              "value": "4"
+            },
+            {
+              "label": "5",
+              "value": "5"
+            },
+            {
+              "label": "6",
+              "value": "6"
+            },
+            {
+              "label": "7",
+              "value": "7"
+            },
+            {
+              "label": "8",
+              "value": "8"
+            }
+          ]
+        },
+        {
+          "id": "model3_p2index",
+          "label": "FORCE PLAYER 2 PAD INDEX",
+          "type": "select",
+          "default": "auto",
+          "configKey": "model3_p2index",
+          "values": [
+            {
+              "label": "1",
+              "value": "1"
+            },
+            {
+              "label": "2",
+              "value": "2"
+            },
+            {
+              "label": "3",
+              "value": "3"
+            },
+            {
+              "label": "4",
+              "value": "4"
+            },
+            {
+              "label": "5",
+              "value": "5"
+            },
+            {
+              "label": "6",
+              "value": "6"
+            },
+            {
+              "label": "7",
+              "value": "7"
+            },
+            {
+              "label": "8",
+              "value": "8"
+            }
+          ]
+        },
+        {
+          "id": "wheel_index",
+          "label": "FORCE WHEEL INDEX",
+          "description": "Force wheel index, can be useful if RetroBat sets wrong index.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "wheel_index",
+          "values": [
+            {
+              "label": "1",
+              "value": "1"
+            },
+            {
+              "label": "2",
+              "value": "2"
+            },
+            {
+              "label": "3",
+              "value": "3"
+            },
+            {
+              "label": "4",
+              "value": "4"
+            },
+            {
+              "label": "5",
+              "value": "5"
+            },
+            {
+              "label": "6",
+              "value": "6"
+            },
+            {
+              "label": "7",
+              "value": "7"
+            },
+            {
+              "label": "8",
+              "value": "8"
+            }
+          ]
+        },
+        {
+          "id": "supermodel_joy_deadzone",
+          "label": "ANALOG DEADZONE",
+          "description": "Sets the deadzone of the Gamepad analog sticks.",
+          "type": "slider",
+          "default": "auto",
+          "configKey": "supermodel_joy_deadzone",
+          "min": 0,
+          "max": 50,
+          "step": 5,
+          "suffix": "%",
+          "realKey": "InputSystem",
+          "realSection": " Global ",
+          "realFile": "Model3.Controllers.cs"
+        },
+        {
+          "id": "model3_racingshoulder",
+          "label": "USE SHOULDER BUTTONS FOR RACING GAMES",
+          "description": "Use R1 and L1 to accelerate and brake in racing games, only compatible with 'Automático' gear shifting.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "model3_racingshoulder"
+        },
+        {
+          "id": "model3_indexswitch",
+          "label": "SWITCH JOYPAD INDEX",
+          "description": "When using XInput, this option will switch gamepads 1 and 2.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "model3_indexswitch"
+        },
+        {
+          "id": "crosshairs",
+          "label": "SHOW CROSSHAIR",
+          "description": "Enable crosshairs in shooting games.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "crosshairs",
+          "values": [
+            {
+              "label": "Nenhum",
+              "value": "0"
+            },
+            {
+              "label": "P1 only",
+              "value": "1"
+            },
+            {
+              "label": "P2 only",
+              "value": "2"
+            },
+            {
+              "label": "P1 & P2",
+              "value": "3"
+            }
+          ],
+          "realKey": "Crosshairs",
+          "realSection": " Global ",
+          "realFile": "Model3.Generator.cs"
+        },
+        {
+          "id": "multigun",
+          "label": "MULTIGUN (RAW INPUT)",
+          "description": "Set this Ativado when using multiple guns. Defaults to Ativado if multiple guns are found and input driver is not set to 'sdl'.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "multigun"
+        },
+        {
+          "id": "supermodel_gun1",
+          "label": "GUN 1 INDEX",
+          "type": "select",
+          "default": "auto",
+          "configKey": "supermodel_gun1",
+          "values": [
+            {
+              "label": "1",
+              "value": "1"
+            },
+            {
+              "label": "2",
+              "value": "2"
+            },
+            {
+              "label": "3",
+              "value": "3"
+            },
+            {
+              "label": "4",
+              "value": "4"
+            },
+            {
+              "label": "5",
+              "value": "5"
+            }
+          ]
+        },
+        {
+          "id": "supermodel_gun2",
+          "label": "GUN 2 INDEX",
+          "type": "select",
+          "default": "auto",
+          "configKey": "supermodel_gun2",
+          "values": [
+            {
+              "label": "1",
+              "value": "1"
+            },
+            {
+              "label": "2",
+              "value": "2"
+            },
+            {
+              "label": "3",
+              "value": "3"
+            },
+            {
+              "label": "4",
+              "value": "4"
+            },
+            {
+              "label": "5",
+              "value": "5"
+            }
+          ],
+          "realKey": "InputSystem",
+          "realSection": " Global ",
+          "realFile": "Model3.Controllers.cs"
+        },
+        {
+          "id": "supermodel_output",
+          "label": "OUTPUT GAME DATA",
+          "description": "Enable this option when using mamehooker with LEDs, solenoids, rumble...",
+          "type": "select",
+          "default": "auto",
+          "configKey": "supermodel_output",
+          "values": [
+            {
+              "label": "TO WINDOW",
+              "value": "win"
+            }
+          ],
+          "realKey": "Outputs",
+          "realSection": " Global ",
+          "realFile": "Model3.Generator.cs"
+        },
+        {
+          "id": "use_mamehooker",
+          "label": "USE MAMEHOOKER",
+          "description": "Launch MameHooker for outputs management.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "use_mamehooker"
+        },
+        {
+          "id": "forceFeedback",
+          "label": "ENABLE FORCE FEEDBACK",
+          "description": "Enable force feedback for supported controllers.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "forceFeedback"
         }
       ]
     }

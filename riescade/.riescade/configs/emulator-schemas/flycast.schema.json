@@ -1,25 +1,11 @@
 {
   "$schema": "riescade-emulator-schema-v1",
   "id": "flycast",
-  "name": "Flycast",
-  "description": "Emulador de Sega Dreamcast / Naomi / Atomiswave.",
+  "name": "FLYCAST",
+  "description": "Configurações para o emulador FLYCAST geradas a partir do es_features.cfg.",
   "icon": "flycast",
-  "configFiles": [
-    {
-      "path": "emu.cfg",
-      "format": "cfg"
-    }
-  ],
-  "globalMappings": {
-    "fullscreen": {
-      "configKey": "fullscreen",
-      "globalKey": "fullscreen"
-    },
-    "vsync": {
-      "configKey": "vsync",
-      "globalKey": "vsync"
-    }
-  },
+  "configFiles": [],
+  "globalMappings": {},
   "groups": [
     {
       "id": "graphics",
@@ -28,71 +14,215 @@
       "order": 1,
       "options": [
         {
-          "id": "fullscreen",
-          "label": "Tela Cheia",
-          "description": "Iniciar o emulador em modo tela cheia.",
-          "type": "toggle",
-          "default": "true",
-          "configKey": "fullscreen",
-          "inheritsGlobal": "fullscreen"
-        },
-        {
-          "id": "vsync",
-          "label": "V-Sync",
-          "description": "Sincronização vertical.",
-          "type": "toggle",
-          "default": "true",
-          "configKey": "vsync",
-          "inheritsGlobal": "vsync"
-        },
-        {
-          "id": "flycast_internal_resolution",
+          "id": "flycast_resolution",
           "label": "Resolução Interna",
-          "description": "Multiplicador da resolução nativa.",
           "type": "select",
           "default": "auto",
-          "configKey": "flycast_internal_resolution",
+          "configKey": "flycast_resolution",
           "values": [
             {
-              "label": "Automático",
-              "value": "auto"
+              "label": "640x480 (NATIVE)",
+              "value": "480"
             },
             {
-              "label": "1x Nativa",
-              "value": "1"
+              "label": "320x240 (HALF)",
+              "value": "240"
             },
             {
-              "label": "2x",
+              "label": "960x720 (x1.5)",
+              "value": "720"
+            },
+            {
+              "label": "1280x960 (x2)",
+              "value": "960"
+            },
+            {
+              "label": "1600x1200 (x2.5)",
+              "value": "1200"
+            },
+            {
+              "label": "1920x1440 (x3)",
+              "value": "1440"
+            },
+            {
+              "label": "2560x1920 (x4)",
+              "value": "1920"
+            },
+            {
+              "label": "2880x2160 (x4.5)",
+              "value": "2160"
+            },
+            {
+              "label": "3200x2400 (x5)",
+              "value": "2400"
+            },
+            {
+              "label": "3840x2880 (x6)",
+              "value": "2880"
+            },
+            {
+              "label": "4480x3360 (x7)",
+              "value": "3360"
+            },
+            {
+              "label": "5120x3840 (x8)",
+              "value": "3840"
+            },
+            {
+              "label": "5760x4320 (x9)",
+              "value": "4320"
+            }
+          ],
+          "realKey": "rend.Resolution",
+          "realSection": "config",
+          "realFile": "Flycast.Generator.cs"
+        },
+        {
+          "id": "flycast_ratio",
+          "label": "Proporção de Tela",
+          "type": "select",
+          "default": "auto",
+          "configKey": "flycast_ratio",
+          "values": [
+            {
+              "label": "4/3",
+              "value": "normal"
+            },
+            {
+              "label": "16/9",
+              "value": "wide"
+            },
+            {
+              "label": "Esticar",
+              "value": "stretch"
+            }
+          ],
+          "realKey": "flycast_ratio",
+          "realFile": "Flycast.Generator.cs"
+        },
+        {
+          "id": "flycast_vsync",
+          "label": "Sincronização Vertical (V-Sync)",
+          "type": "select",
+          "default": "auto",
+          "configKey": "flycast_vsync",
+          "values": [
+            {
+              "label": "Sim",
+              "value": "yes"
+            },
+            {
+              "label": "Não",
+              "value": "no"
+            },
+            {
+              "label": "Duplicate frames",
+              "value": "dupframes"
+            }
+          ],
+          "realKey": "rend.vsync",
+          "realSection": "config",
+          "realFile": "Flycast.Generator.cs"
+        },
+        {
+          "id": "flycast_cable",
+          "label": "EMULATED CABLE TYPE",
+          "description": "Apply a Vídeo filter to mimic various signals.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "flycast_cable",
+          "values": [
+            {
+              "label": "VGA",
+              "value": "0"
+            },
+            {
+              "label": "TV (RGB)",
               "value": "2"
             },
             {
-              "label": "3x",
+              "label": "COMPOSITE",
+              "value": "3"
+            }
+          ],
+          "realKey": "Dreamcast.Cable",
+          "realSection": "config",
+          "realFile": "Flycast.Generator.cs"
+        },
+        {
+          "id": "flycast_broadcast",
+          "label": "Vídeo FORMAT",
+          "description": "Select a Vídeo format for output.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "flycast_broadcast",
+          "values": [
+            {
+              "label": "NTSC",
+              "value": "0"
+            },
+            {
+              "label": "PAL (WORLD)",
+              "value": "1"
+            },
+            {
+              "label": "PAL-N (ARGENTINA, URUGUAY, PARAGUAY)",
               "value": "3"
             },
             {
-              "label": "4x",
-              "value": "4"
+              "label": "PAL-M (BRAZIL)",
+              "value": "2"
             }
-          ]
+          ],
+          "realKey": "Dreamcast.Broadcast",
+          "realSection": "config",
+          "realFile": "Flycast.Generator.cs"
         },
         {
-          "id": "flycast_widescreen",
-          "label": "Widescreen",
-          "description": "Força proporção 16:9.",
+          "id": "flycast_rotate",
+          "label": "TATE MODE",
+          "description": "Rotate display for vertical games.",
           "type": "toggle",
-          "default": "false",
-          "configKey": "flycast_widescreen"
+          "default": "auto",
+          "configKey": "flycast_rotate",
+          "realKey": "rend.Rotate90",
+          "realSection": "config",
+          "realFile": "Flycast.Generator.cs"
         },
         {
-          "id": "flycast_anisotropic",
-          "label": "Filtragem Anisotrópica",
-          "description": "Melhora a nitidez de texturas.",
+          "id": "flycast_transparent_sorting",
+          "label": "ALPHA SORTING",
+          "description": "Enhance graphics accuracy at the cost of inscreased performance requirements.",
           "type": "select",
-          "default": "1",
-          "configKey": "flycast_anisotropic",
+          "default": "auto",
+          "configKey": "flycast_transparent_sorting",
           "values": [
             {
-              "label": "Desativado",
+              "label": "per-pixel (accurate)",
+              "value": "pixel"
+            },
+            {
+              "label": "per-strip (fast, least accurate)",
+              "value": "strip"
+            },
+            {
+              "label": "per-triangle (normal)",
+              "value": "triangle"
+            }
+          ],
+          "realKey": "flycast_transparent_sorting",
+          "realFile": "Flycast.Generator.cs"
+        },
+        {
+          "id": "flycast_fxaa",
+          "label": "Filtragem Anisotrópica",
+          "description": "Enhance the quality of textures Ativado surface.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "flycast_fxaa",
+          "values": [
+            {
+              "label": "DISABLED",
               "value": "1"
             },
             {
@@ -111,7 +241,790 @@
               "label": "16x",
               "value": "16"
             }
+          ],
+          "realKey": "rend.AnisotropicFiltering",
+          "realSection": "config",
+          "realFile": "Flycast.Generator.cs"
+        },
+        {
+          "id": "flycast_texture_filter",
+          "label": "Filtragem de Texturas",
+          "description": "Control the texture filtering of the Emulação.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "flycast_texture_filter",
+          "values": [
+            {
+              "label": "NEAREST NEIGHBOR",
+              "value": "1"
+            },
+            {
+              "label": "LINEAR",
+              "value": "2"
+            }
+          ],
+          "realKey": "rend.TextureFiltering",
+          "realSection": "config",
+          "realFile": "Flycast.Generator.cs"
+        },
+        {
+          "id": "flycast_shadows",
+          "label": "DISABLE SHADOWS",
+          "description": "Disable modifier volumes used to render shadows.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "flycast_shadows",
+          "realKey": "rend.ModifierVolumes",
+          "realSection": "config",
+          "realFile": "Flycast.Generator.cs"
+        },
+        {
+          "id": "flycast_fog",
+          "label": "DISABLE FOG",
+          "description": "Disable fog effects.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "flycast_fog",
+          "realKey": "rend.Fog",
+          "realSection": "config",
+          "realFile": "Flycast.Generator.cs"
+        },
+        {
+          "id": "flycast_threads",
+          "label": "THREADS FOR TEXTURE UPSCALING",
+          "description": "Maximum number of CPU threads to use for texture upscaling. Use total number of threads minus 1.",
+          "type": "slider",
+          "default": "auto",
+          "configKey": "flycast_threads",
+          "min": 1,
+          "max": 8,
+          "step": 1,
+          "realKey": "pvr.MaxThreads",
+          "realSection": "config",
+          "realFile": "Flycast.Generator.cs"
+        },
+        {
+          "id": "flycast_copytovram",
+          "label": "COPY TEXTURES TO VRAM",
+          "description": "Copy textures to VRAM, slower but more accurate. Disable this to save performance.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "flycast_copytovram",
+          "realKey": "rend.RenderToTextureBuffer",
+          "realSection": "config",
+          "realFile": "Flycast.Generator.cs"
+        },
+        {
+          "id": "flycast_custom_textures",
+          "label": "CUSTOM TEXTURES",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "flycast_custom_textures",
+          "realKey": "rend.CustomTextures",
+          "realSection": "config",
+          "realFile": "Flycast.Generator.cs"
+        },
+        {
+          "id": "flycast_linearinterpolation",
+          "label": "LINEAR INTERPOLATION",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "flycast_linearinterpolation",
+          "realKey": "rend.LinearInterpolation",
+          "realSection": "config",
+          "realFile": "Flycast.Generator.cs"
+        },
+        {
+          "id": "flycast_video",
+          "label": "Vídeo",
+          "type": "select",
+          "default": "auto",
+          "configKey": "flycast_video",
+          "values": [
+            {
+              "label": "VULKAN",
+              "value": "vulkan"
+            },
+            {
+              "label": "OPENGL",
+              "value": "opengl"
+            },
+            {
+              "label": "DIRECTX 11",
+              "value": "dx11"
+            },
+            {
+              "label": "DIRECTX 9",
+              "value": "dx9"
+            }
+          ],
+          "realKey": "flycast_video",
+          "realFile": "Flycast.Generator.cs"
+        },
+        {
+          "id": "flycast_host",
+          "label": "HOST GAME",
+          "description": "Act as player 1 and host the game.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "flycast_host",
+          "realKey": "ActAsServer",
+          "realSection": "network",
+          "realFile": "Flycast.Generator.cs"
+        },
+        {
+          "id": "flycast_server",
+          "label": "SERVER",
+          "description": "Enter server address.",
+          "type": "input",
+          "default": "auto",
+          "configKey": "flycast_server",
+          "realKey": "server",
+          "realSection": "network",
+          "realFile": "Flycast.Generator.cs"
+        },
+        {
+          "id": "flycast_upnp",
+          "label": "ENABLE UPNP",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "flycast_upnp",
+          "realKey": "EnableUPnP",
+          "realSection": "network",
+          "realFile": "Flycast.Generator.cs"
+        },
+        {
+          "id": "flycast_output",
+          "label": "BROADCAST DIGITAL OUTPUTS",
+          "description": "Broadcast input feedback Ativado TCP port 8000.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "flycast_output",
+          "realKey": "NetworkOutput",
+          "realSection": "network",
+          "realFile": "Flycast.Generator.cs"
+        }
+      ]
+    },
+    {
+      "id": "emulation",
+      "title": "Emulação",
+      "icon": "cpu",
+      "order": 2,
+      "options": [
+        {
+          "id": "flycast_autoframeskip",
+          "label": "Automático FRAMESKIP",
+          "description": "Automatically skip frames to improve performance (smoothless).",
+          "type": "select",
+          "default": "auto",
+          "configKey": "flycast_autoframeskip",
+          "values": [
+            {
+              "label": "DISABLED",
+              "value": "0"
+            },
+            {
+              "label": "NORMAL",
+              "value": "1"
+            },
+            {
+              "label": "MAXIMUM",
+              "value": "2"
+            }
+          ],
+          "realKey": "pvr.AutoSkipFrame",
+          "realSection": "config",
+          "realFile": "Flycast.Generator.cs"
+        },
+        {
+          "id": "flycast_region",
+          "label": "REGION",
+          "type": "select",
+          "default": "auto",
+          "configKey": "flycast_region",
+          "values": [
+            {
+              "label": "Japan",
+              "value": "0"
+            },
+            {
+              "label": "USA",
+              "value": "1"
+            },
+            {
+              "label": "Europe",
+              "value": "2"
+            }
+          ],
+          "realKey": "Dreamcast.Region",
+          "realSection": "config",
+          "realFile": "Flycast.Generator.cs"
+        },
+        {
+          "id": "flycast_language",
+          "label": "LANGUAGE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "flycast_language",
+          "values": [
+            {
+              "label": "English",
+              "value": "1"
+            },
+            {
+              "label": "Français",
+              "value": "3"
+            },
+            {
+              "label": "Deutsch",
+              "value": "2"
+            },
+            {
+              "label": "Español",
+              "value": "4"
+            },
+            {
+              "label": "Italiano",
+              "value": "5"
+            },
+            {
+              "label": "日本語 (Japanese)",
+              "value": "0"
+            }
+          ],
+          "realKey": "Dreamcast.Language",
+          "realSection": "config",
+          "realFile": "Flycast.Generator.cs"
+        },
+        {
+          "id": "flycast_service_menu",
+          "label": "ENABLE SERVICE MENU",
+          "description": "Switch this Ativado to activate service menu via R3 and L3 buttons.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "flycast_service_menu"
+        },
+        {
+          "id": "flycast_vmupergame",
+          "label": "PER GAME VMU",
+          "description": "When enabled, each game will have its own VMU in port 1.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "flycast_vmupergame",
+          "realKey": "PerGameVmu",
+          "realSection": "config",
+          "realFile": "Flycast.Generator.cs"
+        },
+        {
+          "id": "flycast_ram32",
+          "label": "32MB RAM MOD",
+          "description": "Enable 32MB Ram mod for dreamcast, may affect compatibility.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "flycast_ram32",
+          "realKey": "Dreamcast.RamMod32MB",
+          "realSection": "config",
+          "realFile": "Flycast.Generator.cs"
+        },
+        {
+          "id": "flycast_hlebios",
+          "label": "USE HLE BIOS",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "flycast_hlebios",
+          "realKey": "UseReios",
+          "realSection": "config",
+          "realFile": "Flycast.Generator.cs"
+        },
+        {
+          "id": "flycast_fps",
+          "label": "DISPLAY FPS",
+          "description": "Show FPS overlay in-game.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "flycast_fps",
+          "realKey": "rend.ShowFPS",
+          "realSection": "config",
+          "realFile": "Flycast.Generator.cs"
+        },
+        {
+          "id": "flycast_network",
+          "label": "NETWORK TYPE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "flycast_network",
+          "values": [
+            {
+              "label": "DISABLED",
+              "value": "disabled"
+            },
+            {
+              "label": "GGPO",
+              "value": "ggpo"
+            },
+            {
+              "label": "NAOMI",
+              "value": "naomi"
+            },
+            {
+              "label": "BATTLE CABLE",
+              "value": "battle"
+            }
+          ],
+          "realKey": "BattleCable",
+          "realSection": "network",
+          "realFile": "Flycast.Generator.cs"
+        },
+        {
+          "id": "flycast_dcnet",
+          "label": "USE DCNET",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "flycast_dcnet",
+          "realKey": "DCNet",
+          "realSection": "network",
+          "realFile": "Flycast.Generator.cs"
+        },
+        {
+          "id": "flycast_localport",
+          "label": "UDP PORT",
+          "description": "Enter local UDP post to use for hosting.",
+          "type": "input",
+          "default": "auto",
+          "configKey": "flycast_localport",
+          "realKey": "LocalPort",
+          "realSection": "network",
+          "realFile": "Flycast.Generator.cs"
+        },
+        {
+          "id": "flycast_dynarec",
+          "label": "CPU MODE",
+          "description": "Use interpreter for best compatibility, dynarec for performance.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "flycast_dynarec",
+          "values": [
+            {
+              "label": "Dynarec",
+              "value": "yes"
+            },
+            {
+              "label": "Interpreter",
+              "value": "no"
+            }
+          ],
+          "realKey": "Dynarec.Enabled",
+          "realSection": "config",
+          "realFile": "Flycast.Generator.cs"
+        }
+      ]
+    },
+    {
+      "id": "hacks",
+      "title": "Correções / Hacks",
+      "icon": "wrench",
+      "order": 3,
+      "options": [
+        {
+          "id": "flycast_widescreen_hack",
+          "label": "WIDESCREEN CHEATS",
+          "description": "Activate cheats that allow certain games to display in widescreen format.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "flycast_widescreen_hack",
+          "realKey": "rend.WidescreenGameHacks",
+          "realSection": "config",
+          "realFile": "Flycast.Generator.cs"
+        }
+      ]
+    },
+    {
+      "id": "audio",
+      "title": "Áudio",
+      "icon": "volume2",
+      "order": 4,
+      "options": [
+        {
+          "id": "flycast_dsp",
+          "label": "DSP Emulação",
+          "description": "Enable Digital Sound Processor. Enhance sound accuracy at the cost of inscreased performance requirements.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "flycast_dsp",
+          "realKey": "aica.DSPEnabled",
+          "realSection": "config",
+          "realFile": "Flycast.Generator.cs"
+        },
+        {
+          "id": "flycast_audio",
+          "label": "Áudio",
+          "type": "select",
+          "default": "auto",
+          "configKey": "flycast_audio",
+          "values": [
+            {
+              "label": "DIRECTSOUND",
+              "value": "directsound"
+            },
+            {
+              "label": "SDL2",
+              "value": "sdl2"
+            }
+          ],
+          "realKey": "backend",
+          "realSection": "audio",
+          "realFile": "Flycast.Generator.cs"
+        }
+      ]
+    },
+    {
+      "id": "controls",
+      "title": "Controles",
+      "icon": "gamepad2",
+      "order": 5,
+      "options": [
+        {
+          "id": "flycast_controller1",
+          "label": "PLAYER 1 CONTROLLER TYPE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "flycast_controller1",
+          "values": [
+            {
+              "label": "CONTROLLER",
+              "value": "0"
+            },
+            {
+              "label": "LIGHT GUN",
+              "value": "7"
+            },
+            {
+              "label": "KEYBOARD",
+              "value": "5"
+            },
+            {
+              "label": "MOUSE",
+              "value": "6"
+            },
+            {
+              "label": "ASCII STICK",
+              "value": "4"
+            },
+            {
+              "label": "TWIN STICK",
+              "value": "8"
+            }
+          ],
+          "realKey": "flycast_controller1",
+          "realFile": "Flycast.Controllers.cs"
+        },
+        {
+          "id": "flycast_extension1",
+          "label": "PLAYER 1 EXTENSION",
+          "description": "Select the extension to add to the controller.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "flycast_extension1",
+          "values": [
+            {
+              "label": "Nenhum",
+              "value": "10"
+            },
+            {
+              "label": "VMU",
+              "value": "1"
+            },
+            {
+              "label": "PURUPURU",
+              "value": "3"
+            },
+            {
+              "label": "MICROPHONE",
+              "value": "2"
+            }
+          ],
+          "realKey": "device1.2",
+          "realSection": "input",
+          "realFile": "Flycast.Controllers.cs"
+        },
+        {
+          "id": "flycast_controller2",
+          "label": "PLAYER 2 CONTROLLER TYPE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "flycast_controller2",
+          "values": [
+            {
+              "label": "CONTROLLER",
+              "value": "0"
+            },
+            {
+              "label": "LIGHT GUN",
+              "value": "7"
+            },
+            {
+              "label": "KEYBOARD",
+              "value": "5"
+            },
+            {
+              "label": "MOUSE",
+              "value": "6"
+            },
+            {
+              "label": "ASCII STICK",
+              "value": "4"
+            },
+            {
+              "label": "TWIN STICK",
+              "value": "8"
+            }
+          ],
+          "realKey": "flycast_controller1",
+          "realFile": "Flycast.Controllers.cs"
+        },
+        {
+          "id": "flycast_extension2",
+          "label": "PLAYER 2 EXTENSION",
+          "type": "select",
+          "default": "auto",
+          "configKey": "flycast_extension2",
+          "values": [
+            {
+              "label": "Nenhum",
+              "value": "10"
+            },
+            {
+              "label": "VMU",
+              "value": "1"
+            },
+            {
+              "label": "PURUPURU",
+              "value": "3"
+            },
+            {
+              "label": "MICROPHONE",
+              "value": "2"
+            }
+          ],
+          "realKey": "device2.2",
+          "realSection": "input",
+          "realFile": "Flycast.Wheels.cs"
+        },
+        {
+          "id": "flycast_controller3",
+          "label": "PLAYER 3 CONTROLLER TYPE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "flycast_controller3",
+          "values": [
+            {
+              "label": "CONTROLLER",
+              "value": "0"
+            },
+            {
+              "label": "ASCII STICK",
+              "value": "4"
+            },
+            {
+              "label": "TWIN STICK",
+              "value": "8"
+            }
           ]
+        },
+        {
+          "id": "flycast_extension3",
+          "label": "PLAYER 3 EXTENSION",
+          "type": "select",
+          "default": "auto",
+          "configKey": "flycast_extension3",
+          "values": [
+            {
+              "label": "Nenhum",
+              "value": "10"
+            },
+            {
+              "label": "VMU",
+              "value": "1"
+            },
+            {
+              "label": "PURUPURU",
+              "value": "3"
+            },
+            {
+              "label": "MICROPHONE",
+              "value": "2"
+            }
+          ]
+        },
+        {
+          "id": "flycast_controller4",
+          "label": "PLAYER 4 CONTROLLER TYPE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "flycast_controller4",
+          "values": [
+            {
+              "label": "CONTROLLER",
+              "value": "0"
+            },
+            {
+              "label": "ASCII STICK",
+              "value": "4"
+            },
+            {
+              "label": "TWIN STICK",
+              "value": "8"
+            }
+          ]
+        },
+        {
+          "id": "flycast_extension4",
+          "label": "PLAYER 4 EXTENSION",
+          "type": "select",
+          "default": "auto",
+          "configKey": "flycast_extension4",
+          "values": [
+            {
+              "label": "Nenhum",
+              "value": "10"
+            },
+            {
+              "label": "VMU",
+              "value": "1"
+            },
+            {
+              "label": "PURUPURU",
+              "value": "3"
+            },
+            {
+              "label": "MICROPHONE",
+              "value": "2"
+            }
+          ]
+        },
+        {
+          "id": "flycast_crosshair",
+          "label": "SHOW CROSSHAIR",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "flycast_crosshair"
+        },
+        {
+          "id": "gun_invert",
+          "label": "INVERT TRIGGER/RELOAD",
+          "description": "Activate this when using WiiZapper to invert trigger and reload buttons.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "gun_invert"
+        },
+        {
+          "id": "flycast_mousegunbuttons",
+          "label": "MOUSE MAPPING",
+          "description": "Define mapping for mouse buttons (left/right/middle), defaut is a/reload/start.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "flycast_mousegunbuttons",
+          "values": [
+            {
+              "label": "A/reload/start",
+              "value": "a_r_s"
+            },
+            {
+              "label": "X/B/start",
+              "value": "x_b_s"
+            },
+            {
+              "label": "X/A/start",
+              "value": "x_a_s"
+            },
+            {
+              "label": "A/B/start",
+              "value": "a_b_s"
+            }
+          ]
+        },
+        {
+          "id": "gun_index_revert",
+          "label": "SWITCH GUN INDEX",
+          "description": "Switch this to use lightgun 1 for player 2 and lightgun 2 for player 1.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "gun_index_revert"
+        },
+        {
+          "id": "use_demulshooter",
+          "label": "USE DEMULSHOOTER",
+          "description": "Launch DemulShooter for gun games.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "use_demulshooter"
+        },
+        {
+          "id": "ds_output",
+          "label": "OUTPUT GAME DATA",
+          "description": "Enable this option when using mamehooker with LEDs, solenoids, rumble...",
+          "type": "select",
+          "default": "auto",
+          "configKey": "ds_output",
+          "values": [
+            {
+              "label": "TO WINDOW",
+              "value": "win"
+            },
+            {
+              "label": "TO NETWORK",
+              "value": "net"
+            },
+            {
+              "label": "TO BOTH",
+              "value": "both"
+            }
+          ]
+        },
+        {
+          "id": "ds_verbose",
+          "label": "VERBOSE MODE",
+          "description": "Enable verbose mode for debugging.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "ds_verbose"
+        },
+        {
+          "id": "use_mamehooker",
+          "label": "USE MAMEHOOKER",
+          "description": "Launch MameHooker for outputs management.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "use_mamehooker"
+        },
+        {
+          "id": "flycast_deadzone",
+          "label": "JOYSTICK DEADZONE",
+          "type": "slider",
+          "default": "auto",
+          "configKey": "flycast_deadzone",
+          "min": 0,
+          "max": 50,
+          "step": 2,
+          "suffix": "%",
+          "realKey": "dead_zone",
+          "realSection": "emulator",
+          "realFile": "Flycast.Controllers.cs"
+        },
+        {
+          "id": "flycast_rumble",
+          "label": "GAMEPAD RUMBLE",
+          "type": "slider",
+          "default": "auto",
+          "configKey": "flycast_rumble",
+          "min": 0,
+          "max": 100,
+          "step": 5,
+          "suffix": "%",
+          "realKey": "rumble_power",
+          "realSection": "emulator",
+          "realFile": "Flycast.Controllers.cs"
         }
       ]
     }

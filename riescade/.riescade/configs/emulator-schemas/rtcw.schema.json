@@ -1,0 +1,265 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "rtcw",
+  "name": "RTCW",
+  "description": "Configurações para o emulador RTCW geradas a partir do es_features.cfg.",
+  "icon": "rtcw",
+  "configFiles": [],
+  "globalMappings": {},
+  "groups": [
+    {
+      "id": "graphics",
+      "title": "Gráficos",
+      "icon": "monitor",
+      "order": 1,
+      "options": [
+        {
+          "id": "rtcw_resolution",
+          "label": "Resolução Interna",
+          "type": "select",
+          "default": "auto",
+          "configKey": "rtcw_resolution",
+          "values": [
+            {
+              "label": "Automático(NATIVE)",
+              "value": "-2"
+            },
+            {
+              "label": "320x240",
+              "value": "0"
+            },
+            {
+              "label": "400x300",
+              "value": "1"
+            },
+            {
+              "label": "512x384",
+              "value": "2"
+            },
+            {
+              "label": "640x480",
+              "value": "3"
+            },
+            {
+              "label": "800x600",
+              "value": "4"
+            },
+            {
+              "label": "960x720",
+              "value": "5"
+            },
+            {
+              "label": "1024x768",
+              "value": "6"
+            },
+            {
+              "label": "1152x864",
+              "value": "7"
+            },
+            {
+              "label": "1280x1024",
+              "value": "8"
+            },
+            {
+              "label": "1600x1200",
+              "value": "9"
+            },
+            {
+              "label": "2048x1536",
+              "value": "10"
+            },
+            {
+              "label": "856x480",
+              "value": "11"
+            },
+            {
+              "label": "640x360",
+              "value": "12"
+            },
+            {
+              "label": "640x400",
+              "value": "13"
+            },
+            {
+              "label": "800x450",
+              "value": "14"
+            },
+            {
+              "label": "800x500",
+              "value": "15"
+            },
+            {
+              "label": "1024x640",
+              "value": "16"
+            },
+            {
+              "label": "1024x576",
+              "value": "17"
+            },
+            {
+              "label": "1280x720",
+              "value": "18"
+            },
+            {
+              "label": "1280x768",
+              "value": "19"
+            },
+            {
+              "label": "1280x800",
+              "value": "20"
+            },
+            {
+              "label": "1280x960",
+              "value": "21"
+            },
+            {
+              "label": "1440x900",
+              "value": "22"
+            },
+            {
+              "label": "1600x900",
+              "value": "23"
+            },
+            {
+              "label": "1600x1000",
+              "value": "24"
+            },
+            {
+              "label": "1680x1050",
+              "value": "25"
+            },
+            {
+              "label": "1920x1080",
+              "value": "26"
+            },
+            {
+              "label": "1920x1200",
+              "value": "27"
+            },
+            {
+              "label": "1920x1440",
+              "value": "28"
+            },
+            {
+              "label": "2560x1600",
+              "value": "29"
+            }
+          ]
+        },
+        {
+          "id": "rtcw_aspect",
+          "label": "Proporção de Tela",
+          "type": "select",
+          "default": "auto",
+          "configKey": "rtcw_aspect",
+          "values": [
+            {
+              "label": "Desativado",
+              "value": "0"
+            },
+            {
+              "label": "4/3",
+              "value": "1"
+            },
+            {
+              "label": "WIDESCREEN",
+              "value": "2"
+            }
+          ]
+        },
+        {
+          "id": "rtcw_vsync",
+          "label": "Sincronização Vertical (V-Sync)",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "rtcw_vsync"
+        },
+        {
+          "id": "rtcw_texturefilter",
+          "label": "TEXTURE FILTERING",
+          "description": "Control the texture filtering of the Emulação.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "rtcw_texturefilter",
+          "values": [
+            {
+              "label": "TRILINEAR",
+              "value": "GL_LINEAR_MIPMAP_LINEAR"
+            },
+            {
+              "label": "BILINEAR",
+              "value": "GL_LINEAR_MIPMAP_NEAREST"
+            }
+          ]
+        },
+        {
+          "id": "rtcw_texturequality",
+          "label": "TEXTURE QUALITY",
+          "type": "select",
+          "default": "auto",
+          "configKey": "rtcw_texturequality",
+          "values": [
+            {
+              "label": "HIGH",
+              "value": "0"
+            },
+            {
+              "label": "MEDIUM",
+              "value": "1"
+            },
+            {
+              "label": "LOW",
+              "value": "2"
+            }
+          ]
+        },
+        {
+          "id": "rtcw_lighting",
+          "label": "LIGHTING",
+          "type": "select",
+          "default": "auto",
+          "configKey": "rtcw_lighting",
+          "values": [
+            {
+              "label": "LIGHT MAP (HIGH)",
+              "value": "0"
+            },
+            {
+              "label": "VERTEX (LOW)",
+              "value": "1"
+            }
+          ]
+        },
+        {
+          "id": "rtcw_anisotropic",
+          "label": "Filtragem Anisotrópica",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "rtcw_anisotropic"
+        }
+      ]
+    },
+    {
+      "id": "emulation",
+      "title": "Emulação",
+      "icon": "cpu",
+      "order": 2,
+      "options": [
+        {
+          "id": "rtcw_showfps",
+          "label": "SHOW FPS",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "rtcw_showfps"
+        },
+        {
+          "id": "rtcw_subtitles",
+          "label": "ENABLE SUBTITLES",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "rtcw_subtitles"
+        }
+      ]
+    }
+  ]
+}

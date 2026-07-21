@@ -1,0 +1,326 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "chihiro-gun",
+  "name": "CHIHIRO-GUN",
+  "description": "Configurações para o emulador CHIHIRO-GUN geradas a partir do es_features.cfg.",
+  "icon": "chihiro-gun",
+  "configFiles": [],
+  "globalMappings": {
+    "ratio": {
+      "configKey": "ratio",
+      "globalKey": "aspect_ratio"
+    }
+  },
+  "groups": [
+    {
+      "id": "graphics",
+      "title": "Gráficos",
+      "icon": "monitor",
+      "order": 1,
+      "options": [
+        {
+          "id": "internalresolution",
+          "label": "Resolução Interna",
+          "type": "select",
+          "default": "auto",
+          "configKey": "internalresolution",
+          "values": [
+            {
+              "label": "1X NATIVE",
+              "value": "1"
+            },
+            {
+              "label": "2X (1280x960)",
+              "value": "2"
+            },
+            {
+              "label": "3X",
+              "value": "3"
+            },
+            {
+              "label": "4X (2560x1920)",
+              "value": "4"
+            },
+            {
+              "label": "5X",
+              "value": "5"
+            },
+            {
+              "label": "6X",
+              "value": "6"
+            },
+            {
+              "label": "7X",
+              "value": "7"
+            },
+            {
+              "label": "8X (5120x3840)",
+              "value": "8"
+            },
+            {
+              "label": "9X",
+              "value": "9"
+            },
+            {
+              "label": "10X",
+              "value": "10"
+            },
+            {
+              "label": "11X",
+              "value": "11"
+            },
+            {
+              "label": "12X",
+              "value": "12"
+            }
+          ],
+          "realKey": "RenderResolution",
+          "realSection": "video",
+          "realFile": "Cxbx.Generator.cs"
+        },
+        {
+          "id": "VSync",
+          "label": "Sincronização Vertical (V-Sync)",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "VSync",
+          "realKey": "VSync",
+          "realSection": "video",
+          "realFile": "Cxbx.Generator.cs"
+        },
+        {
+          "id": "ratio",
+          "label": "Proporção de Tela",
+          "type": "select",
+          "default": "auto",
+          "configKey": "ratio",
+          "values": [
+            {
+              "label": "KEEP ASPECT RATIO",
+              "value": "true"
+            },
+            {
+              "label": "STRETCHED",
+              "value": "stretch"
+            }
+          ],
+          "inheritsGlobal": "aspect_ratio",
+          "realKey": "ratio",
+          "realFile": "Cxbx.Generator.cs"
+        },
+        {
+          "id": "xbox_videostandard",
+          "label": "Vídeo STANDARD",
+          "type": "select",
+          "default": "auto",
+          "configKey": "xbox_videostandard",
+          "values": [
+            {
+              "label": "NTSC-M",
+              "value": "NtscM"
+            },
+            {
+              "label": "NTSC-J",
+              "value": "NtscJ"
+            },
+            {
+              "label": "PAL",
+              "value": "PalI"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "emulation",
+      "title": "Emulação",
+      "icon": "cpu",
+      "order": 2,
+      "options": [
+        {
+          "id": "xbox_language",
+          "label": "LANGUAGE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "xbox_language",
+          "values": [
+            {
+              "label": "English",
+              "value": "1"
+            },
+            {
+              "label": "日本語 (Japanese)",
+              "value": "2"
+            },
+            {
+              "label": "Deutsch",
+              "value": "3"
+            },
+            {
+              "label": "Français",
+              "value": "4"
+            },
+            {
+              "label": "Español",
+              "value": "5"
+            },
+            {
+              "label": "Italiano",
+              "value": "6"
+            },
+            {
+              "label": "한국어 (Korean)",
+              "value": "7"
+            },
+            {
+              "label": "简体中文 (Chinese)",
+              "value": "8"
+            },
+            {
+              "label": "Português",
+              "value": "9"
+            }
+          ]
+        },
+        {
+          "id": "xbeSignature",
+          "label": "DISABLE XBE SIGNATURE CHECK",
+          "description": "Disable XBE signature check when using homebrew games.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "xbeSignature",
+          "realKey": "IgnoreInvalidXbeSig",
+          "realSection": "gui",
+          "realFile": "Cxbx.Generator.cs"
+        },
+        {
+          "id": "disablePixelShaders",
+          "label": "DISABLE PIXEL SHADERS",
+          "description": "Disable pixel shaders can fix some games crashing, do not activate unless the game needs it.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "disablePixelShaders",
+          "realKey": "DisablePixelShaders",
+          "realSection": "hack",
+          "realFile": "Cxbx.Generator.cs"
+        },
+        {
+          "id": "useallcores",
+          "label": "USE ALL CORES",
+          "description": "Will run the XBOX process Ativado multiple CPU threads, can improve performance but might break some games.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "useallcores",
+          "realKey": "UseAllCores",
+          "realSection": "hack",
+          "realFile": "Cxbx.Generator.cs"
+        }
+      ]
+    },
+    {
+      "id": "hacks",
+      "title": "Correções / Hacks",
+      "icon": "wrench",
+      "order": 3,
+      "options": [
+        {
+          "id": "rdtscPatching",
+          "label": "SKIP RDTSC PATCHING",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "rdtscPatching",
+          "realKey": "SkipRdtscPatching",
+          "realSection": "hack",
+          "realFile": "Cxbx.Generator.cs"
+        }
+      ]
+    },
+    {
+      "id": "controls",
+      "title": "Controles",
+      "icon": "gamepad2",
+      "order": 5,
+      "options": [
+        {
+          "id": "cxbx_controller1",
+          "label": "PLAYER 1 CONTROLLER TYPE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "cxbx_controller1",
+          "values": [
+            {
+              "label": "GAMEPAD S",
+              "value": "1"
+            },
+            {
+              "label": "GAMEPAD DUKE",
+              "value": "0"
+            },
+            {
+              "label": "EMS TOPGUN",
+              "value": "2"
+            }
+          ]
+        },
+        {
+          "id": "cxbx_controller2",
+          "label": "PLAYER 2 CONTROLLER TYPE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "cxbx_controller2",
+          "values": [
+            {
+              "label": "GAMEPAD S",
+              "value": "1"
+            },
+            {
+              "label": "GAMEPAD DUKE",
+              "value": "0"
+            }
+          ]
+        },
+        {
+          "id": "cxbx_controller3",
+          "label": "PLAYER 3 CONTROLLER TYPE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "cxbx_controller3",
+          "values": [
+            {
+              "label": "GAMEPAD S",
+              "value": "1"
+            },
+            {
+              "label": "GAMEPAD DUKE",
+              "value": "0"
+            }
+          ]
+        },
+        {
+          "id": "cxbx_controller4",
+          "label": "PLAYER 4 CONTROLLER TYPE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "cxbx_controller4",
+          "values": [
+            {
+              "label": "GAMEPAD S",
+              "value": "1"
+            },
+            {
+              "label": "GAMEPAD DUKE",
+              "value": "0"
+            }
+          ]
+        },
+        {
+          "id": "cxbx_rumble",
+          "label": "ENABLE RUMBLE",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "cxbx_rumble"
+        }
+      ]
+    }
+  ]
+}

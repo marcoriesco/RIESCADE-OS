@@ -1,0 +1,59 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "daphne",
+  "name": "DAPHNE",
+  "description": "Configurações para o emulador DAPHNE geradas a partir do es_features.cfg.",
+  "icon": "daphne",
+  "configFiles": [],
+  "globalMappings": {
+    "ratio": {
+      "configKey": "ratio",
+      "globalKey": "aspect_ratio"
+    }
+  },
+  "groups": [
+    {
+      "id": "graphics",
+      "title": "Gráficos",
+      "icon": "monitor",
+      "order": 1,
+      "options": [
+        {
+          "id": "ratio",
+          "label": "Proporção de Tela",
+          "type": "select",
+          "default": "auto",
+          "configKey": "ratio",
+          "values": [
+            {
+              "label": "4/3",
+              "value": "4/3"
+            },
+            {
+              "label": "16/9",
+              "value": "16/9"
+            }
+          ],
+          "inheritsGlobal": "aspect_ratio",
+          "realKey": "ratio",
+          "realFile": "Daphne.Generator.cs"
+        }
+      ]
+    },
+    {
+      "id": "emulation",
+      "title": "Emulação",
+      "icon": "cpu",
+      "order": 2,
+      "options": [
+        {
+          "id": "fastboot",
+          "label": "FASTBOOT",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "fastboot"
+        }
+      ]
+    }
+  ]
+}

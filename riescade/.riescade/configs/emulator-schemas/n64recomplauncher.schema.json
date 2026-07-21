@@ -1,0 +1,47 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "n64recomplauncher",
+  "name": "N64RECOMPLAUNCHER",
+  "description": "Configurações para o emulador N64RECOMPLAUNCHER geradas a partir do es_features.cfg.",
+  "icon": "n64recomplauncher",
+  "configFiles": [],
+  "globalMappings": {},
+  "groups": [
+    {
+      "id": "emulation",
+      "title": "Emulação",
+      "icon": "cpu",
+      "order": 2,
+      "options": [
+        {
+          "id": "n64recomp_useLauncher",
+          "label": "RUN LAUNCHER",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "n64recomp_useLauncher"
+        },
+        {
+          "id": "pdark_region",
+          "label": "REGION",
+          "type": "select",
+          "default": "auto",
+          "configKey": "pdark_region",
+          "values": [
+            {
+              "label": "Europe",
+              "value": "EUR"
+            },
+            {
+              "label": "USA",
+              "value": "USA"
+            },
+            {
+              "label": "Japan",
+              "value": "JPN"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

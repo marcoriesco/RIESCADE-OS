@@ -1,0 +1,88 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "jynx",
+  "name": "JYNX",
+  "description": "Configurações para o emulador JYNX geradas a partir do es_features.cfg.",
+  "icon": "jynx",
+  "configFiles": [],
+  "globalMappings": {},
+  "groups": [
+    {
+      "id": "graphics",
+      "title": "Gráficos",
+      "icon": "monitor",
+      "order": 1,
+      "options": [
+        {
+          "id": "jynx_fullscreen",
+          "label": "Desativar Tela Cheia",
+          "description": "Switch this option Ativado to Desativar Tela Cheia and run emulator in a windowed mode.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "jynx_fullscreen"
+        },
+        {
+          "id": "jynx_colourset",
+          "label": "COLOR SET",
+          "type": "select",
+          "default": "auto",
+          "configKey": "jynx_colourset",
+          "values": [
+            {
+              "label": "Padrão",
+              "value": "0"
+            },
+            {
+              "label": "GREEN SCREEN",
+              "value": "4"
+            },
+            {
+              "label": "BLACK AND WHITE TV",
+              "value": "3"
+            },
+            {
+              "label": "LEVEL 9 GAMES",
+              "value": "2"
+            },
+            {
+              "label": "GREEN CHANNEL ONLY",
+              "value": "1"
+            }
+          ],
+          "realKey": "ColourSet",
+          "realFile": "Jynx.Generator.cs"
+        }
+      ]
+    },
+    {
+      "id": "emulation",
+      "title": "Emulação",
+      "icon": "cpu",
+      "order": 2,
+      "options": [
+        {
+          "id": "jynx_machine",
+          "label": "MODEL TO EMULATE",
+          "description": "Type of LYNX to emulate, Padrão to 48k.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "jynx_machine",
+          "values": [
+            {
+              "label": "LYNX 48K (Padrão)",
+              "value": "0"
+            },
+            {
+              "label": "LYNX 96K",
+              "value": "1"
+            },
+            {
+              "label": "LYNX 96K - SCORPION",
+              "value": "2"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

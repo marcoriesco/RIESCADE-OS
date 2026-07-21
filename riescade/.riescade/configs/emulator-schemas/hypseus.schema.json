@@ -1,0 +1,116 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "hypseus",
+  "name": "HYPSEUS",
+  "description": "Configurações para o emulador HYPSEUS geradas a partir do es_features.cfg.",
+  "icon": "hypseus",
+  "configFiles": [],
+  "globalMappings": {
+    "ratio": {
+      "configKey": "ratio",
+      "globalKey": "aspect_ratio"
+    }
+  },
+  "groups": [
+    {
+      "id": "graphics",
+      "title": "Gráficos",
+      "icon": "monitor",
+      "order": 1,
+      "options": [
+        {
+          "id": "daphne_vsync",
+          "label": "Sincronização Vertical (V-Sync)",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "daphne_vsync"
+        },
+        {
+          "id": "ratio",
+          "label": "Proporção de Tela",
+          "type": "select",
+          "default": "auto",
+          "configKey": "ratio",
+          "values": [
+            {
+              "label": "4/3",
+              "value": "4/3"
+            },
+            {
+              "label": "16/9",
+              "value": "16/9"
+            }
+          ],
+          "inheritsGlobal": "aspect_ratio"
+        },
+        {
+          "id": "hypseus_scalefactor",
+          "label": "GAME WINDOW DOWNSCALE",
+          "description": "Only use this to downscale the window when using upscale in Windows settings.",
+          "type": "slider",
+          "default": "auto",
+          "configKey": "hypseus_scalefactor",
+          "min": 25,
+          "max": 100,
+          "step": 5,
+          "suffix": "%"
+        },
+        {
+          "id": "hypseus_renderer",
+          "label": "Vídeo DRIVER",
+          "type": "select",
+          "default": "auto",
+          "configKey": "hypseus_renderer",
+          "values": [
+            {
+              "label": "OPENGL",
+              "value": "opengl"
+            },
+            {
+              "label": "VULKAN",
+              "value": "vulkan"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "emulation",
+      "title": "Emulação",
+      "icon": "cpu",
+      "order": 2,
+      "options": [
+        {
+          "id": "fastboot",
+          "label": "FASTBOOT",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "fastboot"
+        }
+      ]
+    },
+    {
+      "id": "controls",
+      "title": "Controles",
+      "icon": "gamepad2",
+      "order": 5,
+      "options": [
+        {
+          "id": "hypseus_flight",
+          "label": "INVERT UP AND DOWN",
+          "description": "Use this setting for flight games.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "hypseus_flight"
+        },
+        {
+          "id": "hypseus_crosshair",
+          "label": "SHOW CROSSHAIR",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "hypseus_crosshair"
+        }
+      ]
+    }
+  ]
+}

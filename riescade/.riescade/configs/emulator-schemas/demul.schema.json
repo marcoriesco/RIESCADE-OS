@@ -1,0 +1,232 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "demul",
+  "name": "DEMUL",
+  "description": "Configurações para o emulador DEMUL geradas a partir do es_features.cfg.",
+  "icon": "demul",
+  "configFiles": [],
+  "globalMappings": {},
+  "groups": [
+    {
+      "id": "graphics",
+      "title": "Gráficos",
+      "icon": "monitor",
+      "order": 1,
+      "options": [
+        {
+          "id": "internal_resolution",
+          "label": "Resolução Interna",
+          "type": "select",
+          "default": "auto",
+          "configKey": "internal_resolution",
+          "values": [
+            {
+              "label": "1X NATIVE",
+              "value": "1"
+            },
+            {
+              "label": "2X",
+              "value": "2"
+            },
+            {
+              "label": "3X",
+              "value": "3"
+            },
+            {
+              "label": "4X",
+              "value": "4"
+            },
+            {
+              "label": "5X",
+              "value": "5"
+            },
+            {
+              "label": "6X",
+              "value": "6"
+            }
+          ],
+          "realKey": "scaling",
+          "realSection": "main",
+          "realFile": "Demul.Generator.cs"
+        },
+        {
+          "id": "VSync",
+          "label": "Sincronização Vertical (V-Sync)",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "VSync",
+          "realKey": "Vsync",
+          "realSection": "main",
+          "realFile": "Demul.Generator.cs"
+        },
+        {
+          "id": "demul_ratio",
+          "label": "Proporção de Tela",
+          "type": "select",
+          "default": "auto",
+          "configKey": "demul_ratio",
+          "values": [
+            {
+              "label": "16/9",
+              "value": "2"
+            },
+            {
+              "label": "4/3",
+              "value": "1"
+            },
+            {
+              "label": "STRETCHED",
+              "value": "0"
+            }
+          ],
+          "realKey": "bezel",
+          "realFile": "Demul.Generator.cs"
+        },
+        {
+          "id": "demul_videomode",
+          "label": "SCREEN TYPE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "demul_videomode",
+          "values": [
+            {
+              "label": "Automático",
+              "value": "1024"
+            },
+            {
+              "label": "VGA",
+              "value": "0"
+            },
+            {
+              "label": "TV (RGB)",
+              "value": "512"
+            },
+            {
+              "label": "TV (VBS/S, RF)",
+              "value": "768"
+            },
+            {
+              "label": "RESERVED",
+              "value": "256"
+            }
+          ],
+          "realKey": "videomode",
+          "realSection": "main",
+          "realFile": "Demul.Generator.cs"
+        },
+        {
+          "id": "demul_oldgpu",
+          "label": "USE OLD GPU PLUGIN",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "demul_oldgpu"
+        }
+      ]
+    },
+    {
+      "id": "emulation",
+      "title": "Emulação",
+      "icon": "cpu",
+      "order": 2,
+      "options": [
+        {
+          "id": "cpumode",
+          "label": "CPU MODE",
+          "description": "Use interpreter for best compatibility, dynarec for performance.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "cpumode",
+          "values": [
+            {
+              "label": "DYNAREC",
+              "value": "1"
+            },
+            {
+              "label": "INTERPRETER",
+              "value": "0"
+            }
+          ],
+          "realKey": "cpumode",
+          "realSection": "main",
+          "realFile": "Demul.Generator.cs"
+        }
+      ]
+    },
+    {
+      "id": "controls",
+      "title": "Controles",
+      "icon": "gamepad2",
+      "order": 5,
+      "options": [
+        {
+          "id": "demuldeadzone",
+          "label": "ANALOG DEADZONE",
+          "type": "slider",
+          "default": "auto",
+          "configKey": "demuldeadzone",
+          "min": 0,
+          "max": 50,
+          "step": 2,
+          "suffix": "%",
+          "realKey": "DEADZONE",
+          "realSection": "GLOBAL0",
+          "realFile": "Demul.Controllers.cs"
+        },
+        {
+          "id": "use_demulshooter",
+          "label": "USE DEMULSHOOTER",
+          "description": "Launch DemulShooter for gun games.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "use_demulshooter"
+        },
+        {
+          "id": "ds_output",
+          "label": "OUTPUT GAME DATA",
+          "description": "Enable this option when using mamehooker with LEDs, solenoids, rumble...",
+          "type": "select",
+          "default": "auto",
+          "configKey": "ds_output",
+          "values": [
+            {
+              "label": "TO WINDOW",
+              "value": "win"
+            },
+            {
+              "label": "TO NETWORK",
+              "value": "net"
+            },
+            {
+              "label": "TO BOTH",
+              "value": "both"
+            }
+          ]
+        },
+        {
+          "id": "ds_verbose",
+          "label": "VERBOSE MODE",
+          "description": "Enable verbose mode for debugging.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "ds_verbose"
+        },
+        {
+          "id": "demul_noresize",
+          "label": "DISABLE RESIZE",
+          "description": "Fix Demul bug (exiting fullscreen when shooting upper left corner), blocking all mouse inputs to Demul GUI.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "demul_noresize"
+        },
+        {
+          "id": "use_mamehooker",
+          "label": "USE MAMEHOOKER",
+          "description": "Launch MameHooker for outputs management.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "use_mamehooker"
+        }
+      ]
+    }
+  ]
+}

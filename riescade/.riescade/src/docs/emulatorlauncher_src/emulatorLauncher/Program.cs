@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
@@ -77,6 +77,7 @@ namespace EmulatorLauncher
             { "devilutionx", () => new DevilutionXGenerator() },
             { "dhewm3", () => new Dhewm3Generator() },
             { "dolphin", () => new DolphinGenerator() },
+            { "dolphin-triforce", () => new DolphinGenerator() },
             { "dosbox", () => new DosBoxGenerator() },
             { "dosbox-pure", () => new DosBoxPureGenerator() },
             { "dosbox-staging", () => new DosBoxStagingGenerator() },
@@ -87,6 +88,8 @@ namespace EmulatorLauncher
             { "eduke32", () => new EDukeGenerator() },
             { "eka2l1", () => new Eka2l1Generator() },
             { "exodos", () => new exoDOSGenerator() },
+            { "exowin3x", () => new exoDOSGenerator() },
+            { "exowin9x", () => new exoDOSGenerator() },
             { "fbneo", () => new FbneoGenerator() },
             { "flycast", () => new FlycastGenerator() },
             { "fpinball", () => new FpinballGenerator() },

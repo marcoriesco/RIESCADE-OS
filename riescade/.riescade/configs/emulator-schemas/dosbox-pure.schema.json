@@ -1,0 +1,870 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "dosbox-pure",
+  "name": "DOSBOX-PURE",
+  "description": "Configurações para o emulador DOSBOX-PURE geradas a partir do es_features.cfg.",
+  "icon": "dosbox-pure",
+  "configFiles": [],
+  "globalMappings": {},
+  "groups": [
+    {
+      "id": "graphics",
+      "title": "Gráficos",
+      "icon": "monitor",
+      "order": 1,
+      "options": [
+        {
+          "id": "dosbox_pure_machine",
+          "label": "EMULATED GRAPHIC CHIP",
+          "description": "The type of emulated graphic chip.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "dosbox_pure_machine",
+          "values": [
+            {
+              "label": "SVGA",
+              "value": "svga"
+            },
+            {
+              "label": "VGA",
+              "value": "vga"
+            },
+            {
+              "label": "EGA",
+              "value": "ega"
+            },
+            {
+              "label": "CGA",
+              "value": "cga"
+            },
+            {
+              "label": "TANDY",
+              "value": "tandy"
+            },
+            {
+              "label": "HERCULES",
+              "value": "hercules"
+            },
+            {
+              "label": "PCJR",
+              "value": "pcjr"
+            }
+          ]
+        },
+        {
+          "id": "dosbox_pure_aspect_correction",
+          "label": "Proporção de Tela",
+          "type": "select",
+          "default": "auto",
+          "configKey": "dosbox_pure_aspect_correction",
+          "values": [
+            {
+              "label": "ORIGINAL",
+              "value": "false"
+            },
+            {
+              "label": "SINGLE-SCAN",
+              "value": "true"
+            },
+            {
+              "label": "Duplo-SCAN",
+              "value": "doublescan"
+            },
+            {
+              "label": "SINGLE-SCAN(PADDED)",
+              "value": "padded"
+            },
+            {
+              "label": "Duplo-SCAN(PADDED)",
+              "value": "padded-doublescan"
+            }
+          ]
+        },
+        {
+          "id": "dosbox_pure_svga",
+          "label": "SVGA MODE",
+          "description": "The SVGA variation that is being emulated.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "dosbox_pure_svga",
+          "values": [
+            {
+              "label": "S3 TRIO64",
+              "value": "svga_s3"
+            },
+            {
+              "label": "S3 TRIO64 Não LINES BUFFER HACK",
+              "value": "vesa_nolfb"
+            },
+            {
+              "label": "S3 TRIO64 VESA 1.3",
+              "value": "vesa_oldvbe"
+            },
+            {
+              "label": "TSENG LABS ET3000",
+              "value": "svga_et3000"
+            },
+            {
+              "label": "TSENG LABS ET4000",
+              "value": "svga_et4000"
+            },
+            {
+              "label": "PARADISE PVGA1A",
+              "value": "svga_paradise"
+            }
+          ]
+        },
+        {
+          "id": "dosbox_pure_voodoo",
+          "label": "3DFX VOODOO ACCELERATOR",
+          "description": "Enable certain games with support for the 3Dfx Voodoo accelerator.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "dosbox_pure_voodoo",
+          "values": [
+            {
+              "label": "8MB Memory",
+              "value": "8mb"
+            },
+            {
+              "label": "Desativado",
+              "value": "off"
+            },
+            {
+              "label": "4MB Memory",
+              "value": "4mb"
+            },
+            {
+              "label": "12MB Memory",
+              "value": "12mb"
+            }
+          ]
+        },
+        {
+          "id": "dosbox_pure_voodoo_perf",
+          "label": "3DFX VOODOO PERFORMANCE",
+          "description": "Tweak the behavior of the 3Dfx Voodoo Emulação.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "dosbox_pure_voodoo_perf",
+          "values": [
+            {
+              "label": "HARDWARE OPENGL",
+              "value": "4"
+            },
+            {
+              "label": "Multi-threaded",
+              "value": "1"
+            },
+            {
+              "label": "Single-threaded",
+              "value": "0"
+            },
+            {
+              "label": "Multi-threaded (Low Quality)",
+              "value": "3"
+            },
+            {
+              "label": "Single-threaded (Low Quality)",
+              "value": "2"
+            }
+          ]
+        },
+        {
+          "id": "dosbox_pure_voodoo_scale",
+          "label": "3DFX VOODOO SCALING",
+          "description": "Increase the 3DFx Voodoo OpenGL resolution.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "dosbox_pure_voodoo_scale",
+          "values": [
+            {
+              "label": "1X",
+              "value": "1"
+            },
+            {
+              "label": "2X",
+              "value": "2"
+            },
+            {
+              "label": "3X",
+              "value": "3"
+            },
+            {
+              "label": "4X",
+              "value": "4"
+            },
+            {
+              "label": "5X",
+              "value": "5"
+            },
+            {
+              "label": "6X",
+              "value": "6"
+            },
+            {
+              "label": "7X",
+              "value": "7"
+            },
+            {
+              "label": "8X",
+              "value": "8"
+            }
+          ]
+        },
+        {
+          "id": "dosbox_interface_scaling",
+          "label": "SCALING FILTER",
+          "description": "Set scaling filter for rendered content.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "dosbox_interface_scaling",
+          "values": [
+            {
+              "label": "SHARP",
+              "value": "sharp"
+            },
+            {
+              "label": "BILINEAR",
+              "value": "bilinear"
+            },
+            {
+              "label": "NEAREST NEIGHBOR",
+              "value": "nearest"
+            },
+            {
+              "label": "INTEGER SCALING",
+              "value": "integer"
+            }
+          ]
+        },
+        {
+          "id": "dosbox_interface_crtfilter",
+          "label": "CRT FILTER",
+          "type": "select",
+          "default": "auto",
+          "configKey": "dosbox_interface_crtfilter",
+          "values": [
+            {
+              "label": "Nenhum",
+              "value": "0"
+            },
+            {
+              "label": "SCANLINES ONLY",
+              "value": "1"
+            },
+            {
+              "label": "TV STYLE PHOSPHORS",
+              "value": "2"
+            },
+            {
+              "label": "APERTURE-GRILLE PHOSPHORS",
+              "value": "3"
+            },
+            {
+              "label": "STRETCHED VGA STYLE PHOSPHORS",
+              "value": "4"
+            },
+            {
+              "label": "VGA STYLE PHOSPHORS",
+              "value": "5"
+            }
+          ]
+        },
+        {
+          "id": "dosbox_pure_overscan",
+          "label": "OVERSCAN",
+          "type": "select",
+          "default": "auto",
+          "configKey": "dosbox_pure_overscan",
+          "values": [
+            {
+              "label": "Desativado",
+              "value": "0"
+            },
+            {
+              "label": "SMALL",
+              "value": "1"
+            },
+            {
+              "label": "MEDIUM",
+              "value": "2"
+            },
+            {
+              "label": "LARGE",
+              "value": "3"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "emulation",
+      "title": "Emulação",
+      "icon": "cpu",
+      "order": 2,
+      "options": [
+        {
+          "id": "dosbox_pure_conf",
+          "label": "LOAD DOSBOX.CONF",
+          "description": "Try to use legacy dosbox.conf config file instead of core options.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "dosbox_pure_conf",
+          "values": [
+            {
+              "label": "Desativado",
+              "value": "false"
+            },
+            {
+              "label": "dosbox.conf (in zip or folder)",
+              "value": "inside"
+            },
+            {
+              "label": "*game_name*.conf (next to zip or folder)",
+              "value": "outside"
+            }
+          ]
+        },
+        {
+          "id": "dosbox_pure_cycles",
+          "label": "CPU CYCLES",
+          "description": "The raw performance to emulate.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "dosbox_pure_cycles",
+          "values": [
+            {
+              "label": "MAX",
+              "value": "max"
+            },
+            {
+              "label": "8086/8088 - 4.77MHZ (315 CPS)",
+              "value": "315"
+            },
+            {
+              "label": "286 - 6MHZ (1320 CPS)",
+              "value": "1320"
+            },
+            {
+              "label": "286 - 12.5MHZ (2750 CPS)",
+              "value": "2750"
+            },
+            {
+              "label": "386 - 20MHZ (4720 CPS)",
+              "value": "4720"
+            },
+            {
+              "label": "386DX - 33MHZ (7800 CPS)",
+              "value": "7800"
+            },
+            {
+              "label": "486DX - 33MHZ (13400 CPS)",
+              "value": "13400"
+            },
+            {
+              "label": "486DX2 - 66MHZ (26800 CPS)",
+              "value": "26800"
+            },
+            {
+              "label": "PENTIUM - 100MHZ (77000 CPS)",
+              "value": "77000"
+            },
+            {
+              "label": "PENTIUM II - 300MHZ (200000 CPS)",
+              "value": "200000"
+            },
+            {
+              "label": "PENTIUM III - 600MHZ (500000 CPS)",
+              "value": "500000"
+            },
+            {
+              "label": "ATHLON - 1.2GHZ (1000000 CPS)",
+              "value": "1000000"
+            }
+          ]
+        },
+        {
+          "id": "dosbox_pure_memory_size",
+          "label": "HIGH MEMORY",
+          "description": "The amount of high memory size the emulated machine has.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "dosbox_pure_memory_size",
+          "values": [
+            {
+              "label": "Não",
+              "value": "none"
+            },
+            {
+              "label": "4MB",
+              "value": "4"
+            },
+            {
+              "label": "8MB",
+              "value": "8"
+            },
+            {
+              "label": "16MB(Padrão)",
+              "value": "16"
+            },
+            {
+              "label": "24MB",
+              "value": "24"
+            },
+            {
+              "label": "32MB",
+              "value": "32"
+            },
+            {
+              "label": "64MB",
+              "value": "64"
+            },
+            {
+              "label": "96MB",
+              "value": "96"
+            },
+            {
+              "label": "128MB",
+              "value": "128"
+            },
+            {
+              "label": "224MB",
+              "value": "224"
+            },
+            {
+              "label": "256MB",
+              "value": "256"
+            },
+            {
+              "label": "512MB",
+              "value": "512"
+            },
+            {
+              "label": "1024MB",
+              "value": "1024"
+            }
+          ]
+        },
+        {
+          "id": "dosbox_pure_cpu_type",
+          "label": "CPU TYPE",
+          "description": "Emulação method used. Automático for mixed features with max performance and compatibility.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "dosbox_pure_cpu_type",
+          "values": [
+            {
+              "label": "386",
+              "value": "386"
+            },
+            {
+              "label": "386 (SLOW)",
+              "value": "386_slow"
+            },
+            {
+              "label": "386 (PREFETCH)",
+              "value": "386_prefetch"
+            },
+            {
+              "label": "486 (SLOW)",
+              "value": "486_slow"
+            },
+            {
+              "label": "PENTIUM (SLOW)",
+              "value": "pentium_slow"
+            }
+          ]
+        },
+        {
+          "id": "dosbox_pure_cpu_core",
+          "label": "CPU CORE",
+          "description": "Use interpreter for best compatibility, dynarec for performance.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "dosbox_pure_cpu_core",
+          "values": [
+            {
+              "label": "DYNAMIC RECOMPILATION",
+              "value": "dynamic"
+            },
+            {
+              "label": "NORMAL (INTERPRETER)",
+              "value": "normal"
+            },
+            {
+              "label": "SIMPLE (INTERPRETER)",
+              "value": "simple"
+            }
+          ]
+        },
+        {
+          "id": "dosbox_pure_bootos_ramdisk",
+          "label": "OS DISK MODIFICATION",
+          "description": "By Padrão, modifications will be saved to disk drive, 'discard' will not save any modification.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "dosbox_pure_bootos_ramdisk",
+          "values": [
+            {
+              "label": "KEEP",
+              "value": "false"
+            },
+            {
+              "label": "DISCARD",
+              "value": "true"
+            },
+            {
+              "label": "SAVE DIFFERENCE PER CONTENT",
+              "value": "diff"
+            }
+          ]
+        },
+        {
+          "id": "dosbox_pure_bootos_forcenormal",
+          "label": "FORCE NORMAL CORE IN OS",
+          "description": "The normal core can be more stable when running installed OS.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "dosbox_pure_bootos_forcenormal"
+        },
+        {
+          "id": "dosbox_pure_svgamem",
+          "label": "SVGA MEMORY",
+          "type": "select",
+          "default": "auto",
+          "configKey": "dosbox_pure_svgamem",
+          "values": [
+            {
+              "label": "512k",
+              "value": "0"
+            },
+            {
+              "label": "1MB",
+              "value": "1"
+            },
+            {
+              "label": "2MB (Padrão)",
+              "value": "2"
+            },
+            {
+              "label": "3MB",
+              "value": "3"
+            },
+            {
+              "label": "4MB",
+              "value": "4"
+            },
+            {
+              "label": "8MB (UNSAFE)",
+              "value": "8"
+            }
+          ]
+        },
+        {
+          "id": "dosbox_pure_perfstats",
+          "label": "CORE PERFORMANCE STATISTICS",
+          "description": "Display different levels of informations about statistics of performance.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "dosbox_pure_perfstats",
+          "values": [
+            {
+              "label": "Desativado",
+              "value": "none"
+            },
+            {
+              "label": "SIMPLE",
+              "value": "simple"
+            },
+            {
+              "label": "DETAILED",
+              "value": "detailed"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "audio",
+      "title": "Áudio",
+      "icon": "volume2",
+      "order": 4,
+      "options": [
+        {
+          "id": "dosbox_sblaster_conf",
+          "label": "SOUNDBLASTER SETTINGS",
+          "description": "Set the adress, interrupt, low 8 bit and high 16 bit DMA.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "dosbox_sblaster_conf",
+          "values": [
+            {
+              "label": "Port 220 IRQ 7 DMA 1/5",
+              "value": "A220 I7 D1 H5"
+            },
+            {
+              "label": "Port 220 IRQ 5 DMA 1/5",
+              "value": "A220 I5 D1 H5"
+            },
+            {
+              "label": "Port 240 IRQ 7 DMA 1/5",
+              "value": "A240 I7 D1 H5"
+            },
+            {
+              "label": "Port 240 IRQ 7 DMA 3/7",
+              "value": "A240 I7 D3 H7"
+            },
+            {
+              "label": "Port 240 IRQ 2 DMA 3/7",
+              "value": "A240 I2 D3 H7"
+            },
+            {
+              "label": "Port 240 IRQ 5 DMA 3/5",
+              "value": "A240 I5 D3 H5"
+            },
+            {
+              "label": "Port 240 IRQ 5 DMA 1/5",
+              "value": "A240 I5 D1 H5"
+            },
+            {
+              "label": "Port 240 IRQ 10 DMA 3/7",
+              "value": "A240 I10 D3 H7"
+            },
+            {
+              "label": "Port 280 IRQ 10 DMA 0/6",
+              "value": "A280 I10 D0 H6"
+            },
+            {
+              "label": "Port 280 IRQ 5 DMA 1/5",
+              "value": "A280 I5 D1 H5"
+            }
+          ]
+        },
+        {
+          "id": "dosbox_midi",
+          "label": "MIDI OUTPUT",
+          "description": "Select the soundfont file or interface used for MIDI output.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "dosbox_midi",
+          "values": [
+            {
+              "label": "SYSTEM",
+              "value": "system"
+            },
+            {
+              "label": "Não",
+              "value": "disabled"
+            },
+            {
+              "label": "ROLAND SC-55",
+              "value": "Roland_SC-55.sf2"
+            },
+            {
+              "label": "ROLAND SC-88",
+              "value": "Roland_SC-88.sf2"
+            },
+            {
+              "label": "ROLAND MT-32",
+              "value": "MT32_CONTROL.ROM"
+            }
+          ]
+        },
+        {
+          "id": "dosbox_pure_sblaster_type",
+          "label": "SOUNDBLASTER TYPE",
+          "description": "Type of emulated SoundBlaster card.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "dosbox_pure_sblaster_type",
+          "values": [
+            {
+              "label": "SOUNDBLASTER 16",
+              "value": "sb16"
+            },
+            {
+              "label": "SOUNDBLASTER PRO 2",
+              "value": "sbpro2"
+            },
+            {
+              "label": "SOUNDBLASTER PRO",
+              "value": "sbpro"
+            },
+            {
+              "label": "SOUNDBLASTER 2.0",
+              "value": "sb2"
+            },
+            {
+              "label": "SOUNDBLASTER 1.0",
+              "value": "sb1"
+            },
+            {
+              "label": "GAMEBLASTER",
+              "value": "gb"
+            },
+            {
+              "label": "Não",
+              "value": "none"
+            }
+          ]
+        },
+        {
+          "id": "dosbox_pure_sblaster_adlib_mode",
+          "label": "SOUNDBLASTER FM MODE",
+          "description": "The SoundBlaster emulated FM synth mode.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "dosbox_pure_sblaster_adlib_mode",
+          "values": [
+            {
+              "label": "CMS",
+              "value": "cms"
+            },
+            {
+              "label": "OPL-2",
+              "value": "opl2"
+            },
+            {
+              "label": "DUAL OPL-2",
+              "value": "dualopl2"
+            },
+            {
+              "label": "OPL-3",
+              "value": "opl3"
+            },
+            {
+              "label": "OPL-3 GOLD",
+              "value": "opl3gold"
+            },
+            {
+              "label": "Não",
+              "value": "none"
+            }
+          ]
+        },
+        {
+          "id": "dosbox_pure_sblaster_adlib_emu",
+          "label": "SOUNDBLASTER ADLIB PROVIDER",
+          "description": "Provider for the Adlib Emulação. Padrão has good quality and low perf requirements.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "dosbox_pure_sblaster_adlib_emu",
+          "values": [
+            {
+              "label": "Padrão",
+              "value": "default"
+            },
+            {
+              "label": "HIGH QUALITY NUKED OPL3",
+              "value": "nuked"
+            }
+          ]
+        },
+        {
+          "id": "dosbox_pure_gus",
+          "label": "GRAVIS ULTRASOUND",
+          "description": "Enable Gravis Ultrasound Emulação.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "dosbox_pure_gus"
+        },
+        {
+          "id": "dosbox_pure_tandysound",
+          "label": "TANDY SOUND",
+          "description": "Enable Tandy Sound Emulação.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "dosbox_pure_tandysound"
+        }
+      ]
+    },
+    {
+      "id": "controls",
+      "title": "Controles",
+      "icon": "gamepad2",
+      "order": 5,
+      "options": [
+        {
+          "id": "dosbox_pure_mouse_input",
+          "label": "MOUSE INPUT MODE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "dosbox_pure_mouse_input",
+          "values": [
+            {
+              "label": "VIRTUAL MOUSE MOVEMENT",
+              "value": "virtual"
+            },
+            {
+              "label": "DIRECT MOUSE CONTROL",
+              "value": "direct"
+            },
+            {
+              "label": "TOUCHPAD",
+              "value": "pad"
+            },
+            {
+              "label": "Desativado",
+              "value": "false"
+            }
+          ]
+        },
+        {
+          "id": "dosbox_pure_interface_lockmouse",
+          "label": "LOCK MOUSE",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "dosbox_pure_interface_lockmouse"
+        },
+        {
+          "id": "dosbox_pure_auto_mapping",
+          "label": "GAMEPAD Automático MAPPING",
+          "description": "Try to detect the game and apply a controller mapping.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "dosbox_pure_auto_mapping",
+          "values": [
+            {
+              "label": "Ativado",
+              "value": "true"
+            },
+            {
+              "label": "Ativado WITH NOTIFICATIONS",
+              "value": "notify"
+            },
+            {
+              "label": "Desativado",
+              "value": "false"
+            }
+          ]
+        },
+        {
+          "id": "dosbox_pure_keyboard_layout",
+          "label": "KEYBOARD LAYOUT",
+          "type": "select",
+          "default": "auto",
+          "configKey": "dosbox_pure_keyboard_layout",
+          "values": [
+            {
+              "label": "US(Padrão)",
+              "value": "us"
+            },
+            {
+              "label": "UK",
+              "value": "uk"
+            },
+            {
+              "label": "FRANCE",
+              "value": "fr"
+            },
+            {
+              "label": "GERMANY",
+              "value": "gr"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

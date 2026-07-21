@@ -1,0 +1,978 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "mednafen",
+  "name": "MEDNAFEN",
+  "description": "Configurações para o emulador MEDNAFEN geradas a partir do es_features.cfg.",
+  "icon": "mednafen",
+  "configFiles": [],
+  "globalMappings": {},
+  "groups": [
+    {
+      "id": "graphics",
+      "title": "Gráficos",
+      "icon": "monitor",
+      "order": 1,
+      "options": [
+        {
+          "id": "mednafen_ratio",
+          "label": "Proporção de Tela",
+          "type": "select",
+          "default": "auto",
+          "configKey": "mednafen_ratio",
+          "values": [
+            {
+              "label": "PRESERVE ASPECT",
+              "value": "aspect"
+            },
+            {
+              "label": "INTEGER SCALE (Preserve Aspect)",
+              "value": "aspect_int"
+            },
+            {
+              "label": "INTEGER MULTIPLE-OF-2 SCALE (Preserve Aspect)",
+              "value": "aspect_mult2"
+            },
+            {
+              "label": "Esticar TO SCREEN",
+              "value": "full"
+            },
+            {
+              "label": "Não Esticar",
+              "value": "0"
+            }
+          ]
+        },
+        {
+          "id": "mednafen_vsync",
+          "label": "Sincronização Vertical (V-Sync)",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "mednafen_vsync"
+        },
+        {
+          "id": "mednafen_interlace",
+          "label": "Modo de Desentrelaçamento",
+          "type": "select",
+          "default": "auto",
+          "configKey": "mednafen_interlace",
+          "values": [
+            {
+              "label": "WEAVE",
+              "value": "weave"
+            },
+            {
+              "label": "BOB",
+              "value": "bob"
+            },
+            {
+              "label": "BOB OFFSET",
+              "value": "bob_offset"
+            },
+            {
+              "label": "BLEND",
+              "value": "blend"
+            },
+            {
+              "label": "BLEND RG",
+              "value": "blend_rg"
+            }
+          ]
+        },
+        {
+          "id": "mednafen_scaler",
+          "label": "Vídeo SCALER",
+          "description": "Efficient graphics filters improving the rendering of games.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "mednafen_scaler",
+          "values": [
+            {
+              "label": "Nenhum",
+              "value": "none"
+            },
+            {
+              "label": "HQ 2x",
+              "value": "hq2x"
+            },
+            {
+              "label": "HQ 3x",
+              "value": "hq3x"
+            },
+            {
+              "label": "HQ 4x",
+              "value": "hq4x"
+            },
+            {
+              "label": "SCALE 2x",
+              "value": "scale2x"
+            },
+            {
+              "label": "SCALE 3x",
+              "value": "scale3x"
+            },
+            {
+              "label": "SCALE 4x",
+              "value": "scale4x"
+            },
+            {
+              "label": "2x SAI",
+              "value": "2xsai"
+            },
+            {
+              "label": "SUPER 2x SAI",
+              "value": "super2xsai"
+            },
+            {
+              "label": "SUPER EAGLE",
+              "value": "supereagle"
+            },
+            {
+              "label": "NEAREST NEIGHBOR 2X",
+              "value": "nn2x"
+            },
+            {
+              "label": "NEAREST NEIGHBOR 3X",
+              "value": "nn3x"
+            },
+            {
+              "label": "NEAREST NEIGHBOR 4X",
+              "value": "nn4x"
+            }
+          ]
+        },
+        {
+          "id": "mednafen_nes_videopreset",
+          "label": "EMULATED Vídeo SIGNAL",
+          "description": "Apply a Vídeo filter to mimic various signals.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "mednafen_nes_videopreset",
+          "values": [
+            {
+              "label": "Nenhum",
+              "value": "none"
+            },
+            {
+              "label": "COMPOSITE",
+              "value": "composite"
+            },
+            {
+              "label": "S-Vídeo",
+              "value": "svideo"
+            },
+            {
+              "label": "RGB",
+              "value": "rgb"
+            },
+            {
+              "label": "MONOCHROME",
+              "value": "monochrome"
+            }
+          ]
+        },
+        {
+          "id": "mednafen_snes_h_blend",
+          "label": "HORIZONTAL BLEND",
+          "description": "Enable horizontal blend (blur) filter.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "mednafen_snes_h_blend"
+        }
+      ]
+    },
+    {
+      "id": "emulation",
+      "title": "Emulação",
+      "icon": "cpu",
+      "order": 2,
+      "options": [
+        {
+          "id": "mednafen_cheats",
+          "label": "Ativar Cheats / Trapaças",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "mednafen_cheats"
+        },
+        {
+          "id": "mednafen_fps_enable",
+          "label": "SHOW FPS",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "mednafen_fps_enable"
+        },
+        {
+          "id": "mednafen_gba_bios",
+          "label": "USE EXTERNAL BIOS",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "mednafen_gba_bios"
+        },
+        {
+          "id": "mednafen_md_region",
+          "label": "CONSOLE REGION",
+          "type": "select",
+          "default": "auto",
+          "configKey": "mednafen_md_region",
+          "values": [
+            {
+              "label": "EUROPE",
+              "value": "overseas_pal"
+            },
+            {
+              "label": "NORTH AMERICA",
+              "value": "overseas_ntsc"
+            },
+            {
+              "label": "JAPAN",
+              "value": "domestic_ntsc"
+            }
+          ]
+        },
+        {
+          "id": "mednafen_nes_pal50",
+          "label": "FORCE PAL 50HZ",
+          "description": "Enable PAL(50Hz) NES Emulação.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "mednafen_nes_pal50"
+        },
+        {
+          "id": "mednafen_ngp_language",
+          "label": "CONSOLE LANGUAGE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "mednafen_ngp_language",
+          "values": [
+            {
+              "label": "ENGLISH",
+              "value": "english"
+            },
+            {
+              "label": "JAPANESE",
+              "value": "japanese"
+            }
+          ]
+        },
+        {
+          "id": "mednafen_pcfx_cpu",
+          "label": "CPU Emulação MODE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "mednafen_pcfx_cpu",
+          "values": [
+            {
+              "label": "FAST",
+              "value": "fast"
+            },
+            {
+              "label": "ACCURATE",
+              "value": "accurate"
+            }
+          ]
+        },
+        {
+          "id": "mednafen_psx_region",
+          "label": "CONSOLE REGION",
+          "type": "select",
+          "default": "auto",
+          "configKey": "mednafen_psx_region",
+          "values": [
+            {
+              "label": "NORTH AMERICA",
+              "value": "na"
+            },
+            {
+              "label": "EUROPE",
+              "value": "eu"
+            },
+            {
+              "label": "JAPAN",
+              "value": "jp"
+            }
+          ],
+          "realKey": "psx.region_autodetect",
+          "realFile": "Mednafen.Generator.cs"
+        },
+        {
+          "id": "mednafen_psx_memcards",
+          "label": "EMULATED MEMCARDS",
+          "description": "Define the number of memory cards to emulate.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "mednafen_psx_memcards",
+          "values": [
+            {
+              "label": "Nenhum",
+              "value": "none"
+            },
+            {
+              "label": "1",
+              "value": "1"
+            },
+            {
+              "label": "2",
+              "value": "2"
+            },
+            {
+              "label": "3",
+              "value": "3"
+            },
+            {
+              "label": "4",
+              "value": "4"
+            }
+          ]
+        },
+        {
+          "id": "mednafen_psx_original_bios",
+          "label": "USE SCPH LEGACY BIOS",
+          "description": "RetroBat will use by Padrão psxonpsp BIOS, enable this option to force usage of legacy SCPH550X bios file.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "mednafen_psx_original_bios"
+        },
+        {
+          "id": "mednafen_saturn_region",
+          "label": "CONSOLE REGION",
+          "type": "select",
+          "default": "auto",
+          "configKey": "mednafen_saturn_region",
+          "values": [
+            {
+              "label": "EUROPE",
+              "value": "eu"
+            },
+            {
+              "label": "JAPAN",
+              "value": "jp"
+            },
+            {
+              "label": "NORTH AMERICA",
+              "value": "na"
+            },
+            {
+              "label": "SOUTH KOREA",
+              "value": "kr"
+            },
+            {
+              "label": "TAIWAN",
+              "value": "tw"
+            },
+            {
+              "label": "CHINA",
+              "value": "as"
+            },
+            {
+              "label": "BRAZIL",
+              "value": "br"
+            },
+            {
+              "label": "LATIN AMERICA",
+              "value": "la"
+            }
+          ],
+          "realKey": "ss.region_autodetect",
+          "realFile": "Mednafen.Generator.cs"
+        },
+        {
+          "id": "mednafen_saturn_language",
+          "label": "CONSOLE LANGUAGE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "mednafen_saturn_language",
+          "values": [
+            {
+              "label": "english",
+              "value": "english"
+            },
+            {
+              "label": "français",
+              "value": "french"
+            },
+            {
+              "label": "deutsch",
+              "value": "german"
+            },
+            {
+              "label": "español",
+              "value": "spanish"
+            },
+            {
+              "label": "italiano",
+              "value": "italian"
+            },
+            {
+              "label": "日本語 (japanese)",
+              "value": "japanese"
+            }
+          ]
+        },
+        {
+          "id": "mednafen_saturn_ramcart",
+          "label": "EXPANSION CARTRIDGE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "mednafen_saturn_ramcart",
+          "values": [
+            {
+              "label": "Nenhum",
+              "value": "none"
+            },
+            {
+              "label": "Backup Memory (512KB)",
+              "value": "backup"
+            },
+            {
+              "label": "1MB Extended RAM",
+              "value": "extram1"
+            },
+            {
+              "label": "4MB Extended RAM",
+              "value": "extram4"
+            },
+            {
+              "label": "16MB RAM mapped in A-bus CS1",
+              "value": "cs1ram16"
+            }
+          ]
+        },
+        {
+          "id": "mednafen_wswan_lang",
+          "label": "LANGUAGE",
+          "description": "Language games should display text in.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "mednafen_wswan_lang",
+          "values": [
+            {
+              "label": "ENGLISH",
+              "value": "english"
+            },
+            {
+              "label": "JAPANESE",
+              "value": "japanese"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hacks",
+      "title": "Correções / Hacks",
+      "icon": "wrench",
+      "order": 3,
+      "options": [
+        {
+          "id": "mednafen_ratio_correction",
+          "label": "Proporção de Tela CORRECTION",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "mednafen_ratio_correction"
+        }
+      ]
+    },
+    {
+      "id": "audio",
+      "title": "Áudio",
+      "icon": "volume2",
+      "order": 4,
+      "options": [
+        {
+          "id": "mednafen_forcemono",
+          "label": "FORCE MONO",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "mednafen_forcemono"
+        },
+        {
+          "id": "mednafen_apu",
+          "label": "Áudio",
+          "type": "select",
+          "default": "auto",
+          "configKey": "mednafen_apu",
+          "values": [
+            {
+              "label": "WASAPI (SHARED)",
+              "value": "wasapish"
+            },
+            {
+              "label": "DIRECT SOUND",
+              "value": "dsound"
+            },
+            {
+              "label": "WASAPI (EXCLUSIVE)",
+              "value": "wasapi"
+            },
+            {
+              "label": "SDL",
+              "value": "sdl"
+            }
+          ]
+        },
+        {
+          "id": "mednafen_lynx_lowpass",
+          "label": "Áudio FILTER",
+          "description": "Enables a low pass Áudio filter to soften the harsh sound of some games.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "mednafen_lynx_lowpass"
+        },
+        {
+          "id": "mednafen_sms_fm",
+          "label": "ENABLE FM SOUND",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "mednafen_sms_fm"
+        },
+        {
+          "id": "mednafen_nes_106bs",
+          "label": "NAMCO 106 SOUND Emulação",
+          "description": "Enable less-accurate, but better sounding, Namco 106(mapper 19) sound Emulação.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "mednafen_nes_106bs"
+        },
+        {
+          "id": "pceadpcvolume",
+          "label": "VOLUME ADPCM",
+          "description": "Setting this too high may cause sample clipping.",
+          "type": "slider",
+          "default": "auto",
+          "configKey": "pceadpcvolume",
+          "min": 0,
+          "max": 200,
+          "step": 10,
+          "suffix": "%"
+        },
+        {
+          "id": "pcecddavolume",
+          "label": "VOLUME CDDA",
+          "description": "Setting this too high may cause sample clipping.",
+          "type": "slider",
+          "default": "auto",
+          "configKey": "pcecddavolume",
+          "min": 0,
+          "max": 200,
+          "step": 10,
+          "suffix": "%"
+        },
+        {
+          "id": "pcecdpsvolume",
+          "label": "VOLUME PSG CD",
+          "description": "Setting this too high may cause sample clipping.",
+          "type": "slider",
+          "default": "auto",
+          "configKey": "pcecdpsvolume",
+          "min": 0,
+          "max": 200,
+          "step": 10,
+          "suffix": "%"
+        },
+        {
+          "id": "mednafen_snes_resamp_quality",
+          "label": "APU OUTPUT RESAMPLER QUALITY",
+          "description": "0 is lowest quality and latency and CPU usage, 10 is highest quality and latency and CPU usage.",
+          "type": "slider",
+          "default": "auto",
+          "configKey": "mednafen_snes_resamp_quality",
+          "min": 0,
+          "max": 10,
+          "step": 1
+        }
+      ]
+    },
+    {
+      "id": "controls",
+      "title": "Controles",
+      "icon": "gamepad2",
+      "order": 5,
+      "options": [
+        {
+          "id": "mednafen_controller_type",
+          "label": "CONTROLLER TYPE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "mednafen_controller_type",
+          "values": [
+            {
+              "label": "JOYSTICK (2-AXIS 2-BUTTONS)",
+              "value": "joystick"
+            },
+            {
+              "label": "GAMEPAD (D-PAD 2-BUTTONS)",
+              "value": "gamepad"
+            },
+            {
+              "label": "ATARI JOYSTICK",
+              "value": "atari"
+            }
+          ],
+          "realKey": "mednafen_controller_type",
+          "realFile": "Mednafen.Controllers.cs"
+        },
+        {
+          "id": "mednafen_lynx_rotate",
+          "label": "ROTATE D-PAD",
+          "description": "Virtually rotate the D-pad when the screen is rotated.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "mednafen_lynx_rotate"
+        },
+        {
+          "id": "rotate_buttons",
+          "label": "ROTATE BUTTONS",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "rotate_buttons"
+        },
+        {
+          "id": "megadrive_control_layout",
+          "label": "BUTTON LAYOUT",
+          "type": "select",
+          "default": "auto",
+          "configKey": "megadrive_control_layout",
+          "values": [
+            {
+              "label": "L/R as X/Z",
+              "value": "lr_xz"
+            },
+            {
+              "label": "L/R as Z/C",
+              "value": "lr_zc"
+            },
+            {
+              "label": "L/R as Y/Z",
+              "value": "lr_yz"
+            },
+            {
+              "label": "L/R as Y/B",
+              "value": "lr_yb"
+            },
+            {
+              "label": "L/R as B/Y",
+              "value": "lr_by"
+            }
+          ],
+          "realKey": "megadrive_control_layout",
+          "realFile": "Mednafen.Controllers.cs"
+        },
+        {
+          "id": "mednafen_md_multitap",
+          "label": "USE MULTITAP",
+          "type": "select",
+          "default": "auto",
+          "configKey": "mednafen_md_multitap",
+          "values": [
+            {
+              "label": "Não",
+              "value": "0"
+            },
+            {
+              "label": "PORT 1",
+              "value": "1"
+            },
+            {
+              "label": "PORT 2",
+              "value": "2"
+            },
+            {
+              "label": "BOTH PORTS",
+              "value": "both"
+            }
+          ],
+          "realKey": "mednafen_md_multitap",
+          "realFile": "Mednafen.Generator.cs"
+        },
+        {
+          "id": "md_pad",
+          "label": "USE GENESIS-LIKE CONTROLLER",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "md_pad"
+        },
+        {
+          "id": "nes_turbo_enable",
+          "label": "ENABLE TURBO",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "nes_turbo_enable"
+        },
+        {
+          "id": "mednafen_nes_multitap",
+          "label": "USE MULTITAP",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "mednafen_nes_multitap"
+        },
+        {
+          "id": "mednafen_gun",
+          "label": "ENABLE GUN",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "mednafen_gun"
+        },
+        {
+          "id": "mednafen_pce_multitap",
+          "label": "USE MULTITAP",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "mednafen_pce_multitap"
+        },
+        {
+          "id": "mednafen_pcfx_multitap",
+          "label": "USE MULTITAP",
+          "type": "select",
+          "default": "auto",
+          "configKey": "mednafen_pcfx_multitap",
+          "values": [
+            {
+              "label": "Não",
+              "value": "0"
+            },
+            {
+              "label": "PORT 1",
+              "value": "1"
+            },
+            {
+              "label": "PORT 2",
+              "value": "2"
+            },
+            {
+              "label": "BOTH PORTS",
+              "value": "both"
+            }
+          ],
+          "realKey": "mednafen_pcfx_multitap",
+          "realFile": "Mednafen.Generator.cs"
+        },
+        {
+          "id": "mednafen_pcfx_mode1",
+          "label": "MODE 1 VALUE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "mednafen_pcfx_mode1",
+          "values": [
+            {
+              "label": "A",
+              "value": "a"
+            },
+            {
+              "label": "B",
+              "value": "b"
+            }
+          ]
+        },
+        {
+          "id": "mednafen_pcfx_mode2",
+          "label": "MODE 2 VALUE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "mednafen_pcfx_mode2",
+          "values": [
+            {
+              "label": "A",
+              "value": "a"
+            },
+            {
+              "label": "B",
+              "value": "b"
+            }
+          ]
+        },
+        {
+          "id": "mednafen_psx_analogcombo",
+          "label": "ANALOG TOGGLE COMBO",
+          "description": "Define the button combo to hold to toggle dualshock controller between analog and digital mode.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "mednafen_psx_analogcombo",
+          "values": [
+            {
+              "label": "SELECT+R1+L1",
+              "value": "3073"
+            },
+            {
+              "label": "L3+R3",
+              "value": "6"
+            },
+            {
+              "label": "SELECT+R2+L2",
+              "value": "769"
+            },
+            {
+              "label": "START+L1+R1",
+              "value": "3080"
+            }
+          ]
+        },
+        {
+          "id": "mednafen_psx_multitap",
+          "label": "USE MULTITAP",
+          "type": "select",
+          "default": "auto",
+          "configKey": "mednafen_psx_multitap",
+          "values": [
+            {
+              "label": "Não",
+              "value": "0"
+            },
+            {
+              "label": "PORT 1",
+              "value": "1"
+            },
+            {
+              "label": "PORT 2",
+              "value": "2"
+            },
+            {
+              "label": "BOTH PORTS",
+              "value": "both"
+            }
+          ],
+          "realKey": "mednafen_psx_multitap",
+          "realFile": "Mednafen.Generator.cs"
+        },
+        {
+          "id": "mednafen_psx_mouse",
+          "label": "USE MOUSE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "mednafen_psx_mouse",
+          "values": [
+            {
+              "label": "PORT 1",
+              "value": "1"
+            },
+            {
+              "label": "PORT 2",
+              "value": "2"
+            },
+            {
+              "label": "BOTH PORTS",
+              "value": "both"
+            }
+          ],
+          "realKey": "psx.input.port1",
+          "realFile": "Mednafen.Generator.cs"
+        },
+        {
+          "id": "psx_triggerswap",
+          "label": "USE TRIGGERS TO BRAKE/ACCELERATE",
+          "description": "Can be useful for Gran Turismo, triggers will be mapped to right analog stick.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "psx_triggerswap"
+        },
+        {
+          "id": "mednafen_psx_gun",
+          "label": "GUN TYPE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "mednafen_psx_gun",
+          "values": [
+            {
+              "label": "GUNCON",
+              "value": "guncon"
+            },
+            {
+              "label": "JUSTIFIER",
+              "value": "justifier"
+            }
+          ]
+        },
+        {
+          "id": "saturn_padlayout",
+          "label": "BUTTON LAYOUT",
+          "type": "select",
+          "default": "auto",
+          "configKey": "saturn_padlayout",
+          "values": [
+            {
+              "label": "L/R as Z/C",
+              "value": "lr_zc"
+            },
+            {
+              "label": "L/R as Y/Z",
+              "value": "lr_yz"
+            },
+            {
+              "label": "L/R as X/Z",
+              "value": "lr_xz"
+            }
+          ],
+          "realKey": "a",
+          "realFile": "Mednafen.Controllers.cs"
+        },
+        {
+          "id": "saturn_invert_triggers",
+          "label": "INVERT TRIGGERS AND SHOULDERS",
+          "description": "Use shoulder buttons for L and R instead of triggers.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "saturn_invert_triggers"
+        },
+        {
+          "id": "mednafen_ss_multitap",
+          "label": "USE MULTITAP",
+          "type": "select",
+          "default": "auto",
+          "configKey": "mednafen_ss_multitap",
+          "values": [
+            {
+              "label": "Não",
+              "value": "0"
+            },
+            {
+              "label": "PORT 1",
+              "value": "1"
+            },
+            {
+              "label": "PORT 2",
+              "value": "2"
+            },
+            {
+              "label": "BOTH PORTS",
+              "value": "both"
+            }
+          ],
+          "realKey": "mednafen_ss_multitap",
+          "realFile": "Mednafen.Generator.cs"
+        },
+        {
+          "id": "saturn_pad",
+          "label": "USE SATURN-LIKE CONTROLLER",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "saturn_pad"
+        },
+        {
+          "id": "mednafen_snes_multitap",
+          "label": "USE MULTITAP",
+          "type": "select",
+          "default": "auto",
+          "configKey": "mednafen_snes_multitap",
+          "values": [
+            {
+              "label": "Não",
+              "value": "0"
+            },
+            {
+              "label": "PORT 1",
+              "value": "1"
+            },
+            {
+              "label": "PORT 2",
+              "value": "2"
+            },
+            {
+              "label": "BOTH PORTS",
+              "value": "both"
+            }
+          ],
+          "realKey": "mednafen_snes_multitap",
+          "realFile": "Mednafen.Generator.cs"
+        }
+      ]
+    }
+  ]
+}

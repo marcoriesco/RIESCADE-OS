@@ -1,0 +1,28 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "mugen",
+  "name": "MUGEN",
+  "description": "Configurações para o emulador MUGEN geradas a partir do es_features.cfg.",
+  "icon": "mugen",
+  "configFiles": [],
+  "globalMappings": {},
+  "groups": [
+    {
+      "id": "graphics",
+      "title": "Gráficos",
+      "icon": "monitor",
+      "order": 1,
+      "options": [
+        {
+          "id": "VRetrace",
+          "label": "Sincronização Vertical (V-Sync)",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "VRetrace",
+          "realKey": "VRetrace",
+          "realFile": "ExeLauncher.Generator.cs"
+        }
+      ]
+    }
+  ]
+}

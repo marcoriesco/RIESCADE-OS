@@ -1,0 +1,103 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "cdogs",
+  "name": "CDOGS",
+  "description": "Configurações para o emulador CDOGS geradas a partir do es_features.cfg.",
+  "icon": "cdogs",
+  "configFiles": [],
+  "globalMappings": {},
+  "groups": [
+    {
+      "id": "graphics",
+      "title": "Gráficos",
+      "icon": "monitor",
+      "order": 1,
+      "options": [
+        {
+          "id": "cdogs_scalemode",
+          "label": "UPSCALE FILTER",
+          "type": "select",
+          "default": "auto",
+          "configKey": "cdogs_scalemode",
+          "values": [
+            {
+              "label": "NEAREST NEIGHBOR",
+              "value": "Nearest neighbor"
+            },
+            {
+              "label": "BILINEAR",
+              "value": "Bilinear"
+            }
+          ]
+        },
+        {
+          "id": "cdogs_shadows",
+          "label": "ENABLE SHADOWS",
+          "description": "Padrão: enabled.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "cdogs_shadows"
+        }
+      ]
+    },
+    {
+      "id": "emulation",
+      "title": "Emulação",
+      "icon": "cpu",
+      "order": 2,
+      "options": [
+        {
+          "id": "cdogs_hud",
+          "label": "SHOW HUD",
+          "description": "Padrão: enabled.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "cdogs_hud"
+        },
+        {
+          "id": "cdogs_fps",
+          "label": "SHOW FPS",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "cdogs_fps"
+        },
+        {
+          "id": "cdogs_time",
+          "label": "SHOW TIME",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "cdogs_time"
+        },
+        {
+          "id": "cdogs_hudmap",
+          "label": "SHOW MAP",
+          "description": "Padrão: enabled.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "cdogs_hudmap"
+        },
+        {
+          "id": "cdogs_splitscreen",
+          "label": "SPLITSCREEN",
+          "type": "select",
+          "default": "auto",
+          "configKey": "cdogs_splitscreen",
+          "values": [
+            {
+              "label": "NEVER",
+              "value": "Never"
+            },
+            {
+              "label": "NORMAL",
+              "value": "Normal"
+            },
+            {
+              "label": "ALWAYS",
+              "value": "Always"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

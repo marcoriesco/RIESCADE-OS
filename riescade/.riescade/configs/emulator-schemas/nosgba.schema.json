@@ -1,0 +1,114 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "nosgba",
+  "name": "NOSGBA",
+  "description": "Configurações para o emulador NOSGBA geradas a partir do es_features.cfg.",
+  "icon": "nosgba",
+  "configFiles": [],
+  "globalMappings": {},
+  "groups": [
+    {
+      "id": "graphics",
+      "title": "Gráficos",
+      "icon": "monitor",
+      "order": 1,
+      "options": [
+        {
+          "id": "gba_video_output",
+          "label": "Vídeo OUTPUT MODE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "gba_video_output",
+          "values": [
+            {
+              "label": "24 BIT COLOR",
+              "value": "24bit True Color"
+            },
+            {
+              "label": "8 BIT (MONOCHROME)",
+              "value": "8bit Monochrome"
+            },
+            {
+              "label": "15 BIT COLOR",
+              "value": "15bit Color"
+            }
+          ]
+        },
+        {
+          "id": "gba_colors",
+          "label": "COLOR MODE",
+          "description": "Select which color filter to apply.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "gba_colors",
+          "values": [
+            {
+              "label": "BACKLIGHT",
+              "value": "GBA SP (backlight)"
+            },
+            {
+              "label": "Não BACKLIGHT",
+              "value": "GBA (no backlight)"
+            },
+            {
+              "label": "BLURRY",
+              "value": "NDS in GBA mode (blurry)"
+            },
+            {
+              "label": "POPPY",
+              "value": "NDS-Lite in GBA mode (poppy)"
+            }
+          ]
+        },
+        {
+          "id": "gba_video_renderer",
+          "label": "Vídeo RENDERER",
+          "type": "select",
+          "default": "auto",
+          "configKey": "gba_video_renderer",
+          "values": [
+            {
+              "label": "NOCASH",
+              "value": "nocash"
+            },
+            {
+              "label": "OPENGL",
+              "value": "opengl"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "emulation",
+      "title": "Emulação",
+      "icon": "cpu",
+      "order": 2,
+      "options": [
+        {
+          "id": "gba_nbplayers",
+          "label": "NUMBER OF PLAYERS",
+          "type": "select",
+          "default": "auto",
+          "configKey": "gba_nbplayers",
+          "values": [
+            {
+              "label": "2",
+              "value": "-Two Machines"
+            },
+            {
+              "label": "3",
+              "value": "3"
+            },
+            {
+              "label": "4",
+              "value": "4"
+            }
+          ],
+          "realKey": "gba_nbplayers",
+          "realFile": "NosGba.Generator.cs"
+        }
+      ]
+    }
+  ]
+}

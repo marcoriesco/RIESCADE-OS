@@ -1,21 +1,11 @@
 {
   "$schema": "riescade-emulator-schema-v1",
   "id": "ares",
-  "name": "Ares",
-  "description": "Emulador multi-sistema (N64, SNES, Genesis, PSX, etc.).",
+  "name": "ARES",
+  "description": "Configurações para o emulador ARES geradas a partir do es_features.cfg.",
   "icon": "ares",
-  "configFiles": [
-    {
-      "path": "settings.bml",
-      "format": "bml"
-    }
-  ],
-  "globalMappings": {
-    "fullscreen": {
-      "configKey": "fullscreen",
-      "globalKey": "fullscreen"
-    }
-  },
+  "configFiles": [],
+  "globalMappings": {},
   "groups": [
     {
       "id": "graphics",
@@ -24,139 +14,247 @@
       "order": 1,
       "options": [
         {
-          "id": "fullscreen",
-          "label": "Tela Cheia",
-          "description": "Iniciar o emulador em modo tela cheia.",
-          "type": "toggle",
-          "default": "true",
-          "configKey": "fullscreen",
-          "inheritsGlobal": "fullscreen"
-        },
-        {
-          "id": "ares_renderer",
-          "label": "Driver de Vídeo",
-          "description": "API gráfica.",
-          "type": "select",
-          "default": "OpenGL 3.2",
-          "configKey": "ares_renderer",
-          "values": [
-            {
-              "label": "OpenGL 4.6",
-              "value": "OpenGL 4.6"
-            },
-            {
-              "label": "OpenGL 3.2",
-              "value": "OpenGL 3.2"
-            },
-            {
-              "label": "Direct3D 9",
-              "value": "Direct3D 9.0"
-            }
-          ]
-        },
-        {
           "id": "ares_aspect",
-          "label": "Modo de Saída",
-          "description": "Modo de exibição da imagem.",
+          "label": "ASPECT RATIO",
           "type": "select",
-          "default": "Scale",
+          "default": "auto",
           "configKey": "ares_aspect",
           "values": [
             {
-              "label": "Escala",
+              "label": "SCALE (BEST FIT)",
               "value": "Scale"
+            },
+            {
+              "label": "SCALE (INTEGER)",
+              "value": "Integer"
             },
             {
               "label": "Esticar",
               "value": "Stretch"
-            },
-            {
-              "label": "Centralizar",
-              "value": "Center"
             }
-          ]
+          ],
+          "realKey": "Output",
+          "realFile": "Ares.Generator.cs"
         },
         {
-          "id": "ares_aspectcorrection",
-          "label": "Correção de Aspecto",
-          "description": "Modo de correção de proporção.",
+          "id": "ares_gpusync",
+          "label": "Vídeo SYNC",
           "type": "select",
-          "default": "Anamorphic",
-          "configKey": "ares_aspectcorrection",
+          "default": "auto",
+          "configKey": "ares_gpusync",
           "values": [
             {
-              "label": "Anamórfico",
-              "value": "Anamorphic"
+              "label": "SYNC",
+              "value": "sync"
             },
             {
-              "label": "Desativado",
-              "value": "None"
+              "label": "GPU SYNC ONLY",
+              "value": "gpu"
+            },
+            {
+              "label": "SYNC + GPU",
+              "value": "gpusync"
+            },
+            {
+              "label": "Não",
+              "value": "none"
             }
-          ]
+          ],
+          "realKey": "Blocking",
+          "realFile": "Ares.Generator.cs"
         },
         {
           "id": "ares_luminance",
-          "label": "Luminância",
-          "description": "Ajuste de brilho (0.0 a 2.0).",
-          "type": "input",
-          "default": "1.0",
-          "configKey": "ares_luminance"
+          "label": "ADJUST LUMINANCE",
+          "type": "slider",
+          "default": "auto",
+          "configKey": "ares_luminance",
+          "min": 0,
+          "max": 1,
+          "step": 0.04,
+          "suffix": "%",
+          "realKey": "Luminance",
+          "realFile": "Ares.Generator.cs"
         },
         {
           "id": "ares_saturation",
-          "label": "Saturação",
-          "description": "Ajuste de saturação de cores (0.0 a 2.0).",
-          "type": "input",
-          "default": "1.0",
-          "configKey": "ares_saturation"
+          "label": "ADJUST SATURATION",
+          "type": "slider",
+          "default": "auto",
+          "configKey": "ares_saturation",
+          "min": 0,
+          "max": 2,
+          "step": 0.04,
+          "suffix": "%",
+          "realKey": "Saturation",
+          "realFile": "Ares.Generator.cs"
         },
         {
           "id": "ares_gamma",
-          "label": "Gamma",
-          "description": "Ajuste de gamma (0.0 a 2.0).",
-          "type": "input",
-          "default": "1.0",
-          "configKey": "ares_gamma"
+          "label": "ADJUST GAMMA",
+          "type": "slider",
+          "default": "auto",
+          "configKey": "ares_gamma",
+          "min": 1,
+          "max": 2,
+          "step": 0.04,
+          "suffix": "%",
+          "realKey": "Gamma",
+          "realFile": "Ares.Generator.cs"
         },
         {
           "id": "ares_colobleed",
-          "label": "Color Bleed",
-          "description": "Simula sangramento de cores de TVs CRT.",
+          "label": "COLOR BLEED",
+          "description": "Blurs adjacent pixels for translucency effects.",
           "type": "toggle",
-          "default": "false",
-          "configKey": "ares_colobleed"
+          "default": "auto",
+          "configKey": "ares_colobleed",
+          "realKey": "ColorBleed",
+          "realFile": "Ares.Generator.cs"
         },
         {
           "id": "ares_coloremulation",
-          "label": "Emulação de Cores",
-          "description": "Emula as cores do hardware original.",
+          "label": "ACCURATE COLOR Emulação",
+          "description": "Matches colors to how they look Ativado real hardware.",
           "type": "toggle",
-          "default": "true",
-          "configKey": "ares_coloremulation"
+          "default": "auto",
+          "configKey": "ares_coloremulation",
+          "realKey": "ColorEmulation",
+          "realFile": "Ares.Generator.cs"
         },
         {
           "id": "ares_interframe_blend",
-          "label": "Blend Interframe",
-          "description": "Mescla frames para simular efeitos de transparência.",
+          "label": "INTERFRAME BLENDING",
+          "description": "Emulates LCD translucency effects, but increase motion blur.",
           "type": "toggle",
-          "default": "true",
-          "configKey": "ares_interframe_blend"
+          "default": "auto",
+          "configKey": "ares_interframe_blend",
+          "realKey": "InterframeBlending",
+          "realFile": "Ares.Generator.cs"
         },
         {
           "id": "ares_overscan",
-          "label": "Overscan",
-          "description": "Mostra a área de overscan da imagem.",
+          "label": "OVERSCAN",
+          "description": "Shows extended PAL CRT lines, but these are usually blank in most games.",
           "type": "toggle",
-          "default": "false",
-          "configKey": "ares_overscan"
+          "default": "auto",
+          "configKey": "ares_overscan",
+          "realKey": "Overscan",
+          "realFile": "Ares.Generator.cs"
         },
         {
-          "id": "ares_weavedeinterlacing",
-          "label": "Weave Deinterlacing",
-          "description": "Modo de desentrelaçamento por weave.",
+          "id": "ares_pixel_accurate",
+          "label": "PIXEL ACCURACY",
+          "description": "Use pixel-accurate Emulação where available.",
           "type": "toggle",
-          "default": "true",
-          "configKey": "ares_weavedeinterlacing"
+          "default": "auto",
+          "configKey": "ares_pixel_accurate",
+          "realKey": "PixelAccuracy",
+          "realFile": "Ares.Generator.cs"
+        },
+        {
+          "id": "ares_renderer",
+          "label": "Vídeo",
+          "type": "select",
+          "default": "auto",
+          "configKey": "ares_renderer",
+          "values": [
+            {
+              "label": "OPENGL",
+              "value": "OpenGL 3.2"
+            },
+            {
+              "label": "DIRECT3D 9",
+              "value": "Direct3D 9.0"
+            },
+            {
+              "label": "GDI",
+              "value": "GDI"
+            }
+          ],
+          "realKey": "Driver",
+          "realFile": "Ares.Generator.cs"
+        }
+      ]
+    },
+    {
+      "id": "emulation",
+      "title": "Emulação",
+      "icon": "cpu",
+      "order": 2,
+      "options": [
+        {
+          "id": "ares_region",
+          "label": "PREFERRED REGION",
+          "type": "select",
+          "default": "auto",
+          "configKey": "ares_region",
+          "values": [
+            {
+              "label": "PAL",
+              "value": "PAL"
+            },
+            {
+              "label": "NTSC(US)",
+              "value": "NTSC-U"
+            },
+            {
+              "label": "NTSC(JAPAN)",
+              "value": "NTSC-J"
+            }
+          ],
+          "realKey": "Prefer",
+          "realFile": "Ares.Generator.cs"
+        },
+        {
+          "id": "ares_fastboot",
+          "label": "Inicialização Rápida (Fast Boot)",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "ares_fastboot",
+          "realKey": "Fast",
+          "realFile": "Ares.Generator.cs"
+        },
+        {
+          "id": "ares_runahead",
+          "label": "ENABLE RUN-AHEAD",
+          "description": "Removes one frame of input lag, but doubles system requirements.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "ares_runahead",
+          "realKey": "RunAhead",
+          "realFile": "Ares.Generator.cs"
+        }
+      ]
+    },
+    {
+      "id": "hacks",
+      "title": "Correções / Hacks",
+      "icon": "wrench",
+      "order": 3,
+      "options": [
+        {
+          "id": "ares_aspectcorrection",
+          "label": "ASPECT CORRECTION MODE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "ares_aspectcorrection",
+          "values": [
+            {
+              "label": "STANDARD",
+              "value": "Standard"
+            },
+            {
+              "label": "Nenhum",
+              "value": "None"
+            },
+            {
+              "label": "ANAMORPHIC (16:9)",
+              "value": "Anamorphic"
+            }
+          ],
+          "realKey": "AspectCorrectionMode",
+          "realFile": "Ares.Generator.cs"
         }
       ]
     },
@@ -164,14 +262,13 @@
       "id": "audio",
       "title": "Áudio",
       "icon": "volume2",
-      "order": 3,
+      "order": 4,
       "options": [
         {
           "id": "ares_audio_renderer",
-          "label": "Driver de Áudio",
-          "description": "API de áudio.",
+          "label": "Áudio",
           "type": "select",
-          "default": "WASAPI",
+          "default": "auto",
           "configKey": "ares_audio_renderer",
           "values": [
             {
@@ -179,126 +276,33 @@
               "value": "WASAPI"
             },
             {
-              "label": "DirectSound",
-              "value": "DirectSound"
+              "label": "XAUDIO2",
+              "value": "XAudio 2.1"
+            },
+            {
+              "label": "SDL",
+              "value": "SDL"
+            },
+            {
+              "label": "DIRECTSOUND",
+              "value": "DirectSound 7.0"
+            },
+            {
+              "label": "WAVEOUT",
+              "value": "waveOut"
             }
-          ]
+          ],
+          "realKey": "Driver",
+          "realFile": "Ares.Generator.cs"
         },
         {
           "id": "ares_audiosync",
-          "label": "Sincronização de Áudio",
-          "description": "Bloqueia o áudio para manter sincronia.",
+          "label": "Áudio SYNC",
           "type": "toggle",
-          "default": "true",
-          "configKey": "ares_audiosync"
-        }
-      ]
-    },
-    {
-      "id": "emulation",
-      "title": "Emulação",
-      "icon": "settings",
-      "order": 4,
-      "options": [
-        {
-          "id": "ares_fastboot",
-          "label": "Fast Boot",
-          "description": "Pula a animação de boot dos consoles.",
-          "type": "toggle",
-          "default": "false",
-          "configKey": "ares_fastboot"
-        },
-        {
-          "id": "ares_region",
-          "label": "Região Preferida",
-          "description": "Região padrão para jogos multi-região.",
-          "type": "select",
-          "default": "NTSC-U",
-          "configKey": "ares_region",
-          "values": [
-            {
-              "label": "NTSC-U (América)",
-              "value": "NTSC-U"
-            },
-            {
-              "label": "NTSC-J (Japão)",
-              "value": "NTSC-J"
-            },
-            {
-              "label": "PAL (Europa)",
-              "value": "PAL"
-            }
-          ]
-        },
-        {
-          "id": "rewind",
-          "label": "Rewind",
-          "description": "Permite rebobinar a emulação em tempo real.",
-          "type": "toggle",
-          "default": "false",
-          "configKey": "rewind"
-        },
-        {
-          "id": "ares_runahead",
-          "label": "Run-Ahead",
-          "description": "Reduz a latência de input executando frames adiante.",
-          "type": "toggle",
-          "default": "false",
-          "configKey": "ares_runahead"
-        }
-      ]
-    },
-    {
-      "id": "n64",
-      "title": "Nintendo 64",
-      "icon": "cpu",
-      "order": 2,
-      "options": [
-        {
-          "id": "ares_n64_quality",
-          "label": "Qualidade N64",
-          "description": "Qualidade de renderização para jogos N64.",
-          "type": "select",
-          "default": "HD",
-          "configKey": "ares_n64_quality",
-          "values": [
-            {
-              "label": "SD",
-              "value": "SD"
-            },
-            {
-              "label": "HD",
-              "value": "HD"
-            },
-            {
-              "label": "Ultra HD",
-              "value": "Ultra HD"
-            }
-          ]
-        },
-        {
-          "id": "ares_pixel_accurate",
-          "label": "Pixel Accurate",
-          "description": "Renderização pixel-perfect para N64 (mais lento).",
-          "type": "toggle",
-          "default": "false",
-          "configKey": "ares_pixel_accurate"
-        },
-        {
-          "id": "ares_supersampling",
-          "label": "Supersampling",
-          "description": "Anti-aliasing via supersampling.",
-          "type": "toggle",
-          "default": "false",
-          "configKey": "ares_supersampling"
-        },
-        {
-          "id": "ares_ExpansionPak",
-          "label": "Expansion Pak",
-          "description": "Simular o Expansion Pak do N64 (necessário para alguns jogos).",
-          "type": "toggle",
-          "default": "true",
-          "configKey": "ares_ExpansionPak"
+          "default": "auto",
+          "configKey": "ares_audiosync",
+          "realKey": "Blocking",
+          "realFile": "Ares.Generator.cs"
         }
       ]
     }

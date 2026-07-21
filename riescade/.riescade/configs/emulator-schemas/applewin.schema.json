@@ -1,0 +1,171 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "applewin",
+  "name": "APPLEWIN",
+  "description": "Configurações para o emulador APPLEWIN geradas a partir do es_features.cfg.",
+  "icon": "applewin",
+  "configFiles": [],
+  "globalMappings": {},
+  "groups": [
+    {
+      "id": "graphics",
+      "title": "Gráficos",
+      "icon": "monitor",
+      "order": 1,
+      "options": [
+        {
+          "id": "screentype",
+          "label": "SCREEN TYPE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "screentype",
+          "values": [
+            {
+              "label": "Monochrome (Custom)",
+              "value": "0"
+            },
+            {
+              "label": "Color (Composite Idealized)",
+              "value": "1"
+            },
+            {
+              "label": "Color (RGB Card/Monitor)",
+              "value": "2"
+            },
+            {
+              "label": "Color (Composite Monitor)",
+              "value": "3"
+            },
+            {
+              "label": "Color TV",
+              "value": "4"
+            },
+            {
+              "label": "Black and White TV",
+              "value": "5"
+            },
+            {
+              "label": "Monochrome (Amber)",
+              "value": "6"
+            },
+            {
+              "label": "Monochrome (Green)",
+              "value": "7"
+            },
+            {
+              "label": "Monochrome (White)",
+              "value": "8"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "emulation",
+      "title": "Emulação",
+      "icon": "cpu",
+      "order": 2,
+      "options": [
+        {
+          "id": "cputype",
+          "label": "MACHINE TYPE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "cputype",
+          "values": [
+            {
+              "label": "Apple ][ (Original)",
+              "value": "apple2"
+            },
+            {
+              "label": "Apple ][+",
+              "value": "apple2p"
+            },
+            {
+              "label": "Apple ][ J-Plus",
+              "value": "apple2jp"
+            },
+            {
+              "label": "Apple //e",
+              "value": "apple2e"
+            },
+            {
+              "label": "Enhanced Apple //e",
+              "value": "apple2ee"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "controls",
+      "title": "Controles",
+      "icon": "gamepad2",
+      "order": 5,
+      "options": [
+        {
+          "id": "applewin_joytype1",
+          "label": "PLAYER 1 JOYSTICK TYPE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "applewin_joytype1",
+          "values": [
+            {
+              "label": "JOYSTICK",
+              "value": "1"
+            },
+            {
+              "label": "KEYBOARD (CURSOR)",
+              "value": "2"
+            },
+            {
+              "label": "KEYBOARD (NUMPAD)",
+              "value": "3"
+            },
+            {
+              "label": "MOUSE",
+              "value": "4"
+            },
+            {
+              "label": "DISABLED",
+              "value": "0"
+            }
+          ]
+        },
+        {
+          "id": "applewin_joytype2",
+          "label": "PLAYER 2 JOYSTICK TYPE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "applewin_joytype2",
+          "values": [
+            {
+              "label": "DISABLED",
+              "value": "0"
+            },
+            {
+              "label": "JOYSTICK",
+              "value": "1"
+            },
+            {
+              "label": "KEYBOARD (CURSOR)",
+              "value": "2"
+            },
+            {
+              "label": "KEYBOARD (NUMPAD)",
+              "value": "3"
+            },
+            {
+              "label": "MOUSE",
+              "value": "4"
+            },
+            {
+              "label": "JOYSTICK 1 RightStick",
+              "value": "5"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

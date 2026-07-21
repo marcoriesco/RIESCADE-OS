@@ -1,0 +1,205 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "eka2l1",
+  "name": "EKA2L1",
+  "description": "Configurações para o emulador EKA2L1 geradas a partir do es_features.cfg.",
+  "icon": "eka2l1",
+  "configFiles": [],
+  "globalMappings": {},
+  "groups": [
+    {
+      "id": "graphics",
+      "title": "Gráficos",
+      "icon": "monitor",
+      "order": 1,
+      "options": [
+        {
+          "id": "eka2l1_upscale",
+          "label": "SCREEN SIZE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "eka2l1_upscale",
+          "values": [
+            {
+              "label": "4x",
+              "value": "4"
+            },
+            {
+              "label": "8x",
+              "value": "8"
+            },
+            {
+              "label": "2x",
+              "value": "2"
+            },
+            {
+              "label": "1x",
+              "value": "1"
+            },
+            {
+              "label": "Esticar TO SCREEN",
+              "value": "-1"
+            }
+          ],
+          "realKey": "screen-upscale",
+          "realFile": "Eka2l1.Generator.cs"
+        },
+        {
+          "id": "eka2l1_rotate",
+          "label": "ROTATE SCREEN",
+          "type": "select",
+          "default": "auto",
+          "configKey": "eka2l1_rotate",
+          "values": [
+            {
+              "label": "Não",
+              "value": "0"
+            },
+            {
+              "label": "ROTATE RIGHT",
+              "value": "90"
+            },
+            {
+              "label": "ROTATE LEFT",
+              "value": "270"
+            },
+            {
+              "label": "ROTATE MIRROR",
+              "value": "180"
+            }
+          ],
+          "realKey": "screen-rotation",
+          "realFile": "Eka2l1.Generator.cs"
+        },
+        {
+          "id": "eka2l1_nearest_neighbor_filter",
+          "label": "Filtragem de Texturas",
+          "description": "Control the texture filtering of the Emulação.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "eka2l1_nearest_neighbor_filter",
+          "realKey": "enable-nearest-neighbor-filter",
+          "realFile": "Eka2l1.Generator.cs"
+        },
+        {
+          "id": "eka2l1_upscale_filter",
+          "label": "TEXTURE UPSCALING",
+          "description": "Efficient graphics filters improving the rendering of games.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "eka2l1_upscale_filter",
+          "values": [
+            {
+              "label": "Nenhum",
+              "value": "false"
+            },
+            {
+              "label": "2xBR",
+              "value": "2xBR"
+            },
+            {
+              "label": "4xBR",
+              "value": "4xBR"
+            },
+            {
+              "label": "4xhq",
+              "value": "4xhq"
+            },
+            {
+              "label": "5xBR",
+              "value": "5xBR"
+            },
+            {
+              "label": "5xBR-lv2",
+              "value": "5xBR-lv2"
+            },
+            {
+              "label": "CRT-Hyllian",
+              "value": "CRT-Hyllian"
+            },
+            {
+              "label": "CRT-Lottes",
+              "value": "CRT-Lottes"
+            },
+            {
+              "label": "dot",
+              "value": "dot"
+            },
+            {
+              "label": "fxaa",
+              "value": "fxaa"
+            },
+            {
+              "label": "scanline",
+              "value": "scanline"
+            },
+            {
+              "label": "sharpen",
+              "value": "sharpen"
+            },
+            {
+              "label": "zfast_lcd",
+              "value": "zfast_lcd"
+            },
+            {
+              "label": "zfast_lcd_mobile",
+              "value": "zfast_lcd_mobile"
+            }
+          ],
+          "realKey": "screen-upscale-method",
+          "realFile": "Eka2l1.Generator.cs"
+        }
+      ]
+    },
+    {
+      "id": "emulation",
+      "title": "Emulação",
+      "icon": "cpu",
+      "order": 2,
+      "options": [
+        {
+          "id": "eka2l1_device",
+          "label": "SYMBIAN DEVICE",
+          "description": "Define Symbian device to run.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "eka2l1_device",
+          "values": [
+            {
+              "label": "N-GAGE (S60v1)",
+              "value": "NEM-4"
+            },
+            {
+              "label": "N95 (S60v3)",
+              "value": "RM-320"
+            },
+            {
+              "label": "N70 (S60v2)",
+              "value": "RM-84"
+            },
+            {
+              "label": "N-GAGE QD (S60v1)",
+              "value": "RH-29"
+            },
+            {
+              "label": "XPress Music 5320d-1 (S60v3)",
+              "value": "RM-409"
+            },
+            {
+              "label": "5230 (S60v5)",
+              "value": "RM-588"
+            },
+            {
+              "label": "9300 (S60 7.0)",
+              "value": "RAE-6"
+            },
+            {
+              "label": "X7-00 (Belle)",
+              "value": "RM-707"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

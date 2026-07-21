@@ -1,0 +1,100 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "openbor",
+  "name": "OPENBOR",
+  "description": "Configurações para o emulador OPENBOR geradas a partir do es_features.cfg.",
+  "icon": "openbor",
+  "configFiles": [],
+  "globalMappings": {
+    "ratio": {
+      "configKey": "ratio",
+      "globalKey": "aspect_ratio"
+    }
+  },
+  "groups": [
+    {
+      "id": "graphics",
+      "title": "Gráficos",
+      "icon": "monitor",
+      "order": 1,
+      "options": [
+        {
+          "id": "filter",
+          "label": "Conjunto de Shaders",
+          "description": "Efficient graphics filters improving the rendering of games.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "filter",
+          "values": [
+            {
+              "label": "SIMPLE 2X",
+              "value": "0"
+            },
+            {
+              "label": "BILINEAR",
+              "value": "1"
+            },
+            {
+              "label": "2XSAI",
+              "value": "2"
+            },
+            {
+              "label": "SUPER 2XSAI",
+              "value": "3"
+            },
+            {
+              "label": "SUPER EAGLE",
+              "value": "4"
+            },
+            {
+              "label": "ADVANCE MAME2X",
+              "value": "5"
+            },
+            {
+              "label": "LQ2X",
+              "value": "6"
+            },
+            {
+              "label": "HQ2X",
+              "value": "7"
+            },
+            {
+              "label": "SCANLINES",
+              "value": "8"
+            },
+            {
+              "label": "SCANLINES TV",
+              "value": "9"
+            },
+            {
+              "label": "TV 2X",
+              "value": "10"
+            },
+            {
+              "label": "DOT MATRIX",
+              "value": "11"
+            }
+          ],
+          "realKey": "swfilter",
+          "realFile": "OpenBor.Generator.cs"
+        },
+        {
+          "id": "ratio",
+          "label": "Proporção de Tela",
+          "type": "select",
+          "default": "auto",
+          "configKey": "ratio",
+          "values": [
+            {
+              "label": "Esticar",
+              "value": "1"
+            }
+          ],
+          "inheritsGlobal": "aspect_ratio",
+          "realKey": "ratio",
+          "realFile": "OpenBor.Generator.cs"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "xroar",
+  "name": "XROAR",
+  "description": "Configurações para o emulador XROAR geradas a partir do es_features.cfg.",
+  "icon": "xroar",
+  "configFiles": [],
+  "globalMappings": {},
+  "groups": [
+    {
+      "id": "controls",
+      "title": "Controles",
+      "icon": "gamepad2",
+      "order": 5,
+      "options": [
+        {
+          "id": "xroar_joyswitch",
+          "label": "SWITCH JOYSTICKS",
+          "description": "Enable this to plus Player 1 joystick in left port instead of right port.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "xroar_joyswitch"
+        }
+      ]
+    }
+  ]
+}

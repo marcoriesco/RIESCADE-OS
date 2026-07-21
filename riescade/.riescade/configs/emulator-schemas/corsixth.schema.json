@@ -1,0 +1,161 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "corsixth",
+  "name": "CORSIXTH",
+  "description": "Configurações para o emulador CORSIXTH geradas a partir do es_features.cfg.",
+  "icon": "corsixth",
+  "configFiles": [],
+  "globalMappings": {},
+  "groups": [
+    {
+      "id": "graphics",
+      "title": "Gráficos",
+      "icon": "monitor",
+      "order": 1,
+      "options": [
+        {
+          "id": "th_resolution",
+          "label": "Resolução Interna",
+          "type": "select",
+          "default": "auto",
+          "configKey": "th_resolution",
+          "values": [
+            {
+              "label": "640x480",
+              "value": "640x480"
+            },
+            {
+              "label": "800x600",
+              "value": "800x600"
+            },
+            {
+              "label": "1024x768",
+              "value": "1024x768"
+            },
+            {
+              "label": "1280x960",
+              "value": "1280x960"
+            },
+            {
+              "label": "1600x1200",
+              "value": "1600x1200"
+            },
+            {
+              "label": "1280x1024",
+              "value": "1280x1024"
+            },
+            {
+              "label": "1366x768",
+              "value": "1366x768"
+            },
+            {
+              "label": "1600x900",
+              "value": "1600x900"
+            },
+            {
+              "label": "1920x1080",
+              "value": "1920x1080"
+            },
+            {
+              "label": "1280x800",
+              "value": "1280x800"
+            },
+            {
+              "label": "1440x900",
+              "value": "1440x900"
+            },
+            {
+              "label": "1680x1050",
+              "value": "1680x1050"
+            },
+            {
+              "label": "1920x1200",
+              "value": "1920x1200"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "emulation",
+      "title": "Emulação",
+      "icon": "cpu",
+      "order": 2,
+      "options": [
+        {
+          "id": "th_language",
+          "label": "LANGUAGE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "th_language",
+          "values": [
+            {
+              "label": "English",
+              "value": "English"
+            },
+            {
+              "label": "Français",
+              "value": "French"
+            },
+            {
+              "label": "Español",
+              "value": "Spanish"
+            },
+            {
+              "label": "Deutsch",
+              "value": "German"
+            },
+            {
+              "label": "Italiano",
+              "value": "Italian"
+            },
+            {
+              "label": "Portugues",
+              "value": "Portuguese"
+            },
+            {
+              "label": "Portugues do Brasil",
+              "value": "Brazilian Portuguese"
+            },
+            {
+              "label": "Nederlands",
+              "value": "Dutch"
+            },
+            {
+              "label": "Dansk",
+              "value": "Danish"
+            },
+            {
+              "label": "Norsk",
+              "value": "Norwegian"
+            },
+            {
+              "label": "Suomi",
+              "value": "Finnish"
+            },
+            {
+              "label": "Svenska",
+              "value": "Swedish"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "controls",
+      "title": "Controles",
+      "icon": "gamepad2",
+      "order": 5,
+      "options": [
+        {
+          "id": "th_capture_mouse",
+          "label": "CAPTURE MOUSE",
+          "description": "Padrão Ativado.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "th_capture_mouse"
+        }
+      ]
+    }
+  ]
+}

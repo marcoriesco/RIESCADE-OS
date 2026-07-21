@@ -1,0 +1,94 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "vkquake2",
+  "name": "VKQUAKE2",
+  "description": "Configurações para o emulador VKQUAKE2 geradas a partir do es_features.cfg.",
+  "icon": "vkquake2",
+  "configFiles": [],
+  "globalMappings": {},
+  "groups": [
+    {
+      "id": "graphics",
+      "title": "Gráficos",
+      "icon": "monitor",
+      "order": 1,
+      "options": [
+        {
+          "id": "vkquake2_vsync",
+          "label": "Sincronização Vertical (V-Sync)",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "vkquake2_vsync"
+        },
+        {
+          "id": "vkquake2_antialiasing",
+          "label": "ANTI ALIASING (MSAA)",
+          "description": "Set Anti Aliasing for rendered content.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "vkquake2_antialiasing",
+          "values": [
+            {
+              "label": "Nenhum",
+              "value": "0"
+            },
+            {
+              "label": "MSAA 2X",
+              "value": "1"
+            },
+            {
+              "label": "MSAA 4X",
+              "value": "2"
+            },
+            {
+              "label": "MSAA 8X",
+              "value": "3"
+            },
+            {
+              "label": "MSAA 16X",
+              "value": "4"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "audio",
+      "title": "Áudio",
+      "icon": "volume2",
+      "order": 4,
+      "options": [
+        {
+          "id": "vkquake2_soundhighquality",
+          "label": "HIGH QUALITY Áudio",
+          "description": "Ativado by Padrão, switch Desativado to use 11khz sound quality.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "vkquake2_soundhighquality"
+        }
+      ]
+    },
+    {
+      "id": "controls",
+      "title": "Controles",
+      "icon": "gamepad2",
+      "order": 5,
+      "options": [
+        {
+          "id": "vkquake2_usejoy",
+          "label": "USE JOYSTICK",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "vkquake2_usejoy"
+        },
+        {
+          "id": "vkquake2_invmouse",
+          "label": "INVERT MOUSE",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "vkquake2_invmouse"
+        }
+      ]
+    }
+  ]
+}

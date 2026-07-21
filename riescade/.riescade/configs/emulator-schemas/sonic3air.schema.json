@@ -1,0 +1,152 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "sonic3air",
+  "name": "SONIC3AIR",
+  "description": "Configurações para o emulador SONIC3AIR geradas a partir do es_features.cfg.",
+  "icon": "sonic3air",
+  "configFiles": [],
+  "globalMappings": {},
+  "groups": [
+    {
+      "id": "graphics",
+      "title": "Gráficos",
+      "icon": "monitor",
+      "order": 1,
+      "options": [
+        {
+          "id": "sonic3_shader",
+          "label": "Conjunto de Shaders",
+          "type": "select",
+          "default": "auto",
+          "configKey": "sonic3_shader",
+          "values": [
+            {
+              "label": "SHARP",
+              "value": "0"
+            },
+            {
+              "label": "SOFT 1",
+              "value": "1"
+            },
+            {
+              "label": "SOFT 2",
+              "value": "2"
+            },
+            {
+              "label": "xBRZ",
+              "value": "3"
+            },
+            {
+              "label": "HQ2x",
+              "value": "4"
+            },
+            {
+              "label": "HQ3x",
+              "value": "5"
+            },
+            {
+              "label": "HQ4x",
+              "value": "6"
+            }
+          ],
+          "realKey": "Filtering",
+          "realFile": "PortsLauncher.Configuration.cs"
+        },
+        {
+          "id": "sonic3_vsync",
+          "label": "Sincronização Vertical (V-Sync)",
+          "type": "select",
+          "default": "auto",
+          "configKey": "sonic3_vsync",
+          "values": [
+            {
+              "label": "Sim",
+              "value": "1"
+            },
+            {
+              "label": "Não",
+              "value": "0"
+            },
+            {
+              "label": "Sim WITH FPS CAP",
+              "value": "2"
+            }
+          ],
+          "realKey": "FrameSync",
+          "realFile": "PortsLauncher.Configuration.cs"
+        },
+        {
+          "id": "sonic3_scanlines",
+          "label": "SCANLINES",
+          "description": "Scanlines are not compatible with HQ or xBRZ shaders.",
+          "type": "slider",
+          "default": "auto",
+          "configKey": "sonic3_scanlines",
+          "min": 0,
+          "max": 100,
+          "step": 25,
+          "suffix": "%",
+          "realKey": "Scanlines",
+          "realFile": "PortsLauncher.Configuration.cs"
+        },
+        {
+          "id": "sonic3_renderer",
+          "label": "Vídeo",
+          "type": "select",
+          "default": "auto",
+          "configKey": "sonic3_renderer",
+          "values": [
+            {
+              "label": "OPENGL",
+              "value": "opengl-full"
+            },
+            {
+              "label": "OPENGL SOFTWARE",
+              "value": "opengl-soft"
+            }
+          ],
+          "realKey": "RenderMethod",
+          "realFile": "PortsLauncher.Configuration.cs"
+        }
+      ]
+    },
+    {
+      "id": "emulation",
+      "title": "Emulação",
+      "icon": "cpu",
+      "order": 2,
+      "options": [
+        {
+          "id": "sonic3_showfps",
+          "label": "SHOW FPS",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "sonic3_showfps",
+          "realKey": "PerformanceDisplay",
+          "realFile": "PortsLauncher.Configuration.cs"
+        }
+      ]
+    },
+    {
+      "id": "controls",
+      "title": "Controles",
+      "icon": "gamepad2",
+      "order": 5,
+      "options": [
+        {
+          "id": "sonic3_rumble",
+          "label": "RUMBLE LEVEL",
+          "type": "slider",
+          "default": "auto",
+          "configKey": "sonic3_rumble",
+          "min": 0,
+          "max": 100,
+          "step": 20,
+          "suffix": "%",
+          "realKey": "RomPath",
+          "realFile": "PortsLauncher.Configuration.cs"
+        }
+      ]
+    }
+  ]
+}

@@ -1,58 +1,237 @@
 {
   "$schema": "riescade-emulator-schema-v1",
   "id": "shadps4",
-  "name": "shadPS4",
-  "description": "Emulador de PlayStation 4 em desenvolvimento.",
+  "name": "SHADPS4",
+  "description": "Configurações para o emulador SHADPS4 geradas a partir do es_features.cfg.",
   "icon": "shadps4",
-  "configFiles": [
-    {
-      "path": "user/config.toml",
-      "format": "toml"
-    }
-  ],
-  "globalMappings": {
-    "fullscreen": {
-      "configKey": "fullscreen",
-      "globalKey": "fullscreen"
-    }
-  },
+  "configFiles": [],
+  "globalMappings": {},
   "groups": [
     {
-      "id": "graphics",
-      "title": "Gráficos",
-      "icon": "monitor",
-      "order": 1,
+      "id": "emulation",
+      "title": "Emulação",
+      "icon": "cpu",
+      "order": 2,
       "options": [
         {
-          "id": "fullscreen",
-          "label": "Tela Cheia",
-          "description": "Iniciar o emulador em modo tela cheia.",
+          "id": "shadps4_gui",
+          "label": "SHOW GUI",
+          "description": "Show emulator GUI.",
           "type": "toggle",
-          "default": "true",
-          "configKey": "fullscreen",
-          "inheritsGlobal": "fullscreen"
+          "default": "auto",
+          "configKey": "shadps4_gui"
         },
         {
-          "id": "shadps4_fullscreen_mode",
-          "label": "Modo de Tela Cheia",
-          "description": "Tipo de tela cheia ao iniciar.",
+          "id": "shadps4_isps4pro",
+          "label": "PS4 PRO",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "shadps4_isps4pro",
+          "realKey": "isPS4Pro",
+          "realSection": "General",
+          "realFile": "ShadPS4.Generator.cs"
+        },
+        {
+          "id": "shadps4_lang",
+          "label": "LANGUAGE",
           "type": "select",
-          "default": "Borderless",
-          "configKey": "shadps4_fullscreen_mode",
+          "default": "auto",
+          "configKey": "shadps4_lang",
           "values": [
             {
-              "label": "Borderless",
-              "value": "Borderless"
+              "label": "English (US)",
+              "value": "1"
             },
             {
-              "label": "Exclusivo",
-              "value": "Exclusive"
+              "label": "Français",
+              "value": "2"
             },
             {
-              "label": "Janela",
-              "value": "Windowed"
+              "label": "Deutsch",
+              "value": "4"
+            },
+            {
+              "label": "Español",
+              "value": "3"
+            },
+            {
+              "label": "Italiano",
+              "value": "5"
+            },
+            {
+              "label": "Nederlands",
+              "value": "6"
+            },
+            {
+              "label": "Polski",
+              "value": "16"
+            },
+            {
+              "label": "Portugues",
+              "value": "7"
+            },
+            {
+              "label": "Portugues do Brasil",
+              "value": "17"
+            },
+            {
+              "label": "Español (Latin America)",
+              "value": "20"
+            },
+            {
+              "label": "Français (Canada)",
+              "value": "22"
+            },
+            {
+              "label": "日本語 (Japanese)",
+              "value": "0"
+            },
+            {
+              "label": "简化字 (Chinese - simplified)",
+              "value": "11"
+            },
+            {
+              "label": "簡化字 (Chinese - traditional)",
+              "value": "10"
+            },
+            {
+              "label": "한국어 (Korean)",
+              "value": "9"
+            },
+            {
+              "label": "English (UK)",
+              "value": "18"
+            },
+            {
+              "label": "Dansk",
+              "value": "14"
+            },
+            {
+              "label": "Suomalainen",
+              "value": "12"
+            },
+            {
+              "label": "Svenska",
+              "value": "13"
+            },
+            {
+              "label": "Norsk",
+              "value": "15"
+            },
+            {
+              "label": "Türkçe",
+              "value": "19"
+            },
+            {
+              "label": "Русский",
+              "value": "8"
+            },
+            {
+              "label": "Arabic",
+              "value": "21"
+            },
+            {
+              "label": "Czech",
+              "value": "23"
+            },
+            {
+              "label": "Hungarian",
+              "value": "24"
+            },
+            {
+              "label": "Greek",
+              "value": "25"
+            },
+            {
+              "label": "Romanian",
+              "value": "26"
+            },
+            {
+              "label": "Thai",
+              "value": "27"
+            },
+            {
+              "label": "Vietnamese",
+              "value": "28"
+            },
+            {
+              "label": "Indonesian",
+              "value": "29"
+            }
+          ],
+          "realKey": "consoleLanguage",
+          "realSection": "Settings",
+          "realFile": "ShadPS4.Generator.cs"
+        },
+        {
+          "id": "shadps4_version",
+          "label": "EMULATOR VERSION",
+          "type": "select",
+          "default": "auto",
+          "configKey": "shadps4_version",
+          "values": [
+            {
+              "label": "0.15.0",
+              "value": "0.15.0"
+            },
+            {
+              "label": "0.14.0",
+              "value": "0.14.0"
+            },
+            {
+              "label": "0.13.0",
+              "value": "0.13.0"
+            },
+            {
+              "label": "0.12.5",
+              "value": "0.12.5"
+            },
+            {
+              "label": "PRE-RELEASE",
+              "value": "Pre-release"
+            },
+            {
+              "label": "0.12.0",
+              "value": "0.12.0"
+            },
+            {
+              "label": "0.11.0",
+              "value": "0.11.0"
+            },
+            {
+              "label": "Padrão",
+              "value": "default"
             }
           ]
+        },
+        {
+          "id": "shadps4_username",
+          "label": "USER NAME",
+          "type": "input",
+          "default": "auto",
+          "configKey": "shadps4_username",
+          "realKey": "userName",
+          "realSection": "General",
+          "realFile": "ShadPS4.Generator.cs"
+        }
+      ]
+    },
+    {
+      "id": "controls",
+      "title": "Controles",
+      "icon": "gamepad2",
+      "order": 5,
+      "options": [
+        {
+          "id": "shadps4_motion",
+          "label": "ENABLE MOTION",
+          "description": "Can only be used if the controller is compatible with motion control.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "shadps4_motion",
+          "realKey": "isMotionControlsEnabled",
+          "realSection": "Input",
+          "realFile": "ShadPS4.Generator.cs"
         }
       ]
     }

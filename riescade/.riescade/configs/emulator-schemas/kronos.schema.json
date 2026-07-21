@@ -1,0 +1,449 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "kronos",
+  "name": "KRONOS",
+  "description": "Configurações para o emulador KRONOS geradas a partir do es_features.cfg.",
+  "icon": "kronos",
+  "configFiles": [],
+  "globalMappings": {},
+  "groups": [
+    {
+      "id": "graphics",
+      "title": "Gráficos",
+      "icon": "monitor",
+      "order": 1,
+      "options": [
+        {
+          "id": "kronos_vsync",
+          "label": "Sincronização Vertical (V-Sync)",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "kronos_vsync",
+          "realKey": "General\\\\EnableVSync",
+          "realSection": "1.0",
+          "realFile": "Kronos.Generator.cs"
+        },
+        {
+          "id": "kronos_resolution",
+          "label": "Resolução Interna",
+          "type": "select",
+          "default": "auto",
+          "configKey": "kronos_resolution",
+          "values": [
+            {
+              "label": "ORIGINAL",
+              "value": "1"
+            },
+            {
+              "label": "2X",
+              "value": "8"
+            },
+            {
+              "label": "4X",
+              "value": "32"
+            },
+            {
+              "label": "SAME AS SCREEN",
+              "value": "64"
+            }
+          ],
+          "realKey": "Video\\\\resolution_mode",
+          "realSection": "1.0",
+          "realFile": "Kronos.Generator.cs"
+        },
+        {
+          "id": "kronos_ratio",
+          "label": "Proporção de Tela",
+          "type": "select",
+          "default": "auto",
+          "configKey": "kronos_ratio",
+          "values": [
+            {
+              "label": "PRESERVE ASPECT",
+              "value": "0"
+            },
+            {
+              "label": "Esticar TO SCREEN",
+              "value": "1"
+            },
+            {
+              "label": "INTEGER SCALE (Fullscreen)",
+              "value": "2"
+            },
+            {
+              "label": "INTEGER SCALE",
+              "value": "3"
+            }
+          ],
+          "realKey": "Video\\\\AspectRatio",
+          "realSection": "1.0",
+          "realFile": "Kronos.Generator.cs"
+        },
+        {
+          "id": "kronos_scaler",
+          "label": "Vídeo SCALER",
+          "description": "Efficient graphics filters improving the rendering of games.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "kronos_scaler",
+          "values": [
+            {
+              "label": "Nenhum",
+              "value": "0"
+            },
+            {
+              "label": "HQ 4x",
+              "value": "1"
+            },
+            {
+              "label": "4x BRZ",
+              "value": "2"
+            },
+            {
+              "label": "6x BRZ",
+              "value": "3"
+            }
+          ],
+          "realKey": "Video\\\\upscale_type",
+          "realSection": "1.0",
+          "realFile": "Kronos.Generator.cs"
+        },
+        {
+          "id": "kronos_filtering",
+          "label": "Filtragem de Texturas",
+          "description": "Control the texture filtering of the Emulação.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "kronos_filtering",
+          "values": [
+            {
+              "label": "Nenhum",
+              "value": "0"
+            },
+            {
+              "label": "BILINEAR",
+              "value": "1"
+            },
+            {
+              "label": "BICUBIC",
+              "value": "2"
+            },
+            {
+              "label": "DEINTERLACING Adaptável",
+              "value": "3"
+            },
+            {
+              "label": "DEBUG DEINTERLACING",
+              "value": "4"
+            },
+            {
+              "label": "BOB DEINTERLACING",
+              "value": "5"
+            },
+            {
+              "label": "SCANLINE",
+              "value": "6"
+            }
+          ],
+          "realKey": "Video\\\\filter_type",
+          "realSection": "1.0",
+          "realFile": "Kronos.Generator.cs"
+        },
+        {
+          "id": "kronos_mesh",
+          "label": "MESH MODE",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "kronos_mesh"
+        },
+        {
+          "id": "kronos_bandingmode",
+          "label": "BANDING MODE",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "kronos_bandingmode",
+          "realKey": "Video\\\\BandingMode",
+          "realSection": "1.0",
+          "realFile": "Kronos.Generator.cs"
+        }
+      ]
+    },
+    {
+      "id": "emulation",
+      "title": "Emulação",
+      "icon": "cpu",
+      "order": 2,
+      "options": [
+        {
+          "id": "saturn_language",
+          "label": "CONSOLE LANGUAGE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "saturn_language",
+          "values": [
+            {
+              "label": "english",
+              "value": "0"
+            },
+            {
+              "label": "français",
+              "value": "2"
+            },
+            {
+              "label": "deutsch",
+              "value": "1"
+            },
+            {
+              "label": "español",
+              "value": "3"
+            },
+            {
+              "label": "italiano",
+              "value": "4"
+            },
+            {
+              "label": "日本語 (japanese)",
+              "value": "5"
+            }
+          ],
+          "realKey": "General\\\\SystemLanguageID",
+          "realSection": "1.0",
+          "realFile": "Kronos.Generator.cs"
+        },
+        {
+          "id": "saturn_discnumber",
+          "label": "DISC NUMBER",
+          "description": "In case of multidisc games, when using .m3u file, specify the disc number to run.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "saturn_discnumber",
+          "values": [
+            {
+              "label": "1",
+              "value": "0"
+            },
+            {
+              "label": "2",
+              "value": "1"
+            },
+            {
+              "label": "3",
+              "value": "2"
+            },
+            {
+              "label": "4",
+              "value": "3"
+            }
+          ]
+        },
+        {
+          "id": "saturn_startbios",
+          "label": "START BIOS",
+          "description": "This will run the console BIOS instead of a game.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "saturn_startbios"
+        },
+        {
+          "id": "kronos_force_bios",
+          "label": "FORCE BIOS",
+          "description": "Define BIOS to use for Emulação.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "kronos_force_bios",
+          "values": [
+            {
+              "label": "Multi-region",
+              "value": "saturn_bios.bin"
+            },
+            {
+              "label": "JAP",
+              "value": "sega_101.bin"
+            },
+            {
+              "label": "EUR/US",
+              "value": "mpr-17933.bin"
+            },
+            {
+              "label": "HLE",
+              "value": "hle"
+            }
+          ],
+          "realKey": "Memory\\\\Path",
+          "realSection": "1.0",
+          "realFile": "Kronos.Generator.cs"
+        },
+        {
+          "id": "kronos_cartridge",
+          "label": "CARTRIDGE TYPE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "kronos_cartridge",
+          "values": [
+            {
+              "label": "DRAM 32 Mbit",
+              "value": "7"
+            },
+            {
+              "label": "DRAM 8 Mbit",
+              "value": "6"
+            },
+            {
+              "label": "Nenhum",
+              "value": "0"
+            }
+          ],
+          "realKey": "Cartridge\\\\Type",
+          "realSection": "1.0",
+          "realFile": "Kronos.Generator.cs"
+        },
+        {
+          "id": "kronos_fps",
+          "label": "SHOW FPS",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "kronos_fps",
+          "realKey": "General\\\\ShowFPS",
+          "realSection": "1.0",
+          "realFile": "Kronos.Generator.cs"
+        }
+      ]
+    },
+    {
+      "id": "audio",
+      "title": "Áudio",
+      "icon": "volume2",
+      "order": 4,
+      "options": [
+        {
+          "id": "kronos_audiocore",
+          "label": "Áudio",
+          "type": "select",
+          "default": "auto",
+          "configKey": "kronos_audiocore",
+          "values": [
+            {
+              "label": "DIRECTX",
+              "value": "2"
+            },
+            {
+              "label": "SDL",
+              "value": "1"
+            }
+          ],
+          "realKey": "Sound\\\\SoundCore",
+          "realSection": "1.0",
+          "realFile": "Kronos.Generator.cs"
+        }
+      ]
+    },
+    {
+      "id": "controls",
+      "title": "Controles",
+      "icon": "gamepad2",
+      "order": 5,
+      "options": [
+        {
+          "id": "kronos_padlayout",
+          "label": "BUTTON LAYOUT",
+          "type": "select",
+          "default": "auto",
+          "configKey": "kronos_padlayout",
+          "values": [
+            {
+              "label": "L/R as Y/Z",
+              "value": "lr_yz"
+            },
+            {
+              "label": "L/R as Z/C",
+              "value": "lr_zc"
+            },
+            {
+              "label": "L/R as X/Z",
+              "value": "lr_xz"
+            }
+          ],
+          "realKey": "Input\\\\Port\\\\",
+          "realSection": "1.0",
+          "realFile": "Kronos.Controllers.cs"
+        },
+        {
+          "id": "kronos_leftstick",
+          "label": "USE ANALOG STICK",
+          "description": "Use Left analog stick instead of D-PAD for Controles.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "kronos_leftstick"
+        },
+        {
+          "id": "kronos_multitap",
+          "label": "USE MULTITAP",
+          "type": "select",
+          "default": "auto",
+          "configKey": "kronos_multitap",
+          "values": [
+            {
+              "label": "Não",
+              "value": "0"
+            },
+            {
+              "label": "PORT 1",
+              "value": "1"
+            },
+            {
+              "label": "PORT 2",
+              "value": "2"
+            },
+            {
+              "label": "BOTH PORTS",
+              "value": "both"
+            }
+          ]
+        },
+        {
+          "id": "saturn_pad_kronos",
+          "label": "USE SATURN-LIKE CONTROLLER",
+          "type": "select",
+          "default": "auto",
+          "configKey": "saturn_pad_kronos",
+          "values": [
+            {
+              "label": "Não",
+              "value": "0"
+            },
+            {
+              "label": "Sim(DPAD)",
+              "value": "1"
+            },
+            {
+              "label": "Sim(ANALOG)",
+              "value": "2"
+            }
+          ],
+          "realKey": "saturn_pad_kronos",
+          "realFile": "Kronos.Controllers.cs"
+        },
+        {
+          "id": "kronos_gunport",
+          "label": "GUN PORT",
+          "type": "select",
+          "default": "auto",
+          "configKey": "kronos_gunport",
+          "values": [
+            {
+              "label": "PORT 2",
+              "value": "2"
+            },
+            {
+              "label": "PORT 1",
+              "value": "1"
+            }
+          ],
+          "realKey": "Input\\\\Port\\\\",
+          "realSection": "1.0",
+          "realFile": "Kronos.Generator.cs"
+        }
+      ]
+    }
+  ]
+}

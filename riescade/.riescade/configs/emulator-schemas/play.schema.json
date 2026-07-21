@@ -1,0 +1,180 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "play",
+  "name": "PLAY",
+  "description": "Configurações para o emulador PLAY geradas a partir do es_features.cfg.",
+  "icon": "play",
+  "configFiles": [],
+  "globalMappings": {},
+  "groups": [
+    {
+      "id": "graphics",
+      "title": "Gráficos",
+      "icon": "monitor",
+      "order": 1,
+      "options": [
+        {
+          "id": "play_resolution",
+          "label": "Resolução Interna",
+          "type": "select",
+          "default": "auto",
+          "configKey": "play_resolution",
+          "values": [
+            {
+              "label": "NATIVE (480p)",
+              "value": "1"
+            },
+            {
+              "label": "x2 (960p)",
+              "value": "2"
+            },
+            {
+              "label": "x4 (1920p)",
+              "value": "4"
+            },
+            {
+              "label": "x8 (4320p - 8K)",
+              "value": "8"
+            },
+            {
+              "label": "x16 (7680p - 16K)",
+              "value": "16"
+            }
+          ]
+        },
+        {
+          "id": "play_presentation",
+          "label": "Proporção de Tela",
+          "type": "select",
+          "default": "auto",
+          "configKey": "play_presentation",
+          "values": [
+            {
+              "label": "FIT SCREEN",
+              "value": "1"
+            },
+            {
+              "label": "Esticar TO FILL",
+              "value": "0"
+            },
+            {
+              "label": "ORIGINAL SIZE",
+              "value": "2"
+            }
+          ]
+        },
+        {
+          "id": "play_widescreen",
+          "label": "WIDESCREEN",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "play_widescreen"
+        },
+        {
+          "id": "play_renderer",
+          "label": "Vídeo",
+          "type": "select",
+          "default": "auto",
+          "configKey": "play_renderer",
+          "values": [
+            {
+              "label": "OPENGL",
+              "value": "0"
+            },
+            {
+              "label": "VULKAN",
+              "value": "1"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "emulation",
+      "title": "Emulação",
+      "icon": "cpu",
+      "order": 2,
+      "options": [
+        {
+          "id": "play_limitframerate",
+          "label": "THROTTLE",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "play_limitframerate"
+        },
+        {
+          "id": "play_language",
+          "label": "LANGUAGE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "play_language",
+          "values": [
+            {
+              "label": "English",
+              "value": "1"
+            },
+            {
+              "label": "Français",
+              "value": "2"
+            },
+            {
+              "label": "日本語 (Japanese)",
+              "value": "0"
+            },
+            {
+              "label": "Español",
+              "value": "3"
+            },
+            {
+              "label": "Deutsch",
+              "value": "4"
+            },
+            {
+              "label": "Italiano",
+              "value": "5"
+            },
+            {
+              "label": "Nederlands",
+              "value": "6"
+            },
+            {
+              "label": "Portugues",
+              "value": "7"
+            },
+            {
+              "label": "Russian",
+              "value": "8"
+            },
+            {
+              "label": "한국어 (Korean)",
+              "value": "9"
+            },
+            {
+              "label": "簡化字 (Chinese - traditional)",
+              "value": "10"
+            },
+            {
+              "label": "简化字 (Chinese - simplified)",
+              "value": "11"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "controls",
+      "title": "Controles",
+      "icon": "gamepad2",
+      "order": 5,
+      "options": [
+        {
+          "id": "play_rumble",
+          "label": "DISABLE RUMBLE",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "play_rumble"
+        }
+      ]
+    }
+  ]
+}

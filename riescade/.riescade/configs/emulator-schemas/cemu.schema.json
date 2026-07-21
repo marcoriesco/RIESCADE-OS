@@ -1,29 +1,11 @@
 {
   "$schema": "riescade-emulator-schema-v1",
   "id": "cemu",
-  "name": "Cemu",
-  "description": "Emulador de Nintendo Wii U.",
+  "name": "CEMU",
+  "description": "Configurações para o emulador CEMU geradas a partir do es_features.cfg.",
   "icon": "cemu",
-  "configFiles": [
-    {
-      "path": "portable/settings.xml",
-      "format": "xml"
-    }
-  ],
-  "globalMappings": {
-    "fullscreen": {
-      "configKey": "fullscreen",
-      "globalKey": "fullscreen"
-    },
-    "vsync": {
-      "configKey": "vsync",
-      "globalKey": "vsync"
-    },
-    "video_driver": {
-      "configKey": "video_driver",
-      "globalKey": "video_driver"
-    }
-  },
+  "configFiles": [],
+  "globalMappings": {},
   "groups": [
     {
       "id": "graphics",
@@ -32,93 +14,656 @@
       "order": 1,
       "options": [
         {
-          "id": "fullscreen",
-          "label": "Tela Cheia",
-          "description": "Iniciar o emulador em modo tela cheia.",
-          "type": "toggle",
-          "default": "true",
-          "configKey": "fullscreen",
-          "inheritsGlobal": "fullscreen"
-        },
-        {
-          "id": "video_driver",
-          "label": "Renderizador",
-          "description": "API gráfica. 1 = Vulkan, 0 = OpenGL.",
+          "id": "stretch",
+          "label": "Proporção de Tela",
           "type": "select",
-          "default": "1",
-          "configKey": "video_driver",
-          "inheritsGlobal": "video_driver",
+          "default": "auto",
+          "configKey": "stretch",
           "values": [
             {
-              "label": "Vulkan",
-              "value": "1"
+              "label": "KEEP ASPECT RATIO",
+              "value": "0"
             },
             {
-              "label": "OpenGL",
-              "value": "0"
+              "label": "Esticar TO DISPLAY",
+              "value": "1"
             }
-          ]
+          ],
+          "realKey": "FullscreenScaling",
+          "realFile": "Cemu.Generator.cs"
         },
         {
-          "id": "vsync",
-          "label": "V-Sync",
-          "description": "Sincronização vertical. 0 = Off, 1 = On, 2 = Double, 3 = Triple.",
+          "id": "cemu_vsync",
+          "label": "Sincronização Vertical (V-Sync)",
+          "description": "'Triplo-buffer' and 'match emulated content' are only available with Vulkan Vídeo driver.",
           "type": "select",
-          "default": "1",
-          "configKey": "vsync",
-          "inheritsGlobal": "vsync",
+          "default": "auto",
+          "configKey": "cemu_vsync",
           "values": [
             {
-              "label": "Desativado",
-              "value": "0"
-            },
-            {
-              "label": "Ativado",
+              "label": "Duplo-BUFFER",
               "value": "1"
             },
             {
-              "label": "Double Buffering",
+              "label": "Triplo-BUFFER",
               "value": "2"
             },
             {
-              "label": "Triple Buffering",
+              "label": "MATCH EMULATED CONTENT",
               "value": "3"
+            },
+            {
+              "label": "Não",
+              "value": "0"
             }
-          ]
+          ],
+          "realKey": "VSync",
+          "realFile": "Cemu.Generator.cs"
         },
         {
-          "id": "cemu_upscale_filter",
-          "label": "Filtro de Upscaling",
-          "description": "Filtro para aumentar a resolução.",
+          "id": "async_texture",
+          "label": "ASYNCHRONOUS TEXTURE COMPILATION",
+          "description": "Can improve performance Ativado more powerful GPUs that have spare headroom. Only works with Vulkan renderer.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "async_texture",
+          "realKey": "AsyncCompile",
+          "realFile": "Cemu.Generator.cs"
+        },
+        {
+          "id": "accurate_sync",
+          "label": "ACCURATE TEXTURE SYNC",
+          "description": "More accurate behavior but may cause lower performance. Ativado by Padrão.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "accurate_sync",
+          "realKey": "GX2DrawdoneSync",
+          "realFile": "Cemu.Generator.cs"
+        },
+        {
+          "id": "upscaleFilter",
+          "label": "UPSCALE FILTER",
+          "description": "Specify filter to use for upscaling. BICUBIC by Padrão.",
           "type": "select",
           "default": "auto",
-          "configKey": "cemu_upscale_filter",
+          "configKey": "upscaleFilter",
           "values": [
             {
-              "label": "Automático",
-              "value": "auto"
+              "label": "BILINEAR",
+              "value": "0"
             },
             {
-              "label": "Bilinear",
-              "value": "bilinear"
+              "label": "BICUBIC",
+              "value": "1"
             },
             {
-              "label": "Nearest",
-              "value": "nearest"
+              "label": "HERMITE",
+              "value": "2"
             },
             {
-              "label": "Bicubic",
-              "value": "bicubic"
+              "label": "NEAREST NEIGHBOR",
+              "value": "3"
+            }
+          ],
+          "realKey": "UpscaleFilter",
+          "realFile": "Cemu.Generator.cs"
+        },
+        {
+          "id": "downscaleFilter",
+          "label": "DOWNSCALE FILTER",
+          "description": "Specify filter to use for downscaling. BILINEAR by Padrão.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "downscaleFilter",
+          "values": [
+            {
+              "label": "BILINEAR",
+              "value": "0"
+            },
+            {
+              "label": "BICUBIC",
+              "value": "1"
+            },
+            {
+              "label": "HERMITE",
+              "value": "2"
+            },
+            {
+              "label": "NEAREST NEIGHBOR",
+              "value": "3"
+            }
+          ],
+          "realKey": "DownscaleFilter",
+          "realFile": "Cemu.Generator.cs"
+        },
+        {
+          "id": "video_renderer",
+          "label": "Vídeo",
+          "type": "select",
+          "default": "auto",
+          "configKey": "video_renderer",
+          "values": [
+            {
+              "label": "OPENGL",
+              "value": "0"
+            },
+            {
+              "label": "VULKAN",
+              "value": "1"
+            }
+          ],
+          "realKey": "video_renderer",
+          "realFile": "Cemu.Generator.cs"
+        }
+      ]
+    },
+    {
+      "id": "emulation",
+      "title": "Emulação",
+      "icon": "cpu",
+      "order": 2,
+      "options": [
+        {
+          "id": "wiiu_language",
+          "label": "LANGUAGE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "wiiu_language",
+          "values": [
+            {
+              "label": "Japanese",
+              "value": "0"
+            },
+            {
+              "label": "English",
+              "value": "1"
+            },
+            {
+              "label": "Français",
+              "value": "2"
+            },
+            {
+              "label": "Deutsch",
+              "value": "3"
+            },
+            {
+              "label": "Italiano",
+              "value": "4"
+            },
+            {
+              "label": "Español",
+              "value": "5"
+            },
+            {
+              "label": "简体中文 (Chinese)",
+              "value": "6"
+            },
+            {
+              "label": "한국어 (Korean)",
+              "value": "7"
+            },
+            {
+              "label": "Nederlands",
+              "value": "8"
+            },
+            {
+              "label": "Português",
+              "value": "9"
+            },
+            {
+              "label": "Русский (Russian)",
+              "value": "10"
+            }
+          ],
+          "realKey": "console_language",
+          "realFile": "Cemu.Generator.cs"
+        },
+        {
+          "id": "overlay",
+          "label": "PERFORMANCE STATISTICS",
+          "description": "Show performance statistics overlay in-game.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "overlay",
+          "values": [
+            {
+              "label": "FULL",
+              "value": "full"
+            },
+            {
+              "label": "FPS ONLY",
+              "value": "fps"
+            },
+            {
+              "label": "Nenhum",
+              "value": "none"
+            }
+          ],
+          "realKey": "overlay",
+          "realFile": "Cemu.Generator.cs"
+        },
+        {
+          "id": "notifications",
+          "label": "NOTIFICATIONS",
+          "description": "Turn Ativado emulator notifications : connected controllers and shader compilation messages.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "notifications"
+        }
+      ]
+    },
+    {
+      "id": "audio",
+      "title": "Áudio",
+      "icon": "volume2",
+      "order": 4,
+      "options": [
+        {
+          "id": "channels",
+          "label": "Áudio CHANNELS",
+          "description": "Configure this setting if you want to switch between stereo and surround sound.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "channels",
+          "values": [
+            {
+              "label": "MONO",
+              "value": "0"
+            },
+            {
+              "label": "STEREO",
+              "value": "1"
+            },
+            {
+              "label": "SURROUND",
+              "value": "2"
+            }
+          ],
+          "realKey": "TVChannels",
+          "realFile": "Cemu.Generator.cs"
+        },
+        {
+          "id": "cemu_microphone",
+          "label": "ENABLE COMPUTER MICROPHONE",
+          "description": "Use Padrão computer Áudio input device as microphone.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "cemu_microphone"
+        },
+        {
+          "id": "audio_renderer",
+          "label": "Áudio",
+          "type": "select",
+          "default": "auto",
+          "configKey": "audio_renderer",
+          "values": [
+            {
+              "label": "DIRECTSOUND",
+              "value": "0"
+            },
+            {
+              "label": "XAUDIO2",
+              "value": "2"
+            },
+            {
+              "label": "CUBEB",
+              "value": "3"
+            }
+          ],
+          "realKey": "api",
+          "realFile": "Cemu.Generator.cs"
+        }
+      ]
+    },
+    {
+      "id": "controls",
+      "title": "Controles",
+      "icon": "gamepad2",
+      "order": 5,
+      "options": [
+        {
+          "id": "cemu_forcexinput",
+          "label": "INPUT",
+          "description": "'XINPUT' will force usage of XInput api for compatible controllers.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "cemu_forcexinput",
+          "values": [
+            {
+              "label": "SDL",
+              "value": "0"
+            },
+            {
+              "label": "XINPUT",
+              "value": "1"
             }
           ]
         },
         {
-          "id": "cemu_async_compile",
-          "label": "Compilação Assíncrona de Shaders",
-          "description": "Compila shaders em background. Reduz stuttering.",
+          "id": "cemu_open_pad",
+          "label": "SEPARATE GAMEPAD VIEW",
+          "description": "Opens a second window for the Gamepad view.",
           "type": "toggle",
-          "default": "true",
-          "configKey": "cemu_async_compile"
+          "default": "auto",
+          "configKey": "cemu_open_pad",
+          "realKey": "open_pad",
+          "realFile": "Cemu.Generator.cs"
+        },
+        {
+          "id": "cemu_enable_motion",
+          "label": "MOTION CONTROL",
+          "description": "Can only be used if the controller is compatible with motion control.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "cemu_enable_motion"
+        },
+        {
+          "id": "cemu_enable_rumble",
+          "label": "RUMBLE",
+          "description": "Enable controller's rumble effects.",
+          "type": "slider",
+          "default": "auto",
+          "configKey": "cemu_enable_rumble",
+          "min": 0,
+          "max": 1,
+          "step": 0.02,
+          "suffix": "%"
+        },
+        {
+          "id": "gamepadbuttons",
+          "label": "INVERT FACE BUTTONS",
+          "description": "Invert A/B and X/Y buttons.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "gamepadbuttons"
+        },
+        {
+          "id": "cemu_controllerp0",
+          "label": "PLAYER 1 CONTROLLER TYPE",
+          "description": "Padrão to WIIU Gamepad, change this for games that do not accept WIIU Gamepad in multiplayer mode.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "cemu_controllerp0",
+          "values": [
+            {
+              "label": "GAMEPAD",
+              "value": "gamepad"
+            },
+            {
+              "label": "PRO CONTROLLER",
+              "value": "procontroller"
+            },
+            {
+              "label": "HORIZONTAL WIIMOTE",
+              "value": "wiimote_horizontal"
+            }
+          ]
+        },
+        {
+          "id": "cemu_controllerp1",
+          "label": "PLAYER 2 CONTROLLER TYPE",
+          "description": "Padrão to Pro Controller.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "cemu_controllerp1",
+          "values": [
+            {
+              "label": "PRO CONTROLLER",
+              "value": "procontroller"
+            },
+            {
+              "label": "GAMEPAD",
+              "value": "gamepad"
+            },
+            {
+              "label": "HORIZONTAL WIIMOTE",
+              "value": "wiimote_horizontal"
+            }
+          ]
+        },
+        {
+          "id": "cemu_controllerp2",
+          "label": "PLAYER 3 CONTROLLER TYPE",
+          "description": "Padrão to Pro Controller.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "cemu_controllerp2",
+          "values": [
+            {
+              "label": "PRO CONTROLLER",
+              "value": "procontroller"
+            },
+            {
+              "label": "HORIZONTAL WIIMOTE",
+              "value": "wiimote_horizontal"
+            }
+          ]
+        },
+        {
+          "id": "cemu_controllerp3",
+          "label": "PLAYER 4 CONTROLLER TYPE",
+          "description": "Padrão to Pro Controller.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "cemu_controllerp3",
+          "values": [
+            {
+              "label": "PRO CONTROLLER",
+              "value": "procontroller"
+            },
+            {
+              "label": "HORIZONTAL WIIMOTE",
+              "value": "wiimote_horizontal"
+            }
+          ]
+        },
+        {
+          "id": "use_wiimotes",
+          "label": "REAL WIIMOTES",
+          "description": "Play with real wiimotes only, other controllers will not work.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "use_wiimotes",
+          "values": [
+            {
+              "label": "Não",
+              "value": "0"
+            },
+            {
+              "label": "1 WIIMOTE",
+              "value": "1"
+            },
+            {
+              "label": "2 WIIMOTES",
+              "value": "2"
+            },
+            {
+              "label": "3 WIIMOTES",
+              "value": "3"
+            },
+            {
+              "label": "4 WIIMOTES",
+              "value": "4"
+            }
+          ]
+        },
+        {
+          "id": "cemu_wiimotep0",
+          "label": "WIIMOTE 1 TYPE",
+          "description": "When using real Wiimotes, define the type of Wiimote.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "cemu_wiimotep0",
+          "values": [
+            {
+              "label": "MOTION PLUS",
+              "value": "5"
+            },
+            {
+              "label": "MOTION PLUS + NUNCHUK",
+              "value": "6"
+            },
+            {
+              "label": "STANDARD",
+              "value": "0"
+            },
+            {
+              "label": "STANDARD + NUNCHUK",
+              "value": "1"
+            }
+          ]
+        },
+        {
+          "id": "cemu_wiimotep1",
+          "label": "WIIMOTE 2 TYPE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "cemu_wiimotep1",
+          "values": [
+            {
+              "label": "MOTION PLUS",
+              "value": "5"
+            },
+            {
+              "label": "MOTION PLUS + NUNCHUK",
+              "value": "6"
+            },
+            {
+              "label": "STANDARD",
+              "value": "0"
+            },
+            {
+              "label": "STANDARD + NUNCHUK",
+              "value": "1"
+            }
+          ]
+        },
+        {
+          "id": "cemu_wiimotep2",
+          "label": "WIIMOTE 3 TYPE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "cemu_wiimotep2",
+          "values": [
+            {
+              "label": "MOTION PLUS",
+              "value": "5"
+            },
+            {
+              "label": "MOTION PLUS + NUNCHUK",
+              "value": "6"
+            },
+            {
+              "label": "STANDARD",
+              "value": "0"
+            },
+            {
+              "label": "STANDARD + NUNCHUK",
+              "value": "1"
+            }
+          ]
+        },
+        {
+          "id": "cemu_wiimotep3",
+          "label": "WIIMOTE 4 TYPE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "cemu_wiimotep3",
+          "values": [
+            {
+              "label": "MOTION PLUS",
+              "value": "5"
+            },
+            {
+              "label": "MOTION PLUS + NUNCHUK",
+              "value": "6"
+            },
+            {
+              "label": "STANDARD",
+              "value": "0"
+            },
+            {
+              "label": "STANDARD + NUNCHUK",
+              "value": "1"
+            }
+          ]
+        },
+        {
+          "id": "cemu_gamepadscreen",
+          "label": "DISPLAY GAMEPAD SCREEN",
+          "description": "Define button to display Gamepad screen, Padrão if Nenhum.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "cemu_gamepadscreen",
+          "values": [
+            {
+              "label": "Nenhum",
+              "value": "none"
+            },
+            {
+              "label": "LEFT STICK BUTTON",
+              "value": "leftstick"
+            },
+            {
+              "label": "RIGHT STICK BUTTON",
+              "value": "rightstick"
+            },
+            {
+              "label": "SELECT BUTTON",
+              "value": "select"
+            }
+          ]
+        },
+        {
+          "id": "cemu_toggle_display",
+          "label": "GAMEPAD SCREEN TOGGLE",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "cemu_toggle_display"
+        },
+        {
+          "id": "cemu_gamepadmic",
+          "label": "MAP BUTTON TO MICROPHONE BLOW",
+          "type": "select",
+          "default": "auto",
+          "configKey": "cemu_gamepadmic",
+          "values": [
+            {
+              "label": "Nenhum",
+              "value": "none"
+            },
+            {
+              "label": "LEFT STICK BUTTON",
+              "value": "leftstick"
+            },
+            {
+              "label": "RIGHT STICK BUTTON",
+              "value": "rightstick"
+            }
+          ]
+        },
+        {
+          "id": "cemu_deadzone",
+          "label": "ANALOG DEADZONE",
+          "type": "slider",
+          "default": "auto",
+          "configKey": "cemu_deadzone",
+          "min": 0,
+          "max": 0.5,
+          "step": 0.02,
+          "suffix": "%"
+        },
+        {
+          "id": "cemu_trigger_deadzone",
+          "label": "ANALOG TRIGGER DEADZONE",
+          "description": "Sets the deadzone of the Gamepad analog triggers.",
+          "type": "slider",
+          "default": "auto",
+          "configKey": "cemu_trigger_deadzone",
+          "min": 0,
+          "max": 0.5,
+          "step": 0.02,
+          "suffix": "%"
         }
       ]
     }

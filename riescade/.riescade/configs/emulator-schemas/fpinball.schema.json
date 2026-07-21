@@ -1,0 +1,239 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "fpinball",
+  "name": "FPINBALL",
+  "description": "Configurações para o emulador FPINBALL geradas a partir do es_features.cfg.",
+  "icon": "fpinball",
+  "configFiles": [],
+  "globalMappings": {
+    "ratio": {
+      "configKey": "ratio",
+      "globalKey": "aspect_ratio"
+    }
+  },
+  "groups": [
+    {
+      "id": "graphics",
+      "title": "Gráficos",
+      "icon": "monitor",
+      "order": 1,
+      "options": [
+        {
+          "id": "ratio",
+          "label": "Proporção de Tela",
+          "type": "select",
+          "default": "auto",
+          "configKey": "ratio",
+          "values": [
+            {
+              "label": "16/9",
+              "value": "16/9"
+            },
+            {
+              "label": "4/3",
+              "value": "4/3"
+            }
+          ],
+          "inheritsGlobal": "aspect_ratio",
+          "realKey": "ratio",
+          "realFile": "Fpinball.Generator.cs"
+        },
+        {
+          "id": "fp_vsync",
+          "label": "VSYNC",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "fp_vsync"
+        },
+        {
+          "id": "DefaultCamera",
+          "label": "CAMERA",
+          "type": "select",
+          "default": "auto",
+          "configKey": "DefaultCamera",
+          "values": [
+            {
+              "label": "FULL TABLE",
+              "value": "0"
+            },
+            {
+              "label": "FULL TABLE 2",
+              "value": "1"
+            },
+            {
+              "label": "SCROLLING 1",
+              "value": "2"
+            },
+            {
+              "label": "SCROLLING 2",
+              "value": "3"
+            },
+            {
+              "label": "LOW ANGLE 1",
+              "value": "4"
+            },
+            {
+              "label": "LOW ANGLE 2",
+              "value": "5"
+            },
+            {
+              "label": "FIXED VIEW",
+              "value": "6"
+            }
+          ]
+        },
+        {
+          "id": "arcademode",
+          "label": "TATE MODE",
+          "description": "Rotate display for vertical screen.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "arcademode"
+        },
+        {
+          "id": "camerafollowball",
+          "label": "CAMERA FOLLOWS THE BALL",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "camerafollowball"
+        },
+        {
+          "id": "preset",
+          "label": "PRESET",
+          "type": "select",
+          "default": "auto",
+          "configKey": "preset",
+          "values": [
+            {
+              "label": "MAX",
+              "value": "max"
+            },
+            {
+              "label": "MEDIUM",
+              "value": "medium"
+            },
+            {
+              "label": "MIN",
+              "value": "min"
+            }
+          ],
+          "realKey": "preset",
+          "realFile": "Fpinball.Generator.cs"
+        },
+        {
+          "id": "fp_texture_filter",
+          "label": "Filtragem de Texturas",
+          "description": "Control the texture filtering of the Emulação.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "fp_texture_filter",
+          "values": [
+            {
+              "label": "Nenhum",
+              "value": "0"
+            },
+            {
+              "label": "BILINEAR",
+              "value": "1"
+            },
+            {
+              "label": "TRILINEAR",
+              "value": "2"
+            }
+          ]
+        },
+        {
+          "id": "fp_anisotropic",
+          "label": "Filtragem Anisotrópica",
+          "description": "Enhance the quality of textures Ativado surface.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "fp_anisotropic"
+        },
+        {
+          "id": "fp_antialiasing",
+          "label": "Anti-Aliasing (FXAA)",
+          "description": "Set Anti Aliasing for rendered content.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "fp_antialiasing",
+          "values": [
+            {
+              "label": "Não",
+              "value": "0"
+            },
+            {
+              "label": "2X",
+              "value": "2"
+            },
+            {
+              "label": "4X",
+              "value": "4"
+            },
+            {
+              "label": "6X",
+              "value": "6"
+            }
+          ]
+        },
+        {
+          "id": "fp_hide_gameroom",
+          "label": "HIDE GAME ROOM",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "fp_hide_gameroom"
+        },
+        {
+          "id": "fp_hide_ornaments",
+          "label": "HIDE ORNAMENTS",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "fp_hide_ornaments"
+        },
+        {
+          "id": "fpinball_dmdext",
+          "label": "USE EXTERNAL DMD",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "fpinball_dmdext"
+        },
+        {
+          "id": "fpinball_virtualdmd",
+          "label": "ENABLE VIRTUAL DMD",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "fpinball_virtualdmd",
+          "realKey": "virtualdmd",
+          "realFile": "Fpinball.Generator.cs"
+        },
+        {
+          "id": "fpinball_zedmd",
+          "label": "ENABLE ZEDMD",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "fpinball_zedmd",
+          "realKey": "zedmd",
+          "realFile": "Fpinball.Generator.cs"
+        },
+        {
+          "id": "fpinball_pixelcade",
+          "label": "ENABLE PIXELCADE",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "fpinball_pixelcade",
+          "realKey": "pixelcade",
+          "realFile": "Fpinball.Generator.cs"
+        },
+        {
+          "id": "fpinball_pin2dmd",
+          "label": "ENABLE PIN2DMD",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "fpinball_pin2dmd",
+          "realKey": "pin2dmd",
+          "realFile": "Fpinball.Generator.cs"
+        }
+      ]
+    }
+  ]
+}

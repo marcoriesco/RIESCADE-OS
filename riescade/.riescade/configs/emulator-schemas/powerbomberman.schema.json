@@ -1,0 +1,29 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "powerbomberman",
+  "name": "POWERBOMBERMAN",
+  "description": "Configurações para o emulador POWERBOMBERMAN geradas a partir do es_features.cfg.",
+  "icon": "powerbomberman",
+  "configFiles": [],
+  "globalMappings": {},
+  "groups": [
+    {
+      "id": "graphics",
+      "title": "Gráficos",
+      "icon": "monitor",
+      "order": 1,
+      "options": [
+        {
+          "id": "pb_vsync",
+          "label": "Sincronização Vertical (V-Sync)",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "pb_vsync",
+          "realKey": "vsync",
+          "realSection": "VIDEO",
+          "realFile": "PortsLauncher.Configuration.cs"
+        }
+      ]
+    }
+  ]
+}

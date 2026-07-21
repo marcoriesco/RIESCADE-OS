@@ -1,0 +1,894 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "vpinball",
+  "name": "VPINBALL",
+  "description": "Configurações para o emulador VPINBALL geradas a partir do es_features.cfg.",
+  "icon": "vpinball",
+  "configFiles": [],
+  "globalMappings": {},
+  "groups": [
+    {
+      "id": "graphics",
+      "title": "Gráficos",
+      "icon": "monitor",
+      "order": 1,
+      "options": [
+        {
+          "id": "vp_vsync",
+          "label": "vp_vsync",
+          "type": "select",
+          "default": "auto",
+          "configKey": "vp_vsync",
+          "values": [
+            {
+              "label": "FRAME PACING",
+              "value": "3"
+            },
+            {
+              "label": "Sincronização Vertical (V-Sync)",
+              "value": "1"
+            },
+            {
+              "label": "Adaptável SYNC",
+              "value": "2"
+            },
+            {
+              "label": "Não",
+              "value": "0"
+            }
+          ],
+          "realKey": "SyncMode",
+          "realSection": "Player",
+          "realFile": "VPinball.Generator.cs"
+        },
+        {
+          "id": "enableb2s",
+          "label": "ENABLE BACKGLASS",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "enableb2s"
+        },
+        {
+          "id": "arcademode",
+          "label": "TATE MODE",
+          "description": "Rotate display for vertical screen.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "arcademode"
+        },
+        {
+          "id": "vp_nvidia",
+          "label": "USE NVIDIA DEPTH BUFFER",
+          "description": "Use alternative depth processing, to enable if there are graphics issues or a specific error message.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "vp_nvidia"
+        },
+        {
+          "id": "vp_vertex",
+          "label": "SOFTWARE VERTEX PROCESSING",
+          "description": "Enable this option if encountering issues with an Intel graphics chip.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "vp_vertex"
+        },
+        {
+          "id": "ScreenResX",
+          "label": "PLAYFIELD X RESOLUTION",
+          "type": "input",
+          "default": "auto",
+          "configKey": "ScreenResX"
+        },
+        {
+          "id": "ScreenResY",
+          "label": "PLAYFIELD Y RESOLUTION",
+          "type": "input",
+          "default": "auto",
+          "configKey": "ScreenResY"
+        },
+        {
+          "id": "Screen2ResX",
+          "label": "BACKGLASS X RESOLUTION",
+          "type": "input",
+          "default": "auto",
+          "configKey": "Screen2ResX"
+        },
+        {
+          "id": "Screen2ResY",
+          "label": "BACKGLASS Y RESOLUTION",
+          "type": "input",
+          "default": "auto",
+          "configKey": "Screen2ResY"
+        },
+        {
+          "id": "Monitor",
+          "label": "BACKGLASS MONITOR",
+          "type": "select",
+          "default": "auto",
+          "configKey": "Monitor",
+          "values": [
+            {
+              "label": "1",
+              "value": "1"
+            },
+            {
+              "label": "2",
+              "value": "2"
+            },
+            {
+              "label": "3",
+              "value": "3"
+            },
+            {
+              "label": "4",
+              "value": "4"
+            },
+            {
+              "label": "5",
+              "value": "5"
+            },
+            {
+              "label": "6",
+              "value": "6"
+            }
+          ]
+        },
+        {
+          "id": "Screen2posX",
+          "label": "BACKGLASS X POSITION",
+          "type": "input",
+          "default": "auto",
+          "configKey": "Screen2posX"
+        },
+        {
+          "id": "Screen2posY",
+          "label": "BACKGLASS Y POSITION",
+          "type": "input",
+          "default": "auto",
+          "configKey": "Screen2posY"
+        },
+        {
+          "id": "DmdResX",
+          "label": "DMD WIDTH",
+          "type": "input",
+          "default": "auto",
+          "configKey": "DmdResX"
+        },
+        {
+          "id": "DmdResY",
+          "label": "DMD HEIGHT",
+          "type": "input",
+          "default": "auto",
+          "configKey": "DmdResY"
+        },
+        {
+          "id": "DmdposX",
+          "label": "DMD X POSITION",
+          "type": "input",
+          "default": "auto",
+          "configKey": "DmdposX"
+        },
+        {
+          "id": "DmdposY",
+          "label": "DMD Y POSITION",
+          "type": "input",
+          "default": "auto",
+          "configKey": "DmdposY"
+        },
+        {
+          "id": "Screen2posXStart",
+          "label": "STARTBACKGROUND BACKGLASS X POSITION",
+          "type": "input",
+          "default": "auto",
+          "configKey": "Screen2posXStart"
+        },
+        {
+          "id": "Screen2posYStart",
+          "label": "STARTBACKGROUND BACKGLASS Y POSITION",
+          "type": "input",
+          "default": "auto",
+          "configKey": "Screen2posYStart"
+        },
+        {
+          "id": "Screen2ResXStart",
+          "label": "STARTBACKGROUND BACKGLASS WIDTH",
+          "type": "input",
+          "default": "auto",
+          "configKey": "Screen2ResXStart"
+        },
+        {
+          "id": "Screen2ResYStart",
+          "label": "STARTBACKGROUND BACKGLASS HEIGHT",
+          "type": "input",
+          "default": "auto",
+          "configKey": "Screen2ResYStart"
+        },
+        {
+          "id": "FramePath",
+          "label": "PATH TO BACKGROUND IMAGE",
+          "type": "input",
+          "default": "auto",
+          "configKey": "FramePath"
+        },
+        {
+          "id": "noscreenres",
+          "label": "DISABLE SCREENRES OVERWRITE",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "noscreenres"
+        },
+        {
+          "id": "vp_details",
+          "label": "LEVEL OF DETAIL",
+          "type": "slider",
+          "default": "auto",
+          "configKey": "vp_details",
+          "min": 0,
+          "max": 10,
+          "step": 1,
+          "realKey": "AlphaRampAccuracy",
+          "realSection": "Player",
+          "realFile": "VPinball.Generator.cs"
+        },
+        {
+          "id": "vp_lighting",
+          "label": "ENVIRONMENT LIGHTING",
+          "description": "Override table Padrão lighting.",
+          "type": "slider",
+          "default": "auto",
+          "configKey": "vp_lighting",
+          "min": 0,
+          "max": 1,
+          "step": 0.1,
+          "suffix": "x",
+          "realKey": "EmissionScale",
+          "realSection": "Player",
+          "realFile": "VPinball.Generator.cs"
+        },
+        {
+          "id": "vp_ambient_occlusion",
+          "label": "AMBIENT OCCLUSION",
+          "description": "Enhance shadows of the different objects.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "vp_ambient_occlusion",
+          "values": [
+            {
+              "label": "Sim",
+              "value": "1"
+            },
+            {
+              "label": "Não",
+              "value": "0"
+            },
+            {
+              "label": "DYNAMIC",
+              "value": "dynamic"
+            }
+          ],
+          "realKey": "vp_ambient_occlusion",
+          "realFile": "VPinball.Generator.cs"
+        },
+        {
+          "id": "vp_antialiasing",
+          "label": "Anti-Aliasing (FXAA)",
+          "description": "Post-processing Anti-Aliasing (FXAA) effect to apply to the image output of the game.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "vp_antialiasing",
+          "values": [
+            {
+              "label": "Desativado",
+              "value": "0"
+            },
+            {
+              "label": "FAST FXAA",
+              "value": "1"
+            },
+            {
+              "label": "STANDARD FXAA",
+              "value": "2"
+            },
+            {
+              "label": "QUALITY FXAA",
+              "value": "3"
+            },
+            {
+              "label": "FAST NFAA",
+              "value": "4"
+            },
+            {
+              "label": "STANDARD DLAA",
+              "value": "5"
+            },
+            {
+              "label": "QUALITY SMAA",
+              "value": "6"
+            }
+          ],
+          "realKey": "vp_ambient_occlusion",
+          "realFile": "VPinball.PreX8.cs"
+        },
+        {
+          "id": "vp_sharpen",
+          "label": "SHARPEN IMAGE",
+          "description": "Bilateral CAS is recommended but will harm performance, CAS is less aggressive but more subtle.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "vp_sharpen",
+          "values": [
+            {
+              "label": "Desativado",
+              "value": "0"
+            },
+            {
+              "label": "CAS",
+              "value": "1"
+            },
+            {
+              "label": "BILATERAL CAS",
+              "value": "2"
+            }
+          ]
+        },
+        {
+          "id": "vp_anisotropic_filtering",
+          "label": "Filtragem Anisotrópica",
+          "description": "Enhance the quality of textures.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "vp_anisotropic_filtering"
+        },
+        {
+          "id": "vp_supersampling",
+          "label": "SUPERSAMPLING",
+          "description": "Enable brute force up/downscaling (10.8.0 only)",
+          "type": "select",
+          "default": "auto",
+          "configKey": "vp_supersampling",
+          "values": [
+            {
+              "label": "Desativado",
+              "value": "1"
+            },
+            {
+              "label": "125%",
+              "value": "1.25"
+            },
+            {
+              "label": "133%",
+              "value": "1.33"
+            },
+            {
+              "label": "150%",
+              "value": "1.5"
+            },
+            {
+              "label": "175%",
+              "value": "1.75"
+            },
+            {
+              "label": "200%",
+              "value": "2"
+            },
+            {
+              "label": "50%",
+              "value": "0.5"
+            },
+            {
+              "label": "75%",
+              "value": "0.75"
+            }
+          ]
+        },
+        {
+          "id": "vpmame_dmd",
+          "label": "DMD",
+          "type": "select",
+          "default": "auto",
+          "configKey": "vpmame_dmd",
+          "values": [
+            {
+              "label": "INTERNAL",
+              "value": "0"
+            },
+            {
+              "label": "EXTERNAL",
+              "value": "1"
+            },
+            {
+              "label": "Nenhum",
+              "value": "none"
+            }
+          ],
+          "realKey": "vpmame_dmd",
+          "realFile": "VPinball.Generator.cs"
+        },
+        {
+          "id": "vpmame_virtualdmd",
+          "label": "VIRTUAL DMD",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "vpmame_virtualdmd",
+          "realKey": "enabled",
+          "realSection": "virtualdmd",
+          "realFile": "VPinball.Generator.cs"
+        },
+        {
+          "id": "vpmame_zedmd",
+          "label": "ZEDMD",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "vpmame_zedmd",
+          "realKey": "enabled",
+          "realSection": "zedmd",
+          "realFile": "VPinball.Generator.cs"
+        },
+        {
+          "id": "vpmame_zedmdhd",
+          "label": "ZEDMDHD",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "vpmame_zedmdhd",
+          "realKey": "enabled",
+          "realSection": "zedmdhd",
+          "realFile": "VPinball.Generator.cs"
+        },
+        {
+          "id": "vpmame_pin2dmd",
+          "label": "PIN2DMD",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "vpmame_pin2dmd",
+          "realKey": "enabled",
+          "realSection": "pin2dmd",
+          "realFile": "VPinball.Generator.cs"
+        },
+        {
+          "id": "vpmame_colordmd",
+          "label": "COLORIZE DMD",
+          "type": "select",
+          "default": "auto",
+          "configKey": "vpmame_colordmd",
+          "values": [
+            {
+              "label": "Não",
+              "value": "0"
+            },
+            {
+              "label": "Sim",
+              "value": "1"
+            }
+          ],
+          "realKey": "dmd_colorize",
+          "realFile": "VPinball.Generator.cs"
+        },
+        {
+          "id": "vpbg_hidegrill",
+          "label": "HIDE GRILL",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "vpbg_hidegrill"
+        },
+        {
+          "id": "vpdof_contractors",
+          "label": "CONTRACTORS",
+          "type": "select",
+          "default": "auto",
+          "configKey": "vpdof_contractors",
+          "values": [
+            {
+              "label": "BOTH",
+              "value": "2"
+            },
+            {
+              "label": "DOF",
+              "value": "1"
+            },
+            {
+              "label": "SOUNDFX",
+              "value": "0"
+            }
+          ],
+          "realKey": "DOFContactors",
+          "realSection": "Controller",
+          "realFile": "VPinball.Generator.cs"
+        },
+        {
+          "id": "vpdof_knocker",
+          "label": "KNOCKER",
+          "type": "select",
+          "default": "auto",
+          "configKey": "vpdof_knocker",
+          "values": [
+            {
+              "label": "BOTH",
+              "value": "2"
+            },
+            {
+              "label": "DOF",
+              "value": "1"
+            },
+            {
+              "label": "SOUNDFX",
+              "value": "0"
+            }
+          ],
+          "realKey": "DOFKnocker",
+          "realSection": "Controller",
+          "realFile": "VPinball.Generator.cs"
+        },
+        {
+          "id": "vpdof_chimes",
+          "label": "CHIMES",
+          "type": "select",
+          "default": "auto",
+          "configKey": "vpdof_chimes",
+          "values": [
+            {
+              "label": "BOTH",
+              "value": "2"
+            },
+            {
+              "label": "DOF",
+              "value": "1"
+            },
+            {
+              "label": "SOUNDFX",
+              "value": "0"
+            }
+          ],
+          "realKey": "DOFChimes",
+          "realSection": "Controller",
+          "realFile": "VPinball.Generator.cs"
+        },
+        {
+          "id": "vpdof_bell",
+          "label": "BELL",
+          "type": "select",
+          "default": "auto",
+          "configKey": "vpdof_bell",
+          "values": [
+            {
+              "label": "BOTH",
+              "value": "2"
+            },
+            {
+              "label": "DOF",
+              "value": "1"
+            },
+            {
+              "label": "SOUNDFX",
+              "value": "0"
+            }
+          ],
+          "realKey": "DOFBell",
+          "realSection": "Controller",
+          "realFile": "VPinball.Generator.cs"
+        },
+        {
+          "id": "vpdof_gear",
+          "label": "GEAR",
+          "type": "select",
+          "default": "auto",
+          "configKey": "vpdof_gear",
+          "values": [
+            {
+              "label": "BOTH",
+              "value": "2"
+            },
+            {
+              "label": "DOF",
+              "value": "1"
+            },
+            {
+              "label": "SOUNDFX",
+              "value": "0"
+            }
+          ],
+          "realKey": "DOFGear",
+          "realSection": "Controller",
+          "realFile": "VPinball.Generator.cs"
+        },
+        {
+          "id": "vpdof_shaker",
+          "label": "SHAKER",
+          "type": "select",
+          "default": "auto",
+          "configKey": "vpdof_shaker",
+          "values": [
+            {
+              "label": "BOTH",
+              "value": "2"
+            },
+            {
+              "label": "DOF",
+              "value": "1"
+            },
+            {
+              "label": "SOUNDFX",
+              "value": "0"
+            }
+          ],
+          "realKey": "DOFShaker",
+          "realSection": "Controller",
+          "realFile": "VPinball.Generator.cs"
+        },
+        {
+          "id": "vpdof_targets",
+          "label": "TARGETS",
+          "type": "select",
+          "default": "auto",
+          "configKey": "vpdof_targets",
+          "values": [
+            {
+              "label": "BOTH",
+              "value": "2"
+            },
+            {
+              "label": "DOF",
+              "value": "1"
+            },
+            {
+              "label": "SOUNDFX",
+              "value": "0"
+            }
+          ],
+          "realKey": "DOFTargets",
+          "realSection": "Controller",
+          "realFile": "VPinball.Generator.cs"
+        },
+        {
+          "id": "vpdof_droptargets",
+          "label": "DROP TARGETS",
+          "type": "select",
+          "default": "auto",
+          "configKey": "vpdof_droptargets",
+          "values": [
+            {
+              "label": "BOTH",
+              "value": "2"
+            },
+            {
+              "label": "DOF",
+              "value": "1"
+            },
+            {
+              "label": "SOUNDFX",
+              "value": "0"
+            }
+          ],
+          "realKey": "DOFDropTargets",
+          "realSection": "Controller",
+          "realFile": "VPinball.Generator.cs"
+        }
+      ]
+    },
+    {
+      "id": "emulation",
+      "title": "Emulação",
+      "icon": "cpu",
+      "order": 2,
+      "options": [
+        {
+          "id": "FlipLedDisplay",
+          "label": "FLIP LED DISPLAY",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "FlipLedDisplay"
+        },
+        {
+          "id": "vpmame_cabinet",
+          "label": "CABINET MODE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "vpmame_cabinet",
+          "values": [
+            {
+              "label": "Sim",
+              "value": "1"
+            },
+            {
+              "label": "Não",
+              "value": "0"
+            }
+          ],
+          "realKey": "cabinet_mode",
+          "realFile": "VPinball.Generator.cs"
+        },
+        {
+          "id": "vpdof_flippers",
+          "label": "FLIPPERS",
+          "type": "select",
+          "default": "auto",
+          "configKey": "vpdof_flippers",
+          "values": [
+            {
+              "label": "BOTH",
+              "value": "2"
+            },
+            {
+              "label": "DOF",
+              "value": "1"
+            },
+            {
+              "label": "SOUNDFX",
+              "value": "0"
+            }
+          ],
+          "realKey": "DOFFlippers",
+          "realSection": "Controller",
+          "realFile": "VPinball.Generator.cs"
+        }
+      ]
+    },
+    {
+      "id": "audio",
+      "title": "Áudio",
+      "icon": "volume2",
+      "order": 4,
+      "options": [
+        {
+          "id": "vp_music_off",
+          "label": "DISABLE MUSIC",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "vp_music_off"
+        },
+        {
+          "id": "vp_audiochannels",
+          "label": "Áudio CHANNELS",
+          "type": "select",
+          "default": "auto",
+          "configKey": "vp_audiochannels",
+          "values": [
+            {
+              "label": "2 CHANNEL",
+              "value": "0"
+            },
+            {
+              "label": "SURROUND (EFFECTS TO REAR)",
+              "value": "1"
+            },
+            {
+              "label": "SURROUND (FRONT IS FRONT CAB)",
+              "value": "3"
+            },
+            {
+              "label": "SURROUND (FRONT IS REAR CAB)",
+              "value": "2"
+            },
+            {
+              "label": "7.1 SURROUND",
+              "value": "4"
+            },
+            {
+              "label": "7.1 SURROUND ENHANCED",
+              "value": "5"
+            }
+          ],
+          "realKey": "Sound3D",
+          "realSection": "Player",
+          "realFile": "VPinball.Generator.cs"
+        },
+        {
+          "id": "vpmame_soundmode",
+          "label": "SOUND MODE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "vpmame_soundmode",
+          "values": [
+            {
+              "label": 0,
+              "value": "0"
+            },
+            {
+              "label": "1",
+              "value": "1"
+            },
+            {
+              "label": "2",
+              "value": "2"
+            },
+            {
+              "label": "3",
+              "value": "3"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "controls",
+      "title": "Controles",
+      "icon": "gamepad2",
+      "order": 5,
+      "options": [
+        {
+          "id": "vp_inputdriver",
+          "label": "INPUT",
+          "type": "select",
+          "default": "auto",
+          "configKey": "vp_inputdriver",
+          "values": [
+            {
+              "label": "DIRECTINPUT",
+              "value": "0"
+            },
+            {
+              "label": "XINPUT",
+              "value": "1"
+            },
+            {
+              "label": "USE PAD2KEY",
+              "value": "pad2key"
+            }
+          ],
+          "realKey": "InputApi",
+          "realSection": "Player",
+          "realFile": "VPinball.Controllers.cs"
+        },
+        {
+          "id": "nouse_joyaxis",
+          "label": "DISABLE JOYSTICK STICK",
+          "description": "Disable use of X-axis to nudge, Y-axis to plumb and Z-axis for plunger.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "nouse_joyaxis"
+        },
+        {
+          "id": "joy_deadzone",
+          "label": "JOYSTICK DEADZONE",
+          "type": "slider",
+          "default": "auto",
+          "configKey": "joy_deadzone",
+          "min": 0,
+          "max": 50,
+          "step": 5,
+          "suffix": "%",
+          "realKey": "DeadZone",
+          "realSection": "Player",
+          "realFile": "VPinball.Controllers.cs"
+        },
+        {
+          "id": "vp_rumble",
+          "label": "RUMBLE MODE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "vp_rumble",
+          "values": [
+            {
+              "label": "Desativado",
+              "value": "0"
+            },
+            {
+              "label": "TABLE",
+              "value": "1"
+            },
+            {
+              "label": "GENERIC",
+              "value": "2"
+            },
+            {
+              "label": "TABLE WITH GENERIC FALLBACK",
+              "value": "3"
+            }
+          ],
+          "realKey": "RumbleMode",
+          "realSection": "Player",
+          "realFile": "VPinball.Controllers.cs"
+        },
+        {
+          "id": "vp_analognudge",
+          "label": "ENABLE ANALOG NUDGE",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "vp_analognudge",
+          "realKey": "PBWEnabled",
+          "realSection": "Player",
+          "realFile": "VPinball.Generator.cs"
+        }
+      ]
+    }
+  ]
+}

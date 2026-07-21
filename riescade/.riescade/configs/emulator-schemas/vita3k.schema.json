@@ -1,29 +1,11 @@
 {
   "$schema": "riescade-emulator-schema-v1",
   "id": "vita3k",
-  "name": "Vita3K",
-  "description": "Emulador de PlayStation Vita.",
+  "name": "VITA3K",
+  "description": "Configurações para o emulador VITA3K geradas a partir do es_features.cfg.",
   "icon": "vita3k",
-  "configFiles": [
-    {
-      "path": "config.yml",
-      "format": "yml"
-    }
-  ],
-  "globalMappings": {
-    "fullscreen": {
-      "configKey": "fullscreen",
-      "globalKey": "fullscreen"
-    },
-    "vsync": {
-      "configKey": "vsync",
-      "globalKey": "vsync"
-    },
-    "video_driver": {
-      "configKey": "video_driver",
-      "globalKey": "video_driver"
-    }
-  },
+  "configFiles": [],
+  "globalMappings": {},
   "groups": [
     {
       "id": "graphics",
@@ -32,67 +14,439 @@
       "order": 1,
       "options": [
         {
-          "id": "fullscreen",
-          "label": "Tela Cheia",
-          "description": "Iniciar o emulador em modo tela cheia.",
+          "id": "vita_vsync",
+          "label": "Sincronização Vertical (V-Sync)",
           "type": "toggle",
-          "default": "true",
-          "configKey": "fullscreen",
-          "inheritsGlobal": "fullscreen"
+          "default": "auto",
+          "configKey": "vita_vsync",
+          "realKey": "v-sync",
+          "realFile": "vita3k.Generator.cs"
         },
         {
-          "id": "video_driver",
-          "label": "Backend Gráfico",
-          "description": "API de renderização.",
+          "id": "vita3k_high_accuracy",
+          "label": "RENDERER ACCURACY",
           "type": "select",
-          "default": "Vulkan",
-          "configKey": "video_driver",
-          "inheritsGlobal": "video_driver",
+          "default": "auto",
+          "configKey": "vita3k_high_accuracy",
           "values": [
             {
-              "label": "Vulkan",
-              "value": "Vulkan"
+              "label": "HIGH",
+              "value": "true"
             },
             {
-              "label": "OpenGL",
-              "value": "OpenGL"
+              "label": "STANDARD",
+              "value": "false"
             }
-          ]
+          ],
+          "realKey": "high-accuracy",
+          "realFile": "vita3k.Generator.cs"
         },
         {
-          "id": "vsync",
-          "label": "V-Sync",
-          "description": "Sincronização vertical.",
-          "type": "toggle",
-          "default": "true",
-          "configKey": "vsync",
-          "inheritsGlobal": "vsync"
-        },
-        {
-          "id": "resolution",
-          "label": "Resolução Interna",
-          "description": "Multiplicador da resolução do PS Vita (960x544).",
+          "id": "anisotropic-filtering",
+          "label": "Filtragem Anisotrópica",
+          "description": "Enhance the quality of textures Ativado surface.",
           "type": "select",
-          "default": "1",
-          "configKey": "resolution",
+          "default": "auto",
+          "configKey": "anisotropic-filtering",
           "values": [
             {
-              "label": "1x Nativa",
+              "label": "1X",
               "value": "1"
             },
             {
-              "label": "2x",
+              "label": "2X",
               "value": "2"
             },
             {
-              "label": "3x",
+              "label": "4X",
+              "value": "4"
+            },
+            {
+              "label": "8X",
+              "value": "8"
+            },
+            {
+              "label": "16X",
+              "value": "16"
+            }
+          ],
+          "realKey": "anisotropic-filtering",
+          "realFile": "vita3k.Generator.cs"
+        },
+        {
+          "id": "vita_screenfilter",
+          "label": "TEXTURE FILTERING",
+          "description": "Control the texture filtering of the Emulação.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "vita_screenfilter",
+          "values": [
+            {
+              "label": "BILINEAR",
+              "value": "Bilinear"
+            },
+            {
+              "label": "NEAREST",
+              "value": "Nearest"
+            },
+            {
+              "label": "BICUBIC",
+              "value": "Bicubic"
+            },
+            {
+              "label": "FXAA",
+              "value": "FXAA"
+            },
+            {
+              "label": "FSR",
+              "value": "FSR"
+            }
+          ],
+          "realKey": "screen-filter",
+          "realFile": "vita3k.Generator.cs"
+        },
+        {
+          "id": "shader_cache",
+          "label": "SHADER CACHE",
+          "description": "Pre-coompile shader cache at game startup, leave Ativado for less stuttering in game.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "shader_cache",
+          "realKey": "shader-cache",
+          "realFile": "vita3k.Generator.cs"
+        },
+        {
+          "id": "texture_cache",
+          "label": "TEXTURE CACHE",
+          "description": "Select Não to disable texture cache.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "texture_cache",
+          "realKey": "texture-cache",
+          "realFile": "vita3k.Generator.cs"
+        },
+        {
+          "id": "vita_custom_textures",
+          "label": "CUSTOM TEXTURES",
+          "description": "Replace original textures with custom textures pack.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "vita_custom_textures"
+        },
+        {
+          "id": "backend-renderer",
+          "label": "Vídeo",
+          "description": "Select which graphics API to use internally.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "backend-renderer",
+          "values": [
+            {
+              "label": "OpenGL",
+              "value": "OpenGL"
+            },
+            {
+              "label": "Vulkan",
+              "value": "Vulkan"
+            }
+          ],
+          "realKey": "backend-renderer",
+          "realFile": "vita3k.Generator.cs"
+        },
+        {
+          "id": "libhttp",
+          "label": "libhttp",
+          "description": "Required to fix Tales of Hearts R, only valid if modules are managed from Retrobat.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "libhttp"
+        },
+        {
+          "id": "libscemp4",
+          "label": "libscemp4",
+          "description": "Required to fix Street Fighter vs Tekken, only valid if modules are managed from Retrobat.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "libscemp4"
+        }
+      ]
+    },
+    {
+      "id": "emulation",
+      "title": "Emulação",
+      "icon": "cpu",
+      "order": 2,
+      "options": [
+        {
+          "id": "resolution_multiplier",
+          "label": "Resolução Interna",
+          "type": "select",
+          "default": "auto",
+          "configKey": "resolution_multiplier",
+          "values": [
+            {
+              "label": "NATIVE (960x544)",
+              "value": "1"
+            },
+            {
+              "label": "0.5X (480x272)",
+              "value": "0.5"
+            },
+            {
+              "label": "0.75X (720x408)",
+              "value": "0.75"
+            },
+            {
+              "label": "1.5X (1440x816)",
+              "value": "1.5"
+            },
+            {
+              "label": "2X (1920x1088)",
+              "value": "2"
+            },
+            {
+              "label": "2.5X (2400x1360)",
+              "value": "2.5"
+            },
+            {
+              "label": "3X",
               "value": "3"
             },
             {
-              "label": "4x",
+              "label": "4X (4K)",
               "value": "4"
+            },
+            {
+              "label": "5X (4800x2720)",
+              "value": "5"
+            },
+            {
+              "label": "6X",
+              "value": "6"
+            },
+            {
+              "label": "7X",
+              "value": "7"
+            },
+            {
+              "label": "8X (7680x4352)",
+              "value": "8"
             }
-          ]
+          ],
+          "realKey": "resolution-multiplier",
+          "realFile": "vita3k.Generator.cs"
+        },
+        {
+          "id": "psvita_language",
+          "label": "LANGUAGE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "psvita_language",
+          "values": [
+            {
+              "label": "Japanese",
+              "value": "0"
+            },
+            {
+              "label": "English",
+              "value": "1"
+            },
+            {
+              "label": "Français",
+              "value": "2"
+            },
+            {
+              "label": "Español",
+              "value": "3"
+            },
+            {
+              "label": "Deutsch",
+              "value": "4"
+            },
+            {
+              "label": "Italiano",
+              "value": "5"
+            },
+            {
+              "label": "Nederlands",
+              "value": "6"
+            },
+            {
+              "label": "Português",
+              "value": "7"
+            },
+            {
+              "label": "Русский (Russian)",
+              "value": "8"
+            },
+            {
+              "label": "한국어 (Korean)",
+              "value": "9"
+            },
+            {
+              "label": "简体中文 (Chinese-Traditional)",
+              "value": "10"
+            },
+            {
+              "label": "简化字 (Chinese - simplified)",
+              "value": "11"
+            },
+            {
+              "label": "Finnish",
+              "value": "12"
+            },
+            {
+              "label": "Swedish",
+              "value": "13"
+            },
+            {
+              "label": "Danish",
+              "value": "14"
+            },
+            {
+              "label": "Norwegian",
+              "value": "15"
+            },
+            {
+              "label": "Polski",
+              "value": "16"
+            },
+            {
+              "label": "Português (Brazil)",
+              "value": "17"
+            },
+            {
+              "label": "English (GB)",
+              "value": "18"
+            },
+            {
+              "label": "Turkish",
+              "value": "19"
+            }
+          ],
+          "realKey": "sys-lang",
+          "realFile": "vita3k.Generator.cs"
+        },
+        {
+          "id": "disable_surfacesync",
+          "label": "DISABLE SURFACE SYNC",
+          "description": "Speed hack but might not be compatible with some games.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "disable_surfacesync",
+          "realKey": "disable-surface-sync",
+          "realFile": "vita3k.Generator.cs"
+        },
+        {
+          "id": "vita3k_pref_path",
+          "label": "CHANGE PREF-PATH",
+          "type": "input",
+          "default": "auto",
+          "configKey": "vita3k_pref_path"
+        },
+        {
+          "id": "async_pipeline_compilation",
+          "label": "USE ASYNCHRONOUS SHADER COMPILATION",
+          "description": "Can reduce lags when compiling shaders, experimental.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "async_pipeline_compilation",
+          "realKey": "async-pipeline-compilation",
+          "realFile": "vita3k.Generator.cs"
+        },
+        {
+          "id": "cpu_opt",
+          "label": "CPU OPTIMIZATIONS",
+          "description": "Leave this Ativado by Padrão to enable CPU JIT Optimizations.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "cpu_opt",
+          "realKey": "cpu-opt",
+          "realFile": "vita3k.Generator.cs"
+        },
+        {
+          "id": "vita3k_showShaderCompile",
+          "label": "SHOW SHADER COMPILATION INFO",
+          "description": "Show information about shader compilation.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "vita3k_showShaderCompile",
+          "realKey": "show-compile-shaders",
+          "realFile": "vita3k.Generator.cs"
+        },
+        {
+          "id": "performance-overlay",
+          "label": "CORE PERFORMANCE STATISTICS",
+          "description": "Display different levels of informations about statistics of performance.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "performance-overlay",
+          "values": [
+            {
+              "label": "Não",
+              "value": "false"
+            },
+            {
+              "label": "MINIMUM",
+              "value": "0"
+            },
+            {
+              "label": "LOW",
+              "value": "1"
+            },
+            {
+              "label": "MEDIUM",
+              "value": "2"
+            },
+            {
+              "label": "MAXIMUM",
+              "value": "3"
+            }
+          ],
+          "realKey": "performance-overlay",
+          "realFile": "vita3k.Generator.cs"
+        },
+        {
+          "id": "modules",
+          "label": "MODULES MANAGEMENT METHOD",
+          "description": "Define how modules should be managed.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "modules",
+          "values": [
+            {
+              "label": "EMULATOR UI (Automático)",
+              "value": "0"
+            },
+            {
+              "label": "EMULATOR UI (MANUAL)",
+              "value": "2"
+            },
+            {
+              "label": "FRONTEND UI (MANUAL)",
+              "value": "1"
+            }
+          ],
+          "realKey": "modules",
+          "realFile": "vita3k.Generator.cs"
+        }
+      ]
+    },
+    {
+      "id": "hacks",
+      "title": "Correções / Hacks",
+      "icon": "wrench",
+      "order": 3,
+      "options": [
+        {
+          "id": "vita3k_fpshack",
+          "label": "FPS HACK",
+          "description": "Allow some 30fps games to run at 60fps.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "vita3k_fpshack",
+          "realKey": "fps-hack",
+          "realFile": "vita3k.Generator.cs"
         }
       ]
     }

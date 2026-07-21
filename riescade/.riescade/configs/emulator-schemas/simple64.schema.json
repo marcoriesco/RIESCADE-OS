@@ -1,0 +1,375 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "simple64",
+  "name": "SIMPLE64",
+  "description": "Configurações para o emulador SIMPLE64 geradas a partir do es_features.cfg.",
+  "icon": "simple64",
+  "configFiles": [],
+  "globalMappings": {},
+  "groups": [
+    {
+      "id": "graphics",
+      "title": "Gráficos",
+      "icon": "monitor",
+      "order": 1,
+      "options": [
+        {
+          "id": "parallel_upscaling",
+          "label": "Resolução Interna",
+          "type": "select",
+          "default": "auto",
+          "configKey": "parallel_upscaling",
+          "values": [
+            {
+              "label": "1x",
+              "value": "1"
+            },
+            {
+              "label": "2x",
+              "value": "2"
+            },
+            {
+              "label": "4x",
+              "value": "4"
+            }
+          ],
+          "realKey": "Upscaling",
+          "realSection": "Video-Parallel",
+          "realFile": "Simple64.Generator.cs"
+        },
+        {
+          "id": "vsync",
+          "label": "Sincronização Vertical (V-Sync)",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "vsync"
+        },
+        {
+          "id": "n64_widescreen",
+          "label": "Esticar TO SCREEN",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "n64_widescreen",
+          "realKey": "WidescreenStretch",
+          "realSection": "Video-Parallel",
+          "realFile": "Simple64.Generator.cs"
+        },
+        {
+          "id": "antialiasing",
+          "label": "Anti-Aliasing (FXAA)",
+          "description": "Set Anti Aliasing for rendered content.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "antialiasing",
+          "realKey": "VIAA",
+          "realSection": "Video-Parallel",
+          "realFile": "Simple64.Generator.cs"
+        }
+      ]
+    },
+    {
+      "id": "emulation",
+      "title": "Emulação",
+      "icon": "cpu",
+      "order": 2,
+      "options": [
+        {
+          "id": "n64_mempack",
+          "label": "DISABLE 4MB RAM PACK",
+          "description": "Disabling the 4MB expansion RAM pack may be necessary for some games.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "n64_mempack",
+          "realKey": "DisableExtraMem",
+          "realSection": "Core",
+          "realFile": "Simple64.Generator.cs"
+        },
+        {
+          "id": "show_gui",
+          "label": "SHOW EMULATOR GUI",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "show_gui"
+        }
+      ]
+    },
+    {
+      "id": "controls",
+      "title": "Controles",
+      "icon": "gamepad2",
+      "order": 5,
+      "options": [
+        {
+          "id": "simple64_inputplugin",
+          "label": "INPUT",
+          "type": "select",
+          "default": "auto",
+          "configKey": "simple64_inputplugin",
+          "values": [
+            {
+              "label": "STANDARD",
+              "value": "simple64-input-qt.dll"
+            },
+            {
+              "label": "RAPHNET ADAPTATOR",
+              "value": "simple64-input-raphnetraw.dll"
+            }
+          ],
+          "realKey": "inputPlugin",
+          "realSection": "General",
+          "realFile": "Simple64.Generator.cs"
+        },
+        {
+          "id": "mupen64_inputprofile1",
+          "label": "CONTROLLER LAYOUT P1",
+          "description": "Select between the different controller layouts.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "mupen64_inputprofile1",
+          "values": [
+            {
+              "label": "C-BUTTONS=RIGHT-STICK Z=LEFT-TRIGGER",
+              "value": "c_stick_zl"
+            },
+            {
+              "label": "C-BUTTONS=FACE Z=LEFT-TRIGGER",
+              "value": "c_face_zl"
+            },
+            {
+              "label": "C-BUTTONS=RIGHT-STICK Z=RIGHT-TRIGGER",
+              "value": "c_stick"
+            },
+            {
+              "label": "C-BUTTONS=FACE Z=RIGHT-TRIGGER",
+              "value": "c_face"
+            },
+            {
+              "label": "XBOX",
+              "value": "xbox"
+            }
+          ]
+        },
+        {
+          "id": "simple64_pak1",
+          "label": "P1 CONTROLLER EXTENSION",
+          "description": "Choose the extension attached to the controller.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "simple64_pak1",
+          "values": [
+            {
+              "label": "MEMORY",
+              "value": "Memory"
+            },
+            {
+              "label": "RUMBLE PACK",
+              "value": "Rumble"
+            },
+            {
+              "label": "Nenhum",
+              "value": "None"
+            },
+            {
+              "label": "TRANSFER PACK",
+              "value": "Transfer"
+            }
+          ]
+        },
+        {
+          "id": "mupen64_inputprofile2",
+          "label": "CONTROLLER LAYOUT P2",
+          "description": "Select between the different controller layouts.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "mupen64_inputprofile2",
+          "values": [
+            {
+              "label": "C-BUTTONS=RIGHT-STICK Z=LEFT-TRIGGER",
+              "value": "c_stick_zl"
+            },
+            {
+              "label": "C-BUTTONS=FACE Z=LEFT-TRIGGER",
+              "value": "c_face_zl"
+            },
+            {
+              "label": "C-BUTTONS=RIGHT-STICK Z=RIGHT-TRIGGER",
+              "value": "c_stick"
+            },
+            {
+              "label": "C-BUTTONS=FACE Z=RIGHT-TRIGGER",
+              "value": "c_face"
+            },
+            {
+              "label": "XBOX",
+              "value": "xbox"
+            }
+          ]
+        },
+        {
+          "id": "simple64_pak2",
+          "label": "P2 CONTROLLER EXTENSION",
+          "type": "select",
+          "default": "auto",
+          "configKey": "simple64_pak2",
+          "values": [
+            {
+              "label": "MEMORY",
+              "value": "Memory"
+            },
+            {
+              "label": "RUMBLE PACK",
+              "value": "Rumble"
+            },
+            {
+              "label": "Nenhum",
+              "value": "None"
+            },
+            {
+              "label": "TRANSFER PACK",
+              "value": "Transfer"
+            }
+          ]
+        },
+        {
+          "id": "mupen64_inputprofile3",
+          "label": "CONTROLLER LAYOUT P3",
+          "description": "Select between the different controller layouts.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "mupen64_inputprofile3",
+          "values": [
+            {
+              "label": "C-BUTTONS=RIGHT-STICK Z=LEFT-TRIGGER",
+              "value": "c_stick_zl"
+            },
+            {
+              "label": "C-BUTTONS=FACE Z=LEFT-TRIGGER",
+              "value": "c_face_zl"
+            },
+            {
+              "label": "C-BUTTONS=RIGHT-STICK Z=RIGHT-TRIGGER",
+              "value": "c_stick"
+            },
+            {
+              "label": "C-BUTTONS=FACE Z=RIGHT-TRIGGER",
+              "value": "c_face"
+            },
+            {
+              "label": "XBOX",
+              "value": "xbox"
+            }
+          ]
+        },
+        {
+          "id": "simple64_pak3",
+          "label": "P3 CONTROLLER EXTENSION",
+          "type": "select",
+          "default": "auto",
+          "configKey": "simple64_pak3",
+          "values": [
+            {
+              "label": "MEMORY",
+              "value": "Memory"
+            },
+            {
+              "label": "RUMBLE PACK",
+              "value": "Rumble"
+            },
+            {
+              "label": "Nenhum",
+              "value": "None"
+            },
+            {
+              "label": "TRANSFER PACK",
+              "value": "Transfer"
+            }
+          ]
+        },
+        {
+          "id": "mupen64_inputprofile4",
+          "label": "CONTROLLER LAYOUT P4",
+          "description": "Select between the different controller layouts.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "mupen64_inputprofile4",
+          "values": [
+            {
+              "label": "C-BUTTONS=RIGHT-STICK Z=LEFT-TRIGGER",
+              "value": "c_stick_zl"
+            },
+            {
+              "label": "C-BUTTONS=FACE Z=LEFT-TRIGGER",
+              "value": "c_face_zl"
+            },
+            {
+              "label": "C-BUTTONS=RIGHT-STICK Z=RIGHT-TRIGGER",
+              "value": "c_stick"
+            },
+            {
+              "label": "C-BUTTONS=FACE Z=RIGHT-TRIGGER",
+              "value": "c_face"
+            },
+            {
+              "label": "XBOX",
+              "value": "xbox"
+            }
+          ]
+        },
+        {
+          "id": "simple64_pak4",
+          "label": "P4 CONTROLLER EXTENSION",
+          "type": "select",
+          "default": "auto",
+          "configKey": "simple64_pak4",
+          "values": [
+            {
+              "label": "MEMORY",
+              "value": "Memory"
+            },
+            {
+              "label": "RUMBLE PACK",
+              "value": "Rumble"
+            },
+            {
+              "label": "Nenhum",
+              "value": "None"
+            },
+            {
+              "label": "TRANSFER PACK",
+              "value": "Transfer"
+            }
+          ]
+        },
+        {
+          "id": "mupen64_deadzone",
+          "label": "JOYSTICK DEADZONE",
+          "type": "slider",
+          "default": "auto",
+          "configKey": "mupen64_deadzone",
+          "min": 0,
+          "max": 50,
+          "step": 2,
+          "suffix": "%"
+        },
+        {
+          "id": "mupen64_sensitivity",
+          "label": "ANALOG SENSITIVITY",
+          "type": "slider",
+          "default": "auto",
+          "configKey": "mupen64_sensitivity",
+          "min": 70,
+          "max": 130,
+          "step": 5,
+          "suffix": "%"
+        },
+        {
+          "id": "n64_pad",
+          "label": "USE N64-LIKE CONTROLLER",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "n64_pad"
+        }
+      ]
+    }
+  ]
+}

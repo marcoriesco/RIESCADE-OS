@@ -1,0 +1,259 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "kega-fusion",
+  "name": "KEGA-FUSION",
+  "description": "Configurações para o emulador KEGA-FUSION geradas a partir do es_features.cfg.",
+  "icon": "kega-fusion",
+  "configFiles": [],
+  "globalMappings": {},
+  "groups": [
+    {
+      "id": "graphics",
+      "title": "Gráficos",
+      "icon": "monitor",
+      "order": 1,
+      "options": [
+        {
+          "id": "kega_internal_resolution",
+          "label": "Resolução Interna",
+          "type": "select",
+          "default": "auto",
+          "configKey": "kega_internal_resolution",
+          "values": [
+            {
+              "label": "640x480",
+              "value": "224,1,128,2"
+            },
+            {
+              "label": "800x600",
+              "value": "88,2,32,3"
+            },
+            {
+              "label": "1024x768",
+              "value": "0,3,0,4"
+            },
+            {
+              "label": "1280x720",
+              "value": "208,2,0,5"
+            },
+            {
+              "label": "1280x768",
+              "value": "0,3,0,5"
+            },
+            {
+              "label": "1280x800",
+              "value": "32,3,0,5"
+            },
+            {
+              "label": "1280x960",
+              "value": "192,3,0,5"
+            },
+            {
+              "label": "1280x1024",
+              "value": "0,4,0,5"
+            },
+            {
+              "label": "1440x900",
+              "value": "132,3,160,5"
+            },
+            {
+              "label": "1600x900",
+              "value": "132,3,64,6"
+            },
+            {
+              "label": "1920x1080",
+              "value": "56,4,128,7"
+            }
+          ]
+        },
+        {
+          "id": "vsync",
+          "label": "Sincronização Vertical (V-Sync)",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "vsync"
+        },
+        {
+          "id": "kega_scanlines",
+          "label": "SCANLINES",
+          "type": "select",
+          "default": "auto",
+          "configKey": "kega_scanlines",
+          "values": [
+            {
+              "label": "Nenhum",
+              "value": "4"
+            },
+            {
+              "label": "25%",
+              "value": "3"
+            },
+            {
+              "label": "50%",
+              "value": "2"
+            },
+            {
+              "label": "75%",
+              "value": "1"
+            },
+            {
+              "label": "100%",
+              "value": "0"
+            }
+          ]
+        },
+        {
+          "id": "kega_scaler",
+          "label": "SCALER",
+          "type": "select",
+          "default": "auto",
+          "configKey": "kega_scaler",
+          "values": [
+            {
+              "label": "2xPM HQ",
+              "value": "1"
+            },
+            {
+              "label": "2xPM LQ",
+              "value": "2"
+            },
+            {
+              "label": "2xSaI",
+              "value": "3"
+            },
+            {
+              "label": "Duplo",
+              "value": "4"
+            },
+            {
+              "label": "Duplo raw",
+              "value": "5"
+            },
+            {
+              "label": "HQ 2x",
+              "value": "6"
+            },
+            {
+              "label": "HQ 3x",
+              "value": "7"
+            },
+            {
+              "label": "HQ 4x",
+              "value": "8"
+            },
+            {
+              "label": "MD NTSC",
+              "value": "9"
+            },
+            {
+              "label": "Quad",
+              "value": "10"
+            },
+            {
+              "label": "Quad raw",
+              "value": "11"
+            },
+            {
+              "label": "Scale2x",
+              "value": "12"
+            },
+            {
+              "label": "Scale3x",
+              "value": "13"
+            },
+            {
+              "label": "Scale4x",
+              "value": "14"
+            }
+          ]
+        },
+        {
+          "id": "kega_nearest",
+          "label": "NEAREST MULTIPLE",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "kega_nearest"
+        },
+        {
+          "id": "kega_filter",
+          "label": "Filtragem Bilinear",
+          "description": "Use Filtragem Bilinear to smooth the overall picture.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "kega_filter"
+        },
+        {
+          "id": "kega_brighten",
+          "label": "BRIGHTEN PICTURE",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "kega_brighten"
+        },
+        {
+          "id": "kega_ntsc_aspect",
+          "label": "USE NTSC ASPECT",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "kega_ntsc_aspect"
+        },
+        {
+          "id": "kega_rendermode",
+          "label": "RENDER MODE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "kega_rendermode",
+          "values": [
+            {
+              "label": "NORMAL",
+              "value": "0"
+            },
+            {
+              "label": "TV CVBS",
+              "value": "2"
+            },
+            {
+              "label": "TV RF",
+              "value": "1"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "emulation",
+      "title": "Emulação",
+      "icon": "cpu",
+      "order": 2,
+      "options": [
+        {
+          "id": "kega_region",
+          "label": "CONSOLE REGION",
+          "type": "select",
+          "default": "auto",
+          "configKey": "kega_region",
+          "values": [
+            {
+              "label": "USA",
+              "value": "0"
+            },
+            {
+              "label": "JAP",
+              "value": "1"
+            },
+            {
+              "label": "EUR",
+              "value": "2"
+            }
+          ]
+        },
+        {
+          "id": "kega_fps",
+          "label": "SHOW FPS",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "kega_fps"
+        }
+      ]
+    }
+  ]
+}

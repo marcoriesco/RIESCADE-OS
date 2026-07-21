@@ -1,0 +1,212 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "ssf",
+  "name": "SSF",
+  "description": "Configurações para o emulador SSF geradas a partir do es_features.cfg.",
+  "icon": "ssf",
+  "configFiles": [],
+  "globalMappings": {},
+  "groups": [
+    {
+      "id": "graphics",
+      "title": "Gráficos",
+      "icon": "monitor",
+      "order": 1,
+      "options": [
+        {
+          "id": "vsync",
+          "label": "Sincronização Vertical (V-Sync)",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "vsync"
+        },
+        {
+          "id": "saturn_widescreen",
+          "label": "WIDESCREEN",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "saturn_widescreen",
+          "realKey": "WideScreen",
+          "realSection": "Screen",
+          "realFile": "SSF.Generator.cs"
+        },
+        {
+          "id": "ssf_scanlines",
+          "label": "SCANLINES",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "ssf_scanlines"
+        }
+      ]
+    },
+    {
+      "id": "emulation",
+      "title": "Emulação",
+      "icon": "cpu",
+      "order": 2,
+      "options": [
+        {
+          "id": "use_external_bios",
+          "label": "FORCE BIOS",
+          "description": "Define BIOS to use for Emulação.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "use_external_bios",
+          "values": [
+            {
+              "label": "Multi-region",
+              "value": "saturn_bios.bin"
+            },
+            {
+              "label": "JAP",
+              "value": "sega_101.bin"
+            },
+            {
+              "label": "EUR/US",
+              "value": "mpr-17933.bin"
+            },
+            {
+              "label": "HLE",
+              "value": "hle"
+            }
+          ],
+          "realKey": "SaturnBIOS",
+          "realSection": "Peripheral",
+          "realFile": "SSF.Generator.cs"
+        },
+        {
+          "id": "saturn_region",
+          "label": "CONSOLE REGION",
+          "type": "select",
+          "default": "auto",
+          "configKey": "saturn_region",
+          "values": [
+            {
+              "label": "Japan",
+              "value": "1"
+            },
+            {
+              "label": "America, Canada, Brazil",
+              "value": "4"
+            },
+            {
+              "label": "Europe, Australia, South Africa, Latin America(PAL)",
+              "value": "c"
+            },
+            {
+              "label": "Taiwan, Korea, Philippines",
+              "value": "2"
+            }
+          ],
+          "realKey": "Areacode",
+          "realSection": "Peripheral",
+          "realFile": "SSF.Generator.cs"
+        },
+        {
+          "id": "ssf_discindex",
+          "label": "DISC INDEX",
+          "description": "When using .m3u file, select disc index to run.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "ssf_discindex",
+          "values": [
+            {
+              "label": "1",
+              "value": "1"
+            },
+            {
+              "label": "2",
+              "value": "2"
+            },
+            {
+              "label": "3",
+              "value": "3"
+            },
+            {
+              "label": "4",
+              "value": "4"
+            }
+          ]
+        },
+        {
+          "id": "saturn_custom_setting",
+          "label": "USE OWN GAME SETTING FILE",
+          "description": "By Padrão RetroBat will generate it's own config file, enable this option to use your own game setting file located in 'emulators\\ssf\\Setting' folder.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "saturn_custom_setting"
+        }
+      ]
+    },
+    {
+      "id": "controls",
+      "title": "Controles",
+      "icon": "gamepad2",
+      "order": 5,
+      "options": [
+        {
+          "id": "ssf_use_analog",
+          "label": "USE LEFT JOYSTICK",
+          "description": "Use left analog stick instead of D-PAD.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "ssf_use_analog"
+        },
+        {
+          "id": "saturn_padlayout",
+          "label": "BUTTON LAYOUT",
+          "type": "select",
+          "default": "auto",
+          "configKey": "saturn_padlayout",
+          "values": [
+            {
+              "label": "L/R as Z/C",
+              "value": "lr_zc"
+            },
+            {
+              "label": "L/R as Y/Z",
+              "value": "lr_yz"
+            },
+            {
+              "label": "L/R as X/Z",
+              "value": "lr_xz"
+            }
+          ],
+          "realKey": "saturn_padlayout",
+          "realFile": "SSF.Controllers.cs"
+        },
+        {
+          "id": "saturn_invert_triggers",
+          "label": "INVERT TRIGGERS AND SHOULDERS",
+          "description": "Use shoulder buttons for L and R instead of triggers.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "saturn_invert_triggers"
+        },
+        {
+          "id": "saturn_pad_ssf",
+          "label": "USE SATURN-LIKE CONTROLLER",
+          "type": "select",
+          "default": "auto",
+          "configKey": "saturn_pad_ssf",
+          "values": [
+            {
+              "label": "Não",
+              "value": "0"
+            },
+            {
+              "label": "Sim(DPAD)",
+              "value": "1"
+            },
+            {
+              "label": "Sim(ANALOG)",
+              "value": "2"
+            }
+          ],
+          "realKey": "saturn_pad_ssf",
+          "realFile": "SSF.Controllers.cs"
+        }
+      ]
+    }
+  ]
+}

@@ -1,9 +1,551 @@
 {
   "$schema": "riescade-emulator-schema-v1",
-  "id": "teknoparrot", "name": "TeknoParrot", "description": "Loader para jogos arcade modernos (Sega, Namco, etc.).", "icon": "teknoparrot",
-  "globalMappings": { "fullscreen": { "configKey": "fullscreen", "globalKey": "fullscreen" } },
-  "groups": [{ "id": "interface", "title": "Interface", "icon": "monitor", "order": 1, "options": [
-    { "id": "fullscreen", "label": "Tela Cheia", "description": "Iniciar jogos em tela cheia.", "type": "toggle", "default": "true", "configKey": "fullscreen", "inheritsGlobal": "fullscreen" },
-    { "id": "teknoparrot_minimize", "label": "Minimizar TeknoParrot", "description": "Minimiza a janela do TeknoParrot ao iniciar um jogo.", "type": "toggle", "default": "true", "configKey": "teknoparrot_minimize" }
-  ]}]
+  "id": "teknoparrot",
+  "name": "TEKNOPARROT",
+  "description": "Configurações para o emulador TEKNOPARROT geradas a partir do es_features.cfg.",
+  "icon": "teknoparrot",
+  "configFiles": [],
+  "globalMappings": {},
+  "groups": [
+    {
+      "id": "graphics",
+      "title": "Gráficos",
+      "icon": "monitor",
+      "order": 1,
+      "options": [
+        {
+          "id": "tp_fsmode",
+          "label": "FULLSCREEN MODE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "tp_fsmode",
+          "values": [
+            {
+              "label": "WINDOWED",
+              "value": "0"
+            },
+            {
+              "label": "FULLSCREEN WINDOW",
+              "value": "1"
+            },
+            {
+              "label": "EXCLUSIVE FULLSCREEN",
+              "value": "2"
+            }
+          ],
+          "realKey": "tp_fsmode",
+          "realFile": "TeknoParrot.generator.cs"
+        },
+        {
+          "id": "tp_useScreenres",
+          "label": "USE SCREEN RESOLUTION",
+          "description": "Force resolution to current screen resolution for games that allow custom resolution.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "tp_useScreenres"
+        },
+        {
+          "id": "tp_customres",
+          "label": "USE CUSTOM RESOLUTION",
+          "description": "Enable custom resolution based Ativado Vídeo mode.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "tp_customres"
+        },
+        {
+          "id": "tp_play_resolution",
+          "label": "Resolução Interna",
+          "type": "select",
+          "default": "auto",
+          "configKey": "tp_play_resolution",
+          "values": [
+            {
+              "label": "480p",
+              "value": "480p"
+            },
+            {
+              "label": "960p",
+              "value": "960p"
+            },
+            {
+              "label": "1920p",
+              "value": "1920p"
+            },
+            {
+              "label": "4320p",
+              "value": "4320p"
+            },
+            {
+              "label": "7680p",
+              "value": "7680p"
+            }
+          ]
+        },
+        {
+          "id": "tp_play_gpuapi",
+          "label": "Vídeo",
+          "type": "select",
+          "default": "auto",
+          "configKey": "tp_play_gpuapi",
+          "values": [
+            {
+              "label": "VULKAN",
+              "value": "Vulkan"
+            },
+            {
+              "label": "OPENGL",
+              "value": "OpenGL"
+            }
+          ]
+        },
+        {
+          "id": "tp_rpcs3_resolution",
+          "label": "Resolução Interna",
+          "type": "slider",
+          "default": "auto",
+          "configKey": "tp_rpcs3_resolution",
+          "min": 25,
+          "max": 800,
+          "step": 25
+        },
+        {
+          "id": "tp_rpcs3_writecolorbuffers",
+          "label": "WRITE COLOR BUFFERS",
+          "description": "Enable this option if you get missing graphics or broken lighting ingame.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "tp_rpcs3_writecolorbuffers"
+        },
+        {
+          "id": "tp_rpcs3_gpuapi",
+          "label": "Vídeo",
+          "type": "select",
+          "default": "auto",
+          "configKey": "tp_rpcs3_gpuapi",
+          "values": [
+            {
+              "label": "VULKAN",
+              "value": "Vulkan"
+            },
+            {
+              "label": "OPENGL",
+              "value": "OpenGL"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "emulation",
+      "title": "Emulação",
+      "icon": "cpu",
+      "order": 2,
+      "options": [
+        {
+          "id": "tp_region",
+          "label": "REGION/LANGUAGE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "tp_region",
+          "values": [
+            {
+              "label": "USA/ENGLISH",
+              "value": "usa"
+            },
+            {
+              "label": "EXPORT/ENGLISH",
+              "value": "export"
+            },
+            {
+              "label": "JAPANESE",
+              "value": "japan"
+            }
+          ]
+        },
+        {
+          "id": "tp_freePlay",
+          "label": "FREE PLAY",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "tp_freePlay"
+        },
+        {
+          "id": "requires_admin",
+          "label": "DISABLE ADMIN RIGHTS",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "requires_admin"
+        },
+        {
+          "id": "apm3id",
+          "label": "APM3ID (REQUIRE ONLINE PROFILE)",
+          "type": "input",
+          "default": "auto",
+          "configKey": "apm3id"
+        },
+        {
+          "id": "tp_minimize",
+          "label": "HIDE TEKNOPARROT Ativado STARTUP",
+          "description": "Hidden by Padrão, for few games can cause problem.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "tp_minimize"
+        }
+      ]
+    },
+    {
+      "id": "hacks",
+      "title": "Correções / Hacks",
+      "icon": "wrench",
+      "order": 3,
+      "options": [
+        {
+          "id": "tp_offscreenhack",
+          "label": "OFFSCREEN RELOAD HACK",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "tp_offscreenhack"
+        }
+      ]
+    },
+    {
+      "id": "controls",
+      "title": "Controles",
+      "icon": "gamepad2",
+      "order": 5,
+      "options": [
+        {
+          "id": "tp_stooz",
+          "label": "JOYSTICK DEADZONE",
+          "description": "This is helpful in driving games to make it less 'twitchy' when using a controller to steer.",
+          "type": "slider",
+          "default": "auto",
+          "configKey": "tp_stooz",
+          "min": 0,
+          "max": 50,
+          "step": 5,
+          "suffix": "%"
+        },
+        {
+          "id": "tp_padindex1",
+          "label": "FORCE PLAYER 1 PAD INDEX",
+          "description": "Force P1 pad index, can be useful if XInput devices or not odered right.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "tp_padindex1",
+          "values": [
+            {
+              "label": 0,
+              "value": "0"
+            },
+            {
+              "label": "1",
+              "value": "1"
+            },
+            {
+              "label": "2",
+              "value": "2"
+            },
+            {
+              "label": "3",
+              "value": "3"
+            }
+          ]
+        },
+        {
+          "id": "tp_padindex2",
+          "label": "FORCE PLAYER 2 PAD INDEX",
+          "type": "select",
+          "default": "auto",
+          "configKey": "tp_padindex2",
+          "values": [
+            {
+              "label": 0,
+              "value": "0"
+            },
+            {
+              "label": "1",
+              "value": "1"
+            },
+            {
+              "label": "2",
+              "value": "2"
+            },
+            {
+              "label": "3",
+              "value": "3"
+            }
+          ]
+        },
+        {
+          "id": "tp_inputdriver",
+          "label": "INPUT",
+          "type": "select",
+          "default": "auto",
+          "configKey": "tp_inputdriver",
+          "values": [
+            {
+              "label": "XINPUT",
+              "value": "XInput"
+            },
+            {
+              "label": "DIRECTINPUT",
+              "value": "DirectInput"
+            },
+            {
+              "label": "RAW INPUT",
+              "value": "RawInput"
+            }
+          ]
+        },
+        {
+          "id": "tp_display_cursor",
+          "label": "SHOW MOUSE CURSOR",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "tp_display_cursor"
+        },
+        {
+          "id": "tp_gunkeyboard",
+          "label": "COIN\\START BUTTONS",
+          "description": "Define where the the coin and start buttons are located.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "tp_gunkeyboard",
+          "values": [
+            {
+              "label": "Ativado GUN",
+              "value": "0"
+            },
+            {
+              "label": "Ativado KEYBOARD",
+              "value": "1"
+            },
+            {
+              "label": "TEST/SERVICE Ativado KEYBOARD",
+              "value": "2"
+            }
+          ],
+          "realKey": "tp_gunkeyboard",
+          "realFile": "TeknoParrot.Guns.cs"
+        },
+        {
+          "id": "tp_gunindex1",
+          "label": "GUN 1 INDEX",
+          "type": "select",
+          "default": "auto",
+          "configKey": "tp_gunindex1",
+          "values": [
+            {
+              "label": "1",
+              "value": "0"
+            },
+            {
+              "label": "2",
+              "value": "1"
+            },
+            {
+              "label": "3",
+              "value": "2"
+            },
+            {
+              "label": "4",
+              "value": "3"
+            },
+            {
+              "label": "5",
+              "value": "4"
+            }
+          ]
+        },
+        {
+          "id": "tp_gunindex2",
+          "label": "GUN 2 INDEX",
+          "type": "select",
+          "default": "auto",
+          "configKey": "tp_gunindex2",
+          "values": [
+            {
+              "label": "1",
+              "value": "0"
+            },
+            {
+              "label": "2",
+              "value": "1"
+            },
+            {
+              "label": "3",
+              "value": "2"
+            },
+            {
+              "label": "4",
+              "value": "3"
+            },
+            {
+              "label": "5",
+              "value": "4"
+            }
+          ]
+        },
+        {
+          "id": "tp_gunindex3",
+          "label": "GUN 3 INDEX",
+          "type": "select",
+          "default": "auto",
+          "configKey": "tp_gunindex3",
+          "values": [
+            {
+              "label": "1",
+              "value": "0"
+            },
+            {
+              "label": "2",
+              "value": "1"
+            },
+            {
+              "label": "3",
+              "value": "2"
+            },
+            {
+              "label": "4",
+              "value": "3"
+            },
+            {
+              "label": "5",
+              "value": "4"
+            }
+          ]
+        },
+        {
+          "id": "tp_gunindex4",
+          "label": "GUN 4 INDEX",
+          "type": "select",
+          "default": "auto",
+          "configKey": "tp_gunindex4",
+          "values": [
+            {
+              "label": "1",
+              "value": "0"
+            },
+            {
+              "label": "2",
+              "value": "1"
+            },
+            {
+              "label": "3",
+              "value": "2"
+            },
+            {
+              "label": "4",
+              "value": "3"
+            },
+            {
+              "label": "5",
+              "value": "4"
+            }
+          ]
+        },
+        {
+          "id": "tp_kbindex",
+          "label": "KEYBOARD INDEX",
+          "description": "Force the keyboard to use if multiple keyboards are connected.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "tp_kbindex",
+          "values": [
+            {
+              "label": 0,
+              "value": "0"
+            },
+            {
+              "label": "1",
+              "value": "1"
+            },
+            {
+              "label": "2",
+              "value": "2"
+            },
+            {
+              "label": "3",
+              "value": "3"
+            },
+            {
+              "label": "4",
+              "value": "4"
+            },
+            {
+              "label": "5",
+              "value": "5"
+            },
+            {
+              "label": "6",
+              "value": "6"
+            }
+          ]
+        },
+        {
+          "id": "use_demulshooter",
+          "label": "USE DEMULSHOOTER",
+          "description": "Launch DemulShooter for gun games.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "use_demulshooter"
+        },
+        {
+          "id": "ds_output",
+          "label": "OUTPUT GAME DATA",
+          "description": "Enable this option when using mamehooker with LEDs, solenoids, rumble...",
+          "type": "select",
+          "default": "auto",
+          "configKey": "ds_output",
+          "values": [
+            {
+              "label": "TO WINDOW",
+              "value": "win"
+            },
+            {
+              "label": "TO NETWORK",
+              "value": "net"
+            },
+            {
+              "label": "TO BOTH",
+              "value": "both"
+            }
+          ]
+        },
+        {
+          "id": "tp_nocrosshair",
+          "label": "HIDE CROSSHAIR",
+          "description": "Hide in-game crosshair (game dependant).",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "tp_nocrosshair"
+        },
+        {
+          "id": "ds_verbose",
+          "label": "VERBOSE MODE",
+          "description": "Enable verbose mode for debugging.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "ds_verbose"
+        },
+        {
+          "id": "use_mamehooker",
+          "label": "USE MAMEHOOKER",
+          "description": "Launch MameHooker for outputs management.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "use_mamehooker"
+        },
+        {
+          "id": "tp_digitalrotary",
+          "label": "ALLOW DPAD FOR STEERING",
+          "description": "Use buttons instead of an analog axis for the wheel.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "tp_digitalrotary"
+        }
+      ]
+    }
+  ]
 }

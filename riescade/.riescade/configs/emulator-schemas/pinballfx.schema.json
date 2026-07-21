@@ -1,0 +1,10 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "pinballfx",
+  "name": "PINBALLFX",
+  "description": "Configurações para o emulador PINBALLFX geradas a partir do es_features.cfg.",
+  "icon": "pinballfx",
+  "configFiles": [],
+  "globalMappings": {},
+  "groups": []
+}

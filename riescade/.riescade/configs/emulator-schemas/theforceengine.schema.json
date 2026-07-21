@@ -1,0 +1,303 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "theforceengine",
+  "name": "THEFORCEENGINE",
+  "description": "Configurações para o emulador THEFORCEENGINE geradas a partir do es_features.cfg.",
+  "icon": "theforceengine",
+  "configFiles": [],
+  "globalMappings": {},
+  "groups": [
+    {
+      "id": "graphics",
+      "title": "Gráficos",
+      "icon": "monitor",
+      "order": 1,
+      "options": [
+        {
+          "id": "forceengine_internal_resolution",
+          "label": "Resolução Interna",
+          "type": "select",
+          "default": "auto",
+          "configKey": "forceengine_internal_resolution",
+          "values": [
+            {
+              "label": "200p",
+              "value": "320x200"
+            },
+            {
+              "label": "400p",
+              "value": "640x400"
+            },
+            {
+              "label": "480p",
+              "value": "640x480"
+            },
+            {
+              "label": "600p",
+              "value": "800x600"
+            },
+            {
+              "label": "720p",
+              "value": "960x720"
+            },
+            {
+              "label": "768p",
+              "value": "1024x768"
+            },
+            {
+              "label": "800p",
+              "value": "1066x800"
+            },
+            {
+              "label": "960p",
+              "value": "1280x960"
+            },
+            {
+              "label": "1050p",
+              "value": "1440x1050"
+            },
+            {
+              "label": "1080p",
+              "value": "1440x1080"
+            },
+            {
+              "label": "1200p",
+              "value": "1600x1200"
+            },
+            {
+              "label": "1392p",
+              "value": "1856x1392"
+            },
+            {
+              "label": "1440p",
+              "value": "1920x1440"
+            },
+            {
+              "label": "1536p",
+              "value": "2048x1536"
+            },
+            {
+              "label": "2160p",
+              "value": "2880x2160"
+            }
+          ],
+          "realKey": "gameHeight",
+          "realSection": "Graphics",
+          "realFile": "ForceEngine.Generator.cs"
+        },
+        {
+          "id": "vsync",
+          "label": "Sincronização Vertical (V-Sync)",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "vsync",
+          "realKey": "vsync",
+          "realSection": "Graphics",
+          "realFile": "ForceEngine.Generator.cs"
+        },
+        {
+          "id": "forceengine_widescreen",
+          "label": "WIDESCREEN",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "forceengine_widescreen",
+          "realKey": "widescreen",
+          "realSection": "Graphics",
+          "realFile": "ForceEngine.Generator.cs"
+        },
+        {
+          "id": "forceengine_smooth",
+          "label": "Filtragem Bilinear",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "forceengine_smooth",
+          "realKey": "useBilinear",
+          "realSection": "Graphics",
+          "realFile": "ForceEngine.Generator.cs"
+        },
+        {
+          "id": "forceengine_bloom",
+          "label": "ENABLE BLOOM",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "forceengine_bloom",
+          "realKey": "bloomEnabled",
+          "realSection": "Graphics",
+          "realFile": "ForceEngine.Generator.cs"
+        },
+        {
+          "id": "forceengine_color_mode",
+          "label": "GL-COLOR MODE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "forceengine_color_mode",
+          "values": [
+            {
+              "label": "TRUE COLOR",
+              "value": "2"
+            },
+            {
+              "label": "8-BIT (CLASSIC)",
+              "value": "0"
+            },
+            {
+              "label": "8-BIT INTERPOLATED",
+              "value": "1"
+            }
+          ],
+          "realKey": "colorMode",
+          "realSection": "Graphics",
+          "realFile": "ForceEngine.Generator.cs"
+        },
+        {
+          "id": "forceengine_sky_mode",
+          "label": "GL-SKY RENDER MODE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "forceengine_sky_mode",
+          "values": [
+            {
+              "label": "CYLINDER",
+              "value": "1"
+            },
+            {
+              "label": "VANILLA",
+              "value": "0"
+            }
+          ],
+          "realKey": "skyMode",
+          "realSection": "Graphics",
+          "realFile": "ForceEngine.Generator.cs"
+        },
+        {
+          "id": "forceengine_renderer",
+          "label": "Vídeo",
+          "type": "select",
+          "default": "auto",
+          "configKey": "forceengine_renderer",
+          "values": [
+            {
+              "label": "OPENGL",
+              "value": "1"
+            },
+            {
+              "label": "SOFTWARE",
+              "value": "0"
+            }
+          ],
+          "realKey": "renderer",
+          "realSection": "Graphics",
+          "realFile": "ForceEngine.Generator.cs"
+        }
+      ]
+    },
+    {
+      "id": "emulation",
+      "title": "Emulação",
+      "icon": "cpu",
+      "order": 2,
+      "options": [
+        {
+          "id": "forceengine_mipmap",
+          "label": "MIP MAPPING",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "forceengine_mipmap",
+          "realKey": "useMipmapping",
+          "realSection": "Graphics",
+          "realFile": "ForceEngine.Generator.cs"
+        },
+        {
+          "id": "forceengine_cutscenes",
+          "label": "DISABLE CUTSCENES",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "forceengine_cutscenes"
+        },
+        {
+          "id": "forceengine_fps",
+          "label": "SHOW FPS",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "forceengine_fps",
+          "realKey": "show_fps",
+          "realSection": "Graphics",
+          "realFile": "ForceEngine.Generator.cs"
+        },
+        {
+          "id": "forceengine_subtitles",
+          "label": "SHOW SUBTITLES",
+          "type": "select",
+          "default": "auto",
+          "configKey": "forceengine_subtitles",
+          "values": [
+            {
+              "label": "Nenhum",
+              "value": "none"
+            },
+            {
+              "label": "CUTSCENES ONLY",
+              "value": "cutscenes"
+            },
+            {
+              "label": "GAMEPLAY ONLY",
+              "value": "gameplay"
+            },
+            {
+              "label": "BOTH",
+              "value": "both"
+            }
+          ],
+          "realKey": "forceengine_subtitles",
+          "realFile": "ForceEngine.Generator.cs"
+        }
+      ]
+    },
+    {
+      "id": "hacks",
+      "title": "Correções / Hacks",
+      "icon": "wrench",
+      "order": 3,
+      "options": [
+        {
+          "id": "forceengine_color_correction",
+          "label": "COLOR CORRECTION",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "forceengine_color_correction",
+          "realKey": "colorCorrection",
+          "realSection": "Graphics",
+          "realFile": "ForceEngine.Generator.cs"
+        }
+      ]
+    },
+    {
+      "id": "controls",
+      "title": "Controles",
+      "icon": "gamepad2",
+      "order": 5,
+      "options": [
+        {
+          "id": "forceengine_autoaim",
+          "label": "DISABLE AUTOAIM",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "forceengine_autoaim",
+          "realKey": "enableAutoaim",
+          "realSection": "Dark_Forces",
+          "realFile": "ForceEngine.Generator.cs"
+        },
+        {
+          "id": "forceengine_crosshair",
+          "label": "DISABLE CROSSHAIR",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "forceengine_crosshair",
+          "realKey": "reticleEnable",
+          "realSection": "Graphics",
+          "realFile": "ForceEngine.Generator.cs"
+        }
+      ]
+    }
+  ]
+}

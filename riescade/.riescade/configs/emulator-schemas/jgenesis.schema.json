@@ -1,0 +1,194 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "jgenesis",
+  "name": "JGENESIS",
+  "description": "Configurações para o emulador JGENESIS geradas a partir do es_features.cfg.",
+  "icon": "jgenesis",
+  "configFiles": [],
+  "globalMappings": {},
+  "groups": [
+    {
+      "id": "graphics",
+      "title": "Gráficos",
+      "icon": "monitor",
+      "order": 1,
+      "options": [
+        {
+          "id": "jgen_shader",
+          "label": "SHADER",
+          "type": "select",
+          "default": "auto",
+          "configKey": "jgen_shader",
+          "values": [
+            {
+              "label": "Nenhum",
+              "value": "None"
+            },
+            {
+              "label": "HORIZONTAL BLUR (2px)",
+              "value": "HorizontalBlurTwoPixels"
+            },
+            {
+              "label": "HORIZONTAL BLUR (3px)",
+              "value": "HorizontalBlurThreePixels"
+            },
+            {
+              "label": "HORIZONTAL BLUR (Snes Adaptável)",
+              "value": "HorizontalBlurSnesAdaptive"
+            },
+            {
+              "label": "ANTI-DITHER (conservative)",
+              "value": "AntiDitherWeak"
+            },
+            {
+              "label": "ANTI-DITHER (aggressive)",
+              "value": "AntiDitherStrong"
+            }
+          ],
+          "realKey": "preprocess_shader",
+          "realSection": "common",
+          "realFile": "Jgenesis.Generator.cs"
+        },
+        {
+          "id": "jgen_vsync",
+          "label": "Sincronização Vertical (V-Sync)",
+          "type": "select",
+          "default": "auto",
+          "configKey": "jgen_vsync",
+          "values": [
+            {
+              "label": "ENABLED",
+              "value": "Enabled"
+            },
+            {
+              "label": "FAST",
+              "value": "Fast"
+            },
+            {
+              "label": "DISABLED",
+              "value": "Disabled"
+            }
+          ],
+          "realKey": "vsync_mode",
+          "realSection": "common",
+          "realFile": "Jgenesis.Generator.cs"
+        },
+        {
+          "id": "jgen_filter",
+          "label": "FILTER MODE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "jgen_filter",
+          "values": [
+            {
+              "label": "LINEAR",
+              "value": "Linear"
+            },
+            {
+              "label": "NEAREST NEIGHBOR",
+              "value": "Nearest"
+            }
+          ],
+          "realKey": "filter_mode",
+          "realSection": "common",
+          "realFile": "Jgenesis.Generator.cs"
+        },
+        {
+          "id": "jgen_prescale",
+          "label": "PRESCALING",
+          "type": "slider",
+          "default": "auto",
+          "configKey": "jgen_prescale",
+          "min": 1,
+          "max": 16,
+          "step": 1,
+          "realKey": "auto_prescale",
+          "realSection": "common",
+          "realFile": "Jgenesis.Generator.cs"
+        },
+        {
+          "id": "jgen_scanlines",
+          "label": "SCANLINES",
+          "type": "select",
+          "default": "auto",
+          "configKey": "jgen_scanlines",
+          "values": [
+            {
+              "label": "Nenhum",
+              "value": "None"
+            },
+            {
+              "label": "DIM",
+              "value": "Dim"
+            },
+            {
+              "label": "BLACK",
+              "value": "Black"
+            }
+          ],
+          "realKey": "scanlines",
+          "realSection": "common",
+          "realFile": "Jgenesis.Generator.cs"
+        },
+        {
+          "id": "jgen_renderer",
+          "label": "Vídeo",
+          "type": "select",
+          "default": "auto",
+          "configKey": "jgen_renderer",
+          "values": [
+            {
+              "label": "VULKAN",
+              "value": "Vulkan"
+            },
+            {
+              "label": "DIRECTX12",
+              "value": "DirectX12"
+            },
+            {
+              "label": "OPENGL",
+              "value": "OpenGl"
+            }
+          ],
+          "realKey": "wgpu_backend",
+          "realSection": "common",
+          "realFile": "Jgenesis.Generator.cs"
+        }
+      ]
+    },
+    {
+      "id": "emulation",
+      "title": "Emulação",
+      "icon": "cpu",
+      "order": 2,
+      "options": [
+        {
+          "id": "jgen_gui",
+          "label": "SHOW GUI",
+          "description": "Runs 'jgenesis-gui.exe' instead of cli version.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "jgen_gui"
+        }
+      ]
+    },
+    {
+      "id": "audio",
+      "title": "Áudio",
+      "icon": "volume2",
+      "order": 4,
+      "options": [
+        {
+          "id": "jgen_async",
+          "label": "Áudio SYNC",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "jgen_async",
+          "realKey": "audio_sync",
+          "realSection": "common",
+          "realFile": "Jgenesis.Generator.cs"
+        }
+      ]
+    }
+  ]
+}

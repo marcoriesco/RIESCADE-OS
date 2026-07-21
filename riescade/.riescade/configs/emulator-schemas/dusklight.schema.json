@@ -1,0 +1,183 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "dusklight",
+  "name": "DUSKLIGHT",
+  "description": "Configurações para o emulador DUSKLIGHT geradas a partir do es_features.cfg.",
+  "icon": "dusklight",
+  "configFiles": [],
+  "globalMappings": {},
+  "groups": [
+    {
+      "id": "graphics",
+      "title": "Gráficos",
+      "icon": "monitor",
+      "order": 1,
+      "options": [
+        {
+          "id": "dusklight_resolution",
+          "label": "Resolução Interna",
+          "type": "select",
+          "default": "auto",
+          "configKey": "dusklight_resolution",
+          "values": [
+            {
+              "label": "1x (608x448)",
+              "value": "1"
+            },
+            {
+              "label": "2x (HD READY)",
+              "value": "2"
+            },
+            {
+              "label": "3x (FULL HD)",
+              "value": "3"
+            },
+            {
+              "label": "4x",
+              "value": "4"
+            },
+            {
+              "label": "5x",
+              "value": "5"
+            },
+            {
+              "label": "6x",
+              "value": "6"
+            },
+            {
+              "label": "7x",
+              "value": "7"
+            },
+            {
+              "label": "8x",
+              "value": "8"
+            },
+            {
+              "label": "9x",
+              "value": "9"
+            },
+            {
+              "label": "10x",
+              "value": "10"
+            },
+            {
+              "label": "11x",
+              "value": "11"
+            },
+            {
+              "label": "12x",
+              "value": "12"
+            }
+          ]
+        },
+        {
+          "id": "dusklight_force43",
+          "label": "FORCE 4/3 RATIO",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "dusklight_force43"
+        },
+        {
+          "id": "dusklight_vsync",
+          "label": "Sincronização Vertical (V-Sync)",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "dusklight_vsync"
+        },
+        {
+          "id": "dusklight_shadowres",
+          "label": "SHADOW RESOLUTION",
+          "type": "slider",
+          "default": "auto",
+          "configKey": "dusklight_shadowres",
+          "min": 1,
+          "max": 8,
+          "step": 1,
+          "suffix": "x"
+        },
+        {
+          "id": "dusklight_bloom",
+          "label": "BLOOM MODE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "dusklight_bloom",
+          "values": [
+            {
+              "label": "DUSK",
+              "value": "2"
+            },
+            {
+              "label": "CLASSIC",
+              "value": "1"
+            },
+            {
+              "label": "Desativado",
+              "value": "0"
+            }
+          ]
+        },
+        {
+          "id": "dusklight_renderer",
+          "label": "Vídeo",
+          "type": "select",
+          "default": "auto",
+          "configKey": "dusklight_renderer",
+          "values": [
+            {
+              "label": "DIRECT3D 12",
+              "value": "d3d12"
+            },
+            {
+              "label": "VULKAN",
+              "value": "vulkan"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "emulation",
+      "title": "Emulação",
+      "icon": "cpu",
+      "order": 2,
+      "options": [
+        {
+          "id": "dusklight_language",
+          "label": "LANGUAGE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "dusklight_language",
+          "values": [
+            {
+              "label": "ENGLISH",
+              "value": "0"
+            },
+            {
+              "label": "FRENCH",
+              "value": "2"
+            },
+            {
+              "label": "GERMAN",
+              "value": "1"
+            },
+            {
+              "label": "SPANISH",
+              "value": "3"
+            },
+            {
+              "label": "ITALIAN",
+              "value": "4"
+            }
+          ]
+        },
+        {
+          "id": "dusklight_fps",
+          "label": "SHOW FPS",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "dusklight_fps"
+        }
+      ]
+    }
+  ]
+}

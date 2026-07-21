@@ -2,21 +2,16 @@
   "$schema": "riescade-emulator-schema-v1",
   "id": "pcsx2",
   "name": "PCSX2",
-  "description": "Emulador de PlayStation 2 — versão Qt moderna.",
+  "description": "Configurações para o emulador PCSX2 geradas a partir do es_features.cfg.",
   "icon": "pcsx2",
-  "configFiles": [
-    {
-      "path": "inis/PCSX2.ini",
-      "format": "ini"
-    }
-  ],
+  "configFiles": [],
   "globalMappings": {
-    "fullscreen": {
-      "configKey": "fullscreen",
-      "globalKey": "fullscreen"
+    "ratio": {
+      "configKey": "ratio",
+      "globalKey": "aspect_ratio"
     },
-    "vsync": {
-      "configKey": "vsync",
+    "pcsx2_vsync": {
+      "configKey": "pcsx2_vsync",
       "globalKey": "vsync"
     }
   },
@@ -28,133 +23,339 @@
       "order": 1,
       "options": [
         {
-          "id": "fullscreen",
-          "label": "Tela Cheia",
-          "description": "Iniciar o emulador em modo tela cheia.",
+          "id": "TVShader",
+          "label": "Conjunto de Shaders",
+          "type": "select",
+          "default": "auto",
+          "configKey": "TVShader",
+          "values": [
+            {
+              "label": "Não",
+              "value": "0"
+            },
+            {
+              "label": "SCANLINES",
+              "value": "1"
+            },
+            {
+              "label": "DIAGONAL FILTER",
+              "value": "2"
+            },
+            {
+              "label": "TRIANGULAR FILTER",
+              "value": "3"
+            },
+            {
+              "label": "WAVE FILTER",
+              "value": "4"
+            },
+            {
+              "label": "LOTTES CRT",
+              "value": "5"
+            },
+            {
+              "label": "4xRGSS",
+              "value": "6"
+            },
+            {
+              "label": "NxAGSS",
+              "value": "7"
+            }
+          ],
+          "realKey": "TVShader",
+          "realSection": "Settings",
+          "realFile": "Pcsx2.Generator.cs"
+        },
+        {
+          "id": "ratio",
+          "label": "Proporção de Tela",
+          "type": "select",
+          "default": "auto",
+          "configKey": "ratio",
+          "values": [
+            {
+              "label": "4/3 2/2",
+              "value": "Auto 4:3/3:2"
+            },
+            {
+              "label": "4/3",
+              "value": "4:3"
+            },
+            {
+              "label": "16/9",
+              "value": "16:9"
+            },
+            {
+              "label": "10/7",
+              "value": "10:7"
+            },
+            {
+              "label": "Esticar para Preencher",
+              "value": "Stretch"
+            }
+          ],
+          "inheritsGlobal": "aspect_ratio",
+          "realKey": "ratio",
+          "realFile": "Pcsx2.Generator.cs"
+        },
+        {
+          "id": "pcsx2_vsync",
+          "label": "Sincronização Vertical (V-Sync)",
           "type": "toggle",
-          "default": "true",
-          "configKey": "fullscreen",
-          "inheritsGlobal": "fullscreen"
+          "default": "auto",
+          "configKey": "pcsx2_vsync",
+          "inheritsGlobal": "vsync",
+          "realKey": "VsyncEnable",
+          "realSection": "EmuCore/GS",
+          "realFile": "Pcsx2.Generator.cs"
         },
         {
           "id": "internalresolution",
           "label": "Resolução Interna",
-          "description": "Multiplicador da resolução nativa do PS2 (512x448).",
           "type": "select",
-          "default": "3",
+          "default": "auto",
           "configKey": "internalresolution",
           "values": [
             {
-              "label": "Nativa (1x)",
+              "label": "Nativa (PS2)",
               "value": "1"
             },
             {
-              "label": "2x (1024x896)",
+              "label": "x2 (720p)",
               "value": "2"
             },
             {
-              "label": "3x (1536x1344)",
+              "label": "x3 (1080p)",
               "value": "3"
             },
             {
-              "label": "4x (2048x1792)",
+              "label": "x4 (1440p)",
               "value": "4"
             },
             {
-              "label": "5x (2560x2240)",
+              "label": "x5 (1620p)",
               "value": "5"
             },
             {
-              "label": "6x (3072x2688)",
+              "label": "x6 (4K)",
               "value": "6"
             },
             {
-              "label": "8x (4096x3584)",
+              "label": "x7 (2520p)",
+              "value": "7"
+            },
+            {
+              "label": "x8 (2880p)",
               "value": "8"
+            },
+            {
+              "label": "x9 (3240p)",
+              "value": "9"
+            },
+            {
+              "label": "x10 (6K)",
+              "value": "10"
+            },
+            {
+              "label": "x11 (3960p)",
+              "value": "11"
+            },
+            {
+              "label": "x12 (8K)",
+              "value": "12"
             }
-          ]
+          ],
+          "realKey": "upscale_multiplier",
+          "realSection": "Settings",
+          "realFile": "Pcsx2.Generator.cs"
         },
         {
-          "id": "TVShader",
-          "label": "TV Shader",
-          "description": "Aplica filtros visuais que simulam a aparência de uma TV CRT.",
+          "id": "fmv_ratio",
+          "label": "Proporção de FMV",
+          "description": "Set the aspect ratio of the FMV cinematics.",
           "type": "select",
-          "default": "0",
-          "configKey": "TVShader",
+          "default": "auto",
+          "configKey": "fmv_ratio",
           "values": [
             {
               "label": "Desativado",
-              "value": "0"
+              "value": "Off"
             },
             {
-              "label": "Scanlines",
+              "label": "4/3 3/2",
+              "value": "Auto 4:3/3:2"
+            },
+            {
+              "label": "4/3",
+              "value": "4:3"
+            },
+            {
+              "label": "16/9",
+              "value": "16:9"
+            },
+            {
+              "label": "10/7",
+              "value": "10:7"
+            }
+          ],
+          "realKey": "FMVAspectRatioSwitch",
+          "realSection": "GSWindow",
+          "realFile": "Pcsx2.Generator.cs"
+        },
+        {
+          "id": "interlace",
+          "label": "Modo de Desentrelaçamento",
+          "description": "Force the rendering and display of frames to progressive mode.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "interlace",
+          "values": [
+            {
+              "label": "Nenhum",
               "value": "1"
             },
             {
-              "label": "Diagonal",
+              "label": "WEAVE (Top first)",
               "value": "2"
             },
             {
-              "label": "Triangular",
+              "label": "WEAVE (Bottom first)",
               "value": "3"
             },
             {
-              "label": "Wave",
+              "label": "BOB (Top first)",
               "value": "4"
+            },
+            {
+              "label": "BOB (Bottom first)",
+              "value": "5"
+            },
+            {
+              "label": "BLEND (Top first)",
+              "value": "6"
+            },
+            {
+              "label": "BLEND (Bottom first)",
+              "value": "7"
+            },
+            {
+              "label": "Adaptável (Top first)",
+              "value": "8"
+            },
+            {
+              "label": "Adaptável (Bottom first)",
+              "value": "9"
             }
-          ]
+          ],
+          "realKey": "deinterlace_mode",
+          "realSection": "EmuCore/GS",
+          "realFile": "Pcsx2.Generator.cs"
         },
         {
-          "id": "vsync",
-          "label": "V-Sync",
-          "description": "Sincronização vertical do PCSX2.",
+          "id": "disable_fullscreen",
+          "label": "Desativar Tela Cheia",
+          "description": "Use this option if PCSX2 is not displaying Ativado the correct monitor.",
           "type": "toggle",
-          "default": "true",
-          "configKey": "vsync",
-          "inheritsGlobal": "vsync"
+          "default": "auto",
+          "configKey": "disable_fullscreen"
+        },
+        {
+          "id": "fxaa",
+          "label": "Anti-Aliasing (FXAA)",
+          "description": "Set Anti Aliasing for rendered content.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "fxaa",
+          "realKey": "fxaa",
+          "realSection": "EmuCore/GS",
+          "realFile": "Pcsx2.Generator.cs"
         },
         {
           "id": "bilinear_filtering",
           "label": "Filtragem Bilinear",
-          "description": "Suavização de texturas para reduzir pixels visíveis.",
+          "description": "Use Filtragem Bilinear to smooth the overall picture.",
           "type": "select",
           "default": "auto",
           "configKey": "bilinear_filtering",
           "values": [
             {
-              "label": "Automático",
-              "value": "auto"
+              "label": "Sim (SMOOTH)",
+              "value": "1"
             },
+            {
+              "label": "Sim (SHARP)",
+              "value": "2"
+            },
+            {
+              "label": "Não",
+              "value": "0"
+            }
+          ],
+          "realKey": "bilinear_filtering",
+          "realFile": "Pcsx2.Generator.cs"
+        },
+        {
+          "id": "texture_filtering",
+          "label": "Filtragem de Texturas",
+          "description": "Control the texture filtering of the Emulação.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "texture_filtering",
+          "values": [
+            {
+              "label": "BILINEAR (PS2)",
+              "value": "2"
+            },
+            {
+              "label": "NEAREST",
+              "value": "0"
+            },
+            {
+              "label": "BILINEAR (FORCED)",
+              "value": "1"
+            },
+            {
+              "label": "BILINEAR (FORCED EXCLUDING SPRITE)",
+              "value": "3"
+            }
+          ],
+          "realKey": "filter",
+          "realSection": "EmuCore/GS",
+          "realFile": "Pcsx2.Generator.cs"
+        },
+        {
+          "id": "trilinear_filtering",
+          "label": "Filtragem Trilinear",
+          "description": "Control the texture tri-filtering of the Emulação.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "trilinear_filtering",
+          "values": [
             {
               "label": "Desativado",
               "value": "0"
             },
             {
-              "label": "Bilinear (Forçado)",
+              "label": "TRILINEAR (PS2)",
               "value": "1"
             },
             {
-              "label": "Bilinear (PS2)",
+              "label": "TRILINEAR (FORCED)",
               "value": "2"
-            },
-            {
-              "label": "Bilinear (Forçado exceto sprites)",
-              "value": "3"
             }
-          ]
+          ],
+          "realKey": "TriFilter",
+          "realSection": "EmuCore/GS",
+          "realFile": "Pcsx2.Generator.cs"
         },
         {
           "id": "anisotropic_filtering",
           "label": "Filtragem Anisotrópica",
-          "description": "Melhora a nitidez de texturas em ângulos oblíquos.",
+          "description": "Enhance the quality of textures Ativado surface.",
           "type": "select",
           "default": "auto",
           "configKey": "anisotropic_filtering",
           "values": [
-            {
-              "label": "Automático",
-              "value": "auto"
-            },
             {
               "label": "Desativado",
               "value": "0"
@@ -175,225 +376,146 @@
               "label": "16x",
               "value": "16"
             }
-          ]
+          ],
+          "realKey": "MaxAnisotropy",
+          "realSection": "Settings",
+          "realFile": "Pcsx2.Generator.cs"
         },
         {
-          "id": "texture_filtering",
-          "label": "Filtragem de Textura",
-          "description": "Método de filtragem de texturas do GS.",
+          "id": "pcrtc_antiblur",
+          "label": "ANTI BLUR",
+          "description": "Enables anti blur hack, less accurate but makes games less blurry.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "pcrtc_antiblur",
+          "realKey": "pcrtc_antiblur",
+          "realSection": "EmuCore/GS",
+          "realFile": "Pcsx2.Generator.cs"
+        },
+        {
+          "id": "blending_accuracy",
+          "label": "BLENDING ACCURACY",
+          "description": "Control the accuracy level of GS blending unit. Higher values will emulate blending more accurately in the shader.",
+          "type": "slider",
+          "default": "auto",
+          "configKey": "blending_accuracy",
+          "min": 0,
+          "max": 5,
+          "step": 1,
+          "realKey": "accurate_blending_unit",
+          "realSection": "EmuCore/GS",
+          "realFile": "Pcsx2.Generator.cs"
+        },
+        {
+          "id": "dithering",
+          "label": "DITHERING FILTER",
+          "description": "Improves color depth.",
           "type": "select",
           "default": "auto",
-          "configKey": "texture_filtering",
+          "configKey": "dithering",
           "values": [
             {
-              "label": "Automático",
-              "value": "auto"
-            },
-            {
-              "label": "Nearest",
-              "value": "0"
-            },
-            {
-              "label": "Bilinear (Forçado)",
-              "value": "1"
-            },
-            {
-              "label": "Bilinear (PS2)",
+              "label": "UNSCALED",
               "value": "2"
             },
             {
-              "label": "Bilinear (Forçado exceto sprites)",
+              "label": "Desativado",
+              "value": "0"
+            },
+            {
+              "label": "SCALED",
+              "value": "1"
+            },
+            {
+              "label": "FORCE 32 BITS",
               "value": "3"
             }
-          ]
+          ],
+          "realKey": "dithering_ps2",
+          "realSection": "EmuCore/GS",
+          "realFile": "Pcsx2.Generator.cs"
         },
         {
-          "id": "trilinear_filtering",
-          "label": "Filtragem Trilinear",
-          "description": "Suavização entre níveis de mipmap para mais qualidade.",
+          "id": "pcsx2_casmode",
+          "label": "CONTRAST Adaptável SHARPENING",
+          "description": "Enable FidelityFX contrast Adaptável sharpening.",
           "type": "select",
           "default": "auto",
-          "configKey": "trilinear_filtering",
+          "configKey": "pcsx2_casmode",
           "values": [
-            {
-              "label": "Automático",
-              "value": "auto"
-            },
             {
               "label": "Desativado",
               "value": "0"
             },
             {
-              "label": "Trilinear (PS2)",
+              "label": "SHARPEN ONLY",
               "value": "1"
             },
             {
-              "label": "Trilinear (Forçado)",
+              "label": "SHARPEN AND SCALE",
               "value": "2"
             }
-          ]
+          ],
+          "realKey": "CASMode",
+          "realSection": "EmuCore/GS",
+          "realFile": "Pcsx2.Generator.cs"
         },
         {
-          "id": "interlace",
-          "label": "Desentrelaçamento",
-          "description": "Método para converter vídeo entrelaçado em progressivo.",
+          "id": "hires_textures",
+          "label": "CUSTOM TEXTURES",
+          "description": "Replace original textures with custom textures pack.",
           "type": "select",
           "default": "auto",
-          "configKey": "interlace",
+          "configKey": "hires_textures",
           "values": [
             {
-              "label": "Automático",
-              "value": "auto"
-            },
-            {
-              "label": "Desativado",
+              "label": "Não",
               "value": "0"
             },
             {
-              "label": "Weave (Top Field First)",
+              "label": "Sim (PRECACHE)",
               "value": "1"
             },
             {
-              "label": "Weave (Bottom Field First)",
+              "label": "Sim (Não PRECACHE)",
               "value": "2"
-            },
-            {
-              "label": "Bob (Top Field First)",
-              "value": "3"
-            },
-            {
-              "label": "Bob (Bottom Field First)",
-              "value": "4"
-            },
-            {
-              "label": "Blend (Top Field First)",
-              "value": "5"
-            },
-            {
-              "label": "Blend (Bottom Field First)",
-              "value": "6"
-            },
-            {
-              "label": "Adaptive",
-              "value": "7"
             }
-          ]
+          ],
+          "realKey": "hires_textures",
+          "realFile": "Pcsx2.Generator.cs"
         },
         {
-          "id": "fmv_ratio",
-          "label": "Proporção de FMV",
-          "description": "Proporção de tela para vídeos pré-renderizados (FMVs).",
+          "id": "renderer",
+          "label": "Vídeo",
+          "description": "Select which graphics API to use internally. Software mode disable graphics enhancements.",
           "type": "select",
           "default": "auto",
-          "configKey": "fmv_ratio",
+          "configKey": "renderer",
           "values": [
             {
-              "label": "Automático",
-              "value": "auto"
-            },
-            {
-              "label": "Desativado",
-              "value": "0"
-            },
-            {
-              "label": "4:3",
-              "value": "1"
-            },
-            {
-              "label": "16:9",
-              "value": "2"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "id": "hacks",
-      "title": "Correções / Hacks",
-      "icon": "wrench",
-      "order": 2,
-      "options": [
-        {
-          "id": "UserHacks_HalfPixelOffset",
-          "label": "Half Pixel Offset",
-          "description": "Corrige problemas de alinhamento de pixels em alguns jogos (God of War, Shadow of the Colossus).",
-          "type": "select",
-          "default": "auto",
-          "configKey": "UserHacks_HalfPixelOffset",
-          "values": [
-            {
-              "label": "Automático",
-              "value": "auto"
-            },
-            {
-              "label": "Desativado",
-              "value": "0"
-            },
-            {
-              "label": "Normal (Vertex)",
-              "value": "1"
-            },
-            {
-              "label": "Especial (Texture)",
-              "value": "2"
-            },
-            {
-              "label": "Especial (Texture Agressivo)",
+              "label": "DIRECT3D 11",
               "value": "3"
             },
             {
-              "label": "Alinhado ao Native Res",
-              "value": "4"
+              "label": "DIRECT3D 12",
+              "value": "15"
+            },
+            {
+              "label": "OPENGL",
+              "value": "12"
+            },
+            {
+              "label": "VULKAN",
+              "value": "14"
+            },
+            {
+              "label": "SOFTWARE",
+              "value": "13"
             }
-          ]
-        },
-        {
-          "id": "UserHacks_round_sprite_offset",
-          "label": "Round Sprite Offset",
-          "description": "Corrige linhas entre sprites em alguns jogos 2D.",
-          "type": "select",
-          "default": "auto",
-          "configKey": "UserHacks_round_sprite_offset",
-          "values": [
-            {
-              "label": "Automático",
-              "value": "auto"
-            },
-            {
-              "label": "Desativado",
-              "value": "0"
-            },
-            {
-              "label": "Half",
-              "value": "1"
-            },
-            {
-              "label": "Full",
-              "value": "2"
-            }
-          ]
-        },
-        {
-          "id": "TextureOffsets",
-          "label": "Offsets de Textura",
-          "description": "Correção de desalinhamento de texturas em alta resolução.",
-          "type": "select",
-          "default": "auto",
-          "configKey": "TextureOffsets",
-          "values": [
-            {
-              "label": "Automático",
-              "value": "auto"
-            },
-            {
-              "label": "Desativado",
-              "value": "0"
-            },
-            {
-              "label": "Ativado",
-              "value": "1"
-            }
-          ]
+          ],
+          "realKey": "Renderer",
+          "realSection": "Settings",
+          "realFile": "Pcsx2.Generator.cs"
         }
       ]
     },
@@ -401,71 +523,1236 @@
       "id": "emulation",
       "title": "Emulação",
       "icon": "cpu",
-      "order": 3,
+      "order": 2,
       "options": [
         {
-          "id": "pcsx2_fastboot",
-          "label": "Fast Boot",
-          "description": "Pula a animação de boot do PS2 ao iniciar jogos.",
+          "id": "mipmap",
+          "label": "MIP MAPPING",
+          "description": "Mipmapping is necessary for some games.",
           "type": "toggle",
-          "default": "true",
-          "configKey": "pcsx2_fastboot"
+          "default": "auto",
+          "configKey": "mipmap",
+          "realKey": "hw_mipmap",
+          "realSection": "EmuCore/GS",
+          "realFile": "Pcsx2.Generator.cs"
         },
         {
           "id": "fullboot",
-          "label": "Full Boot",
-          "description": "Exige boot completo do PS2 (útil para BIOS e testes).",
+          "label": "SKIP BIOS",
+          "description": "Skips the BIOS boot animation displayed when loading content.",
           "type": "toggle",
-          "default": "true",
+          "default": "auto",
           "configKey": "fullboot"
         },
         {
+          "id": "pcsx2_fastboot",
+          "label": "Inicialização Rápida (Fast Boot)",
+          "description": "Boost Emulação during boot.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "pcsx2_fastboot"
+        },
+        {
           "id": "pcsx2_forcebios",
-          "label": "Forçar BIOS",
-          "description": "Arquivo de BIOS específico para usar.",
+          "label": "FORCE BIOS",
+          "description": "Force the emulator to use a specific BIOS file.",
           "type": "select",
-          "default": "ps2-0230a-20080220.bin",
+          "default": "auto",
           "configKey": "pcsx2_forcebios",
           "values": [
             {
-              "label": "Automático",
-              "value": "auto"
-            },
-            {
-              "label": "PS2 NTSC-U/C (v02.30)",
+              "label": "USA 230",
               "value": "ps2-0230a-20080220.bin"
             },
             {
-              "label": "PS2 PAL (v02.30)",
+              "label": "EUR 230",
               "value": "ps2-0230e-20080220.bin"
             },
             {
-              "label": "PS2 NTSC-J (v02.30)",
+              "label": "EUR 250",
+              "value": "ps2-0250e-20100415.bin"
+            },
+            {
+              "label": "JAP 230",
               "value": "ps2-0230j-20080220.bin"
+            },
+            {
+              "label": "PS3 PS2 FIRMWARE",
+              "value": "ps3_ps2_emu_bios.bin"
             }
-          ]
+          ],
+          "realKey": "Bios",
+          "realSection": "Folders",
+          "realFile": "Pcsx2.Generator.cs"
         },
         {
           "id": "pcsx2_slot1_memory",
-          "label": "Memory Card Slot 1",
-          "description": "Configuração do Memory Card no slot 1.",
+          "label": "SLOT 1 MEMORY CARD",
           "type": "select",
           "default": "auto",
           "configKey": "pcsx2_slot1_memory",
           "values": [
             {
-              "label": "Automático (Compartilhado)",
-              "value": "auto"
+              "label": "STANDARD MEMORY CARD",
+              "value": "standard"
             },
             {
-              "label": "Por Jogo",
-              "value": "pergame"
+              "label": "FOLDER",
+              "value": "folder"
             },
+            {
+              "label": "PER GAME MEMORY CARD",
+              "value": "game"
+            }
+          ],
+          "realKey": "pcsx2_slot1_memory",
+          "realFile": "Pcsx2.Generator.cs"
+        },
+        {
+          "id": "enable_cheats",
+          "label": "Ativar Cheats / Trapaças",
+          "description": "Automatically loads and applies cheats Ativado game start.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "enable_cheats",
+          "realKey": "EnableCheats",
+          "realSection": "EmuCore",
+          "realFile": "Pcsx2.Generator.cs"
+        },
+        {
+          "id": "pcsx2_startbios",
+          "label": "START BIOS",
+          "description": "This will run the console BIOS instead of a game.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "pcsx2_startbios"
+        },
+        {
+          "id": "pcsx2_vuthread",
+          "label": "MULTITHREAD VU1",
+          "description": "Improve performance for cpu with more than 4 cores, Padrão is enabled.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "pcsx2_vuthread",
+          "realKey": "vuThread",
+          "realSection": "EmuCore/Speedhacks",
+          "realFile": "Pcsx2.Generator.cs"
+        },
+        {
+          "id": "pcsx2_NominalScalar",
+          "label": "Emulação SPEED",
+          "type": "slider",
+          "default": "auto",
+          "configKey": "pcsx2_NominalScalar",
+          "min": 0.5,
+          "max": 2,
+          "step": 0.1,
+          "suffix": "x",
+          "realKey": "NominalScalar",
+          "realSection": "Framerate",
+          "realFile": "Pcsx2.Generator.cs"
+        },
+        {
+          "id": "bigpicture",
+          "label": "BIGPICTURE MODE",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "bigpicture"
+        },
+        {
+          "id": "DrawFramerate",
+          "label": "DRAW STATISTICS",
+          "description": "Enable performance statistics.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "DrawFramerate"
+        },
+        {
+          "id": "Notifications",
+          "label": "NOTIFICATIONS",
+          "description": "Show notifications.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "Notifications",
+          "realKey": "OsdShowMessages",
+          "realSection": "EmuCore/GS",
+          "realFile": "Pcsx2.Generator.cs"
+        },
+        {
+          "id": "pcsx2_gui",
+          "label": "SHOW GUI",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "pcsx2_gui"
+        },
+        {
+          "id": "pcsx2_osdposition",
+          "label": "OSD MESSAGES POSITION",
+          "type": "select",
+          "default": "auto",
+          "configKey": "pcsx2_osdposition",
+          "values": [
+            {
+              "label": "BOTTOM CENTER",
+              "value": "8"
+            },
+            {
+              "label": "TOP LEFT",
+              "value": "1"
+            },
+            {
+              "label": "TOP CENTER",
+              "value": "2"
+            },
+            {
+              "label": "TOP RIGHT",
+              "value": "3"
+            },
+            {
+              "label": "CENTER LEFT",
+              "value": "4"
+            },
+            {
+              "label": "CENTER",
+              "value": "5"
+            },
+            {
+              "label": "CENTER RIGHT",
+              "value": "6"
+            },
+            {
+              "label": "BOTTOM LEFT",
+              "value": "7"
+            },
+            {
+              "label": "BOTTOM RIGHT",
+              "value": "9"
+            },
+            {
+              "label": "Nenhum",
+              "value": "0"
+            }
+          ],
+          "realKey": "OsdMessagesPos",
+          "realSection": "EmuCore/GS",
+          "realFile": "Pcsx2.Generator.cs"
+        },
+        {
+          "id": "pcsx2_perfposition",
+          "label": "OSD PERFORMANCE POSITION",
+          "type": "select",
+          "default": "auto",
+          "configKey": "pcsx2_perfposition",
+          "values": [
+            {
+              "label": "TOP CENTER",
+              "value": "2"
+            },
+            {
+              "label": "TOP LEFT",
+              "value": "1"
+            },
+            {
+              "label": "TOP RIGHT",
+              "value": "3"
+            },
+            {
+              "label": "CENTER LEFT",
+              "value": "4"
+            },
+            {
+              "label": "CENTER",
+              "value": "5"
+            },
+            {
+              "label": "CENTER RIGHT",
+              "value": "6"
+            },
+            {
+              "label": "BOTTOM LEFT",
+              "value": "7"
+            },
+            {
+              "label": "BOTTOM CENTER",
+              "value": "8"
+            },
+            {
+              "label": "BOTTOM RIGHT",
+              "value": "9"
+            },
+            {
+              "label": "Nenhum",
+              "value": "0"
+            }
+          ],
+          "realKey": "OsdPerformancePos",
+          "realSection": "EmuCore/GS",
+          "realFile": "Pcsx2.Generator.cs"
+        },
+        {
+          "id": "pcsx2_achievposition",
+          "label": "ACHIEVEMENT NOTIFICATIONS POSITION",
+          "type": "select",
+          "default": "auto",
+          "configKey": "pcsx2_achievposition",
+          "values": [
+            {
+              "label": "TOP CENTER",
+              "value": "2"
+            },
+            {
+              "label": "TOP LEFT",
+              "value": "1"
+            },
+            {
+              "label": "TOP RIGHT",
+              "value": "3"
+            },
+            {
+              "label": "CENTER LEFT",
+              "value": "4"
+            },
+            {
+              "label": "CENTER",
+              "value": "5"
+            },
+            {
+              "label": "CENTER RIGHT",
+              "value": "6"
+            },
+            {
+              "label": "BOTTOM LEFT",
+              "value": "7"
+            },
+            {
+              "label": "BOTTOM CENTER",
+              "value": "8"
+            },
+            {
+              "label": "BOTTOM RIGHT",
+              "value": "9"
+            },
+            {
+              "label": "Nenhum",
+              "value": "0"
+            }
+          ],
+          "realKey": "NotificationPosition",
+          "realSection": "Achievements",
+          "realFile": "Pcsx2.Generator.cs"
+        },
+        {
+          "id": "pcsx2_ethenable",
+          "label": "ENABLE NETWORK",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "pcsx2_ethenable",
+          "realKey": "EthEnable",
+          "realSection": "DEV9/Eth",
+          "realFile": "Pcsx2.Generator.cs"
+        },
+        {
+          "id": "pcsx2_modedns1",
+          "label": "DNS1 MODE",
+          "description": "When selecting 'MANUAL', specify an address in the next setting.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "pcsx2_modedns1",
+          "values": [
+            {
+              "label": "Automático",
+              "value": "Auto"
+            },
+            {
+              "label": "MANUAL ADRESS",
+              "value": "Manual"
+            },
+            {
+              "label": "INTERNAL",
+              "value": "Internal"
+            }
+          ],
+          "realKey": "ModeDNS1",
+          "realSection": "DEV9/Eth",
+          "realFile": "Pcsx2.Generator.cs"
+        },
+        {
+          "id": "pcsx2_dns1",
+          "label": "DNS1 ADDRESS",
+          "description": "When an address is entered, the mode will automatically be set as 'MANUAL'.",
+          "type": "input",
+          "default": "auto",
+          "configKey": "pcsx2_dns1",
+          "realKey": "DNS1",
+          "realSection": "DEV9/Eth",
+          "realFile": "Pcsx2.Generator.cs"
+        },
+        {
+          "id": "pcsx2_modedns2",
+          "label": "DNS2 MODE",
+          "description": "When selecting 'MANUAL', specify an address in the next setting.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "pcsx2_modedns2",
+          "values": [
+            {
+              "label": "Automático",
+              "value": "Auto"
+            },
+            {
+              "label": "MANUAL ADRESS",
+              "value": "Manual"
+            },
+            {
+              "label": "INTERNAL",
+              "value": "Internal"
+            }
+          ],
+          "realKey": "ModeDNS2",
+          "realSection": "DEV9/Eth",
+          "realFile": "Pcsx2.Generator.cs"
+        },
+        {
+          "id": "pcsx2_dns2",
+          "label": "DNS2 ADDRESS",
+          "description": "When an address is entered, the mode will automatically be set as 'MANUAL'.",
+          "type": "input",
+          "default": "auto",
+          "configKey": "pcsx2_dns2",
+          "realKey": "DNS2",
+          "realSection": "DEV9/Eth",
+          "realFile": "Pcsx2.Generator.cs"
+        }
+      ]
+    },
+    {
+      "id": "hacks",
+      "title": "Correções / Hacks",
+      "icon": "wrench",
+      "order": 3,
+      "options": [
+        {
+          "id": "disable_interlace_offset",
+          "label": "Desativar Offset de Interlace",
+          "description": "Switching this Ativado when using a dedicated Modo de Desentrelaçamento can help reduce blur.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "disable_interlace_offset",
+          "realKey": "disable_interlace_offset",
+          "realSection": "EmuCore/GS",
+          "realFile": "Pcsx2.Generator.cs"
+        },
+        {
+          "id": "widescreen_patch",
+          "label": "Patches Widescreen",
+          "description": "Automatically load Patches Widescreen Ativado game start-up.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "widescreen_patch",
+          "realKey": "EnableWideScreenPatches",
+          "realSection": "EmuCore",
+          "realFile": "Pcsx2.Generator.cs"
+        },
+        {
+          "id": "interlacing_patch",
+          "label": "Patches No-Interlace",
+          "description": "Automatically load Patches Não-Interlace Ativado game start-up.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "interlacing_patch",
+          "realKey": "EnableNoInterlacingPatches",
+          "realSection": "EmuCore",
+          "realFile": "Pcsx2.Generator.cs"
+        },
+        {
+          "id": "pcrtc_offsets",
+          "label": "SCREEN OFFSETS",
+          "description": "Useful for games with screenshake effects such as Wipeout Fusion, can make the picture blury.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "pcrtc_offsets",
+          "realKey": "pcrtc_offsets",
+          "realSection": "EmuCore/GS",
+          "realFile": "Pcsx2.Generator.cs"
+        },
+        {
+          "id": "UserHacks",
+          "label": "MANUAL RENDERER FIXES",
+          "description": "Enable manual Hacks / Velocidade below, otherwise Hacks / Velocidade will be apllied automatically.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "UserHacks",
+          "realKey": "UserHacks",
+          "realSection": "EmuCore/GS",
+          "realFile": "Pcsx2.Generator.cs"
+        },
+        {
+          "id": "UserHacks_SkipDraw_Start",
+          "label": "SKIPDRAW START (HACK)",
+          "description": "Skips drawing surfaces for the area defined left and right.",
+          "type": "slider",
+          "default": "auto",
+          "configKey": "UserHacks_SkipDraw_Start",
+          "min": 0,
+          "max": 50,
+          "step": 1,
+          "realKey": "UserHacks_SkipDraw_Offset",
+          "realSection": "Settings",
+          "realFile": "Pcsx2.Generator.cs"
+        },
+        {
+          "id": "UserHacks_SkipDraw_End",
+          "label": "SKIPDRAW END (HACK)",
+          "type": "slider",
+          "default": "auto",
+          "configKey": "UserHacks_SkipDraw_End",
+          "min": 0,
+          "max": 50,
+          "step": 1,
+          "realKey": "UserHacks_SkipDraw",
+          "realSection": "Settings",
+          "realFile": "Pcsx2.Generator.cs"
+        },
+        {
+          "id": "UserHacks_Disable_Safe_Features",
+          "label": "DISABLE SAFE FEATURES",
+          "description": "Disabling safe features can help various games such as Xenosaga, Kingdom Hearts...",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "UserHacks_Disable_Safe_Features",
+          "realKey": "UserHacks_Disable_Safe_Features",
+          "realSection": "Settings",
+          "realFile": "Pcsx2.Generator.cs"
+        },
+        {
+          "id": "UserHacks_HalfPixelOffset",
+          "label": "HALF PIXEL OFFSET",
+          "description": "Might fix some misaligned fog, bloom or blend effect.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "UserHacks_HalfPixelOffset",
+          "values": [
             {
               "label": "Desativado",
-              "value": "disabled"
+              "value": "0"
+            },
+            {
+              "label": "NORMAL (VERTEX)",
+              "value": "1"
+            },
+            {
+              "label": "SPECIAL (TEXTURE)",
+              "value": "2"
+            },
+            {
+              "label": "SPECIAL (TEXTURE AGRESSIVE)",
+              "value": "3"
+            },
+            {
+              "label": "ALIGN TO NATIVE",
+              "value": "4"
+            }
+          ],
+          "realKey": "UserHacks_HalfPixelOffset",
+          "realSection": "Settings",
+          "realFile": "Pcsx2.Generator.cs"
+        },
+        {
+          "id": "UserHacks_round_sprite_offset",
+          "label": "ROUND SPRITE",
+          "description": "Correct the sampling of 2D sprite textures when upscaling.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "UserHacks_round_sprite_offset",
+          "values": [
+            {
+              "label": "Desativado",
+              "value": "0"
+            },
+            {
+              "label": "HALF",
+              "value": "1"
+            },
+            {
+              "label": "FULL",
+              "value": "2"
+            }
+          ],
+          "realKey": "UserHacks_round_sprite_offset",
+          "realSection": "Settings",
+          "realFile": "Pcsx2.Generator.cs"
+        },
+        {
+          "id": "UserHacks_align_sprite_X",
+          "label": "ALIGN SPRITE",
+          "description": "Fix issues with upscaling in Namco games (Ace Combat, Tekken, SoulCalibur...).",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "UserHacks_align_sprite_X",
+          "realKey": "UserHacks_align_sprite_X",
+          "realSection": "EmuCore/GS",
+          "realFile": "Pcsx2.Generator.cs"
+        },
+        {
+          "id": "UserHacks_merge_pp_sprite",
+          "label": "MERGE SPRITE",
+          "description": "Replaces post-processing multiple paving sprites by a single fat sprite.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "UserHacks_merge_pp_sprite",
+          "realKey": "UserHacks_merge_pp_sprite",
+          "realSection": "Settings",
+          "realFile": "Pcsx2.Generator.cs"
+        },
+        {
+          "id": "UserHacks_forceEvenSpritePosition",
+          "label": "WILD ARMS HACK",
+          "description": "Lower the GS precision to avoid gap between pixels when upscaling. Fix Wild Arms text, SoulCalibur ghosting.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "UserHacks_forceEvenSpritePosition",
+          "realKey": "UserHacks_forceEvenSpritePosition",
+          "realSection": "EmuCore/GS",
+          "realFile": "Pcsx2.Generator.cs"
+        },
+        {
+          "id": "TextureOffsets",
+          "label": "TEXTURE OFFSETS (HACK)",
+          "description": "Offset for the ST/UV texture coordinates.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "TextureOffsets",
+          "values": [
+            {
+              "label": "X:0500 Y:0500 (Persona 3, Haunting Ground)",
+              "value": "1"
+            },
+            {
+              "label": "X:0000 Y:1000 (Xenosaga)",
+              "value": "2"
+            }
+          ],
+          "realKey": "TextureOffsets",
+          "realFile": "Pcsx2.Generator.cs"
+        },
+        {
+          "id": "FpuMulHack",
+          "label": "FPU MULTIPLY",
+          "description": "For Tales of Destiny.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "FpuMulHack"
+        },
+        {
+          "id": "SoftwareRendererFMVHack",
+          "label": "SOFTWARE RENDERER FOR FMV",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "SoftwareRendererFMVHack"
+        },
+        {
+          "id": "SkipMPEGHack",
+          "label": "SKIP MPEG",
+          "description": "Skip videos/FMVs.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "SkipMPEGHack"
+        },
+        {
+          "id": "GoemonTlbHack",
+          "label": "PRELOAD TLB",
+          "description": "For Goemon.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "GoemonTlbHack"
+        },
+        {
+          "id": "EETimingHack",
+          "label": "EE TIMING HACK",
+          "description": "General purpose timing hack.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "EETimingHack"
+        },
+        {
+          "id": "InstantDMAHack",
+          "label": "INSTANT DMA HACK",
+          "description": "Good for cache Emulação problems.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "InstantDMAHack"
+        },
+        {
+          "id": "OPHFlagHack",
+          "label": "OPH FLAG HACK",
+          "description": "For Bleach Blade Battlers.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "OPHFlagHack"
+        },
+        {
+          "id": "GIFFIFOHack",
+          "label": "EMULATE GIF FIFO",
+          "description": "Correct but slower.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "GIFFIFOHack"
+        },
+        {
+          "id": "DMABusyHack",
+          "label": "DMA BUSY HACK",
+          "description": "Deny writes when busy.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "DMABusyHack"
+        },
+        {
+          "id": "VIF1StallHack",
+          "label": "DELAY VIF1 STALLS",
+          "description": "For SOCOM 2 HUD/Spy Hunter.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "VIF1StallHack"
+        },
+        {
+          "id": "VIFFIFOHack",
+          "label": "EMULATE VIF FIFO",
+          "description": "Correct but slower.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "VIFFIFOHack"
+        },
+        {
+          "id": "IbitHack",
+          "label": "VU I BIT HACK",
+          "description": "For Scarface The World is Yours and Crash Tag Team Racing.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "IbitHack"
+        },
+        {
+          "id": "VuAddSubHack",
+          "label": "VU ADD HACK",
+          "description": "For Tri-Ace Games.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "VuAddSubHack"
+        },
+        {
+          "id": "VUOverflowHack",
+          "label": "VU OVERFLOW HACK",
+          "description": "For Superman Returns.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "VUOverflowHack"
+        },
+        {
+          "id": "VUSyncHack",
+          "label": "VU SYNC",
+          "description": "For Run Behind and M-bit Games.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "VUSyncHack"
+        },
+        {
+          "id": "XgKickHack",
+          "label": "VU XGKICK SYNC",
+          "description": "Correct but slower.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "XgKickHack"
+        },
+        {
+          "id": "BlitInternalFPSHack",
+          "label": "FORCE BLIT INTERNAL FPS DETECTION",
+          "description": "When Automático-detection fails.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "BlitInternalFPSHack"
+        }
+      ]
+    },
+    {
+      "id": "audio",
+      "title": "Áudio",
+      "icon": "volume2",
+      "order": 4,
+      "options": [
+        {
+          "id": "pcsx2_apu",
+          "label": "Áudio",
+          "type": "select",
+          "default": "auto",
+          "configKey": "pcsx2_apu",
+          "values": [
+            {
+              "label": "CUBEB",
+              "value": "Cubeb"
+            },
+            {
+              "label": "SDL",
+              "value": "SDL"
+            }
+          ],
+          "realKey": "Backend",
+          "realSection": "SPU2/Output",
+          "realFile": "Pcsx2.Generator.cs"
+        }
+      ]
+    },
+    {
+      "id": "controls",
+      "title": "Controles",
+      "icon": "gamepad2",
+      "order": 5,
+      "options": [
+        {
+          "id": "pcsx2_input_driver_force",
+          "label": "INPUT",
+          "description": "Force usage of SDL or DInput driver for controllers, set this if more than 4 controllers are used, as XInput limits to 4 players.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "pcsx2_input_driver_force",
+          "values": [
+            {
+              "label": "FORCE SDL",
+              "value": "1"
+            },
+            {
+              "label": "FORCE DINPUT",
+              "value": "dinput"
+            }
+          ],
+          "realKey": "pcsx2_input_driver_force",
+          "realFile": "Pcsx2.Controllers.cs"
+        },
+        {
+          "id": "pcsx2_multitap",
+          "label": "USE MULTITAP",
+          "type": "select",
+          "default": "auto",
+          "configKey": "pcsx2_multitap",
+          "values": [
+            {
+              "label": "Não",
+              "value": "none"
+            },
+            {
+              "label": "PORT 1",
+              "value": "port1"
+            },
+            {
+              "label": "PORT 2",
+              "value": "port2"
+            },
+            {
+              "label": "BOTH PORTS",
+              "value": "both"
+            }
+          ],
+          "realKey": "MultitapPort1",
+          "realSection": "Pad",
+          "realFile": "Pcsx2.Controllers.cs"
+        },
+        {
+          "id": "use_guitar",
+          "label": "USE GUITAR",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "use_guitar"
+        },
+        {
+          "id": "pcsx2_stick_dpad",
+          "label": "USE LEFT STICK AS DPAD",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "pcsx2_stick_dpad"
+        },
+        {
+          "id": "pcsx2_triggersdriving",
+          "label": "USE TRIGGERS TO BRAKE/ACCELERATE",
+          "description": "Can be useful for Gran Turismo, triggers will be mapped to different buttons.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "pcsx2_triggersdriving",
+          "values": [
+            {
+              "label": "TRIGGERS AS SQUARE AND CROSS",
+              "value": "square_cross"
+            },
+            {
+              "label": "TRIGGERS AS RIGHT STICK",
+              "value": "righty"
+            },
+            {
+              "label": "TRIGGERS AS LEFT STICK",
+              "value": "lefty"
             }
           ]
+        },
+        {
+          "id": "pcsx2_pressure",
+          "label": "PRESSURE MODIFIER BUTTON",
+          "description": "Can be useful for Metal Gear, to simulate pressure sensitivity.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "pcsx2_pressure",
+          "values": [
+            {
+              "label": "LEFT STICK",
+              "value": "leftstick"
+            },
+            {
+              "label": "RIGHT STICK",
+              "value": "rightstick"
+            }
+          ]
+        },
+        {
+          "id": "pcsx2_pressure_modifier",
+          "label": "PRESSURE MODIFIER QUANTITY",
+          "type": "slider",
+          "default": "auto",
+          "configKey": "pcsx2_pressure_modifier",
+          "min": 0.01,
+          "max": 0.75,
+          "step": 0.02,
+          "suffix": "%"
+        },
+        {
+          "id": "pcsx2_deadzone",
+          "label": "JOYSTICK DEADZONE",
+          "type": "slider",
+          "default": "auto",
+          "configKey": "pcsx2_deadzone",
+          "min": 0,
+          "max": 0.5,
+          "step": 0.02,
+          "suffix": "%"
+        },
+        {
+          "id": "pcsx2_axisscale",
+          "label": "ANALOG SENSITIVITY",
+          "type": "slider",
+          "default": "auto",
+          "configKey": "pcsx2_axisscale",
+          "min": 0.5,
+          "max": 1.5,
+          "step": 0.05,
+          "suffix": "%"
+        },
+        {
+          "id": "pcsx2_rumble_strength",
+          "label": "RUMBLE STRENGTH",
+          "type": "slider",
+          "default": "auto",
+          "configKey": "pcsx2_rumble_strength",
+          "min": 0,
+          "max": 1,
+          "step": 0.05,
+          "suffix": "%"
+        },
+        {
+          "id": "pcsx2_trigger_deadzone",
+          "label": "TRIGGERS DEADZONE",
+          "type": "slider",
+          "default": "auto",
+          "configKey": "pcsx2_trigger_deadzone",
+          "min": 0,
+          "max": 0.5,
+          "step": 0.02,
+          "suffix": "%"
+        },
+        {
+          "id": "pcsx2_gun",
+          "label": "PLAYER 1 GUN PORT",
+          "type": "select",
+          "default": "auto",
+          "configKey": "pcsx2_gun",
+          "values": [
+            {
+              "label": "USB 1",
+              "value": "USB1"
+            },
+            {
+              "label": "USB 2",
+              "value": "USB2"
+            }
+          ],
+          "realKey": "pcsx2_gun",
+          "realFile": "Pcsx2.Guns.cs"
+        },
+        {
+          "id": "pcsx2_gunmapping",
+          "label": "GUNCON BUTTON MAPPING",
+          "description": "Define how to map the guncon2 buttons.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "pcsx2_gunmapping",
+          "values": [
+            {
+              "label": "KB & MOUSE (MOUSE MID\\LEFT as START\\A)",
+              "value": "keyboard_middle"
+            },
+            {
+              "label": "KB (RETURN as START)",
+              "value": "keyboard_return"
+            },
+            {
+              "label": "KB (VOL+ & VOL- as A/B)",
+              "value": "keyboard_volume"
+            },
+            {
+              "label": "GAMEPAD",
+              "value": "controller"
+            }
+          ],
+          "realKey": "pcsx2_gunmapping",
+          "realFile": "Pcsx2.Guns.cs"
+        },
+        {
+          "id": "gun_invert",
+          "label": "INVERT TRIGGER/RELOAD",
+          "description": "Activate this when using WiiZapper to invert trigger and reload buttons.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "gun_invert"
+        },
+        {
+          "id": "gun_calibrate",
+          "label": "CALIBRATION BUTTON",
+          "description": "By Padrão, calibration is done with middle mouse button, this setting allows to set an alternative button for the calibration shot.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "gun_calibrate",
+          "values": [
+            {
+              "label": "MIDDLE MOUSE",
+              "value": "middle_mouse"
+            },
+            {
+              "label": "TRIGGER",
+              "value": "trigger"
+            },
+            {
+              "label": "KEYBOARD LEFT SHIFT",
+              "value": "leftshift"
+            },
+            {
+              "label": "GAMEPAD R1",
+              "value": "gamepadr"
+            }
+          ],
+          "realKey": "gun_calibrate",
+          "realFile": "Pcsx2.Guns.cs"
+        },
+        {
+          "id": "pcsx2_crosshair",
+          "label": "CROSSHAIR",
+          "description": "Place custom 'crosshair.png' file in 'cross' subfolder of the emulator or select file below.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "pcsx2_crosshair",
+          "values": [
+            {
+              "label": "Nenhum",
+              "value": "disabled"
+            },
+            {
+              "label": "MOUSE CURSOR",
+              "value": "mouse"
+            },
+            {
+              "label": "CUSTOM",
+              "value": "custom"
+            }
+          ],
+          "realKey": "pcsx2_crosshair",
+          "realFile": "Pcsx2.Guns.cs"
+        },
+        {
+          "id": "pcsx2_crosshairpath",
+          "label": "CUSTOM CROSSHAIR FILE",
+          "description": "Use 'custom' crosshair to enable the crosshair file selected.",
+          "type": "input",
+          "default": "auto",
+          "configKey": "pcsx2_crosshairpath",
+          "realKey": "pcsx2_crosshair",
+          "realFile": "Pcsx2.Guns.cs"
+        },
+        {
+          "id": "pcsx2_crosshair_size",
+          "label": "CUSTOM CROSSHAIR SIZE",
+          "description": "Values above 1.00 will increase size, values below will reduce.",
+          "type": "slider",
+          "default": "auto",
+          "configKey": "pcsx2_crosshair_size",
+          "min": 0.01,
+          "max": 2,
+          "step": 0.05,
+          "suffix": "%"
+        },
+        {
+          "id": "pcsx2_force_feedback",
+          "label": "ENABLE FORCE FEEDBACK",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "pcsx2_force_feedback"
+        },
+        {
+          "id": "pcsx2_wheeltype",
+          "label": "WHEEL TYPE PLAYER 1",
+          "type": "select",
+          "default": "auto",
+          "configKey": "pcsx2_wheeltype",
+          "values": [
+            {
+              "label": "DRIVING FORCE",
+              "value": "0"
+            },
+            {
+              "label": "DRIVING FORCE PRO",
+              "value": "1"
+            },
+            {
+              "label": "DRIVING FORCE PRO(REV11.02)",
+              "value": "2"
+            },
+            {
+              "label": "GT FORCE",
+              "value": "3"
+            }
+          ]
+        },
+        {
+          "id": "pcsx2_wheeltype2",
+          "label": "WHEEL TYPE PLAYER 2",
+          "type": "select",
+          "default": "auto",
+          "configKey": "pcsx2_wheeltype2",
+          "values": [
+            {
+              "label": "DRIVING FORCE",
+              "value": "0"
+            },
+            {
+              "label": "DRIVING FORCE PRO",
+              "value": "1"
+            },
+            {
+              "label": "DRIVING FORCE PRO(REV11.02)",
+              "value": "2"
+            },
+            {
+              "label": "GT FORCE",
+              "value": "3"
+            }
+          ]
+        },
+        {
+          "id": "pcsx2_emulatedwheel",
+          "label": "SIMULATE WHEEL WITH GAMEPAD",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "pcsx2_emulatedwheel"
+        },
+        {
+          "id": "pcsx2_wheel1_index",
+          "label": "FORCE WHEEL 1 INDEX",
+          "description": "Force wheel index, can be useful if RetroBat sets wrong index.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "pcsx2_wheel1_index",
+          "values": [
+            {
+              "label": 0,
+              "value": "0"
+            },
+            {
+              "label": "1",
+              "value": "1"
+            },
+            {
+              "label": "2",
+              "value": "2"
+            },
+            {
+              "label": "3",
+              "value": "3"
+            },
+            {
+              "label": "4",
+              "value": "4"
+            },
+            {
+              "label": "5",
+              "value": "5"
+            },
+            {
+              "label": "6",
+              "value": "6"
+            },
+            {
+              "label": "7",
+              "value": "7"
+            },
+            {
+              "label": "8",
+              "value": "8"
+            }
+          ],
+          "realKey": "SDL",
+          "realSection": "InputSources",
+          "realFile": "Pcsx2.Wheels.cs"
+        },
+        {
+          "id": "pcsx2_wheel2_index",
+          "label": "FORCE WHEEL 2 INDEX",
+          "description": "Force wheel index, can be useful if RetroBat sets wrong index.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "pcsx2_wheel2_index",
+          "values": [
+            {
+              "label": 0,
+              "value": "0"
+            },
+            {
+              "label": "1",
+              "value": "1"
+            },
+            {
+              "label": "2",
+              "value": "2"
+            },
+            {
+              "label": "3",
+              "value": "3"
+            },
+            {
+              "label": "4",
+              "value": "4"
+            },
+            {
+              "label": "5",
+              "value": "5"
+            },
+            {
+              "label": "6",
+              "value": "6"
+            },
+            {
+              "label": "7",
+              "value": "7"
+            },
+            {
+              "label": "8",
+              "value": "8"
+            }
+          ],
+          "realKey": "SDL",
+          "realSection": "InputSources",
+          "realFile": "Pcsx2.Wheels.cs"
         }
       ]
     }

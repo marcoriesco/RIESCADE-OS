@@ -1,0 +1,348 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "snes9x",
+  "name": "SNES9X",
+  "description": "Configurações para o emulador SNES9X geradas a partir do es_features.cfg.",
+  "icon": "snes9x",
+  "configFiles": [],
+  "globalMappings": {},
+  "groups": [
+    {
+      "id": "graphics",
+      "title": "Gráficos",
+      "icon": "monitor",
+      "order": 1,
+      "options": [
+        {
+          "id": "snes9x_ntsc_filters",
+          "label": "Conjunto de Shaders",
+          "description": "Apply a Vídeo filter to the output image.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "snes9x_ntsc_filters",
+          "values": [
+            {
+              "label": "Nenhum",
+              "value": "0"
+            },
+            {
+              "label": "Forced 1X",
+              "value": "1"
+            },
+            {
+              "label": "Simple 2X",
+              "value": "2"
+            },
+            {
+              "label": "Scanlines",
+              "value": "3"
+            },
+            {
+              "label": "TV Mode",
+              "value": "4"
+            },
+            {
+              "label": "Blargg's NTSC (RF)",
+              "value": "5"
+            },
+            {
+              "label": "Blargg's NTSC (Composite)",
+              "value": "6"
+            },
+            {
+              "label": "Blargg's NTSC (S-Vídeo)",
+              "value": "7"
+            },
+            {
+              "label": "Blargg's NTSC (RGB)",
+              "value": "8"
+            },
+            {
+              "label": "SuperEagle",
+              "value": "9"
+            },
+            {
+              "label": "Super2xSaI",
+              "value": "10"
+            },
+            {
+              "label": "2xSaI",
+              "value": "11"
+            },
+            {
+              "label": "hq2x",
+              "value": "12"
+            },
+            {
+              "label": "hq2xS",
+              "value": "13"
+            },
+            {
+              "label": "hq2xBold",
+              "value": "14"
+            },
+            {
+              "label": "EPX A",
+              "value": "15"
+            },
+            {
+              "label": "EPX B",
+              "value": "16"
+            },
+            {
+              "label": "EPX C",
+              "value": "17"
+            },
+            {
+              "label": "Simple 3X",
+              "value": "18"
+            },
+            {
+              "label": "TV Mode 3X",
+              "value": "19"
+            },
+            {
+              "label": "Dot Matrix 3X",
+              "value": "20"
+            },
+            {
+              "label": "hq3x",
+              "value": "21"
+            },
+            {
+              "label": "hq3xS",
+              "value": "22"
+            },
+            {
+              "label": "hq3xBold",
+              "value": "23"
+            },
+            {
+              "label": "lq3xBold",
+              "value": "24"
+            },
+            {
+              "label": "EPX3",
+              "value": "25"
+            },
+            {
+              "label": "Simple 4X",
+              "value": "26"
+            },
+            {
+              "label": "hq4x",
+              "value": "27"
+            },
+            {
+              "label": "2xBRZ",
+              "value": "28"
+            },
+            {
+              "label": "3xBRZ",
+              "value": "29"
+            },
+            {
+              "label": "4xBRZ",
+              "value": "30"
+            },
+            {
+              "label": "5xBRZ",
+              "value": "31"
+            },
+            {
+              "label": "6xBRZ",
+              "value": "32"
+            },
+            {
+              "label": "SharpBilinear4x",
+              "value": "33"
+            }
+          ]
+        },
+        {
+          "id": "snes9x_ratio",
+          "label": "Proporção de Tela",
+          "type": "select",
+          "default": "auto",
+          "configKey": "snes9x_ratio",
+          "values": [
+            {
+              "label": "4/3",
+              "value": "4/3"
+            },
+            {
+              "label": "8/7",
+              "value": "8/7"
+            },
+            {
+              "label": "Full keep aspect 4/3",
+              "value": "full_43"
+            },
+            {
+              "label": "Full keep aspect 8/7",
+              "value": "full_87"
+            },
+            {
+              "label": "Esticar",
+              "value": "stretch"
+            }
+          ],
+          "realKey": "snes9x_ratio",
+          "realFile": "Snes9x.Generator.cs"
+        },
+        {
+          "id": "snes9x_integer",
+          "label": "INTEGER SCALING (PIXEL PERFECT)",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "snes9x_integer"
+        },
+        {
+          "id": "snes9x_vsync",
+          "label": "Sincronização Vertical (V-Sync)",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "snes9x_vsync"
+        },
+        {
+          "id": "snes9x_bilinear",
+          "label": "SMOOTH GAMES (Filtragem Bilinear)",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "snes9x_bilinear"
+        },
+        {
+          "id": "snes9x_scanlines",
+          "label": "SCANLINES Ativado NTESC FILTERS",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "snes9x_scanlines"
+        },
+        {
+          "id": "snes9x_renderer",
+          "label": "Vídeo",
+          "type": "select",
+          "default": "auto",
+          "configKey": "snes9x_renderer",
+          "values": [
+            {
+              "label": "OPENGL",
+              "value": "2"
+            },
+            {
+              "label": "VULKAN",
+              "value": "3"
+            },
+            {
+              "label": "DIRECTDRAW",
+              "value": "0"
+            },
+            {
+              "label": "DIRECT3D",
+              "value": "1"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "emulation",
+      "title": "Emulação",
+      "icon": "cpu",
+      "order": 2,
+      "options": [
+        {
+          "id": "snes9x_showmenu",
+          "label": "SHOW EMULATOR MENU BAR",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "snes9x_showmenu"
+        },
+        {
+          "id": "snes9x_framerate",
+          "label": "SHOW FRAMERATE",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "snes9x_framerate",
+          "realKey": "FrameRate",
+          "realSection": "Display",
+          "realFile": "Snes9x.Generator.cs"
+        }
+      ]
+    },
+    {
+      "id": "controls",
+      "title": "Controles",
+      "icon": "gamepad2",
+      "order": 5,
+      "options": [
+        {
+          "id": "snes9x_analog",
+          "label": "USE ANALOG STICK",
+          "description": "Use left analog stick in addition to dpad.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "snes9x_analog"
+        },
+        {
+          "id": "snes9x_allowdiagonals",
+          "label": "ALLOW DIAGONALS",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "snes9x_allowdiagonals"
+        },
+        {
+          "id": "snes9x_mouse",
+          "label": "USE MOUSE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "snes9x_mouse",
+          "values": [
+            {
+              "label": "Não",
+              "value": "no"
+            },
+            {
+              "label": "PORT 1",
+              "value": "port1"
+            },
+            {
+              "label": "PORT 2",
+              "value": "port2"
+            }
+          ],
+          "realKey": "snes9x_mouse",
+          "realFile": "Snes9x.Controllers.cs"
+        },
+        {
+          "id": "snes9x_guntype",
+          "label": "GUN TYPE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "snes9x_guntype",
+          "values": [
+            {
+              "label": "Superscope",
+              "value": "superscope"
+            },
+            {
+              "label": "Justifier",
+              "value": "justifier"
+            },
+            {
+              "label": "2 Justifier",
+              "value": "justifiers"
+            }
+          ]
+        },
+        {
+          "id": "snes9x_dinput",
+          "label": "ENABLE DIRECTINPUT",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "snes9x_dinput"
+        }
+      ]
+    }
+  ]
+}

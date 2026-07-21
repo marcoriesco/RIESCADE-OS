@@ -1,0 +1,130 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "sonicmania",
+  "name": "SONICMANIA",
+  "description": "Configurações para o emulador SONICMANIA geradas a partir do es_features.cfg.",
+  "icon": "sonicmania",
+  "configFiles": [],
+  "globalMappings": {},
+  "groups": [
+    {
+      "id": "graphics",
+      "title": "Gráficos",
+      "icon": "monitor",
+      "order": 1,
+      "options": [
+        {
+          "id": "sonicmania_shader",
+          "label": "Conjunto de Shaders",
+          "type": "select",
+          "default": "auto",
+          "configKey": "sonicmania_shader",
+          "values": [
+            {
+              "label": "Nenhum",
+              "value": "0"
+            },
+            {
+              "label": "CLEAN",
+              "value": "1"
+            },
+            {
+              "label": "SHARP",
+              "value": "2"
+            },
+            {
+              "label": "SOFT TV",
+              "value": "3"
+            }
+          ],
+          "realKey": "shaderSupport",
+          "realSection": "Video",
+          "realFile": "PortsLauncher.Configuration.cs"
+        },
+        {
+          "id": "sonicmania_vsync",
+          "label": "Sincronização Vertical (V-Sync)",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "sonicmania_vsync",
+          "realKey": "vsync",
+          "realSection": "Video",
+          "realFile": "PortsLauncher.Configuration.cs"
+        },
+        {
+          "id": "sonicmania_force60hz",
+          "label": "FORCE 60HZ",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "sonicmania_force60hz"
+        }
+      ]
+    },
+    {
+      "id": "emulation",
+      "title": "Emulação",
+      "icon": "cpu",
+      "order": 2,
+      "options": [
+        {
+          "id": "sonicmania_triple_buffering",
+          "label": "Triplo BUFFERING",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "sonicmania_triple_buffering",
+          "realKey": "tripleBuffering",
+          "realSection": "Video",
+          "realFile": "PortsLauncher.Configuration.cs"
+        },
+        {
+          "id": "sonicmania_lang",
+          "label": "LANGUAGE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "sonicmania_lang",
+          "values": [
+            {
+              "label": "English",
+              "value": "0"
+            },
+            {
+              "label": "Français",
+              "value": "1"
+            },
+            {
+              "label": "Italiano",
+              "value": "2"
+            },
+            {
+              "label": "Deutsch",
+              "value": "3"
+            },
+            {
+              "label": "Español",
+              "value": "4"
+            },
+            {
+              "label": "日本語 (Japanese)",
+              "value": "5"
+            },
+            {
+              "label": "한국어 (Korean)",
+              "value": "6"
+            },
+            {
+              "label": "简化字 (Chinese - simplified)",
+              "value": "7"
+            },
+            {
+              "label": "簡化字 (Chinese - traditional)",
+              "value": "8"
+            }
+          ],
+          "realKey": "language",
+          "realSection": "Game",
+          "realFile": "PortsLauncher.Configuration.cs"
+        }
+      ]
+    }
+  ]
+}

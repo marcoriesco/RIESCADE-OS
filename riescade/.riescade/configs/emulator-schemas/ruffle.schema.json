@@ -1,0 +1,92 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "ruffle",
+  "name": "RUFFLE",
+  "description": "Configurações para o emulador RUFFLE geradas a partir do es_features.cfg.",
+  "icon": "ruffle",
+  "configFiles": [],
+  "globalMappings": {},
+  "groups": [
+    {
+      "id": "graphics",
+      "title": "Gráficos",
+      "icon": "monitor",
+      "order": 1,
+      "options": [
+        {
+          "id": "ruffle_quality",
+          "label": "Vídeo QUALITY",
+          "type": "select",
+          "default": "auto",
+          "configKey": "ruffle_quality",
+          "values": [
+            {
+              "label": "HIGH",
+              "value": "high"
+            },
+            {
+              "label": "LOW",
+              "value": "low"
+            },
+            {
+              "label": "MEDIUM",
+              "value": "medium"
+            },
+            {
+              "label": "BEST",
+              "value": "best"
+            },
+            {
+              "label": "8x AA",
+              "value": "high8x8"
+            },
+            {
+              "label": "8x AA LINEAR",
+              "value": "high8x8-linear"
+            },
+            {
+              "label": "16x AA",
+              "value": "high16x16"
+            },
+            {
+              "label": "16x AA LINEAR",
+              "value": "high16x16-linear"
+            }
+          ]
+        },
+        {
+          "id": "ruffle_renderer",
+          "label": "Vídeo",
+          "type": "select",
+          "default": "auto",
+          "configKey": "ruffle_renderer",
+          "values": [
+            {
+              "label": "VULKAN",
+              "value": "vulkan"
+            },
+            {
+              "label": "DIRECTX 12",
+              "value": "dx12"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "emulation",
+      "title": "Emulação",
+      "icon": "cpu",
+      "order": 2,
+      "options": [
+        {
+          "id": "ruffle_gui",
+          "label": "SHOW EMULATOR GUI",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "ruffle_gui"
+        }
+      ]
+    }
+  ]
+}

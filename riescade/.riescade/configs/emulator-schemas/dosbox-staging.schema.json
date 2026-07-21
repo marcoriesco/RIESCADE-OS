@@ -1,0 +1,1088 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "dosbox-staging",
+  "name": "DOSBOX-STAGING",
+  "description": "Configurações para o emulador DOSBOX-STAGING geradas a partir do es_features.cfg.",
+  "icon": "dosbox-staging",
+  "configFiles": [],
+  "globalMappings": {},
+  "groups": [
+    {
+      "id": "graphics",
+      "title": "Gráficos",
+      "icon": "monitor",
+      "order": 1,
+      "options": [
+        {
+          "id": "dbs_glshader",
+          "label": "Conjunto de Shaders",
+          "description": "Efficient graphics filters improving the rendering of games.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "dbs_glshader",
+          "values": [
+            {
+              "label": "CRT Automático",
+              "value": "crt-auto"
+            },
+            {
+              "label": "CRT Automático MACHINE",
+              "value": "crt-auto-machine"
+            },
+            {
+              "label": "CRT Automático ARCADE",
+              "value": "crt-auto-arcade"
+            },
+            {
+              "label": "CRT Automático ARCADE SHARP",
+              "value": "crt-auto-arcade-sharp"
+            },
+            {
+              "label": "SHARP",
+              "value": "sharp"
+            },
+            {
+              "label": "BILINEAR",
+              "value": "bilinear"
+            },
+            {
+              "label": "NEAREST NEIGHBOUR",
+              "value": "nearest"
+            },
+            {
+              "label": "CRT ARCADE 1080P",
+              "value": "crt\\arcade-1080p"
+            },
+            {
+              "label": "CRT ARCADE 1440P",
+              "value": "crt\\arcade-1440p"
+            },
+            {
+              "label": "CRT ARCADE 4K",
+              "value": "crt\\arcade-sharp-4k"
+            },
+            {
+              "label": "SCALER ADVMAME 2x",
+              "value": "scaler\\advmame2x"
+            },
+            {
+              "label": "SCALER ADVMAME 3x",
+              "value": "scaler\\advmame3x"
+            },
+            {
+              "label": "XBR 2X 3D",
+              "value": "scaler\\xbr-lv2-3d"
+            },
+            {
+              "label": "XBR 2X NOBLEND",
+              "value": "scaler\\xbr-lv2-noblend"
+            },
+            {
+              "label": "XBR 3X",
+              "value": "scaler\\xbr-lv3"
+            },
+            {
+              "label": "VGA 1080 FAKE Duplo SCAN",
+              "value": "crt\\vga-1080p-fake-double-scan"
+            },
+            {
+              "label": "VGA 1080P",
+              "value": "crt\\vga-1080p"
+            },
+            {
+              "label": "VGA 1440P",
+              "value": "crt\\vga-1440p"
+            },
+            {
+              "label": "VGA 4K",
+              "value": "crt\\vga-4k"
+            },
+            {
+              "label": "EGA 1080P",
+              "value": "crt\\ega-1080p"
+            },
+            {
+              "label": "EGA 1440P",
+              "value": "crt\\ega-1440p"
+            },
+            {
+              "label": "EGA 4K",
+              "value": "crt\\ega-4k"
+            }
+          ],
+          "realKey": "glshader",
+          "realSection": "render",
+          "realFile": "DosBoxStaging.Generator.cs"
+        },
+        {
+          "id": "dbs_aspect",
+          "label": "Proporção de Tela",
+          "type": "select",
+          "default": "auto",
+          "configKey": "dbs_aspect",
+          "values": [
+            {
+              "label": "CORRECTION Ativado",
+              "value": "on"
+            },
+            {
+              "label": "CORRECTION Desativado",
+              "value": "off"
+            },
+            {
+              "label": "SQUARE PIXELS",
+              "value": "square-pixels"
+            },
+            {
+              "label": "Esticar",
+              "value": "stretch"
+            }
+          ],
+          "realKey": "aspect",
+          "realSection": "render",
+          "realFile": "DosBoxStaging.Generator.cs"
+        },
+        {
+          "id": "dbs_vsync",
+          "label": "VSYNC",
+          "type": "select",
+          "default": "auto",
+          "configKey": "dbs_vsync",
+          "values": [
+            {
+              "label": "Ativado",
+              "value": "on"
+            },
+            {
+              "label": "Adaptável",
+              "value": "adaptive"
+            },
+            {
+              "label": "Desativado",
+              "value": "off"
+            },
+            {
+              "label": "YIELD",
+              "value": "yield"
+            }
+          ],
+          "realKey": "vsync",
+          "realSection": "sdl",
+          "realFile": "DosBoxStaging.Generator.cs"
+        },
+        {
+          "id": "dbs_integer_scaling",
+          "label": "INTEGER SCALING",
+          "type": "select",
+          "default": "auto",
+          "configKey": "dbs_integer_scaling",
+          "values": [
+            {
+              "label": "VERTICAL",
+              "value": "vertical"
+            },
+            {
+              "label": "HORIZONTAL",
+              "value": "horizontal"
+            },
+            {
+              "label": "Desativado",
+              "value": "off"
+            }
+          ],
+          "realKey": "integer_scaling",
+          "realSection": "render",
+          "realFile": "DosBoxStaging.Generator.cs"
+        },
+        {
+          "id": "dbs_machine",
+          "label": "EMULATED GRAPHIC CHIP",
+          "description": "The type of emulated graphic chip.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "dbs_machine",
+          "values": [
+            {
+              "label": "SVGA",
+              "value": "svga"
+            },
+            {
+              "label": "VGA",
+              "value": "vga"
+            },
+            {
+              "label": "EGA",
+              "value": "ega"
+            },
+            {
+              "label": "CGA",
+              "value": "cga"
+            },
+            {
+              "label": "CGA MONO",
+              "value": "cga_mono"
+            },
+            {
+              "label": "TANDY",
+              "value": "tandy"
+            },
+            {
+              "label": "HERCULES",
+              "value": "hercules"
+            },
+            {
+              "label": "PCJR",
+              "value": "pcjr"
+            },
+            {
+              "label": "SVGA PARADISE",
+              "value": "svga_paradise"
+            },
+            {
+              "label": "Tseng Labs ET3000 SVGA",
+              "value": "svga_et3000"
+            },
+            {
+              "label": "Tseng Labs ET4000 SVGA",
+              "value": "svga_et4000"
+            },
+            {
+              "label": "S3 Trio64",
+              "value": "svga_s3"
+            },
+            {
+              "label": "S3 Trio64 (VESA VBE 1.2)",
+              "value": "vesa_oldvbe"
+            },
+            {
+              "label": "S3 Trio64 (Não LINEAR HACK)",
+              "value": "vesa_nolfb"
+            }
+          ],
+          "realKey": "machine",
+          "realSection": "dosbox",
+          "realFile": "DosBoxStaging.Generator.cs"
+        },
+        {
+          "id": "dbs_reelmagic",
+          "label": "ENABLE REEL MAGIC",
+          "description": "ReelMagic MPEG playback support.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "dbs_reelmagic",
+          "values": [
+            {
+              "label": "Desativado",
+              "value": "off"
+            },
+            {
+              "label": "CARD (WITHOUT FMPDRV DRIVER)",
+              "value": "cardonly"
+            },
+            {
+              "label": "Ativado",
+              "value": "on"
+            }
+          ],
+          "realKey": "reelmagic",
+          "realSection": "reelmagic",
+          "realFile": "DosBoxStaging.Generator.cs"
+        },
+        {
+          "id": "dbs_host_rate",
+          "label": "HOST REFRESH RATE",
+          "description": "Set the host's refresh rate.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "dbs_host_rate",
+          "values": [
+            {
+              "label": "SERIAL DEVICE INTERFACE",
+              "value": "sdi"
+            },
+            {
+              "label": "VRR",
+              "value": "vrr"
+            }
+          ],
+          "realKey": "host_rate",
+          "realSection": "sdl",
+          "realFile": "DosBoxStaging.Generator.cs"
+        },
+        {
+          "id": "dbs_presentation_mode",
+          "label": "PRESENTATION MODE",
+          "description": "Select the frame presentation mode.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "dbs_presentation_mode",
+          "values": [
+            {
+              "label": "CONSTANTE FRAME RATE",
+              "value": "cfr"
+            },
+            {
+              "label": "VARIABLE FRAME RATE",
+              "value": "vfr"
+            }
+          ],
+          "realKey": "presentation_mode",
+          "realSection": "sdl",
+          "realFile": "DosBoxStaging.Generator.cs"
+        },
+        {
+          "id": "dbs_voodoo",
+          "label": "ENABLE 3DFX VOODOO Emulação",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "dbs_voodoo",
+          "realKey": "voodoo",
+          "realSection": "voodoo",
+          "realFile": "DosBoxStaging.Generator.cs"
+        },
+        {
+          "id": "dbs_voodoo_bilinear_filtering",
+          "label": "Filtragem Bilinear",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "dbs_voodoo_bilinear_filtering",
+          "realKey": "voodoo_bilinear_filtering",
+          "realSection": "voodoo",
+          "realFile": "DosBoxStaging.Generator.cs"
+        },
+        {
+          "id": "dbs_vga_render_per_scanline",
+          "label": "ACCURATE PER-SCANLINE VGA RENDERING",
+          "description": "A few games need this option disabled.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "dbs_vga_render_per_scanline",
+          "realKey": "vga_render_per_scanline",
+          "realSection": "dosbox",
+          "realFile": "DosBoxStaging.Generator.cs"
+        },
+        {
+          "id": "dbs_output",
+          "label": "Vídeo",
+          "description": "Select which graphics API to use internally.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "dbs_output",
+          "values": [
+            {
+              "label": "OpenGL",
+              "value": "opengl"
+            },
+            {
+              "label": "SDL TEXTURE(BILINEAR)",
+              "value": "texture"
+            },
+            {
+              "label": "SDL TEXTURE(NEAREST NEIGHBOUR)",
+              "value": "texturenb"
+            }
+          ],
+          "realKey": "output",
+          "realSection": "sdl",
+          "realFile": "DosBoxStaging.Generator.cs"
+        },
+        {
+          "id": "dbs_texture_renderer",
+          "label": "TEXTURE RENDERER",
+          "description": "Select which graphics API to use when using texture renderer.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "dbs_texture_renderer",
+          "values": [
+            {
+              "label": "DIRECT3D",
+              "value": "direct3d"
+            },
+            {
+              "label": "DIRECT3D 11",
+              "value": "direct3d11"
+            },
+            {
+              "label": "DIRECT3D 12",
+              "value": "direct3d12"
+            },
+            {
+              "label": "OPENGL",
+              "value": "opengl"
+            },
+            {
+              "label": "OPENGLES 2",
+              "value": "opengles2"
+            },
+            {
+              "label": "SOFTWARE",
+              "value": "software"
+            }
+          ],
+          "realKey": "texture_renderer",
+          "realSection": "sdl",
+          "realFile": "DosBoxStaging.Generator.cs"
+        }
+      ]
+    },
+    {
+      "id": "emulation",
+      "title": "Emulação",
+      "icon": "cpu",
+      "order": 2,
+      "options": [
+        {
+          "id": "dbs_cputype",
+          "label": "CPU TYPE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "dbs_cputype",
+          "values": [
+            {
+              "label": "386",
+              "value": "386"
+            },
+            {
+              "label": "386 FAST",
+              "value": "386_fast"
+            },
+            {
+              "label": "386 PREFETCH",
+              "value": "386_prefetch"
+            },
+            {
+              "label": "486",
+              "value": "486"
+            },
+            {
+              "label": "PENTIUM",
+              "value": "pentium"
+            },
+            {
+              "label": "PENTIUM MMX",
+              "value": "pentium_mmx"
+            }
+          ],
+          "realKey": "cputype",
+          "realSection": "cpu",
+          "realFile": "DosBoxStaging.Generator.cs"
+        },
+        {
+          "id": "dbs_cpu_cycles",
+          "label": "CPU CYCLES",
+          "type": "select",
+          "default": "auto",
+          "configKey": "dbs_cpu_cycles",
+          "values": [
+            {
+              "label": "8088 (4.77 MHz)",
+              "value": "300"
+            },
+            {
+              "label": "286-8",
+              "value": "700"
+            },
+            {
+              "label": "286-12",
+              "value": "1500"
+            },
+            {
+              "label": "386SX-20",
+              "value": "3000"
+            },
+            {
+              "label": "386DX-33",
+              "value": "6000"
+            },
+            {
+              "label": "386DX-40",
+              "value": "8000"
+            },
+            {
+              "label": "486DX-33",
+              "value": "12000"
+            },
+            {
+              "label": "486DX/2-66",
+              "value": "25000"
+            },
+            {
+              "label": "Pentium 90",
+              "value": "50000"
+            },
+            {
+              "label": "Pentium MMX-166",
+              "value": "100000"
+            },
+            {
+              "label": "Pentium II 300",
+              "value": "200000"
+            },
+            {
+              "label": "MAXIMUM",
+              "value": "max"
+            }
+          ],
+          "realKey": "cpu_cycles",
+          "realSection": "cpu",
+          "realFile": "DosBoxStaging.Generator.cs"
+        },
+        {
+          "id": "dbs_cpu_cycles_protected",
+          "label": "CPU CYCLES(PROTECTED MODE)",
+          "type": "select",
+          "default": "auto",
+          "configKey": "dbs_cpu_cycles_protected",
+          "values": [
+            {
+              "label": "8088 (4.77 MHz)",
+              "value": "300"
+            },
+            {
+              "label": "286-8",
+              "value": "700"
+            },
+            {
+              "label": "286-12",
+              "value": "1500"
+            },
+            {
+              "label": "386SX-20",
+              "value": "3000"
+            },
+            {
+              "label": "386DX-33",
+              "value": "6000"
+            },
+            {
+              "label": "386DX-40",
+              "value": "8000"
+            },
+            {
+              "label": "486DX-33",
+              "value": "12000"
+            },
+            {
+              "label": "486DX/2-66",
+              "value": "25000"
+            },
+            {
+              "label": "Pentium 90",
+              "value": "50000"
+            },
+            {
+              "label": "Pentium MMX-166",
+              "value": "100000"
+            },
+            {
+              "label": "Pentium II 300",
+              "value": "200000"
+            },
+            {
+              "label": "MAXIMUM",
+              "value": "max"
+            }
+          ],
+          "realKey": "cpu_cycles_protected",
+          "realSection": "cpu",
+          "realFile": "DosBoxStaging.Generator.cs"
+        },
+        {
+          "id": "dbs_cpu_throttle",
+          "label": "CPU THROTTLE",
+          "description": "Throttle down the number of emulated CPU cycles dynamically if your host CPU cannot keep up (disabled by Padrão)",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "dbs_cpu_throttle",
+          "realKey": "cpu_throttle",
+          "realSection": "cpu",
+          "realFile": "DosBoxStaging.Generator.cs"
+        },
+        {
+          "id": "dbs_core",
+          "label": "CORE",
+          "description": "Type of CPU Emulação core to use.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "dbs_core",
+          "values": [
+            {
+              "label": "NORMAL",
+              "value": "normal"
+            },
+            {
+              "label": "SIMPLE",
+              "value": "simple"
+            },
+            {
+              "label": "DYNAMIC",
+              "value": "dynamic"
+            }
+          ],
+          "realKey": "core",
+          "realSection": "cpu",
+          "realFile": "DosBoxStaging.Generator.cs"
+        },
+        {
+          "id": "dbs_automount",
+          "label": "AUTOMOUNT C",
+          "description": "Mount automatically drive C: at startup.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "dbs_automount",
+          "realKey": "automount",
+          "realSection": "dosbox",
+          "realFile": "DosBoxStaging.Generator.cs"
+        },
+        {
+          "id": "dbs_memsize",
+          "label": "MEMORY SIZE",
+          "description": "The amount of high memory size the emulated machine has.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "dbs_memsize",
+          "values": [
+            {
+              "label": "4MB",
+              "value": "4"
+            },
+            {
+              "label": "8MB",
+              "value": "8"
+            },
+            {
+              "label": "16MB(Padrão)",
+              "value": "16"
+            },
+            {
+              "label": "24MB",
+              "value": "24"
+            },
+            {
+              "label": "32MB",
+              "value": "32"
+            },
+            {
+              "label": "64MB",
+              "value": "64"
+            },
+            {
+              "label": "96MB",
+              "value": "96"
+            },
+            {
+              "label": "128MB",
+              "value": "128"
+            },
+            {
+              "label": "224MB",
+              "value": "224"
+            },
+            {
+              "label": "256MB",
+              "value": "256"
+            },
+            {
+              "label": "512MB",
+              "value": "512"
+            },
+            {
+              "label": "1024MB",
+              "value": "1024"
+            }
+          ],
+          "realKey": "memsize",
+          "realSection": "dosbox",
+          "realFile": "DosBoxStaging.Generator.cs"
+        },
+        {
+          "id": "dosbox_exerun",
+          "label": "FORCE EXE TO RUN",
+          "type": "input",
+          "default": "auto",
+          "configKey": "dosbox_exerun"
+        },
+        {
+          "id": "dosbox_runsetup",
+          "label": "TRY TO RUN GAME SETUP",
+          "description": "Try and run the game setup.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "dosbox_runsetup"
+        },
+        {
+          "id": "dosbox_setupcommand",
+          "label": "SETUP EXECUTABLE",
+          "type": "input",
+          "default": "auto",
+          "configKey": "dosbox_setupcommand"
+        },
+        {
+          "id": "dosbox_ignorebat",
+          "label": "IGNORE BAT FILES",
+          "description": "Use this setting to ignore run.bat, autoexec.bat or dosbox.bat files in game folder.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "dosbox_ignorebat"
+        },
+        {
+          "id": "dbs_vmemsize",
+          "label": "Vídeo MEMORY SIZE",
+          "description": "The amount of Vídeo memory.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "dbs_vmemsize",
+          "values": [
+            {
+              "label": "1MB",
+              "value": "1"
+            },
+            {
+              "label": "2MB",
+              "value": "2"
+            },
+            {
+              "label": "4MB",
+              "value": "4"
+            },
+            {
+              "label": "8MB",
+              "value": "8"
+            },
+            {
+              "label": "256MB",
+              "value": "256"
+            },
+            {
+              "label": "512MB",
+              "value": "512"
+            },
+            {
+              "label": "1024MB",
+              "value": "1024"
+            },
+            {
+              "label": "2048MB",
+              "value": "2048"
+            },
+            {
+              "label": "4096MB",
+              "value": "4096"
+            },
+            {
+              "label": "8192MB",
+              "value": "8192"
+            }
+          ],
+          "realKey": "vmemsize",
+          "realSection": "dosbox",
+          "realFile": "DosBoxStaging.Generator.cs"
+        },
+        {
+          "id": "dbs_voodoo_memsize",
+          "label": "VOODOO MEMORY SIZE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "dbs_voodoo_memsize",
+          "values": [
+            {
+              "label": "4MB",
+              "value": "4"
+            },
+            {
+              "label": "12MB",
+              "value": "12"
+            }
+          ],
+          "realKey": "voodoo_memsize",
+          "realSection": "voodoo",
+          "realFile": "DosBoxStaging.Generator.cs"
+        },
+        {
+          "id": "dbs_startup_verbosity",
+          "label": "STARTUP VERBOSITY",
+          "description": "Controles verbosity prior to displaying the program.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "dbs_startup_verbosity",
+          "values": [
+            {
+              "label": "WELCOME AND STDOUT",
+              "value": "high"
+            },
+            {
+              "label": "STDOUT ONLY",
+              "value": "low"
+            },
+            {
+              "label": "QUIET",
+              "value": "quiet"
+            }
+          ],
+          "realKey": "startup_verbosity",
+          "realSection": "dosbox",
+          "realFile": "DosBoxStaging.Generator.cs"
+        },
+        {
+          "id": "dosbox_showconsole",
+          "label": "SHOW CONSOLE",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "dosbox_showconsole"
+        },
+        {
+          "id": "dosbox_noexit",
+          "label": "Não EXIT",
+          "description": "Keep DOS shell active if quitting game or when launch fails.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "dosbox_noexit"
+        }
+      ]
+    },
+    {
+      "id": "audio",
+      "title": "Áudio",
+      "icon": "volume2",
+      "order": 4,
+      "options": [
+        {
+          "id": "dosbox_midi",
+          "label": "MIDI OUTPUT",
+          "description": "Select the soundfont file or interface used for MIDI output.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "dosbox_midi",
+          "values": [
+            {
+              "label": "SYSTEM",
+              "value": "system"
+            },
+            {
+              "label": "Não",
+              "value": "disabled"
+            },
+            {
+              "label": "ROLAND SC-55",
+              "value": "Roland_SC-55.sf2"
+            },
+            {
+              "label": "ROLAND SC-88",
+              "value": "Roland_SC-88.sf2"
+            },
+            {
+              "label": "ROLAND MT-32",
+              "value": "MT32_CONTROL.ROM"
+            }
+          ]
+        },
+        {
+          "id": "dosbox_sblaster_conf",
+          "label": "SOUNDBLASTER SETTINGS",
+          "description": "Set the adress, interrupt, low 8 bit and high 16 bit DMA.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "dosbox_sblaster_conf",
+          "values": [
+            {
+              "label": "Port 220 IRQ 7 DMA 1/5",
+              "value": "A220 I7 D1 H5"
+            },
+            {
+              "label": "Port 220 IRQ 5 DMA 1/5",
+              "value": "A220 I5 D1 H5"
+            },
+            {
+              "label": "Port 240 IRQ 7 DMA 1/5",
+              "value": "A240 I7 D1 H5"
+            },
+            {
+              "label": "Port 240 IRQ 7 DMA 3/7",
+              "value": "A240 I7 D3 H7"
+            },
+            {
+              "label": "Port 240 IRQ 2 DMA 3/7",
+              "value": "A240 I2 D3 H7"
+            },
+            {
+              "label": "Port 240 IRQ 5 DMA 3/5",
+              "value": "A240 I5 D3 H5"
+            },
+            {
+              "label": "Port 240 IRQ 5 DMA 1/5",
+              "value": "A240 I5 D1 H5"
+            },
+            {
+              "label": "Port 240 IRQ 10 DMA 3/7",
+              "value": "A240 I10 D3 H7"
+            },
+            {
+              "label": "Port 280 IRQ 10 DMA 0/6",
+              "value": "A280 I10 D0 H6"
+            },
+            {
+              "label": "Port 280 IRQ 5 DMA 1/5",
+              "value": "A280 I5 D1 H5"
+            }
+          ]
+        },
+        {
+          "id": "dbs_gus",
+          "label": "GRAVIS ULTRASOUND",
+          "description": "Enable Gravis Ultrasound Emulação.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "dbs_gus",
+          "realKey": "gus",
+          "realSection": "gus",
+          "realFile": "DosBoxStaging.Generator.cs"
+        },
+        {
+          "id": "dbs_imfc",
+          "label": "IBM MUSIC CARD",
+          "description": "Enable the IBM Music Feature Card (disabled by Padrão).",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "dbs_imfc",
+          "realKey": "imfc",
+          "realSection": "imfc",
+          "realFile": "DosBoxStaging.Generator.cs"
+        },
+        {
+          "id": "dbs_tandy",
+          "label": "TANDY SOUND",
+          "description": "Enable Tandy Sound Emulação.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "dbs_tandy",
+          "values": [
+            {
+              "label": "Ativado",
+              "value": "on"
+            },
+            {
+              "label": "ONLY 3-VOICE SOUND GENERATOR",
+              "value": "psg"
+            },
+            {
+              "label": "Desativado",
+              "value": "off"
+            }
+          ],
+          "realKey": "tandy",
+          "realSection": "speaker",
+          "realFile": "DosBoxStaging.Generator.cs"
+        },
+        {
+          "id": "dbs_lpt_dac",
+          "label": "PARALLEL PORT DAC TYPE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "dbs_lpt_dac",
+          "values": [
+            {
+              "label": "Desativado",
+              "value": "off"
+            },
+            {
+              "label": "DISNEY SOUND SOURCE",
+              "value": "disney"
+            },
+            {
+              "label": "COVOX SPEECH THING",
+              "value": "covox"
+            },
+            {
+              "label": "STEREO-Ativado-1 DAC",
+              "value": "ston1"
+            }
+          ],
+          "realKey": "lpt_dac",
+          "realSection": "speaker",
+          "realFile": "DosBoxStaging.Generator.cs"
+        },
+        {
+          "id": "dbs_ps1audio",
+          "label": "IBM PS/1 Áudio Emulação",
+          "description": "Enable IBM PS/1 Áudio Emulação (disabled by Padrão).",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "dbs_ps1audio",
+          "realKey": "ps1audio",
+          "realSection": "speaker",
+          "realFile": "DosBoxStaging.Generator.cs"
+        }
+      ]
+    },
+    {
+      "id": "controls",
+      "title": "Controles",
+      "icon": "gamepad2",
+      "order": 5,
+      "options": [
+        {
+          "id": "dbs_joysticktype",
+          "label": "JOYSTICK TYPE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "dbs_joysticktype",
+          "values": [
+            {
+              "label": "2 AXIS",
+              "value": "2axis"
+            },
+            {
+              "label": "4 AXIS (FIRST ONLY)",
+              "value": "4axis"
+            },
+            {
+              "label": "4 AXIS (TWO)",
+              "value": "4axis_2"
+            },
+            {
+              "label": "THRUSTMASTER FCS",
+              "value": "fcs"
+            },
+            {
+              "label": "CH FLIGHTSTICK",
+              "value": "ch"
+            },
+            {
+              "label": "HIDDEN",
+              "value": "hidden"
+            },
+            {
+              "label": "DISABLED",
+              "value": "disabled"
+            }
+          ],
+          "realKey": "joysticktype",
+          "realSection": "joystick",
+          "realFile": "DosBoxStaging.Generator.cs"
+        },
+        {
+          "id": "dbs_timed",
+          "label": "TIMED INTERVALS FOR AXIS",
+          "description": "Experiment with this option, if your joystick drifts away (enabled by Padrão).",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "dbs_timed",
+          "realKey": "timed",
+          "realSection": "joystick",
+          "realFile": "DosBoxStaging.Generator.cs"
+        },
+        {
+          "id": "dbs_autofire",
+          "label": "AUTOFIRE",
+          "description": "Fire continuously as long as the button is pressed.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "dbs_autofire",
+          "realKey": "autofire",
+          "realSection": "reelmagic",
+          "realFile": "DosBoxStaging.Generator.cs"
+        }
+      ]
+    }
+  ]
+}

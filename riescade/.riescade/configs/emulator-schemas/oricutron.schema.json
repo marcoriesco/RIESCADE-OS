@@ -1,0 +1,136 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "oricutron",
+  "name": "ORICUTRON",
+  "description": "Configurações para o emulador ORICUTRON geradas a partir do es_features.cfg.",
+  "icon": "oricutron",
+  "configFiles": [],
+  "globalMappings": {},
+  "groups": [
+    {
+      "id": "graphics",
+      "title": "Gráficos",
+      "icon": "monitor",
+      "order": 1,
+      "options": [
+        {
+          "id": "oricutron_aratio",
+          "label": "MAINTAIN ASPECT RATIO",
+          "description": "Maintain correct aspect ratio in 50Hz/60Hz modes.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "oricutron_aratio"
+        },
+        {
+          "id": "oricutron_hstretch",
+          "label": "HORIZONTAL Esticar",
+          "description": "In OpenGL only.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "oricutron_hstretch"
+        },
+        {
+          "id": "oricutron_scanlines",
+          "label": "SCANLINES",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "oricutron_scanlines"
+        },
+        {
+          "id": "oricutron_palghosting",
+          "label": "PAL GHOSTING",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "oricutron_palghosting"
+        },
+        {
+          "id": "oricutron_rendermode",
+          "label": "Vídeo",
+          "type": "select",
+          "default": "auto",
+          "configKey": "oricutron_rendermode",
+          "values": [
+            {
+              "label": "OPENGL",
+              "value": "opengl"
+            },
+            {
+              "label": "SOFTWARE",
+              "value": "soft"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "emulation",
+      "title": "Emulação",
+      "icon": "cpu",
+      "order": 2,
+      "options": [
+        {
+          "id": "oricutron_machine",
+          "label": "MACHINE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "oricutron_machine",
+          "values": [
+            {
+              "label": "ATMOS",
+              "value": "atmos"
+            },
+            {
+              "label": "ORIC-1",
+              "value": "oric1"
+            },
+            {
+              "label": "ORIC-1 16K",
+              "value": "oric1-16k"
+            },
+            {
+              "label": "TELESTRAT",
+              "value": "telestrat"
+            },
+            {
+              "label": "PRAVETZ",
+              "value": "pravetz"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "controls",
+      "title": "Controles",
+      "icon": "gamepad2",
+      "order": 5,
+      "options": [
+        {
+          "id": "oricutron_joyinterface",
+          "label": "JOYSTICK INTERFACE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "oricutron_joyinterface",
+          "values": [
+            {
+              "label": "Nenhum",
+              "value": "none"
+            },
+            {
+              "label": "ALTAI",
+              "value": "altai"
+            },
+            {
+              "label": "PASE",
+              "value": "pase"
+            },
+            {
+              "label": "IJK",
+              "value": "ijk"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

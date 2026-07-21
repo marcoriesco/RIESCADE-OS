@@ -31,6 +31,93 @@ import { Vita3kGenerator } from './generators/Vita3kGenerator.js';
 import { WindowsGenerator } from './generators/WindowsGenerator.js';
 import { findFreeDriveLetter, mountSquashfs, unmountSquashfs, resolveRomInDrive } from './utils/squashfs.js';
 import { getRetroBatPath } from './utils/paths.js';
+import { AltirraGenerator } from './generators/AltirraGenerator.js';
+import { ExeLauncherGenerator } from './generators/ExeLauncherGenerator.js';
+import { AmigaForeverGenerator } from './generators/AmigaForeverGenerator.js';
+import { AppleWinGenerator } from './generators/AppleWinGenerator.js';
+import { ArcadeFlashWebGenerator } from './generators/ArcadeFlashWebGenerator.js';
+import { AzaharGenerator } from './generators/AzaharGenerator.js';
+import { BizhawkGenerator } from './generators/BizhawkGenerator.js';
+import { CapriceForeverGenerator } from './generators/CapriceForeverGenerator.js';
+import { CitraGenerator } from './generators/CitraGenerator.js';
+import { CxbxGenerator } from './generators/CxbxGenerator.js';
+import { DaphneGenerator } from './generators/DaphneGenerator.js';
+import { DemulGenerator } from './generators/DemulGenerator.js';
+import { DesmumeGenerator } from './generators/DesmumeGenerator.js';
+import { DevilutionXGenerator } from './generators/DevilutionXGenerator.js';
+import { DosBoxGenerator } from './generators/DosBoxGenerator.js';
+import { DosBoxPureGenerator } from './generators/DosBoxPureGenerator.js';
+import { DosBoxStagingGenerator } from './generators/DosBoxStagingGenerator.js';
+import { EasyRpgGenerator } from './generators/EasyRpgGenerator.js';
+import { EDukeGenerator } from './generators/EDukeGenerator.js';
+import { Eka2l1Generator } from './generators/Eka2l1Generator.js';
+import { ExeLauncherGenerator } from './generators/ExeLauncherGenerator.js';
+import { ExeLauncherGenerator } from './generators/ExeLauncherGenerator.js';
+import { exoDOSGenerator } from './generators/exoDOSGenerator.js';
+import { FbneoGenerator } from './generators/FbneoGenerator.js';
+import { ForceEngineGenerator } from './generators/ForceEngineGenerator.js';
+import { FpinballGenerator } from './generators/FpinballGenerator.js';
+import { GemRBGenerator } from './generators/GemRBGenerator.js';
+import { ExeLauncherGenerator } from './generators/ExeLauncherGenerator.js';
+import { Gopher64Generator } from './generators/Gopher64Generator.js';
+import { GsPlusGenerator } from './generators/GsPlusGenerator.js';
+import { GZDoomGenerator } from './generators/GZDoomGenerator.js';
+import { HatariGenerator } from './generators/HatariGenerator.js';
+import { JgenesisGenerator } from './generators/JgenesisGenerator.js';
+import { JynxGenerator } from './generators/JynxGenerator.js';
+import { JZintvGenerator } from './generators/JZintvGenerator.js';
+import { KegaFusionGenerator } from './generators/KegaFusionGenerator.js';
+import { KronosGenerator } from './generators/KronosGenerator.js';
+import { Lime3dsGenerator } from './generators/Lime3dsGenerator.js';
+import { LinuxloaderGenerator } from './generators/LinuxloaderGenerator.js';
+import { LoveGenerator } from './generators/LoveGenerator.js';
+import { MagicEngineGenerator } from './generators/MagicEngineGenerator.js';
+import { MandarineGenerator } from './generators/MandarineGenerator.js';
+import { MednafenGenerator } from './generators/MednafenGenerator.js';
+import { MelonDSGenerator } from './generators/MelonDSGenerator.js';
+import { MesenGenerator } from './generators/MesenGenerator.js';
+import { MGBAGenerator } from './generators/MGBAGenerator.js';
+import { Mupen64Generator } from './generators/Mupen64Generator.js';
+import { N64RecompGenerator } from './generators/N64RecompGenerator.js';
+import { Nes3dGenerator } from './generators/Nes3dGenerator.js';
+import { NosGbaGenerator } from './generators/NosGbaGenerator.js';
+import { OpenBorGenerator } from './generators/OpenBorGenerator.js';
+import { OpenMSXGenerator } from './generators/OpenMSXGenerator.js';
+import { OricutronGenerator } from './generators/OricutronGenerator.js';
+import { PhoenixGenerator } from './generators/PhoenixGenerator.js';
+import { Pico8Generator } from './generators/Pico8Generator.js';
+import { PinballFXGenerator } from './generators/PinballFXGenerator.js';
+import { PlayGenerator } from './generators/PlayGenerator.js';
+import { PortsLauncherGenerator } from './generators/PortsLauncherGenerator.js';
+import { Project64Generator } from './generators/Project64Generator.js';
+import { PSXMameGenerator } from './generators/PSXMameGenerator.js';
+import { RaineGenerator } from './generators/RaineGenerator.js';
+import { RazeGenerator } from './generators/RazeGenerator.js';
+import { RetrobatLauncherGenerator } from './generators/RetrobatLauncherGenerator.js';
+import { RuffleGenerator } from './generators/RuffleGenerator.js';
+import { ScummVmGenerator } from './generators/ScummVmGenerator.js';
+import { SimCoupeGenerator } from './generators/SimCoupeGenerator.js';
+import { Simple64Generator } from './generators/Simple64Generator.js';
+import { Singe2Generator } from './generators/Singe2Generator.js';
+import { Snes9xGenerator } from './generators/Snes9xGenerator.js';
+import { SolarusGenerator } from './generators/SolarusGenerator.js';
+import { SSFGenerator } from './generators/SSFGenerator.js';
+import { ExeLauncherGenerator } from './generators/ExeLauncherGenerator.js';
+import { StellaGenerator } from './generators/StellaGenerator.js';
+import { SudachiGenerator } from './generators/SudachiGenerator.js';
+import { SuyuGenerator } from './generators/SuyuGenerator.js';
+import { TsugaruGenerator } from './generators/TsugaruGenerator.js';
+import { UaeGenerator } from './generators/UaeGenerator.js';
+import { VPinballGenerator } from './generators/VPinballGenerator.js';
+import { WinArcadiaGenerator } from './generators/WinArcadiaGenerator.js';
+import { Xm6proGenerator } from './generators/Xm6proGenerator.js';
+import { XroarGenerator } from './generators/XroarGenerator.js';
+import { YabasanshiroGenerator } from './generators/YabasanshiroGenerator.js';
+import { YmirGenerator } from './generators/YmirGenerator.js';
+import { YuzuGenerator } from './generators/YuzuGenerator.js';
+import { ZaccariaPinballGenerator } from './generators/ZaccariaPinballGenerator.js';
+import { ZEsarUXGenerator } from './generators/ZEsarUXGenerator.js';
+import { ZincGenerator } from './generators/ZincGenerator.js';
 
 
 
@@ -160,6 +247,267 @@ function getGenerator(args: LaunchArgs): BaseGenerator {
 
 
 
+    if (emu === 'altirra') {
+    return new AltirraGenerator(args);
+  }
+  if (emu === 'amazonlauncher') {
+    return new ExeLauncherGenerator(args);
+  }
+  if (emu === 'amigaforever') {
+    return new AmigaForeverGenerator(args);
+  }
+  if (emu === 'applewin') {
+    return new AppleWinGenerator(args);
+  }
+  if (emu === 'arcadeflashweb') {
+    return new ArcadeFlashWebGenerator(args);
+  }
+  if (emu === 'azahar') {
+    return new AzaharGenerator(args);
+  }
+  if (emu === 'bizhawk') {
+    return new BizhawkGenerator(args);
+  }
+  if (emu === 'capriceforever') {
+    return new CapriceForeverGenerator(args);
+  }
+  if (emu === 'citra') {
+    return new CitraGenerator(args);
+  }
+  if (emu === 'cxbx') {
+    return new CxbxGenerator(args);
+  }
+  if (emu === 'daphne') {
+    return new DaphneGenerator(args);
+  }
+  if (emu === 'demul') {
+    return new DemulGenerator(args);
+  }
+  if (emu === 'desmume') {
+    return new DesmumeGenerator(args);
+  }
+  if (emu === 'devilutionx') {
+    return new DevilutionXGenerator(args);
+  }
+  if (emu === 'dosbox') {
+    return new DosBoxGenerator(args);
+  }
+  if (emu === 'dosboxpure') {
+    return new DosBoxPureGenerator(args);
+  }
+  if (emu === 'dosboxstaging') {
+    return new DosBoxStagingGenerator(args);
+  }
+  if (emu === 'easyrpg') {
+    return new EasyRpgGenerator(args);
+  }
+  if (emu === 'eduke32') {
+    return new EDukeGenerator(args);
+  }
+  if (emu === 'eka2l1') {
+    return new Eka2l1Generator(args);
+  }
+  if (emu === 'epiclauncher') {
+    return new ExeLauncherGenerator(args);
+  }
+  if (emu === 'exelauncher') {
+    return new ExeLauncherGenerator(args);
+  }
+  if (emu === 'exodos') {
+    return new exoDOSGenerator(args);
+  }
+  if (emu === 'fbneo') {
+    return new FbneoGenerator(args);
+  }
+  if (emu === 'forceengine') {
+    return new ForceEngineGenerator(args);
+  }
+  if (emu === 'fpinball') {
+    return new FpinballGenerator(args);
+  }
+  if (emu === 'gemrb') {
+    return new GemRBGenerator(args);
+  }
+  if (emu === 'goglauncher') {
+    return new ExeLauncherGenerator(args);
+  }
+  if (emu === 'gopher64') {
+    return new Gopher64Generator(args);
+  }
+  if (emu === 'gsplus') {
+    return new GsPlusGenerator(args);
+  }
+  if (emu === 'gzdoom') {
+    return new GZDoomGenerator(args);
+  }
+  if (emu === 'hatari') {
+    return new HatariGenerator(args);
+  }
+  if (emu === 'jgenesis') {
+    return new JgenesisGenerator(args);
+  }
+  if (emu === 'jynx') {
+    return new JynxGenerator(args);
+  }
+  if (emu === 'jzintv') {
+    return new JZintvGenerator(args);
+  }
+  if (emu === 'kegafusion') {
+    return new KegaFusionGenerator(args);
+  }
+  if (emu === 'kronos') {
+    return new KronosGenerator(args);
+  }
+  if (emu === 'lime3ds') {
+    return new Lime3dsGenerator(args);
+  }
+  if (emu === 'linuxloader') {
+    return new LinuxloaderGenerator(args);
+  }
+  if (emu === 'love') {
+    return new LoveGenerator(args);
+  }
+  if (emu === 'magicengine') {
+    return new MagicEngineGenerator(args);
+  }
+  if (emu === 'mandarine') {
+    return new MandarineGenerator(args);
+  }
+  if (emu === 'mednafen') {
+    return new MednafenGenerator(args);
+  }
+  if (emu === 'melonds') {
+    return new MelonDSGenerator(args);
+  }
+  if (emu === 'mesen') {
+    return new MesenGenerator(args);
+  }
+  if (emu === 'mgba') {
+    return new MGBAGenerator(args);
+  }
+  if (emu === 'mupen64') {
+    return new Mupen64Generator(args);
+  }
+  if (emu === 'n64recomp') {
+    return new N64RecompGenerator(args);
+  }
+  if (emu === 'nes3d') {
+    return new Nes3dGenerator(args);
+  }
+  if (emu === 'nosgba') {
+    return new NosGbaGenerator(args);
+  }
+  if (emu === 'openbor') {
+    return new OpenBorGenerator(args);
+  }
+  if (emu === 'openmsx') {
+    return new OpenMSXGenerator(args);
+  }
+  if (emu === 'oricutron') {
+    return new OricutronGenerator(args);
+  }
+  if (emu === 'phoenix') {
+    return new PhoenixGenerator(args);
+  }
+  if (emu === 'pico8') {
+    return new Pico8Generator(args);
+  }
+  if (emu === 'pinballfx') {
+    return new PinballFXGenerator(args);
+  }
+  if (emu === 'play') {
+    return new PlayGenerator(args);
+  }
+  if (emu === 'portslauncher') {
+    return new PortsLauncherGenerator(args);
+  }
+  if (emu === 'project64') {
+    return new Project64Generator(args);
+  }
+  if (emu === 'psxmame') {
+    return new PSXMameGenerator(args);
+  }
+  if (emu === 'raine') {
+    return new RaineGenerator(args);
+  }
+  if (emu === 'raze') {
+    return new RazeGenerator(args);
+  }
+  if (emu === 'retrobatlauncher') {
+    return new RetrobatLauncherGenerator(args);
+  }
+  if (emu === 'ruffle') {
+    return new RuffleGenerator(args);
+  }
+  if (emu === 'scummvm') {
+    return new ScummVmGenerator(args);
+  }
+  if (emu === 'simcoupe') {
+    return new SimCoupeGenerator(args);
+  }
+  if (emu === 'simple64') {
+    return new Simple64Generator(args);
+  }
+  if (emu === 'singe2') {
+    return new Singe2Generator(args);
+  }
+  if (emu === 'snes9x') {
+    return new Snes9xGenerator(args);
+  }
+  if (emu === 'solarus') {
+    return new SolarusGenerator(args);
+  }
+  if (emu === 'ssf') {
+    return new SSFGenerator(args);
+  }
+  if (emu === 'steamlauncher') {
+    return new ExeLauncherGenerator(args);
+  }
+  if (emu === 'stella') {
+    return new StellaGenerator(args);
+  }
+  if (emu === 'sudachi') {
+    return new SudachiGenerator(args);
+  }
+  if (emu === 'suyu') {
+    return new SuyuGenerator(args);
+  }
+  if (emu === 'tsugaru') {
+    return new TsugaruGenerator(args);
+  }
+  if (emu === 'uae') {
+    return new UaeGenerator(args);
+  }
+  if (emu === 'vpinball') {
+    return new VPinballGenerator(args);
+  }
+  if (emu === 'winarcadia') {
+    return new WinArcadiaGenerator(args);
+  }
+  if (emu === 'xm6pro') {
+    return new Xm6proGenerator(args);
+  }
+  if (emu === 'xroar') {
+    return new XroarGenerator(args);
+  }
+  if (emu === 'yabasanshiro') {
+    return new YabasanshiroGenerator(args);
+  }
+  if (emu === 'ymir') {
+    return new YmirGenerator(args);
+  }
+  if (emu === 'yuzu') {
+    return new YuzuGenerator(args);
+  }
+  if (emu === 'zaccariapinball') {
+    return new ZaccariaPinballGenerator(args);
+  }
+  if (emu === 'zesarux') {
+    return new ZEsarUXGenerator(args);
+  }
+  if (emu === 'zinc') {
+    return new ZincGenerator(args);
+  }
   return new GenericGenerator(args);
 }
 

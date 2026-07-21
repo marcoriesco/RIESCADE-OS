@@ -1,0 +1,247 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "ymir",
+  "name": "YMIR",
+  "description": "Configurações para o emulador YMIR geradas a partir do es_features.cfg.",
+  "icon": "ymir",
+  "configFiles": [],
+  "globalMappings": {},
+  "groups": [
+    {
+      "id": "graphics",
+      "title": "Gráficos",
+      "icon": "monitor",
+      "order": 1,
+      "options": [
+        {
+          "id": "ymir_ratio",
+          "label": "Proporção de Tela",
+          "type": "select",
+          "default": "auto",
+          "configKey": "ymir_ratio",
+          "values": [
+            {
+              "label": "Padrão",
+              "value": "default"
+            },
+            {
+              "label": "FORCE 4/3",
+              "value": "43"
+            },
+            {
+              "label": "FORCE 16/9",
+              "value": "169"
+            }
+          ]
+        },
+        {
+          "id": "ymir_videoformat",
+          "label": "Vídeo FORMAT",
+          "description": "Select a Vídeo format for output.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "ymir_videoformat",
+          "values": [
+            {
+              "label": "NTSC",
+              "value": "NTSC"
+            },
+            {
+              "label": "PAL",
+              "value": "PAL"
+            }
+          ],
+          "realKey": "VideoStandard",
+          "realSection": "System",
+          "realFile": "Ymir.Generator.cs"
+        },
+        {
+          "id": "saturn_deinterlace",
+          "label": "DEINTERLACE",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "saturn_deinterlace",
+          "realKey": "Deinterlace",
+          "realSection": "Video.Enhancements",
+          "realFile": "Ymir.Generator.cs"
+        },
+        {
+          "id": "saturn_meshmode",
+          "label": "IMPROVED MESH",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "saturn_meshmode",
+          "realKey": "TransparentMeshes",
+          "realSection": "Video.Enhancements",
+          "realFile": "Ymir.Generator.cs"
+        },
+        {
+          "id": "ymir_renderer",
+          "label": "Vídeo",
+          "type": "select",
+          "default": "auto",
+          "configKey": "ymir_renderer",
+          "values": [
+            {
+              "label": "DIRECT3D12",
+              "value": "Direct3D12"
+            },
+            {
+              "label": "DIRECT3D11",
+              "value": "Direct3D11"
+            },
+            {
+              "label": "VULKAN",
+              "value": "Vulkan"
+            }
+          ],
+          "realKey": "VideoStandard",
+          "realSection": "System",
+          "realFile": "Ymir.Generator.cs"
+        }
+      ]
+    },
+    {
+      "id": "emulation",
+      "title": "Emulação",
+      "icon": "cpu",
+      "order": 2,
+      "options": [
+        {
+          "id": "ymir_force_bios",
+          "label": "FORCE BIOS",
+          "description": "Define BIOS to use for Emulação.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "ymir_force_bios",
+          "values": [
+            {
+              "label": "Multi-region",
+              "value": "saturn_bios.bin"
+            },
+            {
+              "label": "JAP",
+              "value": "sega_101.bin"
+            },
+            {
+              "label": "EUR/US",
+              "value": "mpr-17933.bin"
+            }
+          ],
+          "realKey": "Override",
+          "realSection": "System.IPL",
+          "realFile": "Ymir.Generator.cs"
+        },
+        {
+          "id": "saturn_pergame_backup",
+          "label": "PER GAME BACKUP RAM",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "saturn_pergame_backup",
+          "realKey": "InternalBackupRAMPerGame",
+          "realSection": "System",
+          "realFile": "Ymir.Generator.cs"
+        }
+      ]
+    },
+    {
+      "id": "controls",
+      "title": "Controles",
+      "icon": "gamepad2",
+      "order": 5,
+      "options": [
+        {
+          "id": "ymir_peripheral",
+          "label": "CONTROLLER TYPE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "ymir_peripheral",
+          "values": [
+            {
+              "label": "STANDARD CONTROLLER",
+              "value": "ControlPad"
+            },
+            {
+              "label": "3D PAD",
+              "value": "AnalogPad"
+            }
+          ]
+        },
+        {
+          "id": "saturn_padlayout",
+          "label": "BUTTON LAYOUT",
+          "type": "select",
+          "default": "auto",
+          "configKey": "saturn_padlayout",
+          "values": [
+            {
+              "label": "L/R as Y/Z",
+              "value": "lr_yz"
+            },
+            {
+              "label": "L/R as Z/C",
+              "value": "lr_zc"
+            },
+            {
+              "label": "L/R as X/Z",
+              "value": "lr_xz"
+            }
+          ]
+        },
+        {
+          "id": "saturn_invert_triggers",
+          "label": "INVERT TRIGGERS AND SHOULDERS",
+          "description": "Use shoulder buttons for L and R instead of triggers.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "saturn_invert_triggers"
+        },
+        {
+          "id": "saturn_pad_ymir",
+          "label": "USE SATURN-LIKE CONTROLLER",
+          "type": "select",
+          "default": "auto",
+          "configKey": "saturn_pad_ymir",
+          "values": [
+            {
+              "label": "Não",
+              "value": "0"
+            },
+            {
+              "label": "Sim",
+              "value": "1"
+            }
+          ],
+          "realKey": "saturn_pad_ymir",
+          "realFile": "Ymir.Controllers.cs"
+        },
+        {
+          "id": "ymir_deadzone",
+          "label": "ANALOG DEADZONE",
+          "type": "slider",
+          "default": "auto",
+          "configKey": "ymir_deadzone",
+          "min": 0,
+          "max": 0.5,
+          "step": 0.02,
+          "suffix": "%"
+        },
+        {
+          "id": "ymir_trigger_deadzone",
+          "label": "ANALOG TRIGGER DEADZONE",
+          "description": "Sets the deadzone of the Gamepad analog triggers.",
+          "type": "slider",
+          "default": "auto",
+          "configKey": "ymir_trigger_deadzone",
+          "min": 0,
+          "max": 0.5,
+          "step": 0.02,
+          "suffix": "%",
+          "realKey": "AnalogToDigitalSensitivity",
+          "realSection": "Input.Gamepad",
+          "realFile": "Ymir.Controllers.cs"
+        }
+      ]
+    }
+  ]
+}

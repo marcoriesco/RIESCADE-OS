@@ -1,0 +1,271 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "linuxloader",
+  "name": "LINUXLOADER",
+  "description": "Configurações para o emulador LINUXLOADER geradas a partir do es_features.cfg.",
+  "icon": "linuxloader",
+  "configFiles": [],
+  "globalMappings": {},
+  "groups": [
+    {
+      "id": "graphics",
+      "title": "Gráficos",
+      "icon": "monitor",
+      "order": 1,
+      "options": [
+        {
+          "id": "ll_keepratio",
+          "label": "KEEP ASPECT RATIO",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "ll_keepratio",
+          "realKey": "KEEP_ASPECT_RATIO",
+          "realSection": "Display",
+          "realFile": "Linuxloader.Generator.cs"
+        }
+      ]
+    },
+    {
+      "id": "emulation",
+      "title": "Emulação",
+      "icon": "cpu",
+      "order": 2,
+      "options": [
+        {
+          "id": "ll_region",
+          "label": "REGION",
+          "type": "select",
+          "default": "auto",
+          "configKey": "ll_region",
+          "values": [
+            {
+              "label": "EXPORT",
+              "value": "EX"
+            },
+            {
+              "label": "US",
+              "value": "US"
+            },
+            {
+              "label": "JAPAN",
+              "value": "JP"
+            }
+          ],
+          "realKey": "REGION",
+          "realSection": "Emulation",
+          "realFile": "Linuxloader.Generator.cs"
+        },
+        {
+          "id": "ll_freeplay",
+          "label": "FREE PLAY",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "ll_freeplay",
+          "realKey": "FREEPLAY",
+          "realSection": "Emulation",
+          "realFile": "Linuxloader.Generator.cs"
+        },
+        {
+          "id": "ll_testmode",
+          "label": "TEST MODE",
+          "description": "Use S and T keys Ativado keyboard to navigate test mode.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "ll_testmode"
+        }
+      ]
+    },
+    {
+      "id": "controls",
+      "title": "Controles",
+      "icon": "gamepad2",
+      "order": 5,
+      "options": [
+        {
+          "id": "ll_reversepadindex",
+          "label": "INVERT P1 AND P2",
+          "description": "Use this option in case p1 and p2 are inverted.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "ll_reversepadindex"
+        },
+        {
+          "id": "ll_controlconfig",
+          "label": "CUSTOM Controles INI FILE",
+          "description": "Define path to custom Controles.ini file.",
+          "type": "input",
+          "default": "auto",
+          "configKey": "ll_controlconfig"
+        },
+        {
+          "id": "ll_hide_cursor",
+          "label": "HIDE MOUSE CURSOR",
+          "description": "Padrão: disabled.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "ll_hide_cursor",
+          "realKey": "HIDE_CURSOR",
+          "realSection": "Display",
+          "realFile": "Linuxloader.Generator.cs"
+        },
+        {
+          "id": "ll_crosshair",
+          "label": "ENABLE INTERNAL CROSSHAIR",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "ll_crosshair"
+        },
+        {
+          "id": "ll_gun_reload",
+          "label": "RELOAD MAPPING",
+          "type": "select",
+          "default": "auto",
+          "configKey": "ll_gun_reload",
+          "values": [
+            {
+              "label": "MOUSE RIGHT",
+              "value": "MOUSE_RIGHT_BUTTON"
+            },
+            {
+              "label": "MOUSE MIDDLE",
+              "value": "MOUSE_MIDDLE_BUTTON"
+            },
+            {
+              "label": "START (KEY 1)",
+              "value": "KEY_1"
+            },
+            {
+              "label": "UP",
+              "value": "KEY_Up"
+            },
+            {
+              "label": "DOWN",
+              "value": "KEY_Down"
+            }
+          ]
+        },
+        {
+          "id": "ll_gun_button",
+          "label": "GUN BUTTON MAPPING",
+          "type": "select",
+          "default": "auto",
+          "configKey": "ll_gun_button",
+          "values": [
+            {
+              "label": "MOUSE MIDDLE",
+              "value": "MOUSE_MIDDLE_BUTTON"
+            },
+            {
+              "label": "MOUSE RIGHT",
+              "value": "MOUSE_RIGHT_BUTTON"
+            },
+            {
+              "label": "START (KEY 1)",
+              "value": "KEY_1"
+            },
+            {
+              "label": "UP",
+              "value": "KEY_Up"
+            },
+            {
+              "label": "DOWN",
+              "value": "KEY_Down"
+            }
+          ]
+        },
+        {
+          "id": "ll_gun_action",
+          "label": "ACTION BUTTON MAPPING",
+          "type": "select",
+          "default": "auto",
+          "configKey": "ll_gun_action",
+          "values": [
+            {
+              "label": "START (KEY 1)",
+              "value": "KEY_1"
+            },
+            {
+              "label": "MOUSE RIGHT",
+              "value": "MOUSE_RIGHT_BUTTON"
+            },
+            {
+              "label": "MOUSE MIDDLE",
+              "value": "MOUSE_MIDDLE_BUTTON"
+            },
+            {
+              "label": "UP",
+              "value": "KEY_Up"
+            },
+            {
+              "label": "DOWN",
+              "value": "KEY_Down"
+            }
+          ]
+        },
+        {
+          "id": "ll_crosshair1",
+          "label": "P1 CROSSHAIR PATH",
+          "type": "input",
+          "default": "auto",
+          "configKey": "ll_crosshair1",
+          "realKey": "GSEVO_CROSSHAIR_ALWAYS_OFF",
+          "realSection": "CrossHairs",
+          "realFile": "Linuxloader.Generator.cs"
+        },
+        {
+          "id": "ll_sindenborder",
+          "label": "ENABLE WHITE BORDER",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "ll_sindenborder"
+        },
+        {
+          "id": "gun_index_revert",
+          "label": "SWITCH GUN INDEX",
+          "description": "Switch this to use lightgun 1 for player 2 and lightgun 2 for player 1.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "gun_index_revert"
+        },
+        {
+          "id": "use_demulshooter",
+          "label": "USE DEMULSHOOTER",
+          "description": "Launch DemulShooter for gun games.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "use_demulshooter"
+        },
+        {
+          "id": "ds_nocrosshair",
+          "label": "HIDE CROSSHAIR (DEMULSHOOTER)",
+          "description": "Hide in-game crosshair (game dependant).",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "ds_nocrosshair"
+        },
+        {
+          "id": "ds_output",
+          "label": "OUTPUT GAME DATA",
+          "description": "Enable this option when using mamehooker with LEDs, solenoids, rumble...",
+          "type": "select",
+          "default": "auto",
+          "configKey": "ds_output",
+          "values": [
+            {
+              "label": "TO WINDOW",
+              "value": "win"
+            },
+            {
+              "label": "TO NETWORK",
+              "value": "net"
+            },
+            {
+              "label": "TO BOTH",
+              "value": "both"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

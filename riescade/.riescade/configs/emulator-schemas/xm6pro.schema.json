@@ -1,0 +1,239 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "xm6pro",
+  "name": "XM6PRO",
+  "description": "Configurações para o emulador XM6PRO geradas a partir do es_features.cfg.",
+  "icon": "xm6pro",
+  "configFiles": [],
+  "globalMappings": {},
+  "groups": [
+    {
+      "id": "graphics",
+      "title": "Gráficos",
+      "icon": "monitor",
+      "order": 1,
+      "options": [
+        {
+          "id": "68k_scanlines",
+          "label": "SCANLINES",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "68k_scanlines",
+          "realKey": "Scanlines",
+          "realSection": "Display",
+          "realFile": "Xm6pro.Generator.cs"
+        },
+        {
+          "id": "68k_smooth",
+          "label": "SMOOTH",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "68k_smooth",
+          "realKey": "Smoothing",
+          "realSection": "Display",
+          "realFile": "Xm6pro.Generator.cs"
+        },
+        {
+          "id": "68k_stretch",
+          "label": "Proporção de Tela",
+          "type": "select",
+          "default": "auto",
+          "configKey": "68k_stretch",
+          "values": [
+            {
+              "label": "4/3",
+              "value": "false"
+            },
+            {
+              "label": "Esticar",
+              "value": "true"
+            }
+          ],
+          "realKey": "68k_stretch",
+          "realFile": "Xm6pro.Generator.cs"
+        }
+      ]
+    },
+    {
+      "id": "emulation",
+      "title": "Emulação",
+      "icon": "cpu",
+      "order": 2,
+      "options": [
+        {
+          "id": "68k_clock",
+          "label": "CPU FREQUENCY",
+          "type": "select",
+          "default": "auto",
+          "configKey": "68k_clock",
+          "values": [
+            {
+              "label": "10 MHZ (STANDARD)",
+              "value": "0"
+            },
+            {
+              "label": "12 MHZ (ACE)",
+              "value": "1"
+            },
+            {
+              "label": "15 MHZ (PRO)",
+              "value": "2"
+            },
+            {
+              "label": "16 MHZ (SUPER)",
+              "value": "3"
+            },
+            {
+              "label": "17.4 MHZ (EXPERT)",
+              "value": "4"
+            },
+            {
+              "label": "20 MHZ (HARP)",
+              "value": "5"
+            }
+          ],
+          "realKey": "Clock",
+          "realSection": "Basic",
+          "realFile": "Xm6pro.Generator.cs"
+        },
+        {
+          "id": "68k_ram",
+          "label": "MAIN RAM",
+          "type": "select",
+          "default": "auto",
+          "configKey": "68k_ram",
+          "values": [
+            {
+              "label": "2 MB",
+              "value": "0"
+            },
+            {
+              "label": "4 MB",
+              "value": "1"
+            },
+            {
+              "label": "6 MB",
+              "value": "2"
+            },
+            {
+              "label": "8 MB",
+              "value": "3"
+            },
+            {
+              "label": "10 MB",
+              "value": "4"
+            },
+            {
+              "label": "12 MB",
+              "value": "5"
+            }
+          ],
+          "realKey": "Memory",
+          "realSection": "Basic",
+          "realFile": "Xm6pro.Generator.cs"
+        },
+        {
+          "id": "68k_floppy",
+          "label": "FAST FLOPPY",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "68k_floppy",
+          "realKey": "FloppySpeed",
+          "realSection": "Misc",
+          "realFile": "Xm6pro.Generator.cs"
+        },
+        {
+          "id": "68k_statusbar",
+          "label": "SHOW STATUS BAR",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "68k_statusbar",
+          "realKey": "StatusBar",
+          "realSection": "Window",
+          "realFile": "Xm6pro.Generator.cs"
+        }
+      ]
+    },
+    {
+      "id": "audio",
+      "title": "Áudio",
+      "icon": "volume2",
+      "order": 4,
+      "options": [
+        {
+          "id": "68k_midi_index",
+          "label": "MIDI DEVICE INDEX",
+          "description": "Select MIDI device as listed in emulator.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "68k_midi_index",
+          "values": [
+            {
+              "label": "0 (Não DEVICE SELECTED)",
+              "value": "0"
+            },
+            {
+              "label": "1",
+              "value": "1"
+            },
+            {
+              "label": "2",
+              "value": "2"
+            },
+            {
+              "label": "3",
+              "value": "3"
+            },
+            {
+              "label": "4",
+              "value": "4"
+            },
+            {
+              "label": "5",
+              "value": "5"
+            },
+            {
+              "label": "6",
+              "value": "6"
+            },
+            {
+              "label": "7",
+              "value": "7"
+            },
+            {
+              "label": "8",
+              "value": "8"
+            },
+            {
+              "label": "9",
+              "value": "9"
+            }
+          ],
+          "realKey": "OutDevice",
+          "realSection": "MIDI",
+          "realFile": "Xm6pro.Generator.cs"
+        },
+        {
+          "id": "68k_midi_interrupt",
+          "label": "MIDI INTERRUPT LEVEL",
+          "type": "select",
+          "default": "auto",
+          "configKey": "68k_midi_interrupt",
+          "values": [
+            {
+              "label": "LEVEL 4",
+              "value": "0"
+            },
+            {
+              "label": "LEVEL 2",
+              "value": "1"
+            }
+          ],
+          "realKey": "IntLevel",
+          "realSection": "MIDI",
+          "realFile": "Xm6pro.Generator.cs"
+        }
+      ]
+    }
+  ]
+}

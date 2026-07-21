@@ -1,0 +1,492 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "stella",
+  "name": "STELLA",
+  "description": "Configurações para o emulador STELLA geradas a partir do es_features.cfg.",
+  "icon": "stella",
+  "configFiles": [],
+  "globalMappings": {},
+  "groups": [
+    {
+      "id": "graphics",
+      "title": "Gráficos",
+      "icon": "monitor",
+      "order": 1,
+      "options": [
+        {
+          "id": "stella_vsync",
+          "label": "Sincronização Vertical (V-Sync)",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "stella_vsync"
+        },
+        {
+          "id": "stella_stretch",
+          "label": "Esticar TO SCREEN",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "stella_stretch"
+        },
+        {
+          "id": "stella_adapt_refresh",
+          "label": "ADAPT DISPLAY REFRESH RATE",
+          "description": "Try to select best refresh rate for the ROM.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "stella_adapt_refresh"
+        },
+        {
+          "id": "stella_monitor",
+          "label": "MONITOR INDEX",
+          "type": "select",
+          "default": "auto",
+          "configKey": "stella_monitor",
+          "values": [
+            {
+              "label": 0,
+              "value": "0"
+            },
+            {
+              "label": "1",
+              "value": "1"
+            },
+            {
+              "label": "2",
+              "value": "2"
+            },
+            {
+              "label": "3",
+              "value": "3"
+            },
+            {
+              "label": "4",
+              "value": "4"
+            },
+            {
+              "label": "5",
+              "value": "5"
+            },
+            {
+              "label": "6",
+              "value": "6"
+            },
+            {
+              "label": "7",
+              "value": "7"
+            },
+            {
+              "label": "8",
+              "value": "8"
+            },
+            {
+              "label": "9",
+              "value": "9"
+            }
+          ]
+        },
+        {
+          "id": "stella_interpolation",
+          "label": "INTERPOLATION",
+          "description": "Blur emulated display.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "stella_interpolation"
+        },
+        {
+          "id": "stella_tvfilter",
+          "label": "Vídeo FILTER",
+          "description": "Select a filter to apply.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "stella_tvfilter",
+          "values": [
+            {
+              "label": "Nenhum",
+              "value": "0"
+            },
+            {
+              "label": "RGB",
+              "value": "1"
+            },
+            {
+              "label": "S-Vídeo",
+              "value": "2"
+            },
+            {
+              "label": "COMPOSITE",
+              "value": "3"
+            },
+            {
+              "label": "BAD ADJUST",
+              "value": "4"
+            },
+            {
+              "label": "CUSTOM",
+              "value": "5"
+            }
+          ]
+        },
+        {
+          "id": "stella_scanlines",
+          "label": "SCANLINES INTENSITY",
+          "type": "select",
+          "default": "auto",
+          "configKey": "stella_scanlines",
+          "values": [
+            {
+              "label": "Não SCANLINES",
+              "value": "Off"
+            },
+            {
+              "label": "5%",
+              "value": "5"
+            },
+            {
+              "label": "10%",
+              "value": "10"
+            },
+            {
+              "label": "15%",
+              "value": "15"
+            },
+            {
+              "label": "20%",
+              "value": "20"
+            },
+            {
+              "label": "25%",
+              "value": "25"
+            },
+            {
+              "label": "30%",
+              "value": "30"
+            },
+            {
+              "label": "40%",
+              "value": "40"
+            },
+            {
+              "label": "50%",
+              "value": "50"
+            },
+            {
+              "label": "75%",
+              "value": "75"
+            }
+          ]
+        },
+        {
+          "id": "stella_overscan",
+          "label": "OVERSCAN",
+          "type": "select",
+          "default": "auto",
+          "configKey": "stella_overscan",
+          "values": [
+            {
+              "label": "Desativado",
+              "value": "Off"
+            },
+            {
+              "label": "1%",
+              "value": "1"
+            },
+            {
+              "label": "2%",
+              "value": "2"
+            },
+            {
+              "label": "3%",
+              "value": "3"
+            },
+            {
+              "label": "4%",
+              "value": "4"
+            },
+            {
+              "label": "5%",
+              "value": "5"
+            },
+            {
+              "label": "6%",
+              "value": "6"
+            },
+            {
+              "label": "7%",
+              "value": "7"
+            },
+            {
+              "label": "8%",
+              "value": "8"
+            },
+            {
+              "label": "9%",
+              "value": "9"
+            },
+            {
+              "label": "10%",
+              "value": "10"
+            }
+          ]
+        },
+        {
+          "id": "stella_renderer",
+          "label": "Vídeo",
+          "type": "select",
+          "default": "auto",
+          "configKey": "stella_renderer",
+          "values": [
+            {
+              "label": "DIRECT3D",
+              "value": "direct3d"
+            },
+            {
+              "label": "OPENGL",
+              "value": "opengl"
+            },
+            {
+              "label": "DIRECT3D 11",
+              "value": "direct3d11"
+            },
+            {
+              "label": "SOFTWARE",
+              "value": "software"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "emulation",
+      "title": "Emulação",
+      "icon": "cpu",
+      "order": 2,
+      "options": [
+        {
+          "id": "stella_autosave",
+          "label": "SAVE Ativado EXIT",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "stella_autosave"
+        },
+        {
+          "id": "stella_multithread",
+          "label": "ENABLE MULTI-THREADING",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "stella_multithread"
+        },
+        {
+          "id": "stella_fastload",
+          "label": "FAST LOAD",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "stella_fastload"
+        },
+        {
+          "id": "stella_uimessages",
+          "label": "SHOW UI MESSAGES",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "stella_uimessages"
+        }
+      ]
+    },
+    {
+      "id": "hacks",
+      "title": "Correções / Hacks",
+      "icon": "wrench",
+      "order": 3,
+      "options": [
+        {
+          "id": "stella_correct_aspect",
+          "label": "ASPECT RATIO CORRECTION",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "stella_correct_aspect"
+        }
+      ]
+    },
+    {
+      "id": "audio",
+      "title": "Áudio",
+      "icon": "volume2",
+      "order": 4,
+      "options": [
+        {
+          "id": "stella_audio_quality",
+          "label": "Áudio QUALITY",
+          "type": "select",
+          "default": "auto",
+          "configKey": "stella_audio_quality",
+          "values": [
+            {
+              "label": "HIGH QUALITY / MEDIUM LAG",
+              "value": "3"
+            },
+            {
+              "label": "LOW QUALITY / MEDIUM LAG",
+              "value": "2"
+            },
+            {
+              "label": "HIGH QUALITY / LOW LAG",
+              "value": "4"
+            },
+            {
+              "label": "ULTRA QUALITY / MINIMAL LAG",
+              "value": "5"
+            },
+            {
+              "label": "CUSTOM",
+              "value": "1"
+            }
+          ]
+        },
+        {
+          "id": "stella_force_stereo",
+          "label": "FORCE STEREO",
+          "description": "Force stereo Ativado all ROMs.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "stella_force_stereo"
+        }
+      ]
+    },
+    {
+      "id": "controls",
+      "title": "Controles",
+      "icon": "gamepad2",
+      "order": 5,
+      "options": [
+        {
+          "id": "stella_mouse",
+          "label": "USE MOUSE AS CONTROLLER",
+          "type": "select",
+          "default": "auto",
+          "configKey": "stella_mouse",
+          "values": [
+            {
+              "label": "FOR ANALOG DEVICES ONLY",
+              "value": "analog"
+            },
+            {
+              "label": "ALWAYS",
+              "value": "always"
+            },
+            {
+              "label": "NEVER",
+              "value": "never"
+            }
+          ]
+        },
+        {
+          "id": "stella_deadzone",
+          "label": "ANALOG DEADZONE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "stella_deadzone",
+          "values": [
+            {
+              "label": "5%",
+              "value": "3"
+            },
+            {
+              "label": "0%",
+              "value": "0"
+            },
+            {
+              "label": "10%",
+              "value": "6"
+            },
+            {
+              "label": "16%",
+              "value": "9"
+            },
+            {
+              "label": "21%",
+              "value": "12"
+            },
+            {
+              "label": "26%",
+              "value": "15"
+            },
+            {
+              "label": "31%",
+              "value": "18"
+            }
+          ]
+        },
+        {
+          "id": "stella_fourway",
+          "label": "4 WAY JOYSTICK",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "stella_fourway"
+        },
+        {
+          "id": "stella_autofire",
+          "label": "AUTOFIRE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "stella_autofire",
+          "values": [
+            {
+              "label": "Não",
+              "value": "0"
+            },
+            {
+              "label": "5HZ",
+              "value": "5"
+            },
+            {
+              "label": "10HZ",
+              "value": "10"
+            },
+            {
+              "label": "15HZ",
+              "value": "15"
+            },
+            {
+              "label": "20HZ",
+              "value": "20"
+            },
+            {
+              "label": "25HZ",
+              "value": "25"
+            },
+            {
+              "label": "30HZ",
+              "value": "30"
+            }
+          ],
+          "realKey": "stella_autofire",
+          "realFile": "Stella.Generator.cs"
+        },
+        {
+          "id": "stella_cursor",
+          "label": "SHOW MOUSE CURSOR",
+          "type": "select",
+          "default": "auto",
+          "configKey": "stella_cursor",
+          "values": [
+            {
+              "label": "IN UI ONLY",
+              "value": "2"
+            },
+            {
+              "label": "ALWAYS",
+              "value": "3"
+            },
+            {
+              "label": "IN GAME ONLY",
+              "value": "1"
+            },
+            {
+              "label": "NEVER",
+              "value": "0"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

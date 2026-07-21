@@ -1,0 +1,26 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "zesarux",
+  "name": "ZESARUX",
+  "description": "Configurações para o emulador ZESARUX geradas a partir do es_features.cfg.",
+  "icon": "zesarux",
+  "configFiles": [],
+  "globalMappings": {},
+  "groups": [
+    {
+      "id": "emulation",
+      "title": "Emulação",
+      "icon": "cpu",
+      "order": 2,
+      "options": [
+        {
+          "id": "zesarux_showfps",
+          "label": "SHOW FPS",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "zesarux_showfps"
+        }
+      ]
+    }
+  ]
+}

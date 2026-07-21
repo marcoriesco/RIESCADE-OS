@@ -1,0 +1,320 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "capriceforever",
+  "name": "CAPRICEFOREVER",
+  "description": "Configurações para o emulador CAPRICEFOREVER geradas a partir do es_features.cfg.",
+  "icon": "capriceforever",
+  "configFiles": [],
+  "globalMappings": {},
+  "groups": [
+    {
+      "id": "graphics",
+      "title": "Gráficos",
+      "icon": "monitor",
+      "order": 1,
+      "options": [
+        {
+          "id": "caprice_scanlines",
+          "label": "SCANLINES",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "caprice_scanlines",
+          "realKey": "DrawScanlines",
+          "realSection": "MainForm",
+          "realFile": "CapriceForever.Generator.cs"
+        },
+        {
+          "id": "caprice_monochrome",
+          "label": "MONOCHROME",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "caprice_monochrome",
+          "realKey": "ColorMonitor",
+          "realSection": "Emulator",
+          "realFile": "CapriceForever.Generator.cs"
+        },
+        {
+          "id": "caprice_renderer",
+          "label": "Vídeo",
+          "type": "select",
+          "default": "auto",
+          "configKey": "caprice_renderer",
+          "values": [
+            {
+              "label": "DIRECTX",
+              "value": "directx"
+            },
+            {
+              "label": "OPENGL",
+              "value": "opengl"
+            },
+            {
+              "label": "GDI",
+              "value": "gdi"
+            }
+          ],
+          "realKey": "UseOpenGL",
+          "realSection": "MainForm",
+          "realFile": "CapriceForever.Generator.cs"
+        }
+      ]
+    },
+    {
+      "id": "emulation",
+      "title": "Emulação",
+      "icon": "cpu",
+      "order": 2,
+      "options": [
+        {
+          "id": "caprice_fastload",
+          "label": "FAST LOAD",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "caprice_fastload",
+          "realKey": "FastLoading",
+          "realSection": "Emulator",
+          "realFile": "CapriceForever.Generator.cs"
+        },
+        {
+          "id": "caprice_turbo",
+          "label": "TURBO SPEED",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "caprice_turbo",
+          "realKey": "TurboFullSpeed",
+          "realSection": "Emulator",
+          "realFile": "CapriceForever.Generator.cs"
+        },
+        {
+          "id": "caprice_brand",
+          "label": "COMPUTER BRAND",
+          "type": "select",
+          "default": "auto",
+          "configKey": "caprice_brand",
+          "values": [
+            {
+              "label": "AMSTRAD",
+              "value": "Amstrad"
+            },
+            {
+              "label": "ORION",
+              "value": "Orion"
+            },
+            {
+              "label": "SCHNEIDER",
+              "value": "Schneider"
+            },
+            {
+              "label": "AWA",
+              "value": "Awa"
+            },
+            {
+              "label": "SOLAVOX",
+              "value": "Solavox"
+            },
+            {
+              "label": "SAISHO",
+              "value": "Saisho"
+            },
+            {
+              "label": "TRIUMPH",
+              "value": "Triumph"
+            },
+            {
+              "label": "ISP",
+              "value": "Isp"
+            }
+          ],
+          "realKey": "Brand",
+          "realSection": "Emulator",
+          "realFile": "CapriceForever.Generator.cs"
+        },
+        {
+          "id": "caprice_256k",
+          "label": "256K MEMORY EXTENSION",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "caprice_256k",
+          "realKey": "256kMemoryExtension",
+          "realSection": "Emulator",
+          "realFile": "CapriceForever.Generator.cs"
+        },
+        {
+          "id": "caprice_256ksilicon",
+          "label": "256K SILICON DISC",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "caprice_256ksilicon"
+        },
+        {
+          "id": "caprice_4m",
+          "label": "4MB MEMORY EXPANSION",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "caprice_4m"
+        },
+        {
+          "id": "caprice_multiface2",
+          "label": "MULTIFACE II",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "caprice_multiface2",
+          "realKey": "Multiface2",
+          "realSection": "Emulator",
+          "realFile": "CapriceForever.Generator.cs"
+        },
+        {
+          "id": "caprice_xmem",
+          "label": "XMEM",
+          "type": "select",
+          "default": "auto",
+          "configKey": "caprice_xmem",
+          "values": [
+            {
+              "label": "Não",
+              "value": "no"
+            },
+            {
+              "label": "Sim",
+              "value": "xmem"
+            },
+            {
+              "label": "BOOT",
+              "value": "xmem_boot"
+            }
+          ],
+          "realKey": "UpperROM1",
+          "realSection": "Roms",
+          "realFile": "CapriceForever.Generator.cs"
+        },
+        {
+          "id": "caprice_xmass",
+          "label": "XMASS",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "caprice_xmass",
+          "realKey": "XMass",
+          "realSection": "Emulator",
+          "realFile": "CapriceForever.Generator.cs"
+        },
+        {
+          "id": "caprice_albireo",
+          "label": "ALBIREO",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "caprice_albireo",
+          "realKey": "Albireo",
+          "realSection": "Emulator",
+          "realFile": "CapriceForever.Generator.cs"
+        },
+        {
+          "id": "caprice_gui",
+          "label": "SHOW GUI",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "caprice_gui",
+          "realKey": "FullscreenMenu",
+          "realSection": "MainForm",
+          "realFile": "CapriceForever.Generator.cs"
+        }
+      ]
+    },
+    {
+      "id": "audio",
+      "title": "Áudio",
+      "icon": "volume2",
+      "order": 4,
+      "options": [
+        {
+          "id": "caprice_playcity",
+          "label": "PLAYCITY EXTENSION",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "caprice_playcity",
+          "realKey": "PlayCity",
+          "realSection": "Emulator",
+          "realFile": "CapriceForever.Generator.cs"
+        },
+        {
+          "id": "caprice_digiblaster",
+          "label": "DIGIBLASTER EXTENSION",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "caprice_digiblaster",
+          "realKey": "Digiblaster",
+          "realSection": "Emulator",
+          "realFile": "CapriceForever.Generator.cs"
+        },
+        {
+          "id": "caprice_addspeech",
+          "label": "SPEECH SYNTHESIZER",
+          "type": "select",
+          "default": "auto",
+          "configKey": "caprice_addspeech",
+          "values": [
+            {
+              "label": "Nenhum",
+              "value": "none"
+            },
+            {
+              "label": "TECHNIMUSIC (TMPI)",
+              "value": "tmpi"
+            },
+            {
+              "label": "SSA-1",
+              "value": "ssa1"
+            },
+            {
+              "label": "DK TRONICS",
+              "value": "dktronics"
+            }
+          ],
+          "realKey": "TechniMusique",
+          "realSection": "Emulator",
+          "realFile": "CapriceForever.Generator.cs"
+        }
+      ]
+    },
+    {
+      "id": "controls",
+      "title": "Controles",
+      "icon": "gamepad2",
+      "order": 5,
+      "options": [
+        {
+          "id": "caprice_gamepadprofile",
+          "label": "MAPPING PROFILE",
+          "description": "Use 'per game' if you have saved a profile for the game in capriceforever\\Profiles folder.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "caprice_gamepadprofile",
+          "values": [
+            {
+              "label": "RETROBAT Automático",
+              "value": "retrobat"
+            },
+            {
+              "label": "PER GAME",
+              "value": "per_game"
+            },
+            {
+              "label": "CUSTOM",
+              "value": "custom"
+            }
+          ],
+          "realKey": "ProfileDirectory",
+          "realSection": "Inputs",
+          "realFile": "CapriceForever.Generator.cs"
+        },
+        {
+          "id": "caprice_keyboardasjoystick",
+          "label": "KEYBOARD AS JOYSTICK",
+          "description": "Enables arrows, CTRL and ALT key to act as joystick and fire buttons.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "caprice_keyboardasjoystick"
+        }
+      ]
+    }
+  ]
+}

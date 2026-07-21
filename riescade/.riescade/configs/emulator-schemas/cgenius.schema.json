@@ -1,0 +1,220 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "cgenius",
+  "name": "CGENIUS",
+  "description": "Configurações para o emulador CGENIUS geradas a partir do es_features.cfg.",
+  "icon": "cgenius",
+  "configFiles": [],
+  "globalMappings": {
+    "ratio": {
+      "configKey": "ratio",
+      "globalKey": "aspect_ratio"
+    }
+  },
+  "groups": [
+    {
+      "id": "graphics",
+      "title": "Gráficos",
+      "icon": "monitor",
+      "order": 1,
+      "options": [
+        {
+          "id": "cgenius_filter",
+          "label": "Conjunto de Shaders",
+          "description": "Efficient graphics filters improving the rendering of games.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "cgenius_filter",
+          "values": [
+            {
+              "label": "Nenhum",
+              "value": "1"
+            },
+            {
+              "label": "SCALE2X",
+              "value": "2"
+            },
+            {
+              "label": "SCALE3X",
+              "value": "3"
+            },
+            {
+              "label": "SCALE4X",
+              "value": "4"
+            }
+          ]
+        },
+        {
+          "id": "cgenius_resolution",
+          "label": "Resolução Interna",
+          "type": "select",
+          "default": "auto",
+          "configKey": "cgenius_resolution",
+          "values": [
+            {
+              "label": "320x200",
+              "value": "320x200"
+            },
+            {
+              "label": "320x240",
+              "value": "320x240"
+            },
+            {
+              "label": "640x360",
+              "value": "640x360"
+            },
+            {
+              "label": "640x480",
+              "value": "640x480"
+            }
+          ]
+        },
+        {
+          "id": "cgenius_vsync",
+          "label": "Sincronização Vertical (V-Sync)",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "cgenius_vsync"
+        },
+        {
+          "id": "ratio",
+          "label": "Proporção de Tela",
+          "type": "select",
+          "default": "auto",
+          "configKey": "ratio",
+          "values": [
+            {
+              "label": "4/3",
+              "value": "4:3"
+            },
+            {
+              "label": "16/9",
+              "value": "16:9"
+            },
+            {
+              "label": "5/4",
+              "value": "5:4"
+            },
+            {
+              "label": "16/10",
+              "value": "16:10"
+            },
+            {
+              "label": "5/4",
+              "value": "5:4"
+            },
+            {
+              "label": "4/3",
+              "value": "4:3"
+            },
+            {
+              "label": "disabled",
+              "value": "0:0"
+            }
+          ],
+          "inheritsGlobal": "aspect_ratio"
+        },
+        {
+          "id": "TiltedScreen",
+          "label": "ROTATE SCREEN",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "TiltedScreen"
+        },
+        {
+          "id": "cgenius_fps",
+          "label": "TARGET FPS",
+          "type": "slider",
+          "default": "auto",
+          "configKey": "cgenius_fps",
+          "min": 10,
+          "max": 120,
+          "step": 10
+        },
+        {
+          "id": "OGLfilter",
+          "label": "Filtragem de Texturas",
+          "description": "Select texture filtering mode.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "OGLfilter",
+          "values": [
+            {
+              "label": "NEAREST NEIGHBOR",
+              "value": "nearest"
+            },
+            {
+              "label": "LINEAR",
+              "value": "linear"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "emulation",
+      "title": "Emulação",
+      "icon": "cpu",
+      "order": 2,
+      "options": [
+        {
+          "id": "cgenius_hud",
+          "label": "SHOW HUD",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "cgenius_hud"
+        },
+        {
+          "id": "cgenius_fps",
+          "label": "SHOW FPS",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "cgenius_fps"
+        }
+      ]
+    },
+    {
+      "id": "controls",
+      "title": "Controles",
+      "icon": "gamepad2",
+      "order": 5,
+      "options": [
+        {
+          "id": "cgenius_TwoButtonFiring",
+          "label": "TWO BUTTON FIRE",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "cgenius_TwoButtonFiring"
+        },
+        {
+          "id": "cgenius_Analog",
+          "label": "ANALOG MOVEMENT",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "cgenius_Analog"
+        },
+        {
+          "id": "cgenius_SuperPogo",
+          "label": "SUPER POGO",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "cgenius_SuperPogo"
+        },
+        {
+          "id": "cgenius_ImpossiblePogo",
+          "label": "IMPOSSIBLE POGO",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "cgenius_ImpossiblePogo"
+        },
+        {
+          "id": "cgenius_AutoFire",
+          "label": "Automático FIRE",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "cgenius_AutoFire"
+        }
+      ]
+    }
+  ]
+}

@@ -1,25 +1,11 @@
 {
   "$schema": "riescade-emulator-schema-v1",
   "id": "bigpemu",
-  "name": "BigPEmu",
-  "description": "Emulador de Atari Jaguar.",
+  "name": "BIGPEMU",
+  "description": "Configurações para o emulador BIGPEMU geradas a partir do es_features.cfg.",
   "icon": "bigpemu",
-  "configFiles": [
-    {
-      "path": "userdata/BigPEmuConfig.bigpcfg",
-      "format": "json"
-    }
-  ],
-  "globalMappings": {
-    "fullscreen": {
-      "configKey": "fullscreen",
-      "globalKey": "fullscreen"
-    },
-    "vsync": {
-      "configKey": "vsync",
-      "globalKey": "vsync"
-    }
-  },
+  "configFiles": [],
+  "globalMappings": {},
   "groups": [
     {
       "id": "graphics",
@@ -28,22 +14,312 @@
       "order": 1,
       "options": [
         {
-          "id": "fullscreen",
-          "label": "Tela Cheia",
-          "description": "Iniciar o emulador em modo tela cheia.",
-          "type": "toggle",
-          "default": "true",
-          "configKey": "fullscreen",
-          "inheritsGlobal": "fullscreen"
+          "id": "bigpemu_scaling",
+          "label": "Resolução Interna",
+          "type": "select",
+          "default": "auto",
+          "configKey": "bigpemu_scaling",
+          "values": [
+            {
+              "label": "FIT TO AXIS",
+              "value": "5"
+            },
+            {
+              "label": "INTEGER MULTIPLE",
+              "value": "0"
+            },
+            {
+              "label": "1X",
+              "value": "1"
+            },
+            {
+              "label": "2X",
+              "value": "2"
+            },
+            {
+              "label": "3X",
+              "value": "3"
+            },
+            {
+              "label": "4X",
+              "value": "4"
+            },
+            {
+              "label": "Esticar",
+              "value": "6"
+            }
+          ],
+          "realKey": "ScreenScaling",
+          "realFile": "BigPEmu.Generator.cs"
+        },
+        {
+          "id": "bigpemu_ratio",
+          "label": "Proporção de Tela",
+          "type": "select",
+          "default": "auto",
+          "configKey": "bigpemu_ratio",
+          "values": [
+            {
+              "label": "4/3",
+              "value": "2"
+            },
+            {
+              "label": "1/1",
+              "value": "0"
+            },
+            {
+              "label": "16/9",
+              "value": "8"
+            },
+            {
+              "label": "5/3 (1.666)",
+              "value": "7"
+            },
+            {
+              "label": "10/9 (1.111)",
+              "value": "1"
+            },
+            {
+              "label": "29/21 (1.383)",
+              "value": "3"
+            },
+            {
+              "label": "89/60 (1.483)",
+              "value": "4"
+            },
+            {
+              "label": "14/9 (1.555)",
+              "value": "5"
+            },
+            {
+              "label": "16/10 (1.6)",
+              "value": "6"
+            },
+            {
+              "label": "37/20 (1.85)",
+              "value": "9"
+            },
+            {
+              "label": "20/10 (2)",
+              "value": "10"
+            },
+            {
+              "label": "21/9 (2.333)",
+              "value": "11"
+            }
+          ],
+          "realKey": "ScreenAspect",
+          "realFile": "BigPEmu.Generator.cs"
         },
         {
           "id": "vsync",
-          "label": "V-Sync",
-          "description": "Sincronização vertical.",
+          "label": "Sincronização Vertical (V-Sync)",
           "type": "toggle",
-          "default": "true",
+          "default": "auto",
           "configKey": "vsync",
-          "inheritsGlobal": "vsync"
+          "realKey": "VSync",
+          "realFile": "BigPEmu.Generator.cs"
+        },
+        {
+          "id": "bigpemu_shader",
+          "label": "EFFECT",
+          "description": "Select a BigPemu shader, only possible when RetroBat shaders is set to 'Nenhum'.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "bigpemu_shader",
+          "values": [
+            {
+              "label": "CHEESY SCANLINES",
+              "value": "cheesy_scanlines.dstack"
+            },
+            {
+              "label": "CRT-HYLLIAN",
+              "value": "crt-hyllian.dstack"
+            },
+            {
+              "label": "GAMMA",
+              "value": "gamma.dstack"
+            },
+            {
+              "label": "LIZ",
+              "value": "liz.dstack"
+            },
+            {
+              "label": "OH MY GAUSS",
+              "value": "oh_my_gauss.dstack"
+            },
+            {
+              "label": "SHADERTOY",
+              "value": "shadertoy.dstack"
+            },
+            {
+              "label": "WARPING",
+              "value": "warping.dstack"
+            },
+            {
+              "label": "XBR LV2",
+              "value": "xbr-lv2.dstack"
+            },
+            {
+              "label": "XBR LV3",
+              "value": "xbr-lv3-multipass.dstack"
+            }
+          ],
+          "realKey": "shaderset",
+          "realFile": "BigPEmu.Generator.cs"
+        },
+        {
+          "id": "bigpemu_antialiasing",
+          "label": "ANTI ALIASING (MSAA)",
+          "description": "Set Anti Aliasing for rendered content.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "bigpemu_antialiasing",
+          "values": [
+            {
+              "label": "Nenhum",
+              "value": "0"
+            },
+            {
+              "label": "MSAA 2X",
+              "value": "1"
+            },
+            {
+              "label": "MSAA 4X",
+              "value": "2"
+            },
+            {
+              "label": "MSAA 8X",
+              "value": "3"
+            },
+            {
+              "label": "MSAA 16X",
+              "value": "4"
+            }
+          ],
+          "realKey": "MSAAPref",
+          "realFile": "BigPEmu.Generator.cs"
+        },
+        {
+          "id": "bigpemu_renderer",
+          "label": "Vídeo",
+          "type": "select",
+          "default": "auto",
+          "configKey": "bigpemu_renderer",
+          "values": [
+            {
+              "label": "OPENGL",
+              "value": "BigPEmu_Video_OpenGL"
+            },
+            {
+              "label": "DIRECT3D 12",
+              "value": "BigPEmu_Video_D3D12"
+            }
+          ],
+          "realKey": "bigpemu_renderer",
+          "realFile": "BigPEmu.Generator.cs"
+        }
+      ]
+    },
+    {
+      "id": "emulation",
+      "title": "Emulação",
+      "icon": "cpu",
+      "order": 2,
+      "options": [
+        {
+          "id": "pal_mode",
+          "label": "PAL MODE",
+          "description": "Forces console to PAL mode instead of NTSC, might feel sluggish.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "pal_mode",
+          "realKey": "PALMode",
+          "realFile": "BigPEmu.Generator.cs"
+        },
+        {
+          "id": "bigpemu_jgd",
+          "label": "ENABLE JAGUAR GAME DRIVE",
+          "description": "Some games require the Game Drive extension.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "bigpemu_jgd",
+          "realKey": "ForceJGD",
+          "realFile": "BigPEmu.Generator.cs"
+        }
+      ]
+    },
+    {
+      "id": "controls",
+      "title": "Controles",
+      "icon": "gamepad2",
+      "order": 5,
+      "options": [
+        {
+          "id": "bigpemu_sdl",
+          "label": "INPUT",
+          "type": "select",
+          "default": "auto",
+          "configKey": "bigpemu_sdl",
+          "values": [
+            {
+              "label": "SDL",
+              "value": "1"
+            },
+            {
+              "label": "DIRECTINPUT",
+              "value": "0"
+            }
+          ],
+          "realKey": "bigpemu_sdl",
+          "realFile": "BigPEmu.Controllers.cs"
+        },
+        {
+          "id": "bigpemu_multitap",
+          "label": "ENABLE MULTITAP",
+          "type": "select",
+          "default": "auto",
+          "configKey": "bigpemu_multitap",
+          "values": [
+            {
+              "label": "Nenhum",
+              "value": "none"
+            },
+            {
+              "label": "IN PORT 1",
+              "value": "port1"
+            },
+            {
+              "label": "IN PORT 2",
+              "value": "port2"
+            },
+            {
+              "label": "BOTH PORTS",
+              "value": "both"
+            }
+          ]
+        },
+        {
+          "id": "bigpemu_analogstick",
+          "label": "USE LEFT STICK",
+          "description": "Use analog stick instead of dpad.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "bigpemu_analogstick"
+        },
+        {
+          "id": "bigpemu_deadzone",
+          "label": "ANALOG DEADZONE",
+          "description": "Sets the deadzone of the Gamepad analog sticks.",
+          "type": "slider",
+          "default": "auto",
+          "configKey": "bigpemu_deadzone",
+          "min": 0,
+          "max": 0.5,
+          "step": 0.02,
+          "suffix": "%",
+          "realKey": "AnalDeadMice",
+          "realFile": "BigPEmu.Controllers.cs"
         }
       ]
     }

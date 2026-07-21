@@ -67,7 +67,8 @@
     "bilinear_filtering": "auto",
     "texture_filtering": "auto",
     "trilinear_filtering": "auto",
-    "anisotropic_filtering": "auto"
+    "anisotropic_filtering": "auto",
+    "widescreen_patch": "true"
   },
   "pcsx2-nightly": {
     "TVShader": "0",

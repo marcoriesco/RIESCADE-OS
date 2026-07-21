@@ -1,0 +1,55 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "exodos",
+  "name": "EXODOS",
+  "description": "Configurações para o emulador EXODOS geradas a partir do es_features.cfg.",
+  "icon": "exodos",
+  "configFiles": [],
+  "globalMappings": {},
+  "groups": [
+    {
+      "id": "graphics",
+      "title": "Gráficos",
+      "icon": "monitor",
+      "order": 1,
+      "options": [
+        {
+          "id": "exo_resolution",
+          "label": "Resolução Interna",
+          "type": "select",
+          "default": "auto",
+          "configKey": "exo_resolution",
+          "values": [
+            {
+              "label": "MEDIUM(1280x960)",
+              "value": "medium"
+            },
+            {
+              "label": "LARGE(2560x1920)",
+              "value": "large"
+            },
+            {
+              "label": "SMALL(640x480)",
+              "value": "small"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hacks",
+      "title": "Correções / Hacks",
+      "icon": "wrench",
+      "order": 3,
+      "options": [
+        {
+          "id": "exo_aspect_ratio",
+          "label": "ASPECT RATIO CORRECTION",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "exo_aspect_ratio"
+        }
+      ]
+    }
+  ]
+}

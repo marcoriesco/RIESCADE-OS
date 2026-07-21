@@ -1,25 +1,11 @@
 {
   "$schema": "riescade-emulator-schema-v1",
   "id": "ryujinx",
-  "name": "Ryujinx",
-  "description": "Emulador de Nintendo Switch.",
+  "name": "RYUJINX",
+  "description": "Configurações para o emulador RYUJINX geradas a partir do es_features.cfg.",
   "icon": "ryujinx",
-  "configFiles": [
-    {
-      "path": "portable/Config.json",
-      "format": "json"
-    }
-  ],
-  "globalMappings": {
-    "fullscreen": {
-      "configKey": "fullscreen",
-      "globalKey": "fullscreen"
-    },
-    "vsync": {
-      "configKey": "vsync",
-      "globalKey": "vsync"
-    }
-  },
+  "configFiles": [],
+  "globalMappings": {},
   "groups": [
     {
       "id": "graphics",
@@ -28,47 +14,37 @@
       "order": 1,
       "options": [
         {
-          "id": "fullscreen",
-          "label": "Tela Cheia",
-          "description": "Iniciar o emulador em modo tela cheia.",
-          "type": "toggle",
-          "default": "true",
-          "configKey": "fullscreen",
-          "inheritsGlobal": "fullscreen"
-        },
-        {
-          "id": "vsync",
-          "label": "V-Sync",
-          "description": "Modo de sincronização vertical. Switch = 0, Switch Uncapped = 1, Mailbox = 2.",
+          "id": "ryujinx_vsync",
+          "label": "Sincronização Vertical (V-Sync)",
           "type": "select",
-          "default": "1",
-          "configKey": "vsync",
-          "inheritsGlobal": "vsync",
+          "default": "auto",
+          "configKey": "ryujinx_vsync",
           "values": [
             {
-              "label": "Switch (60 FPS)",
+              "label": "SWITCH",
               "value": "0"
             },
             {
-              "label": "Switch Sem Limite",
+              "label": "UNBOUNDED",
               "value": "1"
             },
             {
-              "label": "Mailbox",
+              "label": "CUSTOM",
               "value": "2"
             }
-          ]
+          ],
+          "realKey": "vsync_mode",
+          "realFile": "Ryujinx.Generator.cs"
         },
         {
-          "id": "ryujinx_resolution_scale",
-          "label": "Escala de Resolução",
-          "description": "Multiplicador de resolução interna.",
+          "id": "res_scale",
+          "label": "Resolução Interna",
           "type": "select",
-          "default": "1",
-          "configKey": "ryujinx_resolution_scale",
+          "default": "auto",
+          "configKey": "res_scale",
           "values": [
             {
-              "label": "1x Nativa (720p/1080p)",
+              "label": "Native (720p/1080p)",
               "value": "1"
             },
             {
@@ -82,71 +58,68 @@
             {
               "label": "4x (2880p/4320p)",
               "value": "4"
+            },
+            {
+              "label": "0,5x (custom)",
+              "value": "0.5"
+            },
+            {
+              "label": "0,8x (custom)",
+              "value": "0.8"
             }
           ]
         },
         {
-          "id": "ryujinx_backend_threading",
-          "label": "Threading de Backend",
-          "description": "Multithreading para o backend gráfico.",
+          "id": "aspect_ratio",
+          "label": "Proporção de Tela",
           "type": "select",
-          "default": "Auto",
-          "configKey": "ryujinx_backend_threading",
+          "default": "auto",
+          "configKey": "aspect_ratio",
           "values": [
             {
-              "label": "Automático",
-              "value": "Auto"
+              "label": "4/3",
+              "value": "Fixed4x3"
             },
             {
-              "label": "Desativado",
-              "value": "Off"
+              "label": "16/9",
+              "value": "Fixed16x9"
             },
             {
-              "label": "Ativado",
-              "value": "On"
+              "label": "16/10",
+              "value": "Fixed16x10"
+            },
+            {
+              "label": "21/9",
+              "value": "Fixed21x9"
+            },
+            {
+              "label": "32/9",
+              "value": "Fixed32x9"
+            },
+            {
+              "label": "Esticar",
+              "value": "Stretched"
             }
-          ]
+          ],
+          "realKey": "aspect_ratio",
+          "realFile": "Ryujinx.Generator.cs"
         },
         {
-          "id": "ryujinx_anti_aliasing",
-          "label": "Anti-Aliasing",
-          "description": "Método de suavização de bordas.",
-          "type": "select",
-          "default": "None",
-          "configKey": "ryujinx_anti_aliasing",
-          "values": [
-            {
-              "label": "Desativado",
-              "value": "None"
-            },
-            {
-              "label": "FXAA",
-              "value": "Fxaa"
-            },
-            {
-              "label": "SMAA Low",
-              "value": "SmaaLow"
-            },
-            {
-              "label": "SMAA Medium",
-              "value": "SmaaMedium"
-            },
-            {
-              "label": "SMAA High",
-              "value": "SmaaHigh"
-            },
-            {
-              "label": "SMAA Ultra",
-              "value": "SmaaUltra"
-            }
-          ]
+          "id": "backend_threading",
+          "label": "GRAPHICS BACKEND MULTITHREADING",
+          "description": "Executes Graphics backend Ativado second thread, improves performance, reduces stutter and speeds up shader compilation.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "backend_threading",
+          "realKey": "backend_threading",
+          "realFile": "Ryujinx.Generator.cs"
         },
         {
           "id": "ryujinx_scaling_filter",
-          "label": "Filtro de Upscaling",
-          "description": "Algoritmo para upscaling da imagem.",
+          "label": "SCALING FILTER",
+          "description": "Set scaling filter for rendered content.",
           "type": "select",
-          "default": "Bilinear",
+          "default": "auto",
           "configKey": "ryujinx_scaling_filter",
           "values": [
             {
@@ -154,84 +127,589 @@
               "value": "Bilinear"
             },
             {
-              "label": "Nearest",
+              "label": "Nearest Neighbor",
               "value": "Nearest"
             },
             {
               "label": "FSR",
               "value": "Fsr"
+            },
+            {
+              "label": "AREA",
+              "value": "Area"
             }
-          ]
+          ],
+          "realKey": "scaling_filter",
+          "realFile": "Ryujinx.Generator.cs"
+        },
+        {
+          "id": "enable_shader_cache",
+          "label": "SHADER CACHE",
+          "description": "Pre-coompile shader cache at game startup, leave Ativado for less stuttering in game.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "enable_shader_cache",
+          "realKey": "enable_shader_cache",
+          "realFile": "Ryujinx.Generator.cs"
+        },
+        {
+          "id": "enable_texture_recompression",
+          "label": "TEXTURE RECOMPRESSION",
+          "description": "Reduces VRAM usage at the cost of quality, may increase stuttering.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "enable_texture_recompression",
+          "realKey": "enable_texture_recompression",
+          "realFile": "Ryujinx.Generator.cs"
+        },
+        {
+          "id": "ryujinx_antialiasing",
+          "label": "Anti-Aliasing (FXAA)",
+          "description": "Set Anti Aliasing for rendered content.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "ryujinx_antialiasing",
+          "values": [
+            {
+              "label": "Nenhum",
+              "value": "None"
+            },
+            {
+              "label": "FXAA",
+              "value": "Fxaa"
+            },
+            {
+              "label": "SMAA LOW",
+              "value": "SmaaLow"
+            },
+            {
+              "label": "SMAA MEDIUM",
+              "value": "SmaaMedium"
+            },
+            {
+              "label": "SMAA HIGH",
+              "value": "SmaaHigh"
+            },
+            {
+              "label": "SMAA ULTRA",
+              "value": "SmaaUltra"
+            }
+          ],
+          "realKey": "anti_aliasing",
+          "realFile": "Ryujinx.Generator.cs"
+        },
+        {
+          "id": "max_anisotropy",
+          "label": "Filtragem Anisotrópica",
+          "description": "Enhance the quality of textures Ativado surface.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "max_anisotropy",
+          "values": [
+            {
+              "label": "Não",
+              "value": "-1"
+            },
+            {
+              "label": "2x",
+              "value": "2"
+            },
+            {
+              "label": "4x",
+              "value": "4"
+            },
+            {
+              "label": "8x",
+              "value": "8"
+            },
+            {
+              "label": "16x",
+              "value": "16"
+            }
+          ],
+          "realKey": "max_anisotropy",
+          "realFile": "Ryujinx.Generator.cs"
+        },
+        {
+          "id": "backend",
+          "label": "Vídeo",
+          "type": "select",
+          "default": "auto",
+          "configKey": "backend",
+          "values": [
+            {
+              "label": "OPENGL",
+              "value": "OpenGl"
+            },
+            {
+              "label": "VULKAN",
+              "value": "Vulkan"
+            }
+          ],
+          "realKey": "graphics_backend",
+          "realFile": "Ryujinx.Generator.cs"
         }
       ]
     },
     {
-      "id": "system",
-      "title": "Sistema",
+      "id": "emulation",
+      "title": "Emulação",
       "icon": "cpu",
       "order": 2,
       "options": [
         {
           "id": "ryujinx_undock",
-          "label": "Modo Portátil (Undocked)",
-          "description": "Emula o Switch no modo portátil.",
+          "label": "USE UNDOCKED MODE",
+          "description": "Can increase performance Ativado some lower-end systems.",
           "type": "toggle",
-          "default": "false",
+          "default": "auto",
           "configKey": "ryujinx_undock"
         },
         {
-          "id": "ryujinx_enable_ptc",
-          "label": "PPTC (Cache de Tradução)",
-          "description": "Reduz o tempo de compilação nos próximos carregamentos.",
+          "id": "enable_ptc",
+          "label": "ENABLE PPTC",
+          "description": "Reduces stuttering and speeds up boot after first boot.",
           "type": "toggle",
-          "default": "true",
-          "configKey": "ryujinx_enable_ptc"
+          "default": "auto",
+          "configKey": "enable_ptc",
+          "realKey": "enable_ptc",
+          "realFile": "Ryujinx.Generator.cs"
         },
         {
-          "id": "ryujinx_ignore_missing_services",
-          "label": "Ignorar Serviços Ausentes",
-          "description": "Pode ajudar com crashes em alguns jogos.",
+          "id": "enable_fs_integrity_checks",
+          "label": "FS INTEGRITY CHECKS",
+          "description": "Checks for corrupt files when booting a game.",
           "type": "toggle",
-          "default": "false",
-          "configKey": "ryujinx_ignore_missing_services"
+          "default": "auto",
+          "configKey": "enable_fs_integrity_checks",
+          "realKey": "enable_fs_integrity_checks",
+          "realFile": "Ryujinx.Generator.cs"
         },
         {
-          "id": "ryujinx_language",
-          "label": "Idioma do Sistema",
-          "description": "Idioma simulado do sistema Switch.",
+          "id": "system_region",
+          "label": "REGION",
+          "description": "Force the region of the system.",
           "type": "select",
-          "default": "AmericanEnglish",
-          "configKey": "ryujinx_language",
+          "default": "auto",
+          "configKey": "system_region",
           "values": [
             {
-              "label": "Inglês (EUA)",
+              "label": "JAPAN",
+              "value": "Japan"
+            },
+            {
+              "label": "USA",
+              "value": "USA"
+            },
+            {
+              "label": "EUROPE",
+              "value": "Europe"
+            },
+            {
+              "label": "AUSTRALIA",
+              "value": "Australia"
+            },
+            {
+              "label": "CHINA",
+              "value": "China"
+            },
+            {
+              "label": "KOREA",
+              "value": "Korea"
+            },
+            {
+              "label": "TAIWAN",
+              "value": "Taiwan"
+            }
+          ],
+          "realKey": "system_region",
+          "realFile": "Ryujinx.Generator.cs"
+        },
+        {
+          "id": "switch_language",
+          "label": "LANGUAGE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "switch_language",
+          "values": [
+            {
+              "label": "English (US)",
               "value": "AmericanEnglish"
             },
             {
-              "label": "Português (BR)",
-              "value": "BrazilianPortuguese"
-            },
-            {
-              "label": "Japonês",
-              "value": "Japanese"
-            },
-            {
-              "label": "Francês",
+              "label": "Français",
               "value": "French"
             },
             {
-              "label": "Espanhol",
-              "value": "Spanish"
+              "label": "Deutsch",
+              "value": "German"
             },
             {
-              "label": "Alemão",
-              "value": "German"
+              "label": "Español",
+              "value": "Spanish"
             },
             {
               "label": "Italiano",
               "value": "Italian"
+            },
+            {
+              "label": "Nederlands",
+              "value": "Dutch"
+            },
+            {
+              "label": "Portugues",
+              "value": "Portuguese"
+            },
+            {
+              "label": "Portugues do Brasil",
+              "value": "BrazilianPortuguese"
+            },
+            {
+              "label": "日本語 (Japanese)",
+              "value": "Japanese"
+            },
+            {
+              "label": "简化字 (Chinese)",
+              "value": "Chinese"
+            },
+            {
+              "label": "简化字 (Chinese - simplified)",
+              "value": "SimplifiedChinese"
+            },
+            {
+              "label": "簡化字 (Chinese - traditional)",
+              "value": "TraditionalChinese"
+            },
+            {
+              "label": "한국어 (Korean)",
+              "value": "Korean"
+            },
+            {
+              "label": "Taiwanese",
+              "value": "Taiwanese"
+            },
+            {
+              "label": "English (UK)",
+              "value": "BritishEnglish"
+            },
+            {
+              "label": "Français (Canada)",
+              "value": "CanadianFrench"
+            },
+            {
+              "label": "Español (Spanish - South America)",
+              "value": "LatinAmericanSpanish"
+            },
+            {
+              "label": "Русский",
+              "value": "Russian"
+            }
+          ],
+          "realKey": "system_language",
+          "realFile": "Ryujinx.Generator.cs"
+        },
+        {
+          "id": "memory_manager_mode",
+          "label": "MEMORY MANAGER MODE",
+          "description": "Greatly affects CPU performance.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "memory_manager_mode",
+          "values": [
+            {
+              "label": "SOFTWARE",
+              "value": "SoftwarePageTable"
+            },
+            {
+              "label": "HOST (fast)",
+              "value": "HostMapped"
+            },
+            {
+              "label": "HOST UNCHECKED (fastest)",
+              "value": "HostMappedUnsafe"
+            }
+          ],
+          "realKey": "memory_manager_mode",
+          "realFile": "Ryujinx.Generator.cs"
+        },
+        {
+          "id": "ignore_missing_services",
+          "label": "IGNORE MISSING SERVICES",
+          "description": "Ignore Horizon OS Services, can solve crashes Ativado some games.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "ignore_missing_services",
+          "realKey": "ignore_missing_services",
+          "realFile": "Ryujinx.Generator.cs"
+        },
+        {
+          "id": "ryujinx_showconsole",
+          "label": "SHOW DEBUG CONSOLE",
+          "description": "Show Ryujinx debug console.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "ryujinx_showconsole"
+        },
+        {
+          "id": "ryujinx_network",
+          "label": "MULTIPLAYER MODE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "ryujinx_network",
+          "values": [
+            {
+              "label": "Não",
+              "value": "no"
+            },
+            {
+              "label": "LOCAL",
+              "value": "local"
+            },
+            {
+              "label": "INTERNET",
+              "value": "internet"
+            }
+          ],
+          "realKey": "ryujinx_network",
+          "realFile": "Ryujinx.Generator.cs"
+        }
+      ]
+    },
+    {
+      "id": "audio",
+      "title": "Áudio",
+      "icon": "volume2",
+      "order": 4,
+      "options": [
+        {
+          "id": "audio_backend",
+          "label": "Áudio",
+          "type": "select",
+          "default": "auto",
+          "configKey": "audio_backend",
+          "values": [
+            {
+              "label": "OPENAL",
+              "value": "OpenAl"
+            },
+            {
+              "label": "SDL3",
+              "value": "SDL3"
+            },
+            {
+              "label": "SDL2",
+              "value": "SDL2"
+            },
+            {
+              "label": "SOUNDIO",
+              "value": "SoundIo"
+            }
+          ],
+          "realKey": "audio_backend",
+          "realFile": "Ryujinx.Generator.cs"
+        }
+      ]
+    },
+    {
+      "id": "controls",
+      "title": "Controles",
+      "icon": "gamepad2",
+      "order": 5,
+      "options": [
+        {
+          "id": "ryujinx_padtype1",
+          "label": "PLAYER 1 CONTROLLER TYPE",
+          "description": "Sets the player controller type.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "ryujinx_padtype1",
+          "values": [
+            {
+              "label": "PRO CONTROLLER",
+              "value": "ProController"
+            },
+            {
+              "label": "DUAL JOYCON",
+              "value": "JoyconPair"
+            },
+            {
+              "label": "LEFT JOYCON",
+              "value": "JoyconLeft"
+            },
+            {
+              "label": "RIGHT JOYCON",
+              "value": "JoyconRight"
+            },
+            {
+              "label": "HANDHELD",
+              "value": "Handheld"
             }
           ]
+        },
+        {
+          "id": "ryujinx_padtype2",
+          "label": "PLAYER 2 CONTROLLER TYPE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "ryujinx_padtype2",
+          "values": [
+            {
+              "label": "PRO CONTROLLER",
+              "value": "ProController"
+            },
+            {
+              "label": "DUAL JOYCON",
+              "value": "JoyconPair"
+            },
+            {
+              "label": "LEFT JOYCON",
+              "value": "JoyconLeft"
+            },
+            {
+              "label": "RIGHT JOYCON",
+              "value": "JoyconRight"
+            }
+          ]
+        },
+        {
+          "id": "ryujinx_padtype3",
+          "label": "PLAYER 3 CONTROLLER TYPE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "ryujinx_padtype3",
+          "values": [
+            {
+              "label": "PRO CONTROLLER",
+              "value": "ProController"
+            },
+            {
+              "label": "DUAL JOYCON",
+              "value": "JoyconPair"
+            },
+            {
+              "label": "LEFT JOYCON",
+              "value": "JoyconLeft"
+            },
+            {
+              "label": "RIGHT JOYCON",
+              "value": "JoyconRight"
+            }
+          ]
+        },
+        {
+          "id": "ryujinx_padtype4",
+          "label": "PLAYER 4 CONTROLLER TYPE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "ryujinx_padtype4",
+          "values": [
+            {
+              "label": "PRO CONTROLLER",
+              "value": "ProController"
+            },
+            {
+              "label": "DUAL JOYCON",
+              "value": "JoyconPair"
+            },
+            {
+              "label": "LEFT JOYCON",
+              "value": "JoyconLeft"
+            },
+            {
+              "label": "RIGHT JOYCON",
+              "value": "JoyconRight"
+            }
+          ]
+        },
+        {
+          "id": "ryujinx_gamepadbuttons",
+          "label": "INVERT FACE BUTTONS",
+          "description": "Invert A/B and X/Y buttons.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "ryujinx_gamepadbuttons"
+        },
+        {
+          "id": "ryujinx_enable_rumble",
+          "label": "RUMBLE",
+          "description": "Enable controller's rumble effects.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "ryujinx_enable_rumble"
+        },
+        {
+          "id": "ryujinx_enable_motion",
+          "label": "MOTION CONTROL",
+          "description": "Can only be used if the controller is compatible with motion control.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "ryujinx_enable_motion"
+        },
+        {
+          "id": "ryujinx_maxcontrollers",
+          "label": "FORCE NUMBER OF PLAYERS",
+          "description": "By Padrão RetroBat configures as many players as connected controllers, use this to override.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "ryujinx_maxcontrollers",
+          "values": [
+            {
+              "label": "1",
+              "value": "1"
+            },
+            {
+              "label": "2",
+              "value": "2"
+            },
+            {
+              "label": "3",
+              "value": "3"
+            },
+            {
+              "label": "4",
+              "value": "4"
+            },
+            {
+              "label": "5",
+              "value": "5"
+            },
+            {
+              "label": "6",
+              "value": "6"
+            },
+            {
+              "label": "7",
+              "value": "7"
+            },
+            {
+              "label": "8",
+              "value": "8"
+            }
+          ]
+        },
+        {
+          "id": "ryujinx_controller_applet",
+          "label": "DISABLE CONTROLLER APPLET",
+          "description": "Disable the controller applet that appears in multiplayer games to select the connected controllers.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "ryujinx_controller_applet",
+          "realKey": "ignore_applet",
+          "realFile": "Ryujinx.Generator.cs"
+        },
+        {
+          "id": "ryujinx_deadzone",
+          "label": "ANALOG DEADZONE",
+          "description": "Ignore analog stick movement below this threshold.",
+          "type": "slider",
+          "default": "auto",
+          "configKey": "ryujinx_deadzone",
+          "min": 0,
+          "max": 0.5,
+          "step": 0.05,
+          "suffix": "%",
+          "realKey": "deadzone_left",
+          "realFile": "Ryujinx.Controllers.cs"
         }
       ]
     }

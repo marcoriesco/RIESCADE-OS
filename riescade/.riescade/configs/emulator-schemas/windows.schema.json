@@ -1,0 +1,121 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "windows",
+  "name": "WINDOWS",
+  "description": "Configurações para o emulador WINDOWS geradas a partir do es_features.cfg.",
+  "icon": "windows",
+  "configFiles": [],
+  "globalMappings": {},
+  "groups": [
+    {
+      "id": "emulation",
+      "title": "Emulação",
+      "icon": "cpu",
+      "order": 2,
+      "options": [
+        {
+          "id": "steam_wait",
+          "label": "WAIT TIME",
+          "description": "Padrão is 30 seconds, define time to wait for the game to launch before returning to RetroBat game list.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "steam_wait",
+          "values": [
+            {
+              "label": "30s",
+              "value": "30"
+            },
+            {
+              "label": "45s",
+              "value": "45"
+            },
+            {
+              "label": "60s",
+              "value": "60"
+            },
+            {
+              "label": "75s",
+              "value": "75"
+            },
+            {
+              "label": "90s",
+              "value": "90"
+            },
+            {
+              "label": "105s",
+              "value": "105"
+            },
+            {
+              "label": "120s",
+              "value": "120"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "controls",
+      "title": "Controles",
+      "icon": "gamepad2",
+      "order": 5,
+      "options": [
+        {
+          "id": "use_demulshooter",
+          "label": "USE DEMULSHOOTER",
+          "description": "Launch DemulShooter for gun games.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "use_demulshooter",
+          "realKey": "use_demulshooter",
+          "realFile": "ExeLauncher.Guns.cs"
+        },
+        {
+          "id": "ds_output",
+          "label": "OUTPUT GAME DATA",
+          "description": "Enable this option when using mamehooker with LEDs, solenoids, rumble...",
+          "type": "select",
+          "default": "auto",
+          "configKey": "ds_output",
+          "values": [
+            {
+              "label": "TO WINDOW",
+              "value": "win"
+            },
+            {
+              "label": "TO NETWORK",
+              "value": "net"
+            },
+            {
+              "label": "TO BOTH",
+              "value": "both"
+            }
+          ]
+        },
+        {
+          "id": "ds_verbose",
+          "label": "VERBOSE MODE",
+          "description": "Enable verbose mode for debugging.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "ds_verbose"
+        },
+        {
+          "id": "ds_nocrosshair",
+          "label": "HIDE CROSSHAIR",
+          "description": "Hide in-game crosshair (game dependant).",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "ds_nocrosshair"
+        },
+        {
+          "id": "use_mamehooker",
+          "label": "USE MAMEHOOKER",
+          "description": "Launch MameHooker for outputs management.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "use_mamehooker"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,206 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "hatari",
+  "name": "HATARI",
+  "description": "Configurações para o emulador HATARI geradas a partir do es_features.cfg.",
+  "icon": "hatari",
+  "configFiles": [],
+  "globalMappings": {},
+  "groups": [
+    {
+      "id": "graphics",
+      "title": "Gráficos",
+      "icon": "monitor",
+      "order": 1,
+      "options": [
+        {
+          "id": "hatari_vsync",
+          "label": "VSYNC",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "hatari_vsync",
+          "realKey": "bUseVsync",
+          "realSection": "Screen",
+          "realFile": "Hatari.Generator.cs"
+        }
+      ]
+    },
+    {
+      "id": "emulation",
+      "title": "Emulação",
+      "icon": "cpu",
+      "order": 2,
+      "options": [
+        {
+          "id": "hatari_machine",
+          "label": "MACHINE TYPE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "hatari_machine",
+          "values": [
+            {
+              "label": "ATARI ST",
+              "value": "st"
+            },
+            {
+              "label": "MEGA ST",
+              "value": "megast"
+            },
+            {
+              "label": "ATARI STE",
+              "value": "ste"
+            },
+            {
+              "label": "MEGA STE",
+              "value": "megaste"
+            }
+          ],
+          "realKey": "bConfirmQuit",
+          "realSection": "Log",
+          "realFile": "Hatari.Generator.cs"
+        },
+        {
+          "id": "hatari_tos",
+          "label": "TOS",
+          "type": "select",
+          "default": "auto",
+          "configKey": "hatari_tos",
+          "values": [
+            {
+              "label": "TOS 2.06",
+              "value": "tos206.img"
+            },
+            {
+              "label": "TOS 1.06",
+              "value": "tos106.img"
+            },
+            {
+              "label": "TOS 1.04",
+              "value": "tos104.img"
+            },
+            {
+              "label": "TOS 1.02",
+              "value": "tos102.img"
+            },
+            {
+              "label": "EMUTOS",
+              "value": "emutos.img"
+            }
+          ]
+        },
+        {
+          "id": "hatari_frequency",
+          "label": "CPU FREQUENCY",
+          "description": "Use 8mhz for better compatibility.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "hatari_frequency",
+          "values": [
+            {
+              "label": "8 MHZ",
+              "value": "8"
+            },
+            {
+              "label": "16 MHZ",
+              "value": "16"
+            },
+            {
+              "label": "32 MHZ",
+              "value": "32"
+            }
+          ],
+          "realKey": "nCpuFreq",
+          "realSection": "System",
+          "realFile": "Hatari.Generator.cs"
+        },
+        {
+          "id": "hatari_memory",
+          "label": "RAM SIZE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "hatari_memory",
+          "values": [
+            {
+              "label": "1MB",
+              "value": "1024"
+            },
+            {
+              "label": "256kb",
+              "value": "256"
+            },
+            {
+              "label": "512kb",
+              "value": "512"
+            },
+            {
+              "label": "2MB",
+              "value": "2048"
+            },
+            {
+              "label": "4MB",
+              "value": "4096"
+            },
+            {
+              "label": "8MB",
+              "value": "8192"
+            },
+            {
+              "label": "10MB",
+              "value": "10240"
+            },
+            {
+              "label": "14MB",
+              "value": "14336"
+            }
+          ],
+          "realKey": "nMemorySize",
+          "realSection": "Memory",
+          "realFile": "Hatari.Generator.cs"
+        },
+        {
+          "id": "hatari_fastboot",
+          "label": "Inicialização Rápida (Fast Boot)",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "hatari_fastboot",
+          "realKey": "bFastBoot",
+          "realSection": "System",
+          "realFile": "Hatari.Generator.cs"
+        },
+        {
+          "id": "hatari_autosave",
+          "label": "AUTOSAVE",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "hatari_autosave",
+          "realKey": "bAutoSave",
+          "realSection": "Memory",
+          "realFile": "Hatari.Generator.cs"
+        }
+      ]
+    },
+    {
+      "id": "controls",
+      "title": "Controles",
+      "icon": "gamepad2",
+      "order": 5,
+      "options": [
+        {
+          "id": "hatari_autofire",
+          "label": "ENABLE AUTOFIRE",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "hatari_autofire"
+        },
+        {
+          "id": "hatari_joypad",
+          "label": "USE JAGUAR JOYPADS (STE)",
+          "description": "Enable the Emulação of Jaguar joypads which are plugged in the enhanced joystick ports of the Atari STE.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "hatari_joypad"
+        }
+      ]
+    }
+  ]
+}

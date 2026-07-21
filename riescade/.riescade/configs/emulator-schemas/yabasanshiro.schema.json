@@ -1,0 +1,340 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "yabasanshiro",
+  "name": "YABASANSHIRO",
+  "description": "Configurações para o emulador YABASANSHIRO geradas a partir do es_features.cfg.",
+  "icon": "yabasanshiro",
+  "configFiles": [],
+  "globalMappings": {},
+  "groups": [
+    {
+      "id": "graphics",
+      "title": "Gráficos",
+      "icon": "monitor",
+      "order": 1,
+      "options": [
+        {
+          "id": "yaba_resolution",
+          "label": "Resolução Interna",
+          "type": "select",
+          "default": "auto",
+          "configKey": "yaba_resolution",
+          "values": [
+            {
+              "label": "NATIVE",
+              "value": "0"
+            },
+            {
+              "label": "ORIGINAL",
+              "value": "3"
+            },
+            {
+              "label": "2x",
+              "value": "2"
+            },
+            {
+              "label": "4x",
+              "value": "1"
+            },
+            {
+              "label": "720p",
+              "value": "4"
+            },
+            {
+              "label": "1080p",
+              "value": "5"
+            }
+          ],
+          "realKey": "Video\\\\resolution_mode",
+          "realSection": "0.9.11",
+          "realFile": "Yabasanshiro.Generator.cs"
+        },
+        {
+          "id": "yaba_ratio",
+          "label": "Proporção de Tela",
+          "type": "select",
+          "default": "auto",
+          "configKey": "yaba_ratio",
+          "values": [
+            {
+              "label": "PRESERVE ASPECT",
+              "value": "0"
+            },
+            {
+              "label": "Esticar TO SCREEN",
+              "value": "3"
+            },
+            {
+              "label": "4:3",
+              "value": "1"
+            },
+            {
+              "label": "16:9",
+              "value": "2"
+            }
+          ],
+          "realKey": "Video\\\\AspectRatio",
+          "realSection": "0.9.11",
+          "realFile": "Yabasanshiro.Generator.cs"
+        },
+        {
+          "id": "yaba_filtering",
+          "label": "Filtragem de Texturas",
+          "description": "Control the texture filtering of the Emulação.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "yaba_filtering",
+          "values": [
+            {
+              "label": "Nenhum",
+              "value": "0"
+            },
+            {
+              "label": "BILINEAR",
+              "value": "3"
+            },
+            {
+              "label": "FXAA",
+              "value": "1"
+            },
+            {
+              "label": "SCANLINE",
+              "value": "2"
+            }
+          ],
+          "realKey": "Video\\\\filter_type",
+          "realSection": "0.9.11",
+          "realFile": "Yabasanshiro.Generator.cs"
+        },
+        {
+          "id": "yaba_videocore",
+          "label": "Vídeo",
+          "type": "select",
+          "default": "auto",
+          "configKey": "yaba_videocore",
+          "values": [
+            {
+              "label": "OPENGL",
+              "value": "1"
+            },
+            {
+              "label": "VULKAN",
+              "value": "4"
+            }
+          ],
+          "realKey": "Video\\\\VideoCore",
+          "realSection": "0.9.11",
+          "realFile": "Yabasanshiro.Generator.cs"
+        }
+      ]
+    },
+    {
+      "id": "emulation",
+      "title": "Emulação",
+      "icon": "cpu",
+      "order": 2,
+      "options": [
+        {
+          "id": "yaba_frameskip",
+          "label": "FRAMESKIP",
+          "description": "Skip frames to improve performance (smoothless).",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "yaba_frameskip",
+          "realKey": "General\\\\EnableFrameSkipLimiter",
+          "realSection": "0.9.11",
+          "realFile": "Yabasanshiro.Generator.cs"
+        },
+        {
+          "id": "saturn_discnumber",
+          "label": "DISC NUMBER",
+          "description": "In case of multidisc games, when using .m3u file, specify the disc number to run.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "saturn_discnumber",
+          "values": [
+            {
+              "label": "1",
+              "value": "0"
+            },
+            {
+              "label": "2",
+              "value": "1"
+            },
+            {
+              "label": "3",
+              "value": "2"
+            },
+            {
+              "label": "4",
+              "value": "3"
+            }
+          ]
+        },
+        {
+          "id": "saturn_startbios",
+          "label": "START BIOS",
+          "description": "This will run the console BIOS instead of a game.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "saturn_startbios"
+        },
+        {
+          "id": "yabasanshiro_force_bios",
+          "label": "FORCE BIOS",
+          "description": "Define BIOS to use for Emulação.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "yabasanshiro_force_bios",
+          "values": [
+            {
+              "label": "Multi-region",
+              "value": "saturn_bios.bin"
+            },
+            {
+              "label": "JAP",
+              "value": "sega_101.bin"
+            },
+            {
+              "label": "EUR/US",
+              "value": "mpr-17933.bin"
+            },
+            {
+              "label": "HLE",
+              "value": "hle"
+            }
+          ],
+          "realKey": "Memory\\\\Path",
+          "realSection": "0.9.11",
+          "realFile": "Yabasanshiro.Generator.cs"
+        },
+        {
+          "id": "yaba_fps",
+          "label": "SHOW FPS",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "yaba_fps",
+          "realKey": "General\\\\ShowFPS",
+          "realSection": "0.9.11",
+          "realFile": "Yabasanshiro.Generator.cs"
+        }
+      ]
+    },
+    {
+      "id": "audio",
+      "title": "Áudio",
+      "icon": "volume2",
+      "order": 4,
+      "options": [
+        {
+          "id": "yaba_audiocore",
+          "label": "Áudio",
+          "type": "select",
+          "default": "auto",
+          "configKey": "yaba_audiocore",
+          "values": [
+            {
+              "label": "SDL",
+              "value": "1"
+            },
+            {
+              "label": "DIRECTX",
+              "value": "2"
+            }
+          ],
+          "realKey": "Sound\\\\SoundCore",
+          "realSection": "0.9.11",
+          "realFile": "Yabasanshiro.Generator.cs"
+        }
+      ]
+    },
+    {
+      "id": "controls",
+      "title": "Controles",
+      "icon": "gamepad2",
+      "order": 5,
+      "options": [
+        {
+          "id": "yaba_padlayout",
+          "label": "BUTTON LAYOUT",
+          "type": "select",
+          "default": "auto",
+          "configKey": "yaba_padlayout",
+          "values": [
+            {
+              "label": "L/R as Y/Z",
+              "value": "lr_yz"
+            },
+            {
+              "label": "L/R as Z/C",
+              "value": "lr_zc"
+            },
+            {
+              "label": "L/R as X/Z",
+              "value": "lr_xz"
+            }
+          ],
+          "realKey": "Input\\\\Port\\\\",
+          "realSection": "0.9.11",
+          "realFile": "Yabasanshiro.Controllers.cs"
+        },
+        {
+          "id": "yaba_leftstick",
+          "label": "USE ANALOG STICK",
+          "description": "Use Left analog stick instead of D-PAD for Controles.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "yaba_leftstick"
+        },
+        {
+          "id": "yaba_multitap",
+          "label": "USE MULTITAP",
+          "type": "select",
+          "default": "auto",
+          "configKey": "yaba_multitap",
+          "values": [
+            {
+              "label": "Não",
+              "value": "0"
+            },
+            {
+              "label": "PORT 1",
+              "value": "1"
+            },
+            {
+              "label": "PORT 2",
+              "value": "2"
+            },
+            {
+              "label": "BOTH PORTS",
+              "value": "both"
+            }
+          ]
+        },
+        {
+          "id": "saturn_pad_yaba",
+          "label": "USE SATURN-LIKE CONTROLLER",
+          "type": "select",
+          "default": "auto",
+          "configKey": "saturn_pad_yaba",
+          "values": [
+            {
+              "label": "Não",
+              "value": "0"
+            },
+            {
+              "label": "Sim(DPAD)",
+              "value": "1"
+            },
+            {
+              "label": "Sim(ANALOG)",
+              "value": "2"
+            }
+          ],
+          "realKey": "saturn_pad_yaba",
+          "realFile": "Yabasanshiro.Controllers.cs"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,570 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "pcsx2-16",
+  "name": "PCSX2-16",
+  "description": "Configurações para o emulador PCSX2-16 geradas a partir do es_features.cfg.",
+  "icon": "pcsx2-16",
+  "configFiles": [],
+  "globalMappings": {
+    "ratio": {
+      "configKey": "ratio",
+      "globalKey": "aspect_ratio"
+    }
+  },
+  "groups": [
+    {
+      "id": "graphics",
+      "title": "Gráficos",
+      "icon": "monitor",
+      "order": 1,
+      "options": [
+        {
+          "id": "TVShader",
+          "label": "Conjunto de Shaders",
+          "type": "select",
+          "default": "auto",
+          "configKey": "TVShader",
+          "values": [
+            {
+              "label": "Não",
+              "value": "0"
+            },
+            {
+              "label": "SCANLINES",
+              "value": "1"
+            },
+            {
+              "label": "DIAGONAL FILTER",
+              "value": "2"
+            },
+            {
+              "label": "TRIANGULAR FILTER",
+              "value": "3"
+            },
+            {
+              "label": "WAVE FILTER",
+              "value": "4"
+            }
+          ],
+          "realKey": "TVShader",
+          "realSection": "Settings",
+          "realFile": "Pcsx2.Generator.cs"
+        },
+        {
+          "id": "ratio",
+          "label": "Proporção de Tela",
+          "type": "select",
+          "default": "auto",
+          "configKey": "ratio",
+          "values": [
+            {
+              "label": "4/3",
+              "value": "4:3"
+            },
+            {
+              "label": "16/9",
+              "value": "16:9"
+            },
+            {
+              "label": "Esticar",
+              "value": "Stretch"
+            }
+          ],
+          "inheritsGlobal": "aspect_ratio",
+          "realKey": "ratio",
+          "realFile": "Pcsx2.Generator.cs"
+        },
+        {
+          "id": "VSync",
+          "label": "Sincronização Vertical (V-Sync)",
+          "type": "select",
+          "default": "auto",
+          "configKey": "VSync",
+          "values": [
+            {
+              "label": "Não",
+              "value": "0"
+            },
+            {
+              "label": "STANDARD",
+              "value": "1"
+            },
+            {
+              "label": "Adaptável",
+              "value": "2"
+            }
+          ]
+        },
+        {
+          "id": "internalresolution",
+          "label": "Resolução Interna",
+          "type": "select",
+          "default": "auto",
+          "configKey": "internalresolution",
+          "values": [
+            {
+              "label": "Nativa (PS2)",
+              "value": "1"
+            },
+            {
+              "label": "x2 (720p)",
+              "value": "2"
+            },
+            {
+              "label": "x3 (1080p)",
+              "value": "3"
+            },
+            {
+              "label": "x4 (1440p)",
+              "value": "4"
+            },
+            {
+              "label": "x5",
+              "value": "5"
+            },
+            {
+              "label": "x6 (4K)",
+              "value": "6"
+            },
+            {
+              "label": "x8",
+              "value": "8"
+            },
+            {
+              "label": "DESKTOP",
+              "value": "0"
+            },
+            {
+              "label": "1024x1024 (SQUARE)",
+              "value": "1024"
+            },
+            {
+              "label": "2048x2048 (SQUARE)",
+              "value": "2048"
+            },
+            {
+              "label": "4096x4096 (SQUARE)",
+              "value": "4096"
+            },
+            {
+              "label": "1366x768",
+              "value": "768"
+            }
+          ],
+          "realKey": "upscale_multiplier",
+          "realSection": "Settings",
+          "realFile": "Pcsx2.Generator.cs"
+        },
+        {
+          "id": "renderer",
+          "label": "Vídeo",
+          "description": "Select which graphics API to use internally. Software mode disable graphics enhancements.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "renderer",
+          "values": [
+            {
+              "label": "OPENGL (HARDWARE)",
+              "value": "12"
+            },
+            {
+              "label": "DIRECTX 11 (HARDWARE)",
+              "value": "3"
+            },
+            {
+              "label": "OPENGL (SOFTWARE)",
+              "value": "13"
+            },
+            {
+              "label": "DIRECTX 11 (SOFTWARE)",
+              "value": "4"
+            }
+          ],
+          "realKey": "Renderer",
+          "realSection": "Settings",
+          "realFile": "Pcsx2.Generator.cs"
+        },
+        {
+          "id": "fmv_ratio",
+          "label": "Proporção de FMV",
+          "description": "Set the aspect ratio of the FMV cinematics.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "fmv_ratio",
+          "values": [
+            {
+              "label": "4/3",
+              "value": "4:3"
+            },
+            {
+              "label": "16/9",
+              "value": "16:9"
+            }
+          ],
+          "realKey": "FMVAspectRatioSwitch",
+          "realSection": "GSWindow",
+          "realFile": "Pcsx2.Generator.cs"
+        },
+        {
+          "id": "interlace",
+          "label": "DEINTERLACE",
+          "description": "Force the rendering and display of frames to progressive mode.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "interlace",
+          "realKey": "deinterlace_mode",
+          "realSection": "EmuCore/GS",
+          "realFile": "Pcsx2.Generator.cs"
+        },
+        {
+          "id": "fxaa",
+          "label": "Anti-Aliasing (FXAA)",
+          "description": "Set Anti Aliasing for rendered content.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "fxaa",
+          "realKey": "fxaa",
+          "realSection": "EmuCore/GS",
+          "realFile": "Pcsx2.Generator.cs"
+        },
+        {
+          "id": "bilinear_filtering",
+          "label": "LINEAR FILTERING",
+          "description": "Use Filtragem Bilinear when upscaling/downscaling the image to the screen.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "bilinear_filtering",
+          "realKey": "bilinear_filtering",
+          "realFile": "Pcsx2.Generator.cs"
+        },
+        {
+          "id": "anisotropic_filtering",
+          "label": "Filtragem Anisotrópica",
+          "description": "Enhance the quality of textures Ativado surface.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "anisotropic_filtering",
+          "values": [
+            {
+              "label": "Não",
+              "value": "0"
+            },
+            {
+              "label": "2x",
+              "value": "2"
+            },
+            {
+              "label": "4x",
+              "value": "4"
+            },
+            {
+              "label": "8x",
+              "value": "8"
+            },
+            {
+              "label": "16x",
+              "value": "16"
+            }
+          ],
+          "realKey": "MaxAnisotropy",
+          "realSection": "Settings",
+          "realFile": "Pcsx2.Generator.cs"
+        }
+      ]
+    },
+    {
+      "id": "emulation",
+      "title": "Emulação",
+      "icon": "cpu",
+      "order": 2,
+      "options": [
+        {
+          "id": "lrps2_bios",
+          "label": "FORCE BIOS",
+          "description": "Force the emulator to use a specific BIOS file.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "lrps2_bios",
+          "values": [
+            {
+              "label": "USA 230",
+              "value": "ps2-0230a-20080220.bin"
+            },
+            {
+              "label": "EUR 230",
+              "value": "ps2-0230e-20080220.bin"
+            },
+            {
+              "label": "EUR 250",
+              "value": "ps2-0250e-20100415.bin"
+            },
+            {
+              "label": "JAP 230",
+              "value": "ps2-0230j-20080220.bin"
+            },
+            {
+              "label": "PS3 PS2 FIRMWARE",
+              "value": "ps3_ps2_emu_bios.bin"
+            }
+          ]
+        },
+        {
+          "id": "gs_plugin",
+          "label": "GRAPHICS PLUGINS",
+          "description": "Select the graphics plugin used by the emulator. Depends Ativado hardware compatibility.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "gs_plugin",
+          "values": [
+            {
+              "label": "AVX2",
+              "value": "GSdx32-AVX2.dll"
+            },
+            {
+              "label": "SSE2",
+              "value": "GSdx32-SSE2.dll"
+            },
+            {
+              "label": "SSE4",
+              "value": "GSdx32-SSE4.dll"
+            }
+          ],
+          "realKey": "GS",
+          "realSection": "Filenames",
+          "realFile": "Pcsx2.Generator.cs"
+        },
+        {
+          "id": "fullboot",
+          "label": "SKIP BIOS",
+          "description": "Skips the BIOS boot animation displayed when loading content.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "fullboot"
+        },
+        {
+          "id": "DrawFramerate",
+          "label": "DRAW STATISTICS",
+          "description": "Enable monitoring.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "DrawFramerate"
+        },
+        {
+          "id": "Notifications",
+          "label": "NOTIFICATIONS",
+          "description": "Show notifications.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "Notifications",
+          "realKey": "OsdShowMessages",
+          "realSection": "EmuCore/GS",
+          "realFile": "Pcsx2.Generator.cs"
+        }
+      ]
+    },
+    {
+      "id": "hacks",
+      "title": "Correções / Hacks",
+      "icon": "wrench",
+      "order": 3,
+      "options": [
+        {
+          "id": "UserHacks",
+          "label": "MANUAL Hacks / Velocidade",
+          "description": "Enable manual Hacks / Velocidade below, otherwise Hacks / Velocidade will be apllied automatically.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "UserHacks",
+          "realKey": "UserHacks",
+          "realSection": "EmuCore/GS",
+          "realFile": "Pcsx2.Generator.cs"
+        },
+        {
+          "id": "Offset",
+          "label": "LOWER GS PRECISION (HACK)",
+          "description": "Avoid gap between pixels when upscaling. Fix Wild Arms text, SoulCalibur ghosting.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "Offset"
+        },
+        {
+          "id": "UserHacks_Half_Bottom_Override",
+          "label": "HALF-SCREEN (HACK)",
+          "description": "'Automático' will Controles the half-screen fix detection Ativado texture shuffling.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "UserHacks_Half_Bottom_Override",
+          "values": [
+            {
+              "label": "FORCE DISABLE (For Xenosaga games)",
+              "value": "0"
+            },
+            {
+              "label": "FORCE ENABLE (If issues Ativado Automático)",
+              "value": "1"
+            }
+          ],
+          "realKey": "UserHacks_Half_Bottom_Override",
+          "realSection": "Settings",
+          "realFile": "Pcsx2.Generator.cs"
+        },
+        {
+          "id": "UserHacks_HalfPixelOffset",
+          "label": "HALF PIXEL OFFSET (HACK)",
+          "description": "Might fix some misaligned fog, bloom or blend effect.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "UserHacks_HalfPixelOffset",
+          "values": [
+            {
+              "label": "Não",
+              "value": "0"
+            },
+            {
+              "label": "NORMAL (VERTEX)",
+              "value": "1"
+            },
+            {
+              "label": "SPECIAL (TEXTURE)",
+              "value": "2"
+            },
+            {
+              "label": "SPECIAL (TEXTURE AGRESSIVE)",
+              "value": "3"
+            }
+          ],
+          "realKey": "UserHacks_HalfPixelOffset",
+          "realSection": "Settings",
+          "realFile": "Pcsx2.Generator.cs"
+        },
+        {
+          "id": "UserHacks_round_sprite_offset",
+          "label": "ROUND SPRITE (HACK)",
+          "description": "Correct the sampling of 2D sprite textures when upscaling.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "UserHacks_round_sprite_offset",
+          "values": [
+            {
+              "label": "Não",
+              "value": "0"
+            },
+            {
+              "label": "HALF",
+              "value": "1"
+            },
+            {
+              "label": "FULL",
+              "value": "2"
+            }
+          ],
+          "realKey": "UserHacks_round_sprite_offset",
+          "realSection": "Settings",
+          "realFile": "Pcsx2.Generator.cs"
+        },
+        {
+          "id": "align_sprite",
+          "label": "ALIGN SPRITE (HACK)",
+          "description": "Fix issues with upscaling in Namco games (Ace Combat, Tekken, SoulCalibur...).",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "align_sprite"
+        },
+        {
+          "id": "UserHacks_merge_pp_sprite",
+          "label": "MERGE SPRITE (HACK)",
+          "description": "Replaces post-processing multiple paving sprites by a single fat sprite.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "UserHacks_merge_pp_sprite",
+          "realKey": "UserHacks_merge_pp_sprite",
+          "realSection": "Settings",
+          "realFile": "Pcsx2.Generator.cs"
+        },
+        {
+          "id": "TextureOffsets",
+          "label": "TEXTURE OFFSETS (HACK)",
+          "description": "Offset for the ST/UV texture coordinates.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "TextureOffsets",
+          "values": [
+            {
+              "label": "X:0500 Y:0500 (Persona 3, Haunting Ground)",
+              "value": "1"
+            },
+            {
+              "label": "X:0000 Y:1000 (Xenosaga)",
+              "value": "2"
+            }
+          ],
+          "realKey": "TextureOffsets",
+          "realFile": "Pcsx2.Generator.cs"
+        },
+        {
+          "id": "UserHacks_Disable_Safe_Features",
+          "label": "SAFE FEATURES (HACK)",
+          "description": "Disabling safe features can help various games such as Xenosaga, Kingdom Hearts...",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "UserHacks_Disable_Safe_Features",
+          "realKey": "UserHacks_Disable_Safe_Features",
+          "realSection": "Settings",
+          "realFile": "Pcsx2.Generator.cs"
+        },
+        {
+          "id": "UserHacks_SkipDraw_Start",
+          "label": "SKIPDRAW START (HACK)",
+          "description": "A shadows and colors fix needed for some games such as Tony Hawk Proving Ground.",
+          "type": "slider",
+          "default": "auto",
+          "configKey": "UserHacks_SkipDraw_Start",
+          "min": 0,
+          "max": 20,
+          "step": 1,
+          "realKey": "UserHacks_SkipDraw_Offset",
+          "realSection": "Settings",
+          "realFile": "Pcsx2.Generator.cs"
+        },
+        {
+          "id": "UserHacks_SkipDraw_End",
+          "label": "SKIPDRAW END (HACK)",
+          "type": "slider",
+          "default": "auto",
+          "configKey": "UserHacks_SkipDraw_End",
+          "min": 0,
+          "max": 20,
+          "step": 1,
+          "realKey": "UserHacks_SkipDraw",
+          "realSection": "Settings",
+          "realFile": "Pcsx2.Generator.cs"
+        },
+        {
+          "id": "crc_hack_level",
+          "label": "CRC LEVEL (HACK)",
+          "description": "Controles the number of Automático-CRC fixes and Hacks / Velocidade applied to games.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "crc_hack_level",
+          "values": [
+            {
+              "label": "AGRESSIVE",
+              "value": "4"
+            }
+          ],
+          "realKey": "crc_hack_level",
+          "realSection": "Settings",
+          "realFile": "Pcsx2.Generator.cs"
+        },
+        {
+          "id": "negdivhack",
+          "label": "SPEED Hacks / Velocidade",
+          "description": "Significantly improves performances for CPU with 3+ cores.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "negdivhack"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,349 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "raze",
+  "name": "RAZE",
+  "description": "Configurações para o emulador RAZE geradas a partir do es_features.cfg.",
+  "icon": "raze",
+  "configFiles": [],
+  "globalMappings": {},
+  "groups": [
+    {
+      "id": "graphics",
+      "title": "Gráficos",
+      "icon": "monitor",
+      "order": 1,
+      "options": [
+        {
+          "id": "raze_scalemode",
+          "label": "Resolução Interna",
+          "type": "select",
+          "default": "auto",
+          "configKey": "raze_scalemode",
+          "values": [
+            {
+              "label": "NORMAL",
+              "value": "0"
+            },
+            {
+              "label": "LOWEST POSSIBLE SCALE",
+              "value": "1"
+            },
+            {
+              "label": "320x200",
+              "value": "6"
+            },
+            {
+              "label": "640x400",
+              "value": "2"
+            },
+            {
+              "label": "960x600",
+              "value": "3"
+            },
+            {
+              "label": "1280x800",
+              "value": "4"
+            }
+          ],
+          "realKey": "vid_scalemode",
+          "realSection": "GlobalSettings",
+          "realFile": "Raze.Generator.cs"
+        },
+        {
+          "id": "raze_ratio",
+          "label": "Proporção de Tela",
+          "type": "select",
+          "default": "auto",
+          "configKey": "raze_ratio",
+          "values": [
+            {
+              "label": "4/3",
+              "value": "3"
+            },
+            {
+              "label": "16/10",
+              "value": "2"
+            },
+            {
+              "label": "16/9",
+              "value": "1"
+            },
+            {
+              "label": "17/10",
+              "value": "5"
+            },
+            {
+              "label": "5/4",
+              "value": "4"
+            },
+            {
+              "label": "21/9",
+              "value": "6"
+            }
+          ],
+          "realKey": "vid_aspect",
+          "realSection": "GlobalSettings",
+          "realFile": "Raze.Generator.cs"
+        },
+        {
+          "id": "raze_vsync",
+          "label": "VSYNC",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "raze_vsync",
+          "realKey": "vid_vsync",
+          "realSection": "GlobalSettings",
+          "realFile": "Raze.Generator.cs"
+        },
+        {
+          "id": "raze_cropaspect",
+          "label": "Esticar TO SCREEN",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "raze_cropaspect",
+          "realKey": "vid_cropaspect",
+          "realSection": "GlobalSettings",
+          "realFile": "Raze.Generator.cs"
+        },
+        {
+          "id": "raze_texture_filter",
+          "label": "Filtragem de Texturas",
+          "description": "Control the texture filtering of the Emulação.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "raze_texture_filter",
+          "values": [
+            {
+              "label": "Nenhum",
+              "value": "0"
+            },
+            {
+              "label": "LINEAR",
+              "value": "2"
+            },
+            {
+              "label": "BILINEAR",
+              "value": "3"
+            },
+            {
+              "label": "TRILINEAR",
+              "value": "4"
+            }
+          ],
+          "realKey": "gl_texture_filter",
+          "realSection": "GlobalSettings",
+          "realFile": "Raze.Generator.cs"
+        },
+        {
+          "id": "raze_anisotropic_filtering",
+          "label": "Filtragem Anisotrópica",
+          "description": "Enhance the quality of textures Ativado surface.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "raze_anisotropic_filtering",
+          "values": [
+            {
+              "label": "Não",
+              "value": "1"
+            },
+            {
+              "label": "2x",
+              "value": "2"
+            },
+            {
+              "label": "4x",
+              "value": "4"
+            },
+            {
+              "label": "8x",
+              "value": "8"
+            },
+            {
+              "label": "16x",
+              "value": "16"
+            }
+          ],
+          "realKey": "gl_texture_filter_anisotropic",
+          "realSection": "GlobalSettings",
+          "realFile": "Raze.Generator.cs"
+        },
+        {
+          "id": "raze_msaa",
+          "label": "MULTISAMPLE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "raze_msaa",
+          "values": [
+            {
+              "label": "Não",
+              "value": "1"
+            },
+            {
+              "label": "2x",
+              "value": "2"
+            },
+            {
+              "label": "4x",
+              "value": "4"
+            },
+            {
+              "label": "8x",
+              "value": "8"
+            },
+            {
+              "label": "16x",
+              "value": "16"
+            },
+            {
+              "label": "32x",
+              "value": "32"
+            }
+          ],
+          "realKey": "gl_multisample",
+          "realSection": "GlobalSettings",
+          "realFile": "Raze.Generator.cs"
+        },
+        {
+          "id": "raze_fxaa",
+          "label": "FXAA",
+          "type": "select",
+          "default": "auto",
+          "configKey": "raze_fxaa",
+          "values": [
+            {
+              "label": "Nenhum",
+              "value": "0"
+            },
+            {
+              "label": "LOW",
+              "value": "1"
+            },
+            {
+              "label": "MEDIUM",
+              "value": "2"
+            },
+            {
+              "label": "HIGH",
+              "value": "3"
+            },
+            {
+              "label": "EXTREME",
+              "value": "4"
+            }
+          ],
+          "realKey": "gl_fxaa",
+          "realSection": "GlobalSettings",
+          "realFile": "Raze.Generator.cs"
+        },
+        {
+          "id": "raze_renderer",
+          "label": "Vídeo",
+          "type": "select",
+          "default": "auto",
+          "configKey": "raze_renderer",
+          "values": [
+            {
+              "label": "OPENGL",
+              "value": "0"
+            },
+            {
+              "label": "VULKAN",
+              "value": "1"
+            },
+            {
+              "label": "OPENGL ES",
+              "value": "2"
+            }
+          ],
+          "realKey": "vid_preferbackend",
+          "realSection": "GlobalSettings",
+          "realFile": "Raze.Generator.cs"
+        }
+      ]
+    },
+    {
+      "id": "audio",
+      "title": "Áudio",
+      "icon": "volume2",
+      "order": 4,
+      "options": [
+        {
+          "id": "raze_mididevice",
+          "label": "Áudio (MIDI DEVICE)",
+          "type": "select",
+          "default": "auto",
+          "configKey": "raze_mididevice",
+          "values": [
+            {
+              "label": "FLUIDSYNTH",
+              "value": "-5"
+            },
+            {
+              "label": "MS GS WAVETABLE SYNTH",
+              "value": "0"
+            }
+          ],
+          "realKey": "snd_mididevice",
+          "realSection": "GlobalSettings",
+          "realFile": "Raze.Generator.cs"
+        }
+      ]
+    },
+    {
+      "id": "controls",
+      "title": "Controles",
+      "icon": "gamepad2",
+      "order": 5,
+      "options": [
+        {
+          "id": "raze_crosshair",
+          "label": "SHOW CROSSHAIR",
+          "type": "select",
+          "default": "auto",
+          "configKey": "raze_crosshair",
+          "values": [
+            {
+              "label": "Desativado",
+              "value": "off"
+            },
+            {
+              "label": "STANDARD",
+              "value": "0"
+            },
+            {
+              "label": "CROSS 1",
+              "value": "1"
+            },
+            {
+              "label": "CROSS 2",
+              "value": "2"
+            },
+            {
+              "label": "X",
+              "value": "3"
+            },
+            {
+              "label": "CIRCLE",
+              "value": "4"
+            },
+            {
+              "label": "ANGLE",
+              "value": "5"
+            },
+            {
+              "label": "TRIANGLE",
+              "value": "6"
+            },
+            {
+              "label": "DOT",
+              "value": "7"
+            }
+          ],
+          "realKey": "vk_hdr",
+          "realSection": "GlobalSettings",
+          "realFile": "Raze.Generator.cs"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "phoenix",
+  "name": "PHOENIX",
+  "description": "Configurações para o emulador PHOENIX geradas a partir do es_features.cfg.",
+  "icon": "phoenix",
+  "configFiles": [],
+  "globalMappings": {},
+  "groups": [
+    {
+      "id": "graphics",
+      "title": "Gráficos",
+      "icon": "monitor",
+      "order": 1,
+      "options": [
+        {
+          "id": "phoenix_vsync",
+          "label": "VSYNC",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "phoenix_vsync"
+        }
+      ]
+    },
+    {
+      "id": "controls",
+      "title": "Controles",
+      "icon": "gamepad2",
+      "order": 5,
+      "options": [
+        {
+          "id": "phoenix_dpad",
+          "label": "USE DPAD",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "phoenix_dpad"
+        }
+      ]
+    }
+  ]
+}

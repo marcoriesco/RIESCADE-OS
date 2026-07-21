@@ -1,0 +1,406 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "opengoal",
+  "name": "OPENGOAL",
+  "description": "Configurações para o emulador OPENGOAL geradas a partir do es_features.cfg.",
+  "icon": "opengoal",
+  "configFiles": [],
+  "globalMappings": {},
+  "groups": [
+    {
+      "id": "graphics",
+      "title": "Gráficos",
+      "icon": "monitor",
+      "order": 1,
+      "options": [
+        {
+          "id": "opengoal_ratio",
+          "label": "Proporção de Tela",
+          "type": "select",
+          "default": "auto",
+          "configKey": "opengoal_ratio",
+          "values": [
+            {
+              "label": "4:3",
+              "value": "4_3"
+            },
+            {
+              "label": "16:9",
+              "value": "16_9"
+            },
+            {
+              "label": "4:3 (PS2)",
+              "value": "4_3_ps2"
+            },
+            {
+              "label": "16:9 (PS2)",
+              "value": "16_9_ps2"
+            },
+            {
+              "label": "16:10",
+              "value": "16_10"
+            },
+            {
+              "label": "21:9",
+              "value": "21_9"
+            },
+            {
+              "label": "64:27",
+              "value": "64_27"
+            }
+          ]
+        },
+        {
+          "id": "opengoal_vsync",
+          "label": "Sincronização Vertical (V-Sync)",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "opengoal_vsync"
+        },
+        {
+          "id": "opengoal_resolution",
+          "label": "Resolução Interna",
+          "type": "select",
+          "default": "auto",
+          "configKey": "opengoal_resolution",
+          "values": [
+            {
+              "label": "1920x1080",
+              "value": "1920 1080"
+            },
+            {
+              "label": "1680x1050",
+              "value": "1680 1050"
+            },
+            {
+              "label": "1600x900",
+              "value": "1600 900"
+            },
+            {
+              "label": "1400x1050",
+              "value": "1400 1050"
+            },
+            {
+              "label": "1600x900",
+              "value": "1600 900"
+            },
+            {
+              "label": "1280x1024",
+              "value": "1280 1024"
+            },
+            {
+              "label": "1440x900",
+              "value": "1440 900"
+            },
+            {
+              "label": "1280x960",
+              "value": "1280 960"
+            },
+            {
+              "label": "1366x768",
+              "value": "1366 768"
+            },
+            {
+              "label": "1360x768",
+              "value": "1360 768"
+            },
+            {
+              "label": "1280x800",
+              "value": "1280 800"
+            },
+            {
+              "label": "1152x864",
+              "value": "1152 864"
+            },
+            {
+              "label": "1280x768",
+              "value": "1280 768"
+            },
+            {
+              "label": "1280x720",
+              "value": "1280 720"
+            },
+            {
+              "label": "1024x768",
+              "value": "1024 768"
+            },
+            {
+              "label": "1280x600",
+              "value": "1280 600"
+            },
+            {
+              "label": "800x600",
+              "value": "800 600"
+            },
+            {
+              "label": "640x480",
+              "value": "640 480"
+            }
+          ]
+        },
+        {
+          "id": "opengoal_msaa",
+          "label": "ANTI ALIASING (MSAA)",
+          "description": "Set Multi-Sampled Anti Aliasing level for rendered content.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "opengoal_msaa",
+          "values": [
+            {
+              "label": "Desativado",
+              "value": "1"
+            },
+            {
+              "label": "2X",
+              "value": "2"
+            },
+            {
+              "label": "4X",
+              "value": "4"
+            },
+            {
+              "label": "8X",
+              "value": "8"
+            },
+            {
+              "label": "16X",
+              "value": "16"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "emulation",
+      "title": "Emulação",
+      "icon": "cpu",
+      "order": 2,
+      "options": [
+        {
+          "id": "opengoal_region",
+          "label": "FORCE GAME REGION",
+          "type": "select",
+          "default": "auto",
+          "configKey": "opengoal_region",
+          "values": [
+            {
+              "label": "EUROPE",
+              "value": "1"
+            },
+            {
+              "label": "AMERICA",
+              "value": "0"
+            },
+            {
+              "label": "JAPAN",
+              "value": "2"
+            },
+            {
+              "label": "KOREA",
+              "value": "3"
+            }
+          ]
+        },
+        {
+          "id": "opengoal_language",
+          "label": "GAME LANGUAGE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "opengoal_language",
+          "values": [
+            {
+              "label": "English",
+              "value": "0"
+            },
+            {
+              "label": "Français",
+              "value": "1"
+            },
+            {
+              "label": "Deutsch",
+              "value": "2"
+            },
+            {
+              "label": "Español",
+              "value": "3"
+            },
+            {
+              "label": "Italiano",
+              "value": "4"
+            },
+            {
+              "label": "日本語 (Japanese)",
+              "value": "5"
+            },
+            {
+              "label": "한국어 (Korean)",
+              "value": "6"
+            }
+          ]
+        },
+        {
+          "id": "opengoal_subtitles",
+          "label": "SHOW SUBTITLES",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "opengoal_subtitles"
+        },
+        {
+          "id": "opengoal_sublang",
+          "label": "SUBTITLE LANGUAGE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "opengoal_sublang",
+          "values": [
+            {
+              "label": "English",
+              "value": "0"
+            },
+            {
+              "label": "Français",
+              "value": "1"
+            },
+            {
+              "label": "Deutsch",
+              "value": "2"
+            },
+            {
+              "label": "Español",
+              "value": "3"
+            },
+            {
+              "label": "Italiano",
+              "value": "4"
+            },
+            {
+              "label": "English (UK)",
+              "value": "6"
+            },
+            {
+              "label": "Suomi",
+              "value": "8"
+            },
+            {
+              "label": "Svenska",
+              "value": "9"
+            },
+            {
+              "label": "Dansk",
+              "value": "10"
+            },
+            {
+              "label": "Nederlands",
+              "value": "12"
+            },
+            {
+              "label": "Portugues do Brasil",
+              "value": "13"
+            },
+            {
+              "label": "Polski",
+              "value": "19"
+            },
+            {
+              "label": "Lietuvu",
+              "value": "20"
+            }
+          ]
+        },
+        {
+          "id": "opengoal_isopath_jak1",
+          "label": "JAK1 ISO PATH",
+          "type": "input",
+          "default": "auto",
+          "configKey": "opengoal_isopath_jak1"
+        },
+        {
+          "id": "opengoal_isopath_jak2",
+          "label": "JAK2 ISO PATH",
+          "type": "input",
+          "default": "auto",
+          "configKey": "opengoal_isopath_jak2"
+        },
+        {
+          "id": "opengoal_isopath_jak3",
+          "label": "JAK3 ISO PATH",
+          "type": "input",
+          "default": "auto",
+          "configKey": "opengoal_isopath_jak3"
+        },
+        {
+          "id": "opengoal_menulang",
+          "label": "INTERFACE LANGUAGE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "opengoal_menulang",
+          "values": [
+            {
+              "label": "English",
+              "value": "0"
+            },
+            {
+              "label": "Français",
+              "value": "1"
+            },
+            {
+              "label": "Deutsch",
+              "value": "2"
+            },
+            {
+              "label": "Español",
+              "value": "3"
+            },
+            {
+              "label": "Italiano",
+              "value": "4"
+            },
+            {
+              "label": "English(UK) (jak1)/ Korean (jak2)",
+              "value": "6"
+            },
+            {
+              "label": "Portugues (jak1) / English(UK) (jak2)",
+              "value": "7"
+            },
+            {
+              "label": "Suomi",
+              "value": "8"
+            },
+            {
+              "label": "Svenska",
+              "value": "9"
+            },
+            {
+              "label": "Dansk",
+              "value": "10"
+            },
+            {
+              "label": "Norsk",
+              "value": "11"
+            },
+            {
+              "label": "Nederlands",
+              "value": "12"
+            },
+            {
+              "label": "Portugues do Brasil",
+              "value": "13"
+            },
+            {
+              "label": "Magyar",
+              "value": "14"
+            },
+            {
+              "label": "Polski",
+              "value": "19"
+            },
+            {
+              "label": "Lietuvu",
+              "value": "20"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

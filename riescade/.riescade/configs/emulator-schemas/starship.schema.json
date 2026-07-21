@@ -1,0 +1,181 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "starship",
+  "name": "STARSHIP",
+  "description": "Configurações para o emulador STARSHIP geradas a partir do es_features.cfg.",
+  "icon": "starship",
+  "configFiles": [],
+  "globalMappings": {},
+  "groups": [
+    {
+      "id": "emulation",
+      "title": "Emulação",
+      "icon": "cpu",
+      "order": 2,
+      "options": [
+        {
+          "id": "starship_resolution",
+          "label": "Resolução Interna",
+          "type": "select",
+          "default": "auto",
+          "configKey": "starship_resolution",
+          "values": [
+            {
+              "label": "240p (NATIVE)",
+              "value": "240"
+            },
+            {
+              "label": "480p",
+              "value": "480"
+            },
+            {
+              "label": "720p",
+              "value": "720"
+            },
+            {
+              "label": "960p",
+              "value": "960"
+            },
+            {
+              "label": "1080p (FULL HD)",
+              "value": "1080"
+            },
+            {
+              "label": "1200p",
+              "value": "1200"
+            },
+            {
+              "label": "1440p",
+              "value": "1440"
+            },
+            {
+              "label": "2160p (4K)",
+              "value": "2160"
+            }
+          ]
+        },
+        {
+          "id": "starship_ratio",
+          "label": "Proporção de Tela",
+          "type": "select",
+          "default": "auto",
+          "configKey": "starship_ratio",
+          "values": [
+            {
+              "label": "NATIVE (4:3)",
+              "value": "native"
+            },
+            {
+              "label": "WIDESCREEN (16:9)",
+              "value": "widescreen"
+            },
+            {
+              "label": "3DS (5:3)",
+              "value": "3ds"
+            },
+            {
+              "label": "16:10",
+              "value": "16:10"
+            },
+            {
+              "label": "ULTRAWIDE (21:9)",
+              "value": "ultrawide"
+            }
+          ]
+        },
+        {
+          "id": "starship_vsync",
+          "label": "Sincronização Vertical (V-Sync)",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "starship_vsync"
+        },
+        {
+          "id": "starship_texturefilter",
+          "label": "Filtragem de Texturas",
+          "type": "select",
+          "default": "auto",
+          "configKey": "starship_texturefilter",
+          "values": [
+            {
+              "label": "LINEAR",
+              "value": "1"
+            },
+            {
+              "label": "THREE POINT",
+              "value": "0"
+            },
+            {
+              "label": "Nenhum",
+              "value": "2"
+            }
+          ]
+        },
+        {
+          "id": "starship_msaa",
+          "label": "ANTI ALIASING (MSAA)",
+          "description": "Multi-Sampling Anti Aliasing level.",
+          "type": "slider",
+          "default": "auto",
+          "configKey": "starship_msaa",
+          "min": 1,
+          "max": 8,
+          "step": 1,
+          "suffix": "x"
+        },
+        {
+          "id": "starship_fps",
+          "label": "TARGET FPS",
+          "type": "slider",
+          "default": "auto",
+          "configKey": "starship_fps",
+          "min": 30,
+          "max": 60,
+          "step": 1
+        },
+        {
+          "id": "starship_renderer",
+          "label": "Vídeo",
+          "type": "select",
+          "default": "auto",
+          "configKey": "starship_renderer",
+          "values": [
+            {
+              "label": "OPENGL",
+              "value": "OpenGL"
+            },
+            {
+              "label": "DIRECTX",
+              "value": "DirectX"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "audio",
+      "title": "Áudio",
+      "icon": "volume2",
+      "order": 4,
+      "options": [
+        {
+          "id": "starship_audioapi",
+          "label": "Áudio",
+          "type": "select",
+          "default": "auto",
+          "configKey": "starship_audioapi",
+          "values": [
+            {
+              "label": "WASAPI",
+              "value": "wasapi"
+            },
+            {
+              "label": "SDL",
+              "value": "sdl"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

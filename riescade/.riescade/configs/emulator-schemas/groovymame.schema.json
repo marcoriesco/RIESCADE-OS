@@ -1,0 +1,830 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "groovymame",
+  "name": "GROOVYMAME",
+  "description": "Configurações para o emulador GROOVYMAME geradas a partir do es_features.cfg.",
+  "icon": "groovymame",
+  "configFiles": [],
+  "globalMappings": {},
+  "groups": [
+    {
+      "id": "graphics",
+      "title": "Gráficos",
+      "icon": "monitor",
+      "order": 1,
+      "options": [
+        {
+          "id": "vsync",
+          "label": "Sincronização Vertical (V-Sync)",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "vsync"
+        },
+        {
+          "id": "groovy_profile",
+          "label": "SCREEN PROFILE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "groovy_profile",
+          "values": [
+            {
+              "label": "LCD Arcade (Vewlix) / PC / Modern TV",
+              "value": "LCD_ARCADE"
+            },
+            {
+              "label": "CRT TV 15 kHz",
+              "value": "CRT_TV_15"
+            },
+            {
+              "label": "CRT Arcade 15 kHz",
+              "value": "CRT_ARCADE_15"
+            },
+            {
+              "label": "CRT Arcade 25 kHz",
+              "value": "CRT_ARCADE_25"
+            },
+            {
+              "label": "CRT Arcade 31 kHz VGA",
+              "value": "CRT_ARCADE_31"
+            },
+            {
+              "label": "CRT 15 kHz + 25 kHz Combo",
+              "value": "CRT_15_25"
+            },
+            {
+              "label": "CRT 15/25/31 kHz",
+              "value": "CRT_15_25_31"
+            },
+            {
+              "label": "CRT PC 31 kHz 120 Hz",
+              "value": "CRT_31_120"
+            },
+            {
+              "label": "PVM / BVM",
+              "value": "PVM_BVM"
+            },
+            {
+              "label": "CRT TV PAL",
+              "value": "CRT_TV_PAL"
+            },
+            {
+              "label": "LCD Arcade (vertical)",
+              "value": "LCD_ARCADE_VERTICAL"
+            }
+          ]
+        },
+        {
+          "id": "mame_rotate",
+          "label": "ROTATE SCREEN",
+          "type": "select",
+          "default": "auto",
+          "configKey": "mame_rotate",
+          "values": [
+            {
+              "label": "Não",
+              "value": "off"
+            },
+            {
+              "label": "CLOCKWISE",
+              "value": "autoror"
+            },
+            {
+              "label": "COUNTER-CLOCKWISE",
+              "value": "autorol"
+            }
+          ]
+        },
+        {
+          "id": "disable_artwork",
+          "label": "DISABLE ARTWORK",
+          "description": "Disable the check of artworks in 'saves\\mame\\artwork' folder.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "disable_artwork"
+        },
+        {
+          "id": "brightness",
+          "label": "ADJUST BRIGHTNESS",
+          "description": "Use this setting to decrease or increase brightness, not compatible with 'gdi' Vídeo driver.",
+          "type": "slider",
+          "default": "auto",
+          "configKey": "brightness",
+          "min": 0.5,
+          "max": 1.5,
+          "step": 0.1
+        },
+        {
+          "id": "contrast",
+          "label": "ADJUST CONTRAST",
+          "description": "Use this setting to decrease or increase contrast, not compatible with 'gdi' Vídeo driver.",
+          "type": "slider",
+          "default": "auto",
+          "configKey": "contrast",
+          "min": 0.5,
+          "max": 1.5,
+          "step": 0.1
+        },
+        {
+          "id": "gamma",
+          "label": "ADJUST GAMMA",
+          "description": "Use this setting to decrease or increase gamma, not compatible with 'gdi' Vídeo driver.",
+          "type": "slider",
+          "default": "auto",
+          "configKey": "gamma",
+          "min": 0.5,
+          "max": 1.5,
+          "step": 0.1
+        },
+        {
+          "id": "mame_hiscore",
+          "label": "HISCORES",
+          "description": "Saves the hiscores in supported games.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "mame_hiscore"
+        },
+        {
+          "id": "layout_enable",
+          "label": "LAYOUT",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "layout_enable"
+        },
+        {
+          "id": "mame_autofire",
+          "label": "AUTOFIRE",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "mame_autofire"
+        },
+        {
+          "id": "mame_video_driver",
+          "label": "Vídeo",
+          "type": "select",
+          "default": "auto",
+          "configKey": "mame_video_driver",
+          "values": [
+            {
+              "label": "D3D",
+              "value": "d3d"
+            },
+            {
+              "label": "OPENGL",
+              "value": "opengl"
+            }
+          ],
+          "realKey": "mame_video_driver",
+          "realFile": "Mame64.Generator.cs"
+        }
+      ]
+    },
+    {
+      "id": "emulation",
+      "title": "Emulação",
+      "icon": "cpu",
+      "order": 2,
+      "options": [
+        {
+          "id": "triplebuffer",
+          "label": "Triplo BUFFERING",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "triplebuffer"
+        },
+        {
+          "id": "mame_throttle",
+          "label": "DISABLE THROTTLE",
+          "description": "When throttling is disabled, MAME runs the Emulação as fast as possible.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "mame_throttle"
+        },
+        {
+          "id": "mame_separate_cfg",
+          "label": "SEPARATE CFG FOLDER FROM LIBRETRO",
+          "description": "Use 'cfg64' folder for MAME standalone.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "mame_separate_cfg"
+        },
+        {
+          "id": "mame_cheats",
+          "label": "CHEATS",
+          "description": "Cheats need to be placed in 'cheats\\mame' folder.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "mame_cheats"
+        }
+      ]
+    },
+    {
+      "id": "audio",
+      "title": "Áudio",
+      "icon": "volume2",
+      "order": 4,
+      "options": [
+        {
+          "id": "mame_audio_driver",
+          "label": "Áudio",
+          "type": "select",
+          "default": "auto",
+          "configKey": "mame_audio_driver",
+          "values": [
+            {
+              "label": "DIRECTSOUND",
+              "value": "dsound"
+            },
+            {
+              "label": "XAUDIO2",
+              "value": "xaudio2"
+            },
+            {
+              "label": "PORTAUDIO",
+              "value": "portaudio"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "controls",
+      "title": "Controles",
+      "icon": "gamepad2",
+      "order": 5,
+      "options": [
+        {
+          "id": "mame_joystick_driver",
+          "label": "CONTROLLER",
+          "type": "select",
+          "default": "auto",
+          "configKey": "mame_joystick_driver",
+          "values": [
+            {
+              "label": "WIN HYBRID",
+              "value": "winhybrid"
+            },
+            {
+              "label": "XINPUT",
+              "value": "xinput"
+            },
+            {
+              "label": "DINPUT",
+              "value": "dinput"
+            }
+          ]
+        },
+        {
+          "id": "mame_ctrlr_profile",
+          "label": "CONTROLLER PROFILE",
+          "description": "The RetroBat team has prepared profiles for some common controllers, they are located in 'saves\\mame\\ctrlr' folder. CUSTOM can be used for saving one's own mappings.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "mame_ctrlr_profile",
+          "values": [
+            {
+              "label": "RETROBAT Automático",
+              "value": "retrobat_auto"
+            },
+            {
+              "label": "X-ARCADE",
+              "value": "X-Arcade"
+            },
+            {
+              "label": "IPAC2",
+              "value": "ipac2"
+            },
+            {
+              "label": "Nenhum",
+              "value": "none"
+            },
+            {
+              "label": "Nenhum",
+              "value": "none"
+            },
+            {
+              "label": "GAME SPECIFIC",
+              "value": "per_game"
+            },
+            {
+              "label": "CUSTOM 1",
+              "value": "custom1"
+            },
+            {
+              "label": "CUSTOM 2",
+              "value": "custom2"
+            },
+            {
+              "label": "CUSTOM 3",
+              "value": "custom3"
+            },
+            {
+              "label": "CUSTOM 4",
+              "value": "custom4"
+            },
+            {
+              "label": "CUSTOM 5",
+              "value": "custom5"
+            },
+            {
+              "label": "CUSTOM 6",
+              "value": "custom6"
+            },
+            {
+              "label": "CUSTOM 7",
+              "value": "custom7"
+            },
+            {
+              "label": "CUSTOM 8",
+              "value": "custom8"
+            }
+          ],
+          "realKey": "mame_ctrlr_profile",
+          "realFile": "Mame64.Generator.cs"
+        },
+        {
+          "id": "mame_multimouse",
+          "label": "MULTI-MOUSE",
+          "description": "Turning this option Ativado will enable MAME to report mouse movement and button presses Ativado different mice independently.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "mame_multimouse"
+        },
+        {
+          "id": "mame_dpadandstick",
+          "label": "DO NOT MAP LEFT STICK",
+          "description": "Turn this Desativado to map only the D-PAD for directions.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "mame_dpadandstick"
+        },
+        {
+          "id": "mame_mouse",
+          "label": "MOUSE DEVICE",
+          "description": "Define the connected device that emulates a mouse.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "mame_mouse",
+          "values": [
+            {
+              "label": "Nenhum",
+              "value": "none"
+            },
+            {
+              "label": "MOUSE",
+              "value": "mouse"
+            },
+            {
+              "label": "LIGHTGUN",
+              "value": "lightgun"
+            },
+            {
+              "label": "JOYSTICK",
+              "value": "joystick"
+            }
+          ],
+          "realKey": "mame_mouse",
+          "realFile": "Mame64.Generator.cs"
+        },
+        {
+          "id": "mame_pedal",
+          "label": "PEDAL DEVICE",
+          "description": "Define the connected device that emulates a Pedal.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "mame_pedal",
+          "values": [
+            {
+              "label": "Nenhum",
+              "value": "none"
+            },
+            {
+              "label": "MOUSE",
+              "value": "mouse"
+            },
+            {
+              "label": "LIGHTGUN",
+              "value": "lightgun"
+            },
+            {
+              "label": "JOYSTICK",
+              "value": "joystick"
+            },
+            {
+              "label": "KEYBOARD",
+              "value": "keyboard"
+            }
+          ]
+        },
+        {
+          "id": "mame_lightgun",
+          "label": "LIGHTGUN DEVICE",
+          "description": "Define the connected device that emulates a lightgun.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "mame_lightgun",
+          "values": [
+            {
+              "label": "Nenhum",
+              "value": "none"
+            },
+            {
+              "label": "MOUSE",
+              "value": "mouse"
+            },
+            {
+              "label": "LIGHTGUN",
+              "value": "lightgun"
+            },
+            {
+              "label": "JOYSTICK",
+              "value": "joystick"
+            }
+          ],
+          "realKey": "mame_lightgun",
+          "realFile": "Mame64.Generator.cs"
+        },
+        {
+          "id": "mame_paddle",
+          "label": "PADDLE DEVICE",
+          "description": "Define the connected device that emulates a paddle.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "mame_paddle",
+          "values": [
+            {
+              "label": "Nenhum",
+              "value": "none"
+            },
+            {
+              "label": "MOUSE",
+              "value": "mouse"
+            },
+            {
+              "label": "LIGHTGUN",
+              "value": "lightgun"
+            },
+            {
+              "label": "JOYSTICK",
+              "value": "joystick"
+            },
+            {
+              "label": "KEYBOARD",
+              "value": "keyboard"
+            }
+          ]
+        },
+        {
+          "id": "mame_adstick",
+          "label": "ANALOG STICK DEVICE",
+          "description": "Define the connected device that emulates an Analog Directional Stick.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "mame_adstick",
+          "values": [
+            {
+              "label": "Nenhum",
+              "value": "none"
+            },
+            {
+              "label": "MOUSE",
+              "value": "mouse"
+            },
+            {
+              "label": "LIGHTGUN",
+              "value": "lightgun"
+            },
+            {
+              "label": "JOYSTICK",
+              "value": "joystick"
+            },
+            {
+              "label": "KEYBOARD",
+              "value": "keyboard"
+            }
+          ]
+        },
+        {
+          "id": "mame_positional",
+          "label": "POSITIONAL DEVICE",
+          "description": "Define the connected device that emulates a Positional device.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "mame_positional",
+          "values": [
+            {
+              "label": "Nenhum",
+              "value": "none"
+            },
+            {
+              "label": "MOUSE",
+              "value": "mouse"
+            },
+            {
+              "label": "LIGHTGUN",
+              "value": "lightgun"
+            },
+            {
+              "label": "JOYSTICK",
+              "value": "joystick"
+            },
+            {
+              "label": "KEYBOARD",
+              "value": "keyboard"
+            }
+          ]
+        },
+        {
+          "id": "mame_trackball",
+          "label": "TRACKBALL DEVICE",
+          "description": "Define the connected device that emulates a Trackball.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "mame_trackball",
+          "values": [
+            {
+              "label": "Nenhum",
+              "value": "none"
+            },
+            {
+              "label": "MOUSE",
+              "value": "mouse"
+            },
+            {
+              "label": "LIGHTGUN",
+              "value": "lightgun"
+            },
+            {
+              "label": "JOYSTICK",
+              "value": "joystick"
+            },
+            {
+              "label": "KEYBOARD",
+              "value": "keyboard"
+            }
+          ]
+        },
+        {
+          "id": "mame_dial",
+          "label": "DIAL DEVICE",
+          "description": "Define the connected device that emulates a Dial device.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "mame_dial",
+          "values": [
+            {
+              "label": "Nenhum",
+              "value": "none"
+            },
+            {
+              "label": "MOUSE",
+              "value": "mouse"
+            },
+            {
+              "label": "LIGHTGUN",
+              "value": "lightgun"
+            },
+            {
+              "label": "JOYSTICK",
+              "value": "joystick"
+            },
+            {
+              "label": "KEYBOARD",
+              "value": "keyboard"
+            }
+          ]
+        },
+        {
+          "id": "mame_p1_forceindex",
+          "label": "FORCE PLAYER 1 PAD INDEX",
+          "description": "Force P1 pad index, can be useful when using a controller Ativado an arcade machine.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "mame_p1_forceindex",
+          "values": [
+            {
+              "label": 0,
+              "value": "0"
+            },
+            {
+              "label": "1",
+              "value": "1"
+            },
+            {
+              "label": "2",
+              "value": "2"
+            },
+            {
+              "label": "3",
+              "value": "3"
+            },
+            {
+              "label": "4",
+              "value": "4"
+            },
+            {
+              "label": "5",
+              "value": "5"
+            },
+            {
+              "label": "6",
+              "value": "6"
+            },
+            {
+              "label": "7",
+              "value": "7"
+            },
+            {
+              "label": "8",
+              "value": "8"
+            }
+          ]
+        },
+        {
+          "id": "mame_p2_forceindex",
+          "label": "FORCE PLAYER 2 PAD INDEX",
+          "type": "select",
+          "default": "auto",
+          "configKey": "mame_p2_forceindex",
+          "values": [
+            {
+              "label": 0,
+              "value": "0"
+            },
+            {
+              "label": "1",
+              "value": "1"
+            },
+            {
+              "label": "2",
+              "value": "2"
+            },
+            {
+              "label": "3",
+              "value": "3"
+            },
+            {
+              "label": "4",
+              "value": "4"
+            },
+            {
+              "label": "5",
+              "value": "5"
+            },
+            {
+              "label": "6",
+              "value": "6"
+            },
+            {
+              "label": "7",
+              "value": "7"
+            },
+            {
+              "label": "8",
+              "value": "8"
+            }
+          ]
+        },
+        {
+          "id": "mame_p3_forceindex",
+          "label": "FORCE PLAYER 3 PAD INDEX",
+          "type": "select",
+          "default": "auto",
+          "configKey": "mame_p3_forceindex",
+          "values": [
+            {
+              "label": 0,
+              "value": "0"
+            },
+            {
+              "label": "1",
+              "value": "1"
+            },
+            {
+              "label": "2",
+              "value": "2"
+            },
+            {
+              "label": "3",
+              "value": "3"
+            },
+            {
+              "label": "4",
+              "value": "4"
+            },
+            {
+              "label": "5",
+              "value": "5"
+            },
+            {
+              "label": "6",
+              "value": "6"
+            },
+            {
+              "label": "7",
+              "value": "7"
+            },
+            {
+              "label": "8",
+              "value": "8"
+            }
+          ]
+        },
+        {
+          "id": "mame_p4_forceindex",
+          "label": "FORCE PLAYER 4 PAD INDEX",
+          "type": "select",
+          "default": "auto",
+          "configKey": "mame_p4_forceindex",
+          "values": [
+            {
+              "label": 0,
+              "value": "0"
+            },
+            {
+              "label": "1",
+              "value": "1"
+            },
+            {
+              "label": "2",
+              "value": "2"
+            },
+            {
+              "label": "3",
+              "value": "3"
+            },
+            {
+              "label": "4",
+              "value": "4"
+            },
+            {
+              "label": "5",
+              "value": "5"
+            },
+            {
+              "label": "6",
+              "value": "6"
+            },
+            {
+              "label": "7",
+              "value": "7"
+            },
+            {
+              "label": "8",
+              "value": "8"
+            }
+          ]
+        },
+        {
+          "id": "mame_remove_crosshair",
+          "label": "DISABLE CROSSHAIR",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "mame_remove_crosshair"
+        },
+        {
+          "id": "mame_offscreen_reload",
+          "label": "GUN RELOAD WITH BUTTON",
+          "description": "Turn this Ativado when using a lightgun that does not support offscreen reload.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "mame_offscreen_reload"
+        },
+        {
+          "id": "mame_forceOneGun",
+          "label": "FORCE ONE GUN ONLY",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "mame_forceOneGun"
+        },
+        {
+          "id": "mame_output",
+          "label": "OUTPUT GAME DATA",
+          "description": "Enable this option when using mamehooker with LEDs, solenoids, rumble...",
+          "type": "select",
+          "default": "auto",
+          "configKey": "mame_output",
+          "values": [
+            {
+              "label": "WINDOWS",
+              "value": "windows"
+            },
+            {
+              "label": "NETWORK",
+              "value": "network"
+            }
+          ],
+          "realKey": "output",
+          "realFile": "Mame64.Generator.cs"
+        },
+        {
+          "id": "use_mamehooker",
+          "label": "USE MAMEHOOKER",
+          "description": "Launch MameHooker for outputs management.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "use_mamehooker"
+        }
+      ]
+    }
+  ]
+}

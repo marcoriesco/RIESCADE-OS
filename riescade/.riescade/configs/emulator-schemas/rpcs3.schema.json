@@ -2,28 +2,10 @@
   "$schema": "riescade-emulator-schema-v1",
   "id": "rpcs3",
   "name": "RPCS3",
-  "description": "Emulador de PlayStation 3 de código aberto.",
+  "description": "Configurações para o emulador RPCS3 geradas a partir do es_features.cfg.",
   "icon": "rpcs3",
-  "configFiles": [
-    {
-      "path": "config/config.yml",
-      "format": "yml"
-    }
-  ],
-  "globalMappings": {
-    "fullscreen": {
-      "configKey": "fullscreen",
-      "globalKey": "fullscreen"
-    },
-    "vsync": {
-      "configKey": "vsync",
-      "globalKey": "vsync"
-    },
-    "video_driver": {
-      "configKey": "video_driver",
-      "globalKey": "video_driver"
-    }
-  },
+  "configFiles": [],
+  "globalMappings": {},
   "groups": [
     {
       "id": "graphics",
@@ -32,123 +14,511 @@
       "order": 1,
       "options": [
         {
-          "id": "fullscreen",
-          "label": "Tela Cheia",
-          "description": "Iniciar o emulador em modo tela cheia.",
-          "type": "toggle",
-          "default": "true",
-          "configKey": "fullscreen",
-          "inheritsGlobal": "fullscreen"
-        },
-        {
-          "id": "video_driver",
-          "label": "Backend Gráfico",
-          "description": "API de renderização do RPCS3.",
+          "id": "rpcs3_internal_resolution",
+          "label": "Resolução Interna",
           "type": "select",
-          "default": "Vulkan",
-          "configKey": "video_driver",
-          "inheritsGlobal": "video_driver",
+          "default": "auto",
+          "configKey": "rpcs3_internal_resolution",
           "values": [
             {
-              "label": "Vulkan",
-              "value": "Vulkan"
+              "label": "NATIVE (1280x720)",
+              "value": "100"
             },
             {
-              "label": "OpenGL",
-              "value": "OpenGL"
+              "label": "0.5X (640x360)",
+              "value": "50"
+            },
+            {
+              "label": "0.75X (960x540)",
+              "value": "75"
+            },
+            {
+              "label": "1.25X (1600x900)",
+              "value": "125"
+            },
+            {
+              "label": "1.5X (1920x1080)",
+              "value": "150"
+            },
+            {
+              "label": "2X (2560x1440)",
+              "value": "200"
+            },
+            {
+              "label": "3X (3840x2160)",
+              "value": "300"
+            },
+            {
+              "label": "4X (5120x2880)",
+              "value": "400"
+            },
+            {
+              "label": "6X (7680x4320)",
+              "value": "600"
             }
-          ]
+          ],
+          "realKey": "Resolution Scale",
+          "realFile": "Rpcs3.Generator.cs"
         },
         {
-          "id": "vsync",
-          "label": "V-Sync",
-          "description": "Modo de sincronização vertical do RPCS3.",
+          "id": "rpcs3_ratio",
+          "label": "Proporção de Tela",
+          "description": "Leave this Ativado 16:9 unless you have a 4:3 monitor.",
           "type": "select",
-          "default": "Adaptive",
-          "configKey": "vsync",
-          "inheritsGlobal": "vsync",
+          "default": "auto",
+          "configKey": "rpcs3_ratio",
           "values": [
+            {
+              "label": "16/9",
+              "value": "16:9"
+            },
+            {
+              "label": "4/3",
+              "value": "4:3"
+            }
+          ],
+          "realKey": "Aspect ratio",
+          "realFile": "Rpcs3.Generator.cs"
+        },
+        {
+          "id": "rpcs3_vsync",
+          "label": "VSYNC",
+          "type": "select",
+          "default": "auto",
+          "configKey": "rpcs3_vsync",
+          "values": [
+            {
+              "label": "ADAPTIVE",
+              "value": "Adaptive"
+            },
+            {
+              "label": "FULL",
+              "value": "Full"
+            },
+            {
+              "label": "DISABLED",
+              "value": "Disabled"
+            }
+          ],
+          "realKey": "VSync Mode",
+          "realFile": "Rpcs3.Generator.cs"
+        },
+        {
+          "id": "rpcs3_fullscreen_mode",
+          "label": "FULLSCREEN MODE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "rpcs3_fullscreen_mode",
+          "values": [
+            {
+              "label": "BORDERLESS",
+              "value": "Disable"
+            },
+            {
+              "label": "EXCLUSIVE",
+              "value": "Enable"
+            }
+          ],
+          "realKey": "Exclusive Fullscreen Mode",
+          "realFile": "Rpcs3.Generator.cs"
+        },
+        {
+          "id": "rpcs3_resolution_scale",
+          "label": "RESOLUTION SCALE THRESHOLD",
+          "description": "Only framebuffer greater than this size will be upscaled, can fix some issues in certain games.",
+          "type": "slider",
+          "default": "auto",
+          "configKey": "rpcs3_resolution_scale",
+          "min": 1,
+          "max": 1024,
+          "step": 1,
+          "realKey": "Minimum Scalable Dimension",
+          "realFile": "Rpcs3.Generator.cs"
+        },
+        {
+          "id": "framelimit",
+          "label": "FRAMELIMIT",
+          "description": "Only use framelimiter if a game runs too fast without it. Some games may crash if the framerate is too high. If that happens, set value to anything other than Desativado.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "framelimit",
+          "values": [
+            {
+              "label": "NATIVE",
+              "value": "PS3 Native"
+            },
+            {
+              "label": "AS DISPLAY",
+              "value": "Display"
+            },
+            {
+              "label": "50",
+              "value": "50"
+            },
+            {
+              "label": "60",
+              "value": "60"
+            },
+            {
+              "label": "120",
+              "value": "120"
+            },
+            {
+              "label": "30",
+              "value": "30"
+            },
+            {
+              "label": "INFINITE",
+              "value": "Infinite"
+            },
             {
               "label": "Desativado",
               "value": "Off"
-            },
-            {
-              "label": "Ativado",
-              "value": "On"
-            },
-            {
-              "label": "Adaptativo",
-              "value": "Adaptive"
             }
-          ]
+          ],
+          "realKey": "Frame limit",
+          "realFile": "Rpcs3.Generator.cs"
         },
         {
-          "id": "resolution",
-          "label": "Resolução Interna",
-          "description": "Escala de resolução interna.",
+          "id": "shader_quality",
+          "label": "SHADER QUALITY",
+          "description": "Low shader quality can improve performance but cause glitches.",
           "type": "select",
           "default": "auto",
-          "configKey": "resolution",
+          "configKey": "shader_quality",
+          "values": [
+            {
+              "label": "HIGH",
+              "value": "High"
+            },
+            {
+              "label": "ULTRA",
+              "value": "Ultra"
+            },
+            {
+              "label": "LOW",
+              "value": "Low"
+            }
+          ],
+          "realKey": "Shader Precision",
+          "realFile": "Rpcs3.Generator.cs"
+        },
+        {
+          "id": "zcull_accuracy",
+          "label": "ZCULL ACCURACY",
+          "description": "Precise is the most accurate and relaxed can increase performance but break some games.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "zcull_accuracy",
+          "values": [
+            {
+              "label": "PRECISE",
+              "value": "Precise"
+            },
+            {
+              "label": "APPROXIMATE",
+              "value": "Approximate"
+            },
+            {
+              "label": "RELAXED",
+              "value": "Relaxed"
+            }
+          ],
+          "realKey": "zcull_accuracy",
+          "realFile": "Rpcs3.Generator.cs"
+        },
+        {
+          "id": "writecolorbuffers",
+          "label": "WRITE COLOR BUFFERS",
+          "description": "Enable this option if you get missing graphics or broken lighting ingame.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "writecolorbuffers",
+          "realKey": "Write Color Buffers",
+          "realFile": "Rpcs3.Generator.cs"
+        },
+        {
+          "id": "writedepthbuffers",
+          "label": "WRITE DEPTH BUFFERS",
+          "description": "Writes depth buffer values to vm memory. Padrão Desativado.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "writedepthbuffers",
+          "realKey": "Write Depth Buffer",
+          "realFile": "Rpcs3.Generator.cs"
+        },
+        {
+          "id": "readcolorbuffers",
+          "label": "READ COLOR BUFFERS",
+          "description": "Initializes render target memory using vm memory. Padrão Desativado.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "readcolorbuffers",
+          "realKey": "Read Color Buffers",
+          "realFile": "Rpcs3.Generator.cs"
+        },
+        {
+          "id": "readdepthbuffers",
+          "label": "READ DEPTH BUFFERS",
+          "description": "Initializes render target memory using vm memory. Padrão Desativado.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "readdepthbuffers",
+          "realKey": "Read Depth Buffer",
+          "realFile": "Rpcs3.Generator.cs"
+        },
+        {
+          "id": "cpu_blit",
+          "label": "FORCE CPU BLIT Emulação",
+          "description": "Forces Emulação of blit and image manipulation Ativado the CPU, more accurate in some cases and required for games like GT6.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "cpu_blit",
+          "realKey": "Force CPU Blit",
+          "realFile": "Rpcs3.Generator.cs"
+        },
+        {
+          "id": "disable_zcull_queries",
+          "label": "DISABLE ZCULL OCCLUSION QUERIES",
+          "description": "Performance boost, can also bring stability for some games like GT6.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "disable_zcull_queries",
+          "realKey": "Disable ZCull Occlusion Queries",
+          "realFile": "Rpcs3.Generator.cs"
+        },
+        {
+          "id": "driver_wake",
+          "label": "DRIVER WAKE-UP DELAY",
+          "description": "Change this setting when encountering unstable games. The higher value, the better stability it may provide. 200μs and 400μs are generally good for most games.",
+          "type": "slider",
+          "default": "auto",
+          "configKey": "driver_wake",
+          "min": 0,
+          "max": 800,
+          "step": 10,
+          "suffix": "μs",
+          "realKey": "Driver Wake-Up Delay",
+          "realFile": "Rpcs3.Generator.cs"
+        },
+        {
+          "id": "rpcs3_vblank_frequency",
+          "label": "VBLANK FREQUENCY",
+          "description": "Leaving MANUAL will not change user-defined value, Automático is 60.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "rpcs3_vblank_frequency",
+          "values": [
+            {
+              "label": "60HZ",
+              "value": "60"
+            },
+            {
+              "label": "30HZ",
+              "value": "30"
+            },
+            {
+              "label": "120HZ",
+              "value": "120"
+            },
+            {
+              "label": "240HZ",
+              "value": "240"
+            },
+            {
+              "label": "MANUAL",
+              "value": "keep"
+            }
+          ],
+          "realKey": "Vblank Rate",
+          "realFile": "Rpcs3.Generator.cs"
+        },
+        {
+          "id": "rpcs3_scaling_filter",
+          "label": "SCALING FILTER",
+          "description": "Set scaling filter for rendered content.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "rpcs3_scaling_filter",
+          "values": [
+            {
+              "label": "Bilinear",
+              "value": "Bilinear"
+            },
+            {
+              "label": "Nearest Neighbor",
+              "value": "Nearest"
+            },
+            {
+              "label": "AMD's FidelityFX Super Resolution",
+              "value": "FidelityFX Super Resolution"
+            }
+          ],
+          "realKey": "Output Scaling Mode",
+          "realFile": "Rpcs3.Generator.cs"
+        },
+        {
+          "id": "msaa",
+          "label": "Anti-Aliasing (FXAA)",
+          "description": "Emulates PS3 multisampling layout. Can fix some visual artifacts in some games.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "msaa",
+          "realKey": "MSAA",
+          "realFile": "Rpcs3.Generator.cs"
+        },
+        {
+          "id": "anisotropicfilter",
+          "label": "Filtragem Anisotrópica",
+          "description": "Modern GPUs can handle this setting fine, even at 16x. Keep this Ativado Automático if you want to use the original settings used by a real PS3.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "anisotropicfilter",
           "values": [
             {
               "label": "Automático",
-              "value": "auto"
+              "value": "0"
             },
             {
-              "label": "1280x720 (HD)",
-              "value": "1280x720"
+              "label": "2X",
+              "value": "2"
             },
             {
-              "label": "1920x1080 (Full HD)",
-              "value": "1920x1080"
+              "label": "4X",
+              "value": "4"
             },
             {
-              "label": "2560x1440 (2K)",
-              "value": "2560x1440"
+              "label": "8X",
+              "value": "8"
             },
             {
-              "label": "3840x2160 (4K)",
-              "value": "3840x2160"
+              "label": "16X",
+              "value": "16"
             }
-          ]
+          ],
+          "realKey": "Anisotropic Filter Override",
+          "realFile": "Rpcs3.Generator.cs"
         },
         {
-          "id": "rpcs3_stretch_to_display",
-          "label": "Esticar para Exibição",
-          "description": "Estica a imagem para preencher toda a tela.",
+          "id": "stretchtodisplay",
+          "label": "Esticar TO SCREEN",
+          "description": "Overrides the aspect ratio and stretches the image to the full display area. Useful for games that have an ultrawide (21:9 or 32:9) patch available.",
           "type": "toggle",
-          "default": "false",
-          "configKey": "rpcs3_stretch_to_display"
+          "default": "auto",
+          "configKey": "stretchtodisplay",
+          "realKey": "Stretch To Display Area",
+          "realFile": "Rpcs3.Generator.cs"
         },
         {
-          "id": "rpcs3_fsr",
-          "label": "AMD FidelityFX (FSR)",
-          "description": "Upscaling via FidelityFX Super Resolution.",
+          "id": "strict_rendering",
+          "label": "STRICT RENDERING MODE",
+          "description": "Enforces strict compliance to the API specification. Might result in degraded performance in some games. Can resolve rare cases of missing graphics and flickering.",
           "type": "toggle",
-          "default": "false",
-          "configKey": "rpcs3_fsr"
+          "default": "auto",
+          "configKey": "strict_rendering",
+          "realKey": "Strict Rendering Mode",
+          "realFile": "Rpcs3.Generator.cs"
         },
         {
-          "id": "rpcs3_anti_aliasing",
-          "label": "Anti-Aliasing",
-          "description": "Suavização de bordas para melhorar a qualidade visual.",
+          "id": "disablevertex",
+          "label": "DISABLE VERTEX CACHE",
+          "description": "Disables the vertex cache. Might resolve missing or flickering graphics output. May degrade performance.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "disablevertex",
+          "realKey": "Disable Vertex Cache",
+          "realFile": "Rpcs3.Generator.cs"
+        },
+        {
+          "id": "multithreadedrsx",
+          "label": "MULTITHREADED RSX",
+          "description": "May improve performance for some high-core processors. May cause slowdown in some situations due to the extra worker thread load.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "multithreadedrsx",
+          "realKey": "Multithreaded RSX",
+          "realFile": "Rpcs3.Generator.cs"
+        },
+        {
+          "id": "enable3d",
+          "label": "ENABLE 3D",
           "type": "select",
           "default": "auto",
-          "configKey": "rpcs3_anti_aliasing",
+          "configKey": "enable3d",
           "values": [
             {
-              "label": "Automático",
-              "value": "auto"
-            },
-            {
-              "label": "Desativado",
+              "label": "Não",
               "value": "Disabled"
             },
             {
-              "label": "FXAA",
-              "value": "FXAA"
+              "label": "ANAGLYPH RED GREEN",
+              "value": "Anaglyph Red-Green"
+            },
+            {
+              "label": "ANAGLYPH RED BLUE",
+              "value": "Anaglyph Red-Blue"
+            },
+            {
+              "label": "ANAGLYPH RED CYAN",
+              "value": "Anaglyph Red-Cyan"
+            },
+            {
+              "label": "ANAGLYPH MAGENTA CYAN",
+              "value": "Anaglyph Magenta-Cyan"
+            },
+            {
+              "label": "ANAGLYPH TRIOSCOPIC",
+              "value": "Anaglyph Trioscopic"
+            },
+            {
+              "label": "ANAGLYPH AMBER BLUE",
+              "value": "Anaglyph Amber-Blue"
+            },
+            {
+              "label": "SIDE BY SIDE",
+              "value": "Side-by-Side"
+            },
+            {
+              "label": "OVER-UNDER",
+              "value": "Over-Under"
+            },
+            {
+              "label": "INTERLACED",
+              "value": "Interlaced"
             }
-          ]
+          ],
+          "realKey": "3D Display Mode",
+          "realFile": "Rpcs3.Generator.cs"
+        },
+        {
+          "id": "asynctexturestream",
+          "label": "ASYNCHRONOUS TEXTURE STREAMING",
+          "description": "Can improve performance Ativado more powerful GPUs that have spare headroom. Only works with Vulkan renderer.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "asynctexturestream",
+          "realKey": "Asynchronous Texture Streaming",
+          "realFile": "Rpcs3.Generator.cs"
+        },
+        {
+          "id": "gfxbackend",
+          "label": "Vídeo",
+          "description": "Select which graphics API to use internally.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "gfxbackend",
+          "values": [
+            {
+              "label": "VULKAN",
+              "value": "Vulkan"
+            },
+            {
+              "label": "OPENGL",
+              "value": "OpenGL"
+            }
+          ],
+          "realKey": "Renderer",
+          "realFile": "Rpcs3.Generator.cs"
         }
       ]
     },
@@ -159,78 +529,409 @@
       "order": 2,
       "options": [
         {
-          "id": "rpcs3_spu_block",
-          "label": "Bloco SPU",
-          "description": "Tamanho do bloco de compilação SPU. Mega melhora performance.",
+          "id": "shadermode",
+          "label": "SHADERS COMPILATION METHOD",
           "type": "select",
           "default": "auto",
-          "configKey": "rpcs3_spu_block",
+          "configKey": "shadermode",
           "values": [
             {
-              "label": "Automático",
-              "value": "auto"
+              "label": "ASYNC (MULTI THREADED)",
+              "value": "Async Recompiler (multi-threaded)"
             },
             {
-              "label": "Safe",
-              "value": "Safe"
+              "label": "LEGACY (SINGLE THREADED)",
+              "value": "Legacy Recompiler (single-threaded)"
             },
             {
-              "label": "Mega",
-              "value": "Mega"
-            },
-            {
-              "label": "Giga",
-              "value": "Giga"
+              "label": "ASYNC WITH INTERPRETER",
+              "value": "Async Recompiler with Shader Interpreter"
             }
-          ]
+          ],
+          "realKey": "Shader Mode",
+          "realFile": "Rpcs3.Generator.cs"
         },
         {
-          "id": "rpcs3_ppu_decoder",
-          "label": "Decodificador PPU",
-          "description": "Método de recompilação do PPU.",
+          "id": "ps3_region",
+          "label": "REGION",
+          "description": "Force the region of the system.",
           "type": "select",
           "default": "auto",
-          "configKey": "rpcs3_ppu_decoder",
+          "configKey": "ps3_region",
           "values": [
             {
-              "label": "Automático",
-              "value": "auto"
+              "label": "AMERICA",
+              "value": "SCEA"
             },
             {
-              "label": "Interpreter",
-              "value": "Interpreter"
+              "label": "CHINA",
+              "value": "SCH"
             },
             {
-              "label": "Recompiler (LLVM)",
+              "label": "EUROPE",
+              "value": "SCEE"
+            },
+            {
+              "label": "JAPAN",
+              "value": "SCEJ"
+            },
+            {
+              "label": "KOREA",
+              "value": "SCEK"
+            },
+            {
+              "label": "SOUTHEAST ASIA",
+              "value": "SCEH"
+            }
+          ],
+          "realKey": "License Area",
+          "realFile": "Rpcs3.Generator.cs"
+        },
+        {
+          "id": "ps3_language",
+          "label": "LANGUAGE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "ps3_language",
+          "values": [
+            {
+              "label": "English (US)",
+              "value": "English (US)"
+            },
+            {
+              "label": "Français",
+              "value": "French"
+            },
+            {
+              "label": "Deutsch",
+              "value": "German"
+            },
+            {
+              "label": "Español",
+              "value": "Spanish"
+            },
+            {
+              "label": "Italiano",
+              "value": "Italian"
+            },
+            {
+              "label": "Nederlands",
+              "value": "Dutch"
+            },
+            {
+              "label": "Polski",
+              "value": "Polish"
+            },
+            {
+              "label": "Portugues",
+              "value": "Portuguese (Portugal)"
+            },
+            {
+              "label": "Portugues do Brasil",
+              "value": "Portuguese (Brazil)"
+            },
+            {
+              "label": "日本語 (Japanese)",
+              "value": "Japanese"
+            },
+            {
+              "label": "简化字 (Chinese - simplified)",
+              "value": "Chinese (Simplified)"
+            },
+            {
+              "label": "簡化字 (Chinese - traditional)",
+              "value": "Chinese (Traditional)"
+            },
+            {
+              "label": "한국어 (Korean)",
+              "value": "Korean"
+            },
+            {
+              "label": "English (UK)",
+              "value": "English (UK)"
+            },
+            {
+              "label": "Dansk",
+              "value": "Danish"
+            },
+            {
+              "label": "Suomalainen",
+              "value": "Finnish"
+            },
+            {
+              "label": "Svenska",
+              "value": "Swedish"
+            },
+            {
+              "label": "Norsk",
+              "value": "Norwegian"
+            },
+            {
+              "label": "Türkçe",
+              "value": "Turkish"
+            },
+            {
+              "label": "Русский",
+              "value": "Russian"
+            }
+          ],
+          "realKey": "Language",
+          "realFile": "Rpcs3.Generator.cs"
+        },
+        {
+          "id": "ppudecoder",
+          "label": "PPU DECODER",
+          "description": "LLVM is fastest, use the Interpreter settings if there are issues.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "ppudecoder",
+          "values": [
+            {
+              "label": "LLVM Recompiler",
               "value": "Recompiler (LLVM)"
+            },
+            {
+              "label": "Interpreter (static)",
+              "value": "Interpreter (static)"
             }
-          ]
+          ],
+          "realKey": "PPU Decoder",
+          "realFile": "Rpcs3.Generator.cs"
         },
         {
-          "id": "rpcs3_spu_decoder",
-          "label": "Decodificador SPU",
-          "description": "Método de recompilação do SPU.",
+          "id": "lvmprecomp",
+          "label": "PPU LVM PRECOMPILATION",
+          "description": "If disabled, these modules will only be compiled when needed. Depending Ativado the game, this might interrupt the gameplay unexpectedly and possibly frequently.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "lvmprecomp",
+          "realKey": "LLVM Precompilation",
+          "realFile": "Rpcs3.Generator.cs"
+        },
+        {
+          "id": "spudecoder",
+          "label": "SPU DECODER",
+          "description": "LLVM is the fastest option with very good compatibility. If you experience issues, use the ASMJIT Recompiler.",
           "type": "select",
           "default": "auto",
-          "configKey": "rpcs3_spu_decoder",
+          "configKey": "spudecoder",
           "values": [
             {
-              "label": "Automático",
-              "value": "auto"
+              "label": "LLVM Recompiler",
+              "value": "Recompiler (LLVM)"
             },
             {
-              "label": "Interpreter",
-              "value": "Interpreter"
-            },
-            {
-              "label": "Recompiler (ASMJIT)",
+              "label": "ASMJIT Recompiler",
               "value": "Recompiler (ASMJIT)"
             },
             {
-              "label": "Recompiler (LLVM)",
-              "value": "Recompiler (LLVM)"
+              "label": "Interpreter (static)",
+              "value": "Interpreter (static)"
+            },
+            {
+              "label": "Interpreter (dynamic)",
+              "value": "Interpreter (dynamic)"
             }
-          ]
+          ],
+          "realKey": "SPU Decoder",
+          "realFile": "Rpcs3.Generator.cs"
+        },
+        {
+          "id": "sputhreads",
+          "label": "PREFERRED SPU THREADS",
+          "description": "Some SPU stages are sensitive to race conditions and allowing a limited number at a time helps alleviate performance stalls. Setting this to a smaller value might improve performance and reduce stuttering in some games.",
+          "type": "slider",
+          "default": "auto",
+          "configKey": "sputhreads",
+          "min": 0,
+          "max": 6,
+          "step": 1,
+          "realKey": "Preferred SPU Threads",
+          "realFile": "Rpcs3.Generator.cs"
+        },
+        {
+          "id": "spuloopdetect",
+          "label": "ENABLE SPU LOOP DETECTION",
+          "description": "Try to detect loop conditions in SPU kernels and use them as scheduling hints. Padrão Desativado",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "spuloopdetect",
+          "realKey": "SPU loop detection",
+          "realFile": "Rpcs3.Generator.cs"
+        },
+        {
+          "id": "spublocksize",
+          "label": "SPU BLOCK SIZE",
+          "description": "This option Controles the SPU analyser, particularly the size of compiled units.Use the safe mode for maximum compatibility.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "spublocksize",
+          "values": [
+            {
+              "label": "SAFE",
+              "value": "Safe"
+            },
+            {
+              "label": "MEGA",
+              "value": "Mega"
+            },
+            {
+              "label": "GIGA",
+              "value": "Giga"
+            }
+          ],
+          "realKey": "SPU Block Size",
+          "realFile": "Rpcs3.Generator.cs"
+        },
+        {
+          "id": "accuratersx",
+          "label": "ACCURATE RSX RESERVATION ACCESS",
+          "description": "Improves stability in some games but reduces performance.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "accuratersx",
+          "realKey": "Accurate RSX reservation access",
+          "realFile": "Rpcs3.Generator.cs"
+        },
+        {
+          "id": "rpcs3_rsxfifoaccuracy",
+          "label": "RSX FIFO ACCURACY",
+          "description": "Fast is less accurate, ordered and atomic is accurate but slower.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "rpcs3_rsxfifoaccuracy",
+          "values": [
+            {
+              "label": "FAST",
+              "value": "Fast"
+            },
+            {
+              "label": "ATOMIC",
+              "value": "Atomic"
+            },
+            {
+              "label": "ORDERED AND ATOMIC",
+              "value": "\"Ordered & Atomic\""
+            }
+          ],
+          "realKey": "RSX FIFO Fetch Accuracy",
+          "realFile": "Rpcs3.Generator.cs"
+        },
+        {
+          "id": "rpcs3_xfloat",
+          "label": "ACCURATE XFLOAT",
+          "description": "Higher accuracy fixes bugs in some games at cost of performance. Only used if SPU decoder is set to Dynamic or LLVM.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "rpcs3_xfloat",
+          "values": [
+            {
+              "label": "ACCURATE",
+              "value": "Accurate"
+            },
+            {
+              "label": "APPROXIMATE",
+              "value": "Approximate"
+            },
+            {
+              "label": "RELAXED",
+              "value": "Relaxed"
+            }
+          ],
+          "realKey": "SPU XFloat Accuracy",
+          "realFile": "Rpcs3.Generator.cs"
+        },
+        {
+          "id": "vectornan",
+          "label": "ACCURATE PPU VECTOR NAN",
+          "description": "Respect Non-Java Mode bit values for vector ops in PPU backends. If unsure, do not modify this setting. Padrão Desativado.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "vectornan",
+          "realKey": "PPU Accurate Vector NaN Values",
+          "realFile": "Rpcs3.Generator.cs"
+        },
+        {
+          "id": "rpcs3_custom_config",
+          "label": "USE CUSTOM CONFIG",
+          "description": "Enable this setting to start game using game custom config.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "rpcs3_custom_config"
+        },
+        {
+          "id": "rpcs3_sleeptimersaccuracy",
+          "label": "SLEEP TIMERS ACCURACY",
+          "description": "Can affect performance in unexpected ways.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "rpcs3_sleeptimersaccuracy",
+          "values": [
+            {
+              "label": "USLEEP ONLY",
+              "value": "Usleep Only"
+            },
+            {
+              "label": "AS HOST",
+              "value": "As Host"
+            },
+            {
+              "label": "ALL TIMERS",
+              "value": "All Timers"
+            }
+          ],
+          "realKey": "Sleep Timers Accuracy",
+          "realFile": "Rpcs3.Generator.cs"
+        },
+        {
+          "id": "performance_overlay",
+          "label": "PERFORMANCE STATISTICS",
+          "description": "Display different levels of informations about statistics of performance.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "performance_overlay",
+          "values": [
+            {
+              "label": "Desativado",
+              "value": "off"
+            },
+            {
+              "label": "SIMPLE",
+              "value": "simple"
+            },
+            {
+              "label": "DETAILED",
+              "value": "detailed"
+            }
+          ],
+          "realKey": "performance_overlay",
+          "realFile": "Rpcs3.Generator.cs"
+        },
+        {
+          "id": "show_trophy",
+          "label": "SHOW TROPHIES",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "show_trophy",
+          "realKey": "Show trophy popups",
+          "realFile": "Rpcs3.Generator.cs"
+        },
+        {
+          "id": "rpcs3_hidehints",
+          "label": "HIDE HINTS",
+          "description": "Hide shader and PPU compilation hints.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "rpcs3_hidehints",
+          "realKey": "Show shader compilation hint",
+          "realFile": "Rpcs3.Generator.cs"
+        },
+        {
+          "id": "rpcs3_gui",
+          "label": "SHOW GUI",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "rpcs3_gui"
         }
       ]
     },
@@ -238,29 +939,253 @@
       "id": "audio",
       "title": "Áudio",
       "icon": "volume2",
-      "order": 3,
+      "order": 4,
       "options": [
         {
-          "id": "rpcs3_audio_backend",
-          "label": "Backend de Áudio",
-          "description": "API de áudio utilizada pelo RPCS3.",
+          "id": "audiochannels",
+          "label": "Áudio CHANNELS",
+          "description": "Configure this setting if you want to switch between stereo and surround sound.",
           "type": "select",
           "default": "auto",
-          "configKey": "rpcs3_audio_backend",
+          "configKey": "audiochannels",
           "values": [
             {
-              "label": "Automático",
-              "value": "auto"
+              "label": "STEREO",
+              "value": "Stereo"
             },
             {
-              "label": "XAudio2",
-              "value": "XAudio2"
+              "label": "SURROUND 5.1",
+              "value": "Surround 5.1"
             },
             {
-              "label": "Cubeb",
-              "value": "Cubeb"
+              "label": "SURROUND 7.1",
+              "value": "Surround 7.1"
             }
-          ]
+          ],
+          "realKey": "Audio Format",
+          "realFile": "Rpcs3.Generator.cs"
+        },
+        {
+          "id": "time_stretching",
+          "label": "TIME STRETCHING",
+          "description": "Reduces crackle and stutter, but may cause a very noticeable reduction in Áudio quality Ativado slower CPUs, leave Automático to disable.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "time_stretching",
+          "values": [
+            {
+              "label": "LOW",
+              "value": "low"
+            },
+            {
+              "label": "MEDIUM",
+              "value": "medium"
+            },
+            {
+              "label": "HIGH",
+              "value": "high"
+            }
+          ],
+          "realKey": "time_stretching",
+          "realFile": "Rpcs3.Generator.cs"
+        },
+        {
+          "id": "audio_buffering",
+          "label": "ENABLE Áudio BUFFER",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "audio_buffering",
+          "realKey": "Enable Buffering",
+          "realFile": "Rpcs3.Generator.cs"
+        },
+        {
+          "id": "audiobackend",
+          "label": "Áudio",
+          "type": "select",
+          "default": "auto",
+          "configKey": "audiobackend",
+          "values": [
+            {
+              "label": "CUBEB",
+              "value": "Cubeb"
+            },
+            {
+              "label": "XAUDIO2",
+              "value": "XAudio2"
+            }
+          ],
+          "realKey": "Renderer",
+          "realFile": "Rpcs3.Generator.cs"
+        }
+      ]
+    },
+    {
+      "id": "controls",
+      "title": "Controles",
+      "icon": "gamepad2",
+      "order": 5,
+      "options": [
+        {
+          "id": "rpcs3_forceSDL",
+          "label": "FORCE SDL DRIVER FOR GAMEPAD",
+          "description": "Can fix some issues with XBOX controllers.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "rpcs3_forceSDL"
+        },
+        {
+          "id": "rpcs3_mouse_cursor",
+          "label": "SHOW MOUSE CURSOR",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "rpcs3_mouse_cursor",
+          "realKey": "Show move cursor",
+          "realFile": "Rpcs3.Guns.cs"
+        },
+        {
+          "id": "rpcs3_gamepadbuttons",
+          "label": "INVERT FACE BUTTONS",
+          "description": "Invert A/B and X/Y buttons.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "rpcs3_gamepadbuttons"
+        },
+        {
+          "id": "rpcs3_rumble",
+          "label": "ENABLE RUMBLE",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "rpcs3_rumble"
+        },
+        {
+          "id": "rpcs3_keyboard",
+          "label": "KEYBOARD HANDLER",
+          "type": "select",
+          "default": "auto",
+          "configKey": "rpcs3_keyboard",
+          "values": [
+            {
+              "label": "BASIC",
+              "value": "Basic"
+            }
+          ],
+          "realKey": "Keyboard",
+          "realFile": "Rpcs3.Generator.cs"
+        },
+        {
+          "id": "rpcs3_mouse",
+          "label": "MOUSE HANDLER",
+          "type": "select",
+          "default": "auto",
+          "configKey": "rpcs3_mouse",
+          "values": [
+            {
+              "label": "BASIC",
+              "value": "Basic"
+            },
+            {
+              "label": "RAW",
+              "value": "Raw"
+            }
+          ],
+          "realKey": "Mouse",
+          "realFile": "Rpcs3.Generator.cs"
+        },
+        {
+          "id": "rpcs3_move",
+          "label": "PS MOVE HANDLER",
+          "type": "select",
+          "default": "auto",
+          "configKey": "rpcs3_move",
+          "values": [
+            {
+              "label": "FAKE",
+              "value": "Fake"
+            },
+            {
+              "label": "MOUSE",
+              "value": "Mouse"
+            },
+            {
+              "label": "RAW MOUSE",
+              "value": "Raw Mouse"
+            }
+          ],
+          "realKey": "Move",
+          "realFile": "Rpcs3.Generator.cs"
+        },
+        {
+          "id": "rpcs3_camera",
+          "label": "CAMERA INPUT",
+          "type": "select",
+          "default": "auto",
+          "configKey": "rpcs3_camera",
+          "values": [
+            {
+              "label": "FAKE",
+              "value": "Fake"
+            },
+            {
+              "label": "QT",
+              "value": "Qt"
+            }
+          ],
+          "realKey": "Camera",
+          "realFile": "Rpcs3.Generator.cs"
+        },
+        {
+          "id": "rpcs3_cameraType",
+          "label": "CAMERA TYPE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "rpcs3_cameraType",
+          "values": [
+            {
+              "label": "EYETOY",
+              "value": "EyeToy"
+            },
+            {
+              "label": "PS EYE",
+              "value": "PS Eye"
+            },
+            {
+              "label": "UVC 1.1",
+              "value": "UVC 1.1"
+            }
+          ],
+          "realKey": "Camera type",
+          "realFile": "Rpcs3.Generator.cs"
+        },
+        {
+          "id": "rpcs3_guns",
+          "label": "ENABLE GUN",
+          "type": "select",
+          "default": "auto",
+          "configKey": "rpcs3_guns",
+          "values": [
+            {
+              "label": "Não",
+              "value": "none"
+            },
+            {
+              "label": "RAW MOUSE",
+              "value": "raw"
+            },
+            {
+              "label": "PS EYE",
+              "value": "pseye"
+            }
+          ],
+          "realKey": "rpcs3_guns",
+          "realFile": "Rpcs3.Controllers.cs"
+        },
+        {
+          "id": "rpcs3_guns_start1",
+          "label": "USE PORT 1 FOR GUNCON",
+          "description": "By Padrão, RPCS3 requires guncon in player port 3, use this to force it in port 1.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "rpcs3_guns_start1"
         }
       ]
     }

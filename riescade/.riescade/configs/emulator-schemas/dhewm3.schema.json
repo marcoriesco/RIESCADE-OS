@@ -1,0 +1,261 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "dhewm3",
+  "name": "DHEWM3",
+  "description": "Configurações para o emulador DHEWM3 geradas a partir do es_features.cfg.",
+  "icon": "dhewm3",
+  "configFiles": [],
+  "globalMappings": {},
+  "groups": [
+    {
+      "id": "graphics",
+      "title": "Gráficos",
+      "icon": "monitor",
+      "order": 1,
+      "options": [
+        {
+          "id": "dhewm3_resolution",
+          "label": "Resolução Interna",
+          "type": "select",
+          "default": "auto",
+          "configKey": "dhewm3_resolution",
+          "values": [
+            {
+              "label": "640x480",
+              "value": "3"
+            },
+            {
+              "label": "800x600",
+              "value": "4"
+            },
+            {
+              "label": "1024x768",
+              "value": "5"
+            },
+            {
+              "label": "1152x864",
+              "value": "6"
+            },
+            {
+              "label": "1280x720",
+              "value": "9"
+            },
+            {
+              "label": "1280x800",
+              "value": "25"
+            },
+            {
+              "label": "1280x1024",
+              "value": "7"
+            },
+            {
+              "label": "1366x768",
+              "value": "10"
+            },
+            {
+              "label": "1400x1050",
+              "value": "12"
+            },
+            {
+              "label": "1440x900",
+              "value": "11"
+            },
+            {
+              "label": "1440x1080",
+              "value": "24"
+            },
+            {
+              "label": "1600x900",
+              "value": "13"
+            },
+            {
+              "label": "1600x1200",
+              "value": "8"
+            },
+            {
+              "label": "1680x1050",
+              "value": "14"
+            },
+            {
+              "label": "1920x1080",
+              "value": "15"
+            },
+            {
+              "label": "1920x1200",
+              "value": "16"
+            },
+            {
+              "label": "2048x1152",
+              "value": "17"
+            },
+            {
+              "label": "2560x1080",
+              "value": "26"
+            },
+            {
+              "label": "2560x1440",
+              "value": "23"
+            },
+            {
+              "label": "2560x1600",
+              "value": "18"
+            },
+            {
+              "label": "3200x2400",
+              "value": "19"
+            },
+            {
+              "label": "3440x1440",
+              "value": "27"
+            },
+            {
+              "label": "3840x1080",
+              "value": "30"
+            },
+            {
+              "label": "3840x1600",
+              "value": "28"
+            },
+            {
+              "label": "3840x2160",
+              "value": "20"
+            },
+            {
+              "label": "4096x2304",
+              "value": "21"
+            },
+            {
+              "label": "5120x1440",
+              "value": "31"
+            },
+            {
+              "label": "5120x2160",
+              "value": "29"
+            },
+            {
+              "label": "7680x2160",
+              "value": "32"
+            }
+          ]
+        },
+        {
+          "id": "dhewm3_vsync",
+          "label": "Sincronização Vertical (V-Sync)",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "dhewm3_vsync"
+        },
+        {
+          "id": "dhewm3_quality",
+          "label": "QUALITY",
+          "type": "select",
+          "default": "auto",
+          "configKey": "dhewm3_quality",
+          "values": [
+            {
+              "label": "ULTRA",
+              "value": "3"
+            },
+            {
+              "label": "HIGH",
+              "value": "2"
+            },
+            {
+              "label": "MEDIUM",
+              "value": "1"
+            },
+            {
+              "label": "LOW",
+              "value": "0"
+            }
+          ]
+        },
+        {
+          "id": "dhewm3_antialiasing",
+          "label": "Anti-Aliasing (FXAA)",
+          "description": "Set Anti Aliasing for rendered content.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "dhewm3_antialiasing",
+          "values": [
+            {
+              "label": "Não",
+              "value": "0"
+            },
+            {
+              "label": "2X",
+              "value": "2"
+            },
+            {
+              "label": "4X",
+              "value": "4"
+            },
+            {
+              "label": "8X",
+              "value": "8"
+            },
+            {
+              "label": "16X",
+              "value": "16"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "emulation",
+      "title": "Emulação",
+      "icon": "cpu",
+      "order": 2,
+      "options": [
+        {
+          "id": "dhewm3_playerName",
+          "label": "PLAYER NAME",
+          "type": "input",
+          "default": "auto",
+          "configKey": "dhewm3_playerName"
+        },
+        {
+          "id": "dhewm3_hideHUD",
+          "label": "HIDE HUD",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "dhewm3_hideHUD"
+        }
+      ]
+    },
+    {
+      "id": "audio",
+      "title": "Áudio",
+      "icon": "volume2",
+      "order": 4,
+      "options": [
+        {
+          "id": "dhewm3_sound",
+          "label": "Áudio CHANNELS",
+          "description": "Configure this setting if you want to switch between stereo and surround sound.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "dhewm3_sound",
+          "values": [
+            {
+              "label": "STEREO",
+              "value": "2"
+            },
+            {
+              "label": "SURROUND",
+              "value": "6"
+            }
+          ]
+        },
+        {
+          "id": "dhewm3_eax",
+          "label": "ENABLE EAX",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "dhewm3_eax"
+        }
+      ]
+    }
+  ]
+}

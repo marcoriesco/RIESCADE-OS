@@ -1,0 +1,90 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "ikemen",
+  "name": "IKEMEN",
+  "description": "Configurações para o emulador IKEMEN geradas a partir do es_features.cfg.",
+  "icon": "ikemen",
+  "configFiles": [],
+  "globalMappings": {},
+  "groups": [
+    {
+      "id": "graphics",
+      "title": "Gráficos",
+      "icon": "monitor",
+      "order": 1,
+      "options": [
+        {
+          "id": "VRetrace",
+          "label": "Sincronização Vertical (V-Sync)",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "VRetrace",
+          "realKey": "VRetrace",
+          "realFile": "ExeLauncher.Generator.cs"
+        },
+        {
+          "id": "resolution",
+          "label": "Resolução Interna",
+          "description": "If the Resolução Interna is set Ativado 'Automático' it will take the current resolution of the screen.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "resolution",
+          "values": [
+            {
+              "label": "1920x1080",
+              "value": "1920_1080"
+            },
+            {
+              "label": "1700x1080",
+              "value": "1700_1080"
+            },
+            {
+              "label": "1280x960",
+              "value": "1280_960"
+            },
+            {
+              "label": "1200x762",
+              "value": "1200_762"
+            },
+            {
+              "label": "1280x720",
+              "value": "1280_720"
+            },
+            {
+              "label": "960x720",
+              "value": "960_720"
+            },
+            {
+              "label": "640x480",
+              "value": "640_480"
+            },
+            {
+              "label": "400x254",
+              "value": "400_254"
+            },
+            {
+              "label": "320x240",
+              "value": "320_240"
+            },
+            {
+              "label": "SAME AS SCREEN",
+              "value": "screen"
+            }
+          ],
+          "realKey": "resolution",
+          "realFile": "ExeLauncher.Generator.cs"
+        },
+        {
+          "id": "ikemen_msaa",
+          "label": "ANTI ALIASING (MSAA)",
+          "description": "Set Multi-Sampled Anti Aliasing level for rendered content.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "ikemen_msaa",
+          "realKey": "MSAA",
+          "realFile": "ExeLauncher.Generator.cs"
+        }
+      ]
+    }
+  ]
+}

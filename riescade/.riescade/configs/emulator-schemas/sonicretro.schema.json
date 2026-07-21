@@ -1,0 +1,148 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "sonicretro",
+  "name": "SONICRETRO",
+  "description": "Configurações para o emulador SONICRETRO geradas a partir do es_features.cfg.",
+  "icon": "sonicretro",
+  "configFiles": [],
+  "globalMappings": {},
+  "groups": [
+    {
+      "id": "graphics",
+      "title": "Gráficos",
+      "icon": "monitor",
+      "order": 1,
+      "options": [
+        {
+          "id": "sonicretro_vsync",
+          "label": "Sincronização Vertical (V-Sync)",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "sonicretro_vsync",
+          "realKey": "VSync",
+          "realSection": "Window",
+          "realFile": "PortsLauncher.Configuration.cs"
+        },
+        {
+          "id": "sonicretro_force60hz",
+          "label": "FORCE 60HZ",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "sonicretro_force60hz"
+        },
+        {
+          "id": "sonicretro_scaling",
+          "label": "SCALING FILTER",
+          "type": "select",
+          "default": "auto",
+          "configKey": "sonicretro_scaling",
+          "values": [
+            {
+              "label": "NEAREST NEIGHBOR",
+              "value": "0"
+            },
+            {
+              "label": "LINEAR",
+              "value": "1"
+            }
+          ],
+          "realKey": "ScalingMode",
+          "realSection": "Window",
+          "realFile": "PortsLauncher.Configuration.cs"
+        }
+      ]
+    },
+    {
+      "id": "emulation",
+      "title": "Emulação",
+      "icon": "cpu",
+      "order": 2,
+      "options": [
+        {
+          "id": "sonicretro_lang",
+          "label": "LANGUAGE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "sonicretro_lang",
+          "values": [
+            {
+              "label": "English",
+              "value": "0"
+            },
+            {
+              "label": "Français",
+              "value": "1"
+            },
+            {
+              "label": "Italiano",
+              "value": "2"
+            },
+            {
+              "label": "Deutsch",
+              "value": "3"
+            },
+            {
+              "label": "Español",
+              "value": "4"
+            },
+            {
+              "label": "日本語 (Japanese)",
+              "value": "5"
+            },
+            {
+              "label": "Português",
+              "value": "6"
+            },
+            {
+              "label": "Русский (Russian)",
+              "value": "7"
+            },
+            {
+              "label": "한국어 (Korean)",
+              "value": "8"
+            },
+            {
+              "label": "简化字 (Chinese - simplified)",
+              "value": "9"
+            },
+            {
+              "label": "簡化字 (Chinese - traditional)",
+              "value": "10"
+            }
+          ],
+          "realKey": "Language",
+          "realSection": "Game",
+          "realFile": "PortsLauncher.Configuration.cs"
+        },
+        {
+          "id": "sonicretro_gametype",
+          "label": "GAME TYPE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "sonicretro_gametype",
+          "values": [
+            {
+              "label": "ORIGINAL",
+              "value": "0"
+            },
+            {
+              "label": "ORIGINS RELEASE",
+              "value": "1"
+            }
+          ],
+          "realKey": "GameType",
+          "realSection": "Game",
+          "realFile": "PortsLauncher.Configuration.cs"
+        },
+        {
+          "id": "sonicretro_sonicCD",
+          "label": "FORCE SONIC CD",
+          "description": "If the folder name contains 'soniccd', RetroBat will automatically run Sonic CD RSDK, use this to force it.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "sonicretro_sonicCD"
+        }
+      ]
+    }
+  ]
+}

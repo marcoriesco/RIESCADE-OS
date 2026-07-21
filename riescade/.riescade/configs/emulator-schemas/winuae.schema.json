@@ -1,0 +1,65 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "winuae",
+  "name": "WINUAE",
+  "description": "Configurações para o emulador WINUAE geradas a partir do es_features.cfg.",
+  "icon": "winuae",
+  "configFiles": [],
+  "globalMappings": {},
+  "groups": [
+    {
+      "id": "graphics",
+      "title": "Gráficos",
+      "icon": "monitor",
+      "order": 1,
+      "options": [
+        {
+          "id": "vsync",
+          "label": "Sincronização Vertical (V-Sync)",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "vsync"
+        },
+        {
+          "id": "winuae_gfxrenderer",
+          "label": "Vídeo",
+          "type": "select",
+          "default": "auto",
+          "configKey": "winuae_gfxrenderer",
+          "values": [
+            {
+              "label": "D3D9",
+              "value": "direct3d"
+            },
+            {
+              "label": "D3D11 (HARDWARE)",
+              "value": "direct3d11"
+            },
+            {
+              "label": "D3D11 (SOFTWARE)",
+              "value": "direct3d11_soft"
+            }
+          ],
+          "realKey": "winuae_gfxrenderer",
+          "realFile": "Uae.Generator.cs"
+        }
+      ]
+    },
+    {
+      "id": "emulation",
+      "title": "Emulação",
+      "icon": "cpu",
+      "order": 2,
+      "options": [
+        {
+          "id": "cycleexact",
+          "label": "CYCLE EXACT",
+          "description": "Increase accuracy, can fix some issues of sound and speed.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "cycleexact"
+        }
+      ]
+    }
+  ]
+}

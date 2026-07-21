@@ -1,0 +1,419 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "gzdoom",
+  "name": "GZDOOM",
+  "description": "Configurações para o emulador GZDOOM geradas a partir do es_features.cfg.",
+  "icon": "gzdoom",
+  "configFiles": [],
+  "globalMappings": {},
+  "groups": [
+    {
+      "id": "graphics",
+      "title": "Gráficos",
+      "icon": "monitor",
+      "order": 1,
+      "options": [
+        {
+          "id": "gzdoom_scalemode",
+          "label": "Resolução Interna",
+          "type": "select",
+          "default": "auto",
+          "configKey": "gzdoom_scalemode",
+          "values": [
+            {
+              "label": "NORMAL",
+              "value": "0"
+            },
+            {
+              "label": "LOWEST POSSIBLE SCALE",
+              "value": "1"
+            },
+            {
+              "label": "320x200",
+              "value": "6"
+            },
+            {
+              "label": "640x400",
+              "value": "2"
+            },
+            {
+              "label": "960x600",
+              "value": "3"
+            },
+            {
+              "label": "1280x800",
+              "value": "4"
+            }
+          ],
+          "realKey": "vid_scalemode",
+          "realSection": "GlobalSettings",
+          "realFile": "GzDoom.Generator.cs"
+        },
+        {
+          "id": "gzdoom_ratio",
+          "label": "Proporção de Tela",
+          "type": "select",
+          "default": "auto",
+          "configKey": "gzdoom_ratio",
+          "values": [
+            {
+              "label": "4/3",
+              "value": "3"
+            },
+            {
+              "label": "16/10",
+              "value": "2"
+            },
+            {
+              "label": "16/9",
+              "value": "1"
+            },
+            {
+              "label": "17/10",
+              "value": "5"
+            },
+            {
+              "label": "5/4",
+              "value": "4"
+            },
+            {
+              "label": "21/9",
+              "value": "6"
+            }
+          ],
+          "realKey": "vid_aspect",
+          "realSection": "GlobalSettings",
+          "realFile": "GzDoom.Generator.cs"
+        },
+        {
+          "id": "gzdoom_vsync",
+          "label": "VSYNC",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "gzdoom_vsync",
+          "realKey": "vid_vsync",
+          "realSection": "GlobalSettings",
+          "realFile": "GzDoom.Generator.cs"
+        },
+        {
+          "id": "gzdoom_cropaspect",
+          "label": "Esticar TO SCREEN",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "gzdoom_cropaspect",
+          "realKey": "vid_cropaspect",
+          "realSection": "GlobalSettings",
+          "realFile": "GzDoom.Generator.cs"
+        },
+        {
+          "id": "gzdoom_rendermode",
+          "label": "RENDER MODE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "gzdoom_rendermode",
+          "values": [
+            {
+              "label": "HARDWARE ACCELERATED",
+              "value": "4"
+            },
+            {
+              "label": "SOFTWARE",
+              "value": "0"
+            },
+            {
+              "label": "TRUE COLOR SOFTWARE",
+              "value": "1"
+            }
+          ],
+          "realKey": "vid_rendermode",
+          "realSection": "GlobalSettings",
+          "realFile": "GzDoom.Generator.cs"
+        },
+        {
+          "id": "gzdoom_texture_filter",
+          "label": "Filtragem de Texturas",
+          "description": "Control the texture filtering of the Emulação.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "gzdoom_texture_filter",
+          "values": [
+            {
+              "label": "Nenhum",
+              "value": "0"
+            },
+            {
+              "label": "LINEAR",
+              "value": "2"
+            },
+            {
+              "label": "BILINEAR",
+              "value": "3"
+            },
+            {
+              "label": "TRILINEAR",
+              "value": "4"
+            }
+          ],
+          "realKey": "gl_texture_filter",
+          "realSection": "GlobalSettings",
+          "realFile": "GzDoom.Generator.cs"
+        },
+        {
+          "id": "gzdoom_anisotropic_filtering",
+          "label": "Filtragem Anisotrópica",
+          "description": "Enhance the quality of textures Ativado surface.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "gzdoom_anisotropic_filtering",
+          "values": [
+            {
+              "label": "Não",
+              "value": "1"
+            },
+            {
+              "label": "2x",
+              "value": "2"
+            },
+            {
+              "label": "4x",
+              "value": "4"
+            },
+            {
+              "label": "8x",
+              "value": "8"
+            },
+            {
+              "label": "16x",
+              "value": "16"
+            }
+          ],
+          "realKey": "gl_texture_filter_anisotropic",
+          "realSection": "GlobalSettings",
+          "realFile": "GzDoom.Generator.cs"
+        },
+        {
+          "id": "gzdoom_msaa",
+          "label": "MULTISAMPLE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "gzdoom_msaa",
+          "values": [
+            {
+              "label": "Não",
+              "value": "1"
+            },
+            {
+              "label": "2x",
+              "value": "2"
+            },
+            {
+              "label": "4x",
+              "value": "4"
+            },
+            {
+              "label": "8x",
+              "value": "8"
+            },
+            {
+              "label": "16x",
+              "value": "16"
+            },
+            {
+              "label": "32x",
+              "value": "32"
+            }
+          ],
+          "realKey": "gl_multisample",
+          "realSection": "GlobalSettings",
+          "realFile": "GzDoom.Generator.cs"
+        },
+        {
+          "id": "gzdoom_fxaa",
+          "label": "FXAA",
+          "type": "select",
+          "default": "auto",
+          "configKey": "gzdoom_fxaa",
+          "values": [
+            {
+              "label": "Nenhum",
+              "value": "0"
+            },
+            {
+              "label": "LOW",
+              "value": "1"
+            },
+            {
+              "label": "MEDIUM",
+              "value": "2"
+            },
+            {
+              "label": "HIGH",
+              "value": "3"
+            },
+            {
+              "label": "EXTREME",
+              "value": "4"
+            }
+          ],
+          "realKey": "gl_fxaa",
+          "realSection": "GlobalSettings",
+          "realFile": "GzDoom.Generator.cs"
+        },
+        {
+          "id": "gzdoom_renderer",
+          "label": "Vídeo",
+          "type": "select",
+          "default": "auto",
+          "configKey": "gzdoom_renderer",
+          "values": [
+            {
+              "label": "OPENGL",
+              "value": "0"
+            },
+            {
+              "label": "VULKAN",
+              "value": "1"
+            },
+            {
+              "label": "OPENGL ES",
+              "value": "2"
+            }
+          ],
+          "realKey": "vid_preferbackend",
+          "realSection": "GlobalSettings",
+          "realFile": "GzDoom.Generator.cs"
+        }
+      ]
+    },
+    {
+      "id": "audio",
+      "title": "Áudio",
+      "icon": "volume2",
+      "order": 4,
+      "options": [
+        {
+          "id": "gzdoom_mididevice",
+          "label": "Áudio (MIDI DEVICE)",
+          "type": "select",
+          "default": "auto",
+          "configKey": "gzdoom_mididevice",
+          "values": [
+            {
+              "label": "FLUIDSYNTH",
+              "value": "-5"
+            },
+            {
+              "label": "GUS Emulação",
+              "value": "-4"
+            },
+            {
+              "label": "OPL SYNTH Emulação",
+              "value": "-3"
+            },
+            {
+              "label": "TIMIDITY++",
+              "value": "-2"
+            },
+            {
+              "label": "MS GS WAVETABLE SYNTH",
+              "value": "0"
+            },
+            {
+              "label": "libOPN",
+              "value": "-8"
+            },
+            {
+              "label": "libADL",
+              "value": "-7"
+            },
+            {
+              "label": "WildMIDI",
+              "value": "-6"
+            }
+          ],
+          "realKey": "snd_mididevice",
+          "realSection": "GlobalSettings",
+          "realFile": "GzDoom.Generator.cs"
+        }
+      ]
+    },
+    {
+      "id": "controls",
+      "title": "Controles",
+      "icon": "gamepad2",
+      "order": 5,
+      "options": [
+        {
+          "id": "gzdoom_crosshair",
+          "label": "SHOW CROSSHAIR",
+          "type": "select",
+          "default": "auto",
+          "configKey": "gzdoom_crosshair",
+          "values": [
+            {
+              "label": "Nenhum",
+              "value": "false"
+            },
+            {
+              "label": "CROSS 1",
+              "value": "1"
+            },
+            {
+              "label": "CROSS 2",
+              "value": "2"
+            },
+            {
+              "label": "X",
+              "value": "3"
+            },
+            {
+              "label": "CIRCLE",
+              "value": "4"
+            },
+            {
+              "label": "ANGLE",
+              "value": "5"
+            },
+            {
+              "label": "TRIANGLE",
+              "value": "6"
+            },
+            {
+              "label": "DOT",
+              "value": "7"
+            }
+          ],
+          "realKey": "gzdoom_crosshair",
+          "realFile": "GzDoom.Generator.cs"
+        },
+        {
+          "id": "gzdoom_crosshair_color",
+          "label": "CROSSHAIR COLOR",
+          "type": "select",
+          "default": "auto",
+          "configKey": "gzdoom_crosshair_color",
+          "values": [
+            {
+              "label": "SHOW HEALTH",
+              "value": "health"
+            },
+            {
+              "label": "GREEN",
+              "value": "00_ff_00"
+            },
+            {
+              "label": "RED",
+              "value": "ff_00_00"
+            },
+            {
+              "label": "BLUE",
+              "value": "00_00_ff"
+            }
+          ],
+          "realKey": "gzdoom_crosshair_color",
+          "realFile": "GzDoom.Generator.cs"
+        }
+      ]
+    }
+  ]
+}

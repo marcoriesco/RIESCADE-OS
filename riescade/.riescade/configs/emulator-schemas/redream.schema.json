@@ -1,25 +1,11 @@
 {
   "$schema": "riescade-emulator-schema-v1",
   "id": "redream",
-  "name": "Redream",
-  "description": "Emulador de Sega Dreamcast — rápido e simples.",
+  "name": "REDREAM",
+  "description": "Configurações para o emulador REDREAM geradas a partir do es_features.cfg.",
   "icon": "redream",
-  "configFiles": [
-    {
-      "path": "redream.cfg",
-      "format": "cfg"
-    }
-  ],
-  "globalMappings": {
-    "fullscreen": {
-      "configKey": "fullscreen",
-      "globalKey": "fullscreen"
-    },
-    "vsync": {
-      "configKey": "vsync",
-      "globalKey": "vsync"
-    }
-  },
+  "configFiles": [],
+  "globalMappings": {},
   "groups": [
     {
       "id": "graphics",
@@ -28,48 +14,256 @@
       "order": 1,
       "options": [
         {
-          "id": "fullscreen",
-          "label": "Tela Cheia",
-          "description": "Iniciar o emulador em modo tela cheia.",
+          "id": "redream_vsync",
+          "label": "VSYNC",
           "type": "toggle",
-          "default": "true",
-          "configKey": "fullscreen",
-          "inheritsGlobal": "fullscreen"
+          "default": "auto",
+          "configKey": "redream_vsync"
         },
         {
-          "id": "vsync",
-          "label": "V-Sync",
-          "description": "Sincronização vertical.",
-          "type": "toggle",
-          "default": "true",
-          "configKey": "vsync",
-          "inheritsGlobal": "vsync"
-        },
-        {
-          "id": "redream_internal_resolution",
-          "label": "Resolução Interna",
-          "description": "Resolução de renderização.",
+          "id": "redream_aspect",
+          "label": "Proporção de Tela",
           "type": "select",
-          "default": "2",
-          "configKey": "redream_internal_resolution",
+          "default": "auto",
+          "configKey": "redream_aspect",
           "values": [
             {
-              "label": "1x (640x480)",
+              "label": "4/3",
+              "value": "4:3"
+            },
+            {
+              "label": "16/9",
+              "value": "16:9"
+            },
+            {
+              "label": "Esticar",
+              "value": "stretch"
+            }
+          ],
+          "realKey": "redream_aspect",
+          "realFile": "Redream.Generator.cs"
+        },
+        {
+          "id": "redream_res",
+          "label": "Resolução Interna",
+          "description": "Requires a Redream key.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "redream_res",
+          "values": [
+            {
+              "label": "1X (NATIVE)",
               "value": "1"
             },
             {
-              "label": "2x (1280x960)",
+              "label": "2X",
               "value": "2"
             },
             {
-              "label": "3x (1920x1440)",
+              "label": "3X",
               "value": "3"
             },
             {
-              "label": "4x (2560x1920)",
+              "label": "4X",
+              "value": "4"
+            },
+            {
+              "label": "5X",
+              "value": "5"
+            },
+            {
+              "label": "6X",
+              "value": "6"
+            }
+          ]
+        },
+        {
+          "id": "redream_cable",
+          "label": "EMULATED CABLE TYPE",
+          "description": "Apply a Vídeo filter to mimic various signals.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "redream_cable",
+          "values": [
+            {
+              "label": "TV (RGB)",
+              "value": "rgb"
+            },
+            {
+              "label": "COMPOSITE",
+              "value": "composite"
+            },
+            {
+              "label": "VGA",
+              "value": "vga"
+            }
+          ]
+        },
+        {
+          "id": "redream_broadcast",
+          "label": "Vídeo FORMAT",
+          "description": "Select a Vídeo format for output.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "redream_broadcast",
+          "values": [
+            {
+              "label": "NTSC",
+              "value": "ntsc"
+            },
+            {
+              "label": "PAL (WORLD)",
+              "value": "pal"
+            },
+            {
+              "label": "PAL-N (ARGENTINA, URUGUAY, PARAGUAY)",
+              "value": "pal_n"
+            },
+            {
+              "label": "PAL-M (BRAZIL)",
+              "value": "pal_m"
+            }
+          ]
+        },
+        {
+          "id": "redream_alpha_sorting",
+          "label": "ALPHA SORTING",
+          "description": "Enhance graphics accuracy at the cost of inscreased performance requirements.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "redream_alpha_sorting",
+          "values": [
+            {
+              "label": "per-strip (fast, least accurate)",
+              "value": "0"
+            },
+            {
+              "label": "per-pixel (32)",
+              "value": "32"
+            },
+            {
+              "label": "per-pixel (64)",
+              "value": "64"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "emulation",
+      "title": "Emulação",
+      "icon": "cpu",
+      "order": 2,
+      "options": [
+        {
+          "id": "redream_frameskip",
+          "label": "FRAMESKIP",
+          "description": "Skip frames to improve performance (smoothless).",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "redream_frameskip"
+        },
+        {
+          "id": "redream_language",
+          "label": "LANGUAGE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "redream_language",
+          "values": [
+            {
+              "label": "English",
+              "value": "english"
+            },
+            {
+              "label": "Deutsch",
+              "value": "german"
+            },
+            {
+              "label": "Español",
+              "value": "spanish"
+            },
+            {
+              "label": "Français",
+              "value": "french"
+            },
+            {
+              "label": "Italiano",
+              "value": "italian"
+            },
+            {
+              "label": "日本語 (Japanese)",
+              "value": "japanese"
+            }
+          ]
+        },
+        {
+          "id": "redream_region",
+          "label": "REGION",
+          "type": "select",
+          "default": "auto",
+          "configKey": "redream_region",
+          "values": [
+            {
+              "label": "Japan",
+              "value": "japan"
+            },
+            {
+              "label": "USA",
+              "value": "usa"
+            },
+            {
+              "label": "Europe",
+              "value": "europe"
+            }
+          ]
+        },
+        {
+          "id": "dreamcast_m3uindex",
+          "label": "M3U DISC NUMBER",
+          "type": "select",
+          "default": "auto",
+          "configKey": "dreamcast_m3uindex",
+          "values": [
+            {
+              "label": "1",
+              "value": "1"
+            },
+            {
+              "label": "2",
+              "value": "2"
+            },
+            {
+              "label": "3",
+              "value": "3"
+            },
+            {
+              "label": "4",
               "value": "4"
             }
           ]
+        }
+      ]
+    },
+    {
+      "id": "controls",
+      "title": "Controles",
+      "icon": "gamepad2",
+      "order": 5,
+      "options": [
+        {
+          "id": "redream_controller_autoconfig",
+          "label": "USE REDREAM CONTROLLER CONFIGURATION",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "redream_controller_autoconfig"
+        },
+        {
+          "id": "dreamcast_use_shoulders",
+          "label": "USE R1 AND L1",
+          "description": "Use shoulder buttons instead of triggers.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "dreamcast_use_shoulders"
         }
       ]
     }

@@ -1,0 +1,126 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "singe2",
+  "name": "SINGE2",
+  "description": "Configurações para o emulador SINGE2 geradas a partir do es_features.cfg.",
+  "icon": "singe2",
+  "configFiles": [],
+  "globalMappings": {},
+  "groups": [
+    {
+      "id": "emulation",
+      "title": "Emulação",
+      "icon": "cpu",
+      "order": 2,
+      "options": [
+        {
+          "id": "singe2_debug",
+          "label": "SHOW DEBUG CONSOLE",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "singe2_debug"
+        }
+      ]
+    },
+    {
+      "id": "controls",
+      "title": "Controles",
+      "icon": "gamepad2",
+      "order": 5,
+      "options": [
+        {
+          "id": "singe2_padIndex",
+          "label": "FORCE GAMEPAD INDEX",
+          "type": "select",
+          "default": "auto",
+          "configKey": "singe2_padIndex",
+          "values": [
+            {
+              "label": 0,
+              "value": "0"
+            },
+            {
+              "label": "1",
+              "value": "1"
+            },
+            {
+              "label": "3",
+              "value": "3"
+            },
+            {
+              "label": "4",
+              "value": "4"
+            },
+            {
+              "label": "5",
+              "value": "5"
+            },
+            {
+              "label": "6",
+              "value": "6"
+            },
+            {
+              "label": "7",
+              "value": "7"
+            },
+            {
+              "label": "8",
+              "value": "8"
+            }
+          ]
+        },
+        {
+          "id": "singe2_deadzone",
+          "label": "ANALOG DEADZONE",
+          "type": "slider",
+          "default": "auto",
+          "configKey": "singe2_deadzone",
+          "min": 0,
+          "max": 50,
+          "step": 5,
+          "suffix": "%"
+        },
+        {
+          "id": "singe2_mouseIndex",
+          "label": "FORCE INDEX",
+          "type": "select",
+          "default": "auto",
+          "configKey": "singe2_mouseIndex",
+          "values": [
+            {
+              "label": 0,
+              "value": "0"
+            },
+            {
+              "label": "1",
+              "value": "1"
+            },
+            {
+              "label": "3",
+              "value": "3"
+            },
+            {
+              "label": "4",
+              "value": "4"
+            },
+            {
+              "label": "5",
+              "value": "5"
+            },
+            {
+              "label": "6",
+              "value": "6"
+            }
+          ]
+        },
+        {
+          "id": "singe2_crosshair",
+          "label": "SHOW CROSSHAIR",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "singe2_crosshair"
+        }
+      ]
+    }
+  ]
+}

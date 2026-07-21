@@ -1,25 +1,11 @@
 {
   "$schema": "riescade-emulator-schema-v1",
   "id": "eden",
-  "name": "Eden",
-  "description": "Emulador de Nintendo Switch (fork do Yuzu).",
+  "name": "EDEN",
+  "description": "Configurações para o emulador EDEN geradas a partir do es_features.cfg.",
   "icon": "eden",
-  "configFiles": [
-    {
-      "path": "user/config/qt-config.ini",
-      "format": "ini"
-    }
-  ],
-  "globalMappings": {
-    "fullscreen": {
-      "configKey": "fullscreen",
-      "globalKey": "fullscreen"
-    },
-    "vsync": {
-      "configKey": "vsync",
-      "globalKey": "vsync"
-    }
-  },
+  "configFiles": [],
+  "globalMappings": {},
   "groups": [
     {
       "id": "graphics",
@@ -28,47 +14,288 @@
       "order": 1,
       "options": [
         {
-          "id": "fullscreen",
-          "label": "Tela Cheia",
-          "description": "Iniciar o emulador em modo tela cheia.",
-          "type": "toggle",
-          "default": "true",
-          "configKey": "fullscreen",
-          "inheritsGlobal": "fullscreen"
-        },
-        {
-          "id": "vsync",
-          "label": "V-Sync",
-          "description": "Modo de sincronização vertical. 0 = Off, 1 = FIFO, 2 = Mailbox.",
+          "id": "eden_resolution_setup",
+          "label": "Resolução Interna",
+          "description": "Improve fidelity of 3D models at the cost of increased performance requirements.",
           "type": "select",
-          "default": "1",
-          "configKey": "vsync",
-          "inheritsGlobal": "vsync",
+          "default": "auto",
+          "configKey": "eden_resolution_setup",
           "values": [
             {
-              "label": "Desativado",
+              "label": "0.25x (180p/270p)",
               "value": "0"
             },
             {
-              "label": "FIFO (On)",
+              "label": "0.5x (360p/540p)",
               "value": "1"
             },
             {
-              "label": "Mailbox",
+              "label": "0.75x (540p/810p)",
               "value": "2"
+            },
+            {
+              "label": "1x (720p/1080p)",
+              "value": "3"
+            },
+            {
+              "label": "1.25x (900p/1350p)",
+              "value": "4"
+            },
+            {
+              "label": "1.5x (1080p/1620p)",
+              "value": "5"
+            },
+            {
+              "label": "2x (1440p/2160p)",
+              "value": "6"
+            },
+            {
+              "label": "3x (2160p/3240p)",
+              "value": "7"
+            },
+            {
+              "label": "4x (2880p/4320p)",
+              "value": "8"
+            },
+            {
+              "label": "5x (3600p/5400p)",
+              "value": "9"
+            },
+            {
+              "label": "6x (4320p/6480p)",
+              "value": "10"
+            },
+            {
+              "label": "7x (5040p/7560p)",
+              "value": "11"
+            },
+            {
+              "label": "8x (5760p/8640p)",
+              "value": "12"
             }
-          ]
+          ],
+          "realKey": "resolution_setup",
+          "realSection": "Renderer",
+          "realFile": "Eden.Generator.cs"
         },
         {
-          "id": "eden_resolution_scale",
-          "label": "Escala de Resolução",
-          "description": "Multiplicador de resolução interna.",
+          "id": "eden_use_vsync",
+          "label": "Sincronização Vertical (V-Sync)",
           "type": "select",
-          "default": "1",
-          "configKey": "eden_resolution_scale",
+          "default": "auto",
+          "configKey": "eden_use_vsync",
           "values": [
             {
-              "label": "1x Nativa",
+              "label": "FIFO (Vsync Ativado)",
+              "value": "2"
+            },
+            {
+              "label": "Não",
+              "value": "0"
+            },
+            {
+              "label": "Sim (MAILBOX) - Vulkan only",
+              "value": "1"
+            },
+            {
+              "label": "FIFO RELAX - vulkan only",
+              "value": "3"
+            }
+          ],
+          "realKey": "use_vsync",
+          "realSection": "Renderer",
+          "realFile": "Eden.Generator.cs"
+        },
+        {
+          "id": "eden_ratio",
+          "label": "Proporção de Tela",
+          "type": "select",
+          "default": "auto",
+          "configKey": "eden_ratio",
+          "values": [
+            {
+              "label": "Padrão",
+              "value": "0"
+            },
+            {
+              "label": "FORCE 4/3",
+              "value": "1"
+            },
+            {
+              "label": "FORCE 21/9",
+              "value": "2"
+            },
+            {
+              "label": "FORCE 16/10",
+              "value": "3"
+            },
+            {
+              "label": "Esticar",
+              "value": "4"
+            }
+          ],
+          "realKey": "aspect_ratio",
+          "realSection": "Renderer",
+          "realFile": "Eden.Generator.cs"
+        },
+        {
+          "id": "eden_gpu_accuracy",
+          "label": "GPU ACCURACY",
+          "description": "Padrão is 'HIGH', set to 'NORMAL' to increase performance at the cost of accuracy.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "eden_gpu_accuracy",
+          "values": [
+            {
+              "label": "HIGH",
+              "value": "1"
+            },
+            {
+              "label": "NORMAL",
+              "value": "0"
+            },
+            {
+              "label": "EXTREME (VERY SLOW)",
+              "value": "2"
+            }
+          ],
+          "realKey": "gpu_accuracy",
+          "realSection": "Renderer",
+          "realFile": "Eden.Generator.cs"
+        },
+        {
+          "id": "eden_use_asynchronous_shaders",
+          "label": "USE ASYNCHRONOUS SHADER COMPILATION",
+          "description": "Can reduce lags when compiling shaders, experimental.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "eden_use_asynchronous_shaders"
+        },
+        {
+          "id": "eden_astc_recompression",
+          "label": "ASTC RECOMPRESSION",
+          "description": "For games using ASTC textures, switch to medium when using 6GB VRAM GPU and low when using 4GB-2GB VRAM GPU.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "eden_astc_recompression",
+          "values": [
+            {
+              "label": "UNCOMPRESSED (Padrão, best quality)",
+              "value": "0"
+            },
+            {
+              "label": "MEDIUM QUALITY",
+              "value": "2"
+            },
+            {
+              "label": "LOW QUALITY",
+              "value": "1"
+            }
+          ],
+          "realKey": "astc_recompression",
+          "realSection": "Renderer",
+          "realFile": "Eden.Generator.cs"
+        },
+        {
+          "id": "eden_anti_aliasing",
+          "label": "Anti-Aliasing (FXAA)",
+          "description": "Set Anti Aliasing for rendered content.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "eden_anti_aliasing",
+          "values": [
+            {
+              "label": "Nenhum",
+              "value": "0"
+            },
+            {
+              "label": "FXAA",
+              "value": "1"
+            },
+            {
+              "label": "SMAA",
+              "value": "2"
+            }
+          ],
+          "realKey": "anti_aliasing",
+          "realSection": "Renderer",
+          "realFile": "Eden.Generator.cs"
+        },
+        {
+          "id": "eden_scaling_filter",
+          "label": "SCALING FILTER",
+          "description": "Set scaling filter for rendered content.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "eden_scaling_filter",
+          "values": [
+            {
+              "label": "Nearest Neighbor",
+              "value": "0"
+            },
+            {
+              "label": "Bilinear",
+              "value": "1"
+            },
+            {
+              "label": "Bicubic",
+              "value": "2"
+            },
+            {
+              "label": "Gaussian",
+              "value": "3"
+            },
+            {
+              "label": "Lanczos",
+              "value": "4"
+            },
+            {
+              "label": "ScaleForce",
+              "value": "5"
+            },
+            {
+              "label": "AMD's FidelityFX Super Resolution",
+              "value": "6"
+            },
+            {
+              "label": "Area",
+              "value": "7"
+            },
+            {
+              "label": "MMPX",
+              "value": "12"
+            },
+            {
+              "label": "Zero-Tangent",
+              "value": "8"
+            },
+            {
+              "label": "B-Spline",
+              "value": "9"
+            },
+            {
+              "label": "Mitchell",
+              "value": "10"
+            },
+            {
+              "label": "Spline-1",
+              "value": "11"
+            }
+          ],
+          "realKey": "scaling_filter",
+          "realSection": "Renderer",
+          "realFile": "Eden.Generator.cs"
+        },
+        {
+          "id": "eden_anisotropy",
+          "label": "Filtragem Anisotrópica",
+          "description": "Enhance the quality of textures Ativado surface.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "eden_anisotropy",
+          "values": [
+            {
+              "label": "Padrão",
               "value": "1"
             },
             {
@@ -76,52 +303,503 @@
               "value": "2"
             },
             {
-              "label": "3x",
+              "label": "4x",
               "value": "3"
             },
             {
-              "label": "4x",
+              "label": "8x",
               "value": "4"
+            },
+            {
+              "label": "16x",
+              "value": "5"
+            },
+            {
+              "label": "32x",
+              "value": "6"
+            },
+            {
+              "label": "64x",
+              "value": "7"
+            },
+            {
+              "label": "Nenhum",
+              "value": "8"
             }
-          ]
+          ],
+          "realKey": "max_anisotropy",
+          "realSection": "Renderer",
+          "realFile": "Eden.Generator.cs"
         },
         {
-          "id": "eden_anti_aliasing",
-          "label": "Anti-Aliasing",
-          "description": "Método de suavização.",
+          "id": "eden_backend",
+          "label": "Vídeo",
           "type": "select",
-          "default": "None",
-          "configKey": "eden_anti_aliasing",
+          "default": "auto",
+          "configKey": "eden_backend",
           "values": [
             {
-              "label": "Desativado",
-              "value": "None"
+              "label": "OPENGL GLSL",
+              "value": "0"
             },
             {
-              "label": "FXAA",
-              "value": "FXAA"
+              "label": "VULKAN",
+              "value": "1"
             },
             {
-              "label": "SMAA",
-              "value": "SMAA"
+              "label": "OPENGL GLASM (NVIDIA)",
+              "value": "3"
+            },
+            {
+              "label": "OPENGL SPIR-V (AMD)",
+              "value": "4"
             }
-          ]
+          ],
+          "realKey": "backend",
+          "realSection": "Renderer",
+          "realFile": "Eden.Generator.cs"
         }
       ]
     },
     {
-      "id": "system",
-      "title": "Sistema",
+      "id": "emulation",
+      "title": "Emulação",
       "icon": "cpu",
       "order": 2,
       "options": [
         {
+          "id": "eden_language",
+          "label": "LANGUAGE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "eden_language",
+          "values": [
+            {
+              "label": "American English",
+              "value": "1"
+            },
+            {
+              "label": "日本語 (Japanese)",
+              "value": "0"
+            },
+            {
+              "label": "Français",
+              "value": "2"
+            },
+            {
+              "label": "Español",
+              "value": "5"
+            },
+            {
+              "label": "Deutsch",
+              "value": "3"
+            },
+            {
+              "label": "Italiano",
+              "value": "4"
+            },
+            {
+              "label": "Nederlands",
+              "value": "8"
+            },
+            {
+              "label": "Português",
+              "value": "9"
+            },
+            {
+              "label": "Русский (Russian)",
+              "value": "10"
+            },
+            {
+              "label": "한국어 (Korean)",
+              "value": "7"
+            },
+            {
+              "label": "Chinese",
+              "value": "6"
+            },
+            {
+              "label": "Taiwanese",
+              "value": "11"
+            },
+            {
+              "label": "British",
+              "value": "12"
+            },
+            {
+              "label": "French (Canadian)",
+              "value": "13"
+            },
+            {
+              "label": "Spanish (Latin America)",
+              "value": "14"
+            },
+            {
+              "label": "简化字 (Chinese - simplified)",
+              "value": "15"
+            },
+            {
+              "label": "簡化字 (Chinese - traditional)",
+              "value": "16"
+            },
+            {
+              "label": "Português (Brazil)",
+              "value": "17"
+            }
+          ],
+          "realKey": "language_index",
+          "realSection": "System",
+          "realFile": "Eden.Generator.cs"
+        },
+        {
+          "id": "eden_region_value",
+          "label": "REGION",
+          "description": "Force the region of the system.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "eden_region_value",
+          "values": [
+            {
+              "label": "JAPAN",
+              "value": "0"
+            },
+            {
+              "label": "USA",
+              "value": "1"
+            },
+            {
+              "label": "EUROPE",
+              "value": "2"
+            },
+            {
+              "label": "AUSTRALIA",
+              "value": "3"
+            },
+            {
+              "label": "CHINA",
+              "value": "4"
+            },
+            {
+              "label": "KOREA",
+              "value": "5"
+            },
+            {
+              "label": "TAIWAN",
+              "value": "6"
+            }
+          ],
+          "realKey": "region_index\\\\default",
+          "realSection": "System",
+          "realFile": "Eden.Generator.cs"
+        },
+        {
           "id": "eden_undock",
-          "label": "Modo Portátil (Undocked)",
-          "description": "Emula o Switch no modo portátil.",
+          "label": "USE UNDOCKED MODE",
+          "description": "Can increase performance Ativado some lower-end systems.",
           "type": "toggle",
-          "default": "false",
+          "default": "auto",
           "configKey": "eden_undock"
+        },
+        {
+          "id": "eden_cpu_accuracy",
+          "label": "CPU ACCURACY",
+          "description": "Leave Automático as Padrão except the game requires specific setting.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "eden_cpu_accuracy",
+          "values": [
+            {
+              "label": "ACCURATE",
+              "value": "1"
+            },
+            {
+              "label": "UNSAFE",
+              "value": "2"
+            },
+            {
+              "label": "PARANOID",
+              "value": "3"
+            }
+          ],
+          "realKey": "cpu_accuracy",
+          "realSection": "Cpu",
+          "realFile": "Eden.Generator.cs"
+        },
+        {
+          "id": "eden_multicore",
+          "label": "MULTICORE CPU Emulação",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "eden_multicore",
+          "realKey": "use_multi_core",
+          "realSection": "Core",
+          "realFile": "Eden.Generator.cs"
+        },
+        {
+          "id": "eden_memory",
+          "label": "RAM SIZE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "eden_memory",
+          "values": [
+            {
+              "label": "4GB (Padrão)",
+              "value": "0"
+            },
+            {
+              "label": "6GB (Unsafe)",
+              "value": "1"
+            },
+            {
+              "label": "8GB (Unsafe)",
+              "value": "2"
+            },
+            {
+              "label": "10GB (Unsafe)",
+              "value": "3"
+            },
+            {
+              "label": "12GB (Unsafe)",
+              "value": "4"
+            }
+          ],
+          "realKey": "memory_layout_mode",
+          "realSection": "Core",
+          "realFile": "Eden.Generator.cs"
+        }
+      ]
+    },
+    {
+      "id": "audio",
+      "title": "Áudio",
+      "icon": "volume2",
+      "order": 4,
+      "options": [
+        {
+          "id": "eden_sound_index",
+          "label": "Áudio CHANNELS",
+          "type": "select",
+          "default": "auto",
+          "configKey": "eden_sound_index",
+          "values": [
+            {
+              "label": "STEREO",
+              "value": "1"
+            },
+            {
+              "label": "SURROUND",
+              "value": "2"
+            },
+            {
+              "label": "MONO",
+              "value": "0"
+            }
+          ],
+          "realKey": "sound_index",
+          "realSection": "System",
+          "realFile": "Eden.Generator.cs"
+        },
+        {
+          "id": "eden_audio_backend",
+          "label": "Áudio",
+          "type": "select",
+          "default": "auto",
+          "configKey": "eden_audio_backend",
+          "values": [
+            {
+              "label": "CUBEB",
+              "value": "cubeb"
+            },
+            {
+              "label": "SDL2",
+              "value": "sdl2"
+            }
+          ],
+          "realKey": "output_engine",
+          "realSection": "Audio",
+          "realFile": "Eden.Generator.cs"
+        }
+      ]
+    },
+    {
+      "id": "controls",
+      "title": "Controles",
+      "icon": "gamepad2",
+      "order": 5,
+      "options": [
+        {
+          "id": "eden_norawinput",
+          "label": "DISABLE RAW INPUT",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "eden_norawinput"
+        },
+        {
+          "id": "eden_player_0_type",
+          "label": "PLAYER 1 CONTROLLER TYPE",
+          "description": "Sets the player controller type.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "eden_player_0_type",
+          "values": [
+            {
+              "label": "PRO CONTROLLER",
+              "value": "0"
+            },
+            {
+              "label": "DUAL JOYCON",
+              "value": "1"
+            },
+            {
+              "label": "LEFT JOYCON",
+              "value": "2"
+            },
+            {
+              "label": "RIGHT JOYCON",
+              "value": "3"
+            },
+            {
+              "label": "HANDHELD",
+              "value": "4"
+            },
+            {
+              "label": "GAMECUBE",
+              "value": "5"
+            }
+          ]
+        },
+        {
+          "id": "eden_player_1_type",
+          "label": "PLAYER 2 CONTROLLER TYPE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "eden_player_1_type",
+          "values": [
+            {
+              "label": "PRO CONTROLLER",
+              "value": "0"
+            },
+            {
+              "label": "DUAL JOYCON",
+              "value": "1"
+            },
+            {
+              "label": "LEFT JOYCON",
+              "value": "2"
+            },
+            {
+              "label": "RIGHT JOYCON",
+              "value": "3"
+            },
+            {
+              "label": "GAMECUBE",
+              "value": "5"
+            }
+          ]
+        },
+        {
+          "id": "eden_player_2_type",
+          "label": "PLAYER 3 CONTROLLER TYPE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "eden_player_2_type",
+          "values": [
+            {
+              "label": "PRO CONTROLLER",
+              "value": "0"
+            },
+            {
+              "label": "DUAL JOYCON",
+              "value": "1"
+            },
+            {
+              "label": "LEFT JOYCON",
+              "value": "2"
+            },
+            {
+              "label": "RIGHT JOYCON",
+              "value": "3"
+            },
+            {
+              "label": "GAMECUBE",
+              "value": "5"
+            }
+          ]
+        },
+        {
+          "id": "eden_player_3_type",
+          "label": "PLAYER 4 CONTROLLER TYPE",
+          "type": "select",
+          "default": "auto",
+          "configKey": "eden_player_3_type",
+          "values": [
+            {
+              "label": "PRO CONTROLLER",
+              "value": "0"
+            },
+            {
+              "label": "DUAL JOYCON",
+              "value": "1"
+            },
+            {
+              "label": "LEFT JOYCON",
+              "value": "2"
+            },
+            {
+              "label": "RIGHT JOYCON",
+              "value": "3"
+            },
+            {
+              "label": "GAMECUBE",
+              "value": "5"
+            }
+          ]
+        },
+        {
+          "id": "switch_enable_motion",
+          "label": "ENABLE MOTION",
+          "description": "Can only be used if the controller is compatible with motion control.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "switch_enable_motion"
+        },
+        {
+          "id": "switch_gamepadbuttons",
+          "label": "INVERT FACE BUTTONS",
+          "description": "Invert A/B and X/Y buttons.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "switch_gamepadbuttons"
+        },
+        {
+          "id": "eden_deadzone",
+          "label": "ANALOG DEADZONE",
+          "type": "slider",
+          "default": "auto",
+          "configKey": "eden_deadzone",
+          "min": 0,
+          "max": 50,
+          "step": 5,
+          "suffix": "%"
+        },
+        {
+          "id": "eden_range",
+          "label": "ANALOG RANGE",
+          "type": "slider",
+          "default": "auto",
+          "configKey": "eden_range",
+          "min": 50,
+          "max": 150,
+          "step": 10,
+          "suffix": "%"
+        },
+        {
+          "id": "eden_controller_applet",
+          "label": "DISABLE CONTROLLER APPLET",
+          "description": "Disable the controller applet that appears in multiplayer games to select the connected controllers.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "eden_controller_applet"
         }
       ]
     }
