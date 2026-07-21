@@ -860,7 +860,7 @@
           "configKey": "pcsx2_modedns1",
           "values": [
             {
-              "label": "Automático",
+              "label": "AUTO",
               "value": "Auto"
             },
             {
@@ -896,7 +896,7 @@
           "configKey": "pcsx2_modedns2",
           "values": [
             {
-              "label": "Automático",
+              "label": "AUTO",
               "value": "Auto"
             },
             {

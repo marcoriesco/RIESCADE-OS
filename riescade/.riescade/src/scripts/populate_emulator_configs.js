@@ -51,7 +51,6 @@ const CONFIG_FILE_MAPS = {
   'jzintv': [],
   'kegafusion': [],
   'kronos': [],
-  'libretro': [],
   'lime3ds': ['lime3ds/user/config/qt-config.ini'],
   'linuxloader': [],
   'mame64': ['mame64/mame.ini'],
@@ -77,6 +76,7 @@ const CONFIG_FILE_MAPS = {
   'raine': [],
   'raze': [],
   'redream': ['redream/config.json'],
+  'retroarch': [],
   'rpcs3': ['rpcs3/config.yml'],
   'ryujinx': ['ryujinx/Config.json'],
   'scummvm': [],
@@ -122,7 +122,6 @@ function readIniValue(filePath, section, key) {
       if (eqIdx !== -1) {
         const lineKey = trimmed.substring(0, eqIdx).trim();
         if (lineKey.toLowerCase() === key.toLowerCase()) {
-          // Extract value, strip comments
           let val = trimmed.substring(eqIdx + 1).trim();
           const hashIdx = val.indexOf('#');
           const semiIdx = val.indexOf(';');
@@ -130,7 +129,6 @@ function readIniValue(filePath, section, key) {
           if (commentIdx !== -1) {
             val = val.substring(0, commentIdx).trim();
           }
-          // Remove potential wrapping quotes
           if ((val.startsWith('"') && val.endsWith('"')) || (val.startsWith("'") && val.endsWith("'"))) {
             val = val.substring(1, val.length - 1);
           }
@@ -151,6 +149,13 @@ if (fs.existsSync(emulatorJsonPath)) {
   } catch (e) {
     console.error('Error parsing emulator.json:', e);
     process.exit(1);
+  }
+}
+
+// Remove legacy core_* and libretro/angle keys from emulator.json
+for (const key of Object.keys(emulatorData)) {
+  if (key.startsWith('core_') || key === 'libretro' || key === 'angle') {
+    delete emulatorData[key];
   }
 }
 
@@ -210,7 +215,6 @@ for (const file of files) {
 
       // 3. Map values
       if (val !== null) {
-        // If it's a toggle option and the file value is truthy/falsy
         if (opt.type === 'toggle') {
           const lowerVal = val.toLowerCase();
           if (['true', '1', 'yes', 'on'].includes(lowerVal)) {
@@ -221,7 +225,6 @@ for (const file of files) {
             emulatorData[emuId][optionId] = val;
           }
         } else if (opt.type === 'select' && opt.values) {
-          // Try to match value exactly, or case-insensitive
           const matched = opt.values.find(v => String(v.value).toLowerCase() === val.toLowerCase());
           if (matched) {
             emulatorData[emuId][optionId] = String(matched.value);
@@ -231,7 +234,6 @@ for (const file of files) {
         } else {
           emulatorData[emuId][optionId] = val;
         }
-        console.log(`  Mapped ${optionId} -> ${emulatorData[emuId][optionId]} (from config file)`);
       } else {
         // 4. Fallback to default from schema or "auto"
         emulatorData[emuId][optionId] = opt.default || 'auto';

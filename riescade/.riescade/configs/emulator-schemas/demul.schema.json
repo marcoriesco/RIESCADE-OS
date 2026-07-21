@@ -90,7 +90,7 @@
           "configKey": "demul_videomode",
           "values": [
             {
-              "label": "Automático",
+              "label": "AUTO",
               "value": "1024"
             },
             {

@@ -412,7 +412,7 @@ function getGenerator(args: LaunchArgs): BaseGenerator {
   if (emu === 'pico8') {
     return new Pico8Generator(args);
   }
-  if (emu === 'pinballfx') {
+  if (emu === 'pinballfx' || emu === 'pinballfx2' || emu === 'pinballfx3' || emu === 'pinballm' || sys === 'pinballfx' || sys === 'pinballfx2' || sys === 'pinballfx3' || sys === 'pinballm') {
     return new PinballFXGenerator(args);
   }
   if (emu === 'play') {

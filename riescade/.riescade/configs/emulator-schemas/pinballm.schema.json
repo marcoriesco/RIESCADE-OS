@@ -1,9 +1,9 @@
 {
   "$schema": "riescade-emulator-schema-v1",
-  "id": "pinballfx",
-  "name": "PINBALLFX",
-  "description": "Configurações para o emulador PINBALLFX geradas a partir do es_features.cfg.",
-  "icon": "pinballfx",
+  "id": "pinballm",
+  "name": "PINBALLM",
+  "description": "Configurações para o emulador PINBALLM geradas a partir do es_features.cfg.",
+  "icon": "pinballm",
   "configFiles": [],
   "globalMappings": {},
   "groups": [
@@ -36,12 +36,12 @@
       "order": 2,
       "options": [
         {
-          "id": "pinballfx_gamemode",
+          "id": "pinballm_gamemode",
           "label": "Modo de Jogo",
           "description": "Seleciona o modo de jogo padrão.",
           "type": "select",
           "default": "auto",
-          "configKey": "pinballfx_gamemode",
+          "configKey": "pinballm_gamemode",
           "values": [
             {
               "label": "Clássico",

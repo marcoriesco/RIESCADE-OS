@@ -266,10 +266,21 @@ export const EmulatorSettingsPanel: React.FC<EmulatorSettingsPanelProps> = ({
       )}
 
       {/* Settings content */}
-      {(searchQuery.trim() ? filteredGroups : sortedGroups.filter(g => g.id === activeGroupId)).map(group => (
-        <div key={group.id} className="space-y-2">
-          <SettingGroup label={group.title} />
-          {group.options.map(option => {
+      {(searchQuery.trim() ? filteredGroups : sortedGroups.filter(g => g.id === activeGroupId)).map(group => {
+        const selectedCore = getEffectiveValue('retroarch_core', 'auto').toLowerCase()
+        const visibleOptions = group.options.filter(option => {
+          if ((option as any).core) {
+            if (selectedCore !== 'auto' && selectedCore !== 'all') {
+              return (option as any).core === selectedCore
+            }
+          }
+          return true
+        })
+
+        return (
+          <div key={group.id} className="space-y-2">
+            <SettingGroup label={group.title} />
+            {visibleOptions.map(option => {
             const source = getValueSource(option.configKey)
             const isInherited = source === 'global' && option.inheritsGlobal
             const isOverridden = source === 'emulator'
@@ -339,7 +350,8 @@ export const EmulatorSettingsPanel: React.FC<EmulatorSettingsPanelProps> = ({
             )
           })}
         </div>
-      ))}
+      )
+    })}
 
       {/* No results */}
       {searchQuery.trim() && filteredGroups.length === 0 && (

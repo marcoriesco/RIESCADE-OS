@@ -525,7 +525,7 @@
           "configKey": "desmume_frameskip_type",
           "values": [
             {
-              "label": "Automático",
+              "label": "AUTO",
               "value": "auto"
             },
             {

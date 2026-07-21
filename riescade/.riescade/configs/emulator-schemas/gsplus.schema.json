@@ -2,9 +2,32 @@
   "$schema": "riescade-emulator-schema-v1",
   "id": "gsplus",
   "name": "GSPLUS",
-  "description": "Configurações para o emulador GSPLUS",
+  "description": "Configurações para o emulador GSPLUS geradas a partir do es_features.cfg.",
   "icon": "gsplus",
   "configFiles": [],
   "globalMappings": {},
-  "groups": []
+  "groups": [
+    {
+      "id": "graphics",
+      "title": "Gráficos",
+      "icon": "monitor",
+      "order": 1,
+      "options": [
+        {
+          "id": "videomode",
+          "label": "Modo de Vídeo",
+          "description": "Resolução de tela para o emulador.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "videomode",
+          "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            }
+          ]
+        }
+      ]
+    }
+  ]
 }

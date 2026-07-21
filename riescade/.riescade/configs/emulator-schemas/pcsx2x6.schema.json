@@ -122,7 +122,7 @@
           "configKey": "bilinear_filtering",
           "values": [
             {
-              "label": "Automático",
+              "label": "AUTO",
               "value": "auto"
             },
             {
@@ -152,7 +152,7 @@
           "configKey": "anisotropic_filtering",
           "values": [
             {
-              "label": "Automático",
+              "label": "AUTO",
               "value": "auto"
             },
             {
@@ -186,7 +186,7 @@
           "configKey": "texture_filtering",
           "values": [
             {
-              "label": "Automático",
+              "label": "AUTO",
               "value": "auto"
             },
             {
@@ -216,7 +216,7 @@
           "configKey": "trilinear_filtering",
           "values": [
             {
-              "label": "Automático",
+              "label": "AUTO",
               "value": "auto"
             },
             {
@@ -242,7 +242,7 @@
           "configKey": "interlace",
           "values": [
             {
-              "label": "Automático",
+              "label": "AUTO",
               "value": "auto"
             },
             {
@@ -288,7 +288,7 @@
           "configKey": "fmv_ratio",
           "values": [
             {
-              "label": "Automático",
+              "label": "AUTO",
               "value": "auto"
             },
             {
@@ -322,7 +322,7 @@
           "configKey": "UserHacks_HalfPixelOffset",
           "values": [
             {
-              "label": "Automático",
+              "label": "AUTO",
               "value": "auto"
             },
             {
@@ -356,7 +356,7 @@
           "configKey": "UserHacks_round_sprite_offset",
           "values": [
             {
-              "label": "Automático",
+              "label": "AUTO",
               "value": "auto"
             },
             {
@@ -382,7 +382,7 @@
           "configKey": "TextureOffsets",
           "values": [
             {
-              "label": "Automático",
+              "label": "AUTO",
               "value": "auto"
             },
             {
@@ -428,7 +428,7 @@
           "configKey": "pcsx2_forcebios",
           "values": [
             {
-              "label": "Automático",
+              "label": "AUTO",
               "value": "auto"
             },
             {

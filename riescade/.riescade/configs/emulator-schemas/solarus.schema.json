@@ -2,9 +2,46 @@
   "$schema": "riescade-emulator-schema-v1",
   "id": "solarus",
   "name": "SOLARUS",
-  "description": "Configurações para o emulador SOLARUS",
+  "description": "Configurações para o emulador SOLARUS geradas a partir do es_features.cfg.",
   "icon": "solarus",
   "configFiles": [],
-  "globalMappings": {},
-  "groups": []
+  "globalMappings": {
+    "forcefullscreen": {
+      "configKey": "forcefullscreen",
+      "globalKey": "fullscreen"
+    }
+  },
+  "groups": [
+    {
+      "id": "graphics",
+      "title": "Gráficos",
+      "icon": "monitor",
+      "order": 1,
+      "options": [
+        {
+          "id": "videomode",
+          "label": "Modo de Vídeo",
+          "description": "Resolução de tela para o emulador.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "videomode",
+          "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            }
+          ]
+        },
+        {
+          "id": "forcefullscreen",
+          "label": "Desativar Tela Cheia",
+          "description": "Se ativado, força a execução em modo janela.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "forcefullscreen",
+          "inheritsGlobal": "fullscreen"
+        }
+      ]
+    }
+  ]
 }

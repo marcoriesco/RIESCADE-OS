@@ -1,0 +1,91 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "pinballfx3",
+  "name": "PINBALLFX3",
+  "description": "Configurações para o emulador PINBALLFX3 geradas a partir do es_features.cfg.",
+  "icon": "pinballfx3",
+  "configFiles": [],
+  "globalMappings": {},
+  "groups": [
+    {
+      "id": "graphics",
+      "title": "Gráficos",
+      "icon": "monitor",
+      "order": 1,
+      "options": [
+        {
+          "id": "videomode",
+          "label": "Modo de Vídeo",
+          "description": "Resolução de tela para o emulador.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "videomode",
+          "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "emulation",
+      "title": "Emulação",
+      "icon": "cpu",
+      "order": 2,
+      "options": [
+        {
+          "id": "pinballfx3_players",
+          "label": "Número de Jogadores",
+          "description": "Número de jogadores para o modo Hotseat.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "pinballfx3_players",
+          "values": [
+            {
+              "label": "1",
+              "value": "1"
+            },
+            {
+              "label": "2",
+              "value": "2"
+            },
+            {
+              "label": "3",
+              "value": "3"
+            },
+            {
+              "label": "4",
+              "value": "4"
+            }
+          ]
+        },
+        {
+          "id": "pinballfx3_classic",
+          "label": "Modo Clássico",
+          "description": "Ativar modo clássico do Pinball FX3.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "pinballfx3_classic"
+        },
+        {
+          "id": "pinballfx3_offline",
+          "label": "Modo Offline",
+          "description": "Forçar o modo de jogo offline.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "pinballfx3_offline"
+        },
+        {
+          "id": "killsteam",
+          "label": "Encerrar Steam",
+          "description": "Encerrar o Steam antes de iniciar o jogo.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "killsteam"
+        }
+      ]
+    }
+  ]
+}

@@ -2,9 +2,40 @@
   "$schema": "riescade-emulator-schema-v1",
   "id": "simcoupe",
   "name": "SIMCOUPE",
-  "description": "Configurações para o emulador SIMCOUPE",
+  "description": "Configurações para o emulador SIMCOUPE geradas a partir do es_features.cfg.",
   "icon": "simcoupe",
   "configFiles": [],
   "globalMappings": {},
-  "groups": []
+  "groups": [
+    {
+      "id": "graphics",
+      "title": "Gráficos",
+      "icon": "monitor",
+      "order": 1,
+      "options": [
+        {
+          "id": "videomode",
+          "label": "Modo de Vídeo",
+          "description": "Resolução de tela para o emulador.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "videomode",
+          "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            }
+          ]
+        },
+        {
+          "id": "smooth",
+          "label": "Suavização Bilinear",
+          "description": "Suavizar imagem usando filtragem bilinear.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "smooth"
+        }
+      ]
+    }
+  ]
 }

@@ -376,7 +376,7 @@
           "configKey": "anisotropicfilter",
           "values": [
             {
-              "label": "Automático",
+              "label": "AUTO",
               "value": "0"
             },
             {

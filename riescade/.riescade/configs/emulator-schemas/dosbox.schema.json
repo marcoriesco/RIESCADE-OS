@@ -22,7 +22,7 @@
           "configKey": "videomode",
           "values": [
             {
-              "label": "Automático",
+              "label": "AUTO",
               "value": "auto"
             }
           ]
