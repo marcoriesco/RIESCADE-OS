@@ -86,4 +86,21 @@ export class SettingsParser {
       console.error('Error saving setting:', error)
     }
   }
+
+  public saveWindowBounds(windowId: string, bounds: { x: number; y: number; width: number; height: number }): void {
+    const settingsPath = this.getSettingsPath()
+    const settings = this.getAllSettings()
+
+    settings[`Window.${windowId}.X`] = { value: Math.round(bounds.x), type: 'int' }
+    settings[`Window.${windowId}.Y`] = { value: Math.round(bounds.y), type: 'int' }
+    settings[`Window.${windowId}.Width`] = { value: Math.round(bounds.width), type: 'int' }
+    settings[`Window.${windowId}.Height`] = { value: Math.round(bounds.height), type: 'int' }
+
+    try {
+      const jsonContent = JSON.stringify(settings, null, 2)
+      writeFileSync(settingsPath, jsonContent, 'utf-8')
+    } catch (error) {
+      console.error('Error saving window bounds:', error)
+    }
+  }
 }

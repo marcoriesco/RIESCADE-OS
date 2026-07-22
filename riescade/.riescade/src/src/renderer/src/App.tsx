@@ -111,7 +111,7 @@ export default function App() {
   }, [settings]);
 
   const perSystemMusic = useMemo(() => {
-    return settings["audio.persystem"]?.value !== false && settings["audio.persystem"]?.value !== "false";
+    return settings["audio.persystem"]?.value === true || settings["audio.persystem"]?.value === "true";
   }, [settings]);
 
   const useFavoriteMusic = useMemo(() => {
@@ -125,6 +125,81 @@ export default function App() {
   const showVolumePopup = useMemo(() => {
     return settings["VolumePopup"]?.value !== false && settings["VolumePopup"]?.value !== "false";
   }, [settings]);
+
+  const taskbarAutoHide = useMemo(() => {
+    return settings["taskbar.autoHide"]?.value === true || settings["taskbar.autoHide"]?.value === "true";
+  }, [settings]);
+
+  const taskbarAutoHideTimeout = useMemo(() => {
+    const parsed = parseInt(String(settings["taskbar.autoHideTimeout"]?.value || 3), 10);
+    return isNaN(parsed) ? 3 : Math.max(1, Math.min(30, parsed));
+  }, [settings]);
+
+  const taskbarClockFormat = useMemo(() => {
+    return String(settings["taskbar.clockFormat"]?.value || "default");
+  }, [settings]);
+
+  const taskbarShowWifi = useMemo(() => {
+    return settings["taskbar.showWifi"]?.value !== false && settings["taskbar.showWifi"]?.value !== "false";
+  }, [settings]);
+
+  const taskbarShowVolume = useMemo(() => {
+    return settings["taskbar.showVolume"]?.value !== false && settings["taskbar.showVolume"]?.value !== "false";
+  }, [settings]);
+
+  const taskbarShowBattery = useMemo(() => {
+    return settings["taskbar.showBattery"]?.value !== false && settings["taskbar.showBattery"]?.value !== "false";
+  }, [settings]);
+
+  const taskbarShowControllers = useMemo(() => {
+    return settings["taskbar.showControllers"]?.value !== false && settings["taskbar.showControllers"]?.value !== "false";
+  }, [settings]);
+
+  const [taskbarHidden, setTaskbarHidden] = useState(false);
+  const isMouseNearBottomRef = useRef(false);
+
+  useEffect(() => {
+    if (!taskbarAutoHide) {
+      setTaskbarHidden(false);
+      return;
+    }
+
+    let hideTimer: NodeJS.Timeout | null = null;
+
+    const handleMouseMove = (e: MouseEvent) => {
+      const nearBottom = e.clientY >= window.innerHeight - 25;
+      const insideTaskbarArea = e.clientY >= window.innerHeight - 90;
+
+      if (nearBottom || insideTaskbarArea) {
+        isMouseNearBottomRef.current = true;
+        setTaskbarHidden(false);
+        if (hideTimer) {
+          clearTimeout(hideTimer);
+          hideTimer = null;
+        }
+      } else {
+        if (isMouseNearBottomRef.current || !hideTimer) {
+          isMouseNearBottomRef.current = false;
+          if (hideTimer) clearTimeout(hideTimer);
+          hideTimer = setTimeout(() => {
+            setTaskbarHidden(true);
+          }, taskbarAutoHideTimeout * 1000);
+        }
+      }
+    };
+
+    hideTimer = setTimeout(() => {
+      if (!isMouseNearBottomRef.current) {
+        setTaskbarHidden(true);
+      }
+    }, taskbarAutoHideTimeout * 1000);
+
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => {
+      if (hideTimer) clearTimeout(hideTimer);
+      window.removeEventListener("mousemove", handleMouseMove);
+    };
+  }, [taskbarAutoHide, taskbarAutoHideTimeout]);
 
 
 
@@ -578,16 +653,18 @@ export default function App() {
   }, [handleSaveSetting]);
 
   const updateVirtualWindowBounds = useCallback((id: string, bounds: { x: number; y: number; width: number; height: number }) => {
-    setVirtualWindows(prev => {
-      const updated = prev.map(w => w.id === id ? { ...w, ...bounds } : w);
-      // Save bounds to settings (saves to ES backend db)
-      handleSaveSetting(`Window.${id}.X`, bounds.x, 'int');
-      handleSaveSetting(`Window.${id}.Y`, bounds.y, 'int');
-      handleSaveSetting(`Window.${id}.Width`, bounds.width, 'int');
-      handleSaveSetting(`Window.${id}.Height`, bounds.height, 'int');
-      return updated;
+    setVirtualWindows(prev => prev.map(w => w.id === id ? { ...w, ...bounds } : w));
+    // Single IPC call: 1 file read + 1 file write instead of 4x each
+    window.api.saveWindowBounds(id, bounds).then(() => {
+      setSettings((prev: any) => ({
+        ...prev,
+        [`Window.${id}.X`]: { value: Math.round(bounds.x) },
+        [`Window.${id}.Y`]: { value: Math.round(bounds.y) },
+        [`Window.${id}.Width`]: { value: Math.round(bounds.width) },
+        [`Window.${id}.Height`]: { value: Math.round(bounds.height) }
+      }));
     });
-  }, [handleSaveSetting]);
+  }, []);
 
   const togglePinDesktop = useCallback((type: "system" | "tool", appId: string) => {
     const current = getDesktopIcons();
@@ -918,10 +995,6 @@ export default function App() {
 
       if (rawTracks.length === 0 && useFavoriteMusic) {
         rawTracks = await window.api.getMusicFiles("favorites");
-      }
-
-      if (rawTracks.length === 0) {
-        rawTracks = await window.api.getMusicFiles();
       }
 
       const formatted = (rawTracks || []).map(item => {
@@ -1719,11 +1792,11 @@ export default function App() {
               zIndex={win.zIndex}
               active={active}
               headerLeft={win.type === 'system' ? renderSystemMenu(win.appId) : undefined}
-              onFocus={() => focusVirtualWindow(win.id)}
-              onClose={() => closeVirtualWindow(win.id)}
-              onMinimize={() => minimizeVirtualWindow(win.id)}
-              onMaximize={() => toggleMaximizeVirtualWindow(win.id)}
-              onUpdateBounds={(bounds) => updateVirtualWindowBounds(win.id, bounds)}
+              onFocus={focusVirtualWindow}
+              onClose={closeVirtualWindow}
+              onMinimize={minimizeVirtualWindow}
+              onMaximize={toggleMaximizeVirtualWindow}
+              onUpdateBounds={updateVirtualWindowBounds}
             >
               {win.type === 'system' || isVirtualTool ? (
                 <SystemAppContent
@@ -2001,9 +2074,26 @@ export default function App() {
 
       {/* Overlay behind the taskbar */}
 
+      {/* Windows-style Taskbar bottom edge hover trigger */}
+      {taskbarAutoHide && (
+        <div 
+          className="fixed bottom-0 left-0 right-0 h-3 z-[89]" 
+          onMouseEnter={() => setTaskbarHidden(false)}
+        />
+      )}
+
       {/* Taskbar inferior flutuante */}
-      <Tooltip.Provider delayDuration={400}>
-        <div className="taskbar-dock absolute bottom-4 left-1/2 -translate-x-1/2 z-[90]" onClick={(e) => e.stopPropagation()}>
+      {(() => {
+        const isTaskbarHidden = taskbarAutoHide && taskbarHidden && !launcherOpen && !showQuickSettings && !taskbarContextMenu;
+        return (
+          <Tooltip.Provider delayDuration={400}>
+            <div 
+              className={`taskbar-dock absolute bottom-4 left-1/2 -translate-x-1/2 z-[90] transition-all duration-300 ${
+                isTaskbarHidden ? "translate-y-28 opacity-0 pointer-events-none" : "translate-y-0 opacity-100"
+              }`} 
+              onMouseEnter={() => setTaskbarHidden(false)}
+              onClick={(e) => e.stopPropagation()}
+            >
           <div className="glass-strong rounded-2xl px-3 py-2 flex items-center gap-2 shadow-2xl">
             
             {/* Start Menu button */}
@@ -2183,41 +2273,45 @@ export default function App() {
 
             {/* System tray */}
             <div className="flex items-center gap-2 px-3 text-white/80">
-              <Tooltip.Root>
-                <Tooltip.Trigger asChild>
-                  <button 
-                    onClick={() => setShowQuickSettings(prev => !prev)}
-                    className="hover:scale-105 transition cursor-pointer flex items-center justify-center p-1 rounded hover:bg-white/10"
-                  >
-                    <Wifi className="w-4 h-4 text-white/60 hover:text-white" />
-                  </button>
-                </Tooltip.Trigger>
-                <Tooltip.Portal>
-                  <Tooltip.Content className="tooltip-content" side="top" sideOffset={8}>
-                    {isOnline ? "Rede: Conectado" : "Rede: Desconectado"}
-                    <Tooltip.Arrow className="tooltip-arrow" width={10} height={5} />
-                  </Tooltip.Content>
-                </Tooltip.Portal>
-              </Tooltip.Root>
+              {taskbarShowWifi && (
+                <Tooltip.Root>
+                  <Tooltip.Trigger asChild>
+                    <button 
+                      onClick={() => setShowQuickSettings(prev => !prev)}
+                      className="hover:scale-105 transition cursor-pointer flex items-center justify-center p-1 rounded hover:bg-white/10"
+                    >
+                      <Wifi className="w-4 h-4 text-white/60 hover:text-white" />
+                    </button>
+                  </Tooltip.Trigger>
+                  <Tooltip.Portal>
+                    <Tooltip.Content className="tooltip-content" side="top" sideOffset={8}>
+                      {isOnline ? "Rede: Conectado" : "Rede: Desconectado"}
+                      <Tooltip.Arrow className="tooltip-arrow" width={10} height={5} />
+                    </Tooltip.Content>
+                  </Tooltip.Portal>
+                </Tooltip.Root>
+              )}
 
-              <Tooltip.Root>
-                <Tooltip.Trigger asChild>
-                  <button 
-                    onClick={() => setShowQuickSettings(prev => !prev)}
-                    className="hover:scale-105 transition cursor-pointer flex items-center justify-center p-1 rounded hover:bg-white/10"
-                  >
-                    <Volume2 className="w-4 h-4 text-white/60 hover:text-white" />
-                  </button>
-                </Tooltip.Trigger>
-                <Tooltip.Portal>
-                  <Tooltip.Content className="tooltip-content" side="top" sideOffset={8}>
-                    {`Volume: ${volume}%`}
-                    <Tooltip.Arrow className="tooltip-arrow" width={10} height={5} />
-                  </Tooltip.Content>
-                </Tooltip.Portal>
-              </Tooltip.Root>
+              {taskbarShowVolume && (
+                <Tooltip.Root>
+                  <Tooltip.Trigger asChild>
+                    <button 
+                      onClick={() => setShowQuickSettings(prev => !prev)}
+                      className="hover:scale-105 transition cursor-pointer flex items-center justify-center p-1 rounded hover:bg-white/10"
+                    >
+                      <Volume2 className="w-4 h-4 text-white/60 hover:text-white" />
+                    </button>
+                  </Tooltip.Trigger>
+                  <Tooltip.Portal>
+                    <Tooltip.Content className="tooltip-content" side="top" sideOffset={8}>
+                      {`Volume: ${volume}%`}
+                      <Tooltip.Arrow className="tooltip-arrow" width={10} height={5} />
+                    </Tooltip.Content>
+                  </Tooltip.Portal>
+                </Tooltip.Root>
+              )}
 
-              {batteryState?.hasBattery && (
+              {batteryState?.hasBattery && taskbarShowBattery && (
                 <Tooltip.Root>
                   <Tooltip.Trigger asChild>
                     <button 
@@ -2241,7 +2335,8 @@ export default function App() {
                   FPS <span className="font-bold">{fps}</span>
                 </span>
               )}
-              {controllers.map((c, idx) => (
+
+              {taskbarShowControllers && controllers.map((c, idx) => (
                 <Tooltip.Root key={c.guid + idx}>
                   <Tooltip.Trigger asChild>
                     <span className="flex items-center cursor-help bg-white/5 border border-white/5 rounded px-1.5 py-0.5 select-none shrink-0 gap-1 text-[9px] hover:border-accent/40 transition">
@@ -2260,11 +2355,37 @@ export default function App() {
 
               <Tooltip.Root>
                 <Tooltip.Trigger asChild>
-                  <div className="text-xs leading-tight ml-1 flex text-right gap-1 pl-3 cursor-help">
-                    <span className="font-semibold text-white capitalize">{now.toLocaleDateString("pt-BR", { month: "short" })}</span>
-                    <span className="font-semibold text-white">{now.toLocaleDateString("pt-BR", { day: "2-digit" })}</span>
-                    <span className="font-semibold text-white">{now.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}</span>
-                  </div>
+                  {(() => {
+                    let formattedTime = "";
+                    let formattedDate = "";
+                    if (taskbarClockFormat === "24h") {
+                      formattedTime = now.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit", hour12: false });
+                    } else if (taskbarClockFormat === "24h_sec") {
+                      formattedTime = now.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false });
+                    } else if (taskbarClockFormat === "12h") {
+                      formattedTime = now.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit", hour12: true });
+                    } else if (taskbarClockFormat === "12h_sec") {
+                      formattedTime = now.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: true });
+                    } else if (taskbarClockFormat === "full_24h") {
+                      formattedDate = now.toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit" }) + " - ";
+                      formattedTime = now.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit", hour12: false });
+                    } else {
+                      return (
+                        <div className="text-xs leading-tight ml-1 flex text-right gap-1 pl-3 cursor-help">
+                          <span className="font-semibold text-white capitalize">{now.toLocaleDateString("pt-BR", { month: "short" })}</span>
+                          <span className="font-semibold text-white">{now.toLocaleDateString("pt-BR", { day: "2-digit" })}</span>
+                          <span className="font-semibold text-white">{now.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}</span>
+                        </div>
+                      );
+                    }
+
+                    return (
+                      <div className="text-xs leading-tight ml-1 flex items-center text-right gap-1 pl-3 cursor-help font-mono font-semibold text-white">
+                        {formattedDate && <span className="opacity-80">{formattedDate}</span>}
+                        <span>{formattedTime}</span>
+                      </div>
+                    );
+                  })()}
                 </Tooltip.Trigger>
                 <Tooltip.Portal>
                   <Tooltip.Content className="tooltip-content" side="top" sideOffset={8}>
@@ -2278,6 +2399,8 @@ export default function App() {
           </div>
         </div>
       </Tooltip.Provider>
+    );
+  })()}
       {/* Premium Full-screen Game Loading Backdrop */}
       {isLaunching && launchingGame && (
         <div className="absolute inset-0 z-[200] bg-black/95 flex flex-col items-center justify-center animate-in fade-in duration-300">

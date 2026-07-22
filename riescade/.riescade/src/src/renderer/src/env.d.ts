@@ -19,6 +19,7 @@ declare global {
       loadTheme: (themeName: string) => Promise<any>
       getSettings: () => Promise<any>
       saveSetting: (name: string, value: any, type: string) => Promise<any>
+      saveWindowBounds: (windowId: string, bounds: { x: number; y: number; width: number; height: number }) => Promise<void>
       getEmulatorSettings: () => Promise<any>
       saveEmulatorSetting: (emulator: string, name: string, value: any) => Promise<any>
       getEmulatorSchemas: () => Promise<{ id: string; name: string; description?: string; icon?: string; groupCount: number; optionCount: number }[]>

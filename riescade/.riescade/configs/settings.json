@@ -40,7 +40,7 @@
     "type": "bool"
   },
   "DrawFramerate": {
-    "value": false,
+    "value": true,
     "type": "bool"
   },
   "LoadEmptySystems": {
@@ -85,7 +85,7 @@
   },
   "MusicVolume": {
     "value": 100,
-    "type": "string"
+    "type": "int"
   },
   "ScrapperFilter": {
     "value": "all",
@@ -188,7 +188,7 @@
     "type": "string"
   },
   "Window.system-switch.Maximized": {
-    "value": false,
+    "value": true,
     "type": "bool"
   },
   "Window.system-switch.X": {
@@ -372,23 +372,23 @@
     "type": "int"
   },
   "Window.tool-settings.Maximized": {
-    "value": true,
+    "value": false,
     "type": "bool"
   },
   "Window.tool-settings.X": {
-    "value": 176,
+    "value": 184,
     "type": "int"
   },
   "Window.tool-settings.Y": {
-    "value": 73,
+    "value": 35,
     "type": "int"
   },
   "Window.tool-settings.Width": {
-    "value": 1625,
+    "value": 1572,
     "type": "int"
   },
   "Window.tool-settings.Height": {
-    "value": 825,
+    "value": 906,
     "type": "int"
   },
   "Window.tool-collections.Maximized": {
@@ -416,11 +416,11 @@
     "type": "bool"
   },
   "VSync": {
-    "value": false,
+    "value": true,
     "type": "bool"
   },
   "RIESCADE.AccentColor": {
-    "value": "#9f0043",
+    "value": "#3b82f6",
     "type": "string"
   },
   "Window.system-2ship.Maximized": {
@@ -872,10 +872,42 @@
     "type": "string"
   },
   "audio.useFavoriteMusic": {
-    "value": true,
+    "value": false,
     "type": "bool"
   },
   "VideoAudio": {
+    "value": true,
+    "type": "bool"
+  },
+  "audio.persystem": {
+    "value": true,
+    "type": "bool"
+  },
+  "taskbar.clockFormat": {
+    "value": "default",
+    "type": "string"
+  },
+  "taskbar.autoHide": {
+    "value": false,
+    "type": "bool"
+  },
+  "taskbar.autoHideTimeout": {
+    "value": 1,
+    "type": "int"
+  },
+  "taskbar.showWifi": {
+    "value": true,
+    "type": "bool"
+  },
+  "taskbar.showVolume": {
+    "value": true,
+    "type": "bool"
+  },
+  "taskbar.showBattery": {
+    "value": true,
+    "type": "bool"
+  },
+  "taskbar.showControllers": {
     "value": true,
     "type": "bool"
   }

@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useCallback } from 'react';
 import { X, Minus, Square } from 'lucide-react';
 
 interface VirtualWindowProps {
@@ -15,15 +15,15 @@ interface VirtualWindowProps {
   zIndex: number;
   active: boolean;
   headerLeft?: React.ReactNode;
-  onFocus: () => void;
-  onClose: () => void;
-  onMinimize: () => void;
-  onMaximize: () => void;
-  onUpdateBounds: (bounds: { x: number; y: number; width: number; height: number }) => void;
+  onFocus: (id: string) => void;
+  onClose: (id: string) => void;
+  onMinimize: (id: string) => void;
+  onMaximize: (id: string) => void;
+  onUpdateBounds: (id: string, bounds: { x: number; y: number; width: number; height: number }) => void;
   children: React.ReactNode;
 }
 
-export default function VirtualWindow({
+function VirtualWindow({
   id,
   type,
   appId,
@@ -87,11 +87,30 @@ export default function VirtualWindow({
     }
   }, [initialX, initialY, initialWidth, initialHeight, isMaximized, isMinimized]);
 
-  const handleMouseDown = () => {
+  const handleMouseDown = useCallback(() => {
     if (!active) {
-      onFocus();
+      onFocus(id);
     }
-  };
+  }, [active, onFocus, id]);
+
+  const handleMinimize = useCallback((e: React.MouseEvent) => {
+    e.stopPropagation();
+    onMinimize(id);
+  }, [onMinimize, id]);
+
+  const handleMaximize = useCallback((e: React.MouseEvent) => {
+    e.stopPropagation();
+    onMaximize(id);
+  }, [onMaximize, id]);
+
+  const handleClose = useCallback((e: React.MouseEvent) => {
+    e.stopPropagation();
+    onClose(id);
+  }, [onClose, id]);
+
+  const handleMaximizeDoubleClick = useCallback(() => {
+    onMaximize(id);
+  }, [onMaximize, id]);
 
   const snapPreviewRef = useRef<HTMLDivElement>(null);
 
@@ -146,7 +165,7 @@ export default function VirtualWindow({
 
       startPosX = newX;
       startPosY = newY;
-      onMaximize(); // Notify parent to set isMaximized: false
+      onMaximize(id); // Notify parent to set isMaximized: false
     }
 
     // Drag-to-unsnap if dragging a snapped window
@@ -179,8 +198,14 @@ export default function VirtualWindow({
     }
 
     let currentSnapType: 'left' | 'right' | 'maximize' | null = null;
+    let rafId: number | null = null;
+    let lastMoveEvent: MouseEvent | null = null;
 
-    const handleMouseMove = (moveEvent: MouseEvent) => {
+    const applyDragPosition = () => {
+      rafId = null;
+      if (!lastMoveEvent) return;
+      const moveEvent = lastMoveEvent;
+
       const dx = moveEvent.clientX - startX;
       const dy = moveEvent.clientY - startY;
 
@@ -237,10 +262,22 @@ export default function VirtualWindow({
       }
     };
 
+    const handleMouseMove = (moveEvent: MouseEvent) => {
+      lastMoveEvent = moveEvent;
+      if (!rafId) {
+        rafId = requestAnimationFrame(applyDragPosition);
+      }
+    };
+
     const handleMouseUp = () => {
       document.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseup', handleMouseUp);
       
+      if (rafId) {
+        cancelAnimationFrame(rafId);
+        rafId = null;
+      }
+
       if (el) {
         el.classList.remove('dragging');
       }
@@ -251,7 +288,7 @@ export default function VirtualWindow({
       }
 
       if (currentSnapType === 'maximize') {
-        onMaximize();
+        onMaximize(id);
       } else if (currentSnapType === 'left') {
         const snappedWidth = Math.floor(window.innerWidth / 2);
         const snappedHeight = window.innerHeight - 56;
@@ -266,7 +303,7 @@ export default function VirtualWindow({
           el.style.height = `${snappedHeight}px`;
           el.style.transform = `translate3d(0px, 0px, 0px)`;
         }
-        onUpdateBounds(boundsRef.current);
+        onUpdateBounds(id, boundsRef.current);
       } else if (currentSnapType === 'right') {
         const snappedWidth = Math.floor(window.innerWidth / 2);
         const snappedHeight = window.innerHeight - 56;
@@ -282,9 +319,9 @@ export default function VirtualWindow({
           el.style.height = `${snappedHeight}px`;
           el.style.transform = `translate3d(${snappedX}px, 0px, 0px)`;
         }
-        onUpdateBounds(boundsRef.current);
+        onUpdateBounds(id, boundsRef.current);
       } else {
-        onUpdateBounds({
+        onUpdateBounds(id, {
           x: boundsRef.current.x,
           y: boundsRef.current.y,
           width: boundsRef.current.width,
@@ -314,10 +351,17 @@ export default function VirtualWindow({
 
     const el = windowRef.current;
     if (el) {
-      el.classList.add('dragging');
+      el.classList.add('dragging', 'resizing');
     }
 
-    const handleMouseMove = (moveEvent: MouseEvent) => {
+    let rafId: number | null = null;
+    let lastMoveEvent: MouseEvent | null = null;
+
+    const applyResizePosition = () => {
+      rafId = null;
+      if (!lastMoveEvent) return;
+      const moveEvent = lastMoveEvent;
+
       const dx = moveEvent.clientX - startX;
       const dy = moveEvent.clientY - startY;
 
@@ -357,15 +401,27 @@ export default function VirtualWindow({
       }
     };
 
+    const handleMouseMove = (moveEvent: MouseEvent) => {
+      lastMoveEvent = moveEvent;
+      if (!rafId) {
+        rafId = requestAnimationFrame(applyResizePosition);
+      }
+    };
+
     const handleMouseUp = () => {
       document.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseup', handleMouseUp);
 
-      if (el) {
-        el.classList.remove('dragging');
+      if (rafId) {
+        cancelAnimationFrame(rafId);
+        rafId = null;
       }
 
-      onUpdateBounds({
+      if (el) {
+        el.classList.remove('dragging', 'resizing');
+      }
+
+      onUpdateBounds(id, {
         x: boundsRef.current.x,
         y: boundsRef.current.y,
         width: boundsRef.current.width,
@@ -402,7 +458,7 @@ export default function VirtualWindow({
         {/* Title bar */}
         <div
           onMouseDown={handleDragStart}
-          onDoubleClick={onMaximize}
+          onDoubleClick={handleMaximizeDoubleClick}
           className="h-10 px-4 bg-black/40 border-b border-white/5 flex items-center justify-between select-none shrink-0 cursor-move"
         >
           <div className="flex items-center gap-2 w-full min-w-0 pr-4">
@@ -414,30 +470,21 @@ export default function VirtualWindow({
           {/* Window control buttons */}
           <div className="flex items-center gap-1 shrink-0">
             <button
-              onClick={(e) => {
-                e.stopPropagation();
-                onMinimize();
-              }}
+              onClick={handleMinimize}
               className="win-control-btn w-7 h-7 hover:bg-white/10 flex items-center justify-center rounded-lg text-white/60 hover:text-white transition cursor-pointer"
               title="Minimizar"
             >
               <Minus className="w-3.5 h-3.5" />
             </button>
             <button
-              onClick={(e) => {
-                e.stopPropagation();
-                onMaximize();
-              }}
+              onClick={handleMaximize}
               className="win-control-btn w-7 h-7 hover:bg-white/10 flex items-center justify-center rounded-lg text-white/60 hover:text-white transition cursor-pointer"
               title={isMaximized ? "Restaurar" : "Maximizar"}
             >
               <Square className="w-2.5 h-2.5" />
             </button>
             <button
-              onClick={(e) => {
-                e.stopPropagation();
-                onClose();
-              }}
+              onClick={handleClose}
               className="win-control-btn w-7 h-7 hover:bg-red-500/80 flex items-center justify-center rounded-lg text-white/60 hover:text-white transition cursor-pointer"
               title="Fechar"
             >
@@ -497,3 +544,5 @@ export default function VirtualWindow({
     </>
   );
 }
+
+export default React.memo(VirtualWindow);

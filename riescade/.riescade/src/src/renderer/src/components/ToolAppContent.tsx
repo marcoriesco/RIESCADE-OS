@@ -79,7 +79,6 @@ function RadixSelect({
 const SETTINGS_TABS = [
   { id: "conta", name: "Minha Conta", icon: User },
   { id: "emuladores", name: "Emuladores", icon: Gamepad2 },
-  { id: "interface", name: "Interface", icon: Settings },
   { id: "personalizacao", name: "Personalização", icon: Palette },
   { id: "controles", name: "Controles", icon: Gamepad2 },
   { id: "audio", name: "Áudio", icon: Volume2 },
@@ -92,27 +91,110 @@ const EMULATOR_NAMES: Record<string, string> = {
   global: "Geral / Globais",
   retroarch: "RetroArch",
   ares: "Ares",
-  xenia: "Xenia",
-  pcsx2: "PCSX2",
-  pcsx2x6: "PCSX2X6",
-  teknoparrot: "TeknoParrot",
-  mame64: "MAME64",
-  dolphin: "Dolphin",
-  ryujinx: "Ryujinx",
-  rpcs3: "RPCS3",
-  cemu: "Cemu",
-  duckstation: "DuckStation",
-  ppsspp: "PPSSPP",
-  flycast: "Flycast",
-  xemu: "Xemu",
-  bigpemu: "BigPEmu",
+  xenia: "Xenia (Xbox 360)",
+  "xenia-canary": "Xenia Canary (Xbox 360)",
+  "xenia-edge": "Xenia Edge",
+  "xenia-manager": "Xenia Manager",
+  pcsx2: "PCSX2 (PlayStation 2)",
+  pcsx2x6: "PCSX2 64-bit",
+  pcsx2_nightly: "PCSX2 Nightly",
+  "pcsx2-16": "PCSX2 (v1.6 Legacy)",
+  teknoparrot: "TeknoParrot (Arcade)",
+  mame: "MAME (Arcade)",
+  mame64: "MAME 64-bit",
+  groovymame: "GroovyMAME",
+  hbmame: "HBMAME (Homebrew MAME)",
+  dolphin: "Dolphin (GameCube & Wii)",
+  "dolphin-emu": "Dolphin Emulator",
+  "dolphin-triforce": "Dolphin Triforce (Arcade)",
+  ryujinx: "Ryujinx (Switch)",
+  yuzu: "Yuzu (Switch)",
+  "yuzu-early-access": "Yuzu Early Access",
+  suyu: "Suyu (Switch)",
+  sudachi: "Sudachi (Switch)",
+  citron: "Citron (Switch)",
+  eden: "Eden (Switch)",
+  eden_nightly: "Eden Nightly",
+  rpcs3: "RPCS3 (PlayStation 3)",
+  cemu: "Cemu (Wii U)",
+  duckstation: "DuckStation (PlayStation 1)",
+  ppsspp: "PPSSPP (PSP)",
+  flycast: "Flycast (Dreamcast / Arcade)",
+  xemu: "xemu (Xbox Original)",
+  cxbx: "Cxbx-Reloaded (Xbox)",
+  bigpemu: "BigPEmu (Atari Jaguar)",
   model2: "Model 2 Emulator",
-  model3: "Supermodel (Model 3)",
-  redream: "Redream",
-  shadps4: "shadPS4",
-  vita3k: "Vita3K",
-  eden: "Eden",
-  mame: "MAME"
+  m2emulator: "Model 2 Emulator",
+  model3: "Supermodel (Sega Model 3)",
+  supermodel: "Supermodel (Sega Model 3)",
+  redream: "Redream (Dreamcast)",
+  shadps4: "shadPS4 (PlayStation 4)",
+  vita3k: "Vita3K (PS Vita)",
+  play: "Play! (PlayStation 2)",
+  citra: "Citra (3DS)",
+  "citra-canary": "Citra Canary (3DS)",
+  lime3ds: "Lime3DS (3DS)",
+  mandarine: "Mandarine (3DS)",
+  azahar: "Azahar (3DS)",
+  desmume: "DeSmuME (Nintendo DS)",
+  melonds: "melonDS (Nintendo DS)",
+  nosgba: "No$GBA (DS / GBA)",
+  snes9x: "Snes9x (Super Nintendo)",
+  mesen: "Mesen (NES / SNES / GB)",
+  mgba: "mGBA (Game Boy Advance)",
+  mupen64: "Mupen64Plus (Nintendo 64)",
+  project64: "Project64 (Nintendo 64)",
+  simple64: "simple64 (Nintendo 64)",
+  gopher64: "Gopher64 (Nintendo 64)",
+  n64recomplauncher: "N64 Recomp Launcher",
+  stella: "Stella (Atari 2600)",
+  jzintv: "jzIntv (Intellivision)",
+  kronos: "Kronos (Sega Saturn)",
+  yabasanshiro: "Yaba Sanshiro (Saturn)",
+  ssf: "SSF (Sega Saturn)",
+  demul: "Demul (Arcade / Dreamcast)",
+  kega: "Kega Fusion (Mega Drive / Genesis)",
+  "kega-fusion": "Kega Fusion",
+  fbneo: "FinalBurn Neo (Arcade / NeoGeo)",
+  zinc: "ZiNc (Arcade Sony ZN-1/ZN-2)",
+  vpinball: "Visual Pinball X (VPX)",
+  fpinball: "Future Pinball",
+  pinballfx: "Pinball FX",
+  pinballfx2: "Pinball FX2",
+  pinballfx3: "Pinball FX3",
+  pinballm: "Pinball M",
+  zaccariapinball: "Zaccaria Pinball",
+  winuae: "WinUAE (Amiga)",
+  amigaforever: "Amiga Forever",
+  dosbox: "DOSBox (MS-DOS)",
+  "dosbox-pure": "DOSBox Pure",
+  "dosbox-staging": "DOSBox Staging",
+  scummvm: "ScummVM (Adventure / Point&Click)",
+  hatari: "Hatari (Atari ST)",
+  openmsx: "openMSX (MSX)",
+  applewin: "AppleWin (Apple II)",
+  gsplus: "GSplus (Apple IIGS)",
+  altirra: "Altirra (Atari 8-bit)",
+  oricutron: "Oricutron (Oric 1 / Atmos)",
+  xm6pro: "XM6 Pro (Sharp X68000)",
+  zesarux: "ZEsarUX (ZX Spectrum / Amstrad)",
+  capriceforever: "Caprice Forever (Amstrad CPC)",
+  gzdoom: "GZDoom (Doom Engine)",
+  eduke32: "EDuke32 (Duke Nukem 3D)",
+  dhewm3: "dhewm3 (Doom 3 Engine)",
+  raze: "Raze (Build Engine)",
+  openbor: "OpenBOR (Beat 'Em Up Engine)",
+  sonic3air: "Sonic 3 A.I.R.",
+  sonicmania: "Sonic Mania",
+  sonicretro: "Sonic Retro Engines",
+  soh: "Ship of Harkinian (Zelda OoT)",
+  "2ship": "2 Ship 2 Harkinian (Zelda MM)",
+  opengoal: "OpenGOAL (Jak & Daxter)",
+  pico8: "PICO-8 (Fantasy Console)",
+  solarus: "Solarus Engine",
+  mugen: "M.U.G.E.N",
+  ikemen: "IKEMEN GO",
+  windows: "Windows / PC Games Nativos"
 };
 
 const EMULATOR_DESCRIPTIONS: Record<string, string> = {
@@ -121,25 +203,44 @@ const EMULATOR_DESCRIPTIONS: Record<string, string> = {
   ares: "Ajuste os parâmetros específicos do emulador Ares.",
   xenia: "Ajuste os parâmetros específicos do emulador Xenia e Xenia Canary.",
   pcsx2: "Ajuste os parâmetros específicos do emulador PCSX2.",
-  pcsx2x6: "Ajuste os parâmetros específicos do emulador PCSX2X6.",
+  pcsx2x6: "Ajuste os parâmetros específicos do emulador PCSX2 64-bit.",
   teknoparrot: "Ajuste os parâmetros específicos do emulador TeknoParrot.",
-  mame64: "Ajuste os parâmetros específicos do emulador MAME64.",
+  mame64: "Ajuste os parâmetros específicos do emulador MAME 64-bit.",
   mame: "Ajuste os parâmetros específicos do emulador MAME.",
-  dolphin: "Ajuste os parâmetros específicos do emulador Dolphin.",
+  dolphin: "Ajuste os parâmetros específicos do emulador Dolphin (GameCube / Wii).",
   ryujinx: "Ajuste os parâmetros específicos do emulador Ryujinx.",
-  rpcs3: "Ajuste os parâmetros específicos do emulador RPCS3.",
-  cemu: "Ajuste os parâmetros específicos do emulador Cemu.",
-  duckstation: "Ajuste os parâmetros específicos do emulador DuckStation.",
-  ppsspp: "Ajuste os parâmetros específicos do emulador PPSSPP.",
-  flycast: "Ajuste os parâmetros específicos do emulador Flycast.",
-  xemu: "Ajuste os parâmetros específicos do emulador Xemu.",
-  bigpemu: "Ajuste os parâmetros específicos do emulador BigPEmu.",
-  model2: "Ajuste os parâmetros específicos do emulador Model 2.",
-  model3: "Ajuste os parâmetros específicos do emulador Supermodel.",
+  yuzu: "Ajuste os parâmetros específicos do emulador Yuzu.",
+  suyu: "Ajuste os parâmetros específicos do emulador Suyu.",
+  sudachi: "Ajuste os parâmetros específicos do emulador Sudachi.",
+  citron: "Ajuste os parâmetros específicos do emulador Citron.",
+  rpcs3: "Ajuste os parâmetros específicos do emulador RPCS3 (PS3).",
+  cemu: "Ajuste os parâmetros específicos do emulador Cemu (Wii U).",
+  duckstation: "Ajuste os parâmetros específicos do emulador DuckStation (PS1).",
+  ppsspp: "Ajuste os parâmetros específicos do emulador PPSSPP (PSP).",
+  flycast: "Ajuste os parâmetros específicos do emulador Flycast (Dreamcast).",
+  xemu: "Ajuste os parâmetros específicos do emulador xemu (Xbox Original).",
+  bigpemu: "Ajuste os parâmetros específicos do emulador BigPEmu (Atari Jaguar).",
+  model2: "Ajuste os parâmetros específicos do emulador Model 2 Arcade.",
+  model3: "Ajuste os parâmetros específicos do emulador Supermodel (Model 3).",
+  supermodel: "Ajuste os parâmetros específicos do emulador Supermodel (Model 3).",
   redream: "Ajuste os parâmetros específicos do emulador Redream.",
-  shadps4: "Ajuste os parâmetros específicos do emulador shadPS4.",
-  vita3k: "Ajuste os parâmetros específicos do emulador Vita3K.",
-  eden: "Ajuste os parâmetros específicos do emulador Eden (fork do Yuzu)."
+  shadps4: "Ajuste os parâmetros específicos do emulador shadPS4 (PS4).",
+  vita3k: "Ajuste os parâmetros específicos do emulador Vita3K (PS Vita).",
+  eden: "Ajuste os parâmetros específicos do emulador Eden.",
+  citra: "Ajuste os parâmetros específicos do emulador Citra (Nintendo 3DS).",
+  lime3ds: "Ajuste os parâmetros específicos do emulador Lime3DS.",
+  desmume: "Ajuste os parâmetros específicos do emulador DeSmuME (Nintendo DS).",
+  melonds: "Ajuste os parâmetros específicos do emulador melonDS (Nintendo DS).",
+  snes9x: "Ajuste os parâmetros específicos do emulador Snes9x (SNES).",
+  mesen: "Ajuste os parâmetros específicos do emulador Mesen (NES / SNES / GB).",
+  mgba: "Ajuste os parâmetros específicos do emulador mGBA (GBA).",
+  mupen64: "Ajuste os parâmetros específicos do emulador Mupen64Plus (N64).",
+  project64: "Ajuste os parâmetros específicos do emulador Project64 (N64).",
+  fbneo: "Ajuste os parâmetros específicos do emulador FinalBurn Neo (Arcade).",
+  vpinball: "Ajuste os parâmetros específicos do Visual Pinball X.",
+  winuae: "Ajuste os parâmetros específicos do emulador WinUAE (Amiga).",
+  dosbox: "Ajuste os parâmetros específicos do DOSBox (MS-DOS).",
+  scummvm: "Ajuste os parâmetros específicos do ScummVM."
 };
 
 export default function ToolAppContent({
@@ -1148,6 +1249,53 @@ export default function ToolAppContent({
                       </button>
                     </div>
                   </div>
+
+                  <SettingGroup label="Barra de Tarefas" />
+                  
+                  <SettingToggle 
+                    label="Ocultar automaticamente a Barra de Tarefas" 
+                    name="taskbar.autoHide" 
+                    desc="Oculta a barra de tarefas automaticamente após um período sem interação do mouse." 
+                    ctx={ctx} 
+                  />
+
+                  {(String(ctx.getSetting("taskbar.autoHide")) === "true") && (
+                    <SettingSlider 
+                      label="Tempo de inatividade para ocultar" 
+                      name="taskbar.autoHideTimeout" 
+                      min={1} 
+                      max={30} 
+                      step={1} 
+                      suffix=" s" 
+                      ctx={ctx} 
+                    />
+                  )}
+
+                  <SettingSelect 
+                    label="Formato do Relógio" 
+                    name="taskbar.clockFormat" 
+                    defaultValue="default" 
+                    desc="Escolha o estilo de exibição da hora e data no relógio da barra de tarefas." 
+                    options={[
+                      { label: "Padrão (Mês, Dia, HH:MM)", value: "default" },
+                      { label: "24 Horas (14:30)", value: "24h" },
+                      { label: "24 Horas com Segundos (14:30:45)", value: "24h_sec" },
+                      { label: "12 Horas AM/PM (02:30 PM)", value: "12h" },
+                      { label: "12 Horas AM/PM com Segundos (02:30:45 PM)", value: "12h_sec" },
+                      { label: "Data Completa + 24h (21/07 - 14:30)", value: "full_24h" }
+                    ]} 
+                    ctx={ctx} 
+                  />
+
+                  <SettingToggle label="Mostrar ícone de Wi-Fi na bandeja" name="taskbar.showWifi" ctx={ctx} />
+                  <SettingToggle label="Mostrar ícone de Som / Volume na bandeja" name="taskbar.showVolume" ctx={ctx} />
+                  <SettingToggle label="Mostrar ícone de Bateria na bandeja" name="taskbar.showBattery" ctx={ctx} />
+                  <SettingToggle label="Mostrar ícones de Controles na bandeja" name="taskbar.showControllers" ctx={ctx} />
+
+                  <SettingGroup label="Interface" />
+                  <SettingToggle label="Gravar posições das janelas" name="RIESCADE.SaveWindowPositions" desc="Gravar posições e tamanhos de todas as janelas do sistema operacional." ctx={ctx} />
+                  <SettingToggle label="Exibir FPS na barra de tarefas" name="DrawFramerate" ctx={ctx} />
+                  <SettingToggle label="V-Sync do Frontend" name="VSync" ctx={ctx} />
                 </div>
               </ScrollArea>
             </div>

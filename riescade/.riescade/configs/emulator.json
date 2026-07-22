@@ -5426,5 +5426,23 @@
     "pinballfx2_classic": "auto",
     "pinballfx2_offline": "auto",
     "killsteam": "auto"
+  },
+  "eden-nightly": {
+    "eden_resolution_setup": "5",
+    "eden_use_vsync": "2",
+    "eden_ratio": "0",
+    "eden_gpu_accuracy": "1",
+    "eden_use_asynchronous_shaders": "true",
+    "eden_astc_recompression": "0",
+    "eden_anti_aliasing": "0",
+    "eden_scaling_filter": "1",
+    "eden_anisotropy": "1",
+    "eden_backend": "1",
+    "eden_language": "17",
+    "eden_region_value": "1",
+    "eden_undock": "true",
+    "eden_cpu_accuracy": "1",
+    "eden_multicore": "true",
+    "eden_memory": "1"
   }
 }

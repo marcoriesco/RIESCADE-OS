@@ -27,6 +27,8 @@ const api = {
   getSettings: () => ipcRenderer.invoke('get-settings'),
   saveSetting: (name: string, value: any, type: 'string' | 'bool' | 'int' | 'float') =>
     ipcRenderer.invoke('save-setting', name, value, type),
+  saveWindowBounds: (windowId: string, bounds: { x: number; y: number; width: number; height: number }) =>
+    ipcRenderer.invoke('save-window-bounds', windowId, bounds),
   getEmulatorSettings: () => ipcRenderer.invoke('get-emulator-settings'),
   saveEmulatorSetting: (emulator: string, name: string, value: any) =>
     ipcRenderer.invoke('save-emulator-setting', emulator, name, value),

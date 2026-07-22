@@ -296,10 +296,12 @@ html, body, #root {
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
   transform-style: preserve-3d;
+  contain: layout style paint;
 }
 
-/* Dragging optimization: disable heavy backdrop-filters and saturate to prevent lag on repaint */
-.window-frame.dragging {
+/* Dragging/Resizing optimization: disable heavy backdrop-filters to prevent lag on repaint */
+.window-frame.dragging,
+.window-frame.resizing {
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
   background-color: rgba(20, 20, 20, 0.98) !important;

@@ -478,6 +478,10 @@ app.whenReady().then(() => {
     sendToMainWindow('setting-changed', { name, value, type })
   })
 
+  ipcMain.handle('save-window-bounds', async (_, windowId: string, bounds: { x: number; y: number; width: number; height: number }) => {
+    settingsParser.saveWindowBounds(windowId, bounds)
+  })
+
   ipcMain.handle('get-emulator-settings', async () => {
     const emulatorParser = new EmulatorParser()
     return emulatorParser.getAllSettings()
