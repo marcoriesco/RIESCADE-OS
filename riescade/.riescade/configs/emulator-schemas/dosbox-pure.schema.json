@@ -1,8 +1,8 @@
 {
   "$schema": "riescade-emulator-schema-v1",
   "id": "dosbox-pure",
-  "name": "DOSBOX-PURE",
-  "description": "Configurações para o emulador DOSBOX-PURE",
+  "name": "DOSBox Pure (MS-DOS)",
+  "description": "Ajuste os parâmetros do core DOSBox Pure.",
   "icon": "dosbox-pure",
   "configFiles": [],
   "globalMappings": {},

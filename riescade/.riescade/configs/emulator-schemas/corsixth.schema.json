@@ -1,8 +1,8 @@
 {
   "$schema": "riescade-emulator-schema-v1",
   "id": "corsixth",
-  "name": "CORSIXTH",
-  "description": "Configurações para o emulador CORSIXTH",
+  "name": "CorsixTH (Theme Hospital)",
+  "description": "Ajuste os parâmetros da engine CorsixTH.",
   "icon": "corsixth",
   "configFiles": [],
   "globalMappings": {},

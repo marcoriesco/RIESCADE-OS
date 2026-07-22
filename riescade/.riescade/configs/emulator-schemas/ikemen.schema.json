@@ -1,8 +1,8 @@
 {
   "$schema": "riescade-emulator-schema-v1",
   "id": "ikemen",
-  "name": "IKEMEN",
-  "description": "Configurações para o emulador IKEMEN",
+  "name": "IKEMEN GO (Fighting Engine)",
+  "description": "Ajuste os parâmetros da engine IKEMEN GO.",
   "icon": "ikemen",
   "configFiles": [],
   "globalMappings": {},

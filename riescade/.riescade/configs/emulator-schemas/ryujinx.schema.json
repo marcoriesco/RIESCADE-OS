@@ -1,8 +1,8 @@
 {
   "$schema": "riescade-emulator-schema-v1",
   "id": "ryujinx",
-  "name": "RYUJINX",
-  "description": "Configurações para o emulador RYUJINX",
+  "name": "Ryujinx (Nintendo Switch)",
+  "description": "Ajuste os parâmetros específicos do emulador Ryujinx.",
   "icon": "ryujinx",
   "configFiles": [],
   "globalMappings": {},

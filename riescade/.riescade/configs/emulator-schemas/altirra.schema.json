@@ -1,8 +1,8 @@
 {
   "$schema": "riescade-emulator-schema-v1",
   "id": "altirra",
-  "name": "ALTIRRA",
-  "description": "Configurações para o emulador ALTIRRA",
+  "name": "Altirra (Atari 8-bit / 5200)",
+  "description": "Ajuste os parâmetros específicos do emulador Altirra.",
   "icon": "altirra",
   "configFiles": [],
   "globalMappings": {},

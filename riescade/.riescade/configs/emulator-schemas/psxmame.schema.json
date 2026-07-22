@@ -1,8 +1,8 @@
 {
   "$schema": "riescade-emulator-schema-v1",
   "id": "psxmame",
-  "name": "PSXMAME",
-  "description": "Configurações para o emulador PSXMAME",
+  "name": "PSXMAME (PlayStation Arcade)",
+  "description": "Ajuste os parâmetros do emulador PSXMAME.",
   "icon": "psxmame",
   "configFiles": [],
   "globalMappings": {},

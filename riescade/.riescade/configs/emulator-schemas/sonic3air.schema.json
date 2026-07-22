@@ -1,8 +1,8 @@
 {
   "$schema": "riescade-emulator-schema-v1",
   "id": "sonic3air",
-  "name": "SONIC3AIR",
-  "description": "Configurações para o emulador SONIC3AIR",
+  "name": "Sonic 3 A.I.R.",
+  "description": "Ajuste os parâmetros do Sonic 3 Angel Island Revisited.",
   "icon": "sonic3air",
   "configFiles": [],
   "globalMappings": {},

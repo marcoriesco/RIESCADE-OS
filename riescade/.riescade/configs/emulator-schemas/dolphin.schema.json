@@ -1,8 +1,8 @@
 {
   "$schema": "riescade-emulator-schema-v1",
   "id": "dolphin",
-  "name": "DOLPHIN",
-  "description": "Configurações para o emulador DOLPHIN",
+  "name": "Dolphin (GameCube & Wii)",
+  "description": "Ajuste os parâmetros específicos do emulador Dolphin.",
   "icon": "dolphin",
   "configFiles": [],
   "globalMappings": {

@@ -1,8 +1,8 @@
 {
   "$schema": "riescade-emulator-schema-v1",
   "id": "oricutron",
-  "name": "ORICUTRON",
-  "description": "Configurações para o emulador ORICUTRON",
+  "name": "Oricutron (Oric 1 / Atmos)",
+  "description": "Ajuste os parâmetros específicos do Oricutron.",
   "icon": "oricutron",
   "configFiles": [],
   "globalMappings": {},

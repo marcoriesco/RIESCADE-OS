@@ -1,8 +1,8 @@
 {
   "$schema": "riescade-emulator-schema-v1",
   "id": "groovymame",
-  "name": "GROOVYMAME",
-  "description": "Configurações para o emulador GROOVYMAME",
+  "name": "GroovyMAME (CRT Arcade)",
+  "description": "Ajuste os parâmetros do GroovyMAME para displays CRT.",
   "icon": "groovymame",
   "configFiles": [],
   "globalMappings": {},

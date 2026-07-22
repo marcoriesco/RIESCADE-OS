@@ -1,8 +1,8 @@
 {
   "$schema": "riescade-emulator-schema-v1",
   "id": "eden",
-  "name": "EDEN",
-  "description": "Configurações para o emulador EDEN",
+  "name": "Eden (Nintendo Switch)",
+  "description": "Ajuste os parâmetros específicos do emulador Eden.",
   "icon": "eden",
   "configFiles": [],
   "globalMappings": {},

@@ -1,8 +1,8 @@
 {
   "$schema": "riescade-emulator-schema-v1",
   "id": "applewin",
-  "name": "APPLEWIN",
-  "description": "Configurações para o emulador APPLEWIN",
+  "name": "AppleWin (Apple II)",
+  "description": "Ajuste os parâmetros específicos do emulador AppleWin.",
   "icon": "applewin",
   "configFiles": [],
   "globalMappings": {},

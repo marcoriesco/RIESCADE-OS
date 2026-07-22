@@ -1,8 +1,8 @@
 {
   "$schema": "riescade-emulator-schema-v1",
   "id": "gzdoom",
-  "name": "GZDOOM",
-  "description": "Configurações para o emulador GZDOOM",
+  "name": "GZDoom (Doom Engine)",
+  "description": "Ajuste os parâmetros da engine GZDoom.",
   "icon": "gzdoom",
   "configFiles": [],
   "globalMappings": {},

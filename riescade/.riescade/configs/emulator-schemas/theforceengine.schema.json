@@ -1,8 +1,8 @@
 {
   "$schema": "riescade-emulator-schema-v1",
   "id": "theforceengine",
-  "name": "THEFORCEENGINE",
-  "description": "Configurações para o emulador THEFORCEENGINE",
+  "name": "The Force Engine (Star Wars Dark Forces)",
+  "description": "Ajuste os parâmetros da engine The Force Engine.",
   "icon": "theforceengine",
   "configFiles": [],
   "globalMappings": {},

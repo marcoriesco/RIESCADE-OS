@@ -1,8 +1,8 @@
 {
   "$schema": "riescade-emulator-schema-v1",
   "id": "phoenix",
-  "name": "PHOENIX",
-  "description": "Configurações para o emulador PHOENIX",
+  "name": "Phoenix (3DO / Jaguar)",
+  "description": "Ajuste os parâmetros do emulador Phoenix.",
   "icon": "phoenix",
   "configFiles": [],
   "globalMappings": {},

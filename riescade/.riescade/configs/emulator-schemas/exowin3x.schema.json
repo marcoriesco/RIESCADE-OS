@@ -1,8 +1,8 @@
 {
   "$schema": "riescade-emulator-schema-v1",
   "id": "exowin3x",
-  "name": "EXOWIN3X",
-  "description": "Configurações para o emulador EXOWIN3X",
+  "name": "eXoWin3x (Windows 3.x)",
+  "description": "Ajuste os parâmetros para jogos Windows 3.x.",
   "icon": "exowin3x",
   "configFiles": [],
   "globalMappings": {},

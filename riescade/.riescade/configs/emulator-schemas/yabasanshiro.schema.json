@@ -1,8 +1,8 @@
 {
   "$schema": "riescade-emulator-schema-v1",
   "id": "yabasanshiro",
-  "name": "YABASANSHIRO",
-  "description": "Configurações para o emulador YABASANSHIRO",
+  "name": "Yaba Sanshiro (Sega Saturn)",
+  "description": "Ajuste os parâmetros do emulador Yaba Sanshiro.",
   "icon": "yabasanshiro",
   "configFiles": [],
   "globalMappings": {},

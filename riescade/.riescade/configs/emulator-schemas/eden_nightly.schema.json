@@ -1,8 +1,8 @@
 {
   "$schema": "riescade-emulator-schema-v1",
   "id": "eden-nightly",
-  "name": "EDEN Nightly",
-  "description": "Configurações para o emulador EDEN Nightly",
+  "name": "Eden Nightly (Nintendo Switch)",
+  "description": "Ajuste os parâmetros do emulador Eden Nightly.",
   "icon": "eden",
   "configFiles": [],
   "globalMappings": {},

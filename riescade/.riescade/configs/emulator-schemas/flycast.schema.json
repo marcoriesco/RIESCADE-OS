@@ -1,8 +1,8 @@
 {
   "$schema": "riescade-emulator-schema-v1",
   "id": "flycast",
-  "name": "FLYCAST",
-  "description": "Configurações para o emulador FLYCAST",
+  "name": "Flycast (Dreamcast / Naomi / Atomiswave)",
+  "description": "Ajuste os parâmetros específicos do emulador Flycast.",
   "icon": "flycast",
   "configFiles": [],
   "globalMappings": {},

@@ -1,8 +1,8 @@
 {
   "$schema": "riescade-emulator-schema-v1",
   "id": "simple64",
-  "name": "SIMPLE64",
-  "description": "Configurações para o emulador SIMPLE64",
+  "name": "simple64 (Nintendo 64)",
+  "description": "Ajuste os parâmetros específicos do emulador simple64.",
   "icon": "simple64",
   "configFiles": [],
   "globalMappings": {},

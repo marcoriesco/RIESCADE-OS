@@ -1,8 +1,8 @@
 {
   "$schema": "riescade-emulator-schema-v1",
   "id": "duckstation",
-  "name": "DUCKSTATION",
-  "description": "Configurações para o emulador DUCKSTATION",
+  "name": "DuckStation (PlayStation 1)",
+  "description": "Ajuste os parâmetros específicos do emulador DuckStation (PS1).",
   "icon": "duckstation",
   "configFiles": [],
   "globalMappings": {},

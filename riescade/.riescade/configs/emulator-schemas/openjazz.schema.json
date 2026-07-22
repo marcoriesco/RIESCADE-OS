@@ -1,8 +1,8 @@
 {
   "$schema": "riescade-emulator-schema-v1",
   "id": "openjazz",
-  "name": "OPENJAZZ",
-  "description": "Configurações para o emulador OPENJAZZ",
+  "name": "OpenJazz (Jazz Jackrabbit)",
+  "description": "Ajuste os parâmetros da engine OpenJazz.",
   "icon": "openjazz",
   "configFiles": [],
   "globalMappings": {},

@@ -1,8 +1,8 @@
 {
   "$schema": "riescade-emulator-schema-v1",
   "id": "nosgba",
-  "name": "NOSGBA",
-  "description": "Configurações para o emulador NOSGBA",
+  "name": "No$GBA (Nintendo DS / GBA)",
+  "description": "Ajuste os parâmetros do emulador No$GBA.",
   "icon": "nosgba",
   "configFiles": [],
   "globalMappings": {},

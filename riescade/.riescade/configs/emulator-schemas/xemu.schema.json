@@ -1,8 +1,8 @@
 {
   "$schema": "riescade-emulator-schema-v1",
   "id": "xemu",
-  "name": "XEMU",
-  "description": "Configurações para o emulador XEMU",
+  "name": "xemu (Xbox Original)",
+  "description": "Ajuste os parâmetros específicos do emulador xemu.",
   "icon": "xemu",
   "configFiles": [],
   "globalMappings": {},

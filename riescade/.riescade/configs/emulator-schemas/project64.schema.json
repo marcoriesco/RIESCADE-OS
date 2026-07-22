@@ -1,8 +1,8 @@
 {
   "$schema": "riescade-emulator-schema-v1",
   "id": "project64",
-  "name": "PROJECT64",
-  "description": "Configurações para o emulador PROJECT64",
+  "name": "Project64 (Nintendo 64)",
+  "description": "Ajuste os parâmetros específicos do Project64.",
   "icon": "project64",
   "configFiles": [],
   "globalMappings": {},

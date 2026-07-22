@@ -1,8 +1,8 @@
 {
   "$schema": "riescade-emulator-schema-v1",
   "id": "openmsx",
-  "name": "OPENMSX",
-  "description": "Configurações para o emulador OPENMSX",
+  "name": "openMSX (MSX / MSX2)",
+  "description": "Ajuste os parâmetros específicos do emulador openMSX.",
   "icon": "openmsx",
   "configFiles": [],
   "globalMappings": {},

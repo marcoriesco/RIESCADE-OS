@@ -1,8 +1,8 @@
 {
   "$schema": "riescade-emulator-schema-v1",
   "id": "linuxloader",
-  "name": "LINUXLOADER",
-  "description": "Configurações para o emulador LINUXLOADER",
+  "name": "Linux Loader Engine",
+  "description": "Ajuste os parâmetros do carregador Linux.",
   "icon": "linuxloader",
   "configFiles": [],
   "globalMappings": {},

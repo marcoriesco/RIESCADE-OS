@@ -1,8 +1,8 @@
 {
   "$schema": "riescade-emulator-schema-v1",
   "id": "powerbomberman",
-  "name": "POWERBOMBERMAN",
-  "description": "Configurações para o emulador POWERBOMBERMAN",
+  "name": "Power Bomberman",
+  "description": "Ajuste os parâmetros do jogo Power Bomberman.",
   "icon": "powerbomberman",
   "configFiles": [],
   "globalMappings": {},

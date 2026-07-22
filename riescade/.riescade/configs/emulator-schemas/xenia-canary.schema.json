@@ -1,8 +1,8 @@
 {
   "$schema": "riescade-emulator-schema-v1",
   "id": "xenia-canary",
-  "name": "XENIA-CANARY",
-  "description": "Configurações para o emulador XENIA-CANARY",
+  "name": "Xenia Canary (Xbox 360)",
+  "description": "Ajuste os parâmetros do emulador Xenia Canary.",
   "icon": "xenia-canary",
   "configFiles": [],
   "globalMappings": {},

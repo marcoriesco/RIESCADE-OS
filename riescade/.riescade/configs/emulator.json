@@ -234,7 +234,8 @@
     "tp_nocrosshair": "auto",
     "ds_verbose": "auto",
     "use_mamehooker": "auto",
-    "tp_digitalrotary": "auto"
+    "tp_digitalrotary": "auto",
+    "tp_autocontrollers": "true"
   },
   "xemu": {
     "xemu_ratio": "16x9",
@@ -5128,11 +5129,11 @@
     "xash3d_sensitivity": "auto"
   },
   "xenia-canary": {
-    "xenia_resolution": "auto",
-    "xenia_widescreen": "auto",
+    "xenia_resolution": "1_1",
+    "xenia_widescreen": "true",
     "vsync": "auto",
     "xenia_internal_display_resolution": "auto",
-    "xenia_async_shader_compilation": "auto",
+    "xenia_async_shader_compilation": "true",
     "xenia_video_standard": "auto",
     "xenia_avpack": "auto",
     "xenia_pal50": "auto",

@@ -1,8 +1,8 @@
 {
   "$schema": "riescade-emulator-schema-v1",
   "id": "ares",
-  "name": "ARES",
-  "description": "Configurações para o emulador ARES",
+  "name": "Ares (Multi-sistema)",
+  "description": "Ajuste os parâmetros específicos do emulador Ares.",
   "icon": "ares",
   "configFiles": [],
   "globalMappings": {},

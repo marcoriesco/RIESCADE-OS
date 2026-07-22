@@ -1,8 +1,8 @@
 {
   "$schema": "riescade-emulator-schema-v1",
   "id": "raine",
-  "name": "RAINE",
-  "description": "Configurações para o emulador RAINE",
+  "name": "Raine (Arcade 68000)",
+  "description": "Ajuste os parâmetros específicos do emulador Raine.",
   "icon": "raine",
   "configFiles": [],
   "globalMappings": {},

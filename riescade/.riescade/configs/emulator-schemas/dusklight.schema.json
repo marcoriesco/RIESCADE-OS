@@ -1,8 +1,8 @@
 {
   "$schema": "riescade-emulator-schema-v1",
   "id": "dusklight",
-  "name": "DUSKLIGHT",
-  "description": "Configurações para o emulador DUSKLIGHT",
+  "name": "Dusklight Engine",
+  "description": "Ajuste os parâmetros específicos da engine Dusklight.",
   "icon": "dusklight",
   "configFiles": [],
   "globalMappings": {},

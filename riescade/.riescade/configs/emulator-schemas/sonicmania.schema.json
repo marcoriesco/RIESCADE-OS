@@ -1,8 +1,8 @@
 {
   "$schema": "riescade-emulator-schema-v1",
   "id": "sonicmania",
-  "name": "SONICMANIA",
-  "description": "Configurações para o emulador SONICMANIA",
+  "name": "Sonic Mania",
+  "description": "Ajuste os parâmetros para Sonic Mania.",
   "icon": "sonicmania",
   "configFiles": [],
   "globalMappings": {},

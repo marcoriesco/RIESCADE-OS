@@ -64,22 +64,30 @@ export class TeknoParrotGenerator extends BaseGenerator {
       Logger.info(`[TP] Controller ${idx + 1}: ${c.name} (Type: ${c.type}, GUID: ${c.guid})`);
     });
 
-    // 1. Load database & index GameProfiles
+    // 1. Configure global ParrotData.xml settings
+    this.configureParrotData();
+
+    // 2. If no ROM provided (e.g. live -configure-only mode triggered from Settings UI), stop after global config
+    if (!this.rom) {
+      Logger.info(`[TP] No ROM provided (-configure-only mode). Global ParrotData configuration complete.`);
+      return;
+    }
+
+    // 3. Load database & index GameProfiles
     this.loadControlsDb();
     this.buildGameProfilesIndex();
 
-    // 2. Resolve profile name
+    // 4. Resolve profile name
     this.resolveProfileName();
 
-    // 3. Check hash cache
+    // 5. Check hash cache
     this.hashChanged = this.checkHashChanged();
 
-    // 4. Execute configuration pipeline
+    // 6. Execute game profile configuration pipeline
     this.buildUserProfile();
     this.configureGamePath();
     this.configureConfigValues();
     this.configureControllers();
-    this.configureParrotData();
     this.save();
   }
 
@@ -320,8 +328,13 @@ export class TeknoParrotGenerator extends BaseGenerator {
       }
     }
 
+    const autoSetting = Config.getEmulatorSetting('teknoparrot', 'tp_autocontrollers', null)
+                     ?? Config.getEmulatorSetting('teknoparrot', 'autocontrollers', null);
     const disableAuto = Config.getEmulatorSetting('teknoparrot', 'disableautocontrollers', null);
-    if (disableAuto === 'true' || disableAuto === '1' || disableAuto === true) {
+    if (
+      (autoSetting !== null && (autoSetting === 'false' || autoSetting === '0' || autoSetting === false)) ||
+      (disableAuto !== null && (disableAuto === 'true' || disableAuto === '1' || disableAuto === true))
+    ) {
       Logger.info(`[TP] Auto controller configuration disabled via user setting.`);
       return;
     }

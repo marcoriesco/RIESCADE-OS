@@ -1,8 +1,8 @@
 {
   "$schema": "riescade-emulator-schema-v1",
   "id": "xenia-manager",
-  "name": "XENIA-MANAGER",
-  "description": "Configurações para o emulador XENIA-MANAGER",
+  "name": "Xenia Manager",
+  "description": "Ajuste os parâmetros do Xenia Manager.",
   "icon": "xenia-manager",
   "configFiles": [],
   "globalMappings": {},

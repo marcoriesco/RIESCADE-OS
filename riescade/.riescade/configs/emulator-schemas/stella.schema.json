@@ -1,8 +1,8 @@
 {
   "$schema": "riescade-emulator-schema-v1",
   "id": "stella",
-  "name": "STELLA",
-  "description": "Configurações para o emulador STELLA",
+  "name": "Stella (Atari 2600)",
+  "description": "Ajuste os parâmetros específicos do emulador Stella.",
   "icon": "stella",
   "configFiles": [],
   "globalMappings": {},

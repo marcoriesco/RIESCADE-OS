@@ -1,8 +1,8 @@
 {
   "$schema": "riescade-emulator-schema-v1",
   "id": "fpinball",
-  "name": "FPINBALL",
-  "description": "Configurações para o emulador FPINBALL",
+  "name": "Future Pinball",
+  "description": "Ajuste os parâmetros específicos do Future Pinball.",
   "icon": "fpinball",
   "configFiles": [],
   "globalMappings": {

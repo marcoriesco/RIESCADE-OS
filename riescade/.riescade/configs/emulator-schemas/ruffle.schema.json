@@ -1,8 +1,8 @@
 {
   "$schema": "riescade-emulator-schema-v1",
   "id": "ruffle",
-  "name": "RUFFLE",
-  "description": "Configurações para o emulador RUFFLE",
+  "name": "Ruffle (Flash Player)",
+  "description": "Ajuste os parâmetros do emulador de Flash Ruffle.",
   "icon": "ruffle",
   "configFiles": [],
   "globalMappings": {},

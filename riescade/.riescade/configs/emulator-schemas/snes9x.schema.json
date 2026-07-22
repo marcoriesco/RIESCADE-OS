@@ -1,8 +1,8 @@
 {
   "$schema": "riescade-emulator-schema-v1",
   "id": "snes9x",
-  "name": "SNES9X",
-  "description": "Configurações para o emulador SNES9X",
+  "name": "Snes9x (Super Nintendo)",
+  "description": "Ajuste os parâmetros específicos do emulador Snes9x.",
   "icon": "snes9x",
   "configFiles": [],
   "globalMappings": {},

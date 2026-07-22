@@ -1,8 +1,8 @@
 {
   "$schema": "riescade-emulator-schema-v1",
   "id": "ppsspp",
-  "name": "PPSSPP",
-  "description": "Configurações para o emulador PPSSPP",
+  "name": "PPSSPP (PlayStation Portable)",
+  "description": "Ajuste os parâmetros específicos do emulador PPSSPP.",
   "icon": "ppsspp",
   "configFiles": [],
   "globalMappings": {},

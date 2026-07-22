@@ -1,8 +1,8 @@
 {
   "$schema": "riescade-emulator-schema-v1",
   "id": "gemrb",
-  "name": "GEMRB",
-  "description": "Configurações para o emulador GEMRB",
+  "name": "GemRB (Infinity Engine)",
+  "description": "Ajuste os parâmetros da engine GemRB (Baldur's Gate / Icewind Dale).",
   "icon": "gemrb",
   "configFiles": [],
   "globalMappings": {},

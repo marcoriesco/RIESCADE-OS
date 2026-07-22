@@ -1,8 +1,8 @@
 {
   "$schema": "riescade-emulator-schema-v1",
   "id": "windows",
-  "name": "WINDOWS",
-  "description": "Configurações para o emulador WINDOWS",
+  "name": "Windows / PC Games Nativos",
+  "description": "Configurações e parâmetros para jogos nativos de Windows.",
   "icon": "windows",
   "configFiles": [],
   "globalMappings": {},

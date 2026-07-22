@@ -1,8 +1,8 @@
 {
   "$schema": "riescade-emulator-schema-v1",
   "id": "retroarch",
-  "name": "RETROARCH",
-  "description": "Configurações do emulador RetroArch e Cores Libretro.",
+  "name": "RetroArch (Libretro Frontend)",
+  "description": "Configurações globais de emulação, vídeo, shaders e mais.",
   "icon": "retroarch",
   "configFiles": [],
   "globalMappings": {

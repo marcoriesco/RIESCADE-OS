@@ -1,8 +1,8 @@
 {
   "$schema": "riescade-emulator-schema-v1",
   "id": "chihiro",
-  "name": "CHIHIRO",
-  "description": "Configurações para o emulador CHIHIRO",
+  "name": "Chihiro (Sega Chihiro Arcade)",
+  "description": "Ajuste os parâmetros do emulador de arcade Sega Chihiro.",
   "icon": "chihiro",
   "configFiles": [],
   "globalMappings": {

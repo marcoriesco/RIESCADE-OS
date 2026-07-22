@@ -1,8 +1,8 @@
 {
   "$schema": "riescade-emulator-schema-v1",
   "id": "mame64",
-  "name": "MAME",
-  "description": "Emulador de máquinas arcade e sistemas antigos.",
+  "name": "MAME 64-bit (Arcade)",
+  "description": "Ajuste os parâmetros específicos do emulador MAME 64-bit.",
   "icon": "mame",
   "globalMappings": {
     "fullscreen": {
@@ -42,7 +42,10 @@
           "configKey": "video_driver",
           "inheritsGlobal": "video_driver",
           "values": [
-            { "label": "AUTO", "value": "auto" },
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Direct3D",
               "value": "d3d"
@@ -79,11 +82,26 @@
           "configKey": "aspect_ratio",
           "inheritsGlobal": "aspect_ratio",
           "values": [
-            { "label": "AUTO", "value": "auto" },
-            { "label": "4:3", "value": "Fixed4x3" },
-            { "label": "16:9", "value": "Fixed16x9" },
-            { "label": "16:10", "value": "Fixed16x10" },
-            { "label": "Esticar", "value": "Stretch" }
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
+              "label": "4:3",
+              "value": "Fixed4x3"
+            },
+            {
+              "label": "16:9",
+              "value": "Fixed16x9"
+            },
+            {
+              "label": "16:10",
+              "value": "Fixed16x10"
+            },
+            {
+              "label": "Esticar",
+              "value": "Stretch"
+            }
           ]
         },
         {

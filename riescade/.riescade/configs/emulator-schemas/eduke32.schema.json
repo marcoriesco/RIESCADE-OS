@@ -1,8 +1,8 @@
 {
   "$schema": "riescade-emulator-schema-v1",
   "id": "eduke32",
-  "name": "EDUKE32",
-  "description": "Configurações para o emulador EDUKE32",
+  "name": "EDuke32 (Duke Nukem 3D)",
+  "description": "Ajuste os parâmetros da engine EDuke32.",
   "icon": "eduke32",
   "configFiles": [],
   "globalMappings": {},

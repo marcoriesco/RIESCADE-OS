@@ -265,7 +265,7 @@ export const EmulatorSettingsPanel: React.FC<EmulatorSettingsPanelProps> = ({
                 onClick={() => setActiveGroupId(group.id)}
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-all ${
                   isActive
-                    ? 'bg-accent/20 text-accent border border-accent/30'
+                    ? 'bg-accent/10 text-accent border border-accent/30'
                     : 'bg-white/5 text-white/50 border border-white/5 hover:bg-white/10 hover:text-white/70'
                 }`}
               >

@@ -1,8 +1,8 @@
 {
   "$schema": "riescade-emulator-schema-v1",
   "id": "bstone",
-  "name": "BSTONE",
-  "description": "Configurações para o emulador BSTONE",
+  "name": "Blake Stone (BSOne Engine)",
+  "description": "Ajuste os parâmetros do port nativo BStone para Blake Stone.",
   "icon": "bstone",
   "configFiles": [],
   "globalMappings": {},

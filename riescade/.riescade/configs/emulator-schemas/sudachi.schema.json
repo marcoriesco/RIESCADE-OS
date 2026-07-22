@@ -1,8 +1,8 @@
 {
   "$schema": "riescade-emulator-schema-v1",
   "id": "sudachi",
-  "name": "SUDACHI",
-  "description": "Configurações para o emulador SUDACHI",
+  "name": "Sudachi (Nintendo Switch)",
+  "description": "Ajuste os parâmetros específicos do emulador Sudachi.",
   "icon": "sudachi",
   "configFiles": [],
   "globalMappings": {},

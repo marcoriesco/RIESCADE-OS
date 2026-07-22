@@ -1,8 +1,8 @@
 {
   "$schema": "riescade-emulator-schema-v1",
   "id": "magicengine",
-  "name": "MAGICENGINE",
-  "description": "Configurações para o emulador MAGICENGINE",
+  "name": "MagicEngine (PC Engine / TurboGrafx-16)",
+  "description": "Ajuste os parâmetros do MagicEngine.",
   "icon": "magicengine",
   "configFiles": [],
   "globalMappings": {},

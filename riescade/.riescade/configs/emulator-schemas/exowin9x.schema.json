@@ -1,8 +1,8 @@
 {
   "$schema": "riescade-emulator-schema-v1",
   "id": "exowin9x",
-  "name": "EXOWIN9X",
-  "description": "Configurações para o emulador EXOWIN9X",
+  "name": "eXoWin9x (Windows 9x)",
+  "description": "Ajuste os parâmetros para jogos Windows 9x.",
   "icon": "exowin9x",
   "configFiles": [],
   "globalMappings": {},

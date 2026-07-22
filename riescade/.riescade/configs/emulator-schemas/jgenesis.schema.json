@@ -1,8 +1,8 @@
 {
   "$schema": "riescade-emulator-schema-v1",
   "id": "jgenesis",
-  "name": "JGENESIS",
-  "description": "Configurações para o emulador JGENESIS",
+  "name": "jGenesis (Sega Genesis / Master System)",
+  "description": "Ajuste os parâmetros específicos do emulador jGenesis.",
   "icon": "jgenesis",
   "configFiles": [],
   "globalMappings": {},

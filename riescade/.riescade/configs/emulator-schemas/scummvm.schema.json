@@ -1,8 +1,8 @@
 {
   "$schema": "riescade-emulator-schema-v1",
   "id": "scummvm",
-  "name": "SCUMMVM",
-  "description": "Configurações para o emulador SCUMMVM",
+  "name": "ScummVM (Adventure / Point&Click)",
+  "description": "Ajuste os parâmetros do ScummVM.",
   "icon": "scummvm",
   "configFiles": [],
   "globalMappings": {

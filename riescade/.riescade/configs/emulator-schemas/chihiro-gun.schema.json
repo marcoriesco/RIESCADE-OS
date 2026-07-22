@@ -1,8 +1,8 @@
 {
   "$schema": "riescade-emulator-schema-v1",
   "id": "chihiro-gun",
-  "name": "CHIHIRO-GUN",
-  "description": "Configurações para o emulador CHIHIRO-GUN",
+  "name": "Chihiro Gun (Sega Chihiro Arcade)",
+  "description": "Ajuste os parâmetros de jogos de tiro em arcade Sega Chihiro.",
   "icon": "chihiro-gun",
   "configFiles": [],
   "globalMappings": {

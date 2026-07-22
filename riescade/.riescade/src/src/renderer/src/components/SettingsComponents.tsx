@@ -21,11 +21,11 @@ export const SettingToggle = ({ label, name, desc, ctx }: {
   return (
     <div 
       onClick={handleToggle}
-      className="flex items-center justify-between bg-black/15 border border-white/5 rounded-md px-4 py-3 text-xs hover:bg-white/5 transition duration-200 cursor-pointer select-none"
+      className="flex items-center justify-between bg-black/15 border border-white/5 rounded-md px-4 py-3 text-sm hover:bg-white/5 transition duration-200 cursor-pointer select-none"
     >
       <div className="flex flex-col gap-0.5 flex-1 min-w-0 pr-3">
         <span className="font-medium text-white/90">{label}</span>
-        {desc && <span className="text-[10px] text-white/40 leading-relaxed font-sans">{desc}</span>}
+        {desc && <span className="text-xs text-white/40 leading-relaxed font-sans">{desc}</span>}
       </div>
       <button
         type="button"
@@ -53,10 +53,10 @@ export const SettingSelect = ({ label, name, options, desc, type = "string", def
   const value = (rawVal !== null && rawVal !== undefined) ? String(rawVal) : (defaultValue !== undefined ? defaultValue : "auto");
 
   return (
-    <div className="flex items-center justify-between bg-black/15 border border-white/5 rounded-md px-4 py-3 text-xs hover:bg-white/5 transition duration-200">
+    <div className="flex items-center justify-between bg-black/15 border border-white/5 rounded-md px-4 py-3 text-sm hover:bg-white/5 transition duration-200">
       <div className="flex flex-col gap-0.5 flex-1 min-w-0 pr-3">
         <span className="font-medium text-white/90">{label}</span>
-        {desc && <span className="text-[10px] text-white/40 leading-relaxed font-sans">{desc}</span>}
+        {desc && <span className="text-xs text-white/40 leading-relaxed font-sans">{desc}</span>}
       </div>
       <div className="relative max-w-[220px] shrink-0">
         <Select.Root value={value} onValueChange={(val) => ctx.saveSetting(name, val, type)}>
@@ -97,10 +97,10 @@ export const SettingSlider = ({ label, name, min, max, step, suffix = "", desc, 
 }) => {
   const val = parseFloat(ctx.getSetting(name, String(Math.floor((min + max) / 2))));
   return (
-    <div className="flex items-center justify-between bg-black/15 border border-white/5 rounded-md px-4 py-3 text-xs hover:bg-white/5 transition duration-200">
+    <div className="flex items-center justify-between bg-black/15 border border-white/5 rounded-md px-4 py-3 text-sm hover:bg-white/5 transition duration-200">
       <div className="flex flex-col gap-0.5 flex-1 min-w-0 pr-3">
         <span className="font-medium text-white/90">{label}</span>
-        {desc && <span className="text-[10px] text-white/40 leading-relaxed font-sans">{desc}</span>}
+        {desc && <span className="text-xs text-white/40 leading-relaxed font-sans">{desc}</span>}
       </div>
       <div className="flex items-center gap-3 shrink-0">
         <input
@@ -140,9 +140,9 @@ export const SettingInput = ({ label, name, desc, isPassword = false, ctx }: {
 );
 
 export const SettingInfo = ({ label, value }: { label: string; value: string }) => (
-  <div className="flex items-center justify-between bg-black/15 border border-white/5 rounded-md px-4 py-3 text-xs select-none">
+  <div className="flex items-center justify-between bg-black/15 border border-white/5 rounded-md px-4 py-3 text-sm select-none">
     <span className="font-medium text-white/90">{label}</span>
-    <span className="text-white/50 font-mono text-[10px] bg-white/5 border border-white/5 rounded-md px-2.5 py-0.5">
+    <span className="text-white/50 font-mono text-xs bg-white/5 border border-white/5 rounded-md px-2.5 py-0.5">
       {value}
     </span>
   </div>

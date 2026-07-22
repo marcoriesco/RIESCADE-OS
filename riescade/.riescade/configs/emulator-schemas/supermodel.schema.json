@@ -1,8 +1,8 @@
 {
   "$schema": "riescade-emulator-schema-v1",
   "id": "supermodel",
-  "name": "SUPERMODEL",
-  "description": "Configurações para o emulador SUPERMODEL",
+  "name": "Supermodel (Sega Model 3)",
+  "description": "Ajuste os parâmetros do emulador Supermodel.",
   "icon": "supermodel",
   "configFiles": [],
   "globalMappings": {},

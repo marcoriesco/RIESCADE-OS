@@ -1,8 +1,8 @@
 {
   "$schema": "riescade-emulator-schema-v1",
   "id": "citra-canary",
-  "name": "CITRA-CANARY",
-  "description": "Configurações para o emulador CITRA-CANARY",
+  "name": "Citra Canary (Nintendo 3DS)",
+  "description": "Ajuste os parâmetros específicos do Citra Canary (3DS).",
   "icon": "citra-canary",
   "configFiles": [],
   "globalMappings": {},

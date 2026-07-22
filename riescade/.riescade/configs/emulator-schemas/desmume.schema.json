@@ -1,8 +1,8 @@
 {
   "$schema": "riescade-emulator-schema-v1",
   "id": "desmume",
-  "name": "DESMUME",
-  "description": "Configurações para o emulador DESMUME",
+  "name": "DeSmuME (Nintendo DS)",
+  "description": "Ajuste os parâmetros específicos do emulador DeSmuME.",
   "icon": "desmume",
   "configFiles": [],
   "globalMappings": {},

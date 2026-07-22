@@ -1,8 +1,8 @@
 {
   "$schema": "riescade-emulator-schema-v1",
   "id": "raze",
-  "name": "RAZE",
-  "description": "Configurações para o emulador RAZE",
+  "name": "Raze (Build Engine)",
+  "description": "Ajuste os parâmetros da engine Raze.",
   "icon": "raze",
   "configFiles": [],
   "globalMappings": {},

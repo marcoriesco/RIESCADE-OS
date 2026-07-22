@@ -1,8 +1,8 @@
 {
   "$schema": "riescade-emulator-schema-v1",
   "id": "rtcw",
-  "name": "RTCW",
-  "description": "Configurações para o emulador RTCW",
+  "name": "Return to Castle Wolfenstein (iRTCW)",
+  "description": "Ajuste os parâmetros para Return to Castle Wolfenstein.",
   "icon": "rtcw",
   "configFiles": [],
   "globalMappings": {},

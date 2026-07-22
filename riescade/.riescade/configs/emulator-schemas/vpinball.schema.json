@@ -1,8 +1,8 @@
 {
   "$schema": "riescade-emulator-schema-v1",
   "id": "vpinball",
-  "name": "VPINBALL",
-  "description": "Configurações para o emulador VPINBALL",
+  "name": "Visual Pinball X (VPX)",
+  "description": "Ajuste os parâmetros do Visual Pinball X.",
   "icon": "vpinball",
   "configFiles": [],
   "globalMappings": {},

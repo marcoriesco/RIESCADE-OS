@@ -1,8 +1,8 @@
 {
   "$schema": "riescade-emulator-schema-v1",
   "id": "citron",
-  "name": "CITRON",
-  "description": "Configurações para o emulador CITRON",
+  "name": "Citron (Nintendo Switch)",
+  "description": "Ajuste os parâmetros específicos do emulador Citron.",
   "icon": "citron",
   "configFiles": [],
   "globalMappings": {},

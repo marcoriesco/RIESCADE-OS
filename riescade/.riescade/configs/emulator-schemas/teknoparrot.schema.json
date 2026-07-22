@@ -1,8 +1,8 @@
 {
   "$schema": "riescade-emulator-schema-v1",
   "id": "teknoparrot",
-  "name": "TEKNOPARROT",
-  "description": "Configurações para o emulador TEKNOPARROT",
+  "name": "TeknoParrot (Arcade)",
+  "description": "Ajuste os parâmetros específicos do emulador TeknoParrot.",
   "icon": "teknoparrot",
   "configFiles": [],
   "globalMappings": {},
@@ -214,6 +214,14 @@
       "icon": "gamepad2",
       "order": 5,
       "options": [
+        {
+          "id": "tp_autocontrollers",
+          "label": "CONFIGURAR CONTROLES AUTOMATICAMENTE",
+          "description": "Configura e mapeia automaticamente os controles conectados para o TeknoParrot ao iniciar o jogo.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "tp_autocontrollers"
+        },
         {
           "id": "tp_stooz",
           "label": "JOYSTICK DEADZONE",

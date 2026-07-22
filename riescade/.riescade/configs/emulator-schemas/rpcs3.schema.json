@@ -1,8 +1,8 @@
 {
   "$schema": "riescade-emulator-schema-v1",
   "id": "rpcs3",
-  "name": "RPCS3",
-  "description": "Configurações para o emulador RPCS3",
+  "name": "RPCS3 (PlayStation 3)",
+  "description": "Ajuste os parâmetros específicos do emulador RPCS3.",
   "icon": "rpcs3",
   "configFiles": [],
   "globalMappings": {},

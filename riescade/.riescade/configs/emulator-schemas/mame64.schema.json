@@ -1,8 +1,8 @@
 {
   "$schema": "riescade-emulator-schema-v1",
   "id": "mame64",
-  "name": "MAME64",
-  "description": "Configurações para o emulador MAME64",
+  "name": "MAME 64-bit (Arcade)",
+  "description": "Ajuste os parâmetros específicos do emulador MAME 64-bit.",
   "icon": "mame64",
   "configFiles": [],
   "globalMappings": {},

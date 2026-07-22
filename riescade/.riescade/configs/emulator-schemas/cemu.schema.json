@@ -1,8 +1,8 @@
 {
   "$schema": "riescade-emulator-schema-v1",
   "id": "cemu",
-  "name": "CEMU",
-  "description": "Configurações para o emulador CEMU",
+  "name": "Cemu (Wii U)",
+  "description": "Ajuste os parâmetros específicos do emulador Cemu (Wii U).",
   "icon": "cemu",
   "configFiles": [],
   "globalMappings": {},

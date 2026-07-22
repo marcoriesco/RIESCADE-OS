@@ -1,8 +1,8 @@
 {
   "$schema": "riescade-emulator-schema-v1",
   "id": "singe2",
-  "name": "SINGE2",
-  "description": "Configurações para o emulador SINGE2",
+  "name": "Singe 2 (Laserdisc Arcade)",
+  "description": "Ajuste os parâmetros do emulador Singe 2.",
   "icon": "singe2",
   "configFiles": [],
   "globalMappings": {},

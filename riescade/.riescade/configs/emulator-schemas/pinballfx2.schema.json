@@ -1,8 +1,8 @@
 {
   "$schema": "riescade-emulator-schema-v1",
   "id": "pinballfx2",
-  "name": "PINBALLFX2",
-  "description": "Configurações para o emulador PINBALLFX2",
+  "name": "Pinball FX2",
+  "description": "Ajuste os parâmetros específicos do Pinball FX2.",
   "icon": "pinballfx2",
   "configFiles": [],
   "globalMappings": {},

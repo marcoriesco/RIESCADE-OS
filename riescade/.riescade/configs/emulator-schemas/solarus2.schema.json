@@ -1,8 +1,8 @@
 {
   "$schema": "riescade-emulator-schema-v1",
   "id": "solarus2",
-  "name": "SOLARUS2",
-  "description": "Configurações para o emulador SOLARUS2 geradas a partir do es_features.cfg.",
+  "name": "Solarus 2 Engine",
+  "description": "Ajuste os parâmetros da engine Solarus 2.",
   "icon": "solarus2",
   "configFiles": [],
   "globalMappings": {

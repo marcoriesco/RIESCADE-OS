@@ -1,8 +1,8 @@
 {
   "$schema": "riescade-emulator-schema-v1",
   "id": "tsugaru",
-  "name": "TSUGARU",
-  "description": "Configurações para o emulador TSUGARU geradas a partir do es_features.cfg.",
+  "name": "Tsugaru (FM Towns)",
+  "description": "Ajuste os parâmetros do emulador Tsugaru.",
   "icon": "tsugaru",
   "configFiles": [],
   "globalMappings": {

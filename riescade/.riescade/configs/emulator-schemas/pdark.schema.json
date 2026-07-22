@@ -1,8 +1,8 @@
 {
   "$schema": "riescade-emulator-schema-v1",
   "id": "pdark",
-  "name": "PDARK",
-  "description": "Configurações para o emulador PDARK",
+  "name": "Perfect Dark PC Port",
+  "description": "Ajuste os parâmetros do port nativo de PC de Perfect Dark.",
   "icon": "pdark",
   "configFiles": [],
   "globalMappings": {},

@@ -1,8 +1,8 @@
 {
   "$schema": "riescade-emulator-schema-v1",
   "id": "demul",
-  "name": "DEMUL",
-  "description": "Configurações para o emulador DEMUL",
+  "name": "Demul (Arcade / Dreamcast / Naomi)",
+  "description": "Ajuste os parâmetros específicos do emulador Demul.",
   "icon": "demul",
   "configFiles": [],
   "globalMappings": {},

@@ -1,8 +1,8 @@
 {
   "$schema": "riescade-emulator-schema-v1",
   "id": "vkquake",
-  "name": "VKQUAKE",
-  "description": "Configurações para o emulador VKQUAKE",
+  "name": "vkQuake (Vulkan Quake)",
+  "description": "Ajuste os parâmetros do vkQuake.",
   "icon": "vkquake",
   "configFiles": [],
   "globalMappings": {},

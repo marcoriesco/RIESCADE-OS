@@ -1,8 +1,8 @@
 {
   "$schema": "riescade-emulator-schema-v1",
   "id": "zinc",
-  "name": "ZINC",
-  "description": "Configurações para o emulador ZINC",
+  "name": "ZiNc (Arcade Sony ZN-1/ZN-2)",
+  "description": "Ajuste os parâmetros do emulador ZiNc.",
   "icon": "zinc",
   "configFiles": [],
   "globalMappings": {},

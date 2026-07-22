@@ -1,8 +1,8 @@
 {
   "$schema": "riescade-emulator-schema-v1",
   "id": "exodos",
-  "name": "EXODOS",
-  "description": "Configurações para o emulador EXODOS",
+  "name": "eXoDOS (MS-DOS Collection)",
+  "description": "Ajuste os parâmetros para a coleção eXoDOS.",
   "icon": "exodos",
   "configFiles": [],
   "globalMappings": {},

@@ -1,8 +1,8 @@
 {
   "$schema": "riescade-emulator-schema-v1",
   "id": "pcsx2-nightly",
-  "name": "PCSX2 Nightly",
-  "description": "Emulador de PlayStation 2 — versão Qt moderníssima (Nightly).",
+  "name": "PCSX2 Nightly (PlayStation 2)",
+  "description": "Ajuste os parâmetros do PCSX2 Nightly.",
   "icon": "pcsx2",
   "configFiles": [
     {

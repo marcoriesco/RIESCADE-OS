@@ -1,8 +1,8 @@
 {
   "$schema": "riescade-emulator-schema-v1",
   "id": "mgba",
-  "name": "MGBA",
-  "description": "Configurações para o emulador MGBA",
+  "name": "mGBA (Game Boy Advance)",
+  "description": "Ajuste os parâmetros específicos do emulador mGBA.",
   "icon": "mgba",
   "configFiles": [],
   "globalMappings": {},

@@ -1,8 +1,8 @@
 {
   "$schema": "riescade-emulator-schema-v1",
   "id": "ymir",
-  "name": "YMIR",
-  "description": "Configurações para o emulador YMIR",
+  "name": "YMIR Engine",
+  "description": "Ajuste os parâmetros da engine YMIR.",
   "icon": "ymir",
   "configFiles": [],
   "globalMappings": {},

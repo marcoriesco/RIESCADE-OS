@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useRef, useState, useMemo } from "react"
 import {
   Search, Power, X, Minus, Square, Gamepad2, Monitor,
   Folder, Grid3x3, Wifi, Volume2, Battery, Loader2,
-  MoreHorizontal, Heart, Download, Check, AlertTriangle, Play
+  MoreHorizontal, Heart, Download, Check, AlertTriangle, Play, Settings
 } from "lucide-react";
 import * as Toast from '@radix-ui/react-toast';
 import * as Tooltip from '@radix-ui/react-tooltip';
@@ -765,7 +765,7 @@ export default function App() {
                   <span>{isTaskbar ? "Remover da Taskbar" : "Adicionar à Taskbar"}</span>
                 </button>
 
-                {hasMultipleEmulators(system) && (
+                {hasMultipleEmulators(system) ? (
                   <>
                     <div className="h-px bg-white/10 my-1.5" />
 
@@ -831,6 +831,27 @@ export default function App() {
                       }
                     })}
                   </>
+                ) : (
+                  system?.emulators && system.emulators.length > 0 && (() => {
+                    const emu = system.emulators[0];
+                    const emuName = emu.name === 'libretro' ? 'retroarch' : emu.name;
+                    const emuLabel = (emu.name === 'libretro' ? 'RETROARCH' : emu.name.toUpperCase());
+                    return (
+                      <>
+                        <div className="h-px bg-white/10 my-1.5" />
+                        <button
+                          onClick={() => {
+                            openApp("tool", "settings", emuName);
+                            setOpenMenuSystemId(null);
+                          }}
+                          className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs hover:bg-white/10 text-left transition cursor-pointer"
+                        >
+                          <Settings className="w-4 h-4 text-accent" />
+                          <span>Configurar {emuLabel}</span>
+                        </button>
+                      </>
+                    );
+                  })()
                 )}
               </div>
             </>
@@ -1456,7 +1477,7 @@ export default function App() {
                     <span>{isTaskbar ? "Remover da Taskbar" : "Adicionar à Taskbar"}</span>
                   </button>
 
-                  {hasMultipleEmulators(system) && (
+                  {hasMultipleEmulators(system) ? (
                     <>
                       <div className="h-px bg-white/10 my-1.5" />
 
@@ -1522,6 +1543,27 @@ export default function App() {
                         }
                       })}
                     </>
+                  ) : (
+                    system?.emulators && system.emulators.length > 0 && (() => {
+                      const emu = system.emulators[0];
+                      const emuName = emu.name === 'libretro' ? 'retroarch' : emu.name;
+                      const emuLabel = (emu.name === 'libretro' ? 'RETROARCH' : emu.name.toUpperCase());
+                      return (
+                        <>
+                          <div className="h-px bg-white/10 my-1.5" />
+                          <button
+                            onClick={() => {
+                              openApp("tool", "settings", emuName);
+                              setMenuOpen(false);
+                            }}
+                            className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs hover:bg-white/10 text-left transition cursor-pointer"
+                          >
+                            <Settings className="w-4 h-4 text-accent" />
+                            <span>Configurar {emuLabel}</span>
+                          </button>
+                        </>
+                      );
+                    })()
                   )}
                 </div>
               </>

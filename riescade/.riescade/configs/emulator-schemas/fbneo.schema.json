@@ -1,8 +1,8 @@
 {
   "$schema": "riescade-emulator-schema-v1",
   "id": "fbneo",
-  "name": "FBNEO",
-  "description": "Configurações para o emulador FBNEO",
+  "name": "FinalBurn Neo (Arcade / NeoGeo)",
+  "description": "Ajuste os parâmetros específicos do FinalBurn Neo.",
   "icon": "fbneo",
   "configFiles": [],
   "globalMappings": {},

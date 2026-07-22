@@ -1,8 +1,8 @@
 {
   "$schema": "riescade-emulator-schema-v1",
   "id": "mednafen",
-  "name": "MEDNAFEN",
-  "description": "Configurações para o emulador MEDNAFEN",
+  "name": "Mednafen (Multi-sistema)",
+  "description": "Ajuste os parâmetros específicos do emulador Mednafen.",
   "icon": "mednafen",
   "configFiles": [],
   "globalMappings": {},

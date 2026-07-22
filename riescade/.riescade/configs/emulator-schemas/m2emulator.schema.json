@@ -1,8 +1,8 @@
 {
   "$schema": "riescade-emulator-schema-v1",
   "id": "m2emulator",
-  "name": "M2EMULATOR",
-  "description": "Configurações para o emulador M2EMULATOR",
+  "name": "Model 2 Emulator (Sega Model 2)",
+  "description": "Ajuste os parâmetros do Sega Model 2 Emulator.",
   "icon": "m2emulator",
   "configFiles": [],
   "globalMappings": {},

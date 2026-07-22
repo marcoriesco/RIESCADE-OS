@@ -1,8 +1,8 @@
 {
   "$schema": "riescade-emulator-schema-v1",
   "id": "gopher64",
-  "name": "GOPHER64",
-  "description": "Configurações para o emulador GOPHER64",
+  "name": "Gopher64 (Nintendo 64)",
+  "description": "Ajuste os parâmetros específicos do emulador Gopher64.",
   "icon": "gopher64",
   "configFiles": [],
   "globalMappings": {},

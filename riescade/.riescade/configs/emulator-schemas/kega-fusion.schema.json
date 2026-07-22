@@ -1,8 +1,8 @@
 {
   "$schema": "riescade-emulator-schema-v1",
   "id": "kega-fusion",
-  "name": "KEGA-FUSION",
-  "description": "Configurações para o emulador KEGA-FUSION",
+  "name": "Kega Fusion (Mega Drive / Genesis)",
+  "description": "Ajuste os parâmetros do emulador Kega Fusion.",
   "icon": "kega-fusion",
   "configFiles": [],
   "globalMappings": {},

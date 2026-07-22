@@ -1,8 +1,8 @@
 {
   "$schema": "riescade-emulator-schema-v1",
   "id": "soh",
-  "name": "SOH",
-  "description": "Configurações para o emulador SOH",
+  "name": "Ship of Harkinian (Zelda OoT)",
+  "description": "Ajuste os parâmetros do port nativo Ship of Harkinian.",
   "icon": "soh",
   "configFiles": [],
   "globalMappings": {},

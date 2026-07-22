@@ -1,8 +1,8 @@
 {
   "$schema": "riescade-emulator-schema-v1",
   "id": "bsyndrome",
-  "name": "BSYNDROME",
-  "description": "Configurações para o emulador BSYNDROME",
+  "name": "Blood Syndrome",
+  "description": "Ajuste os parâmetros para a engine Blood Syndrome.",
   "icon": "bsyndrome",
   "configFiles": [],
   "globalMappings": {},

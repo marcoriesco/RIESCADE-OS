@@ -1,8 +1,8 @@
 {
   "$schema": "riescade-emulator-schema-v1",
   "id": "shadps4",
-  "name": "SHADPS4",
-  "description": "Configurações para o emulador SHADPS4",
+  "name": "shadPS4 (PlayStation 4)",
+  "description": "Ajuste os parâmetros específicos do emulador shadPS4.",
   "icon": "shadps4",
   "configFiles": [],
   "globalMappings": {},

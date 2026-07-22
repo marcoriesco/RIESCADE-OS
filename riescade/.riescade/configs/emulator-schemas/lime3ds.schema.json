@@ -1,8 +1,8 @@
 {
   "$schema": "riescade-emulator-schema-v1",
   "id": "lime3ds",
-  "name": "LIME3DS",
-  "description": "Configurações para o emulador LIME3DS",
+  "name": "Lime3DS (Nintendo 3DS)",
+  "description": "Ajuste os parâmetros específicos do emulador Lime3DS.",
   "icon": "lime3ds",
   "configFiles": [],
   "globalMappings": {},

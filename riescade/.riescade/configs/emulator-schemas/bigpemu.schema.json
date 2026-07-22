@@ -1,8 +1,8 @@
 {
   "$schema": "riescade-emulator-schema-v1",
   "id": "bigpemu",
-  "name": "BIGPEMU",
-  "description": "Configurações para o emulador BIGPEMU",
+  "name": "BigPEmu (Atari Jaguar)",
+  "description": "Ajuste os parâmetros específicos do emulador BigPEmu.",
   "icon": "bigpemu",
   "configFiles": [],
   "globalMappings": {},

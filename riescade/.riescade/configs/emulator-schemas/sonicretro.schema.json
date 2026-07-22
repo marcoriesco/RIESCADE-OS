@@ -1,8 +1,8 @@
 {
   "$schema": "riescade-emulator-schema-v1",
   "id": "sonicretro",
-  "name": "SONICRETRO",
-  "description": "Configurações para o emulador SONICRETRO",
+  "name": "Sonic Retro Engines",
+  "description": "Ajuste os parâmetros das engines Sonic Retro.",
   "icon": "sonicretro",
   "configFiles": [],
   "globalMappings": {},

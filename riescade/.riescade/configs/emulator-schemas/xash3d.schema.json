@@ -1,8 +1,8 @@
 {
   "$schema": "riescade-emulator-schema-v1",
   "id": "xash3d",
-  "name": "XASH3D",
-  "description": "Configurações para o emulador XASH3D",
+  "name": "Xash3D FWGS (Half-Life Engine)",
+  "description": "Ajuste os parâmetros da engine Xash3D.",
   "icon": "xash3d",
   "configFiles": [],
   "globalMappings": {},

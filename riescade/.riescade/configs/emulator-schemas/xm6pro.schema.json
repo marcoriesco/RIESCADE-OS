@@ -1,8 +1,8 @@
 {
   "$schema": "riescade-emulator-schema-v1",
   "id": "xm6pro",
-  "name": "XM6PRO",
-  "description": "Configurações para o emulador XM6PRO",
+  "name": "XM6 Pro (Sharp X68000)",
+  "description": "Ajuste os parâmetros do emulador XM6 Pro.",
   "icon": "xm6pro",
   "configFiles": [],
   "globalMappings": {},

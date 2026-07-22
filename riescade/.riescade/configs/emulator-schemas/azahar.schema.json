@@ -1,8 +1,8 @@
 {
   "$schema": "riescade-emulator-schema-v1",
   "id": "azahar",
-  "name": "AZAHAR",
-  "description": "Configurações para o emulador AZAHAR",
+  "name": "Azahar (Nintendo 3DS)",
+  "description": "Ajuste os parâmetros específicos do emulador Azahar.",
   "icon": "azahar",
   "configFiles": [],
   "globalMappings": {},

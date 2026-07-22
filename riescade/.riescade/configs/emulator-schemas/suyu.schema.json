@@ -1,8 +1,8 @@
 {
   "$schema": "riescade-emulator-schema-v1",
   "id": "suyu",
-  "name": "SUYU",
-  "description": "Configurações para o emulador SUYU",
+  "name": "Suyu (Nintendo Switch)",
+  "description": "Ajuste os parâmetros específicos do emulador Suyu.",
   "icon": "suyu",
   "configFiles": [],
   "globalMappings": {},

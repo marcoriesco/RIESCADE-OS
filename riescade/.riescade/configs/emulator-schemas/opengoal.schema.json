@@ -1,8 +1,8 @@
 {
   "$schema": "riescade-emulator-schema-v1",
   "id": "opengoal",
-  "name": "OPENGOAL",
-  "description": "Configurações para o emulador OPENGOAL",
+  "name": "OpenGOAL (Jak & Daxter)",
+  "description": "Ajuste os parâmetros da engine OpenGOAL.",
   "icon": "opengoal",
   "configFiles": [],
   "globalMappings": {},

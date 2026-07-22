@@ -1,8 +1,8 @@
 {
   "$schema": "riescade-emulator-schema-v1",
   "id": "dosbox",
-  "name": "DOSBOX",
-  "description": "Configurações para o emulador DOSBOX",
+  "name": "DOSBox (MS-DOS)",
+  "description": "Ajuste os parâmetros específicos do emulador DOSBox.",
   "icon": "dosbox",
   "configFiles": [],
   "globalMappings": {},

@@ -1,8 +1,8 @@
 {
   "$schema": "riescade-emulator-schema-v1",
   "id": "dosbox-staging",
-  "name": "DOSBOX-STAGING",
-  "description": "Configurações para o emulador DOSBOX-STAGING",
+  "name": "DOSBox Staging (MS-DOS)",
+  "description": "Ajuste os parâmetros do emulador DOSBox Staging.",
   "icon": "dosbox-staging",
   "configFiles": [],
   "globalMappings": {},

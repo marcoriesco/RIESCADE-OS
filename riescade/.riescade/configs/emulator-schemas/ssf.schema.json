@@ -1,8 +1,8 @@
 {
   "$schema": "riescade-emulator-schema-v1",
   "id": "ssf",
-  "name": "SSF",
-  "description": "Configurações para o emulador SSF",
+  "name": "SSF (Sega Saturn)",
+  "description": "Ajuste os parâmetros específicos do emulador SSF.",
   "icon": "ssf",
   "configFiles": [],
   "globalMappings": {},

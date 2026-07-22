@@ -1,8 +1,8 @@
 {
   "$schema": "riescade-emulator-schema-v1",
   "id": "winarcadia",
-  "name": "WINARCADIA",
-  "description": "Configurações para o emulador WINARCADIA",
+  "name": "WinArcadia (Signetics 2650)",
+  "description": "Ajuste os parâmetros do emulador WinArcadia.",
   "icon": "winarcadia",
   "configFiles": [],
   "globalMappings": {

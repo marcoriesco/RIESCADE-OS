@@ -1,8 +1,8 @@
 {
   "$schema": "riescade-emulator-schema-v1",
   "id": "cdogs",
-  "name": "CDOGS",
-  "description": "Configurações para o emulador CDOGS",
+  "name": "C-Dogs SDL",
+  "description": "Ajuste os parâmetros para a engine C-Dogs SDL.",
   "icon": "cdogs",
   "configFiles": [],
   "globalMappings": {},

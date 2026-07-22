@@ -88,159 +88,301 @@ const SETTINGS_TABS = [
 ];
 
 const EMULATOR_NAMES: Record<string, string> = {
-  global: "Geral / Globais",
-  retroarch: "RetroArch",
-  ares: "Ares",
-  xenia: "Xenia (Xbox 360)",
-  "xenia-canary": "Xenia Canary (Xbox 360)",
-  "xenia-edge": "Xenia Edge",
-  "xenia-manager": "Xenia Manager",
-  pcsx2: "PCSX2 (PlayStation 2)",
-  pcsx2x6: "PCSX2 64-bit",
-  pcsx2_nightly: "PCSX2 Nightly",
-  "pcsx2-16": "PCSX2 (v1.6 Legacy)",
-  teknoparrot: "TeknoParrot (Arcade)",
-  mame: "MAME (Arcade)",
-  mame64: "MAME 64-bit",
-  groovymame: "GroovyMAME",
-  hbmame: "HBMAME (Homebrew MAME)",
-  dolphin: "Dolphin (GameCube & Wii)",
-  "dolphin-emu": "Dolphin Emulator",
-  "dolphin-triforce": "Dolphin Triforce (Arcade)",
-  ryujinx: "Ryujinx (Switch)",
-  yuzu: "Yuzu (Switch)",
-  "yuzu-early-access": "Yuzu Early Access",
-  suyu: "Suyu (Switch)",
-  sudachi: "Sudachi (Switch)",
-  citron: "Citron (Switch)",
-  eden: "Eden (Switch)",
-  eden_nightly: "Eden Nightly",
-  rpcs3: "RPCS3 (PlayStation 3)",
-  cemu: "Cemu (Wii U)",
-  duckstation: "DuckStation (PlayStation 1)",
-  ppsspp: "PPSSPP (PSP)",
-  flycast: "Flycast (Dreamcast / Arcade)",
-  xemu: "xemu (Xbox Original)",
-  cxbx: "Cxbx-Reloaded (Xbox)",
-  bigpemu: "BigPEmu (Atari Jaguar)",
-  model2: "Model 2 Emulator",
-  m2emulator: "Model 2 Emulator",
-  model3: "Supermodel (Sega Model 3)",
-  supermodel: "Supermodel (Sega Model 3)",
-  redream: "Redream (Dreamcast)",
-  shadps4: "shadPS4 (PlayStation 4)",
-  vita3k: "Vita3K (PS Vita)",
-  play: "Play! (PlayStation 2)",
-  citra: "Citra (3DS)",
-  "citra-canary": "Citra Canary (3DS)",
-  lime3ds: "Lime3DS (3DS)",
-  mandarine: "Mandarine (3DS)",
-  azahar: "Azahar (3DS)",
-  desmume: "DeSmuME (Nintendo DS)",
-  melonds: "melonDS (Nintendo DS)",
-  nosgba: "No$GBA (DS / GBA)",
-  snes9x: "Snes9x (Super Nintendo)",
-  mesen: "Mesen (NES / SNES / GB)",
-  mgba: "mGBA (Game Boy Advance)",
-  mupen64: "Mupen64Plus (Nintendo 64)",
-  project64: "Project64 (Nintendo 64)",
-  simple64: "simple64 (Nintendo 64)",
-  gopher64: "Gopher64 (Nintendo 64)",
-  n64recomplauncher: "N64 Recomp Launcher",
-  stella: "Stella (Atari 2600)",
-  jzintv: "jzIntv (Intellivision)",
-  kronos: "Kronos (Sega Saturn)",
-  yabasanshiro: "Yaba Sanshiro (Saturn)",
-  ssf: "SSF (Sega Saturn)",
-  demul: "Demul (Arcade / Dreamcast)",
-  kega: "Kega Fusion (Mega Drive / Genesis)",
-  "kega-fusion": "Kega Fusion",
-  fbneo: "FinalBurn Neo (Arcade / NeoGeo)",
-  zinc: "ZiNc (Arcade Sony ZN-1/ZN-2)",
-  vpinball: "Visual Pinball X (VPX)",
-  fpinball: "Future Pinball",
-  pinballfx: "Pinball FX",
-  pinballfx2: "Pinball FX2",
-  pinballfx3: "Pinball FX3",
-  pinballm: "Pinball M",
-  zaccariapinball: "Zaccaria Pinball",
-  winuae: "WinUAE (Amiga)",
-  amigaforever: "Amiga Forever",
-  dosbox: "DOSBox (MS-DOS)",
-  "dosbox-pure": "DOSBox Pure",
-  "dosbox-staging": "DOSBox Staging",
-  scummvm: "ScummVM (Adventure / Point&Click)",
-  hatari: "Hatari (Atari ST)",
-  openmsx: "openMSX (MSX)",
-  applewin: "AppleWin (Apple II)",
-  gsplus: "GSplus (Apple IIGS)",
-  altirra: "Altirra (Atari 8-bit)",
-  oricutron: "Oricutron (Oric 1 / Atmos)",
-  xm6pro: "XM6 Pro (Sharp X68000)",
-  zesarux: "ZEsarUX (ZX Spectrum / Amstrad)",
-  capriceforever: "Caprice Forever (Amstrad CPC)",
-  gzdoom: "GZDoom (Doom Engine)",
-  eduke32: "EDuke32 (Duke Nukem 3D)",
-  dhewm3: "dhewm3 (Doom 3 Engine)",
-  raze: "Raze (Build Engine)",
-  openbor: "OpenBOR (Beat 'Em Up Engine)",
-  sonic3air: "Sonic 3 A.I.R.",
-  sonicmania: "Sonic Mania",
-  sonicretro: "Sonic Retro Engines",
-  soh: "Ship of Harkinian (Zelda OoT)",
   "2ship": "2 Ship 2 Harkinian (Zelda MM)",
-  opengoal: "OpenGOAL (Jak & Daxter)",
-  pico8: "PICO-8 (Fantasy Console)",
-  solarus: "Solarus Engine",
-  mugen: "M.U.G.E.N",
-  ikemen: "IKEMEN GO",
-  windows: "Windows / PC Games Nativos"
+  "altirra": "Altirra (Atari 8-bit / 5200)",
+  "amigaforever": "Amiga Forever",
+  "applewin": "AppleWin (Apple II)",
+  "arcadeflashweb": "Arcade Flash Web",
+  "ares": "Ares (Multi-sistema)",
+  "azahar": "Azahar (Nintendo 3DS)",
+  "bigpemu": "BigPEmu (Atari Jaguar)",
+  "bizhawk": "BizHawk (Multi-sistema)",
+  "bstone": "Blake Stone (BSOne Engine)",
+  "bsyndrome": "Blood Syndrome",
+  "capriceforever": "Caprice Forever (Amstrad CPC)",
+  "cdogs": "C-Dogs SDL",
+  "cemu": "Cemu (Wii U)",
+  "cgenius": "Commander Genius (Commander Keen)",
+  "chihiro-gun": "Chihiro Gun (Sega Chihiro Arcade)",
+  "chihiro": "Chihiro (Sega Chihiro Arcade)",
+  "citra-canary": "Citra Canary (Nintendo 3DS)",
+  "citra": "Citra (Nintendo 3DS)",
+  "citron": "Citron (Nintendo Switch)",
+  "corsixth": "CorsixTH (Theme Hospital)",
+  "cxbx": "Cxbx-Reloaded (Xbox Original)",
+  "daphne": "Daphne (Laserdisc Arcade)",
+  "demul": "Demul (Arcade / Dreamcast / Naomi)",
+  "desmume": "DeSmuME (Nintendo DS)",
+  "dhewm3": "dhewm3 (Doom 3 Engine)",
+  "dolphin-triforce": "Dolphin Triforce (Arcade)",
+  "dolphin": "Dolphin (GameCube & Wii)",
+  "dosbox-pure": "DOSBox Pure (MS-DOS)",
+  "dosbox-staging": "DOSBox Staging (MS-DOS)",
+  "dosbox": "DOSBox (MS-DOS)",
+  "duckstation": "DuckStation (PlayStation 1)",
+  "dusklight": "Dusklight Engine",
+  "eden": "Eden (Nintendo Switch)",
+  "eden-nightly": "Eden Nightly (Nintendo Switch)",
+  "eduke32": "EDuke32 (Duke Nukem 3D)",
+  "eka2l1": "EKA2L1 (Symbian / N-Gage)",
+  "exodos": "eXoDOS (MS-DOS Collection)",
+  "exowin3x": "eXoWin3x (Windows 3.x)",
+  "exowin9x": "eXoWin9x (Windows 9x)",
+  "fbneo": "FinalBurn Neo (Arcade / NeoGeo)",
+  "flycast": "Flycast (Dreamcast / Naomi / Atomiswave)",
+  "fpinball": "Future Pinball",
+  "gemrb": "GemRB (Infinity Engine)",
+  "ghostship": "Ghostship Engine",
+  "gopher64": "Gopher64 (Nintendo 64)",
+  "groovymame": "GroovyMAME (CRT Arcade)",
+  "gsplus": "GSplus (Apple IIGS)",
+  "gzdoom": "GZDoom (Doom Engine)",
+  "hatari": "Hatari (Atari ST / STE / TT)",
+  "hbmame": "HBMAME (Homebrew MAME)",
+  "hypseus": "Hypseus Singe (Laserdisc)",
+  "ikemen": "IKEMEN GO (Fighting Engine)",
+  "jgenesis": "jGenesis (Sega Genesis / Master System)",
+  "jynx": "Jynx (Camputers Lynx)",
+  "jzintv": "jzIntv (Intellivision)",
+  "kega-fusion": "Kega Fusion (Mega Drive / Genesis)",
+  "kronos": "Kronos (Sega Saturn)",
+  "lime3ds": "Lime3DS (Nintendo 3DS)",
+  "linuxloader": "Linux Loader Engine",
+  "m2emulator": "Model 2 Emulator (Sega Model 2)",
+  "magicengine": "MagicEngine (PC Engine / TurboGrafx-16)",
+  "mame64": "MAME 64-bit (Arcade)",
+  "mandarine": "Mandarine (Nintendo 3DS)",
+  "mednafen": "Mednafen (Multi-sistema)",
+  "melonds": "melonDS (Nintendo DS)",
+  "mesen": "Mesen (NES / SNES / GB)",
+  "mgba": "mGBA (Game Boy Advance)",
+  "model2": "Model 2 Emulator (Sega Model 2)",
+  "mugen": "M.U.G.E.N (Fighting Engine)",
+  "mupen64": "Mupen64Plus (Nintendo 64)",
+  "n64recomplauncher": "N64 Recomp Launcher",
+  "nosgba": "No$GBA (Nintendo DS / GBA)",
+  "openbor": "OpenBOR (Beat 'Em Up Engine)",
+  "opengoal": "OpenGOAL (Jak & Daxter)",
+  "openjazz": "OpenJazz (Jazz Jackrabbit)",
+  "openmsx": "openMSX (MSX / MSX2)",
+  "oricutron": "Oricutron (Oric 1 / Atmos)",
+  "pcsx2": "PCSX2 (PlayStation 2)",
+  "pcsx2x6": "PCSX2 64-bit (PlayStation 2)",
+  "pcsx2-nightly": "PCSX2 Nightly (PlayStation 2)",
+  "pdark": "Perfect Dark PC Port",
+  "phoenix": "Phoenix (3DO / Jaguar)",
+  "pico8": "PICO-8 (Fantasy Console)",
+  "pinballfx": "Pinball FX",
+  "pinballfx2": "Pinball FX2",
+  "pinballfx3": "Pinball FX3",
+  "pinballm": "Pinball M",
+  "play": "Play! (PlayStation 2)",
+  "powerbomberman": "Power Bomberman",
+  "ppsspp": "PPSSPP (PlayStation Portable)",
+  "project64": "Project64 (Nintendo 64)",
+  "psxmame": "PSXMAME (PlayStation Arcade)",
+  "raine": "Raine (Arcade 68000)",
+  "raze": "Raze (Build Engine)",
+  "redream": "Redream (Sega Dreamcast)",
+  "retroarch": "RetroArch (Libretro Frontend)",
+  "rpcs3": "RPCS3 (PlayStation 3)",
+  "rtcw": "Return to Castle Wolfenstein (iRTCW)",
+  "ruffle": "Ruffle (Flash Player)",
+  "ryujinx": "Ryujinx (Nintendo Switch)",
+  "scummvm": "ScummVM (Adventure / Point&Click)",
+  "shadps4": "shadPS4 (PlayStation 4)",
+  "simcoupe": "SimCoupe (SAM Coupé)",
+  "simple64": "simple64 (Nintendo 64)",
+  "singe2": "Singe 2 (Laserdisc Arcade)",
+  "snes9x": "Snes9x (Super Nintendo)",
+  "soh": "Ship of Harkinian (Zelda OoT)",
+  "solarus": "Solarus Engine (ARPG)",
+  "solarus2": "Solarus 2 Engine",
+  "sonic3air": "Sonic 3 A.I.R.",
+  "sonicmania": "Sonic Mania",
+  "sonicretro": "Sonic Retro Engines",
+  "sonicretrocd": "Sonic Retro CD Engine",
+  "ssf": "SSF (Sega Saturn)",
+  "starship": "Starship Engine",
+  "stella": "Stella (Atari 2600)",
+  "sudachi": "Sudachi (Nintendo Switch)",
+  "supermodel": "Supermodel (Sega Model 3)",
+  "suyu": "Suyu (Nintendo Switch)",
+  "teknoparrot": "TeknoParrot (Arcade)",
+  "theforceengine": "The Force Engine (Star Wars Dark Forces)",
+  "tsugaru": "Tsugaru (FM Towns)",
+  "vita3k": "Vita3K (PlayStation Vita)",
+  "vkquake": "vkQuake (Vulkan Quake)",
+  "vkquake2": "vkQuake2 (Vulkan Quake II)",
+  "vpinball": "Visual Pinball X (VPX)",
+  "winarcadia": "WinArcadia (Signetics 2650)",
+  "windows": "Windows / PC Games Nativos",
+  "winuae": "WinUAE (Amiga)",
+  "xash3d": "Xash3D FWGS (Half-Life Engine)",
+  "xemu": "xemu (Xbox Original)",
+  "xenia-canary": "Xenia Canary (Xbox 360)",
+  "xenia-edge": "Xenia Edge (Xbox 360)",
+  "xenia-manager": "Xenia Manager",
+  "xenia": "Xenia (Xbox 360)",
+  "xm6pro": "XM6 Pro (Sharp X68000)",
+  "xroar": "XRoar (Dragon 32/64 / TRS-80)",
+  "yabasanshiro": "Yaba Sanshiro (Sega Saturn)",
+  "ymir": "YMIR Engine",
+  "yuzu-early-access": "Yuzu Early Access (Switch)",
+  "yuzu": "Yuzu (Nintendo Switch)",
+  "zaccariapinball": "Zaccaria Pinball",
+  "zesarux": "ZEsarUX (ZX Spectrum / Amstrad)",
+  "zinc": "ZiNc (Arcade Sony ZN-1/ZN-2)",
+  "global": "Geral / Globais",
 };
 
 const EMULATOR_DESCRIPTIONS: Record<string, string> = {
-  global: "Configure opções gerais aplicadas a todos os emuladores.",
-  retroarch: "Configurações globais de emulação, vídeo, shaders e mais.",
-  ares: "Ajuste os parâmetros específicos do emulador Ares.",
-  xenia: "Ajuste os parâmetros específicos do emulador Xenia e Xenia Canary.",
-  pcsx2: "Ajuste os parâmetros específicos do emulador PCSX2.",
-  pcsx2x6: "Ajuste os parâmetros específicos do emulador PCSX2 64-bit.",
-  teknoparrot: "Ajuste os parâmetros específicos do emulador TeknoParrot.",
-  mame64: "Ajuste os parâmetros específicos do emulador MAME 64-bit.",
-  mame: "Ajuste os parâmetros específicos do emulador MAME.",
-  dolphin: "Ajuste os parâmetros específicos do emulador Dolphin (GameCube / Wii).",
-  ryujinx: "Ajuste os parâmetros específicos do emulador Ryujinx.",
-  yuzu: "Ajuste os parâmetros específicos do emulador Yuzu.",
-  suyu: "Ajuste os parâmetros específicos do emulador Suyu.",
-  sudachi: "Ajuste os parâmetros específicos do emulador Sudachi.",
-  citron: "Ajuste os parâmetros específicos do emulador Citron.",
-  rpcs3: "Ajuste os parâmetros específicos do emulador RPCS3 (PS3).",
-  cemu: "Ajuste os parâmetros específicos do emulador Cemu (Wii U).",
-  duckstation: "Ajuste os parâmetros específicos do emulador DuckStation (PS1).",
-  ppsspp: "Ajuste os parâmetros específicos do emulador PPSSPP (PSP).",
-  flycast: "Ajuste os parâmetros específicos do emulador Flycast (Dreamcast).",
-  xemu: "Ajuste os parâmetros específicos do emulador xemu (Xbox Original).",
-  bigpemu: "Ajuste os parâmetros específicos do emulador BigPEmu (Atari Jaguar).",
-  model2: "Ajuste os parâmetros específicos do emulador Model 2 Arcade.",
-  model3: "Ajuste os parâmetros específicos do emulador Supermodel (Model 3).",
-  supermodel: "Ajuste os parâmetros específicos do emulador Supermodel (Model 3).",
-  redream: "Ajuste os parâmetros específicos do emulador Redream.",
-  shadps4: "Ajuste os parâmetros específicos do emulador shadPS4 (PS4).",
-  vita3k: "Ajuste os parâmetros específicos do emulador Vita3K (PS Vita).",
-  eden: "Ajuste os parâmetros específicos do emulador Eden.",
-  citra: "Ajuste os parâmetros específicos do emulador Citra (Nintendo 3DS).",
-  lime3ds: "Ajuste os parâmetros específicos do emulador Lime3DS.",
-  desmume: "Ajuste os parâmetros específicos do emulador DeSmuME (Nintendo DS).",
-  melonds: "Ajuste os parâmetros específicos do emulador melonDS (Nintendo DS).",
-  snes9x: "Ajuste os parâmetros específicos do emulador Snes9x (SNES).",
-  mesen: "Ajuste os parâmetros específicos do emulador Mesen (NES / SNES / GB).",
-  mgba: "Ajuste os parâmetros específicos do emulador mGBA (GBA).",
-  mupen64: "Ajuste os parâmetros específicos do emulador Mupen64Plus (N64).",
-  project64: "Ajuste os parâmetros específicos do emulador Project64 (N64).",
-  fbneo: "Ajuste os parâmetros específicos do emulador FinalBurn Neo (Arcade).",
-  vpinball: "Ajuste os parâmetros específicos do Visual Pinball X.",
-  winuae: "Ajuste os parâmetros específicos do emulador WinUAE (Amiga).",
-  dosbox: "Ajuste os parâmetros específicos do DOSBox (MS-DOS).",
-  scummvm: "Ajuste os parâmetros específicos do ScummVM."
+  "2ship": "Ajuste os parâmetros do port nativo de PC 2 Ship 2 Harkinian (Zelda Majora's Mask).",
+  "altirra": "Ajuste os parâmetros específicos do emulador Altirra.",
+  "amigaforever": "Ajuste os parâmetros específicos do Amiga Forever.",
+  "applewin": "Ajuste os parâmetros específicos do emulador AppleWin.",
+  "arcadeflashweb": "Ajuste os parâmetros específicos para jogos em Flash/Web Arcade.",
+  "ares": "Ajuste os parâmetros específicos do emulador Ares.",
+  "azahar": "Ajuste os parâmetros específicos do emulador Azahar.",
+  "bigpemu": "Ajuste os parâmetros específicos do emulador BigPEmu.",
+  "bizhawk": "Ajuste os parâmetros específicos do emulador BizHawk.",
+  "bstone": "Ajuste os parâmetros do port nativo BStone para Blake Stone.",
+  "bsyndrome": "Ajuste os parâmetros para a engine Blood Syndrome.",
+  "capriceforever": "Ajuste os parâmetros específicos do emulador Caprice Forever.",
+  "cdogs": "Ajuste os parâmetros para a engine C-Dogs SDL.",
+  "cemu": "Ajuste os parâmetros específicos do emulador Cemu (Wii U).",
+  "cgenius": "Ajuste os parâmetros da engine Commander Genius.",
+  "chihiro-gun": "Ajuste os parâmetros de jogos de tiro em arcade Sega Chihiro.",
+  "chihiro": "Ajuste os parâmetros do emulador de arcade Sega Chihiro.",
+  "citra-canary": "Ajuste os parâmetros específicos do Citra Canary (3DS).",
+  "citra": "Ajuste os parâmetros específicos do emulador Citra (3DS).",
+  "citron": "Ajuste os parâmetros específicos do emulador Citron.",
+  "corsixth": "Ajuste os parâmetros da engine CorsixTH.",
+  "cxbx": "Ajuste os parâmetros específicos do emulador Cxbx-Reloaded.",
+  "daphne": "Ajuste os parâmetros específicos do emulador Daphne (Dragon's Lair / Space Ace).",
+  "demul": "Ajuste os parâmetros específicos do emulador Demul.",
+  "desmume": "Ajuste os parâmetros específicos do emulador DeSmuME.",
+  "dhewm3": "Ajuste os parâmetros da engine dhewm3 para Doom 3.",
+  "dolphin-triforce": "Ajuste os parâmetros do Dolphin Triforce Arcade.",
+  "dolphin": "Ajuste os parâmetros específicos do emulador Dolphin.",
+  "dosbox-pure": "Ajuste os parâmetros do core DOSBox Pure.",
+  "dosbox-staging": "Ajuste os parâmetros do emulador DOSBox Staging.",
+  "dosbox": "Ajuste os parâmetros específicos do emulador DOSBox.",
+  "duckstation": "Ajuste os parâmetros específicos do emulador DuckStation (PS1).",
+  "dusklight": "Ajuste os parâmetros específicos da engine Dusklight.",
+  "eden": "Ajuste os parâmetros específicos do emulador Eden.",
+  "eden-nightly": "Ajuste os parâmetros do emulador Eden Nightly.",
+  "eduke32": "Ajuste os parâmetros da engine EDuke32.",
+  "eka2l1": "Ajuste os parâmetros específicos do emulador EKA2L1.",
+  "exodos": "Ajuste os parâmetros para a coleção eXoDOS.",
+  "exowin3x": "Ajuste os parâmetros para jogos Windows 3.x.",
+  "exowin9x": "Ajuste os parâmetros para jogos Windows 9x.",
+  "fbneo": "Ajuste os parâmetros específicos do FinalBurn Neo.",
+  "flycast": "Ajuste os parâmetros específicos do emulador Flycast.",
+  "fpinball": "Ajuste os parâmetros específicos do Future Pinball.",
+  "gemrb": "Ajuste os parâmetros da engine GemRB (Baldur's Gate / Icewind Dale).",
+  "ghostship": "Ajuste os parâmetros da engine Ghostship.",
+  "gopher64": "Ajuste os parâmetros específicos do emulador Gopher64.",
+  "groovymame": "Ajuste os parâmetros do GroovyMAME para displays CRT.",
+  "gsplus": "Ajuste os parâmetros específicos do emulador GSplus.",
+  "gzdoom": "Ajuste os parâmetros da engine GZDoom.",
+  "hatari": "Ajuste os parâmetros específicos do emulador Hatari.",
+  "hbmame": "Ajuste os parâmetros do Homebrew MAME.",
+  "hypseus": "Ajuste os parâmetros do emulador Hypseus Singe.",
+  "ikemen": "Ajuste os parâmetros da engine IKEMEN GO.",
+  "jgenesis": "Ajuste os parâmetros específicos do emulador jGenesis.",
+  "jynx": "Ajuste os parâmetros do emulador Jynx.",
+  "jzintv": "Ajuste os parâmetros específicos do emulador jzIntv.",
+  "kega-fusion": "Ajuste os parâmetros do emulador Kega Fusion.",
+  "kronos": "Ajuste os parâmetros específicos do emulador Kronos.",
+  "lime3ds": "Ajuste os parâmetros específicos do emulador Lime3DS.",
+  "linuxloader": "Ajuste os parâmetros do carregador Linux.",
+  "m2emulator": "Ajuste os parâmetros do Sega Model 2 Emulator.",
+  "magicengine": "Ajuste os parâmetros do MagicEngine.",
+  "mame64": "Ajuste os parâmetros específicos do emulador MAME 64-bit.",
+  "mandarine": "Ajuste os parâmetros do emulador Mandarine.",
+  "mednafen": "Ajuste os parâmetros específicos do emulador Mednafen.",
+  "melonds": "Ajuste os parâmetros específicos do emulador melonDS.",
+  "mesen": "Ajuste os parâmetros específicos do emulador Mesen.",
+  "mgba": "Ajuste os parâmetros específicos do emulador mGBA.",
+  "model2": "Ajuste os parâmetros do Sega Model 2 Emulator.",
+  "mugen": "Ajuste os parâmetros da engine M.U.G.E.N.",
+  "mupen64": "Ajuste os parâmetros específicos do Mupen64Plus.",
+  "n64recomplauncher": "Ajuste os parâmetros do N64 Recomp Launcher.",
+  "nosgba": "Ajuste os parâmetros do emulador No$GBA.",
+  "openbor": "Ajuste os parâmetros da engine OpenBOR.",
+  "opengoal": "Ajuste os parâmetros da engine OpenGOAL.",
+  "openjazz": "Ajuste os parâmetros da engine OpenJazz.",
+  "openmsx": "Ajuste os parâmetros específicos do emulador openMSX.",
+  "oricutron": "Ajuste os parâmetros específicos do Oricutron.",
+  "pcsx2": "Ajuste os parâmetros específicos do emulador PCSX2.",
+  "pcsx2x6": "Ajuste os parâmetros do PCSX2 64-bit.",
+  "pcsx2-nightly": "Ajuste os parâmetros do PCSX2 Nightly.",
+  "pdark": "Ajuste os parâmetros do port nativo de PC de Perfect Dark.",
+  "phoenix": "Ajuste os parâmetros do emulador Phoenix.",
+  "pico8": "Ajuste os parâmetros da fantasy console PICO-8.",
+  "pinballfx": "Ajuste os parâmetros específicos do Pinball FX.",
+  "pinballfx2": "Ajuste os parâmetros específicos do Pinball FX2.",
+  "pinballfx3": "Ajuste os parâmetros específicos do Pinball FX3.",
+  "pinballm": "Ajuste os parâmetros específicos do Pinball M.",
+  "play": "Ajuste os parâmetros específicos do emulador Play!.",
+  "powerbomberman": "Ajuste os parâmetros do jogo Power Bomberman.",
+  "ppsspp": "Ajuste os parâmetros específicos do emulador PPSSPP.",
+  "project64": "Ajuste os parâmetros específicos do Project64.",
+  "psxmame": "Ajuste os parâmetros do emulador PSXMAME.",
+  "raine": "Ajuste os parâmetros específicos do emulador Raine.",
+  "raze": "Ajuste os parâmetros da engine Raze.",
+  "redream": "Ajuste os parâmetros específicos do emulador Redream.",
+  "retroarch": "Configurações globais de emulação, vídeo, shaders e mais.",
+  "rpcs3": "Ajuste os parâmetros específicos do emulador RPCS3.",
+  "rtcw": "Ajuste os parâmetros para Return to Castle Wolfenstein.",
+  "ruffle": "Ajuste os parâmetros do emulador de Flash Ruffle.",
+  "ryujinx": "Ajuste os parâmetros específicos do emulador Ryujinx.",
+  "scummvm": "Ajuste os parâmetros do ScummVM.",
+  "shadps4": "Ajuste os parâmetros específicos do emulador shadPS4.",
+  "simcoupe": "Ajuste os parâmetros do emulador SimCoupe.",
+  "simple64": "Ajuste os parâmetros específicos do emulador simple64.",
+  "singe2": "Ajuste os parâmetros do emulador Singe 2.",
+  "snes9x": "Ajuste os parâmetros específicos do emulador Snes9x.",
+  "soh": "Ajuste os parâmetros do port nativo Ship of Harkinian.",
+  "solarus": "Ajuste os parâmetros da engine Solarus.",
+  "solarus2": "Ajuste os parâmetros da engine Solarus 2.",
+  "sonic3air": "Ajuste os parâmetros do Sonic 3 Angel Island Revisited.",
+  "sonicmania": "Ajuste os parâmetros para Sonic Mania.",
+  "sonicretro": "Ajuste os parâmetros das engines Sonic Retro.",
+  "sonicretrocd": "Ajuste os parâmetros da engine Sonic Retro CD.",
+  "ssf": "Ajuste os parâmetros específicos do emulador SSF.",
+  "starship": "Ajuste os parâmetros da engine Starship.",
+  "stella": "Ajuste os parâmetros específicos do emulador Stella.",
+  "sudachi": "Ajuste os parâmetros específicos do emulador Sudachi.",
+  "supermodel": "Ajuste os parâmetros do emulador Supermodel.",
+  "suyu": "Ajuste os parâmetros específicos do emulador Suyu.",
+  "teknoparrot": "Ajuste os parâmetros específicos do emulador TeknoParrot.",
+  "theforceengine": "Ajuste os parâmetros da engine The Force Engine.",
+  "tsugaru": "Ajuste os parâmetros do emulador Tsugaru.",
+  "vita3k": "Ajuste os parâmetros específicos do emulador Vita3K.",
+  "vkquake": "Ajuste os parâmetros do vkQuake.",
+  "vkquake2": "Ajuste os parâmetros do vkQuake2.",
+  "vpinball": "Ajuste os parâmetros do Visual Pinball X.",
+  "winarcadia": "Ajuste os parâmetros do emulador WinArcadia.",
+  "windows": "Configurações e parâmetros para jogos nativos de Windows.",
+  "winuae": "Ajuste os parâmetros específicos do emulador WinUAE.",
+  "xash3d": "Ajuste os parâmetros da engine Xash3D.",
+  "xemu": "Ajuste os parâmetros específicos do emulador xemu.",
+  "xenia-canary": "Ajuste os parâmetros do emulador Xenia Canary.",
+  "xenia-edge": "Ajuste os parâmetros do emulador Xenia Edge.",
+  "xenia-manager": "Ajuste os parâmetros do Xenia Manager.",
+  "xenia": "Ajuste os parâmetros específicos do emulador Xenia.",
+  "xm6pro": "Ajuste os parâmetros do emulador XM6 Pro.",
+  "xroar": "Ajuste os parâmetros do emulador XRoar.",
+  "yabasanshiro": "Ajuste os parâmetros do emulador Yaba Sanshiro.",
+  "ymir": "Ajuste os parâmetros da engine YMIR.",
+  "yuzu-early-access": "Ajuste os parâmetros do Yuzu Early Access.",
+  "yuzu": "Ajuste os parâmetros específicos do emulador Yuzu.",
+  "zaccariapinball": "Ajuste os parâmetros do Zaccaria Pinball.",
+  "zesarux": "Ajuste os parâmetros do emulador ZEsarUX.",
+  "zinc": "Ajuste os parâmetros do emulador ZiNc.",
+  "global": "Configure opções gerais aplicadas a todos os emuladores.",
 };
 
 export default function ToolAppContent({
@@ -266,6 +408,8 @@ export default function ToolAppContent({
   const [initialGroup, setInitialGroup] = useState<string | undefined>();
   const [initialCore, setInitialCore] = useState<string | undefined>();
 
+  const selectedEmuRef = useRef<HTMLButtonElement | null>(null);
+
   useEffect(() => {
     const handleNavigate = (e: any) => {
       const data = e.detail;
@@ -285,6 +429,15 @@ export default function ToolAppContent({
       window.removeEventListener("navigate-settings", handleNavigate);
     };
   }, []);
+
+  useEffect(() => {
+    if (activeSettingsTab === "emuladores" && activeEmuSubmenu && selectedEmuRef.current) {
+      const el = selectedEmuRef.current;
+      setTimeout(() => {
+        el.scrollIntoView({ block: "nearest", behavior: "smooth" });
+      }, 50);
+    }
+  }, [activeEmuSubmenu, activeSettingsTab]);
 
   useEffect(() => {
     window.api.getRiescadeLogoPath().then((path) => {
@@ -799,14 +952,14 @@ export default function ToolAppContent({
               )}
               <div className="flex flex-col min-w-0">
                 <span className="text-sm font-bold text-white tracking-wide">RIESCADE OS</span>
-                <span className="text-[10px] text-white/40 font-medium">{riescadeVersion}</span>
+                <span className="text-xs text-white/40 font-medium">{riescadeVersion}</span>
               </div>
             </div>
           </div>
 
           {/* Navigation */}
           <div className="flex-1 overflow-y-auto p-3">
-            <div className="text-[10px] font-bold uppercase text-white/25 tracking-widest px-3.5 py-2 mt-1">Configurações</div>
+            <div className="text-xs font-bold uppercase text-white/25 tracking-widest px-3.5 py-2 mt-1">Configurações</div>
             <div className="flex flex-col gap-1">
               {settingsTabs.map((tab) => {
                 const TabIcon = tab.icon;
@@ -825,7 +978,7 @@ export default function ToolAppContent({
                           }
                         }
                       }}
-                      className={`cursor-pointer font-medium w-full text-left px-3.5 py-2.5 rounded-md text-xs flex items-center justify-between transition ${
+                      className={`cursor-pointer font-medium w-full text-left px-3.5 py-2.5 rounded-md text-sm flex items-center justify-between transition ${
                         isActive 
                           ? "bg-white/5 text-white" 
                           : "text-white/60 hover:bg-white/5 hover:text-white"
@@ -847,11 +1000,7 @@ export default function ToolAppContent({
                             return (
                               <button
                                 key={schema.id}
-                                ref={(node) => {
-                                  if (node && isSelected) {
-                                    setTimeout(() => node.scrollIntoView({ block: "nearest", behavior: "smooth" }), 100);
-                                  }
-                                }}
+                                ref={isSelected ? selectedEmuRef : null}
                                 onClick={() => {
                                   setActiveSettingsTab("emuladores");
                                   setActiveEmuSubmenu(schema.id);
@@ -872,11 +1021,7 @@ export default function ToolAppContent({
                             return (
                               <button
                                 key={emuKey}
-                                ref={(node) => {
-                                  if (node && isSelected) {
-                                    setTimeout(() => node.scrollIntoView({ block: "nearest", behavior: "smooth" }), 100);
-                                  }
-                                }}
+                                ref={isSelected ? selectedEmuRef : null}
                                 onClick={() => {
                                   setActiveSettingsTab("emuladores");
                                   setActiveEmuSubmenu(emuKey);
@@ -904,14 +1049,14 @@ export default function ToolAppContent({
           <div className="p-3 border-t border-white/5 shrink-0">
             <div className="flex items-center gap-2.5 px-2 py-1.5">
               <div 
-                className="w-8 h-8 rounded-full flex items-center justify-center text-[10px] font-bold shadow-md shrink-0"
+                className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold shadow-md shrink-0"
                 style={{ background: 'linear-gradient(135deg, var(--accent-color), var(--accent-color))' }}
               >
                 RC
               </div>
               <div className="flex flex-col min-w-0">
                 <span className="text-xs font-semibold text-white/90 truncate">RIESCADE Player</span>
-                <span className="text-[10px] text-white/35">Online</span>
+                <span className="text-xs text-white/35">Online</span>
               </div>
             </div>
           </div>
@@ -995,7 +1140,7 @@ export default function ToolAppContent({
                         className="w-full bg-[#121212] border border-white/10 rounded-md pl-9 pr-3 py-2 text-xs text-white placeholder:text-white/30 focus:outline-none focus:border-accent hover:border-accent transition duration-200" 
                       />
                     </div>
-                    <div className="flex bg-black/25 p-1 rounded-md border border-white/5 text-[10px] items-center shrink-0">
+                    <div className="flex bg-black/25 p-1 rounded-md border border-white/5 text-xs items-center shrink-0">
                       {[{ id: "all", label: "Tudo" }, { id: "tools", label: "Ferramentas" }, { id: "systems", label: "Sistemas" }].map(cat => (
                         <button 
                           key={cat.id} 
@@ -1038,7 +1183,7 @@ export default function ToolAppContent({
                         </div>
                         <div className="flex items-center gap-4 shrink-0 font-sans" onClick={(e) => e.stopPropagation()}>
                           <label className="flex items-center gap-2 cursor-pointer select-none" onClick={e => e.stopPropagation()}>
-                            <span className="text-[10px] text-white/50 font-medium">Desktop</span>
+                            <span className="text-xs text-white/50 font-medium">Desktop</span>
                             <input 
                               type="checkbox" 
                               checked={isDesk}
@@ -1048,7 +1193,7 @@ export default function ToolAppContent({
                           </label>
                           <div className="w-px h-6 bg-white/10" />
                           <label className="flex items-center gap-2 cursor-pointer select-none" onClick={e => e.stopPropagation()}>
-                            <span className="text-[10px] text-white/50 font-medium">Taskbar</span>
+                            <span className="text-xs text-white/50 font-medium">Taskbar</span>
                             <input 
                               type="checkbox" 
                               checked={isTask}
@@ -1105,7 +1250,7 @@ export default function ToolAppContent({
                               className="w-6 h-6 rounded-full border border-white/10 shadow-inner" 
                               style={{ backgroundColor: preset.hex }}
                             />
-                            <span className="text-[10px] text-white/60 font-medium text-center truncate w-full">{preset.name}</span>
+                            <span className="text-xs text-white/60 font-medium text-center truncate w-full">{preset.name}</span>
                           </button>
                         );
                       })}
@@ -1115,8 +1260,8 @@ export default function ToolAppContent({
 
                     <div className="flex items-center justify-between">
                       <div className="flex flex-col gap-0.5">
-                        <span className="font-semibold text-xs text-white/90">Cor Customizada</span>
-                        <span className="text-[10px] text-white/40">Defina uma cor hexadecimal personalizada para a interface.</span>
+                        <span className="font-semibold text-sm text-white/90">Cor Customizada</span>
+                        <span className="text-xs text-white/40">Defina uma cor hexadecimal personalizada para a interface.</span>
                       </div>
                       <div className="flex items-center gap-3">
                         <input 
@@ -1157,10 +1302,10 @@ export default function ToolAppContent({
                     ctx={ctx} 
                   />
 
-                  <div className="flex items-center justify-between bg-black/15 border border-white/5 rounded-md px-4 py-3 text-xs hover:bg-white/5 transition">
+                  <div className="flex items-center justify-between bg-black/15 border border-white/5 rounded-md px-4 py-3 text-sm hover:bg-white/5 transition">
                     <div className="flex flex-col gap-0.5 flex-1 min-w-0 pr-3">
                       <span className="font-medium text-white/90">Background Personalizado</span>
-                      <span className="text-[10px] text-white/45 leading-relaxed font-sans">
+                      <span className="text-xs text-white/45 leading-relaxed font-sans">
                         {ctx.getSetting("RIESCADE.CustomBackground") 
                           ? `Arquivo selecionado: ${ctx.getSetting("RIESCADE.CustomBackground").split('/').pop()}` 
                           : "Selecione uma imagem do seu computador para usar como papel de parede."}
@@ -1208,10 +1353,10 @@ export default function ToolAppContent({
                     ctx={ctx} 
                   />
 
-                  <div className="flex items-center justify-between bg-black/15 border border-white/5 rounded-md px-4 py-3 text-xs hover:bg-white/5 transition">
+                  <div className="flex items-center justify-between bg-black/15 border border-white/5 rounded-md px-4 py-3 text-sm hover:bg-white/5 transition">
                     <div className="flex flex-col gap-0.5 flex-1 min-w-0 pr-3">
                       <span className="font-medium text-white/90">Vídeo de Fundo Personalizado</span>
-                      <span className="text-[10px] text-white/45 leading-relaxed font-sans">
+                      <span className="text-[12px] text-white/45 leading-relaxed font-sans">
                         {ctx.getSetting("RIESCADE.BackgroundVideoPath") 
                           ? `Arquivo selecionado: ${decodeURIComponent(ctx.getSetting("RIESCADE.BackgroundVideoPath").split('/').pop() || '')}` 
                           : "Selecione um vídeo (MP4) do seu computador. Se não for selecionado, o default.mp4 será usado."}
@@ -1343,7 +1488,7 @@ export default function ToolAppContent({
                     <div className="flex justify-between items-center">
                       <h3 className="text-sm font-semibold text-white/60">Controles Conectados</h3>
                       {controllers.length > 0 && (
-                        <span className="text-[10px] font-bold text-green-400 flex items-center gap-1.5 bg-green-500/10 px-2.5 py-0.5 rounded-full border border-green-500/15">
+                        <span className="text-xs font-bold text-green-400 flex items-center gap-1.5 bg-green-500/10 px-2.5 py-0.5 rounded-full border border-green-500/15">
                           <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
                           {controllers.length} {controllers.length === 1 ? 'controle conectado' : 'controles conectados'}
                         </span>
@@ -1354,7 +1499,7 @@ export default function ToolAppContent({
                       <div className="flex flex-col items-center justify-center p-8 bg-white/2 border border-dashed border-white/10 rounded-xl text-center">
                         <Gamepad2 className="w-8 h-8 text-white/10 mb-2 animate-pulse" />
                         <p className="text-xs text-white/40">Nenhum controle detectado automaticamente no momento.</p>
-                        <p className="text-[10px] text-white/20 mt-1">Conecte um controle USB/Bluetooth ou clique em "Buscar Controles" acima.</p>
+                        <p className="text-xs text-white/20 mt-1">Conecte um controle USB/Bluetooth ou clique em "Buscar Controles" acima.</p>
                       </div>
                     ) : (
                       <div className="space-y-4">
@@ -1467,7 +1612,7 @@ export default function ToolAppContent({
                               {/* Card Actions Bottom Row */}
                               <div className="flex flex-wrap items-center justify-between border-t border-white/5 pt-3.5 gap-3">
                                 <div className="flex items-center gap-2">
-                                  <span className="text-[10px] text-white/40 font-bold uppercase tracking-wider">Atribuído a:</span>
+                                  <span className="text-xs text-white/40 font-bold uppercase tracking-wider">Atribuído a:</span>
                                   <RadixSelect
                                     value={String(config.preferredPlayer || "auto")}
                                     onValueChange={(val) => {
@@ -1602,7 +1747,7 @@ export default function ToolAppContent({
                             <div className="flex items-center justify-between gap-4">
                               <div>
                                 <h4 className="text-xs font-bold text-white">Preferência de Jogador</h4>
-                                <p className="text-[10px] text-white/40">Selecione o slot preferido deste controle.</p>
+                                <p className="text-xs text-white/40">Selecione o slot preferido deste controle.</p>
                               </div>
                               <RadixSelect
                                 value={String(config.preferredPlayer || "auto")}
@@ -1633,7 +1778,7 @@ export default function ToolAppContent({
                               <div className="flex justify-between items-center">
                                 <div>
                                   <h4 className="text-xs font-bold text-white">Deadzone do Analógico</h4>
-                                  <p className="text-[10px] text-white/40">Regula a sensibilidade física de ponto morto dos sticks.</p>
+                                  <p className="text-xs text-white/40">Regula a sensibilidade física de ponto morto dos sticks.</p>
                                 </div>
                                 <span className="text-xs font-bold text-accent">
                                   {Math.round((config.deadzone ?? 0.15) * 100)}%
@@ -1665,7 +1810,7 @@ export default function ToolAppContent({
                               <div className="flex items-center justify-between gap-4">
                                 <div>
                                   <h4 className="text-xs font-bold text-white">Inverter Eixo Y Esquerdo</h4>
-                                  <p className="text-[10px] text-white/40">Inverte a direção para cima/baixo.</p>
+                                  <p className="text-xs text-white/40">Inverte a direção para cima/baixo.</p>
                                 </div>
                                 <button
                                   type="button"
@@ -1689,7 +1834,7 @@ export default function ToolAppContent({
                               <div className="flex items-center justify-between gap-4">
                                 <div>
                                   <h4 className="text-xs font-bold text-white">Inverter Eixo Y Direito</h4>
-                                  <p className="text-[10px] text-white/40">Inverte a direção para cima/baixo.</p>
+                                  <p className="text-xs text-white/40">Inverte a direção para cima/baixo.</p>
                                 </div>
                                 <button
                                   type="button"
@@ -1713,7 +1858,7 @@ export default function ToolAppContent({
                               <div className="flex items-center justify-between gap-4 pt-2 md:pt-0">
                                 <div>
                                   <h4 className="text-xs font-bold text-white">Trocar Sticks</h4>
-                                  <p className="text-[10px] text-white/40">Troca as funções dos sticks esquerdo e direito.</p>
+                                  <p className="text-xs text-white/40">Troca as funções dos sticks esquerdo e direito.</p>
                                 </div>
                                 <button
                                   type="button"
@@ -1737,7 +1882,7 @@ export default function ToolAppContent({
                               <div className="flex items-center justify-between gap-4 pt-2 md:pt-0">
                                 <div>
                                   <h4 className="text-xs font-bold text-white">Zona Circular dos Sticks</h4>
-                                  <p className="text-[10px] text-white/40">Restringe a área de movimento para um círculo.</p>
+                                  <p className="text-xs text-white/40">Restringe a área de movimento para um círculo.</p>
                                 </div>
                                 <button
                                   type="button"
@@ -1872,7 +2017,7 @@ export default function ToolAppContent({
                             <div className="flex-1 flex flex-col justify-between space-y-4">
                               <div className="space-y-1">
                                 <h4 className="text-xs font-bold text-white">Calibração dos Sticks</h4>
-                                <p className="text-[10px] text-white/40">Calibre seus sticks para garantir precisão máxima.</p>
+                                <p className="text-xs text-white/40">Calibre seus sticks para garantir precisão máxima.</p>
                               </div>
 
                               <div className="flex justify-around items-center gap-4 py-2">
@@ -1943,7 +2088,7 @@ export default function ToolAppContent({
                           <div className="p-4 bg-white/2 border border-white/5 rounded-xl space-y-4">
                             <div className="space-y-1">
                               <h4 className="text-xs font-bold text-white">Módulos de Calibração</h4>
-                              <p className="text-[10px] text-white/40">Calibre a folga de ponto morto do controle atual para jogos competitivos.</p>
+                              <p className="text-xs text-white/40">Calibre a folga de ponto morto do controle atual para jogos competitivos.</p>
                             </div>
 
                             <div className="flex flex-col md:flex-row gap-6 justify-around py-2 border-t border-white/5 pt-4">
@@ -1956,9 +2101,9 @@ export default function ToolAppContent({
                                 </div>
                                 <div className="space-y-1.5 text-left">
                                   <p className="text-xs font-bold text-white">Stick Esquerdo</p>
-                                  <p className="text-[10px] text-white/50">Centro: X: 0.00 Y: 0.00</p>
-                                  <p className="text-[10px] text-white/50">Zonas de Desvio Máximo: 2%</p>
-                                  <p className="text-[10px] text-green-400 font-bold">Status: Excelente</p>
+                                  <p className="text-xs text-white/50">Centro: X: 0.00 Y: 0.00</p>
+                                  <p className="text-xs text-white/50">Zonas de Desvio Máximo: 2%</p>
+                                  <p className="text-xs text-green-400 font-bold">Status: Excelente</p>
                                 </div>
                               </div>
 
@@ -1971,9 +2116,9 @@ export default function ToolAppContent({
                                 </div>
                                 <div className="space-y-1.5 text-left">
                                   <p className="text-xs font-bold text-white">Stick Direito</p>
-                                  <p className="text-[10px] text-white/50">Centro: X: 0.00 Y: 0.00</p>
-                                  <p className="text-[10px] text-white/50">Zonas de Desvio Máximo: 3%</p>
-                                  <p className="text-[10px] text-green-400 font-bold">Status: Excelente</p>
+                                  <p className="text-xs text-white/50">Centro: X: 0.00 Y: 0.00</p>
+                                  <p className="text-xs text-white/50">Zonas de Desvio Máximo: 3%</p>
+                                  <p className="text-xs text-green-400 font-bold">Status: Excelente</p>
                                 </div>
                               </div>
                             </div>
@@ -2010,7 +2155,7 @@ export default function ToolAppContent({
                             <div className="flex items-center justify-between border-b border-white/5 pb-3">
                               <div>
                                 <h4 className="text-xs font-bold text-white">Wizard de Mapeamento</h4>
-                                <p className="text-[10px] text-white/40">Mapeie os botões e analógicos do seu controle manualmente.</p>
+                                <p className="text-xs text-white/40">Mapeie os botões e analógicos do seu controle manualmente.</p>
                               </div>
                               {wizardStep === null ? (
                                 <button
@@ -2019,7 +2164,7 @@ export default function ToolAppContent({
                                     setWizardStep(0);
                                     setWizardMappings({});
                                   }}
-                                  className="px-3 py-1.5 rounded-lg bg-accent hover:bg-accent/80 text-white text-[10px] font-bold transition cursor-pointer"
+                                  className="px-3 py-1.5 rounded-lg bg-accent hover:bg-accent/80 text-white text-xs font-bold transition cursor-pointer"
                                 >
                                   Iniciar Mapeamento
                                 </button>
@@ -2027,7 +2172,7 @@ export default function ToolAppContent({
                                 <button
                                   type="button"
                                   onClick={() => setWizardStep(null)}
-                                  className="px-3 py-1.5 rounded-lg bg-red-600/20 border border-red-500/30 hover:bg-red-600/30 text-red-400 text-[10px] font-bold transition cursor-pointer"
+                                  className="px-3 py-1.5 rounded-lg bg-red-600/20 border border-red-500/30 hover:bg-red-600/30 text-red-400 text-xs font-bold transition cursor-pointer"
                                 >
                                   Cancelar
                                 </button>
@@ -2053,7 +2198,7 @@ export default function ToolAppContent({
                                         finishWizard(wizardMappings);
                                       }
                                     }}
-                                    className="px-3 py-1.5 rounded bg-white/5 border border-white/10 hover:bg-white/10 text-white text-[10px] font-bold transition cursor-pointer"
+                                    className="px-3 py-1.5 rounded bg-white/5 border border-white/10 hover:bg-white/10 text-white text-xs font-bold transition cursor-pointer"
                                   >
                                     Pular este botão
                                   </button>
@@ -2061,10 +2206,10 @@ export default function ToolAppContent({
                               </div>
                             ) : (
                               <div className="space-y-3">
-                                <h5 className="text-[10px] font-bold text-white/60 uppercase tracking-wider">Perfil de Entrada:</h5>
+                                <h5 className="text-xs font-bold text-white/60 uppercase tracking-wider">Perfil de Entrada:</h5>
                                 <div className="p-3 bg-black/25 border border-white/5 rounded-lg text-xs space-y-2">
                                   <p className="text-white/80">O layout de entrada do controle é carregado do arquivo central <span className="font-mono text-accent">input.json</span>.</p>
-                                  <p className="text-white/60 text-[10px]">Use o Wizard acima para substituir ou reconfigurar todas as atribuições físicas deste dispositivo.</p>
+                                  <p className="text-white/60 text-xs">Use o Wizard acima para substituir ou reconfigurar todas as atribuições físicas deste dispositivo.</p>
                                 </div>
                               </div>
                             )}
@@ -2077,13 +2222,13 @@ export default function ToolAppContent({
                             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-white/5 pb-3">
                               <div>
                                 <h4 className="text-xs font-bold text-white">Debug & Diagnóstico SDL3</h4>
-                                <p className="text-[10px] text-white/40">Monitore as entradas de baixo nível recebidas do driver de controle.</p>
+                                <p className="text-xs text-white/40">Monitore as entradas de baixo nível recebidas do driver de controle.</p>
                               </div>
                               <div className="flex gap-2 shrink-0">
                                 <button
                                   type="button"
                                   onClick={copyControllerId}
-                                  className="px-2.5 py-1.5 rounded bg-white/5 border border-white/10 hover:bg-white/10 text-white text-[10px] font-bold transition flex items-center gap-1 cursor-pointer"
+                                  className="px-2.5 py-1.5 rounded bg-white/5 border border-white/10 hover:bg-white/10 text-white text-xs font-bold transition flex items-center gap-1 cursor-pointer"
                                 >
                                   <Copy className="w-3 h-3 text-accent" />
                                   Copiar ID
@@ -2091,7 +2236,7 @@ export default function ToolAppContent({
                                 <button
                                   type="button"
                                   onClick={exportDebugReport}
-                                  className="px-2.5 py-1.5 rounded bg-white/5 border border-white/10 hover:bg-white/10 text-white text-[10px] font-bold transition flex items-center gap-1 cursor-pointer"
+                                  className="px-2.5 py-1.5 rounded bg-white/5 border border-white/10 hover:bg-white/10 text-white text-xs font-bold transition flex items-center gap-1 cursor-pointer"
                                 >
                                   <Download className="w-3 h-3 text-accent" />
                                   Exportar Relatório
@@ -2099,7 +2244,7 @@ export default function ToolAppContent({
                               </div>
                             </div>
 
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-black/20 border border-white/5 p-3 rounded-lg text-[10px] font-mono text-white/60">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-black/20 border border-white/5 p-3 rounded-lg text-xs font-mono text-white/60">
                               <div><span className="text-white/40 font-bold block">Dispositivo:</span> {selectedController.name}</div>
                               <div><span className="text-white/40 font-bold block">Identificador GUID:</span> {selectedController.guid}</div>
                               <div><span className="text-white/40 font-bold block">Vendor / Product:</span> 0x{selectedController.vendorId} / 0x{selectedController.productId}</div>
@@ -2109,8 +2254,8 @@ export default function ToolAppContent({
                             </div>
 
                             <div className="space-y-2">
-                              <h5 className="text-[10px] font-bold text-white/60 uppercase tracking-wider">Console de Eventos em Tempo Real:</h5>
-                              <div className="h-40 overflow-y-auto bg-black/45 border border-white/5 p-2 rounded-lg font-mono text-[10px] text-green-400 space-y-1 select-text scrollbar-thin">
+                              <h5 className="text-xs font-bold text-white/60 uppercase tracking-wider">Console de Eventos em Tempo Real:</h5>
+                              <div className="h-40 overflow-y-auto bg-black/45 border border-white/5 p-2 rounded-lg font-mono text-xs text-green-400 space-y-1 select-text scrollbar-thin">
                                 {debugEvents.length === 0 ? (
                                   <p className="text-white/30 italic">Aguardando eventos... Pressione algum botão ou mova os sticks analógicos.</p>
                                 ) : (
@@ -2130,14 +2275,14 @@ export default function ToolAppContent({
                             <ScrollArea className="max-h-56 pr-2">
                               <table className="w-full text-xs border-collapse">
                                 <thead>
-                                  <tr className="border-b border-white/10 text-white/40 text-[10px] font-bold uppercase tracking-wider">
+                                  <tr className="border-b border-white/10 text-white/40 text-xs font-bold uppercase tracking-wider">
                                     <th className="pb-2 text-left">Atributo</th>
                                     <th className="pb-2 text-left">Valor do Dispositivo</th>
                                   </tr>
                                 </thead>
                                 <tbody className="text-white/80 font-mono divide-y divide-white/5">
                                   <tr><td className="py-2 font-bold text-white/50">Nome do Dispositivo</td><td className="py-2">{selectedController.name}</td></tr>
-                                  <tr><td className="py-2 font-bold text-white/50">Identificador GUID</td><td className="py-2 text-[10px]">{selectedController.guid}</td></tr>
+                                  <tr><td className="py-2 font-bold text-white/50">Identificador GUID</td><td className="py-2 text-xs">{selectedController.guid}</td></tr>
                                   <tr><td className="py-2 font-bold text-white/50">Vendor ID (VID)</td><td className="py-2">0x{selectedController.vendorId}</td></tr>
                                   <tr><td className="py-2 font-bold text-white/50">Product ID (PID)</td><td className="py-2">0x{selectedController.productId}</td></tr>
                                   <tr><td className="py-2 font-bold text-white/50">ID da Instância (SDL3)</td><td className="py-2">{selectedController.instanceId}</td></tr>
@@ -2412,15 +2557,13 @@ export default function ToolAppContent({
                   <SettingInfo label="Versão" value={`RIESCADE OS ${riescadeVersion}`} />
                   <SettingInfo label="Motor" value="Electron + React + Vite" />
                   <SettingInfo label="Idioma" value={getSetting("Language", "pt_BR")} />
-                  <SettingInfo label="Tema Ativo" value={getSetting("RIESCADE.ThemeSet", "default")} />
 
 
-
-                  <div className="bg-black/15 border border-white/5 rounded-md px-4 py-3.5 text-xs hover:bg-white/[0.03] transition duration-200 space-y-3 mt-3">
+                  <div className="bg-black/15 border border-white/5 rounded-md px-4 py-3.5 text-sm hover:bg-white/[0.03] transition duration-200 space-y-3 mt-3">
                     <div className="flex items-center justify-between">
                       <div className="flex flex-col gap-0.5">
                         <span className="font-semibold text-white/90">Verificar Atualizações</span>
-                        <span className="text-[10px] text-white/40 font-sans">
+                        <span className="text-xs text-white/40 font-sans">
                           {updateState.status === 'idle' && 'Verifique se há novas atualizações do RIESCADE OS.'}
                           {updateState.status === 'checking' && 'Verificando atualizações no GitHub...'}
                           {updateState.status === 'no-update' && 'O sistema está atualizado! Nenhuma atualização disponível.'}
@@ -2468,8 +2611,8 @@ export default function ToolAppContent({
 
                     {updateState.status === 'available' && updateState.releaseNotes && (
                       <div className="bg-black/35 rounded-md p-3 border border-white/5 space-y-1.5">
-                        <div className="font-semibold text-[10px] text-white/60 uppercase tracking-wider">Notas de Lançamento:</div>
-                        <pre className="text-[10px] text-white/50 whitespace-pre-wrap font-mono leading-relaxed max-h-32 overflow-y-auto pr-1">
+                        <div className="font-semibold text-xs text-white/60 uppercase tracking-wider">Notas de Lançamento:</div>
+                        <pre className="text-xs text-white/50 whitespace-pre-wrap font-mono leading-relaxed max-h-32 overflow-y-auto pr-1">
                           {updateState.releaseNotes}
                         </pre>
                       </div>
@@ -2523,7 +2666,7 @@ export default function ToolAppContent({
             </div>
             <div className="flex-1">
               <div className="text-xs font-semibold text-white/95">{a}</div>
-              <div className="text-[10px] text-white/40">Desbloqueado há {i + 1} dias atrás</div>
+              <div className="text-xs text-white/40">Desbloqueado há {i + 1} dias atrás</div>
             </div>
             <Star className="w-4 h-4 text-amber-400 fill-amber-400" />
           </div>
@@ -2712,7 +2855,7 @@ export default function ToolAppContent({
               <Database className="w-5 h-5" />
               <span>DB MANAGER</span>
             </div>
-            <div className="text-[10px] text-white/40 mt-1 uppercase tracking-wider">RIESCADE OS</div>
+            <div className="text-xs text-white/40 mt-1 uppercase tracking-wider">RIESCADE OS</div>
           </div>
           
           <nav className="p-3 flex-1 flex flex-col gap-1">
@@ -2763,7 +2906,7 @@ export default function ToolAppContent({
               </div>
               <div className="flex flex-col items-center gap-1 text-center select-none font-sans">
                 <span className="font-bold text-sm text-white/90">Inicializando Gerenciador</span>
-                <span className="text-[10px] text-white/40 uppercase tracking-wider font-mono">Carregando Tabelas e Metadados...</span>
+                <span className="text-xs text-white/40 uppercase tracking-wider font-mono">Carregando Tabelas e Metadados...</span>
               </div>
             </div>
           )}
@@ -2774,7 +2917,7 @@ export default function ToolAppContent({
               <div className="flex items-end justify-between mb-4">
                 <div>
                   <h2 className="text-lg font-bold">Jogos Catalogados</h2>
-                  <p className="text-[10px] text-white/40">Total: {dbTotalGames} jogos encontrados</p>
+                  <p className="text-xs text-white/40">Total: {dbTotalGames} jogos encontrados</p>
                 </div>
 
                 {/* Filters/Actions Bar */}
@@ -2861,7 +3004,7 @@ export default function ToolAppContent({
                         <tr key={`${game.system}-${game.path}`} className="border-b border-white/5 hover:bg-white/[0.02] transition">
                           <td className="p-3 truncate max-w-[250px] font-medium text-white/90">
                             {game.name}
-                            <span className="block text-[10px] text-white/30 truncate">{game.path}</span>
+                            <span className="block text-xs text-white/30 truncate">{game.path}</span>
                           </td>
                           <td className="p-3 text-white/60 truncate uppercase">{game.system}</td>
                           <td className="p-3 text-white/40 truncate">{game.genre || "N/A"}</td>
@@ -2973,7 +3116,7 @@ export default function ToolAppContent({
                 <div className="grid grid-cols-4 gap-4">
                   <div className="rounded-md border border-white/5 bg-white/5 p-4 flex flex-col gap-1 backdrop-blur-sm">
                     <div className="flex items-center justify-between text-white/40">
-                      <span className="text-[10px] uppercase font-bold tracking-wider">Jogos Catalogados</span>
+                      <span className="text-xs uppercase font-bold tracking-wider">Jogos Catalogados</span>
                       <Gamepad2 className="w-4 h-4 text-accent" />
                     </div>
                     <span className="text-2xl font-black mt-2 text-white">{dbStats?.totalGames || 0}</span>
@@ -2981,7 +3124,7 @@ export default function ToolAppContent({
                   </div>
                   <div className="rounded-md border border-white/5 bg-white/5 p-4 flex flex-col gap-1 backdrop-blur-sm">
                     <div className="flex items-center justify-between text-white/40">
-                      <span className="text-[10px] uppercase font-bold tracking-wider">Sistemas Ativos</span>
+                      <span className="text-xs uppercase font-bold tracking-wider">Sistemas Ativos</span>
                       <Folder className="w-4 h-4 text-accent" />
                     </div>
                     <span className="text-2xl font-black mt-2 text-white">{dbStats?.totalSystems || 0}</span>
@@ -2989,7 +3132,7 @@ export default function ToolAppContent({
                   </div>
                   <div className="rounded-md border border-white/5 bg-white/5 p-4 flex flex-col gap-1 backdrop-blur-sm">
                     <div className="flex items-center justify-between text-white/40">
-                      <span className="text-[10px] uppercase font-bold tracking-wider">Tamanho do Banco</span>
+                      <span className="text-xs uppercase font-bold tracking-wider">Tamanho do Banco</span>
                       <HardDrive className="w-4 h-4 text-accent" />
                     </div>
                     <span className="text-2xl font-black mt-2 text-white">
@@ -2999,7 +3142,7 @@ export default function ToolAppContent({
                   </div>
                   <div className="rounded-md border border-white/5 bg-white/5 p-4 flex flex-col gap-1 backdrop-blur-sm">
                     <div className="flex items-center justify-between text-white/40">
-                      <span className="text-[10px] uppercase font-bold tracking-wider">Último Sync</span>
+                      <span className="text-xs uppercase font-bold tracking-wider">Último Sync</span>
                       <RefreshCw className="w-4 h-4 text-accent" />
                     </div>
                     <span className="text-xs font-bold mt-4 text-white truncate">
@@ -3017,11 +3160,11 @@ export default function ToolAppContent({
                     <div className="flex items-center justify-between p-3.5 bg-black/20 rounded-md border border-white/5">
                       <div className="flex flex-col gap-0.5">
                         <span className="font-semibold text-white/90">Vacuum (Compactar Banco)</span>
-                        <span className="text-[10px] text-white/40">Executa a limpeza física e compacta o arquivo do SQLite. Recomendado se você editou ou removeu muitos jogos.</span>
+                        <span className="text-xs text-white/40">Executa a limpeza física e compacta o arquivo do SQLite. Recomendado se você editou ou removeu muitos jogos.</span>
                       </div>
                       <button
                         onClick={handleVacuum}
-                        className="px-3.5 py-1.5 rounded-md bg-accent text-white font-semibold hover:bg-accent-hover transition shrink-0 cursor-pointer text-[10px]"
+                        className="px-3.5 py-1.5 rounded-md bg-accent text-white font-semibold hover:bg-accent-hover transition shrink-0 cursor-pointer text-xs"
                       >
                         Executar Vacuum
                       </button>
@@ -3030,12 +3173,12 @@ export default function ToolAppContent({
                     <div className="flex items-center justify-between p-3.5 bg-black/20 rounded-md border border-white/5">
                       <div className="flex flex-col gap-0.5">
                         <span className="font-semibold text-white/90 text-red-400">Reconstruir Banco (Rebuild)</span>
-                        <span className="text-[10px] text-white/40">Limpa todas as tabelas do banco de dados e reconstrói do zero varrendo os arquivos físicos e importando arquivos XML novamente.</span>
+                        <span className="text-xs text-white/40">Limpa todas as tabelas do banco de dados e reconstrói do zero varrendo os arquivos físicos e importando arquivos XML novamente.</span>
                       </div>
                       <button
                         disabled={isRebuilding}
                         onClick={handleRebuild}
-                        className="px-3.5 py-1.5 rounded-md bg-red-500/20 hover:bg-red-500 text-red-400 hover:text-white font-semibold transition shrink-0 cursor-pointer disabled:opacity-30 text-[10px]"
+                        className="px-3.5 py-1.5 rounded-md bg-red-500/20 hover:bg-red-500 text-red-400 hover:text-white font-semibold transition shrink-0 cursor-pointer disabled:opacity-30 text-xs"
                       >
                         {isRebuilding ? "Reconstruindo..." : "Reconstruir Banco"}
                       </button>
@@ -3054,7 +3197,7 @@ export default function ToolAppContent({
                 {/* Header */}
                 <div className="p-4 border-b border-white/5 flex items-center justify-between bg-black/10 shrink-0">
                   <div className="truncate max-w-[80%]">
-                    <span className="text-[10px] text-accent uppercase tracking-widest font-black block">{editForm.system}</span>
+                    <span className="text-xs text-accent uppercase tracking-widest font-black block">{editForm.system}</span>
                     <h3 className="font-bold text-sm text-white truncate">{editForm.name}</h3>
                   </div>
                   <button onClick={() => { setSelectedGame(null); setEditForm(null); }} className="p-1 rounded-md hover:bg-white/5 text-white/50 hover:text-white transition cursor-pointer">
@@ -3390,7 +3533,7 @@ export default function ToolAppContent({
                     />
                     <span className="font-semibold text-white/80">Excluir arquivo ROM físico</span>
                   </label>
-                  <p className="text-[10px] text-white/40 leading-normal pl-5">
+                  <p className="text-xs text-white/40 leading-normal pl-5">
                     Se desmarcado, o jogo será apenas removido da interface (banco de dados), mas o arquivo em disco continuará intacto.
                   </p>
                 </div>

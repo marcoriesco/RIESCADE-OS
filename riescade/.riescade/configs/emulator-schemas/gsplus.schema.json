@@ -1,8 +1,8 @@
 {
   "$schema": "riescade-emulator-schema-v1",
   "id": "gsplus",
-  "name": "GSPLUS",
-  "description": "Configurações para o emulador GSPLUS geradas a partir do es_features.cfg.",
+  "name": "GSplus (Apple IIGS)",
+  "description": "Ajuste os parâmetros específicos do emulador GSplus.",
   "icon": "gsplus",
   "configFiles": [],
   "globalMappings": {},
