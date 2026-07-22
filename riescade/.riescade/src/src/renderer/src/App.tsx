@@ -15,7 +15,7 @@ import VirtualWindow from "./components/VirtualWindow";
 import defaultBg from '../../main/resources/default.webp';
 import defaultVideo from '../../main/resources/default.mp4';
 import riescadeLogo from '../../main/resources/riescade.webp';
-import { playUISound } from "./utils/audioManager";
+import { playUISound, setAppMuted } from "./utils/audioManager";
 
 
 const DEFAULT_SYSTEM_BG = "radial-gradient(1200px 800px at 20% 10%, rgb(35 35 35) 0%, transparent 60%), radial-gradient(1000px 700px at 85% 90%, rgb(12 12 12) 0%, transparent 55%), linear-gradient(rgb(4 4 4) 0%, rgb(22 22 22) 100%)";
@@ -203,21 +203,24 @@ export default function App() {
 
 
 
-  // Apply effective music volume & video ducking
+  const [isGameRunning, setIsGameRunning] = useState(false);
+
+  // Mute / pause all UI audio and background music when a game is launching or running
   useEffect(() => {
     if (!bgAudioRef.current) return;
-    let baseVol = (musicVolume / 100) * (masterVolume / 100);
-    if (isVideoDucked && videoLowersMusic) {
+    const isMuted = isGameRunning || isLaunching;
+    let baseVol = isMuted ? 0 : (musicVolume / 100) * (masterVolume / 100);
+    if (!isMuted && isVideoDucked && videoLowersMusic) {
       baseVol *= 0.15;
     }
     bgAudioRef.current.volume = Math.max(0, Math.min(1, baseVol));
 
-    if (!isMusicEnabled) {
+    if (!isMusicEnabled || isMuted) {
       bgAudioRef.current.pause();
     } else if (bgAudioRef.current.paused && currentPlaylist.length > 0 && bgAudioRef.current.src) {
       bgAudioRef.current.play().catch(() => {});
     }
-  }, [masterVolume, musicVolume, isMusicEnabled, isVideoDucked, videoLowersMusic, currentPlaylist]);
+  }, [masterVolume, musicVolume, isMusicEnabled, isVideoDucked, videoLowersMusic, currentPlaylist, isGameRunning, isLaunching]);
 
   // Play track when track index or playlist changes
   useEffect(() => {
@@ -1211,15 +1214,37 @@ export default function App() {
     return unsubscribe;
   }, []);
 
+  // Listen to launcher-status events (game loading, running, closed) to mute/unmute background audio & UI sounds
+  useEffect(() => {
+    const unsubscribe = window.api.on('launcher-status', (_event: any, data: { status: 'loading' | 'running' | 'closed' }) => {
+      if (data.status === 'loading' || data.status === 'running') {
+        setIsGameRunning(true);
+        setAppMuted(true);
+      } else if (data.status === 'closed') {
+        setIsGameRunning(false);
+        setIsLaunching(false);
+        setLaunchingGame(null);
+        setAppMuted(false);
+      }
+    });
+    return unsubscribe;
+  }, []);
+
   const launchDirectly = (game: Game, system: System, saveStateSlot?: number) => {
     setIsLaunching(true);
     setLaunchingGame(game);
+    setIsGameRunning(true);
+    setAppMuted(true);
     window.api.launchGame(game, system, saveStateSlot).then(() => {
       setIsLaunching(false);
       setLaunchingGame(null);
+      setIsGameRunning(false);
+      setAppMuted(false);
     }).catch(() => {
       setIsLaunching(false);
       setLaunchingGame(null);
+      setIsGameRunning(false);
+      setAppMuted(false);
     });
   };
 

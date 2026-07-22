@@ -6,6 +6,8 @@ import { Game, System } from '../../shared/types'
 import { getRetroBatPath, getRiescadePath } from '../utils/paths'
 import { SettingsParser } from '../parsers/SettingsParser'
 import { ControllerManager, ControllerInfo } from './ControllerManager'
+// TeknoParrotAutoConfig is deprecated — controller configuration now handled by riescadeLauncher's TeknoParrotGenerator
+// import { TeknoParrotAutoConfig } from './emulators/TeknoParrotAutoConfig'
 
 export class LauncherService {
   public launch(game: Game, system: System, activeControllers: ControllerInfo[] = [], saveStateSlot?: number, netplayOptions?: any): Promise<void> {
@@ -92,7 +94,7 @@ export class LauncherService {
 
       // Setup arguments
       const settingsParser = new SettingsParser()
-      let emulator = 'retroarch'
+      let emulator = 'libretro'
       let core = ''
 
       // 1. Resolve Emulator
@@ -107,8 +109,9 @@ export class LauncherService {
         }
       }
 
-      if (emulator === 'libretro') {
-        emulator = 'retroarch'
+      // Normalize: retroarch → libretro (canonical name expected by riescadeLauncher)
+      if (emulator === 'retroarch') {
+        emulator = 'libretro'
       }
 
       // 2. Resolve Core
@@ -121,7 +124,7 @@ export class LauncherService {
         const findMatchingEmulator = () => {
           return system.emulators?.find(e => 
             e.name === emulator || 
-            (emulator === 'retroarch' && (e.name === 'retroarch' || e.name === 'libretro'))
+            (emulator === 'libretro' && (e.name === 'retroarch' || e.name === 'libretro'))
           )
         }
 
@@ -143,7 +146,7 @@ export class LauncherService {
       }
 
       const selectedEmulator = system.emulators?.find(e => 
-        e.name === emulator || (emulator === 'retroarch' && (e.name === 'retroarch' || e.name === 'libretro'))
+        e.name === emulator || (emulator === 'libretro' && (e.name === 'retroarch' || e.name === 'libretro'))
       )
       if (selectedEmulator && selectedEmulator.command) {
         // Parse command line arguments respecting double quotes first
@@ -219,12 +222,23 @@ export class LauncherService {
 
       let controllerArgs: string[] = []
       
-      let finalControllers = ControllerManager.getInstance().getConnected()
-      if (!finalControllers || finalControllers.length === 0) {
-        console.log('No connected controllers in ControllerManager. Running a manual scan...')
-        finalControllers = ControllerManager.getInstance().detectAll()
-      }
-      console.log(`Controllers for launching: ${finalControllers.length}`, finalControllers)
+      const prepareAndLaunch = async () => {
+        let finalControllers = ControllerManager.getInstance().getConnected()
+        if (!finalControllers || finalControllers.length === 0) {
+          console.log('No connected controllers in ControllerManager. Running a manual scan...')
+          try {
+            finalControllers = await ControllerManager.getInstance().detectAll()
+          } catch (e) {
+            finalControllers = []
+          }
+        }
+        if (!Array.isArray(finalControllers)) {
+          finalControllers = []
+        }
+        console.log(`Controllers for launching: ${finalControllers.length}`, finalControllers)
+
+        // [DEPRECATED] TeknoParrot auto-config now handled entirely by riescadeLauncher's TeknoParrotGenerator.
+        // Controller metadata is passed via -controllers JSON arg below.
       
       if (finalControllers.length > 0) {
         // Try to get a list of HID device IDs to match paths
@@ -297,6 +311,28 @@ export class LauncherService {
             `-${p}path`, `"${finalPath}"`
           )
         })
+
+        // For TeknoParrot: pass full controller metadata as JSON to the launcher.
+        // The TeknoParrotGenerator in riescadeLauncher is the sole owner of UserProfile.xml.
+        const isTeknoParrot = system.name.toLowerCase() === 'teknoparrot' || emulator.toLowerCase() === 'teknoparrot'
+        if (isTeknoParrot && finalControllers.length > 0) {
+          const controllersPayload = finalControllers.map((c, idx) => ({
+            player: idx + 1,
+            type: c.type,
+            guid: c.guid,
+            name: c.name,
+            vendorId: c.vendorId ? parseInt(c.vendorId, 16) : undefined,
+            productId: c.productId ? parseInt(c.productId, 16) : undefined,
+            index: c.xinputIndex ?? idx,
+            buttons: c.buttons,
+            axes: c.axes,
+            hats: c.hats || 1,
+            instanceId: c.instanceId || '',
+          }))
+          const jsonStr = JSON.stringify(controllersPayload)
+          const base64Str = Buffer.from(jsonStr).toString('base64')
+          controllerArgs = ['-controllers', base64Str]
+        }
       }
 
       let saveStateArgs: string[] = []
@@ -458,11 +494,13 @@ export class LauncherService {
             console.log(`[Launcher:stdout] ${data.trim()}`)
           })
         }
-        if (child.stderr) {
-          child.stderr.on('data', (data) => {
-            console.error(`[Launcher:stderr] ${data.trim()}`)
-          })
-        }
       }
+    }
+
+    prepareAndLaunch().catch((err) => {
+      sendLauncherStatus('closed')
+      reject(err)
     })
-  }}
+  })
+}
+}

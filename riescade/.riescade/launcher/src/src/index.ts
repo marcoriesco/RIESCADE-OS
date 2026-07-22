@@ -2,7 +2,7 @@ import { spawn } from 'child_process';
 import { dirname, parse, join } from 'path';
 import { Logger } from './utils/logger.js';
 import { Config } from './config.js';
-import { LaunchArgs } from './types.js';
+import { LaunchArgs, ControllerInfo } from './types.js';
 import { BaseGenerator } from './generators/BaseGenerator.js';
 import { LibRetroGenerator } from './generators/LibRetroGenerator.js';
 import { Pcsx2Generator } from './generators/Pcsx2Generator.js';
@@ -138,11 +138,55 @@ function parseArgs(args: string[]): LaunchArgs {
     }
   }
 
+  // 3-Tier Controller Parsing Strategy
+  let controllers: ControllerInfo[] = [];
+  const controllersRaw = rawArgs['-controllers'];
+
+  if (controllersRaw) {
+    // Tier 1: Try Base64 decode -> JSON parse
+    try {
+      const decoded = Buffer.from(controllersRaw, 'base64').toString('utf-8');
+      controllers = JSON.parse(decoded);
+      Logger.info(`Parsed ${controllers.length} controller(s) from -controllers Base64 payload`);
+    } catch (e1) {
+      // Tier 2: Try direct JSON parse (for raw un-encoded CLI input)
+      try {
+        controllers = JSON.parse(controllersRaw);
+        Logger.info(`Parsed ${controllers.length} controller(s) from raw -controllers JSON`);
+      } catch (e2) {
+        Logger.warn(`Failed to parse -controllers payload as Base64 or raw JSON. Falling back to legacy per-player args.`);
+      }
+    }
+  }
+
+  // Tier 3: Fallback to building controllers from legacy per-player args (-p1guid, etc.)
+  if (controllers.length === 0) {
+    for (let p = 1; p <= 4; p++) {
+      const guid = rawArgs[`-p${p}guid`];
+      if (!guid) continue;
+      controllers.push({
+        player: p,
+        type: (rawArgs[`-p${p}type`] as ControllerInfo['type']) || 'xinput',
+        guid,
+        name: rawArgs[`-p${p}name`] || `Player ${p} Controller`,
+        index: parseInt(rawArgs[`-p${p}index`] || String(p - 1), 10),
+        buttons: parseInt(rawArgs[`-p${p}nbbuttons`] || '0', 10),
+        axes: parseInt(rawArgs[`-p${p}nbaxes`] || '0', 10),
+        hats: parseInt(rawArgs[`-p${p}nbhats`] || '1', 10),
+        instanceId: rawArgs[`-p${p}path`],
+      });
+    }
+    if (controllers.length > 0) {
+      Logger.info(`Built ${controllers.length} controller(s) from legacy per-player CLI args`);
+    }
+  }
+
   return {
     system: rawArgs['-system'] || '',
     emulator: rawArgs['-emulator'] || '',
     core: rawArgs['-core'] || '',
     rom: rawArgs['-rom'] || '',
+    controllers,
     p1guid: rawArgs['-p1guid'],
     p2guid: rawArgs['-p2guid'],
     p3guid: rawArgs['-p3guid'],
@@ -172,7 +216,7 @@ function getGenerator(args: LaunchArgs): BaseGenerator {
   const emu = args.emulator.toLowerCase();
   const sys = args.system.toLowerCase();
 
-  if (emu === 'libretro' || emu === 'angle') {
+  if (emu === 'libretro' || emu === 'retroarch' || emu === 'angle') {
     return new LibRetroGenerator(args);
   }
   if (emu === 'pcsx2' || emu === 'pcsx2-nightly' || emu === 'pcsx2qt' || emu === 'pcsx2-16' || emu === 'ps2' || sys === 'ps2') {

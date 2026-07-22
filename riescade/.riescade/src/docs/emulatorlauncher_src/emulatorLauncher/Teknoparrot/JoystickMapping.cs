@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Xml.Serialization;
 using Keys = System.Windows.Forms.Keys;
 
@@ -309,7 +309,7 @@ namespace TeknoParrotUi.Common
         public bool HideWithRelativeAxis { get; set; }
         public bool HideWithoutRelativeAxis { get; set; }
         public string Hint { get; set; }
-        public bool HideWithUseDPadForGUN1Stick { get; set; }
+        // removed
         public bool HideWithoutUseDPadForGUN1Stick { get; set; }
         public bool HideWithUseDPadForGUN2Stick { get; set; }
         public bool HideWithoutUseDPadForGUN2Stick { get; set; }

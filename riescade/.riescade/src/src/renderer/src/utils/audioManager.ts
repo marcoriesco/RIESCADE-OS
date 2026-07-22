@@ -17,13 +17,23 @@ export type SoundType =
 let audioCtx: AudioContext | null = null;
 let musicBasePath: string | null = null;
 const audioCache = new Map<string, HTMLAudioElement>();
+let appMuted = false;
+
+export function setAppMuted(muted: boolean) {
+  appMuted = muted;
+  if (muted) {
+    audioCache.forEach((audio) => {
+      audio.pause();
+    });
+  }
+}
 
 export async function playUISound(
   type: SoundType = 'navigate',
   masterVolume = 80,
   enabled = true
 ) {
-  if (!enabled || masterVolume <= 0) return;
+  if (!enabled || masterVolume <= 0 || appMuted) return;
 
   const vol = Math.max(0, Math.min(1, masterVolume / 100));
 

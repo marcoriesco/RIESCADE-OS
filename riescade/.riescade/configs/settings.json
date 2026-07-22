@@ -372,7 +372,7 @@
     "type": "int"
   },
   "Window.tool-settings.Maximized": {
-    "value": false,
+    "value": true,
     "type": "bool"
   },
   "Window.tool-settings.X": {
@@ -576,7 +576,7 @@
     "type": "int"
   },
   "Window.system-arcade.Maximized": {
-    "value": true,
+    "value": false,
     "type": "bool"
   },
   "RIESCADE.PreferredMediaType.xbox360": {
@@ -612,11 +612,11 @@
     "type": "string"
   },
   "RIESCADE.PreferredMediaType.snes": {
-    "value": "fanart",
+    "value": "cover",
     "type": "string"
   },
   "RIESCADE.PreferredMediaType.arcade": {
-    "value": "cover2d",
+    "value": "cover",
     "type": "string"
   },
   "RIESCADE.EnableBackgroundVideo": {
@@ -796,7 +796,7 @@
     "type": "bool"
   },
   "RIESCADE.GpuDriver": {
-    "value": "default",
+    "value": "d3d12",
     "type": "string"
   },
   "LogLevel": {
@@ -872,11 +872,11 @@
     "type": "string"
   },
   "audio.useFavoriteMusic": {
-    "value": false,
+    "value": true,
     "type": "bool"
   },
   "VideoAudio": {
-    "value": true,
+    "value": false,
     "type": "bool"
   },
   "audio.persystem": {

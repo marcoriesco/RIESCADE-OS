@@ -1612,7 +1612,7 @@
     "yabasanshiro_force_hle_bios": "auto",
     "yabasanshiro_multitap": "auto",
     "yabasanshiro_controller": "auto",
-    "retroarch_core": "stella2014",
+    "retroarch_core": "snes9x",
     "a5200_a5200_mix_frames": "auto",
     "a5200_a5200_low_pass_filter": "auto",
     "a5200_rewind": "auto",
