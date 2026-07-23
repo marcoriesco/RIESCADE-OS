@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react'
-import { Search, RotateCcw, Link2, ChevronRight, Monitor, Cpu, Volume2, Settings, Gamepad2, Wrench, Palette, Share2, Cog } from 'lucide-react'
+import { Search, RotateCcw, Link2, ChevronRight, Monitor, Cpu, Volume2, Settings, Gamepad2, Wrench, Palette, Share2, Cog, X } from 'lucide-react'
 import { SettingGroup, SettingToggle, SettingSelect, SettingSlider, SettingInput } from './SettingsComponents'
 import type { SettingsCtx } from '../types'
 
@@ -242,15 +242,25 @@ export const EmulatorSettingsPanel: React.FC<EmulatorSettingsPanelProps> = ({
   return (
     <div className="space-y-5 animate-in fade-in duration-200">
       {/* Search bar */}
-      <div className="relative">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/30 pointer-events-none" />
+      <div className="relative group">
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/30 group-focus-within:text-accent transition duration-200 pointer-events-none" />
         <input
           type="text"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           placeholder="Buscar configuração..."
-          className="w-full pl-9 pr-4 py-2 bg-white/5 border border-white/10 rounded-lg text-sm text-white placeholder-white/30 outline-none focus:border-accent/50 focus:bg-white/[0.07] transition-all"
+          className="w-full pl-9 pr-9 py-2 bg-white/5 border border-white/10 rounded-lg text-sm text-white placeholder-white/30 outline-none focus:border-accent/50 focus:bg-white/[0.07] transition-all"
         />
+        {searchQuery && (
+          <button
+            type="button"
+            onClick={() => setSearchQuery('')}
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-white/40 hover:text-white transition p-0.5 cursor-pointer"
+            title="Limpar busca"
+          >
+            <X className="w-4 h-4" />
+          </button>
+        )}
       </div>
 
       {/* Group tabs - only show when not searching */}

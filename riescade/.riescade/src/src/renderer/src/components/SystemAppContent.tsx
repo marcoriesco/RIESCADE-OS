@@ -984,8 +984,18 @@ export default function SystemAppContent({
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder={`Buscar em ${system.fullname}...`}
-              className="w-full bg-white/5 border border-white/5 rounded-md pl-9 pr-3 py-2 text-xs text-white placeholder:text-white/30 focus:outline-none focus-border-accent focus:bg-white/[0.07] transition duration-200"
+              className="w-full bg-white/5 border border-white/5 rounded-md pl-9 pr-8 py-2 text-xs text-white placeholder:text-white/30 focus:outline-none focus:border-accent focus:bg-white/[0.07] transition duration-200"
             />
+            {search && (
+              <button
+                type="button"
+                onClick={() => setSearch("")}
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-white/40 hover:text-white transition p-0.5 cursor-pointer"
+                title="Limpar busca"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
+            )}
           </div>
         </div>
 
@@ -2122,19 +2132,32 @@ export default function SystemAppContent({
 
             <div className="flex flex-col gap-1.5 mt-1">
               <label className="text-[10px] text-white/40 font-bold uppercase tracking-wider">Termo de Busca</label>
-              <input
-                type="text"
-                value={manualSearchQuery}
-                onChange={(e) => setManualSearchQuery(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter') {
-                    handleManualSearchSubmit();
-                  }
-                }}
-                autoFocus
-                placeholder="Ex: Need for Speed Underground 2"
-                className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder-white/20 focus:outline-none focus:border-accent focus:bg-white/10 transition-all"
-              />
+              <div className="relative group">
+                <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-white/35 group-focus-within:text-accent transition duration-200 pointer-events-none" />
+                <input
+                  type="text"
+                  value={manualSearchQuery}
+                  onChange={(e) => setManualSearchQuery(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      handleManualSearchSubmit();
+                    }
+                  }}
+                  autoFocus
+                  placeholder="Ex: Need for Speed Underground 2"
+                  className="w-full bg-white/5 border border-white/10 rounded-xl pl-10 pr-10 py-3 text-sm text-white placeholder-white/20 focus:outline-none focus:border-accent focus:bg-white/10 transition-all"
+                />
+                {manualSearchQuery && (
+                  <button
+                    type="button"
+                    onClick={() => setManualSearchQuery("")}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-white/40 hover:text-white transition p-1 cursor-pointer"
+                    title="Limpar busca"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                )}
+              </div>
             </div>
 
             <div className="flex gap-2 mt-2">

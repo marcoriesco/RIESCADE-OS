@@ -711,6 +711,9 @@ export default function App() {
   const renderSystemMenu = (systemName: string) => {
     const system = systems.find(s => s.name === systemName);
     const isMenuOpen = openMenuSystemId === systemName;
+    const matchingTool = TOOL_APPS.find(t => t.id === systemName);
+    const theme = matchingTool ? { icon: matchingTool.icon } : getSystemTheme(systemName);
+    const SystemIcon = theme.icon;
     
     // Desktop and Taskbar helper variables
     const desktopIcons = getDesktopIcons();
@@ -858,9 +861,12 @@ export default function App() {
           )}
         </div>
         
-        <span className="text-xs font-bold text-white/95 truncate tracking-wide pr-4">
-          {system?.fullname || systemName.toUpperCase()}
-        </span>
+        <div className="flex items-center gap-2 min-w-0 truncate pr-4">
+          {SystemIcon && <SystemIcon className="w-4 h-4 text-accent shrink-0" />}
+          <span className="text-sm font-bold text-white/95 truncate tracking-wide">
+            {system?.fullname || (matchingTool ? matchingTool.name : systemName.toUpperCase())}
+          </span>
+        </div>
       </div>
     );
   };
@@ -1834,7 +1840,7 @@ export default function App() {
           }
           const active = activeSubWindowId === win.appId;
           const isVirtualTool = ["all", "favorites", "collections"].includes(win.appId);
-          const toolItem = isVirtualTool ? TOOL_APPS.find(t => t.id === win.appId) : null;
+          const toolItem = TOOL_APPS.find(t => t.id === win.appId);
           
           const theme = isVirtualTool && toolItem
             ? { icon: toolItem.icon, color: toolItem.color, bg: "radial-gradient(1200px at 50% 50%, #222222ff 0%, #030303ff 100%)" }
@@ -1842,6 +1848,7 @@ export default function App() {
             
           const Icon = theme.icon;
           const sys = systems.find(s => s.name === win.appId);
+          const winIcon = toolItem ? toolItem.icon : Icon;
 
           return (
             <VirtualWindow
@@ -1850,6 +1857,7 @@ export default function App() {
               type={win.type}
               appId={win.appId}
               title={win.title}
+              icon={winIcon}
               initialX={win.x}
               initialY={win.y}
               initialWidth={win.width}
@@ -1965,8 +1973,18 @@ export default function App() {
               value={startMenuSearch}
               onChange={(e) => setStartMenuSearch(e.target.value)}
               placeholder="Pesquisar plataformas ou ferramentas..."
-              className="w-full bg-white/10 border border-white/15 rounded-full pl-11 pr-4 py-2.5 text-sm text-white placeholder:text-white/40 focus:outline-none focus:border-accent"
+              className="w-full bg-white/10 border border-white/15 rounded-full pl-11 pr-10 py-2.5 text-sm text-white placeholder:text-white/40 focus:outline-none focus:border-accent"
             />
+            {startMenuSearch && (
+              <button
+                type="button"
+                onClick={() => setStartMenuSearch("")}
+                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-white/40 hover:text-white transition p-1 cursor-pointer"
+                title="Limpar busca"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            )}
           </div>
             
             <ScrollArea className="flex-1 pr-2">

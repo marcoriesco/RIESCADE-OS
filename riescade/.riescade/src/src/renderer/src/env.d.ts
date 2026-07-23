@@ -18,6 +18,7 @@ declare global {
       getActiveTheme: () => Promise<string>
       loadTheme: (themeName: string) => Promise<any>
       getSettings: () => Promise<any>
+      getGpuDiagnostics: () => Promise<any>
       saveSetting: (name: string, value: any, type: string) => Promise<any>
       saveWindowBounds: (windowId: string, bounds: { x: number; y: number; width: number; height: number }) => Promise<void>
       getEmulatorSettings: () => Promise<any>

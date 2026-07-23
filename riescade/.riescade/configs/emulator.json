@@ -3479,14 +3479,14 @@
     "forcefullscreen": "auto"
   },
   "azahar": {
-    "azahar_resolution_factor": "auto",
+    "azahar_resolution_factor": "1",
     "vsync": "auto",
-    "azahar_layout_option": "auto",
+    "azahar_layout_option": "2",
     "azahar_swap_screen": "auto",
-    "azahar_texture_filter": "auto",
+    "azahar_texture_filter": "0",
     "azahar_custom_textures": "auto",
     "azahar_PreloadTextures": "auto",
-    "graphics_api": "auto",
+    "graphics_api": "2",
     "azahar_region_value": "auto",
     "n3ds_language": "auto",
     "azahar_audio_emulation": "auto",

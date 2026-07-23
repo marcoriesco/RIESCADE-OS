@@ -4,7 +4,7 @@
     "type": "bool"
   },
   "ScrapeVideos": {
-    "value": true,
+    "value": false,
     "type": "bool"
   },
   "VideoLowersMusic": {
@@ -12,7 +12,7 @@
     "type": "bool"
   },
   "audio.bgmusic": {
-    "value": true,
+    "value": false,
     "type": "bool"
   },
   "audio.display_titles": {
@@ -40,7 +40,7 @@
     "type": "bool"
   },
   "DrawFramerate": {
-    "value": true,
+    "value": false,
     "type": "bool"
   },
   "LoadEmptySystems": {
@@ -188,7 +188,7 @@
     "type": "string"
   },
   "Window.system-switch.Maximized": {
-    "value": true,
+    "value": false,
     "type": "bool"
   },
   "Window.system-switch.X": {
@@ -212,19 +212,19 @@
     "type": "bool"
   },
   "Window.system-teknoparrot.X": {
-    "value": 216,
+    "value": 156,
     "type": "int"
   },
   "Window.system-teknoparrot.Y": {
-    "value": 82,
+    "value": 19,
     "type": "int"
   },
   "Window.system-teknoparrot.Width": {
-    "value": 1504,
+    "value": 1726,
     "type": "int"
   },
   "Window.system-teknoparrot.Height": {
-    "value": 837,
+    "value": 922,
     "type": "int"
   },
   "Window.system-cps1.Maximized": {
@@ -272,7 +272,7 @@
     "type": "int"
   },
   "Window.tool-database.Maximized": {
-    "value": false,
+    "value": true,
     "type": "bool"
   },
   "Window.tool-database.X": {
@@ -292,7 +292,7 @@
     "type": "int"
   },
   "Window.system-snes.Maximized": {
-    "value": true,
+    "value": false,
     "type": "bool"
   },
   "Window.system-snes.X": {
@@ -304,11 +304,11 @@
     "type": "int"
   },
   "Window.system-snes.Width": {
-    "value": 960,
+    "value": 1450,
     "type": "int"
   },
   "Window.system-snes.Height": {
-    "value": 640,
+    "value": 902,
     "type": "int"
   },
   "Window.system-favorites.Maximized": {
@@ -376,19 +376,19 @@
     "type": "bool"
   },
   "Window.tool-settings.X": {
-    "value": 184,
+    "value": 269,
     "type": "int"
   },
   "Window.tool-settings.Y": {
-    "value": 35,
+    "value": 177,
     "type": "int"
   },
   "Window.tool-settings.Width": {
-    "value": 1572,
+    "value": 1243,
     "type": "int"
   },
   "Window.tool-settings.Height": {
-    "value": 906,
+    "value": 896,
     "type": "int"
   },
   "Window.tool-collections.Maximized": {
@@ -744,7 +744,7 @@
     "type": "bool"
   },
   "ScrapperDownloadFanart": {
-    "value": true,
+    "value": false,
     "type": "bool"
   },
   "ScrapperDownloadCover": {
@@ -756,31 +756,31 @@
     "type": "bool"
   },
   "ScrapperDownloadCover3D": {
-    "value": true,
+    "value": false,
     "type": "bool"
   },
   "ScrapperDownloadCoverBack": {
-    "value": true,
+    "value": false,
     "type": "bool"
   },
   "ScrapperDownloadLogo": {
-    "value": true,
+    "value": false,
     "type": "bool"
   },
   "ScrapperDownloadScreenshot": {
-    "value": true,
+    "value": false,
     "type": "bool"
   },
   "ScrapperDownloadTitle": {
-    "value": true,
+    "value": false,
     "type": "bool"
   },
   "ScrapperDownloadMix": {
-    "value": true,
+    "value": false,
     "type": "bool"
   },
   "ScrapperDownloadManual": {
-    "value": true,
+    "value": false,
     "type": "bool"
   },
   "RIESCADE.PreferredMediaType.all": {
@@ -788,7 +788,7 @@
     "type": "string"
   },
   "ScrapperDownloadMarquee": {
-    "value": true,
+    "value": false,
     "type": "bool"
   },
   "RIESCADE.SaveWindowPositions": {
@@ -796,7 +796,7 @@
     "type": "bool"
   },
   "RIESCADE.GpuDriver": {
-    "value": "d3d12",
+    "value": "default",
     "type": "string"
   },
   "LogLevel": {

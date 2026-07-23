@@ -28,22 +28,34 @@ const scraperService = new ScraperService(libraryService)
 const emulatorSchemaService = new EmulatorSchemaService()
 
 // Configure Chromium GPU graphics backend switches based on user settings
-app.commandLine.appendSwitch('ignore-gpu-blocklist')
+const enabledFeatures: string[] = []
+
+const ignoreBlocklistSetting = settingsParser.getSetting('RIESCADE.IgnoreGpuBlocklist', 'string')
+if (ignoreBlocklistSetting === 'true' || ignoreBlocklistSetting === '1') {
+  app.commandLine.appendSwitch('ignore-gpu-blocklist')
+}
+
 app.commandLine.appendSwitch('enable-gpu-rasterization')
+
 const gpuDriver = settingsParser.getSetting('RIESCADE.GpuDriver', 'string')
 if (gpuDriver && gpuDriver !== 'default') {
   if (gpuDriver === 'd3d12') {
     app.commandLine.appendSwitch('use-angle', 'd3d12')
-  } else if (gpuDriver === 'opengl') {
-    app.commandLine.appendSwitch('use-gl', 'desktop')
-  } else if (gpuDriver === 'vulkan') {
-    app.commandLine.appendSwitch('use-angle', 'vulkan')
-    app.commandLine.appendSwitch('enable-features', 'Vulkan')
-  } else if (gpuDriver === 'software') {
-    app.commandLine.appendSwitch('disable-gpu')
   } else if (gpuDriver === 'd3d11') {
     app.commandLine.appendSwitch('use-angle', 'd3d11')
+  } else if (gpuDriver === 'opengl') {
+    app.commandLine.appendSwitch('use-gl', 'desktop')
+    app.commandLine.appendSwitch('use-angle', 'gl')
+  } else if (gpuDriver === 'vulkan') {
+    app.commandLine.appendSwitch('use-angle', 'vulkan')
+    enabledFeatures.push('Vulkan')
+  } else if (gpuDriver === 'software') {
+    app.commandLine.appendSwitch('disable-gpu')
   }
+}
+
+if (enabledFeatures.length > 0) {
+  app.commandLine.appendSwitch('enable-features', enabledFeatures.join(','))
 }
 
 let themeWatcher: FSWatcher | null = null
@@ -469,6 +481,46 @@ app.whenReady().then(() => {
   // ─── IPC: Settings (read-only from ES, write for UI prefs) ───
   ipcMain.handle('get-settings', async () => {
     return settingsParser.getAllSettings()
+  })
+
+  ipcMain.handle('get-gpu-diagnostics', async () => {
+    try {
+      const featureStatus = app.getGPUFeatureStatus()
+      let gpuInfoBasic: any = null
+      let gpuInfoComplete: any = null
+      try {
+        gpuInfoBasic = await app.getGPUInfo('basic')
+      } catch (e: any) {
+        gpuInfoBasic = { error: String(e) }
+      }
+      try {
+        gpuInfoComplete = await app.getGPUInfo('complete')
+      } catch (e: any) {
+        gpuInfoComplete = { error: String(e) }
+      }
+
+      // Merge auxAttributes if present in complete
+      if (gpuInfoBasic && gpuInfoComplete && gpuInfoComplete.auxAttributes) {
+        gpuInfoBasic.auxAttributes = {
+          ...(gpuInfoBasic.auxAttributes || {}),
+          ...gpuInfoComplete.auxAttributes
+        }
+      }
+
+      const configuredDriver = settingsParser.getSetting('RIESCADE.GpuDriver', 'string') || 'default'
+      const ignoreBlocklistSetting = settingsParser.getSetting('RIESCADE.IgnoreGpuBlocklist', 'string')
+      const ignoreBlocklist = ignoreBlocklistSetting === 'true' || ignoreBlocklistSetting === '1'
+
+      return {
+        configuredDriver,
+        ignoreBlocklist,
+        featureStatus,
+        gpuInfoBasic,
+        gpuInfoComplete
+      }
+    } catch (err: any) {
+      return { error: err?.message || String(err) }
+    }
   })
 
   ipcMain.handle('save-setting', async (_, name: string, value: any, type: 'string' | 'bool' | 'int' | 'float') => {

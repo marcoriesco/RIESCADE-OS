@@ -6,6 +6,7 @@ interface VirtualWindowProps {
   type: 'system' | 'tool';
   appId: string;
   title: string;
+  icon?: React.ComponentType<{ className?: string }>;
   initialX: number;
   initialY: number;
   initialWidth: number;
@@ -28,6 +29,7 @@ function VirtualWindow({
   type,
   appId,
   title,
+  icon: IconComponent,
   initialX,
   initialY,
   initialWidth,
@@ -459,36 +461,39 @@ function VirtualWindow({
         <div
           onMouseDown={handleDragStart}
           onDoubleClick={handleMaximizeDoubleClick}
-          className="h-10 px-4 bg-black/40 border-b border-white/5 flex items-center justify-between select-none shrink-0 cursor-move"
+          className="h-10 px-4 pr-0 bg-black/40 flex items-center justify-between select-none shrink-0"
         >
-          <div className="flex items-center gap-2 w-full min-w-0 pr-4">
+          <div className="flex items-center gap-2 w-full h-full min-w-0 pr-4">
             {headerLeft || (
-              <span className="text-xs font-bold text-white/95 truncate tracking-wide">{title}</span>
+              <div className="flex items-center gap-2 min-w-0 truncate">
+                {IconComponent && <IconComponent className="w-4 h-4 text-accent shrink-0" />}
+                <span className="text-sm font-bold text-white/95 truncate tracking-wide">{title}</span>
+              </div>
             )}
           </div>
 
           {/* Window control buttons */}
-          <div className="flex items-center gap-1 shrink-0">
+          <div className="flex items-center h-full shrink-0">
             <button
               onClick={handleMinimize}
-              className="win-control-btn w-7 h-7 hover:bg-white/10 flex items-center justify-center rounded-lg text-white/60 hover:text-white transition cursor-pointer"
+              className="win-control-btn w-12 h-full hover:bg-white/10 flex items-center justify-center text-white/60 hover:text-white transition"
               title="Minimizar"
             >
-              <Minus className="w-3.5 h-3.5" />
+              <Minus className="w-4 h-4" />
             </button>
             <button
               onClick={handleMaximize}
-              className="win-control-btn w-7 h-7 hover:bg-white/10 flex items-center justify-center rounded-lg text-white/60 hover:text-white transition cursor-pointer"
+              className="win-control-btn w-12 h-full hover:bg-white/10 flex items-center justify-center text-white/60 hover:text-white transition"
               title={isMaximized ? "Restaurar" : "Maximizar"}
             >
-              <Square className="w-2.5 h-2.5" />
+              <Square className="w-3 h-3" />
             </button>
             <button
               onClick={handleClose}
-              className="win-control-btn w-7 h-7 hover:bg-red-500/80 flex items-center justify-center rounded-lg text-white/60 hover:text-white transition cursor-pointer"
+              className="win-control-btn w-12 h-full hover:bg-red-500/80 flex items-center justify-center text-white/60 hover:text-white transition"
               title="Fechar"
             >
-              <X className="w-3.5 h-3.5" />
+              <X className="w-4.5 h-4.5" />
             </button>
           </div>
         </div>
