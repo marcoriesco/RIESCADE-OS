@@ -1,97 +1,217 @@
-# RIESCADE SYSTEM
+# RIESCADE OS
 
-Um frontend retro moderno e premium para sistemas de emulação (compatível com a estrutura do EmulationStation e RetroBat), construído com Electron, React, TypeScript e uma integração direta de alto desempenho via C#.
+Frontend portátil para organizar, configurar e iniciar jogos em diferentes emuladores no Windows.
 
----
+O RIESCADE OS reúne em uma única interface a biblioteca de jogos, configurações globais e por emulador, detecção de controles, scraping de metadados e mídias, coleções, favoritos, save states e um launcher responsável por preparar cada emulador antes da execução.
 
-## 📂 Estrutura do Repositório
+> [!IMPORTANT]
+> O RIESCADE OS **não inclui jogos, ROMs ou arquivos de BIOS**.
+>
+> Antes de utilizar o sistema, o usuário deve popular as pastas `roms` e `bios` com seus próprios arquivos, obtidos legalmente. Alguns sistemas também exigem emuladores, firmwares, chaves ou arquivos adicionais.
 
-O repositório é organizado para manter uma estrutura portátil e fácil de implantar:
+## Requisitos
 
-```
-RIESCADE_SYSTEM/               # Raiz do sistema (portátil)
-├── RIESCADE.exe               # Inicializador compilado principal (executável portátil)
-├── README.md                  # Este arquivo de documentação
-├── bios/                      # BIOS de emuladores
-├── cheats/                    # Trapaças/Cheats
-├── decorations/               # Molduras/Bezels para emuladores
-├── emulators/                 # Emuladores e RetroArch
-├── roms/                      # Jogos (ROMs) organizados por console
-├── saves/                     # Salvamentos de jogos
-├── screenshots/               # Capturas de tela dos jogos
-├── system/                    # Arquivos e scripts do sistema
-└── riescade/                  # Pasta do frontend e utilitários
-    ├── emulationstation.exe   # Executável do EmulationStation original
-    ├── emulatorLauncher.exe   # Lançador de emuladores precompilado
-    ├── themes/                # Pastas dos temas (ex: switch2)
-    ├── collections/           # Coleções customizadas
-    ├── music/                 # Músicas de fundo
-    ├── videos/                # Vídeos do sistema
-    ├── .emulationstation/     # Configurações do EmulationStation (es_systems.cfg)
-    └── .riescade/             # Core do Frontend Electron
-        ├── RIESCADE.exe       # Binário executável do Frontend Electron
-        ├── riescade.db        # Banco de dados SQLite persistente
-        ├── locales/           # Arquivos de idioma do Frontend
-        └── src/               # Código-fonte do Frontend (Electron + React + TS)
-            ├── package.json   # Dependências e scripts npm
-            ├── src/           # Códigos TypeScript (main, preload, renderer)
-            └── out/           # Diretório compilado final (gerado no build)
+- Windows 10 ou Windows 11 de 64 bits.
+- ROMs e BIOS próprias.
+- Emuladores necessários para os sistemas desejados.
+- Conexão com a internet para scraping, downloads e atualizações.
+- Conta pessoal do ScreenScraper para scraping autenticado.
+
+## Preparação inicial
+
+Mantenha a estrutura do pacote intacta e execute `RIESCADE.exe` na raiz.
+
+```text
+RIESCADE OS/
+├── RIESCADE.exe
+├── bios/
+├── emulators/
+├── roms/
+└── riescade/
+    └── saves/
 ```
 
----
+### 1. Popular a pasta de ROMs
 
-## 🛠️ Instruções de Compilação e Desenvolvimento
+Coloque os jogos nas subpastas correspondentes dentro de `roms`.
 
-### 1. Frontend do RIESCADE (Electron + React)
+Exemplos:
 
-O código-fonte do frontend está localizado em [riescade/.riescade/src](file:///c:/tmp/RIESCADE_SYSTEM/riescade/.riescade/src).
+```text
+roms/
+├── fbneo/
+├── mame/
+├── megadrive/
+├── nes/
+├── ps2/
+├── psx/
+├── snes/
+└── teknoparrot/
+```
 
-#### Pré-requisitos
-- **Node.js** instalado (Recomendado v18 ou superior).
+Os nomes, caminhos e extensões reconhecidas são definidos em:
 
-#### Passos para desenvolvimento e compilação:
-1. Abra o prompt de comando (CMD ou PowerShell) na pasta do código-fonte:
-   ```bash
-   cd riescade/.riescade/src
-   ```
-2. Instale as dependências do projeto:
-   ```bash
-   npm install
-   ```
-3. Para executar o projeto em modo de desenvolvimento (Hot Reloading):
-   ```bash
-   npm run dev
-   ```
-4. Para compilar e implantar na estrutura de pastas (Gera o Electron unpackaged, compila o launcher portátil `RIESCADE.exe` no diretório raiz e o `RIESCADEUpdater.exe` no diretório de updater):
-   ```bash
-   npm run deploy
-   ```
-5. Para publicar uma nova release (Gera o arquivo compactado `.7z` excluindo pastas de código e arquivos temporários/logs, faz o commit, tag no Git e publica automaticamente no GitHub Releases):
-   ```bash
-   npm run release
-   ```
----
+```text
+riescade/.riescade/configs/systems.json
+```
 
-## ⚙️ Funcionamento das Rotas e Portabilidade
+Não coloque todos os jogos diretamente na raiz de `roms`. Cada plataforma deve utilizar sua própria subpasta.
 
-O sistema é 100% portátil. O executável principal `RIESCADE.exe` na raiz executa a chamada ao executável interno do Electron resolvendo o caminho relativo a si mesmo. Desta forma, a pasta do projeto pode ser movida para qualquer diretório ou unidade (ex: `D:\Games\RIESCADE_SYSTEM`) sem quebrar os vínculos com as ROMs, emuladores e decorações.
+### 2. Popular a pasta de BIOS
 
----
+Copie as BIOS exigidas pelos emuladores para:
 
-## 🎨 Personalização de Temas (HTML/CSS)
+```text
+bios/
+```
 
-O RIESCADE suporta a criação de temas altamente customizados utilizando **HTML, CSS/SCSS e componentes React**. Os temas padrão ficam localizados em `riescade/.riescade/src/src/main/theme_default`.
+A necessidade, o nome e o local exato de cada BIOS dependem do emulador e do sistema. ROMs podem aparecer na biblioteca mesmo quando a BIOS necessária está ausente, mas o jogo poderá não iniciar.
 
-### Componentes de Navegação Customizados:
-- **`<riescade-systems>`**: Exibe a lista de sistemas em formato de Carrossel 3D ou Grade (Grid) de logotipos.
-- **`<riescade-gamelists>`**: Exibe a lista de jogos em formato de Carrossel de logotipos/marquees ou Grade (Grid) de cards.
-- **`<riescade-gamelist>`**: Exibe a lista clássica vertical textual de jogos.
+### 3. Preparar os emuladores
 
-### Grade Customizada (Grid Layout):
-Os templates `system_grid.html` e `gamelist_grid.html` foram atualizados para fornecer suporte a:
-- Colunas flexíveis com CSS Grid.
-- Painel lateral com metadados detalhados (Capa/Video, Desenvolvedora, Gênero e Ano).
-- Efeito de vidro (glassmorphism) nos cards com foco brilhante na cor de destaque configurada (`--theme-color`).
-- Prevenção de corte visual das bordas dos cards selecionados na renderização da grade.
+Coloque ou instale os emuladores compatíveis dentro de:
 
-Consulte a [Documentação de Temas em docs/THEME.md](file:///c:/tmp/RIESCADE_SYSTEM/riescade/.riescade/src/docs/THEME.md) para ver todas as tags e variáveis.
+```text
+emulators/
+```
+
+Depois, abra as Configurações do RIESCADE OS para revisar as opções globais e específicas de cada emulador.
+
+### 4. Atualizar a biblioteca
+
+Após adicionar ou remover jogos, atualize a biblioteca pelo frontend. O banco de dados local e as mídias são mantidos em arquivos próprios do usuário.
+
+## Recursos principais
+
+- Biblioteca unificada com busca, filtros, favoritos e coleções.
+- Configurações globais e schemas específicos para os emuladores.
+- Launcher com geradores de configuração por sistema.
+- Detecção de controles XInput, DirectInput e HID.
+- Configuração automática de mouse, teclado e lightguns.
+- Integração com TeknoParrot e perfis de jogos arcade.
+- Scraper exclusivo pelo ScreenScraper.
+- Download de metadados, capas, fanarts, logos, vídeos e manuais.
+- Scraper paralelo conforme o número de motores permitido pela conta.
+- Progresso do scraper em modal ou notificação não bloqueante.
+- Save states e retomada de jogos para emuladores compatíveis.
+- Interface personalizável, cor de destaque e suporte a dois monitores.
+- Notificações de conexão, desconexão e atividade dos controles.
+- Suporte a múltiplos idiomas.
+- Atualizador integrado e criação de releases portáteis.
+
+## Estrutura do projeto
+
+```text
+RIESCADE OS/
+├── bios/                              # BIOS fornecidas pelo usuário
+├── emulators/                         # Emuladores instalados pelo usuário
+├── roms/                              # Jogos organizados por sistema
+├── saves/                             # Saves e save states
+├── RIESCADE.exe                       # Inicializador portátil
+└── riescade/
+    ├── cheats/
+    ├── collections/
+    ├── decorations/
+    ├── music/
+    ├── screenshots/
+    ├── videos/
+    └── .riescade/
+        ├── configs/
+        │   ├── emulator-schemas/      # Opções exibidas no frontend
+        │   ├── settings.json          # Configurações padrão
+        │   └── systems.json           # Cadastro dos sistemas e ROMs
+        ├── launcher/
+        │   ├── configs/               # Regras e perfis dos geradores
+        │   └── src/                   # Código-fonte do launcher
+        ├── logs/                      # Logs de execução
+        ├── state/                     # Estado temporário gerado localmente
+        ├── themes/                    # Temas e recursos do usuário
+        ├── riescade.db                # Biblioteca SQLite gerada localmente
+        └── src/                       # Frontend Electron + React
+```
+
+### Pasta `state`
+
+`riescade/.riescade/state` armazena dados temporários gerados durante o uso, como o inventário atual de dispositivos e hashes de configurações geradas. A pasta é distribuída vazia e não deve ser usada para configurações permanentes.
+
+## ScreenScraper
+
+O RIESCADE OS utiliza somente o ScreenScraper como fonte de scraping.
+
+Configure o usuário e a senha em:
+
+```text
+Configurações → Scraper
+```
+
+As credenciais pessoais ficam na instalação local e são removidas durante a criação do pacote de release. O botão **Testar conexão** valida a conta, mostra as requisições disponíveis e registra o número de motores autorizado para o processamento paralelo.
+
+## Desenvolvimento
+
+O frontend está em:
+
+```text
+riescade/.riescade/src
+```
+
+Pré-requisitos:
+
+- Node.js 18 ou superior.
+- npm.
+
+Instalação e execução:
+
+```powershell
+cd riescade/.riescade/src
+npm install
+npm run dev
+```
+
+Comandos disponíveis:
+
+```powershell
+npm run typecheck     # Verificação TypeScript
+npm run validate      # Validação de schemas e configurações
+npm run build         # Build do Electron
+npm test              # Validação seguida do build
+npm run dist          # Gera a distribuição do frontend
+npm run deploy        # Compila e implanta na estrutura portátil
+npm run release       # Prepara e publica uma release
+```
+
+O launcher está em:
+
+```text
+riescade/.riescade/launcher/src
+```
+
+```powershell
+cd riescade/.riescade/launcher/src
+npm install
+npm run typecheck
+npm run build
+```
+
+## Dados locais e releases
+
+Arquivos específicos do computador do desenvolvedor ou usuário não devem fazer parte de uma release:
+
+- ROMs e BIOS.
+- Emuladores locais.
+- Banco de dados e arquivos auxiliares SQLite.
+- Logs.
+- Inventário de dispositivos.
+- Estado e hashes gerados em tempo de execução.
+- Credenciais pessoais do ScreenScraper.
+
+A rotina de release preserva as pastas necessárias, remove dados temporários e entrega a pasta `state` vazia.
+
+## Aviso legal
+
+O RIESCADE OS é um frontend e gerenciador de configurações. O projeto não fornece conteúdo protegido, ROMs, BIOS, chaves, firmwares ou jogos comerciais.
+
+O usuário é responsável por:
+
+- Utilizar apenas jogos e arquivos dos quais possua os direitos necessários.
+- Obter suas próprias BIOS, firmwares e chaves de forma legal.
+- Respeitar as licenças dos emuladores e serviços integrados.
