@@ -223,7 +223,7 @@
     "tp_padindex2": "auto",
     "tp_inputdriver": "auto",
     "tp_display_cursor": "auto",
-    "tp_gunkeyboard": "auto",
+    "tp_gunkeyboard": "1",
     "tp_gunindex1": "auto",
     "tp_gunindex2": "auto",
     "tp_gunindex3": "auto",

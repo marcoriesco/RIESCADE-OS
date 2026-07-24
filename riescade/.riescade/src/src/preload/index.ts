@@ -26,6 +26,7 @@ const api = {
   // Settings (read from ES config, write for UI prefs)
   getSettings: () => ipcRenderer.invoke('get-settings'),
   getGpuDiagnostics: () => ipcRenderer.invoke('get-gpu-diagnostics'),
+  getPointingDevices: (forceRefresh?: boolean) => ipcRenderer.invoke('get-pointing-devices', forceRefresh),
   saveSetting: (name: string, value: any, type: 'string' | 'bool' | 'int' | 'float') =>
     ipcRenderer.invoke('save-setting', name, value, type),
   saveWindowBounds: (windowId: string, bounds: { x: number; y: number; width: number; height: number }) =>

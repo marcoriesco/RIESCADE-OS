@@ -18,16 +18,22 @@
     "Tekken7FatedRetribution": "Tekken7FR"
   },
   "profiles": {
-    "MKDX": {
-      "category": "racing",
+    "mkdx": {
+      "category": "other",
       "buttons": {
-        "Wheel Axis": "STEER_AXIS",
-        "Gas": "ACCELERATE",
-        "Brake": "BRAKE",
-        "Item": "ACTION_SOUTH",
-        "Mario Kart Item": "ACTION_SOUTH",
-        "P1 Start": "START_1",
-        "Coin": "COIN_1"
+        "Test": "L3",
+        "Service1": "R3",
+        "Coin1": "COIN_1",
+        "P1ButtonStart": "START_1",
+        "P1Button1": "ACTION_SOUTH",
+        "P1Button2": "ACTION_EAST",
+        "P1Button5": "RB",
+        "P1ButtonDown": "DPAD_DOWN",
+        "P1ButtonUp": "DPAD_UP",
+        "ExtensionOne2": "ACTION_NORTH",
+        "Analog0": "STEER_AXIS",
+        "Analog2": "RT",
+        "Analog4": "LT"
       }
     },
     "Daytona3": {
@@ -46,93 +52,151 @@
         "Coin 1": "COIN_1"
       }
     },
-    "WMMT5": {
-      "category": "racing",
+    "wmmt5": {
+      "category": "other",
       "buttons": {
-        "Wheel Axis": "STEER_AXIS",
-        "Gas": "ACCELERATE",
-        "Brake": "BRAKE",
-        "Gear 1": "ACTION_WEST",
-        "Gear 2": "ACTION_NORTH",
-        "Gear 3": "ACTION_SOUTH",
-        "Gear 4": "ACTION_EAST",
-        "View Change": "Y",
-        "P1 Start": "START_1",
-        "Coin 1": "COIN_1"
+        "Test": "L3",
+        "Service1": "R3",
+        "Coin1": "COIN_1",
+        "P1Button1": "ACTION_SOUTH",
+        "P1ButtonDown": "DPAD_DOWN",
+        "P1ButtonUp": "DPAD_UP",
+        "ExtensionOne1": "ACTION_NORTH",
+        "ExtensionOne2": "ACTION_SOUTH",
+        "Analog0": "STEER_AXIS",
+        "Analog2": "RT",
+        "Analog4": "LT"
       }
     },
-    "DOA5": {
-      "category": "fighter",
+    "doa5": {
+      "category": "other",
       "buttons": {
-        "P1 Button 1": "ACTION_SOUTH",
-        "P1 Button 2": "ACTION_EAST",
-        "P1 Button 3": "ACTION_WEST",
-        "P1 Button 4": "ACTION_NORTH",
-        "P1 Button 5": "LB",
-        "P1 Button 6": "RB",
-        "Player 1 Up": "DPAD_UP",
-        "Player 1 Down": "DPAD_DOWN",
-        "Player 1 Left": "DPAD_LEFT",
-        "Player 1 Right": "DPAD_RIGHT",
-        "Player 1 Start": "START_1",
-        "Coin 1": "COIN_1"
+        "Test": "L3",
+        "Service1": "R3",
+        "Coin1": "COIN_1",
+        "P1ButtonStart": "START_1",
+        "P1Button1": "ACTION_WEST",
+        "P1Button2": "ACTION_NORTH",
+        "P1Button4": "ACTION_EAST",
+        "P1ButtonDown": "DPAD_DOWN",
+        "P1ButtonLeft": "DPAD_LEFT",
+        "P1ButtonRight": "DPAD_RIGHT",
+        "P1ButtonUp": "DPAD_UP",
+        "Coin2": "COIN_1",
+        "P2ButtonStart": "START_1",
+        "P2Button1": "ACTION_WEST",
+        "P2Button2": "ACTION_NORTH",
+        "P2Button4": "ACTION_EAST",
+        "P2ButtonDown": "DPAD_DOWN",
+        "P2ButtonLeft": "DPAD_LEFT",
+        "P2ButtonRight": "DPAD_RIGHT",
+        "P2ButtonUp": "DPAD_UP"
       }
     },
-    "DOA6": {
-      "category": "fighter",
+    "doa6": {
+      "category": "other",
       "buttons": {
-        "P1 Button 1": "ACTION_SOUTH",
-        "P1 Button 2": "ACTION_EAST",
-        "P1 Button 3": "ACTION_WEST",
-        "P1 Button 4": "ACTION_NORTH",
-        "P1 Button 5": "LB",
-        "P1 Button 6": "RB",
-        "Player 1 Start": "START_1",
-        "Coin 1": "COIN_1"
+        "Test": "L3",
+        "Service1": "R3",
+        "P1ButtonStart": "START_1",
+        "P1Button1": "ACTION_WEST",
+        "P1Button2": "ACTION_NORTH",
+        "P1Button3": "ACTION_SOUTH",
+        "P1Button4": "ACTION_EAST",
+        "P1Button5": "RB",
+        "P1Button6": "LB",
+        "P1ButtonDown": "DPAD_DOWN",
+        "P1ButtonLeft": "DPAD_LEFT",
+        "P1ButtonRight": "DPAD_RIGHT",
+        "P1ButtonUp": "DPAD_UP"
       }
     },
-    "Tekken7FR": {
-      "category": "fighter",
+    "tekken7fr": {
+      "category": "other",
       "buttons": {
-        "P1 Button 1": "ACTION_WEST",
-        "P1 Button 2": "ACTION_NORTH",
-        "P1 Button 3": "ACTION_SOUTH",
-        "P1 Button 4": "ACTION_EAST",
-        "Player 1 Start": "START_1",
-        "Coin 1": "COIN_1"
+        "Test": "L3",
+        "Service1": "R3",
+        "Coin1": "COIN_1",
+        "P1ButtonStart": "START_1",
+        "P1Button1": "ACTION_WEST",
+        "P1Button2": "ACTION_NORTH",
+        "P1Button4": "ACTION_SOUTH",
+        "P1Button5": "ACTION_EAST",
+        "P1ButtonDown": "DPAD_DOWN",
+        "P1ButtonLeft": "DPAD_LEFT",
+        "P1ButtonRight": "DPAD_RIGHT",
+        "P1ButtonUp": "DPAD_UP"
       }
     },
-    "UltraStreetFighterIV": {
-      "category": "fighter",
+    "ultrastreetfighteriv": {
+      "category": "other",
       "buttons": {
-        "P1 Button 1": "ACTION_WEST",
-        "P1 Button 2": "ACTION_NORTH",
-        "P1 Button 3": "RB",
-        "P1 Button 4": "ACTION_SOUTH",
-        "P1 Button 5": "ACTION_EAST",
-        "P1 Button 6": "RT",
-        "Player 1 Start": "START_1",
-        "Coin 1": "COIN_1"
+        "Test": "L3",
+        "Service1": "R3",
+        "Coin1": "COIN_1",
+        "P1ButtonStart": "START_1",
+        "P1Button1": "ACTION_WEST",
+        "P1Button2": "ACTION_NORTH",
+        "P1Button3": "ACTION_SOUTH",
+        "P1Button4": "ACTION_EAST",
+        "P1Button5": "RB",
+        "P1Button6": "LB",
+        "P1ButtonDown": "DPAD_DOWN",
+        "P1ButtonLeft": "DPAD_LEFT",
+        "P1ButtonRight": "DPAD_RIGHT",
+        "P1ButtonUp": "DPAD_UP",
+        "Coin2": "COIN_1",
+        "P2ButtonStart": "START_1",
+        "P2Button1": "ACTION_WEST",
+        "P2Button2": "ACTION_NORTH",
+        "P2Button3": "ACTION_SOUTH",
+        "P2Button4": "ACTION_EAST",
+        "P2Button5": "RB",
+        "P2Button6": "LB",
+        "P2ButtonDown": "DPAD_DOWN",
+        "P2ButtonLeft": "DPAD_LEFT",
+        "P2ButtonRight": "DPAD_RIGHT",
+        "P2ButtonUp": "DPAD_UP"
       }
     },
-    "HOTD4": {
+    "hotd4": {
       "category": "lightgun",
       "buttons": {
-        "P1 Trigger": "ACCELERATE",
-        "P1 Reload": "BRAKE",
-        "P1 Special": "ACTION_WEST",
-        "P1 Start": "START_1",
-        "Coin 1": "COIN_1"
-      }
+        "Test": "KB_0",
+        "Service1": "KB_9",
+        "Coin1": "KB_5",
+        "P1ButtonStart": "KB_1",
+        "Coin2": "KB_6",
+        "P2ButtonStart": "KB_2",
+        "p1button1": "mouseleft_1",
+        "p2button1": "mouseleft_2",
+        "p1button3": "mousemiddle_1",
+        "p2button3": "mousemiddle_2",
+        "p1button2": "mouseright_1",
+        "p2button2": "mouseright_2"
+      },
+      "inputMode": "lightgun"
     },
     "AliensArmageddon": {
       "category": "lightgun",
+      "inputMode": "lightgun",
+      "deviceFields": {
+        "p1": "P1 Light Gun",
+        "p2": "P2 Light Gun"
+      },
       "buttons": {
-        "Gun 1 Trigger": "ACCELERATE",
-        "Gun 1 Reload": "BRAKE",
-        "Gun 1 Special": "ACTION_WEST",
-        "P1 Start": "START_1",
-        "Coin 1": "COIN_1"
+        "Test": "KB_0",
+        "Service1": "KB_9",
+        "Coin1": "KB_5",
+        "P1ButtonStart": "KB_1",
+        "Coin2": "KB_6",
+        "P2ButtonStart": "KB_2",
+        "P1Button1": "mouseleft_1",
+        "P1Button2": "mouseright_1",
+        "P1Button3": "mousemiddle_1",
+        "P2Button1": "mouseleft_2",
+        "P2Button2": "mouseright_2",
+        "P2Button3": "mousemiddle_2"
       }
     },
     "actiondeka": {
@@ -623,32 +687,7 @@
       }
     },
     "gashaaaan": {
-      "category": "other",
-      "buttons": {
-        "Test": "L3",
-        "Service1": "R3",
-        "Coin1": "COIN_1",
-        "P1ButtonStart": "START_1",
-        "P1Button1": "RT",
-        "Coin2": "COIN_1",
-        "P2ButtonStart": "START_1",
-        "P2Button1": "RT",
-        "JvsTwoP1ButtonStart": "START_1",
-        "JvsTwoP1Button1": "RT",
-        "JvsTwoP2ButtonStart": "START_1",
-        "JvsTwoP2Button1": "RT",
-        "Analog0": "rightstickleft",
-        "Analog2": "rightstickup",
-        "Analog4": "rightstickleft",
-        "Analog6": "rightstickup",
-        "Analog8": "rightstickleft",
-        "Analog10": "rightstickup",
-        "Analog12": "rightstickleft",
-        "Analog14": "rightstickup"
-      }
-    },
-    "gashaaaan_gun": {
-      "category": "other",
+      "category": "lightgun",
       "buttons": {
         "Test": "KB_0",
         "Service1": "KB_9",
@@ -658,37 +697,15 @@
         "P2ButtonStart": "KB_2",
         "JvsTwoP1ButtonStart": "KB_3",
         "JvsTwoP2ButtonStart": "KB_4",
-        "mouseleft_1": "p1button1",
-        "mouseleft_2": "p2button1",
-        "mouseleft_3": "jvstwop1button1",
-        "mouseleft_4": "jvstwop2button1"
-      }
+        "p1button1": "mouseleft_1",
+        "p2button1": "mouseleft_2",
+        "jvstwop1button1": "mouseleft_3",
+        "jvstwop2button1": "mouseleft_4"
+      },
+      "inputMode": "lightgun"
     },
     "gashaaaan2": {
-      "category": "other",
-      "buttons": {
-        "Test": "L3",
-        "Service1": "R3",
-        "Coin1": "COIN_1",
-        "P1ButtonStart": "START_1",
-        "P1Button1": "ACTION_SOUTH",
-        "P1Button3": "ACTION_WEST",
-        "P2ButtonStart": "START_1",
-        "P2Button1": "ACTION_SOUTH",
-        "JvsTwoP1ButtonStart": "START_1",
-        "JvsTwoP1Button1": "ACTION_SOUTH",
-        "JvsTwoP2ButtonStart": "START_1",
-        "JvsTwoP2Button1": "ACTION_SOUTH",
-        "Analog0": "STEER_AXIS",
-        "Analog10": "rightstickup",
-        "Analog2": "ACCELERATE",
-        "Analog4": "rightstickleft",
-        "Analog6": "rightstickup",
-        "Analog8": "rightstickleft"
-      }
-    },
-    "gashaaaan2_gun": {
-      "category": "other",
+      "category": "lightgun",
       "buttons": {
         "Test": "KB_0",
         "Service1": "KB_9",
@@ -698,11 +715,12 @@
         "P2ButtonStart": "KB_2",
         "JvsTwoP1ButtonStart": "KB_3",
         "JvsTwoP2ButtonStart": "KB_4",
-        "mouseleft_1": "p1button1",
-        "mouseleft_2": "p2button1",
-        "mouseleft_3": "jvstwop1button1",
-        "mouseleft_4": "jvstwop2button1"
-      }
+        "p1button1": "mouseleft_1",
+        "p2button1": "mouseleft_2",
+        "jvstwop1button1": "mouseleft_3",
+        "jvstwop2button1": "mouseleft_4"
+      },
+      "inputMode": "lightgun"
     },
     "tippinbloks": {
       "category": "other",
@@ -777,37 +795,18 @@
       }
     },
     "hotd3": {
-      "category": "other",
+      "category": "lightgun",
       "buttons": {
         "Test": "L3",
         "Service1": "R3",
         "Coin1": "COIN_1",
         "P1ButtonStart": "START_1",
-        "P1Button1": "RT",
-        "P1Button3": "LT",
-        "Analog0": "rightstickleft",
-        "Analog2": "rightstickup",
+        "p1button1": "mouseleft_1",
+        "p1button3": "mouseright_1",
         "Coin2": "COIN_1",
         "P2ButtonStart": "START_1",
-        "P2Button1": "RT",
-        "P2Button3": "LT",
-        "Analog4": "rightstickleft",
-        "Analog6": "rightstickup"
-      }
-    },
-    "hotd3_gun": {
-      "category": "other",
-      "buttons": {
-        "Test": "L3",
-        "Service1": "R3",
-        "Coin1": "COIN_1",
-        "P1ButtonStart": "START_1",
-        "mouseleft_1": "p1button1",
-        "mouseright_1": "p1button3",
-        "Coin2": "COIN_1",
-        "P2ButtonStart": "START_1",
-        "mouseleft_2": "p2button1",
-        "mouseright_2": "p2button3",
+        "p2button1": "mouseleft_2",
+        "p2button3": "mouseright_2",
         "P1Button1": "RT",
         "P1Button2": "LT",
         "P1Button3": "ACTION_SOUTH",
@@ -820,26 +819,28 @@
         "P2Button4": "ACTION_WEST",
         "Analog4": "rightstickleft",
         "Analog6": "rightstickup"
-      }
+      },
+      "inputMode": "lightgun"
     },
-    "vc3_gun": {
-      "category": "other",
+    "vc3": {
+      "category": "lightgun",
       "buttons": {
         "Test": "KB_T",
         "Service1": "KB_S",
         "Coin1": "KB_5",
         "P1ButtonStart": "KB_1",
-        "mouseleft_1": "p1button1",
-        "mouseright_1": "p1button2",
-        "mousemiddle_1": "p1button3",
+        "p1button1": "mouseleft_1",
+        "p1button2": "mouseright_1",
+        "p1button3": "mousemiddle_1",
         "P1Button4": "DPAD_LEFT",
         "Coin2": "KB_6",
         "P2ButtonStart": "KB_2",
-        "mouseleft_2": "p2button1",
-        "mouseright_2": "p2button2",
-        "mousemiddle_2": "p2button3",
+        "p2button1": "mouseleft_2",
+        "p2button2": "mouseright_2",
+        "p2button3": "mousemiddle_2",
         "P2Button4": "DPAD_LEFT"
-      }
+      },
+      "inputMode": "lightgun"
     },
     "wmmt1": {
       "category": "other",
@@ -1565,49 +1566,6 @@
         "P2ButtonLeft": "DPAD_LEFT",
         "P2ButtonRight": "DPAD_RIGHT",
         "P2ButtonUp": "DPAD_UP"
-      }
-    },
-    "doa5": {
-      "category": "other",
-      "buttons": {
-        "Test": "L3",
-        "Service1": "R3",
-        "Coin1": "COIN_1",
-        "P1ButtonStart": "START_1",
-        "P1Button1": "ACTION_WEST",
-        "P1Button2": "ACTION_NORTH",
-        "P1Button4": "ACTION_EAST",
-        "P1ButtonDown": "DPAD_DOWN",
-        "P1ButtonLeft": "DPAD_LEFT",
-        "P1ButtonRight": "DPAD_RIGHT",
-        "P1ButtonUp": "DPAD_UP",
-        "Coin2": "COIN_1",
-        "P2ButtonStart": "START_1",
-        "P2Button1": "ACTION_WEST",
-        "P2Button2": "ACTION_NORTH",
-        "P2Button4": "ACTION_EAST",
-        "P2ButtonDown": "DPAD_DOWN",
-        "P2ButtonLeft": "DPAD_LEFT",
-        "P2ButtonRight": "DPAD_RIGHT",
-        "P2ButtonUp": "DPAD_UP"
-      }
-    },
-    "doa6": {
-      "category": "other",
-      "buttons": {
-        "Test": "L3",
-        "Service1": "R3",
-        "P1ButtonStart": "START_1",
-        "P1Button1": "ACTION_WEST",
-        "P1Button2": "ACTION_NORTH",
-        "P1Button3": "ACTION_SOUTH",
-        "P1Button4": "ACTION_EAST",
-        "P1Button5": "RB",
-        "P1Button6": "LB",
-        "P1ButtonDown": "DPAD_DOWN",
-        "P1ButtonLeft": "DPAD_LEFT",
-        "P1ButtonRight": "DPAD_RIGHT",
-        "P1ButtonUp": "DPAD_UP"
       }
     },
     "eneinsperfektewelt": {
@@ -3058,23 +3016,6 @@
         "P1ButtonUp": "DPAD_UP"
       }
     },
-    "tekken7fr": {
-      "category": "other",
-      "buttons": {
-        "Test": "L3",
-        "Service1": "R3",
-        "Coin1": "COIN_1",
-        "P1ButtonStart": "START_1",
-        "P1Button1": "ACTION_WEST",
-        "P1Button2": "ACTION_NORTH",
-        "P1Button4": "ACTION_SOUTH",
-        "P1Button5": "ACTION_EAST",
-        "P1ButtonDown": "DPAD_DOWN",
-        "P1ButtonLeft": "DPAD_LEFT",
-        "P1ButtonRight": "DPAD_RIGHT",
-        "P1ButtonUp": "DPAD_UP"
-      }
-    },
     "tekken7r2": {
       "category": "other",
       "buttons": {
@@ -3090,37 +3031,6 @@
         "P1ButtonLeft": "DPAD_LEFT",
         "P1ButtonRight": "DPAD_RIGHT",
         "P1ButtonUp": "DPAD_UP"
-      }
-    },
-    "ultrastreetfighteriv": {
-      "category": "other",
-      "buttons": {
-        "Test": "L3",
-        "Service1": "R3",
-        "Coin1": "COIN_1",
-        "P1ButtonStart": "START_1",
-        "P1Button1": "ACTION_WEST",
-        "P1Button2": "ACTION_NORTH",
-        "P1Button3": "ACTION_SOUTH",
-        "P1Button4": "ACTION_EAST",
-        "P1Button5": "RB",
-        "P1Button6": "LB",
-        "P1ButtonDown": "DPAD_DOWN",
-        "P1ButtonLeft": "DPAD_LEFT",
-        "P1ButtonRight": "DPAD_RIGHT",
-        "P1ButtonUp": "DPAD_UP",
-        "Coin2": "COIN_1",
-        "P2ButtonStart": "START_1",
-        "P2Button1": "ACTION_WEST",
-        "P2Button2": "ACTION_NORTH",
-        "P2Button3": "ACTION_SOUTH",
-        "P2Button4": "ACTION_EAST",
-        "P2Button5": "RB",
-        "P2Button6": "LB",
-        "P2ButtonDown": "DPAD_DOWN",
-        "P2ButtonLeft": "DPAD_LEFT",
-        "P2ButtonRight": "DPAD_RIGHT",
-        "P2ButtonUp": "DPAD_UP"
       }
     },
     "undernightapm3": {
@@ -3744,28 +3654,7 @@
       }
     },
     "akb48": {
-      "category": "other",
-      "buttons": {
-        "Test": "L3",
-        "Coin1": "COIN_1",
-        "P1ButtonUp": "ACTION_SOUTH",
-        "ExtensionOne11": "DPAD_DOWN",
-        "ExtensionOne12": "DPAD_UP",
-        "ExtensionOne13": "R3",
-        "ExtensionOne17": "START_1",
-        "ExtensionOne18": "RT",
-        "ExtensionOne2": "LT",
-        "ExtensionOne21": "LT",
-        "ExtensionOne3": "START_1",
-        "ExtensionOne4": "RT",
-        "Analog0": "rightstickleft",
-        "Analog2": "rightstickup",
-        "Analog4": "rightstickleft",
-        "Analog6": "rightstickup"
-      }
-    },
-    "akb48_gun": {
-      "category": "other",
+      "category": "lightgun",
       "buttons": {
         "Test": "KB_0",
         "Coin1": "KB_5",
@@ -3775,36 +3664,15 @@
         "ExtensionOne13": "KB_9",
         "ExtensionOne17": "KB_2",
         "ExtensionOne3": "KB_1",
-        "mouseleft_1": "extensionone21",
-        "mouseleft_2": "extensionone2",
-        "mouseright_1": "extensionone4",
-        "mouseright_2": "extensionone18"
-      }
+        "extensionone21": "mouseleft_1",
+        "extensionone2": "mouseleft_2",
+        "extensionone4": "mouseright_1",
+        "extensionone18": "mouseright_2"
+      },
+      "inputMode": "lightgun"
     },
     "darkescape4d": {
-      "category": "other",
-      "buttons": {
-        "Test": "L3",
-        "Coin1": "COIN_1",
-        "P1ButtonUp": "ACTION_SOUTH",
-        "ExtensionOne11": "DPAD_DOWN",
-        "ExtensionOne12": "DPAD_UP",
-        "ExtensionOne13": "R3",
-        "ExtensionOne16": "ACTION_NORTH",
-        "ExtensionOne17": "START_1",
-        "ExtensionOne18": "RT",
-        "ExtensionOne2": "LT",
-        "ExtensionOne21": "LT",
-        "ExtensionOne3": "START_1",
-        "ExtensionOne4": "RT",
-        "Analog0": "rightstickleft",
-        "Analog2": "rightstickup",
-        "Analog4": "rightstickleft",
-        "Analog6": "rightstickup"
-      }
-    },
-    "darkescape4d_gun": {
-      "category": "other",
+      "category": "lightgun",
       "buttons": {
         "Test": "KB_0",
         "Coin1": "KB_5",
@@ -3814,12 +3682,13 @@
         "ExtensionOne13": "KB_9",
         "ExtensionOne17": "KB_2",
         "ExtensionOne3": "KB_1",
-        "mouseleft_1": "extensionone21",
-        "mouseleft_2": "extensionone2",
-        "mousemiddle_1": "extensionone16",
-        "mouseright_1": "extensionone4",
-        "mouseright_2": "extensionone18"
-      }
+        "extensionone21": "mouseleft_1",
+        "extensionone2": "mouseleft_2",
+        "extensionone16": "mousemiddle_1",
+        "extensionone4": "mouseright_1",
+        "extensionone18": "mouseright_2"
+      },
+      "inputMode": "lightgun"
     },
     "dbzenkai": {
       "category": "other",
@@ -3840,31 +3709,7 @@
       }
     },
     "dsps": {
-      "category": "other",
-      "buttons": {
-        "Test": "L3",
-        "Coin1": "COIN_1",
-        "P1ButtonUp": "ACTION_SOUTH",
-        "ExtensionOne11": "DPAD_DOWN",
-        "ExtensionOne12": "DPAD_UP",
-        "ExtensionOne13": "R3",
-        "ExtensionOne17": "START_1",
-        "ExtensionOne18": "RT",
-        "ExtensionOne2": "LT",
-        "ExtensionOne21": "LT",
-        "ExtensionOne3": "START_1",
-        "ExtensionOne4": "RT",
-        "Analog0": "rightstickleft",
-        "Analog2": "rightstickup",
-        "Analog4": "rightstickleft",
-        "Analog6": "rightstickup",
-        "Rotary1": "STEER_AXIS",
-        "Rotary1Left": "DPAD_LEFT",
-        "Rotary1Right": "DPAD_RIGHT"
-      }
-    },
-    "dsps_gun": {
-      "category": "other",
+      "category": "lightgun",
       "buttons": {
         "Test": "KB_0",
         "Coin1": "KB_5",
@@ -3874,37 +3719,17 @@
         "ExtensionOne13": "KB_9",
         "ExtensionOne17": "KB_2",
         "ExtensionOne3": "KB_1",
-        "mouseleft_1": "extensionone21",
-        "mouseleft_2": "extensionone2",
-        "mouseright_1": "extensionone4",
-        "mouseright_2": "extensionone18",
+        "extensionone21": "mouseleft_1",
+        "extensionone2": "mouseleft_2",
+        "extensionone4": "mouseright_1",
+        "extensionone18": "mouseright_2",
         "Rotary1Left": "KB_LEFT",
         "Rotary1Right": "KB_RIGHT"
-      }
+      },
+      "inputMode": "lightgun"
     },
     "razingstorm": {
-      "category": "other",
-      "buttons": {
-        "Test": "L3",
-        "Coin1": "COIN_1",
-        "P1ButtonUp": "ACTION_SOUTH",
-        "ExtensionOne11": "DPAD_DOWN",
-        "ExtensionOne12": "DPAD_UP",
-        "ExtensionOne13": "R3",
-        "ExtensionOne17": "LT",
-        "ExtensionOne18": "LT",
-        "ExtensionOne2": "RT",
-        "ExtensionOne21": "START_1",
-        "ExtensionOne3": "RT",
-        "ExtensionOne4": "START_1",
-        "Analog0": "rightstickleft",
-        "Analog2": "rightstickup",
-        "Analog4": "rightstickleft",
-        "Analog6": "rightstickup"
-      }
-    },
-    "razingstorm_gun": {
-      "category": "other",
+      "category": "lightgun",
       "buttons": {
         "Test": "KB_0",
         "Coin1": "KB_5",
@@ -3914,11 +3739,12 @@
         "ExtensionOne13": "KB_9",
         "ExtensionOne21": "KB_1",
         "ExtensionOne4": "KB_2",
-        "mouseleft_1": "extensionone3",
-        "mouseleft_2": "extensionone2",
-        "mouseright_1": "extensionone17",
-        "mouseright_2": "extensionone18"
-      }
+        "extensionone3": "mouseleft_1",
+        "extensionone2": "mouseleft_2",
+        "extensionone17": "mouseright_1",
+        "extensionone18": "mouseright_2"
+      },
+      "inputMode": "lightgun"
     },
     "taikogreen": {
       "category": "other",
@@ -4258,58 +4084,30 @@
       }
     },
     "cobrata": {
-      "category": "other",
-      "buttons": {
-        "Test": "L3",
-        "Service1": "R3",
-        "Coin1": "COIN_1",
-        "P1Button1": "ACTION_SOUTH",
-        "P1Button3": "leftttrigger",
-        "P1ButtonDown": "DPAD_DOWN",
-        "P1ButtonLeft": "RT",
-        "P1ButtonUp": "DPAD_UP",
-        "Analog0": "rightstickleft",
-        "Analog2": "rightstickup"
-      }
-    },
-    "cobrata_gun": {
-      "category": "other",
+      "category": "lightgun",
       "buttons": {
         "Test": "KB_0",
         "Service1": "KB_9",
         "Coin1": "KB_5",
         "P1ButtonStart": "KB_1",
-        "mouseleft_1": "p1button1",
-        "mousemiddle_1": "p1button3",
-        "mouseright_1": "p1button2"
-      }
+        "p1button1": "mouseleft_1",
+        "p1button3": "mousemiddle_1",
+        "p1button2": "mouseright_1"
+      },
+      "inputMode": "lightgun"
     },
     "cobrataw": {
-      "category": "other",
-      "buttons": {
-        "Test": "L3",
-        "Service1": "R3",
-        "Coin1": "COIN_1",
-        "P1Button1": "ACTION_SOUTH",
-        "P1Button3": "ACTION_WEST",
-        "P1ButtonDown": "DPAD_DOWN",
-        "P1ButtonLeft": "DPAD_LEFT",
-        "P1ButtonUp": "DPAD_UP",
-        "Analog0": "STEER_AXIS",
-        "Analog2": "ACCELERATE"
-      }
-    },
-    "cobrataw_gun": {
-      "category": "other",
+      "category": "lightgun",
       "buttons": {
         "Test": "KB_0",
         "Service1": "KB_9",
         "Coin1": "KB_5",
         "P1ButtonStart": "KB_1",
-        "mouseleft_1": "p1button1",
-        "mousemiddle_1": "p1button3",
-        "mouseright_1": "p1button2"
-      }
+        "p1button1": "mouseleft_1",
+        "p1button3": "mousemiddle_1",
+        "p1button2": "mouseright_1"
+      },
+      "inputMode": "lightgun"
     },
     "fateulc": {
       "category": "other",
@@ -4590,22 +4388,7 @@
       }
     },
     "timecrs3": {
-      "category": "other",
-      "buttons": {
-        "Test": "L3",
-        "Service1": "R3",
-        "Coin1": "COIN_1",
-        "P1Button1": "ACTION_SOUTH",
-        "P1Button2": "RT",
-        "P1Button3": "ACTION_WEST",
-        "P1ButtonDown": "DPAD_DOWN",
-        "P1ButtonUp": "DPAD_UP",
-        "Analog0": "rightstickleft",
-        "Analog2": "rightstickup"
-      }
-    },
-    "timecrs3_gun": {
-      "category": "other",
+      "category": "lightgun",
       "buttons": {
         "Test": "KB_0",
         "Service1": "KB_9",
@@ -4614,28 +4397,14 @@
         "P1Button1": "KB_ENTER",
         "P1ButtonDown": "KB_DOWN",
         "P1ButtonUp": "KB_UP",
-        "mouseleft_1": "p1button2",
-        "mousemiddle_1": "p1button1",
-        "mouseright_1": "p1button3"
-      }
+        "p1button2": "mouseleft_1",
+        "p1button1": "mousemiddle_1",
+        "p1button3": "mouseright_1"
+      },
+      "inputMode": "lightgun"
     },
     "timecrs4": {
-      "category": "other",
-      "buttons": {
-        "Test": "L3",
-        "Service1": "R3",
-        "Coin1": "COIN_1",
-        "P1Button1": "ACTION_SOUTH",
-        "P1Button3": "ACTION_WEST",
-        "P1ButtonDown": "DPAD_DOWN",
-        "P1ButtonLeft": "RT",
-        "P1ButtonUp": "DPAD_UP",
-        "Analog0": "rightstickleft",
-        "Analog2": "rightstickup"
-      }
-    },
-    "timecrs4_gun": {
-      "category": "other",
+      "category": "lightgun",
       "buttons": {
         "Test": "KB_0",
         "Service1": "KB_9",
@@ -4644,33 +4413,14 @@
         "P1Button1": "KB_ENTER",
         "P1ButtonDown": "KB_DOWN",
         "P1ButtonUp": "KB_UP",
-        "mouseleft_1": "p1buttonleft",
-        "mousemiddle_1": "p1button1",
-        "mouseright_1": "p1button3"
-      }
+        "p1buttonleft": "mouseleft_1",
+        "p1button1": "mousemiddle_1",
+        "p1button3": "mouseright_1"
+      },
+      "inputMode": "lightgun"
     },
     "vnight": {
-      "category": "other",
-      "buttons": {
-        "Test": "L3",
-        "Service1": "R3",
-        "Coin1": "COIN_1",
-        "P1Button1": "ACTION_SOUTH",
-        "P1Button2": "RT",
-        "P1Button3": "START_1",
-        "P1Button5": "RT",
-        "P1Button6": "START_1",
-        "P1ButtonDown": "DPAD_DOWN",
-        "P1ButtonUp": "DPAD_UP",
-        "Coin2": "COIN_1",
-        "Analog0": "rightstickleft",
-        "Analog2": "rightstickup",
-        "Analog4": "rightstickleft",
-        "Analog6": "rightstickup"
-      }
-    },
-    "vnight_gun": {
-      "category": "other",
+      "category": "lightgun",
       "buttons": {
         "Test": "KB_0",
         "Service1": "KB_9",
@@ -4678,10 +4428,11 @@
         "P1Button3": "KB_1",
         "P1Button6": "KB_2",
         "Coin2": "KB_6",
-        "mouseleft_1": "p1button2",
-        "mouseleft_2": "p1button5",
-        "mouseright_1": "p1button1"
-      }
+        "p1button2": "mouseleft_1",
+        "p1button5": "mouseleft_2",
+        "p1button1": "mouseright_1"
+      },
+      "inputMode": "lightgun"
     },
     "wanganmd": {
       "category": "other",
@@ -5301,22 +5052,6 @@
         "P1Button3": "ACTION_WEST",
         "P1ButtonDown": "DPAD_DOWN",
         "P1ButtonUp": "DPAD_UP",
-        "Analog0": "STEER_AXIS",
-        "Analog2": "RT",
-        "Analog4": "LT"
-      }
-    },
-    "daytona3": {
-      "category": "other",
-      "buttons": {
-        "Coin1": "COIN_1",
-        "P1ButtonStart": "START_1",
-        "P1Button5": "rightstickup",
-        "P1Button6": "rightstickdown",
-        "P2Button1": "ACTION_SOUTH",
-        "P2Button2": "ACTION_EAST",
-        "P2Button3": "ACTION_WEST",
-        "P2Button4": "ACTION_NORTH",
         "Analog0": "STEER_AXIS",
         "Analog2": "RT",
         "Analog4": "LT"
@@ -6013,24 +5748,6 @@
         "Analog4": "LT"
       }
     },
-    "mkdx": {
-      "category": "other",
-      "buttons": {
-        "Test": "L3",
-        "Service1": "R3",
-        "Coin1": "COIN_1",
-        "P1ButtonStart": "START_1",
-        "P1Button1": "ACTION_SOUTH",
-        "P1Button2": "ACTION_EAST",
-        "P1Button5": "RB",
-        "P1ButtonDown": "DPAD_DOWN",
-        "P1ButtonUp": "DPAD_UP",
-        "ExtensionOne2": "ACTION_NORTH",
-        "Analog0": "STEER_AXIS",
-        "Analog2": "RT",
-        "Analog4": "LT"
-      }
-    },
     "mkdx118": {
       "category": "other",
       "buttons": {
@@ -6602,22 +6319,6 @@
         "Test": "L3",
         "Service1": "R3",
         "Coin1": "COIN_1",
-        "ExtensionOne1": "ACTION_NORTH",
-        "ExtensionOne2": "ACTION_SOUTH",
-        "Analog0": "STEER_AXIS",
-        "Analog2": "RT",
-        "Analog4": "LT"
-      }
-    },
-    "wmmt5": {
-      "category": "other",
-      "buttons": {
-        "Test": "L3",
-        "Service1": "R3",
-        "Coin1": "COIN_1",
-        "P1Button1": "ACTION_SOUTH",
-        "P1ButtonDown": "DPAD_DOWN",
-        "P1ButtonUp": "DPAD_UP",
         "ExtensionOne1": "ACTION_NORTH",
         "ExtensionOne2": "ACTION_SOUTH",
         "Analog0": "STEER_AXIS",
@@ -7874,23 +7575,7 @@
       }
     },
     "2spicy": {
-      "category": "other",
-      "buttons": {
-        "Test": "L3",
-        "Service1": "R3",
-        "Coin1": "COIN_1",
-        "P1ButtonStart": "START_1",
-        "P1Button1": "RT",
-        "P1Button2": "LT",
-        "P1ButtonLeft": "DPAD_LEFT",
-        "P1ButtonRight": "DPAD_RIGHT",
-        "Coin2": "COIN_1",
-        "Analog0": "rightstickleft",
-        "Analog2": "rightstickup"
-      }
-    },
-    "2spicy_gun": {
-      "category": "other",
+      "category": "lightgun",
       "buttons": {
         "Test": "KB_0",
         "Service1": "KB_9",
@@ -7899,29 +7584,14 @@
         "P1ButtonLeft": "KB_LEFT",
         "P1ButtonRight": "KB_RIGHT",
         "Coin2": "KB_6",
-        "mouseleft_1": "p1button1",
-        "mousemiddle_1": "p1button3",
-        "mouseright_1": "p1button2"
-      }
+        "p1button1": "mouseleft_1",
+        "p1button3": "mousemiddle_1",
+        "p1button2": "mouseright_1"
+      },
+      "inputMode": "lightgun"
     },
     "2spicyelf2": {
-      "category": "other",
-      "buttons": {
-        "Test": "L3",
-        "Service1": "R3",
-        "Coin1": "COIN_1",
-        "P1ButtonStart": "START_1",
-        "P1Button1": "RT",
-        "P1Button2": "LT",
-        "P1ButtonLeft": "DPAD_LEFT",
-        "P1ButtonRight": "DPAD_RIGHT",
-        "Coin2": "COIN_1",
-        "Analog0": "rightstickleft",
-        "Analog2": "rightstickup"
-      }
-    },
-    "2spicyelf2_gun": {
-      "category": "other",
+      "category": "lightgun",
       "buttons": {
         "Test": "KB_0",
         "Service1": "KB_9",
@@ -7930,27 +7600,14 @@
         "P1ButtonLeft": "KB_LEFT",
         "P1ButtonRight": "KB_RIGHT",
         "Coin2": "KB_6",
-        "mouseleft_1": "p1button1",
-        "mousemiddle_1": "p1button3",
-        "mouseright_1": "p1button2"
-      }
+        "p1button1": "mouseleft_1",
+        "p1button3": "mousemiddle_1",
+        "p1button2": "mouseright_1"
+      },
+      "inputMode": "lightgun"
     },
     "aaa": {
-      "category": "other",
-      "buttons": {
-        "Coin1": "COIN_1",
-        "P1ButtonStart": "START_1",
-        "P1Button1": "RT",
-        "P2ButtonStart": "START_1",
-        "P2Button1": "RT",
-        "Analog0": "rightstickleft",
-        "Analog2": "rightstickup",
-        "Analog4": "rightstickleft",
-        "Analog6": "rightstickup"
-      }
-    },
-    "aaa_gun": {
-      "category": "other",
+      "category": "lightgun",
       "buttons": {
         "Test": "KB_0",
         "Service1": "KB_9",
@@ -7958,37 +7615,17 @@
         "P1ButtonStart": "KB_1",
         "Coin2": "KB_6",
         "P2ButtonStart": "KB_2",
-        "mouseleft_1": "p1button1",
-        "mouseleft_2": "p2button1",
-        "mousemiddle_1": "p1button3",
-        "mousemiddle_2": "p2button3",
-        "mouseright_1": "p1button2",
-        "mouseright_2": "p2button2"
-      }
+        "p1button1": "mouseleft_1",
+        "p2button1": "mouseleft_2",
+        "p1button3": "mousemiddle_1",
+        "p2button3": "mousemiddle_2",
+        "p1button2": "mouseright_1",
+        "p2button2": "mouseright_2"
+      },
+      "inputMode": "lightgun"
     },
     "afterdark": {
-      "category": "other",
-      "buttons": {
-        "Test": "L3",
-        "Service1": "R3",
-        "Coin1": "COIN_1",
-        "P1ButtonStart": "START_1",
-        "P1Button1": "RT",
-        "P1Button2": "DPAD_UP",
-        "P1Button3": "DPAD_DOWN",
-        "P1Button5": "LB",
-        "P1Button6": "RB",
-        "Coin2": "COIN_1",
-        "P2ButtonStart": "START_1",
-        "P2Button1": "RT",
-        "Analog0": "rightstickleft",
-        "Analog2": "rightstickup",
-        "Analog4": "rightstickleft",
-        "Analog6": "rightstickup"
-      }
-    },
-    "afterdark_gun": {
-      "category": "other",
+      "category": "lightgun",
       "buttons": {
         "Test": "KB_0",
         "Service1": "KB_9",
@@ -7998,39 +7635,17 @@
         "P1Button6": "KB_RIGHT",
         "Coin2": "KB_6",
         "P2ButtonStart": "KB_2",
-        "mouseleft_1": "p1button1",
-        "mouseleft_2": "p2button1",
-        "mousemiddle_1": "p1button3",
-        "mousemiddle_2": "p2button3",
-        "mouseright_1": "p1button2",
-        "mouseright_2": "p2button2"
-      }
+        "p1button1": "mouseleft_1",
+        "p2button1": "mouseleft_2",
+        "p1button3": "mousemiddle_1",
+        "p2button3": "mousemiddle_2",
+        "p1button2": "mouseright_1",
+        "p2button2": "mouseright_2"
+      },
+      "inputMode": "lightgun"
     },
     "afterdark2": {
-      "category": "other",
-      "buttons": {
-        "Test": "L3",
-        "Service1": "R3",
-        "Coin1": "COIN_1",
-        "P1ButtonStart": "START_1",
-        "P1Button1": "RT",
-        "P1Button2": "ACTION_EAST",
-        "P1Button3": "ACTION_WEST",
-        "P1Button5": "LB",
-        "P1Button6": "RB",
-        "Coin2": "COIN_1",
-        "P2ButtonStart": "START_1",
-        "P2Button1": "RT",
-        "P2Button2": "ACTION_EAST",
-        "P2Button3": "ACTION_WEST",
-        "Analog0": "rightstickleft",
-        "Analog2": "rightstickup",
-        "Analog4": "rightstickleft",
-        "Analog6": "rightstickup"
-      }
-    },
-    "afterdark2_gun": {
-      "category": "other",
+      "category": "lightgun",
       "buttons": {
         "Test": "KB_0",
         "Service1": "KB_9",
@@ -8040,32 +7655,17 @@
         "P1Button6": "KB_RIGHT",
         "Coin2": "KB_6",
         "P2ButtonStart": "KB_2",
-        "mouseleft_1": "p1button1",
-        "mouseleft_2": "p2button1",
-        "mousemiddle_1": "p1button3",
-        "mousemiddle_2": "p2button3",
-        "mouseright_1": "p1button2",
-        "mouseright_2": "p2button2"
-      }
+        "p1button1": "mouseleft_1",
+        "p2button1": "mouseleft_2",
+        "p1button3": "mousemiddle_1",
+        "p2button3": "mousemiddle_2",
+        "p1button2": "mouseright_1",
+        "p2button2": "mouseright_2"
+      },
+      "inputMode": "lightgun"
     },
     "akuma": {
-      "category": "other",
-      "buttons": {
-        "Test": "L3",
-        "Service1": "R3",
-        "Coin1": "COIN_1",
-        "P1ButtonStart": "START_1",
-        "P1Button1": "RT",
-        "P2ButtonStart": "START_1",
-        "P2Button1": "RT",
-        "Analog0": "rightstickleft",
-        "Analog2": "rightstickup",
-        "Analog4": "rightstickleft",
-        "Analog6": "rightstickup"
-      }
-    },
-    "akuma_gun": {
-      "category": "other",
+      "category": "lightgun",
       "buttons": {
         "Test": "KB_0",
         "Service1": "KB_9",
@@ -8073,145 +7673,46 @@
         "P1ButtonStart": "KB_1",
         "Coin2": "KB_6",
         "P2ButtonStart": "KB_2",
-        "mouseleft_1": "p1button1",
-        "mouseleft_2": "p2button1",
-        "mousemiddle_1": "p1button3",
-        "mousemiddle_2": "p2button3",
-        "mouseright_1": "p1button2",
-        "mouseright_2": "p2button2"
-      }
-    },
-    "aliensarmageddon": {
-      "category": "other",
-      "buttons": {
-        "Test": "L3",
-        "Service1": "R3",
-        "Coin1": "COIN_1",
-        "P1ButtonStart": "START_1",
-        "P1Button1": "RT",
-        "P1Button2": "LT",
-        "P1Button3": "LB",
-        "P1ButtonDown": "DPAD_DOWN",
-        "P1ButtonRight": "DPAD_RIGHT",
-        "P1ButtonUp": "DPAD_UP",
-        "P2ButtonStart": "START_1",
-        "P2Button1": "RT",
-        "P2Button2": "LT",
-        "P2Button3": "LB",
-        "Analog0": "rightstickleft",
-        "Analog2": "rightstickup",
-        "Analog4": "rightstickleft",
-        "Analog6": "rightstickup"
-      }
-    },
-    "aliensarmageddon_gun": {
-      "category": "other",
-      "buttons": {
-        "Test": "KB_0",
-        "Service1": "KB_9",
-        "Coin1": "KB_5",
-        "P1ButtonStart": "KB_1",
-        "Coin2": "KB_6",
-        "P2ButtonStart": "KB_2",
-        "mouseleft_1": "p1button1",
-        "mouseleft_2": "p2button1",
-        "mousemiddle_1": "p1button3",
-        "mousemiddle_2": "p2button3",
-        "mouseright_1": "p1button2",
-        "mouseright_2": "p2button2"
-      }
+        "p1button1": "mouseleft_1",
+        "p2button1": "mouseleft_2",
+        "p1button3": "mousemiddle_1",
+        "p2button3": "mousemiddle_2",
+        "p1button2": "mouseright_1",
+        "p2button2": "mouseright_2"
+      },
+      "inputMode": "lightgun"
     },
     "aliensextermination": {
-      "category": "other",
-      "buttons": {
-        "Test": "L3",
-        "Service1": "R3",
-        "Coin1": "COIN_1",
-        "P1Button1": "RT",
-        "P1Button2": "ACTION_EAST",
-        "P1Button3": "ACTION_WEST",
-        "P1Button4": "ACTION_NORTH",
-        "P1Button5": "RB",
-        "P1Button6": "LB",
-        "Coin2": "COIN_1",
-        "P2Button1": "RT",
-        "P2Button2": "ACTION_EAST",
-        "P2Button3": "ACTION_WEST",
-        "P2Button4": "ACTION_NORTH",
-        "P2Button5": "RB",
-        "P2Button6": "LB",
-        "Analog0": "rightstickleft",
-        "Analog2": "rightstickup",
-        "Analog4": "rightstickleft",
-        "Analog6": "rightstickup"
-      }
-    },
-    "aliensextermination_gun": {
-      "category": "other",
+      "category": "lightgun",
       "buttons": {
         "Test": "KB_0",
         "Service1": "KB_9",
-        "Coin1": "KB_5",
-        "P1Button2": "KB_1",
-        "Coin2": "KB_6",
-        "P2Button2": "KB_2",
-        "mouseleft_1": "p1button1",
-        "mouseleft_2": "p2button1",
-        "mousemiddle_1": "p1button3",
-        "mousemiddle_2": "p2button3",
-        "mouseright_1": "p1button4",
-        "mouseright_2": "p2button4"
+        "Coin1": "COIN_1",
+        "P1ButtonStart": "START_1",
+        "Coin2": "COIN_2",
+        "P2ButtonStart": "START_2",
+        "P1Button1": "mouseleft_1",
+        "P1Button2": "mouseright_1",
+        "P1Button3": "mousemiddle_1",
+        "P2Button1": "mouseleft_2",
+        "P2Button2": "mouseright_2",
+        "P2Button3": "mousemiddle_2"
       }
     },
     "angrybirds": {
-      "category": "other",
-      "buttons": {
-        "Test": "L3",
-        "Service1": "R3",
-        "Coin1": "COIN_1",
-        "P1Button1": "ACTION_SOUTH",
-        "P1Button2": "ACTION_EAST",
-        "Coin2": "COIN_1",
-        "P2Button1": "DPAD_UP",
-        "P2Button2": "DPAD_DOWN",
-        "Analog0": "STEER_AXIS",
-        "Analog2": "ACCELERATE"
-      }
-    },
-    "angrybirds_gun": {
-      "category": "other",
+      "category": "lightgun",
       "buttons": {
         "Test": "KB_0",
         "Service1": "KB_9",
         "Coin1": "KB_5",
         "Coin2": "KB_1",
-        "mouseleft_1": "p1button1",
-        "mouseright_1": "p1button2"
-      }
+        "p1button1": "mouseleft_1",
+        "p1button2": "mouseright_1"
+      },
+      "inputMode": "lightgun"
     },
     "bbhhome": {
-      "category": "other",
-      "buttons": {
-        "Test": "L3",
-        "Service1": "R3",
-        "Coin1": "COIN_1",
-        "P1ButtonStart": "START_1",
-        "P1Button1": "RT",
-        "P1Button2": "ACTION_EAST",
-        "P1Button3": "ACTION_WEST",
-        "P1ButtonDown": "DPAD_DOWN",
-        "P1ButtonUp": "DPAD_UP",
-        "P2ButtonStart": "START_1",
-        "P2Button1": "RT",
-        "P2Button2": "LT",
-        "Analog0": "rightstickleft",
-        "Analog2": "rightstickup",
-        "Analog4": "rightstickleft",
-        "Analog6": "rightstickup"
-      }
-    },
-    "bbhhome_gun": {
-      "category": "other",
+      "category": "lightgun",
       "buttons": {
         "Test": "KB_0",
         "Service1": "KB_9",
@@ -8219,37 +7720,17 @@
         "P1ButtonStart": "KB_1",
         "Coin2": "KB_6",
         "P2ButtonStart": "KB_2",
-        "mouseleft_1": "p1button1",
-        "mouseleft_2": "p2button1",
-        "mousemiddle_1": "p1button3",
-        "mousemiddle_2": "p2button3",
-        "mouseright_1": "p1button2",
-        "mouseright_2": "p2button2"
-      }
+        "p1button1": "mouseleft_1",
+        "p2button1": "mouseleft_2",
+        "p1button3": "mousemiddle_1",
+        "p2button3": "mousemiddle_2",
+        "p1button2": "mouseright_1",
+        "p2button2": "mouseright_2"
+      },
+      "inputMode": "lightgun"
     },
     "bbhpro": {
-      "category": "other",
-      "buttons": {
-        "Test": "L3",
-        "Service1": "R3",
-        "Coin1": "COIN_1",
-        "P1ButtonStart": "START_1",
-        "P1Button1": "RT",
-        "P1Button2": "ACTION_EAST",
-        "P1Button3": "ACTION_WEST",
-        "P1ButtonDown": "DPAD_DOWN",
-        "P1ButtonUp": "DPAD_UP",
-        "P2ButtonStart": "START_1",
-        "P2Button1": "RT",
-        "P2Button2": "LT",
-        "Analog0": "rightstickleft",
-        "Analog2": "rightstickup",
-        "Analog4": "rightstickleft",
-        "Analog6": "rightstickup"
-      }
-    },
-    "bbhpro_gun": {
-      "category": "other",
+      "category": "lightgun",
       "buttons": {
         "Test": "KB_0",
         "Service1": "KB_9",
@@ -8257,37 +7738,17 @@
         "P1ButtonStart": "KB_1",
         "Coin2": "KB_6",
         "P2ButtonStart": "KB_2",
-        "mouseleft_1": "p1button1",
-        "mouseleft_2": "p2button1",
-        "mousemiddle_1": "p1button3",
-        "mousemiddle_2": "p2button3",
-        "mouseright_1": "p1button2",
-        "mouseright_2": "p2button2"
-      }
+        "p1button1": "mouseleft_1",
+        "p2button1": "mouseleft_2",
+        "p1button3": "mousemiddle_1",
+        "p2button3": "mousemiddle_2",
+        "p1button2": "mouseright_1",
+        "p2button2": "mouseright_2"
+      },
+      "inputMode": "lightgun"
     },
     "bbhworld": {
-      "category": "other",
-      "buttons": {
-        "Test": "L3",
-        "Service1": "R3",
-        "Coin1": "COIN_1",
-        "P1ButtonStart": "START_1",
-        "P1Button1": "RT",
-        "P1Button2": "LT",
-        "P1ButtonDown": "DPAD_DOWN",
-        "P1ButtonUp": "DPAD_UP",
-        "Coin2": "COIN_1",
-        "P2ButtonStart": "START_1",
-        "P2Button1": "RT",
-        "P2Button2": "LT",
-        "Analog0": "rightstickleft",
-        "Analog2": "rightstickup",
-        "Analog4": "rightstickleft",
-        "Analog6": "rightstickup"
-      }
-    },
-    "bbhworld_gun": {
-      "category": "other",
+      "category": "lightgun",
       "buttons": {
         "Test": "KB_0",
         "Service1": "KB_9",
@@ -8295,34 +7756,17 @@
         "P1ButtonStart": "KB_1",
         "Coin2": "KB_6",
         "P2ButtonStart": "KB_2",
-        "mouseleft_1": "p1button1",
-        "mouseleft_2": "p2button1",
-        "mousemiddle_1": "p1button3",
-        "mousemiddle_2": "p2button3",
-        "mouseright_1": "p1button2",
-        "mouseright_2": "p2button2"
-      }
+        "p1button1": "mouseleft_1",
+        "p2button1": "mouseleft_2",
+        "p1button3": "mousemiddle_1",
+        "p2button3": "mousemiddle_2",
+        "p1button2": "mouseright_1",
+        "p2button2": "mouseright_2"
+      },
+      "inputMode": "lightgun"
     },
     "blockking": {
-      "category": "other",
-      "buttons": {
-        "Test": "L3",
-        "Service1": "R3",
-        "Coin1": "COIN_1",
-        "P1ButtonStart": "START_1",
-        "P1Button1": "RT",
-        "P1Button2": "ACTION_EAST",
-        "P2ButtonStart": "START_1",
-        "P2Button1": "RT",
-        "P2Button2": "ACTION_EAST",
-        "Analog0": "rightstickleft",
-        "Analog2": "rightstickup",
-        "Analog4": "rightstickleft",
-        "Analog6": "rightstickup"
-      }
-    },
-    "blockking_gun": {
-      "category": "other",
+      "category": "lightgun",
       "buttons": {
         "Test": "KB_0",
         "Service1": "KB_9",
@@ -8330,32 +7774,15 @@
         "P1ButtonStart": "KB_1",
         "Coin2": "KB_6",
         "P2ButtonStart": "KB_2",
-        "mouseleft_1": "p1button1",
-        "mouseleft_2": "p2button1",
-        "mousemiddle_1": "p2button2",
-        "mouseright_1": "p1button2"
-      }
+        "p1button1": "mouseleft_1",
+        "p2button1": "mouseleft_2",
+        "p2button2": "mousemiddle_1",
+        "p1button2": "mouseright_1"
+      },
+      "inputMode": "lightgun"
     },
     "bugbusters": {
-      "category": "other",
-      "buttons": {
-        "Test": "L3",
-        "Service1": "R3",
-        "Coin1": "COIN_1",
-        "P1ButtonStart": "START_1",
-        "P1Button1": "RT",
-        "P1Button2": "LT",
-        "P2ButtonStart": "START_1",
-        "P2Button1": "RT",
-        "P2Button2": "LT",
-        "Analog0": "rightstickleft",
-        "Analog2": "rightstickup",
-        "Analog4": "rightstickleft",
-        "Analog6": "rightstickup"
-      }
-    },
-    "bugbusters_gun": {
-      "category": "other",
+      "category": "lightgun",
       "buttons": {
         "Test": "KB_0",
         "Service1": "KB_9",
@@ -8363,32 +7790,17 @@
         "P1ButtonStart": "KB_1",
         "Coin2": "KB_6",
         "P2ButtonStart": "KB_2",
-        "mouseleft_1": "p1button1",
-        "mouseleft_2": "p2button1",
-        "mousemiddle_1": "p1button3",
-        "mousemiddle_2": "p2button3",
-        "mouseright_1": "p1button2",
-        "mouseright_2": "p2button2"
-      }
+        "p1button1": "mouseleft_1",
+        "p2button1": "mouseleft_2",
+        "p1button3": "mousemiddle_1",
+        "p2button3": "mousemiddle_2",
+        "p1button2": "mouseright_1",
+        "p2button2": "mouseright_2"
+      },
+      "inputMode": "lightgun"
     },
     "byonbyon": {
-      "category": "other",
-      "buttons": {
-        "Test": "L3",
-        "Service1": "R3",
-        "Coin1": "COIN_1",
-        "P1ButtonStart": "START_1",
-        "P1Button1": "RT",
-        "P2ButtonStart": "START_1",
-        "P2Button1": "RT",
-        "Analog0": "rightstickleft",
-        "Analog2": "rightstickup",
-        "Analog4": "rightstickleft",
-        "Analog6": "rightstickup"
-      }
-    },
-    "byonbyon_gun": {
-      "category": "other",
+      "category": "lightgun",
       "buttons": {
         "Test": "KB_0",
         "Service1": "KB_9",
@@ -8396,34 +7808,17 @@
         "P1ButtonStart": "KB_1",
         "Coin2": "KB_6",
         "P2ButtonStart": "KB_2",
-        "mouseleft_1": "p1button1",
-        "mouseleft_2": "p2button1",
-        "mousemiddle_1": "p1button3",
-        "mousemiddle_2": "p2button3",
-        "mouseright_1": "p1button2",
-        "mouseright_2": "p2button2"
-      }
+        "p1button1": "mouseleft_1",
+        "p2button1": "mouseleft_2",
+        "p1button3": "mousemiddle_1",
+        "p2button3": "mousemiddle_2",
+        "p1button2": "mouseright_1",
+        "p2button2": "mouseright_2"
+      },
+      "inputMode": "lightgun"
     },
     "castlevania": {
-      "category": "other",
-      "buttons": {
-        "Test": "L3",
-        "Service1": "R3",
-        "Coin1": "COIN_1",
-        "P1Button1": "ACTION_SOUTH",
-        "P1Button2": "START_1",
-        "P1Button3": "ACTION_WEST",
-        "P2Button1": "ACTION_SOUTH",
-        "P2Button2": "START_1",
-        "P2Button3": "ACTION_WEST",
-        "Analog0": "rightstickleft",
-        "Analog2": "rightstickup",
-        "Analog4": "rightstickleft",
-        "Analog6": "rightstickup"
-      }
-    },
-    "castlevania_gun": {
-      "category": "other",
+      "category": "lightgun",
       "buttons": {
         "Test": "KB_0",
         "Service1": "KB_9",
@@ -8431,30 +7826,15 @@
         "P1Button2": "KB_1",
         "Coin2": "KB_6",
         "P2Button2": "KB_2",
-        "mouseleft_1": "p1button3",
-        "mouseleft_2": "p2button3",
-        "mouseright_1": "p1button1",
-        "mouseright_2": "p2button1"
-      }
+        "p1button3": "mouseleft_1",
+        "p2button3": "mouseleft_2",
+        "p1button1": "mouseright_1",
+        "p2button1": "mouseright_2"
+      },
+      "inputMode": "lightgun"
     },
     "coopers9": {
-      "category": "other",
-      "buttons": {
-        "Test": "L3",
-        "Service1": "R3",
-        "Coin1": "COIN_1",
-        "P1ButtonStart": "START_1",
-        "P1Button1": "RT",
-        "P2ButtonStart": "START_1",
-        "P2Button1": "RT",
-        "Analog0": "rightstickleft",
-        "Analog2": "rightstickup",
-        "Analog4": "rightstickleft",
-        "Analog6": "rightstickup"
-      }
-    },
-    "coopers9_gun": {
-      "category": "other",
+      "category": "lightgun",
       "buttons": {
         "Test": "KB_0",
         "Service1": "KB_9",
@@ -8462,30 +7842,13 @@
         "P1ButtonStart": "KB_1",
         "Coin2": "KB_6",
         "P2ButtonStart": "KB_2",
-        "mouseleft_1": "p1button1",
-        "mouseleft_2": "p2button1"
-      }
+        "p1button1": "mouseleft_1",
+        "p2button1": "mouseleft_2"
+      },
+      "inputMode": "lightgun"
     },
     "crossfirepaintball": {
-      "category": "other",
-      "buttons": {
-        "Test": "L3",
-        "Coin1": "COIN_1",
-        "P1ButtonStart": "START_1",
-        "P1Button1": "RT",
-        "P1Button2": "LT",
-        "Coin2": "COIN_1",
-        "P2ButtonStart": "START_1",
-        "P2Button1": "RT",
-        "P2Button2": "LT",
-        "Analog0": "rightstickleft",
-        "Analog2": "rightstickup",
-        "Analog4": "rightstickleft",
-        "Analog6": "rightstickup"
-      }
-    },
-    "crossfirepaintball_gun": {
-      "category": "other",
+      "category": "lightgun",
       "buttons": {
         "Test": "KB_0",
         "Service1": "KB_9",
@@ -8493,31 +7856,15 @@
         "P1ButtonStart": "KB_1",
         "Coin2": "KB_6",
         "P2ButtonStart": "KB_2",
-        "mouseleft_1": "p1button1",
-        "mouseleft_2": "p2button1",
-        "mouseright_1": "p1button2",
-        "mouseright_2": "p2button2"
-      }
+        "p1button1": "mouseleft_1",
+        "p2button1": "mouseleft_2",
+        "p1button2": "mouseright_1",
+        "p2button2": "mouseright_2"
+      },
+      "inputMode": "lightgun"
     },
     "drakons": {
-      "category": "other",
-      "buttons": {
-        "Test": "L3",
-        "Service1": "R3",
-        "Coin1": "COIN_1",
-        "P1ButtonStart": "START_1",
-        "P1Button1": "RT",
-        "P1Button2": "LT",
-        "Coin2": "COIN_1",
-        "P2ButtonStart": "START_1",
-        "P2Button1": "RT",
-        "P2Button2": "LT",
-        "Analog0": "rightstickleft",
-        "Analog2": "rightstickup"
-      }
-    },
-    "drakons_gun": {
-      "category": "other",
+      "category": "lightgun",
       "buttons": {
         "Test": "KB_0",
         "Service1": "KB_9",
@@ -8525,35 +7872,15 @@
         "P1ButtonStart": "KB_1",
         "Coin2": "KB_6",
         "P2ButtonStart": "KB_2",
-        "mouseleft_1": "p1button1",
-        "mouseleft_2": "p2button1",
-        "mouseright_1": "p1button2",
-        "mouseright_2": "p2button2"
-      }
+        "p1button1": "mouseleft_1",
+        "p2button1": "mouseleft_2",
+        "p1button2": "mouseright_1",
+        "p2button2": "mouseright_2"
+      },
+      "inputMode": "lightgun"
     },
     "eadp": {
-      "category": "other",
-      "buttons": {
-        "Test": "L3",
-        "Service1": "R3",
-        "Coin1": "COIN_1",
-        "P1Button1": "LT",
-        "P1Button2": "LT",
-        "P1Button3": "RT",
-        "P1Button5": "RB",
-        "P1Button6": "LB",
-        "P1ButtonDown": "DPAD_DOWN",
-        "P1ButtonLeft": "ACTION_SOUTH",
-        "P1ButtonUp": "DPAD_UP",
-        "P2Button3": "RT",
-        "Analog0": "rightstickleft",
-        "Analog2": "rightstickup",
-        "Analog4": "rightstickleft",
-        "Analog6": "rightstickup"
-      }
-    },
-    "eadp_gun": {
-      "category": "other",
+      "category": "lightgun",
       "buttons": {
         "Test": "KB_0",
         "Service1": "KB_9",
@@ -8561,33 +7888,16 @@
         "P1ButtonStart": "KB_1",
         "Coin2": "KB_6",
         "P2ButtonStart": "KB_2",
-        "mouseleft_1": "p1button3",
-        "mouseleft_2": "p2button3",
-        "mousemiddle_2": "p1buttonleft",
-        "mouseright_1": "p1button1",
-        "mouseright_2": "p1button2"
-      }
+        "p1button3": "mouseleft_1",
+        "p2button3": "mouseleft_2",
+        "p1buttonleft": "mousemiddle_2",
+        "p1button1": "mouseright_1",
+        "p1button2": "mouseright_2"
+      },
+      "inputMode": "lightgun"
     },
     "elevatoractioninvasion": {
-      "category": "other",
-      "buttons": {
-        "Test": "L3",
-        "Coin1": "COIN_1",
-        "P1ButtonStart": "START_1",
-        "P1Button1": "RT",
-        "P1Button5": "RB",
-        "P1Button6": "LB",
-        "Coin2": "COIN_1",
-        "P2ButtonStart": "START_1",
-        "P2Button1": "RT",
-        "Analog0": "rightstickleft",
-        "Analog2": "rightstickup",
-        "Analog4": "rightstickleft",
-        "Analog6": "rightstickup"
-      }
-    },
-    "elevatoractioninvasion_gun": {
-      "category": "other",
+      "category": "lightgun",
       "buttons": {
         "Test": "KB_0",
         "Service1": "KB_9",
@@ -8595,36 +7905,17 @@
         "P1ButtonStart": "KB_1",
         "Coin2": "KB_6",
         "P2ButtonStart": "KB_2",
-        "mouseleft_1": "p1button1",
-        "mouseleft_2": "p2button1",
-        "mousemiddle_1": "p1button3",
-        "mousemiddle_2": "p2button3",
-        "mouseright_1": "p1button2",
-        "mouseright_2": "p2button2"
-      }
+        "p1button1": "mouseleft_1",
+        "p2button1": "mouseleft_2",
+        "p1button3": "mousemiddle_1",
+        "p2button3": "mousemiddle_2",
+        "p1button2": "mouseright_1",
+        "p2button2": "mouseright_2"
+      },
+      "inputMode": "lightgun"
     },
     "farcryparadiselost": {
-      "category": "other",
-      "buttons": {
-        "Test": "L3",
-        "Service1": "R3",
-        "Coin1": "COIN_1",
-        "P1Button1": "RT",
-        "P1Button2": "ACTION_EAST",
-        "P1Button4": "ACTION_NORTH",
-        "P1Button5": "RB",
-        "P1Button6": "LB",
-        "P2Button1": "RT",
-        "P2Button2": "ACTION_EAST",
-        "P2Button4": "ACTION_NORTH",
-        "Analog0": "rightstickleft",
-        "Analog2": "rightstickup",
-        "Analog4": "rightstickleft",
-        "Analog6": "rightstickup"
-      }
-    },
-    "farcryparadiselost_gun": {
-      "category": "other",
+      "category": "lightgun",
       "buttons": {
         "Test": "KB_0",
         "Service1": "KB_9",
@@ -8632,37 +7923,17 @@
         "Coin2": "KB_6",
         "P2Button1": "KB_1",
         "P2Button2": "KB_2",
-        "mouseleft_1": "p1button1",
-        "mouseleft_2": "p2button1",
-        "mousemiddle_1": "p1button4",
-        "mousemiddle_2": "p2button4",
-        "mouseright_1": "p1button2",
-        "mouseright_2": "p2button2"
-      }
+        "p1button1": "mouseleft_1",
+        "p2button1": "mouseleft_2",
+        "p1button4": "mousemiddle_1",
+        "p2button4": "mousemiddle_2",
+        "p1button2": "mouseright_1",
+        "p2button2": "mouseright_2"
+      },
+      "inputMode": "lightgun"
     },
     "friction": {
-      "category": "other",
-      "buttons": {
-        "Test": "L3",
-        "Coin1": "COIN_1",
-        "P2Button1": "RT",
-        "P2Button2": "RT",
-        "P2Button3": "ACTION_WEST",
-        "P2Button4": "START_1",
-        "P2Button5": "START_1",
-        "P2Button6": "COIN_1",
-        "P2ButtonDown": "DPAD_DOWN",
-        "P2ButtonLeft": "LT",
-        "P2ButtonRight": "LT",
-        "P2ButtonUp": "DPAD_UP",
-        "Analog0": "rightstickleft",
-        "Analog2": "rightstickup",
-        "Analog4": "rightstickleft",
-        "Analog6": "rightstickup"
-      }
-    },
-    "friction_gun": {
-      "category": "other",
+      "category": "lightgun",
       "buttons": {
         "Test": "KB_0",
         "Service1": "KB_9",
@@ -8670,36 +7941,15 @@
         "P2Button4": "KB_1",
         "P2Button5": "KB_2",
         "P2Button6": "KB_6",
-        "mouseleft_1": "p2button1",
-        "mouseleft_2": "p2button2",
-        "mouseright_1": "p2buttonleft",
-        "mouseright_2": "p2buttonright"
-      }
+        "p2button1": "mouseleft_1",
+        "p2button2": "mouseleft_2",
+        "p2buttonleft": "mouseright_1",
+        "p2buttonright": "mouseright_2"
+      },
+      "inputMode": "lightgun"
     },
     "gaiaattack4": {
-      "category": "other",
-      "buttons": {
-        "Test": "L3",
-        "P1ButtonDown": "START_1",
-        "P1ButtonUp": "START_1",
-        "P2Button1": "RT",
-        "P2Button3": "RT",
-        "P2Button5": "RB",
-        "P2Button6": "LB",
-        "P2ButtonDown": "RT",
-        "P2ButtonUp": "RT",
-        "Analog0": "rightstickleft",
-        "Analog10": "ACCELERATE",
-        "Analog12": "rightstickleft",
-        "Analog14": "rightstickup",
-        "Analog2": "rightstickup",
-        "Analog4": "rightstickleft",
-        "Analog6": "rightstickup",
-        "Analog8": "STEER_AXIS"
-      }
-    },
-    "gaiaattack4_gun": {
-      "category": "other",
+      "category": "lightgun",
       "buttons": {
         "Test": "KB_0",
         "P1ButtonDown": "KB_2",
@@ -8708,33 +7958,15 @@
         "ExtensionOne17": "KB_4",
         "ExtensionOne18": "KB_3",
         "ExtensionOne4": "KB_9",
-        "mouseleft_1": "p1button1",
-        "mouseleft_2": "p2button1",
-        "mouseleft_3": "p3button1",
-        "mouseleft_4": "p4button1"
-      }
+        "p1button1": "mouseleft_1",
+        "p2button1": "mouseleft_2",
+        "p3button1": "mouseleft_3",
+        "p4button1": "mouseleft_4"
+      },
+      "inputMode": "lightgun"
     },
     "gg": {
-      "category": "other",
-      "buttons": {
-        "Test": "L3",
-        "Service1": "R3",
-        "Coin1": "COIN_1",
-        "P1ButtonStart": "START_1",
-        "P1Button1": "RT",
-        "P1Button2": "LT",
-        "Coin2": "COIN_1",
-        "P2ButtonStart": "START_1",
-        "P2Button1": "RT",
-        "P2Button2": "LT",
-        "Analog0": "rightstickleft",
-        "Analog2": "rightstickup",
-        "Analog4": "rightstickleft",
-        "Analog6": "rightstickup"
-      }
-    },
-    "gg_gun": {
-      "category": "other",
+      "category": "lightgun",
       "buttons": {
         "Test": "KB_0",
         "Service1": "KB_9",
@@ -8742,35 +7974,17 @@
         "P1ButtonStart": "KB_1",
         "Coin2": "KB_6",
         "P2ButtonStart": "KB_2",
-        "mouseleft_1": "p1button1",
-        "mouseleft_2": "p2button1",
-        "mousemiddle_1": "p1button3",
-        "mousemiddle_2": "p2button3",
-        "mouseright_1": "p1button2",
-        "mouseright_2": "p2button2"
-      }
+        "p1button1": "mouseleft_1",
+        "p2button1": "mouseleft_2",
+        "p1button3": "mousemiddle_1",
+        "p2button3": "mousemiddle_2",
+        "p1button2": "mouseright_1",
+        "p2button2": "mouseright_2"
+      },
+      "inputMode": "lightgun"
     },
     "ghostbusters": {
-      "category": "other",
-      "buttons": {
-        "Test": "L3",
-        "Service1": "R3",
-        "Coin1": "COIN_1",
-        "P1Button1": "RT",
-        "P1Button2": "LT",
-        "P1ButtonDown": "DPAD_DOWN",
-        "P1ButtonUp": "DPAD_UP",
-        "Coin2": "COIN_1",
-        "P2Button1": "RT",
-        "P2Button2": "LT",
-        "Analog0": "rightstickleft",
-        "Analog2": "rightstickup",
-        "Analog4": "rightstickleft",
-        "Analog6": "rightstickup"
-      }
-    },
-    "ghostbusters_gun": {
-      "category": "other",
+      "category": "lightgun",
       "buttons": {
         "Test": "KB_0",
         "Service1": "KB_9",
@@ -8778,39 +7992,17 @@
         "P1ButtonStart": "KB_1",
         "Coin2": "KB_6",
         "P2ButtonStart": "KB_2",
-        "mouseleft_1": "p1button1",
-        "mouseleft_2": "p2button1",
-        "mousemiddle_1": "p1button3",
-        "mousemiddle_2": "p2button3",
-        "mouseright_1": "p1button2",
-        "mouseright_2": "p2button2"
-      }
+        "p1button1": "mouseleft_1",
+        "p2button1": "mouseleft_2",
+        "p1button3": "mousemiddle_1",
+        "p2button3": "mousemiddle_2",
+        "p1button2": "mouseright_1",
+        "p2button2": "mouseright_2"
+      },
+      "inputMode": "lightgun"
     },
     "gsevo": {
-      "category": "other",
-      "buttons": {
-        "Test": "L3",
-        "Service1": "R3",
-        "Coin1": "COIN_1",
-        "P1ButtonStart": "START_1",
-        "P1Button1": "RT",
-        "P1Button2": "LT",
-        "P1Button3": "ACTION_WEST",
-        "P1Button4": "ACTION_NORTH",
-        "Coin2": "COIN_1",
-        "P2ButtonStart": "START_1",
-        "P2Button1": "RT",
-        "P2Button2": "LT",
-        "P2Button3": "ACTION_WEST",
-        "P2Button4": "ACTION_NORTH",
-        "Analog0": "rightstickleft",
-        "Analog2": "rightstickup",
-        "Analog4": "rightstickleft",
-        "Analog6": "rightstickup"
-      }
-    },
-    "gsevo_gun": {
-      "category": "other",
+      "category": "lightgun",
       "buttons": {
         "Test": "KB_0",
         "Service1": "KB_9",
@@ -8818,39 +8010,17 @@
         "P1ButtonStart": "KB_1",
         "Coin2": "KB_6",
         "P2ButtonStart": "KB_2",
-        "mouseleft_1": "p1button1",
-        "mouseleft_2": "p2button1",
-        "mousemiddle_1": "p1button3",
-        "mousemiddle_2": "p2button3",
-        "mouseright_1": "p1button2",
-        "mouseright_2": "p2button2"
-      }
+        "p1button1": "mouseleft_1",
+        "p2button1": "mouseleft_2",
+        "p1button3": "mousemiddle_1",
+        "p2button3": "mousemiddle_2",
+        "p1button2": "mouseright_1",
+        "p2button2": "mouseright_2"
+      },
+      "inputMode": "lightgun"
     },
     "gsevoelf2": {
-      "category": "other",
-      "buttons": {
-        "Test": "L3",
-        "Service1": "R3",
-        "Coin1": "COIN_1",
-        "P1ButtonStart": "START_1",
-        "P1Button1": "RT",
-        "P1Button2": "LT",
-        "P1Button3": "ACTION_WEST",
-        "P1Button4": "ACTION_NORTH",
-        "Coin2": "COIN_1",
-        "P2ButtonStart": "START_1",
-        "P2Button1": "RT",
-        "P2Button2": "LT",
-        "P2Button3": "ACTION_WEST",
-        "P2Button4": "ACTION_NORTH",
-        "Analog0": "rightstickleft",
-        "Analog2": "rightstickup",
-        "Analog4": "rightstickleft",
-        "Analog6": "rightstickup"
-      }
-    },
-    "gsevoelf2_gun": {
-      "category": "other",
+      "category": "lightgun",
       "buttons": {
         "Test": "KB_0",
         "Service1": "KB_9",
@@ -8858,36 +8028,17 @@
         "P1ButtonStart": "KB_1",
         "Coin2": "KB_6",
         "P2ButtonStart": "KB_2",
-        "mouseleft_1": "p1button1",
-        "mouseleft_2": "p2button1",
-        "mousemiddle_1": "p1button3",
-        "mousemiddle_2": "p2button3",
-        "mouseright_1": "p1button2",
-        "mouseright_2": "p2button2"
-      }
+        "p1button1": "mouseleft_1",
+        "p2button1": "mouseleft_2",
+        "p1button3": "mousemiddle_1",
+        "p2button3": "mousemiddle_2",
+        "p1button2": "mouseright_1",
+        "p2button2": "mouseright_2"
+      },
+      "inputMode": "lightgun"
     },
     "gundamspiritsofzeon": {
-      "category": "other",
-      "buttons": {
-        "Test": "L3",
-        "Service1": "R3",
-        "Coin1": "COIN_1",
-        "P1ButtonStart": "START_1",
-        "P1Button1": "RT",
-        "P1Button2": "ACTION_EAST",
-        "P1Button3": "ACTION_WEST",
-        "P2ButtonStart": "START_1",
-        "P2Button1": "RT",
-        "P2Button2": "ACTION_EAST",
-        "P2Button3": "ACTION_WEST",
-        "Analog0": "rightstickleft",
-        "Analog2": "rightstickup",
-        "Analog4": "rightstickleft",
-        "Analog6": "rightstickup"
-      }
-    },
-    "gundamspiritsofzeon_gun": {
-      "category": "other",
+      "category": "lightgun",
       "buttons": {
         "Test": "KB_0",
         "Service1": "KB_9",
@@ -8895,40 +8046,17 @@
         "P1ButtonStart": "KB_1",
         "Coin2": "KB_6",
         "P2ButtonStart": "KB_2",
-        "mouseleft_1": "p1button1",
-        "mouseleft_2": "p2button1",
-        "mousemiddle_1": "p1button2",
-        "mousemiddle_2": "p2button2",
-        "mouseright_1": "p1button3",
-        "mouseright_2": "p2button3"
-      }
+        "p1button1": "mouseleft_1",
+        "p2button1": "mouseleft_2",
+        "p1button2": "mousemiddle_1",
+        "p2button2": "mousemiddle_2",
+        "p1button3": "mouseright_1",
+        "p2button3": "mouseright_2"
+      },
+      "inputMode": "lightgun"
     },
     "gunslinger": {
-      "category": "other",
-      "buttons": {
-        "Test": "L3",
-        "Service1": "R3",
-        "Coin1": "COIN_1",
-        "P1ButtonStart": "START_1",
-        "P1Button1": "ACTION_SOUTH",
-        "P1Button2": "ACTION_EAST",
-        "P1Button3": "ACTION_WEST",
-        "P1Button6": "LB",
-        "P2Button1": "ACTION_SOUTH",
-        "P2Button2": "ACTION_EAST",
-        "P2Button5": "RB",
-        "Analog0": "rightstickleft",
-        "Analog10": "ACCELERATE",
-        "Analog12": "rightstickleft",
-        "Analog14": "rightstickup",
-        "Analog2": "rightstickup",
-        "Analog4": "rightstickleft",
-        "Analog6": "rightstickup",
-        "Analog8": "STEER_AXIS"
-      }
-    },
-    "gunslinger_gun": {
-      "category": "other",
+      "category": "lightgun",
       "buttons": {
         "Test": "KB_0",
         "Service1": "KB_9",
@@ -8940,145 +8068,51 @@
         "P3ButtonStart": "KB_3",
         "Coin4": "KB_8",
         "P4ButtonStart": "KB_4",
-        "mouseleft_1": "p1button1",
-        "mouseleft_2": "p2button1",
-        "mouseleft_3": "p3button1",
-        "mouseleft_4": "p4button1",
-        "mousemiddle_1": "p1button3",
-        "mousemiddle_2": "p2button3",
-        "mousemiddle_3": "p3button3",
-        "mousemiddle_4": "p4button3",
-        "mouseright_1": "p1button2",
-        "mouseright_2": "p2button2",
-        "mouseright_3": "p3button2",
-        "mouseright_4": "p4button2"
-      }
+        "p1button1": "mouseleft_1",
+        "p2button1": "mouseleft_2",
+        "p3button1": "mouseleft_3",
+        "p4button1": "mouseleft_4",
+        "p1button3": "mousemiddle_1",
+        "p2button3": "mousemiddle_2",
+        "p3button3": "mousemiddle_3",
+        "p4button3": "mousemiddle_4",
+        "p1button2": "mouseright_1",
+        "p2button2": "mouseright_2",
+        "p3button2": "mouseright_3",
+        "p4button2": "mouseright_4"
+      },
+      "inputMode": "lightgun"
     },
     "hauntedmuseum": {
-      "category": "other",
-      "buttons": {
-        "Test": "L3",
-        "ExtensionOne4": "R3",
-        "ExtensionOne1": "COIN_1",
-        "P1ButtonUp": "START_1",
-        "P1ButtonDown": "START_1",
-        "P2Button1": "RT",
-        "P2Button3": "RT",
-        "P2Button5": "RB",
-        "P2Button6": "LB",
-        "Analog0": "rightstickleft",
-        "Analog2": "rightstickup",
-        "Analog4": "rightstickleft",
-        "Analog6": "rightstickup"
-      }
-    },
-    "hauntedmuseum_gun": {
-      "category": "other",
+      "category": "lightgun",
       "buttons": {
         "Test": "KB_0",
         "ExtensionOne4": "KB_9",
         "ExtensionOne1": "KB_5",
         "P1ButtonUp": "KB_1",
         "P1ButtonDown": "KB_2",
-        "mouseleft_1": "p2button1",
-        "mouseleft_2": "p2button3"
-      }
+        "p2button1": "mouseleft_1",
+        "p2button3": "mouseleft_2"
+      },
+      "inputMode": "lightgun"
     },
     "hauntedmuseumii": {
-      "category": "other",
-      "buttons": {
-        "Test": "L3",
-        "ExtensionOne4": "R3",
-        "ExtensionOne1": "COIN_1",
-        "P1ButtonUp": "START_1",
-        "P1ButtonDown": "START_1",
-        "P2Button1": "RT",
-        "P2Button3": "RT",
-        "ExtensionOne18": "LT",
-        "ExtensionOne17": "LT",
-        "P2Button5": "RB",
-        "P2Button6": "LB",
-        "Analog0": "rightstickleft",
-        "Analog2": "rightstickup",
-        "Analog4": "rightstickleft",
-        "Analog6": "rightstickup"
-      }
-    },
-    "hauntedmuseumii_gun": {
-      "category": "other",
+      "category": "lightgun",
       "buttons": {
         "Test": "KB_0",
         "ExtensionOne4": "KB_9",
         "ExtensionOne1": "KB_5",
         "P1ButtonUp": "KB_1",
         "P1ButtonDown": "KB_2",
-        "mouseleft_1": "p2button1",
-        "mouseleft_2": "p2button3",
-        "mouseright_1": "extensionone18",
-        "mouseright_2": "extensionone17"
-      }
-    },
-    "hotd4": {
-      "category": "other",
-      "buttons": {
-        "Test": "L3",
-        "Service1": "R3",
-        "Coin1": "COIN_1",
-        "P1ButtonStart": "START_1",
-        "P1Button1": "RT",
-        "P1Button2": "LT",
-        "P1Button3": "LB",
-        "Coin2": "COIN_1",
-        "P2ButtonStart": "START_1",
-        "P2Button1": "RT",
-        "P2Button2": "LT",
-        "P2Button3": "LB",
-        "Analog0": "rightstickleft",
-        "Analog2": "rightstickup",
-        "Analog4": "rightstickleft",
-        "Analog6": "rightstickup"
-      }
-    },
-    "hotd4_gun": {
-      "category": "other",
-      "buttons": {
-        "Test": "KB_0",
-        "Service1": "KB_9",
-        "Coin1": "KB_5",
-        "P1ButtonStart": "KB_1",
-        "Coin2": "KB_6",
-        "P2ButtonStart": "KB_2",
-        "mouseleft_1": "p1button1",
-        "mouseleft_2": "p2button1",
-        "mousemiddle_1": "p1button3",
-        "mousemiddle_2": "p2button3",
-        "mouseright_1": "p1button2",
-        "mouseright_2": "p2button2"
-      }
+        "p2button1": "mouseleft_1",
+        "p2button3": "mouseleft_2",
+        "extensionone18": "mouseright_1",
+        "extensionone17": "mouseright_2"
+      },
+      "inputMode": "lightgun"
     },
     "hotd4elf2": {
-      "category": "other",
-      "buttons": {
-        "Test": "L3",
-        "Service1": "R3",
-        "Coin1": "COIN_1",
-        "P1ButtonStart": "START_1",
-        "P1Button1": "RT",
-        "P1Button2": "LT",
-        "P1Button3": "LB",
-        "Coin2": "COIN_1",
-        "P2ButtonStart": "START_1",
-        "P2Button1": "RT",
-        "P2Button2": "LT",
-        "P2Button3": "LB",
-        "Analog0": "rightstickleft",
-        "Analog2": "rightstickup",
-        "Analog4": "rightstickleft",
-        "Analog6": "rightstickup"
-      }
-    },
-    "hotd4elf2_gun": {
-      "category": "other",
+      "category": "lightgun",
       "buttons": {
         "Test": "KB_0",
         "Service1": "KB_9",
@@ -9086,99 +8120,47 @@
         "P1ButtonStart": "KB_1",
         "Coin2": "KB_6",
         "P2ButtonStart": "KB_2",
-        "mouseleft_1": "p1button1",
-        "mouseleft_2": "p2button1",
-        "mousemiddle_1": "p1button3",
-        "mousemiddle_2": "p2button3",
-        "mouseright_1": "p1button2",
-        "mouseright_2": "p2button2"
-      }
+        "p1button1": "mouseleft_1",
+        "p2button1": "mouseleft_2",
+        "p1button3": "mousemiddle_1",
+        "p2button3": "mousemiddle_2",
+        "p1button2": "mouseright_1",
+        "p2button2": "mouseright_2"
+      },
+      "inputMode": "lightgun"
     },
     "hotd4sp": {
-      "category": "other",
-      "buttons": {
-        "Test": "L3",
-        "Service1": "R3",
-        "Coin1": "COIN_1",
-        "P1ButtonStart": "START_1",
-        "P1Button1": "RT",
-        "P1Button3": "LB",
-        "P1Button4": "ACTION_NORTH",
-        "P2Button1": "RT",
-        "P2Button3": "LB",
-        "Analog0": "rightstickleft",
-        "Analog2": "rightstickup",
-        "Analog4": "rightstickleft",
-        "Analog6": "rightstickup"
-      }
-    },
-    "hotd4sp_gun": {
-      "category": "other",
+      "category": "lightgun",
       "buttons": {
         "Test": "KB_0",
         "Service1": "KB_9",
         "Coin1": "KB_5",
         "P1ButtonStart": "KB_1",
-        "mouseleft_1": "p1button1",
-        "mouseleft_2": "p2button1",
-        "mousemiddle_1": "p1button3",
-        "mousemiddle_2": "p2button3",
-        "mouseright_1": "p1button4"
-      }
+        "p1button1": "mouseleft_1",
+        "p2button1": "mouseleft_2",
+        "p1button3": "mousemiddle_1",
+        "p2button3": "mousemiddle_2",
+        "p1button4": "mouseright_1"
+      },
+      "inputMode": "lightgun"
     },
     "hotd4spelf2": {
-      "category": "other",
-      "buttons": {
-        "Test": "L3",
-        "Service1": "R3",
-        "Coin1": "COIN_1",
-        "P1ButtonStart": "START_1",
-        "P1Button1": "RT",
-        "P1Button3": "LB",
-        "P1Button4": "ACTION_NORTH",
-        "P2Button1": "RT",
-        "P2Button3": "LB",
-        "Analog0": "rightstickleft",
-        "Analog2": "rightstickup",
-        "Analog4": "rightstickleft",
-        "Analog6": "rightstickup"
-      }
-    },
-    "hotd4spelf2_gun": {
-      "category": "other",
+      "category": "lightgun",
       "buttons": {
         "Test": "KB_0",
         "Service1": "KB_9",
         "Coin1": "KB_5",
         "P1ButtonStart": "KB_1",
-        "mouseleft_1": "p1button1",
-        "mouseleft_2": "p2button1",
-        "mousemiddle_1": "p1button3",
-        "mousemiddle_2": "p2button3",
-        "mouseright_1": "p1button4"
-      }
+        "p1button1": "mouseleft_1",
+        "p2button1": "mouseleft_2",
+        "p1button3": "mousemiddle_1",
+        "p2button3": "mousemiddle_2",
+        "p1button4": "mouseright_1"
+      },
+      "inputMode": "lightgun"
     },
     "hotdex": {
-      "category": "other",
-      "buttons": {
-        "Test": "L3",
-        "Service1": "R3",
-        "Coin1": "COIN_1",
-        "P1ButtonStart": "START_1",
-        "P1Button1": "RT",
-        "P1ButtonLeft": "DPAD_LEFT",
-        "P1ButtonRight": "DPAD_RIGHT",
-        "Coin2": "COIN_1",
-        "P2ButtonStart": "START_1",
-        "P2Button1": "RT",
-        "Analog0": "rightstickleft",
-        "Analog2": "rightstickup",
-        "Analog4": "rightstickleft",
-        "Analog6": "rightstickup"
-      }
-    },
-    "hotdex_gun": {
-      "category": "other",
+      "category": "lightgun",
       "buttons": {
         "Test": "KB_0",
         "Service1": "KB_9",
@@ -9186,34 +8168,15 @@
         "P1ButtonStart": "KB_1",
         "Coin2": "KB_6",
         "P2ButtonStart": "KB_2",
-        "mouseleft_1": "p1button1",
-        "mouseleft_2": "p2button1",
-        "mouseright_1": "p1buttonleft",
-        "mouseright_2": "p1buttonright"
-      }
+        "p1button1": "mouseleft_1",
+        "p2button1": "mouseleft_2",
+        "p1buttonleft": "mouseright_1",
+        "p1buttonright": "mouseright_2"
+      },
+      "inputMode": "lightgun"
     },
     "hotdsd": {
-      "category": "other",
-      "buttons": {
-        "Test": "L3",
-        "Service1": "R3",
-        "P1ButtonStart": "START_1",
-        "P1Button1": "RT",
-        "P1Button4": "ACTION_NORTH",
-        "P1ButtonDown": "DPAD_DOWN",
-        "P1ButtonUp": "DPAD_UP",
-        "P2ButtonStart": "START_1",
-        "P2Button1": "RT",
-        "P2ButtonDown": "DPAD_DOWN",
-        "P2ButtonUp": "DPAD_UP",
-        "Analog0": "rightstickleft",
-        "Analog2": "rightstickup",
-        "Analog4": "rightstickleft",
-        "Analog6": "rightstickup"
-      }
-    },
-    "hotdsd_gun": {
-      "category": "other",
+      "category": "lightgun",
       "buttons": {
         "Test": "KB_0",
         "Service1": "KB_9",
@@ -9221,39 +8184,16 @@
         "P1ButtonDown": "KB_5",
         "P2ButtonStart": "KB_2",
         "P2ButtonDown": "KB_6",
-        "mouseleft_1": "p1buttonup",
-        "mouseleft_2": "p2buttonup",
-        "mousemiddle_1": "extensionone2",
-        "mouseright_1": "p1button1",
-        "mouseright_2": "p2button1"
-      }
+        "p1buttonup": "mouseleft_1",
+        "p2buttonup": "mouseleft_2",
+        "extensionone2": "mousemiddle_1",
+        "p1button1": "mouseright_1",
+        "p2button1": "mouseright_2"
+      },
+      "inputMode": "lightgun"
     },
     "jurassicpark": {
-      "category": "other",
-      "buttons": {
-        "Test": "L3",
-        "Service1": "R3",
-        "Coin1": "COIN_1",
-        "P1ButtonStart": "START_1",
-        "P1Button1": "RT",
-        "P1Button2": "ACTION_EAST",
-        "P1Button3": "ACTION_WEST",
-        "P1ButtonDown": "DPAD_DOWN",
-        "P1ButtonLeft": "DPAD_LEFT",
-        "P1ButtonRight": "DPAD_RIGHT",
-        "P1ButtonUp": "DPAD_UP",
-        "P2ButtonStart": "START_1",
-        "P2Button1": "RT",
-        "P2Button2": "ACTION_EAST",
-        "P2Button3": "ACTION_WEST",
-        "Analog0": "rightstickleft",
-        "Analog2": "rightstickup",
-        "Analog4": "rightstickleft",
-        "Analog6": "rightstickup"
-      }
-    },
-    "jurassicpark_gun": {
-      "category": "other",
+      "category": "lightgun",
       "buttons": {
         "Test": "KB_0",
         "Service1": "KB_9",
@@ -9261,11 +8201,11 @@
         "P1ButtonStart": "KB_1",
         "Coin2": "KB_6",
         "P2ButtonStart": "KB_2",
-        "mouseleft_1": "p1button1",
-        "mouseleft_2": "p2button1",
-        "mousemiddle_1": "p1button2",
-        "mousemiddle_2": "p1button2"
-      }
+        "p1button1": "mouseleft_1",
+        "p2button1": "mouseleft_2",
+        "p1button2": "mousemiddle_2"
+      },
+      "inputMode": "lightgun"
     },
     "left4dead": {
       "category": "other",
@@ -9275,27 +8215,7 @@
       }
     },
     "lethalenforcers3": {
-      "category": "other",
-      "buttons": {
-        "Test": "L3",
-        "Service1": "R3",
-        "Coin1": "COIN_1",
-        "P1ButtonStart": "START_1",
-        "P1Button1": "RT",
-        "P1Button2": "ACTION_EAST",
-        "P1Button3": "ACTION_WEST",
-        "P2ButtonStart": "START_1",
-        "P2Button1": "RT",
-        "P2Button2": "ACTION_EAST",
-        "P2Button3": "ACTION_WEST",
-        "Analog0": "rightstickleft",
-        "Analog2": "rightstickup",
-        "Analog4": "rightstickleft",
-        "Analog6": "rightstickup"
-      }
-    },
-    "lethalenforcers3_gun": {
-      "category": "other",
+      "category": "lightgun",
       "buttons": {
         "Test": "KB_0",
         "Service1": "KB_9",
@@ -9303,33 +8223,17 @@
         "P1ButtonStart": "KB_1",
         "Coin2": "KB_6",
         "P2ButtonStart": "KB_2",
-        "mouseleft_1": "p1button1",
-        "mouseleft_2": "p2button1",
-        "mousemiddle_1": "p1button2",
-        "mousemiddle_2": "p2button2",
-        "mouseright_1": "p1button3",
-        "mouseright_2": "p2button3"
-      }
+        "p1button1": "mouseleft_1",
+        "p2button1": "mouseleft_2",
+        "p1button2": "mousemiddle_1",
+        "p2button2": "mousemiddle_2",
+        "p1button3": "mouseright_1",
+        "p2button3": "mouseright_2"
+      },
+      "inputMode": "lightgun"
     },
     "lgi": {
-      "category": "other",
-      "buttons": {
-        "Test": "L3",
-        "Service1": "R3",
-        "Coin1": "COIN_1",
-        "P1ButtonStart": "START_1",
-        "P1Button1": "RT",
-        "Coin2": "COIN_1",
-        "P2ButtonStart": "START_1",
-        "P2Button1": "RT",
-        "Analog0": "rightstickleft",
-        "Analog2": "rightstickup",
-        "Analog4": "rightstickleft",
-        "Analog6": "rightstickup"
-      }
-    },
-    "lgi_gun": {
-      "category": "other",
+      "category": "lightgun",
       "buttons": {
         "Test": "KB_0",
         "Service1": "KB_9",
@@ -9337,35 +8241,17 @@
         "P1ButtonStart": "KB_1",
         "Coin2": "KB_6",
         "P2ButtonStart": "KB_2",
-        "mouseleft_1": "p1button1",
-        "mouseleft_2": "p2button1",
-        "mousemiddle_1": "p1button3",
-        "mousemiddle_2": "p2button3",
-        "mouseright_1": "p1button2",
-        "mouseright_2": "p2button2"
-      }
+        "p1button1": "mouseleft_1",
+        "p2button1": "mouseleft_2",
+        "p1button3": "mousemiddle_1",
+        "p2button3": "mousemiddle_2",
+        "p1button2": "mouseright_1",
+        "p2button2": "mouseright_2"
+      },
+      "inputMode": "lightgun"
     },
     "lgi3d": {
-      "category": "other",
-      "buttons": {
-        "Test": "L3",
-        "Service1": "R3",
-        "Coin1": "COIN_1",
-        "P1ButtonStart": "START_1",
-        "P1Button1": "RT",
-        "P1Button2": "LT",
-        "Coin2": "COIN_1",
-        "P2ButtonStart": "START_1",
-        "P2Button1": "RT",
-        "P2Button2": "LT",
-        "Analog0": "rightstickleft",
-        "Analog2": "rightstickup",
-        "Analog4": "rightstickleft",
-        "Analog6": "rightstickup"
-      }
-    },
-    "lgi3d_gun": {
-      "category": "other",
+      "category": "lightgun",
       "buttons": {
         "Test": "KB_0",
         "Service1": "KB_9",
@@ -9373,34 +8259,16 @@
         "P1ButtonStart": "KB_1",
         "Coin2": "KB_6",
         "P2ButtonStart": "KB_2",
-        "mouseleft_1": "p1button1",
-        "mouseleft_2": "p2button1",
-        "mousemiddle_1": "extensionone3",
-        "mouseright_1": "p1button2",
-        "mouseright_2": "p2button2"
-      }
+        "p1button1": "mouseleft_1",
+        "p2button1": "mouseleft_2",
+        "extensionone3": "mousemiddle_1",
+        "p1button2": "mouseright_1",
+        "p2button2": "mouseright_2"
+      },
+      "inputMode": "lightgun"
     },
     "lgj": {
-      "category": "other",
-      "buttons": {
-        "Test": "L3",
-        "Service1": "R3",
-        "Coin1": "COIN_1",
-        "P1ButtonStart": "START_1",
-        "P1Button1": "RT",
-        "P1Button2": "ACTION_EAST",
-        "Coin2": "COIN_1",
-        "P2ButtonStart": "START_1",
-        "P2Button1": "RT",
-        "P2Button2": "ACTION_EAST",
-        "Analog0": "rightstickleft",
-        "Analog2": "rightstickup",
-        "Analog4": "rightstickleft",
-        "Analog6": "rightstickup"
-      }
-    },
-    "lgj_gun": {
-      "category": "other",
+      "category": "lightgun",
       "buttons": {
         "Test": "KB_0",
         "Service1": "KB_9",
@@ -9408,39 +8276,17 @@
         "P1ButtonStart": "KB_1",
         "Coin2": "KB_6",
         "P2ButtonStart": "KB_2",
-        "mouseleft_1": "p1button1",
-        "mouseleft_2": "p2button1",
-        "mousemiddle_1": "p1button3",
-        "mousemiddle_2": "p2button3",
-        "mouseright_1": "p1button2",
-        "mouseright_2": "p2button2"
-      }
+        "p1button1": "mouseleft_1",
+        "p2button1": "mouseleft_2",
+        "p1button3": "mousemiddle_1",
+        "p2button3": "mousemiddle_2",
+        "p1button2": "mouseright_1",
+        "p2button2": "mouseright_2"
+      },
+      "inputMode": "lightgun"
     },
     "lgjs": {
-      "category": "other",
-      "buttons": {
-        "Test": "L3",
-        "Service1": "R3",
-        "Coin1": "COIN_1",
-        "P1ButtonStart": "START_1",
-        "P1Button1": "RT",
-        "P1Button2": "ACTION_EAST",
-        "P1Button3": "ACTION_WEST",
-        "P1Button4": "ACTION_NORTH",
-        "Coin2": "COIN_1",
-        "P2ButtonStart": "START_1",
-        "P2Button1": "RT",
-        "P2Button2": "ACTION_EAST",
-        "P2Button3": "ACTION_WEST",
-        "P2Button4": "ACTION_NORTH",
-        "Analog0": "rightstickleft",
-        "Analog2": "rightstickup",
-        "Analog4": "rightstickleft",
-        "Analog6": "rightstickup"
-      }
-    },
-    "lgjs_gun": {
-      "category": "other",
+      "category": "lightgun",
       "buttons": {
         "Test": "KB_0",
         "Service1": "KB_9",
@@ -9450,13 +8296,14 @@
         "Coin2": "KB_6",
         "P2ButtonStart": "KB_2",
         "P2Button4": "KB_LEFT",
-        "mouseleft_1": "p1button1",
-        "mouseleft_2": "p2button1",
-        "mousemiddle_1": "p1button3",
-        "mousemiddle_2": "p2button3",
-        "mouseright_1": "p1button2",
-        "mouseright_2": "p2button2"
-      }
+        "p1button1": "mouseleft_1",
+        "p2button1": "mouseleft_2",
+        "p1button3": "mousemiddle_1",
+        "p2button3": "mousemiddle_2",
+        "p1button2": "mouseright_1",
+        "p2button2": "mouseright_2"
+      },
+      "inputMode": "lightgun"
     },
     "lgjself2": {
       "category": "other",
@@ -9482,62 +8329,20 @@
       }
     },
     "lostland": {
-      "category": "other",
-      "buttons": {
-        "Service1": "R3",
-        "Coin1": "COIN_1",
-        "P1Button1": "ACTION_SOUTH",
-        "P1Button2": "ACTION_EAST",
-        "P1Button3": "ACTION_WEST",
-        "P1Button4": "ACTION_NORTH",
-        "P1Button5": "RB",
-        "P1Button6": "LB",
-        "P1ButtonDown": "DPAD_DOWN",
-        "P1ButtonUp": "DPAD_UP",
-        "P2Button1": "RT",
-        "P2Button2": "LT",
-        "Analog0": "rightstickleft",
-        "Analog2": "rightstickup",
-        "Analog4": "rightstickleft",
-        "Analog6": "rightstickup"
-      }
-    },
-    "lostland_gun": {
-      "category": "other",
+      "category": "lightgun",
       "buttons": {
         "Test": "KB_0",
         "Service1": "KB_9",
         "Coin1": "KB_5",
         "P1Button3": "KB_1",
         "P1Button4": "KB_2",
-        "mouseleft_1": "p1button1",
-        "mouseleft_2": "p2button2"
-      }
+        "p1button1": "mouseleft_1",
+        "p2button2": "mouseleft_2"
+      },
+      "inputMode": "lightgun"
     },
     "luigismansion": {
-      "category": "other",
-      "buttons": {
-        "Test": "L3",
-        "Service1": "R3",
-        "Coin1": "COIN_1",
-        "P1ButtonStart": "START_1",
-        "P1Button1": "RT",
-        "P1Button2": "LT",
-        "P1Button3": "LB",
-        "P1Button4": "ACTION_NORTH",
-        "Coin2": "COIN_1",
-        "P2ButtonStart": "START_1",
-        "P2Button1": "ACTION_SOUTH",
-        "P2Button2": "ACTION_EAST",
-        "P2Button3": "ACTION_WEST",
-        "Analog0": "rightstickleft",
-        "Analog2": "rightstickup",
-        "Analog4": "rightstickleft",
-        "Analog6": "rightstickup"
-      }
-    },
-    "luigismansion_gun": {
-      "category": "other",
+      "category": "lightgun",
       "buttons": {
         "Test": "KB_0",
         "Service1": "KB_9",
@@ -9545,39 +8350,17 @@
         "P1ButtonStart": "KB_1",
         "Coin2": "KB_6",
         "P2ButtonStart": "KB_2",
-        "mouseleft_1": "p1button1",
-        "mouseleft_2": "p2button1",
-        "mousemiddle_1": "p1button3",
-        "mousemiddle_2": "p2button3",
-        "mouseright_1": "p1button2",
-        "mouseright_2": "p2button2"
-      }
+        "p1button1": "mouseleft_1",
+        "p2button1": "mouseleft_2",
+        "p1button3": "mousemiddle_1",
+        "p2button3": "mousemiddle_2",
+        "p1button2": "mouseright_1",
+        "p2button2": "mouseright_2"
+      },
+      "inputMode": "lightgun"
     },
     "lupin3": {
-      "category": "other",
-      "buttons": {
-        "Test": "L3",
-        "Service1": "R3",
-        "Coin1": "COIN_1",
-        "P1ButtonStart": "START_1",
-        "P1Button1": "RT",
-        "P1Button2": "LT",
-        "P1ButtonDown": "DPAD_DOWN",
-        "P1ButtonLeft": "DPAD_LEFT",
-        "P1ButtonRight": "DPAD_RIGHT",
-        "P1ButtonUp": "DPAD_UP",
-        "Coin2": "COIN_1",
-        "P2ButtonStart": "START_1",
-        "P2Button1": "RT",
-        "P2Button2": "LT",
-        "P2ButtonDown": "DPAD_DOWN",
-        "P2ButtonLeft": "DPAD_LEFT",
-        "P2ButtonRight": "DPAD_RIGHT",
-        "P2ButtonUp": "DPAD_UP"
-      }
-    },
-    "lupin3_gun": {
-      "category": "other",
+      "category": "lightgun",
       "buttons": {
         "Test": "KB_0",
         "Service1": "KB_9",
@@ -9585,94 +8368,45 @@
         "P1ButtonStart": "KB_1",
         "Coin2": "KB_6",
         "P2ButtonStart": "KB_2",
-        "mouseleft_1": "p1button1",
-        "mouseleft_2": "p2button1",
-        "mousemiddle_1": "p1button3",
-        "mousemiddle_2": "p2button3",
-        "mouseright_1": "p1button2",
-        "mouseright_2": "p2button2"
-      }
+        "p1button1": "mouseleft_1",
+        "p2button1": "mouseleft_2",
+        "p1button3": "mousemiddle_1",
+        "p2button3": "mousemiddle_2",
+        "p1button2": "mouseright_1",
+        "p2button2": "mouseright_2"
+      },
+      "inputMode": "lightgun"
     },
     "marssortie": {
-      "category": "other",
-      "buttons": {
-        "Test": "L3",
-        "Service1": "R3",
-        "Coin1": "COIN_1",
-        "P1ButtonStart": "START_1",
-        "P1Button1": "RT",
-        "P1Button2": "ACTION_EAST",
-        "P1Button3": "DPAD_UP",
-        "P1Button4": "DPAD_DOWN",
-        "P2Button3": "DPAD_LEFT",
-        "P2Button4": "DPAD_RIGHT",
-        "Coin2": "COIN_1",
-        "P2ButtonStart": "START_1",
-        "P2Button1": "RT",
-        "P2Button2": "ACTION_EAST",
-        "P1Button5": "COIN_1",
-        "JvsTwoP1ButtonStart": "START_1",
-        "JvsTwoP1Button1": "RT",
-        "JvsTwoP1Button2": "ACTION_EAST",
-        "P1Button6": "COIN_1",
-        "JvsTwoP2ButtonStart": "START_1",
-        "JvsTwoP2Button1": "RT",
-        "JvsTwoP2Button2": "ACTION_EAST",
-        "Analog0": "rightstickleft",
-        "Analog10": "ACCELERATE",
-        "Analog12": "rightstickleft",
-        "Analog14": "rightstickup",
-        "Analog2": "rightstickup",
-        "Analog4": "rightstickleft",
-        "Analog6": "rightstickup",
-        "Analog8": "STEER_AXIS"
-      }
-    },
-    "marssortie_gun": {
-      "category": "other",
+      "category": "lightgun",
       "buttons": {
         "Test": "KB_0",
         "Service1": "KB_9",
         "Coin1": "KB_5",
         "P1ButtonStart": "KB_1",
-        "mouseleft_1": "p1button1",
-        "mouseright_1": "p1button2",
+        "p1button1": "mouseleft_1",
+        "p1button2": "mouseright_1",
         "P1Button3": "DPAD_UP",
         "P1Button4": "DPAD_DOWN",
         "P2Button3": "DPAD_LEFT",
         "P2Button4": "DPAD_RIGHT",
         "Coin2": "KB_6",
         "P2ButtonStart": "KB_2",
-        "mouseleft_2": "p2button1",
-        "mouseright_2": "p2button2",
+        "p2button1": "mouseleft_2",
+        "p2button2": "mouseright_2",
         "P1Button5": "KB_7",
         "JvsTwoP1ButtonStart": "KB_3",
-        "mouseleft_3": "jvstwop1button1",
-        "mouseright_3": "jvstwop1button2",
+        "jvstwop1button1": "mouseleft_3",
+        "jvstwop1button2": "mouseright_3",
         "P1Button6": "KB_8",
         "JvsTwoP2ButtonStart": "KB_4",
-        "mouseleft_4": "jvstwop2button1",
-        "mouseright_4": "jvstwop2button2"
-      }
+        "jvstwop2button1": "mouseleft_4",
+        "jvstwop2button2": "mouseright_4"
+      },
+      "inputMode": "lightgun"
     },
     "medarunogunman": {
-      "category": "other",
-      "buttons": {
-        "Test": "L3",
-        "Service1": "R3",
-        "Coin1": "COIN_1",
-        "P1Button1": "RT",
-        "P1Button4": "ACTION_NORTH",
-        "P2Button1": "RT",
-        "P2Button4": "ACTION_NORTH",
-        "Analog0": "rightstickleft",
-        "Analog2": "rightstickup",
-        "Analog4": "rightstickleft",
-        "Analog6": "rightstickup"
-      }
-    },
-    "medarunogunman_gun": {
-      "category": "other",
+      "category": "lightgun",
       "buttons": {
         "Test": "KB_0",
         "Service1": "KB_9",
@@ -9680,31 +8414,17 @@
         "P1ButtonStart": "KB_1",
         "Coin2": "KB_6",
         "P2ButtonStart": "KB_2",
-        "mouseleft_1": "p1button1",
-        "mouseleft_2": "p2button1",
-        "mousemiddle_1": "p1button3",
-        "mousemiddle_2": "p2button3",
-        "mouseright_1": "p1button2",
-        "mouseright_2": "p2button2"
-      }
+        "p1button1": "mouseleft_1",
+        "p2button1": "mouseleft_2",
+        "p1button3": "mousemiddle_1",
+        "p2button3": "mousemiddle_2",
+        "p1button2": "mouseright_1",
+        "p2button2": "mouseright_2"
+      },
+      "inputMode": "lightgun"
     },
     "mib": {
-      "category": "other",
-      "buttons": {
-        "Test": "L3",
-        "Service1": "R3",
-        "Coin1": "COIN_1",
-        "P1ButtonStart": "START_1",
-        "P1Button1": "RT",
-        "Coin2": "COIN_1",
-        "P2ButtonStart": "START_1",
-        "P2Button1": "RT",
-        "Analog0": "rightstickleft",
-        "Analog2": "rightstickup"
-      }
-    },
-    "mib_gun": {
-      "category": "other",
+      "category": "lightgun",
       "buttons": {
         "Test": "KB_0",
         "Service1": "KB_9",
@@ -9712,60 +8432,28 @@
         "P1ButtonStart": "KB_1",
         "Coin2": "KB_6",
         "P2ButtonStart": "KB_2",
-        "mouseleft_1": "p1button1",
-        "mouseleft_2": "p2button1"
-      }
+        "p1button1": "mouseleft_1",
+        "p2button1": "mouseleft_2"
+      },
+      "inputMode": "lightgun"
     },
     "missionimpossible": {
-      "category": "other",
-      "buttons": {
-        "Coin1": "COIN_1",
-        "P1ButtonStart": "START_1",
-        "P1Button1": "RT",
-        "P2ButtonStart": "START_1",
-        "P2Button1": "RT",
-        "Analog0": "rightstickleft",
-        "Analog2": "rightstickup",
-        "Analog4": "rightstickleft",
-        "Analog6": "rightstickup"
-      }
-    },
-    "missionimpossible_gun": {
-      "category": "other",
+      "category": "lightgun",
       "buttons": {
         "Test": "KB_0",
         "Service1": "KB_9",
         "Coin1": "KB_5",
         "P1ButtonStart": "KB_1",
         "P2ButtonStart": "KB_2",
-        "mouseleft_1": "p1button1",
-        "mouseleft_2": "p2button1",
-        "mouseright_1": "p1button2",
-        "mouseright_2": "p2button2"
-      }
+        "p1button1": "mouseleft_1",
+        "p2button1": "mouseleft_2",
+        "p1button2": "mouseright_1",
+        "p2button2": "mouseright_2"
+      },
+      "inputMode": "lightgun"
     },
     "musicgungun2": {
-      "category": "other",
-      "buttons": {
-        "Test": "L3",
-        "ExtensionOne4": "R3",
-        "P1ButtonStart": "START_1",
-        "P1Button3": "ACTION_WEST",
-        "P1Button4": "ACTION_NORTH",
-        "P1ButtonLeft": "DPAD_LEFT",
-        "P1ButtonRight": "DPAD_RIGHT",
-        "P2Button1": "RT",
-        "P2Button3": "ACTION_WEST",
-        "P2Button5": "RB",
-        "P2Button6": "LB",
-        "Analog0": "rightstickleft",
-        "Analog2": "rightstickup",
-        "Analog4": "rightstickleft",
-        "Analog6": "rightstickup"
-      }
-    },
-    "musicgungun2_gun": {
-      "category": "other",
+      "category": "lightgun",
       "buttons": {
         "Test": "KB_0",
         "ExtensionOne4": "KB_9",
@@ -9773,37 +8461,15 @@
         "P1ButtonLeft": "KB_LEFT",
         "P1ButtonRight": "KB_RIGHT",
         "ExtensionOne1": "KB_5",
-        "mouseleft_1": "p2button1",
-        "mouseleft_2": "p2button3",
-        "mouseright_1": "p1button3",
-        "mouseright_2": "p1button4"
-      }
+        "p2button1": "mouseleft_1",
+        "p2button3": "mouseleft_2",
+        "p1button3": "mouseright_1",
+        "p1button4": "mouseright_2"
+      },
+      "inputMode": "lightgun"
     },
     "nerf": {
-      "category": "other",
-      "buttons": {
-        "Test": "L3",
-        "Service1": "R3",
-        "Coin1": "COIN_1",
-        "P1ButtonStart": "START_1",
-        "P1Button1": "RT",
-        "P1Button2": "LT",
-        "P1Button3": "DPAD_UP",
-        "P1Button4": "DPAD_DOWN",
-        "Coin2": "COIN_1",
-        "P2ButtonStart": "START_1",
-        "P2Button1": "RT",
-        "P2Button2": "LT",
-        "P2Button3": "DPAD_LEFT",
-        "P2Button4": "DPAD_RIGHT",
-        "Analog0": "rightstickleft",
-        "Analog2": "rightstickup",
-        "Analog4": "rightstickleft",
-        "Analog6": "rightstickup"
-      }
-    },
-    "nerf_gun": {
-      "category": "other",
+      "category": "lightgun",
       "buttons": {
         "Test": "KB_0",
         "Service1": "KB_9",
@@ -9811,37 +8477,15 @@
         "P1ButtonStart": "KB_1",
         "Coin2": "KB_6",
         "P2ButtonStart": "KB_2",
-        "mouseleft_1": "p1button1",
-        "mouseleft_2": "p2button1",
-        "mouseright_1": "p1button2",
-        "mouseright_2": "p2button2"
-      }
+        "p1button1": "mouseleft_1",
+        "p2button1": "mouseleft_2",
+        "p1button2": "mouseright_1",
+        "p2button2": "mouseright_2"
+      },
+      "inputMode": "lightgun"
     },
     "og": {
-      "category": "other",
-      "buttons": {
-        "Test": "L3",
-        "Service1": "R3",
-        "Coin1": "COIN_1",
-        "P1ButtonStart": "START_1",
-        "P1Button1": "RT",
-        "P1Button2": "LT",
-        "P1Button3": "ACTION_WEST",
-        "P1Button4": "ACTION_NORTH",
-        "Coin2": "COIN_1",
-        "P2ButtonStart": "START_1",
-        "P2Button1": "RT",
-        "P2Button2": "LT",
-        "P2Button3": "ACTION_WEST",
-        "P2Button4": "ACTION_NORTH",
-        "Analog0": "rightstickleft",
-        "Analog2": "rightstickup",
-        "Analog4": "rightstickleft",
-        "Analog6": "rightstickup"
-      }
-    },
-    "og_gun": {
-      "category": "other",
+      "category": "lightgun",
       "buttons": {
         "Test": "KB_0",
         "Service1": "KB_9",
@@ -9851,81 +8495,41 @@
         "Coin2": "KB_6",
         "P2ButtonStart": "KB_2",
         "P2Button4": "KB_LEFT",
-        "mouseleft_1": "p1button1",
-        "mouseleft_2": "p2button1",
-        "mousemiddle_1": "p1button3",
-        "mousemiddle_2": "p2button3",
-        "mouseright_1": "p1button2",
-        "mouseright_2": "p2button2"
-      }
+        "p1button1": "mouseleft_1",
+        "p2button1": "mouseleft_2",
+        "p1button3": "mousemiddle_1",
+        "p2button3": "mousemiddle_2",
+        "p1button2": "mouseright_1",
+        "p2button2": "mouseright_2"
+      },
+      "inputMode": "lightgun"
     },
     "pigsmightfly": {
-      "category": "other",
-      "buttons": {
-        "Test": "L3",
-        "Service1": "R3",
-        "Coin1": "COIN_1",
-        "P1ButtonStart": "START_1",
-        "P1Button1": "RT",
-        "P1Button2": "ACTION_EAST",
-        "Coin2": "ACTION_NORTH"
-      }
-    },
-    "pigsmightfly_gun": {
-      "category": "other",
+      "category": "lightgun",
       "buttons": {
         "Test": "KB_0",
         "Service1": "KB_9",
         "Coin1": "KB_5",
         "P1ButtonStart": "KB_1",
-        "mouseleft_1": "p1button1",
-        "mouseright_1": "p1button2",
-        "mousemiddle_1": "coin2"
-      }
+        "p1button1": "mouseleft_1",
+        "p1button2": "mouseright_1",
+        "coin2": "mousemiddle_1"
+      },
+      "inputMode": "lightgun"
     },
     "plantsvszombies": {
-      "category": "other",
-      "buttons": {
-        "Test": "L3",
-        "Service1": "R3",
-        "Coin1": "COIN_1",
-        "P1Button1": "RT",
-        "Analog0": "rightstickleft",
-        "Analog2": "rightstickup"
-      }
-    },
-    "plantsvszombies_gun": {
-      "category": "other",
+      "category": "lightgun",
       "buttons": {
         "Test": "KB_0",
         "Service1": "KB_9",
         "Coin1": "KB_5",
         "P1ButtonStart": "KB_1",
-        "mouseleft_1": "p1button1"
-      }
+        "p1button1": "mouseleft_1"
+      },
+      "inputMode": "lightgun"
     },
     "pointblankx": {
-      "category": "other",
-      "buttons": {
-        "Test": "L3",
-        "Service1": "R3",
-        "Coin1": "COIN_1",
-        "P1ButtonStart": "START_1",
-        "P1Button1": "RT",
-        "P1ButtonDown": "DPAD_DOWN",
-        "P1ButtonRight": "DPAD_RIGHT",
-        "P1ButtonUp": "DPAD_UP",
-        "Coin2": "COIN_1",
-        "P2ButtonStart": "START_1",
-        "P2Button1": "RT",
-        "Analog0": "rightstickleft",
-        "Analog2": "rightstickup",
-        "Analog4": "rightstickleft",
-        "Analog6": "rightstickup"
-      }
-    },
-    "pointblankx_gun": {
-      "category": "other",
+      "category": "lightgun",
       "buttons": {
         "Test": "KB_0",
         "Service1": "KB_9",
@@ -9933,32 +8537,17 @@
         "P1ButtonStart": "KB_1",
         "Coin2": "KB_6",
         "P2ButtonStart": "KB_2",
-        "mouseleft_1": "p1button1",
-        "mouseleft_2": "p2button1",
-        "mousemiddle_1": "p1button3",
-        "mousemiddle_2": "p2button3",
-        "mouseright_1": "p1button2",
-        "mouseright_2": "p2button2"
-      }
+        "p1button1": "mouseleft_1",
+        "p2button1": "mouseleft_2",
+        "p1button3": "mousemiddle_1",
+        "p2button3": "mousemiddle_2",
+        "p1button2": "mouseright_1",
+        "p2button2": "mouseright_2"
+      },
+      "inputMode": "lightgun"
     },
     "policetrainer2": {
-      "category": "other",
-      "buttons": {
-        "Test": "L3",
-        "Coin1": "COIN_1",
-        "P1ButtonStart": "START_1",
-        "P1Button1": "RT",
-        "Coin2": "COIN_1",
-        "P2ButtonStart": "START_1",
-        "P2Button1": "RT",
-        "Analog0": "rightstickleft",
-        "Analog2": "rightstickup",
-        "Analog4": "rightstickleft",
-        "Analog6": "rightstickup"
-      }
-    },
-    "policetrainer2_gun": {
-      "category": "other",
+      "category": "lightgun",
       "buttons": {
         "Test": "KB_0",
         "Service1": "KB_9",
@@ -9966,37 +8555,17 @@
         "P1ButtonStart": "KB_1",
         "Coin2": "KB_6",
         "P2ButtonStart": "KB_2",
-        "mouseleft_1": "p1button1",
-        "mouseleft_2": "p2button1",
-        "mousemiddle_1": "p1button3",
-        "mousemiddle_2": "p2button3",
-        "mouseright_1": "p1button2",
-        "mouseright_2": "p2button2"
-      }
+        "p1button1": "mouseleft_1",
+        "p2button1": "mouseleft_2",
+        "p1button3": "mousemiddle_1",
+        "p2button3": "mousemiddle_2",
+        "p1button2": "mouseright_1",
+        "p2button2": "mouseright_2"
+      },
+      "inputMode": "lightgun"
     },
     "primevil": {
-      "category": "other",
-      "buttons": {
-        "Test": "L3",
-        "Service1": "R3",
-        "Coin1": "COIN_1",
-        "P1ButtonStart": "START_1",
-        "P1Button1": "RT",
-        "P1Button2": "LT",
-        "P1Button3": "ACTION_WEST",
-        "Coin2": "COIN_1",
-        "P2ButtonStart": "START_1",
-        "P2Button1": "RT",
-        "P2Button2": "LT",
-        "P2Button3": "ACTION_WEST",
-        "Analog0": "rightstickleft",
-        "Analog2": "rightstickup",
-        "Analog4": "rightstickleft",
-        "Analog6": "rightstickup"
-      }
-    },
-    "primevil_gun": {
-      "category": "other",
+      "category": "lightgun",
       "buttons": {
         "Test": "KB_0",
         "Service1": "KB_9",
@@ -10004,68 +8573,30 @@
         "P1ButtonStart": "KB_1",
         "Coin2": "KB_6",
         "P2ButtonStart": "KB_2",
-        "mouseleft_1": "p1button1",
-        "mouseleft_2": "p2button1",
-        "mousemiddle_1": "p1button3",
-        "mousemiddle_2": "p2button3",
-        "mouseright_1": "p1button2",
-        "mouseright_2": "p2button2"
-      }
+        "p1button1": "mouseleft_1",
+        "p2button1": "mouseleft_2",
+        "p1button3": "mousemiddle_1",
+        "p2button3": "mousemiddle_2",
+        "p1button2": "mouseright_1",
+        "p2button2": "mouseright_2"
+      },
+      "inputMode": "lightgun"
     },
     "pullthetrigger": {
-      "category": "other",
-      "buttons": {
-        "Test": "L3",
-        "Service1": "R3",
-        "Coin1": "COIN_1",
-        "P1ButtonStart": "START_1",
-        "P1Button1": "RT",
-        "P1Button2": "LT",
-        "Analog0": "rightstickleft",
-        "Analog2": "rightstickup"
-      }
-    },
-    "pullthetrigger_gun": {
-      "category": "other",
+      "category": "lightgun",
       "buttons": {
         "Test": "KB_0",
         "Service1": "KB_9",
         "Coin1": "KB_5",
         "P1ButtonStart": "KB_1",
-        "mouseleft_1": "p1button1",
-        "mousemiddle_1": "p1button3",
-        "mouseright_1": "p1button2"
-      }
+        "p1button1": "mouseleft_1",
+        "p1button3": "mousemiddle_1",
+        "p1button2": "mouseright_1"
+      },
+      "inputMode": "lightgun"
     },
     "rabbidshollywood": {
-      "category": "other",
-      "buttons": {
-        "Test": "L3",
-        "Coin1": "COIN_1",
-        "P1ButtonStart": "START_1",
-        "P1Button1": "RT",
-        "P1Button3": "ACTION_WEST",
-        "Coin2": "COIN_1",
-        "P2ButtonStart": "START_1",
-        "P2Button1": "RT",
-        "JvsTwoP1ButtonStart": "START_1",
-        "JvsTwoP1Button1": "RT",
-        "JvsTwoP1Button3": "COIN_1",
-        "JvsTwoP2ButtonStart": "START_1",
-        "JvsTwoP2Button1": "RT",
-        "JvsTwoP2Button3": "COIN_1",
-        "Analog0": "rightstickleft",
-        "Analog10": "ACCELERATE",
-        "Analog12": "rightstickleft",
-        "Analog14": "rightstickup",
-        "Analog2": "rightstickup",
-        "Analog4": "rightstickleft",
-        "Analog6": "rightstickup",
-        "Analog8": "STEER_AXIS"
-      }
-    },
-    "rabbidshollywood_gun": {
-      "category": "other",
+      "category": "lightgun",
       "buttons": {
         "Test": "KB_0",
         "Service1": "KB_9",
@@ -10077,39 +8608,16 @@
         "JvsTwoP1Button3": "KB_7",
         "JvsTwoP2ButtonStart": "KB_4",
         "JvsTwoP2Button3": "KB_8",
-        "mouseleft_1": "p1button1",
-        "mouseleft_2": "p2button1",
-        "mouseleft_3": "jvstwop1button1",
-        "mouseleft_4": "jvstwop2button1",
-        "mousemiddle_1": "p1button3"
-      }
+        "p1button1": "mouseleft_1",
+        "p2button1": "mouseleft_2",
+        "jvstwop1button1": "mouseleft_3",
+        "jvstwop2button1": "mouseleft_4",
+        "p1button3": "mousemiddle_1"
+      },
+      "inputMode": "lightgun"
     },
     "raccoonrampage": {
-      "category": "other",
-      "buttons": {
-        "Test": "L3",
-        "Service1": "R3",
-        "P1ButtonStart": "START_1",
-        "P1Button1": "RT",
-        "P1Button5": "RB",
-        "P2ButtonStart": "START_1",
-        "P2Button1": "RT",
-        "JvsTwoP1ButtonStart": "START_1",
-        "JvsTwoP1Button1": "RT",
-        "JvsTwoP2ButtonStart": "START_1",
-        "JvsTwoP2Button1": "RT",
-        "Analog0": "rightstickleft",
-        "Analog10": "ACCELERATE",
-        "Analog12": "rightstickleft",
-        "Analog14": "rightstickup",
-        "Analog2": "rightstickup",
-        "Analog4": "rightstickleft",
-        "Analog6": "rightstickup",
-        "Analog8": "STEER_AXIS"
-      }
-    },
-    "raccoonrampage_gun": {
-      "category": "other",
+      "category": "lightgun",
       "buttons": {
         "Test": "KB_0",
         "Service1": "KB_9",
@@ -10121,43 +8629,23 @@
         "P3ButtonStart": "KB_3",
         "Coin4": "KB_8",
         "P4ButtonStart": "KB_4",
-        "mouseleft_1": "p1button1",
-        "mouseleft_2": "p2button1",
-        "mouseleft_3": "p3button1",
-        "mouseleft_4": "p4button1",
-        "mousemiddle_1": "p1button3",
-        "mousemiddle_2": "p2button3",
-        "mousemiddle_3": "p3button3",
-        "mousemiddle_4": "p4button3",
-        "mouseright_1": "p1button2",
-        "mouseright_2": "p2button2",
-        "mouseright_3": "p3button2",
-        "mouseright_4": "p4button2"
-      }
+        "p1button1": "mouseleft_1",
+        "p2button1": "mouseleft_2",
+        "p3button1": "mouseleft_3",
+        "p4button1": "mouseleft_4",
+        "p1button3": "mousemiddle_1",
+        "p2button3": "mousemiddle_2",
+        "p3button3": "mousemiddle_3",
+        "p4button3": "mousemiddle_4",
+        "p1button2": "mouseright_1",
+        "p2button2": "mouseright_2",
+        "p3button2": "mouseright_3",
+        "p4button2": "mouseright_4"
+      },
+      "inputMode": "lightgun"
     },
     "rambo": {
-      "category": "other",
-      "buttons": {
-        "Test": "L3",
-        "Service1": "R3",
-        "Coin1": "COIN_1",
-        "P1ButtonStart": "START_1",
-        "P1Button1": "RT",
-        "P1Button2": "LT",
-        "P1Button3": "ACTION_WEST",
-        "Coin2": "COIN_1",
-        "P2ButtonStart": "START_1",
-        "P2Button1": "RT",
-        "P2Button2": "LT",
-        "P2Button3": "ACTION_WEST",
-        "Analog0": "rightstickleft",
-        "Analog2": "rightstickup",
-        "Analog4": "rightstickleft",
-        "Analog6": "rightstickup"
-      }
-    },
-    "rambo_gun": {
-      "category": "other",
+      "category": "lightgun",
       "buttons": {
         "Test": "KB_0",
         "Service1": "KB_9",
@@ -10165,13 +8653,14 @@
         "P1ButtonStart": "KB_1",
         "Coin2": "KB_6",
         "P2ButtonStart": "KB_2",
-        "mouseleft_1": "p1button1",
-        "mouseleft_2": "p2button1",
-        "mousemiddle_1": "p1button3",
-        "mousemiddle_2": "p2button3",
-        "mouseright_1": "p1button2",
-        "mouseright_2": "p2button2"
-      }
+        "p1button1": "mouseleft_1",
+        "p2button1": "mouseleft_2",
+        "p1button3": "mousemiddle_1",
+        "p2button3": "mousemiddle_2",
+        "p1button2": "mouseright_1",
+        "p2button2": "mouseright_2"
+      },
+      "inputMode": "lightgun"
     },
     "ramboelf2": {
       "category": "other",
@@ -10195,52 +8684,20 @@
       }
     },
     "robinhood": {
-      "category": "other",
-      "buttons": {
-        "Test": "L3",
-        "Service1": "R3",
-        "Coin1": "COIN_1",
-        "P1ButtonStart": "START_1",
-        "P1Button1": "RT",
-        "P1Button2": "ACTION_EAST",
-        "P1Button3": "ACTION_WEST",
-        "P1Button4": "ACTION_NORTH",
-        "P1Button5": "RB",
-        "Analog0": "rightstickleft",
-        "Analog2": "rightstickup"
-      }
-    },
-    "robinhood_gun": {
-      "category": "other",
+      "category": "lightgun",
       "buttons": {
         "Test": "KB_0",
         "Service1": "KB_9",
         "Coin1": "KB_5",
         "P1ButtonStart": "KB_1",
-        "mouseleft_1": "p1button1",
-        "mousemiddle_1": "p1button3",
-        "mouseright_1": "p1button2"
-      }
+        "p1button1": "mouseleft_1",
+        "p1button3": "mousemiddle_1",
+        "p1button2": "mouseright_1"
+      },
+      "inputMode": "lightgun"
     },
     "sdr": {
-      "category": "other",
-      "buttons": {
-        "Test": "L3",
-        "Service1": "R3",
-        "Coin1": "COIN_1",
-        "P1ButtonStart": "START_1",
-        "P1Button1": "RT",
-        "Coin2": "COIN_1",
-        "P2ButtonStart": "START_1",
-        "P2Button1": "RT",
-        "Analog0": "rightstickleft",
-        "Analog2": "rightstickup",
-        "Analog4": "rightstickleft",
-        "Analog6": "rightstickup"
-      }
-    },
-    "sdr_gun": {
-      "category": "other",
+      "category": "lightgun",
       "buttons": {
         "Test": "KB_0",
         "Service1": "KB_9",
@@ -10248,38 +8705,17 @@
         "P1ButtonStart": "KB_1",
         "Coin2": "KB_6",
         "P2ButtonStart": "KB_2",
-        "mouseleft_1": "p1button1",
-        "mouseleft_2": "p2button1",
-        "mousemiddle_1": "p1button3",
-        "mousemiddle_2": "p2button3",
-        "mouseright_1": "p1button2",
-        "mouseright_2": "p2button2"
-      }
+        "p1button1": "mouseleft_1",
+        "p2button1": "mouseleft_2",
+        "p1button3": "mousemiddle_1",
+        "p2button3": "mousemiddle_2",
+        "p1button2": "mouseright_1",
+        "p2button2": "mouseright_2"
+      },
+      "inputMode": "lightgun"
     },
     "silenthill": {
-      "category": "other",
-      "buttons": {
-        "Test": "L3",
-        "Service1": "R3",
-        "Coin1": "COIN_1",
-        "P1Button1": "RT",
-        "P1Button2": "START_1",
-        "P1Button3": "ACTION_WEST",
-        "P1Button4": "ACTION_NORTH",
-        "P1Button5": "LT",
-        "P2Button1": "RT",
-        "P2Button2": "START_1",
-        "P2Button3": "ACTION_WEST",
-        "P2Button4": "ACTION_NORTH",
-        "P2Button5": "LT",
-        "Analog0": "rightstickleft",
-        "Analog2": "rightstickup",
-        "Analog4": "rightstickleft",
-        "Analog6": "rightstickup"
-      }
-    },
-    "silenthill_gun": {
-      "category": "other",
+      "category": "lightgun",
       "buttons": {
         "Test": "KB_0",
         "Service1": "KB_9",
@@ -10291,11 +8727,12 @@
         "P2Button2": "KB_2",
         "P2Button3": "KB_LEFT",
         "P2Button4": "KB_RIGHT",
-        "mouseleft_1": "p1button1",
-        "mouseleft_2": "p2button1",
-        "mouseright_1": "p1button5",
-        "mouseright_2": "p2button5"
-      }
+        "p1button1": "mouseleft_1",
+        "p2button1": "mouseleft_2",
+        "p1button5": "mouseright_1",
+        "p2button5": "mouseright_2"
+      },
+      "inputMode": "lightgun"
     },
     "skycurser": {
       "category": "other",
@@ -10323,47 +8760,20 @@
       }
     },
     "spacewarp66": {
-      "category": "other",
-      "buttons": {
-        "Test": "L3",
-        "Service1": "R3",
-        "Coin1": "COIN_1",
-        "P1ButtonStart": "START_1",
-        "P1Button1": "DPAD_UP",
-        "P1Button2": "DPAD_DOWN",
-        "P1Button3": "DPAD_LEFT",
-        "P1Button4": "DPAD_RIGHT"
-      }
-    },
-    "spacewarp66_gun": {
-      "category": "other",
+      "category": "lightgun",
       "buttons": {
         "Test": "KB_0",
         "Service1": "KB_9",
         "Coin1": "KB_5",
         "P1ButtonStart": "KB_1",
-        "mouseleft_1": "p1button1",
-        "mouseright_1": "p1button2",
-        "mousemiddle_1": "p1button3"
-      }
+        "p1button1": "mouseleft_1",
+        "p1button2": "mouseright_1",
+        "p1button3": "mousemiddle_1"
+      },
+      "inputMode": "lightgun"
     },
     "startrekvoyager": {
-      "category": "other",
-      "buttons": {
-        "Coin1": "COIN_1",
-        "P1Button1": "LT",
-        "P1Button2": "RT",
-        "Coin2": "COIN_1",
-        "P2Button1": "LT",
-        "P2Button2": "RT",
-        "Analog0": "rightstickleft",
-        "Analog2": "rightstickup",
-        "Analog4": "rightstickleft",
-        "Analog6": "rightstickup"
-      }
-    },
-    "startrekvoyager_gun": {
-      "category": "other",
+      "category": "lightgun",
       "buttons": {
         "Test": "KB_0",
         "Service1": "KB_9",
@@ -10371,13 +8781,14 @@
         "P1ButtonStart": "KB_1",
         "Coin2": "KB_6",
         "P2ButtonStart": "KB_2",
-        "mouseleft_1": "p1button1",
-        "mouseleft_2": "p2button1",
-        "mousemiddle_1": "p1button3",
-        "mousemiddle_2": "p2button3",
-        "mouseright_1": "p1button2",
-        "mouseright_2": "p2button2"
-      }
+        "p1button1": "mouseleft_1",
+        "p2button1": "mouseleft_2",
+        "p1button3": "mousemiddle_1",
+        "p2button3": "mousemiddle_2",
+        "p1button2": "mouseright_1",
+        "p2button2": "mouseright_2"
+      },
+      "inputMode": "lightgun"
     },
     "startrekvoyagerelf2": {
       "category": "other",
@@ -10395,30 +8806,7 @@
       }
     },
     "targetbravo": {
-      "category": "other",
-      "buttons": {
-        "Test": "L3",
-        "Service1": "R3",
-        "Coin1": "COIN_1",
-        "P1ButtonStart": "START_1",
-        "P1Button1": "RT",
-        "P1Button2": "LT",
-        "P1Button3": "ACTION_WEST",
-        "P1Button4": "ACTION_NORTH",
-        "Coin2": "COIN_1",
-        "P2ButtonStart": "START_1",
-        "P2Button1": "RT",
-        "P2Button2": "LT",
-        "P2Button3": "ACTION_WEST",
-        "P2Button4": "ACTION_NORTH",
-        "Analog0": "rightstickleft",
-        "Analog2": "rightstickup",
-        "Analog4": "rightstickleft",
-        "Analog6": "rightstickup"
-      }
-    },
-    "targetbravo_gun": {
-      "category": "other",
+      "category": "lightgun",
       "buttons": {
         "Test": "KB_0",
         "Service1": "KB_9",
@@ -10428,35 +8816,17 @@
         "Coin2": "KB_6",
         "P2ButtonStart": "KB_2",
         "P2Button4": "KB_RIGHT",
-        "mouseleft_1": "p1button1",
-        "mouseleft_2": "p2button1",
-        "mousemiddle_1": "p1button3",
-        "mousemiddle_2": "p2button3",
-        "mouseright_1": "p1button2",
-        "mouseright_2": "p2button2"
-      }
+        "p1button1": "mouseleft_1",
+        "p2button1": "mouseleft_2",
+        "p1button3": "mousemiddle_1",
+        "p2button3": "mousemiddle_2",
+        "p1button2": "mouseright_1",
+        "p2button2": "mouseright_2"
+      },
+      "inputMode": "lightgun"
     },
     "targetterrorgold": {
-      "category": "other",
-      "buttons": {
-        "Test": "L3",
-        "Service1": "R3",
-        "P1ButtonStart": "START_1",
-        "P1Button1": "RT",
-        "P1Button3": "ACTION_WEST",
-        "P1ButtonDown": "DPAD_DOWN",
-        "P1ButtonUp": "DPAD_UP",
-        "P2ButtonStart": "START_1",
-        "P2Button1": "RT",
-        "P2Button3": "ACTION_WEST",
-        "Analog0": "rightstickleft",
-        "Analog2": "rightstickup",
-        "Analog4": "rightstickleft",
-        "Analog6": "rightstickup"
-      }
-    },
-    "targetterrorgold_gun": {
-      "category": "other",
+      "category": "lightgun",
       "buttons": {
         "Test": "KB_0",
         "Service1": "KB_9",
@@ -10464,67 +8834,30 @@
         "P1ButtonStart": "KB_1",
         "Coin2": "KB_6",
         "P2ButtonStart": "KB_2",
-        "mouseleft_1": "p1button1",
-        "mouseleft_2": "p2button1",
-        "mousemiddle_1": "p1button3",
-        "mousemiddle_2": "p2button3",
-        "mouseright_1": "p1button2",
-        "mouseright_2": "p2button2"
-      }
+        "p1button1": "mouseleft_1",
+        "p2button1": "mouseleft_2",
+        "p1button3": "mousemiddle_1",
+        "p2button3": "mousemiddle_2",
+        "p1button2": "mouseright_1",
+        "p2button2": "mouseright_2"
+      },
+      "inputMode": "lightgun"
     },
     "tc5": {
-      "category": "other",
-      "buttons": {
-        "Test": "L3",
-        "Service1": "R3",
-        "Coin1": "COIN_1",
-        "P1Button1": "RT",
-        "P1Button2": "LT",
-        "P1Button3": "DPAD_LEFT",
-        "P1Button4": "DPAD_RIGHT",
-        "P2Button1": "DPAD_UP",
-        "P2Button2": "DPAD_DOWN",
-        "P2Button3": "ACTION_WEST",
-        "Analog0": "rightstickleft",
-        "Analog2": "rightstickup"
-      }
-    },
-    "tc5_gun": {
-      "category": "other",
+      "category": "lightgun",
       "buttons": {
         "Test": "KB_0",
         "Service1": "KB_9",
         "Coin1": "KB_5",
         "P1Button3": "KB_LEFT",
         "P1Button4": "KB_RIGHT",
-        "mouseleft_1": "p1button1",
-        "mouseright_1": "p1button2"
-      }
+        "p1button1": "mouseleft_1",
+        "p1button2": "mouseright_1"
+      },
+      "inputMode": "lightgun"
     },
     "terminator": {
-      "category": "other",
-      "buttons": {
-        "Test": "L3",
-        "Service1": "R3",
-        "Coin1": "COIN_1",
-        "P1ButtonStart": "START_1",
-        "P1Button1": "RT",
-        "P1Button2": "ACTION_EAST",
-        "P1Button3": "ACTION_WEST",
-        "P1ButtonDown": "DPAD_DOWN",
-        "P1ButtonUp": "DPAD_UP",
-        "P2ButtonStart": "START_1",
-        "P2Button1": "RT",
-        "P2Button2": "ACTION_EAST",
-        "P2Button3": "ACTION_WEST",
-        "Analog0": "rightstickleft",
-        "Analog2": "rightstickup",
-        "Analog4": "rightstickleft",
-        "Analog6": "rightstickup"
-      }
-    },
-    "terminator_gun": {
-      "category": "other",
+      "category": "lightgun",
       "buttons": {
         "Test": "KB_0",
         "Service1": "KB_9",
@@ -10532,47 +8865,17 @@
         "P1ButtonStart": "KB_1",
         "Coin2": "KB_6",
         "P2ButtonStart": "KB_2",
-        "mouseleft_1": "p1button1",
-        "mouseleft_2": "p2button1",
-        "mousemiddle_1": "p1button2",
-        "mousemiddle_2": "p2button2",
-        "mouseright_1": "p1button3",
-        "mouseright_2": "p2button3"
-      }
+        "p1button1": "mouseleft_1",
+        "p2button1": "mouseleft_2",
+        "p1button2": "mousemiddle_1",
+        "p2button2": "mousemiddle_2",
+        "p1button3": "mouseright_1",
+        "p2button3": "mouseright_2"
+      },
+      "inputMode": "lightgun"
     },
     "tombraider": {
-      "category": "other",
-      "buttons": {
-        "Test": "L3",
-        "Coin1": "COIN_1",
-        "P1ButtonStart": "START_1",
-        "P1Button1": "RT",
-        "P1Button2": "LT",
-        "P1Button3": "ACTION_WEST",
-        "Coin2": "COIN_1",
-        "P2ButtonStart": "START_1",
-        "P2Button1": "RT",
-        "P2Button2": "LT",
-        "JvsTwoP1ButtonStart": "START_1",
-        "JvsTwoP1Button1": "RT",
-        "JvsTwoP1Button2": "LT",
-        "JvsTwoP1Button3": "COIN_1",
-        "JvsTwoP2ButtonStart": "START_1",
-        "JvsTwoP2Button1": "RT",
-        "JvsTwoP2Button2": "LT",
-        "JvsTwoP2Button3": "COIN_1",
-        "Analog0": "rightstickleft",
-        "Analog10": "ACCELERATE",
-        "Analog12": "rightstickleft",
-        "Analog14": "rightstickup",
-        "Analog2": "rightstickup",
-        "Analog4": "rightstickleft",
-        "Analog6": "rightstickup",
-        "Analog8": "STEER_AXIS"
-      }
-    },
-    "tombraider_gun": {
-      "category": "other",
+      "category": "lightgun",
       "buttons": {
         "Test": "KB_0",
         "Service1": "KB_9",
@@ -10584,38 +8887,20 @@
         "JvsTwoP1Button3": "KB_7",
         "JvsTwoP2ButtonStart": "KB_4",
         "JvsTwoP2Button3": "KB_8",
-        "mouseleft_1": "p1button1",
-        "mouseleft_2": "p2button1",
-        "mouseleft_3": "jvstwop1button1",
-        "mouseleft_4": "jvstwop2button1",
-        "mousemiddle_1": "p1button3",
-        "mouseright_1": "p1button2",
-        "mouseright_2": "p2button2",
-        "mouseright_3": "jvstwop1button2",
-        "mouseright_4": "jvstwop2button2"
-      }
+        "p1button1": "mouseleft_1",
+        "p2button1": "mouseleft_2",
+        "jvstwop1button1": "mouseleft_3",
+        "jvstwop2button1": "mouseleft_4",
+        "p1button3": "mousemiddle_1",
+        "p1button2": "mouseright_1",
+        "p2button2": "mouseright_2",
+        "jvstwop1button2": "mouseright_3",
+        "jvstwop2button2": "mouseright_4"
+      },
+      "inputMode": "lightgun"
     },
     "transformers": {
-      "category": "other",
-      "buttons": {
-        "Test": "L3",
-        "Service1": "R3",
-        "Coin1": "COIN_1",
-        "P1ButtonStart": "START_1",
-        "P1Button1": "RT",
-        "P1Button2": "LT",
-        "Coin2": "COIN_1",
-        "P2ButtonStart": "START_1",
-        "P2Button1": "RT",
-        "P2Button2": "LT",
-        "Analog0": "rightstickleft",
-        "Analog2": "rightstickup",
-        "Analog4": "rightstickleft",
-        "Analog6": "rightstickup"
-      }
-    },
-    "transformers_gun": {
-      "category": "other",
+      "category": "lightgun",
       "buttons": {
         "Test": "KB_0",
         "Service1": "KB_9",
@@ -10623,32 +8908,17 @@
         "P1ButtonStart": "KB_1",
         "Coin2": "KB_6",
         "P2ButtonStart": "KB_2",
-        "mouseleft_1": "p1button1",
-        "mouseleft_2": "p2button1",
-        "mousemiddle_1": "p1button3",
-        "mousemiddle_2": "p2button3",
-        "mouseright_1": "p1button2",
-        "mouseright_2": "p2button2"
-      }
+        "p1button1": "mouseleft_1",
+        "p2button1": "mouseleft_2",
+        "p1button3": "mousemiddle_1",
+        "p2button3": "mousemiddle_2",
+        "p1button2": "mouseright_1",
+        "p2button2": "mouseright_2"
+      },
+      "inputMode": "lightgun"
     },
     "transformersshadowsrising": {
-      "category": "other",
-      "buttons": {
-        "Coin1": "COIN_1",
-        "P1ButtonStart": "START_1",
-        "P1Button1": "RT",
-        "P1Button2": "ACTION_EAST",
-        "P1Button3": "ACTION_WEST",
-        "P2ButtonStart": "START_1",
-        "P2Button1": "RT",
-        "Analog0": "rightstickleft",
-        "Analog2": "rightstickup",
-        "Analog4": "rightstickleft",
-        "Analog6": "rightstickup"
-      }
-    },
-    "transformersshadowsrising_gun": {
-      "category": "other",
+      "category": "lightgun",
       "buttons": {
         "Test": "KB_0",
         "Service1": "KB_9",
@@ -10656,37 +8926,17 @@
         "P1ButtonStart": "KB_1",
         "Coin2": "KB_6",
         "P2ButtonStart": "KB_2",
-        "mouseleft_1": "p1button1",
-        "mouseleft_2": "p2button1",
-        "mousemiddle_1": "p1button3",
-        "mousemiddle_2": "p2button3",
-        "mouseright_1": "p1button2",
-        "mouseright_2": "p2button2"
-      }
+        "p1button1": "mouseleft_1",
+        "p2button1": "mouseleft_2",
+        "p1button3": "mousemiddle_1",
+        "p2button3": "mousemiddle_2",
+        "p1button2": "mouseright_1",
+        "p2button2": "mouseright_2"
+      },
+      "inputMode": "lightgun"
     },
     "walkingdead": {
-      "category": "other",
-      "buttons": {
-        "Test": "L3",
-        "Service1": "R3",
-        "Coin1": "COIN_1",
-        "P1ButtonStart": "START_1",
-        "P1Button1": "RT",
-        "P1Button2": "LT",
-        "P1ButtonDown": "DPAD_DOWN",
-        "P1ButtonUp": "DPAD_UP",
-        "Coin2": "COIN_1",
-        "P2ButtonStart": "START_1",
-        "P2Button1": "RT",
-        "P2Button2": "LT",
-        "Analog0": "rightstickleft",
-        "Analog2": "rightstickup",
-        "Analog4": "rightstickleft",
-        "Analog6": "rightstickup"
-      }
-    },
-    "walkingdead_gun": {
-      "category": "other",
+      "category": "lightgun",
       "buttons": {
         "Test": "KB_0",
         "Service1": "KB_9",
@@ -10694,55 +8944,17 @@
         "P1ButtonStart": "KB_1",
         "Coin2": "KB_6",
         "P2ButtonStart": "KB_2",
-        "mouseleft_1": "p1button1",
-        "mouseleft_2": "p2button1",
-        "mousemiddle_1": "p1button3",
-        "mousemiddle_2": "p2button3",
-        "mouseright_1": "p1button2",
-        "mouseright_2": "p2button2"
-      }
+        "p1button1": "mouseleft_1",
+        "p2button1": "mouseleft_2",
+        "p1button3": "mousemiddle_1",
+        "p2button3": "mousemiddle_2",
+        "p1button2": "mouseright_1",
+        "p2button2": "mouseright_2"
+      },
+      "inputMode": "lightgun"
     },
     "wartrantroopers": {
-      "category": "other",
-      "buttons": {
-        "Test": "L3",
-        "Service1": "R3",
-        "Coin1": "COIN_1",
-        "P1ButtonStart": "START_1",
-        "P1Button1": "RT",
-        "P1Button2": "ACTION_EAST",
-        "P1Button3": "ACTION_WEST",
-        "P1Button4": "ACTION_NORTH",
-        "P1Button5": "RB",
-        "P1Button6": "LB",
-        "Coin2": "COIN_1",
-        "P2ButtonStart": "START_1",
-        "P2Button1": "RT",
-        "P2Button2": "ACTION_EAST",
-        "P2Button3": "ACTION_WEST",
-        "P2Button4": "ACTION_NORTH",
-        "JvsTwoP1ButtonStart": "START_1",
-        "JvsTwoP1Button1": "RT",
-        "JvsTwoP1Button2": "ACTION_EAST",
-        "JvsTwoP1Button3": "ACTION_WEST",
-        "JvsTwoP1Button4": "ACTION_NORTH",
-        "JvsTwoP2ButtonStart": "START_1",
-        "JvsTwoP2Button1": "RT",
-        "JvsTwoP2Button2": "ACTION_EAST",
-        "JvsTwoP2Button3": "ACTION_WEST",
-        "JvsTwoP2Button4": "ACTION_NORTH",
-        "Analog0": "rightstickleft",
-        "Analog10": "ACCELERATE",
-        "Analog12": "rightstickleft",
-        "Analog14": "rightstickup",
-        "Analog2": "rightstickup",
-        "Analog4": "rightstickleft",
-        "Analog6": "rightstickup",
-        "Analog8": "STEER_AXIS"
-      }
-    },
-    "wartrantroopers_gun": {
-      "category": "other",
+      "category": "lightgun",
       "buttons": {
         "Test": "KB_0",
         "Service1": "KB_9",
@@ -10758,37 +8970,23 @@
         "JvsTwoP1Button4": "KB_LEFT",
         "JvsTwoP2ButtonStart": "KB_4",
         "JvsTwoP2Button4": "KB_LEFT",
-        "mouseleft_1": "p1button1",
-        "mouseleft_2": "p2button1",
-        "mouseleft_3": "p3button1",
-        "mouseleft_4": "p4button1",
-        "mousemiddle_1": "p1button2",
-        "mousemiddle_2": "p2button2",
-        "mousemiddle_3": "jvstwop1button2",
-        "mousemiddle_4": "jvstwop2button2",
-        "mouseright_1": "p1button3",
-        "mouseright_2": "p2button3",
-        "mouseright_3": "jvstwop1button3",
-        "mouseright_4": "jvstwop2button3"
-      }
+        "p1button1": "mouseleft_1",
+        "p2button1": "mouseleft_2",
+        "p3button1": "mouseleft_3",
+        "p4button1": "mouseleft_4",
+        "p1button2": "mousemiddle_1",
+        "p2button2": "mousemiddle_2",
+        "jvstwop1button2": "mousemiddle_3",
+        "jvstwop2button2": "mousemiddle_4",
+        "p1button3": "mouseright_1",
+        "p2button3": "mouseright_2",
+        "jvstwop1button3": "mouseright_3",
+        "jvstwop2button3": "mouseright_4"
+      },
+      "inputMode": "lightgun"
     },
     "wildwestshootout": {
-      "category": "other",
-      "buttons": {
-        "Test": "L3",
-        "Service1": "R3",
-        "Coin1": "COIN_1",
-        "P1Button1": "RT",
-        "P1Button2": "LT",
-        "Coin2": "COIN_1",
-        "P2Button1": "RT",
-        "P2Button2": "LT",
-        "Analog0": "rightstickleft",
-        "Analog2": "rightstickup"
-      }
-    },
-    "wildwestshootout_gun": {
-      "category": "other",
+      "category": "lightgun",
       "buttons": {
         "Test": "KB_0",
         "Service1": "KB_9",
@@ -10796,13 +8994,14 @@
         "P1ButtonStart": "KB_1",
         "Coin2": "KB_6",
         "P2ButtonStart": "KB_2",
-        "mouseleft_1": "p1button1",
-        "mouseleft_2": "p2button1",
-        "mousemiddle_1": "p1button3",
-        "mousemiddle_2": "p2button3",
-        "mouseright_1": "p1button2",
-        "mouseright_2": "p2button2"
-      }
+        "p1button1": "mouseleft_1",
+        "p2button1": "mouseleft_2",
+        "p1button3": "mousemiddle_1",
+        "p2button3": "mousemiddle_2",
+        "p1button2": "mouseright_1",
+        "p2button2": "mouseright_2"
+      },
+      "inputMode": "lightgun"
     },
     "alpineracer": {
       "category": "other",

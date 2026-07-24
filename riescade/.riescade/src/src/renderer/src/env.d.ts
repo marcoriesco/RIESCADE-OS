@@ -19,6 +19,7 @@ declare global {
       loadTheme: (themeName: string) => Promise<any>
       getSettings: () => Promise<any>
       getGpuDiagnostics: () => Promise<any>
+      getPointingDevices: (forceRefresh?: boolean) => Promise<{ lastScan: number; devices: any[] }>
       saveSetting: (name: string, value: any, type: string) => Promise<any>
       saveWindowBounds: (windowId: string, bounds: { x: number; y: number; width: number; height: number }) => Promise<void>
       getEmulatorSettings: () => Promise<any>

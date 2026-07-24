@@ -11,6 +11,13 @@ interface TeknoControlsDb {
   aliases: Record<string, string>;
   profiles: Record<string, {
     category: 'racing' | 'fighter' | 'lightgun' | 'other';
+    inputMode?: 'lightgun' | 'mouse' | 'touchscreen' | 'gamepad';
+    deviceFields?: {
+      p1?: string;
+      p2?: string;
+      mouse?: string;
+      touch?: string;
+    };
     buttons: Record<string, string>;
   }>;
 }
@@ -41,6 +48,9 @@ export class TeknoParrotGenerator extends BaseGenerator {
   private gameProfilesIndex: Map<string, string> = new Map(); // normalizedName -> realFilename
   private controllers: ControllerInfo[] = [];
   private hashChanged: boolean = true;
+  private pointingDevicePaths: string[] = ['', ''];
+  private keyboardDevicePath: string = '';
+  private keyboardDeviceLabel: string = 'Keyboard';
 
   /**
    * Helper: Normalizes a string (lowercase, alphanumeric only) for robust matching.
@@ -86,8 +96,11 @@ export class TeknoParrotGenerator extends BaseGenerator {
     // 6. Execute game profile configuration pipeline
     this.buildUserProfile();
     this.configureGamePath();
-    this.configureConfigValues();
-    this.configureControllers();
+
+    const category = this.getProfileCategory();
+
+    this.configureConfigValues(category);
+    this.configureControllers(category);
     this.save();
   }
 
@@ -287,16 +300,41 @@ export class TeknoParrotGenerator extends BaseGenerator {
     }
   }
 
+  private getProfileCategory(): 'racing' | 'fighter' | 'lightgun' | 'other' {
+    const buttonNames = this.extractButtonNames(this.xml);
+    const normProfileName = TeknoParrotGenerator.normalizeName(this.profileName);
+
+    let explicitProfile: TeknoControlsDb['profiles'][string] | null = null;
+    for (const [key, value] of Object.entries(this.controlsDb.profiles || {})) {
+      if (TeknoParrotGenerator.normalizeName(key) === normProfileName) {
+        explicitProfile = value;
+        break;
+      }
+    }
+
+    return explicitProfile?.category || this.classifyByScore(buttonNames);
+  }
+
   // ────────────────────────────────────────────────────────────────────────
   // Pipeline Step 4: Configure ConfigValues (Input API & DisplayMode)
   // Decoupled from controller button mapping!
   // ────────────────────────────────────────────────────────────────────────
 
-  private configureConfigValues(): void {
-    // 1. Force Input API to XInput whenever controllers are present or XInput is requested
+  private configureConfigValues(category: 'racing' | 'fighter' | 'lightgun' | 'other'): void {
+    // 1. Input API selection: User setting override or category-based default (Lightgun -> RawInput, Racing/Fighter -> XInput)
+    const userApiSetting = Config.getEmulatorSetting('teknoparrot', 'input_api', null)
+                         ?? Config.getEmulatorSetting('teknoparrot', 'inputapi', null);
+
+    let targetInputApi = 'XInput';
+    if (userApiSetting) {
+      targetInputApi = String(userApiSetting);
+    } else if (category === 'lightgun') {
+      targetInputApi = 'RawInput';
+    }
+
     if (this.xml.includes('<FieldName>Input API</FieldName>')) {
-      this.xml = this.setFieldValue(this.xml, 'Input API', 'XInput');
-      Logger.info(`[TP] Input API set to XInput in ConfigValues`);
+      this.xml = this.setFieldValue(this.xml, 'Input API', targetInputApi);
+      Logger.info(`[TP] Input API set to "${targetInputApi}" in ConfigValues (Category: ${category})`);
     }
 
     // 2. Configure DisplayMode (Fullscreen / Windowed)
@@ -314,15 +352,254 @@ export class TeknoParrotGenerator extends BaseGenerator {
       this.xml = this.setFieldValue(this.xml, 'Borderless Fullscreen', '1');
       Logger.info(`[TP] Display options set (Windowed=${forceFs ? '0' : '1'}, Borderless Fullscreen=1)`);
     }
+
+    // 3. Configure Mouse / Lightgun / Touch Pointing Devices
+    this.configurePointingAndLightgunDevices(category);
+  }
+
+  private configurePointingAndLightgunDevices(category: 'racing' | 'fighter' | 'lightgun' | 'other'): void {
+    const normProfileName = TeknoParrotGenerator.normalizeName(this.profileName);
+
+    let explicitProfile: TeknoControlsDb['profiles'][string] | null = null;
+    for (const [key, value] of Object.entries(this.controlsDb.profiles || {})) {
+      if (TeknoParrotGenerator.normalizeName(key) === normProfileName) {
+        explicitProfile = value;
+        break;
+      }
+    }
+
+    const inputMode = explicitProfile?.inputMode || (category === 'lightgun' ? 'lightgun' : 'gamepad');
+
+    // Read user settings or defaults
+    const userMouseSetting = String(Config.getSetting('RIESCADE.TPMouseDevice', 'auto'));
+    const userLightgun1Setting = String(Config.getSetting('RIESCADE.TPLightgun1Device', 'auto'));
+    const userLightgun2Setting = String(Config.getSetting('RIESCADE.TPLightgun2Device', 'auto'));
+
+    Logger.info(`[TP_DEVICE] Game: "${this.profileName}" | Category: ${category} | InputMode: ${inputMode}`);
+    Logger.info(`[TP_DEVICE] User Settings -> Mouse: "${userMouseSetting}", Lightgun1: "${userLightgun1Setting}", Lightgun2: "${userLightgun2Setting}"`);
+
+    const resolveDevice = (userSetting: string): { label: string; path: string } => {
+      if (userSetting && userSetting !== 'auto') {
+        if (userSetting === 'windows_mouse_cursor') {
+          return { label: 'Windows Mouse Cursor', path: '' };
+        }
+        if (userSetting.startsWith('rawinput:')) {
+          try {
+            const path = decodeURIComponent(userSetting.substring('rawinput:'.length));
+            return { label: this.rawInputDeviceLabel(path), path };
+          } catch {
+            Logger.warn(`[TP_DEVICE] Invalid encoded Raw Input device setting: "${userSetting}"`);
+          }
+        }
+        return { label: userSetting, path: '' };
+      }
+      return { label: 'Windows Mouse Cursor', path: '' };
+    };
+
+    // A lightgun game may be played with an ordinary mouse. If no dedicated P1
+    // gun was chosen, reuse the configured primary mouse.
+    const p1Setting = inputMode === 'mouse'
+      ? userMouseSetting
+      : (userLightgun1Setting !== 'auto' ? userLightgun1Setting : userMouseSetting);
+    const resolvedP1 = resolveDevice(p1Setting);
+    const hasExplicitP2 = userLightgun2Setting !== 'auto' && userLightgun2Setting !== 'windows_mouse_cursor';
+    const resolvedP2 = hasExplicitP2
+      ? resolveDevice(userLightgun2Setting)
+      : { label: 'Not configured', path: '' };
+    this.pointingDevicePaths = [resolvedP1.path, resolvedP2.path];
+    this.resolveKeyboardDevice();
+
+    Logger.info(`[TP_DEVICE] Resolved Devices -> P1/Mouse: "${resolvedP1.label}" (${resolvedP1.path || 'system cursor'}), P2: "${resolvedP2.label}" (${resolvedP2.path || 'system cursor'})`);
+    Logger.info(`[TP_DEVICE] Keyboard -> "${this.keyboardDeviceLabel}" (${this.keyboardDevicePath || 'not found'})`);
+
+    const deviceFields = explicitProfile?.deviceFields || {};
+
+    const possibleP1Fields = deviceFields.p1
+      ? [deviceFields.p1]
+      : ['P1 Light Gun', 'Player 1 Light Gun', 'P1 LightGun', 'P1 Light Gun Device', 'Lightgun Device', 'P1 Mouse', 'P1 Mouse Device', 'Mouse Device', 'Cursor Device', 'Touch Device'];
+
+    const possibleP2Fields = deviceFields.p2
+      ? [deviceFields.p2]
+      : ['P2 Light Gun', 'Player 2 Light Gun', 'P2 LightGun', 'P2 Light Gun Device', 'P2 Mouse', 'P2 Mouse Device'];
+
+    // Update <JoystickButtons> nodes for Lightgun pointing devices
+    this.xml = this.updateJoystickLightgunNode(this.xml, possibleP1Fields, resolvedP1);
+    if ((category === 'lightgun' || deviceFields.p2) && resolvedP2.path) {
+      this.xml = this.updateJoystickLightgunNode(this.xml, possibleP2Fields, resolvedP2);
+    } else if (category === 'lightgun' || deviceFields.p2) {
+      this.xml = this.clearJoystickLightgunNodes(this.xml, possibleP2Fields);
+      Logger.info(`[TP_DEVICE] P2 has no physical Raw Input device; leaving P2 lightgun unbound.`);
+    }
+  }
+
+  private resolveKeyboardDevice(): void {
+    const configured = String(Config.getSetting('RIESCADE.TPKeyboardDevice', 'auto'));
+
+    if (configured.startsWith('rawinput:')) {
+      try {
+        this.keyboardDevicePath = decodeURIComponent(configured.substring('rawinput:'.length));
+        this.keyboardDeviceLabel = this.rawInputDeviceLabel(this.keyboardDevicePath);
+        return;
+      } catch {
+        Logger.warn(`[TP_DEVICE] Invalid encoded keyboard device setting.`);
+      }
+    }
+
+    // Prefer the inventory refreshed automatically by the frontend.
+    const inventoryPath = join(getConfigsPath(), 'input-devices.json');
+    if (existsSync(inventoryPath)) {
+      try {
+        const inventory = JSON.parse(readFileSync(inventoryPath, 'utf8'));
+        const keyboards = (inventory.devices || [])
+          .filter((device: any) =>
+            device.type === 'keyboard' && typeof device.devicePath === 'string' && device.devicePath
+          )
+          .sort((a: any, b: any) =>
+            this.scoreKeyboardDevice(b.devicePath) - this.scoreKeyboardDevice(a.devicePath)
+          );
+        const keyboard = keyboards[0];
+        if (keyboard) {
+          this.keyboardDevicePath = keyboard.devicePath;
+          this.keyboardDeviceLabel = this.keyboardDisplayLabel(keyboard.name, keyboard.devicePath);
+          Logger.info(`[TP_DEVICE] Auto-selected keyboard with score ${this.scoreKeyboardDevice(keyboard.devicePath)}.`);
+          return;
+        }
+      } catch (e) {
+        Logger.warn(`[TP_DEVICE] Could not read Raw Input inventory: ${e}`);
+      }
+    }
+
+    // Migration fallback: retain a keyboard path manually configured in an
+    // existing TeknoParrot profile, as in older RIESCADE installations.
+    const keyboardBlock = this.xml.match(
+      /<RawInputButton>\s*<DevicePath>([^<]+)<\/DevicePath>\s*<DeviceType>Keyboard<\/DeviceType>[\s\S]*?<\/RawInputButton>/i
+    );
+    if (keyboardBlock?.[1]) {
+      this.keyboardDevicePath = keyboardBlock[1]
+        .replace(/&amp;/g, '&')
+        .replace(/&lt;/g, '<')
+        .replace(/&gt;/g, '>');
+      this.keyboardDeviceLabel = this.rawInputDeviceLabel(this.keyboardDevicePath);
+      Logger.info(`[TP_DEVICE] Reused keyboard path from existing UserProfile.`);
+    }
+  }
+
+  private extractVidPid(path: string): string {
+    return path.match(/VID_[0-9A-F]{4}&PID_[0-9A-F]{4}/i)?.[0]?.toUpperCase() || '';
+  }
+
+  private scoreKeyboardDevice(path: string): number {
+    const upper = path.toUpperCase();
+    const keyboardVidPid = this.extractVidPid(path);
+    const pointingVidPids = this.pointingDevicePaths
+      .map(devicePath => this.extractVidPid(devicePath))
+      .filter(Boolean);
+
+    let score = 0;
+    // Composite lightguns commonly expose a keyboard collection for their
+    // buttons. It is not the user's typing keyboard and must not win Auto.
+    if (keyboardVidPid && pointingVidPids.includes(keyboardVidPid)) score -= 1000;
+    if (upper.includes('&MI_00')) score += 200;
+    if (!upper.includes('&COL')) score += 100;
+    if (upper.includes('&MI_01')) score += 20;
+    return score;
+  }
+
+  private keyboardDisplayLabel(name: string, path: string): string {
+    const generic = !name || /dispositivo de teclado hid|hid keyboard device/i.test(name);
+    if (!generic) return name;
+    const vidPid = this.extractVidPid(path).replace('&', ' ');
+    const interfaceId = path.match(/&MI_[0-9A-F]{2}/i)?.[0]?.substring(1).toUpperCase() || '';
+    return ['Keyboard', vidPid, interfaceId].filter(Boolean).join(' ');
+  }
+
+  private clearJoystickLightgunNodes(fullXml: string, possibleNames: string[]): string {
+    let updated = fullXml;
+    for (const btnName of possibleNames) {
+      const escapedName = btnName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const nodeRegex = new RegExp(
+        `(<JoystickButtons>(?:(?!</JoystickButtons>)[^])*?<ButtonName>\\s*${escapedName}\\s*</ButtonName>(?:(?!</JoystickButtons>)[^])*?</JoystickButtons>)`,
+        'gi'
+      );
+      updated = updated.replace(nodeRegex, block => this.stripRawInputBinding(block));
+    }
+    return updated;
+  }
+
+  private updateJoystickLightgunNode(fullXml: string, possibleNames: string[], resolvedDevice: { label: string; path: string }): string {
+    let updated = fullXml;
+    let found = false;
+
+    for (const btnName of possibleNames) {
+      const escapedName = btnName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const nodeRegex = new RegExp(
+        `(<JoystickButtons>(?:(?!</JoystickButtons>)[^])*?<ButtonName>\\s*${escapedName}\\s*</ButtonName>(?:(?!</JoystickButtons>)[^])*?</JoystickButtons>)`,
+        'gi'
+      );
+
+      if (nodeRegex.test(updated)) {
+        found = true;
+        updated = updated.replace(nodeRegex, (block) => {
+          let newBlock = block;
+          newBlock = this.stripRawInputBinding(newBlock);
+          const binding = this.renderMouseRawInputButton(resolvedDevice.path, 'None', resolvedDevice.label);
+          newBlock = newBlock.replace(/<\/JoystickButtons>\s*$/i, binding + '\n\t\t</JoystickButtons>');
+          return newBlock;
+        });
+        Logger.info(`[TP_DEVICE] Injected pointing device "${resolvedDevice.label}" into <JoystickButtons> <ButtonName>${btnName}</ButtonName>`);
+      }
+    }
+
+    // If no existing button node was found for P1 lightgun, append it to <JoystickButtons>
+    if (!found && possibleNames.includes('P1 Light Gun') && updated.includes('</JoystickButtons>')) {
+      const binding = this.renderMouseRawInputButton(resolvedDevice.path, 'None', resolvedDevice.label);
+      const newNode = `\t\t<JoystickButtons>\n\t\t\t<ButtonName>P1 Light Gun</ButtonName>\n\t\t\t<InputMapping>P1LightGun</InputMapping>\n${binding}\n\t\t\t<HideWithDirectInput>true</HideWithDirectInput>\n\t\t\t<HideWithXInput>true</HideWithXInput>\n\t\t</JoystickButtons>\n`;
+
+      const lastIndex = updated.lastIndexOf('</JoystickButtons>');
+      if (lastIndex !== -1) {
+        updated = updated.slice(0, lastIndex + 18) + '\n' + newNode + updated.slice(lastIndex + 18);
+        Logger.info(`[TP_DEVICE] Appended new P1 Light Gun node with "${resolvedDevice.label}" into <JoystickButtons>`);
+      }
+    }
+
+    return updated;
+  }
+
+  private rawInputDeviceLabel(path: string): string {
+    const parts = path.replace(/^\\\\\?\\/, '').split('#');
+    return parts.slice(0, 2).join(' ') || 'Raw Input Mouse';
+  }
+
+  private xmlEscape(value: string): string {
+    return value
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&apos;');
+  }
+
+  private stripRawInputBinding(node: string): string {
+    return node
+      .replace(/<RawInputButton>[\s\S]*?<\/RawInputButton>\s*/gi, '')
+      .replace(/<RawInputName>[\s\S]*?<\/RawInputName>\s*/gi, '')
+      .replace(/<BindNameRi>[\s\S]*?<\/BindNameRi>\s*/gi, '')
+      .replace(/<BindName>[\s\S]*?<\/BindName>\s*/gi, '');
+  }
+
+  private renderMouseRawInputButton(path: string, button: string, label: string): string {
+    const safePath = this.xmlEscape(path);
+    const safeLabel = this.xmlEscape(label);
+    return `\t\t\t<RawInputButton>\n\t\t\t\t<DevicePath>${safePath}</DevicePath>\n\t\t\t\t<DeviceType>Mouse</DeviceType>\n\t\t\t\t<MouseButton>${button}</MouseButton>\n\t\t\t\t<KeyboardKey>None</KeyboardKey>\n\t\t\t</RawInputButton>\n\t\t\t<BindNameRi>${safeLabel}${button !== 'None' ? ` ${button}` : ''}</BindNameRi>\n\t\t\t<BindName>${safeLabel}${button !== 'None' ? ` ${button}` : ''}</BindName>`;
   }
 
   // ────────────────────────────────────────────────────────────────────────
   // Pipeline Step 5: Configure Controllers (JoystickButtons)
   // ────────────────────────────────────────────────────────────────────────
 
-  private configureControllers(): void {
+  private configureControllers(category: 'racing' | 'fighter' | 'lightgun' | 'other'): void {
     if (!this.hashChanged) {
-      if (this.xml.includes('<XInputButton>')) {
+      if (this.xml.includes('<XInputButton>') || category === 'lightgun') {
         Logger.info(`[TP] Controller config for "${this.profileName}" is up to date (hash match). Skipping button update.`);
         return;
       }
@@ -339,16 +616,14 @@ export class TeknoParrotGenerator extends BaseGenerator {
       return;
     }
 
-    if (this.controllers.length === 0) {
-      Logger.warn(`[TP] No controllers provided. Skipped button mapping.`);
+    if (category !== 'lightgun' && this.controllers.length === 0) {
+      Logger.warn(`[TP] No gamepads connected and profile is not lightgun. Skipped button mapping.`);
       return;
     }
 
-    // Determine game category and custom mappings
-    const buttonNames = this.extractButtonNames(this.xml);
+    // Determine custom mappings
     const normProfileName = TeknoParrotGenerator.normalizeName(this.profileName);
 
-    // Look up profile entry in controls DB (case/punctuation insensitive)
     let explicitProfile: TeknoControlsDb['profiles'][string] | null = null;
     for (const [key, value] of Object.entries(this.controlsDb.profiles || {})) {
       if (TeknoParrotGenerator.normalizeName(key) === normProfileName) {
@@ -357,7 +632,6 @@ export class TeknoParrotGenerator extends BaseGenerator {
       }
     }
 
-    const category = explicitProfile?.category || this.classifyByScore(buttonNames);
     const customMappings = explicitProfile?.buttons || {};
 
     Logger.info(`[TP] Mapping controls for "${this.profileName}" (Category: ${category}, ${this.controllers.length} controller(s))`);
@@ -457,7 +731,17 @@ export class TeknoParrotGenerator extends BaseGenerator {
 
   private computeHash(): string {
     const controllerSig = this.controllers.map(c => `${c.guid}_${c.index}_${c.vendorId || ''}_${c.productId || ''}`).join('|');
-    const raw = `${this.profileName}_${this.controllers.length}_${controllerSig}_v6`;
+    const pointingSig = [
+      Config.getSetting('RIESCADE.TPMouseDevice', 'auto'),
+      Config.getSetting('RIESCADE.TPLightgun1Device', 'auto'),
+      Config.getSetting('RIESCADE.TPLightgun2Device', 'auto'),
+      Config.getSetting('RIESCADE.TPKeyboardDevice', 'auto')
+    ].join('|');
+    const normalizedProfile = TeknoParrotGenerator.normalizeName(this.profileName);
+    const controlsProfile = Object.entries(this.controlsDb.profiles || {})
+      .find(([key]) => TeknoParrotGenerator.normalizeName(key) === normalizedProfile)?.[1] || null;
+    const controlsSig = JSON.stringify(controlsProfile);
+    const raw = `${this.profileName}_${this.controllers.length}_${controllerSig}_${pointingSig}_${controlsSig}_v11`;
     return createHash('md5').update(raw).digest('hex');
   }
 
@@ -512,9 +796,28 @@ export class TeknoParrotGenerator extends BaseGenerator {
     category: 'racing' | 'fighter' | 'lightgun' | 'other',
     customMappings: Record<string, string>
   ): string | null {
+    // 0. For lightgun games: skip axis, relative, and lightgun-device nodes entirely.
+    //    These nodes must preserve their original template structure (Hide* flags, AnalogType, etc.)
+    //    The lightgun device is configured separately by configurePointingAndLightgunDevices.
+    if (category === 'lightgun') {
+      const lowerMapping = inputMapping.toLowerCase();
+      if (lowerMapping.startsWith('analog') || lowerMapping.includes('relative') || lowerMapping.includes('lightgun')) {
+        Logger.info(`[TP] Lightgun skip: preserving original node for "${btnName}" (${inputMapping})`);
+        return null;
+      }
+    }
+
     // 1. Direct match in custom mappings
     if (customMappings[inputMapping]) return customMappings[inputMapping];
     if (customMappings[btnName]) return customMappings[btnName];
+    const normalizedInput = TeknoParrotGenerator.normalizeName(inputMapping);
+    const normalizedButton = TeknoParrotGenerator.normalizeName(btnName);
+    for (const [mappingKey, action] of Object.entries(customMappings)) {
+      const normalizedKey = TeknoParrotGenerator.normalizeName(mappingKey);
+      if (normalizedKey === normalizedInput || normalizedKey === normalizedButton) {
+        return action;
+      }
+    }
 
     // 2. Try normalized P1 key match for P2/P3/P4 buttons in custom mappings
     const p1EquivalentBtn = btnName.replace(/p[2-4]/gi, 'P1').replace(/player\s*[2-4]/gi, 'Player 1');
@@ -526,10 +829,32 @@ export class TeknoParrotGenerator extends BaseGenerator {
     const lower = (inputMapping + ' ' + btnName).toLowerCase();
 
     // System / Coin / Start
-    if (lower.includes('coin')) return 'COIN';
-    if (lower.includes('start')) return 'START';
-    if (lower.includes('test')) return 'L3';
-    if (lower.includes('service')) return 'R3';
+    const assignKbCoinStart = Config.getSetting('RIESCADE.TPAssignKeyboardCoinStart', true);
+
+    if (lower.includes('coin')) {
+      if (category === 'lightgun' || assignKbCoinStart) return 'KB_5';
+      return 'COIN';
+    }
+    if (lower.includes('start')) {
+      if (category === 'lightgun' || assignKbCoinStart) return 'KB_1';
+      return 'START';
+    }
+    if (lower.includes('test')) {
+      if (category === 'lightgun') return 'KB_0';
+      return 'L3';
+    }
+    if (lower.includes('service')) {
+      if (category === 'lightgun') return 'KB_9';
+      return 'R3';
+    }
+
+    // For lightgun games: if no custom mapping matched and it's not a system button,
+    // do NOT apply gamepad heuristics (D-Pad, face buttons, etc.)
+    // These would incorrectly map buttons like "Volume Up" -> DPAD_UP
+    if (category === 'lightgun') {
+      Logger.info(`[TP] Lightgun: no custom mapping for "${btnName}" (${inputMapping}), skipping heuristic`);
+      return null;
+    }
 
     // D-Pad / Directional
     if (lower.includes('up')) return 'DPAD_UP';
@@ -554,10 +879,6 @@ export class TeknoParrotGenerator extends BaseGenerator {
       if (lower.includes('shift down') || lower.includes('gear down')) return 'GEAR_DOWN';
       if (lower.includes('item')) return 'ACTION_SOUTH';
       if (lower.includes('view')) return 'ACTION_NORTH';
-    } else if (category === 'lightgun') {
-      if (lower.includes('trigger')) return 'ACCELERATE';
-      if (lower.includes('reload') || lower.includes('offscreen')) return 'BRAKE';
-      if (lower.includes('special') || lower.includes('bomb')) return 'ACTION_WEST';
     }
 
     return null;
@@ -611,6 +932,27 @@ export class TeknoParrotGenerator extends BaseGenerator {
   }
 
   private renderXInputButtonParts(action: string, playerIndex: number): { xinputXml: string; bindNameXiXml: string; bindNameXml: string } {
+    if (action.startsWith('KB_')) {
+      const keyStr = action.replace('KB_', '');
+      const bindNameXml = `<BindName>${keyStr}</BindName>`;
+      return { xinputXml: '', bindNameXiXml: '', bindNameXml };
+    }
+
+    if (action.startsWith('mouseleft') || action === 'LeftClick') {
+      const bindNameXml = `<BindName>LeftClick</BindName>`;
+      return { xinputXml: '', bindNameXiXml: '', bindNameXml };
+    }
+
+    if (action.startsWith('mouseright') || action === 'RightClick') {
+      const bindNameXml = `<BindName>RightClick</BindName>`;
+      return { xinputXml: '', bindNameXiXml: '', bindNameXml };
+    }
+
+    if (action.startsWith('mousemiddle') || action === 'MiddleClick') {
+      const bindNameXml = `<BindName>MiddleClick</BindName>`;
+      return { xinputXml: '', bindNameXiXml: '', bindNameXml };
+    }
+
     let code = 0;
     let isBtn = true;
     let isLt = false;
@@ -689,6 +1031,95 @@ export class TeknoParrotGenerator extends BaseGenerator {
     return { xinputXml, bindNameXiXml, bindNameXml };
   }
 
+  /**
+   * Injects a binding into an existing JoystickButtons node WITHOUT rebuilding it.
+   * Preserves the original node structure (Hide* flags, AnalogType, etc.)
+   * For lightgun games in RawInput mode, generates proper <RawInputButton> XML
+   * that TeknoParrot can actually deserialize.
+   */
+  private injectBindingIntoExistingNode(existingNode: string, action: string, _playerIndex: number): string {
+    let node = existingNode;
+
+    // Strip any existing binding/input tags to avoid duplicates
+    node = node.replace(/<XInputButton>[\s\S]*?<\/XInputButton>\s*/gi, '');
+    node = node.replace(/<BindName>[\s\S]*?<\/BindName>\s*/gi, '');
+    node = node.replace(/<BindNameXi>[\s\S]*?<\/BindNameXi>\s*/gi, '');
+    node = node.replace(/<BindNameRi>[\s\S]*?<\/BindNameRi>\s*/gi, '');
+    node = node.replace(/<RawInputButton>[\s\S]*?<\/RawInputButton>\s*/gi, '');
+    node = node.replace(/<RawInputName>[\s\S]*?<\/RawInputName>\s*/gi, '');
+
+    // Generate the proper RawInput binding for lightgun games
+    const binding = this.renderRawInputBinding(action, _playerIndex);
+
+    if (binding) {
+      // Insert before closing </JoystickButtons>
+      node = node.replace(/<\/JoystickButtons>\s*$/i, binding + '\n\t\t</JoystickButtons>');
+    }
+
+    return node;
+  }
+
+  /**
+   * Renders a RawInput binding block for keyboard keys and mouse buttons.
+   * This produces the exact XML format that TeknoParrot's RawInput mode expects.
+   *
+   * For keyboard: <RawInputButton> with DeviceType=Keyboard, KeyboardKey=D0-D9
+   * For mouse:    <RawInputButton> with DeviceType=Mouse, MouseButton=LeftButton/RightButton/MiddleButton
+   */
+  private renderRawInputBinding(action: string, playerIndex: number): string | null {
+    // Keyboard key mapping (KB_0 -> D0, KB_1 -> D1, KB_5 -> D5, KB_9 -> D9, etc.)
+    if (action.startsWith('KB_')) {
+      if (!this.keyboardDevicePath) {
+        Logger.warn(`[TP] Skipping keyboard binding "${action}" because no Raw Input keyboard DevicePath is configured.`);
+        return null;
+      }
+      const keyStr = action.replace('KB_', '').toUpperCase();
+      const namedKeys: Record<string, string> = {
+        UP: 'Up',
+        DOWN: 'Down',
+        LEFT: 'Left',
+        RIGHT: 'Right',
+        ENTER: 'Enter',
+        RETURN: 'Enter'
+      };
+      const keyboardKey = /^\d$/.test(keyStr)
+        ? `D${keyStr}`
+        : (namedKeys[keyStr] || (keyStr.length === 1 ? keyStr : keyStr));
+      const bindLabel = `${this.keyboardDeviceLabel} ${keyboardKey}`;
+      return `\t\t\t<RawInputButton>\n\t\t\t\t<DevicePath>${this.xmlEscape(this.keyboardDevicePath)}</DevicePath>\n\t\t\t\t<DeviceType>Keyboard</DeviceType>\n\t\t\t\t<MouseButton>None</MouseButton>\n\t\t\t\t<KeyboardKey>${keyboardKey}</KeyboardKey>\n\t\t\t</RawInputButton>\n\t\t\t<BindNameRi>${this.xmlEscape(bindLabel)}</BindNameRi>\n\t\t\t<BindName>${this.xmlEscape(bindLabel)}</BindName>`;
+    }
+
+    // Mouse left click
+    if (action.startsWith('mouseleft') || action === 'LeftClick') {
+      if (!this.pointingDevicePaths[playerIndex]) return null;
+      return this.renderMouseRawInputButton(this.pointingDevicePaths[playerIndex] || '', 'LeftButton', `P${playerIndex + 1} Mouse`);
+    }
+
+    // Mouse right click
+    if (action.startsWith('mouseright') || action === 'RightClick') {
+      if (!this.pointingDevicePaths[playerIndex]) return null;
+      return this.renderMouseRawInputButton(this.pointingDevicePaths[playerIndex] || '', 'RightButton', `P${playerIndex + 1} Mouse`);
+    }
+
+    // Mouse middle click
+    if (action.startsWith('mousemiddle') || action === 'MiddleClick') {
+      if (!this.pointingDevicePaths[playerIndex]) return null;
+      return this.renderMouseRawInputButton(this.pointingDevicePaths[playerIndex] || '', 'MiddleButton', `P${playerIndex + 1} Mouse`);
+    }
+
+    // For XInput actions (COIN_1, START_1, DPAD_*, etc.) - use the XInput path as fallback
+    const { xinputXml, bindNameXiXml, bindNameXml } = this.renderXInputButtonParts(action, playerIndex);
+    if (xinputXml || bindNameXml) {
+      const parts: string[] = [];
+      if (xinputXml) parts.push(xinputXml);
+      if (bindNameXiXml) parts.push(bindNameXiXml);
+      if (bindNameXml) parts.push(bindNameXml);
+      return parts.map(p => '\t\t\t' + p).join('\n');
+    }
+
+    return null;
+  }
+
   private classifyByScore(buttons: string[]): 'racing' | 'fighter' | 'lightgun' | 'other' {
     let racingScore = 0;
     let fighterScore = 0;
@@ -741,9 +1172,32 @@ export class TeknoParrotGenerator extends BaseGenerator {
       const playerIndex = this.determinePlayerIndex(btnName, inputMapping);
       const action = this.resolveActionForNode(btnName, inputMapping, category, customMappings);
 
-      // Only assign XInput controls if a physical controller is connected for this player index!
+      // For lightgun games: preserve original node structure and only inject bindings.
+      // This keeps critical Hide* flags (HideWithRawInput, HideWithRelativeAxis, etc.)
+      // and AnalogType values (AnalogJoystick, AnalogJoystickReverse) intact.
+      if (category === 'lightgun') {
+        const lowerMapping = inputMapping.toLowerCase();
+        // Axis, relative, and lightgun-device nodes: leave completely untouched
+        if (lowerMapping.startsWith('analog') || lowerMapping.includes('relative') || lowerMapping.includes('lightgun')) {
+          Logger.info(`[TP] Lightgun preserve: keeping original node for "${btnName}" (${inputMapping})`);
+          return fullMatch;
+        }
+        // Button nodes: inject binding into existing node structure
+        if (action) {
+          count++;
+          Logger.info(`[TP] Lightgun inject: binding "${action}" into existing node for "${btnName}" (${inputMapping})`);
+          return this.injectBindingIntoExistingNode(fullMatch, action, playerIndex);
+        }
+        // No action resolved: preserve original node as-is
+        return fullMatch;
+      }
+
+      // Non-lightgun games: use full node rebuild (existing behavior)
+      // Assign controls if physical gamepad is connected for this player index OR if mouse / keyboard action
+      const isMouseOrKb = action ? (action.toLowerCase().startsWith('mouse') || action.toLowerCase().startsWith('kb_') || action.toLowerCase().startsWith('p1button') || action.toLowerCase().startsWith('p2button')) : false;
+
       let actionToMap: string | null = null;
-      if (playerIndex < this.controllers.length) {
+      if (isMouseOrKb || playerIndex < this.controllers.length) {
         actionToMap = action;
       } else {
         Logger.info(`[TP] Skipped P${playerIndex + 1} button "${btnName}" (${inputMapping}) because only ${this.controllers.length} controller(s) are connected.`);
@@ -788,13 +1242,24 @@ export class TeknoParrotGenerator extends BaseGenerator {
   }
 
   private setFieldValue(xml: string, fieldName: string, newValue: string): string {
-    const flexRegex = new RegExp(
-      `(<FieldInformation>(?:(?!</FieldInformation>)[^])*?<FieldName>${fieldName}</FieldName>(?:(?!</FieldInformation>)[^])*?<FieldValue>)([^]*?)(</FieldValue>)`,
-      'i'
+    const escapedName = fieldName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+    // Match any <FieldInformation> block that contains <FieldName>fieldName</FieldName>
+    const fieldBlockRegex = new RegExp(
+      `(<FieldInformation>(?:(?!</FieldInformation>)[^])*?<FieldName>\\s*${escapedName}\\s*</FieldName>(?:(?!</FieldInformation>)[^])*?</FieldInformation>)`,
+      'gi'
     );
-    if (flexRegex.test(xml)) {
-      return xml.replace(flexRegex, `$1${newValue}$3`);
+
+    if (fieldBlockRegex.test(xml)) {
+      return xml.replace(fieldBlockRegex, (block) => {
+        if (/<FieldValue>(.*?)<\/FieldValue>/i.test(block)) {
+          return block.replace(/<FieldValue>([^]*?)<\/FieldValue>/i, `<FieldValue>${newValue}</FieldValue>`);
+        } else {
+          return block.replace('</FieldInformation>', `  <FieldValue>${newValue}</FieldValue>\n    </FieldInformation>`);
+        }
+      });
     }
+
     return xml;
   }
 

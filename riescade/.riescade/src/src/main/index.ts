@@ -12,6 +12,7 @@ import { SystemService } from './services/SystemService'
 import { ScraperService } from './services/ScraperService'
 import { EmulatorSchemaService } from './services/EmulatorSchemaService'
 import { RomsWatcherService } from './services/RomsWatcherService'
+import { InputDeviceService } from './services/InputDeviceService'
 import { registerUpdaterIpc } from './services/UpdaterService'
 import { Game, System } from '../shared/types'
 import { ControllerManager } from './services/ControllerManager'
@@ -181,6 +182,11 @@ app.whenReady().then(() => {
   })
 
   createWindow()
+
+  // Refresh the Raw Input inventory in the background at every frontend start.
+  // The standalone launcher consumes this inventory for automatic keyboard and
+  // lightgun bindings.
+  void InputDeviceService.scanPointingDevices(true)
 
   // Start polling game controllers and emit changes to the frontend
   const controllerManager = ControllerManager.getInstance()
@@ -521,6 +527,10 @@ app.whenReady().then(() => {
     } catch (err: any) {
       return { error: err?.message || String(err) }
     }
+  })
+
+  ipcMain.handle('get-pointing-devices', async (_, forceRefresh?: boolean) => {
+    return InputDeviceService.scanPointingDevices(Boolean(forceRefresh))
   })
 
   ipcMain.handle('save-setting', async (_, name: string, value: any, type: 'string' | 'bool' | 'int' | 'float') => {

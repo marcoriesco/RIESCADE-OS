@@ -1,0 +1,30 @@
+{
+  "updatedAt": 1784850832002,
+  "devices": [
+    {
+      "type": "mouse",
+      "name": "Mouse compatível com HID",
+      "devicePath": "\\\\?\\HID#VID_1BCF&PID_08A0&Col01#7&3b460199&0&0000#{378de44c-56ef-11d1-bc8c-00a0c91405dd}"
+    },
+    {
+      "type": "mouse",
+      "name": "Mouse compatível com HID",
+      "devicePath": "\\\\?\\HID#VID_258A&PID_0049&MI_01&Col07#a&2940f5d8&0&0006#{378de44c-56ef-11d1-bc8c-00a0c91405dd}"
+    },
+    {
+      "type": "keyboard",
+      "name": "Dispositivo de teclado HID",
+      "devicePath": "\\\\?\\HID#VID_1BCF&PID_08A0&Col02#7&3b460199&0&0001#{884b96c3-56ef-11d1-bc8c-00a0c91405dd}"
+    },
+    {
+      "type": "keyboard",
+      "name": "Dispositivo de teclado HID",
+      "devicePath": "\\\\?\\HID#VID_258A&PID_0049&MI_01&Col04#a&2940f5d8&0&0003#{884b96c3-56ef-11d1-bc8c-00a0c91405dd}"
+    },
+    {
+      "type": "keyboard",
+      "name": "Dispositivo de teclado HID",
+      "devicePath": "\\\\?\\HID#VID_258A&PID_0049&MI_00#a&d6480f&0&0000#{884b96c3-56ef-11d1-bc8c-00a0c91405dd}"
+    }
+  ]
+}

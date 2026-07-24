@@ -910,5 +910,21 @@
   "taskbar.showControllers": {
     "value": true,
     "type": "bool"
+  },
+  "RIESCADE.TPMouseDevice": {
+    "value": "Mouse compatível com HID",
+    "type": "string"
+  },
+  "controllers.p1": {
+    "value": "0300fa675e0400008e02000014017801",
+    "type": "string"
+  },
+  "RIESCADE.TPAssignKeyboardCoinStart": {
+    "value": true,
+    "type": "bool"
+  },
+  "RIESCADE.TPLightgun1Device": {
+    "value": "rawinput:%5C%5C%3F%5CHID%23VID_1BCF%26PID_08A0%26Col01%237%263b460199%260%260000%23%7B378de44c-56ef-11d1-bc8c-00a0c91405dd%7D",
+    "type": "string"
   }
 }

@@ -1353,9 +1353,7 @@ export default function ToolAppContent({
               </div>
               <ScrollArea className="flex-1 min-h-0">
                 <div className="px-6 pb-6 max-w-[800px] space-y-2">
-
-
-                  <SettingGroup label="Opções de Desenvolvedor & GPU" />
+                  <SettingGroup label="Gráficos E GPU" />
                   <SettingSelect 
                     label="Aceleração Gráfica do Frontend" 
                     name="RIESCADE.GpuDriver" 
@@ -1377,13 +1375,14 @@ export default function ToolAppContent({
                     desc="Força aceleração por hardware mesmo em GPUs consideradas instáveis pelo Chromium (--ignore-gpu-blocklist). Desative se ocorrerem travamentos de vídeo." 
                     ctx={ctx} 
                   />
+                  <SettingSlider label="Limite de VRAM" name="MaxVRAM" min={40} max={1000} step={10} suffix=" Mb" ctx={ctx} />
+                  <SettingToggle label="V-Sync do Frontend" name="VSync" ctx={ctx} />
 
+
+                  <SettingGroup label="DIAGNÓSTICO E DEPURAÇÃO" />
                   {/* GPU Diagnostic Card */}
-                  <div className="flex items-center justify-between p-4 bg-white/5 border border-white/10 rounded-xl my-3">
+                  <div className="flex items-center justify-between bg-black/15 border border-white/5 rounded-md px-4 py-3 text-sm hover:bg-white/5 transition duration-200 select-none">
                     <div className="flex items-center gap-3">
-                      <div className="w-9 h-9 rounded-lg bg-accent/20 flex items-center justify-center text-accent shrink-0">
-                        <Cpu className="w-5 h-5" />
-                      </div>
                       <div>
                         <h4 className="text-xs font-bold text-white">Diagnóstico de Aceleração da GPU</h4>
                         <p className="text-[11px] text-white/40">Exibe o status em tempo real do Chromium GPU Process, driver ativo e suporte a hardware.</p>
@@ -1401,9 +1400,7 @@ export default function ToolAppContent({
                       <span>Ver Diagnóstico</span>
                     </button>
                   </div>
-                  <SettingSlider label="Limite de VRAM" name="MaxVRAM" min={40} max={1000} step={10} suffix=" Mb" ctx={ctx} />
                   <SettingToggle label="Exibir FPS" name="DrawFramerate" ctx={ctx} />
-                  <SettingToggle label="V-Sync do Frontend" name="VSync" ctx={ctx} />
                   <SettingSelect 
                     label="Nível de Log" 
                     name="LogLevel" 
