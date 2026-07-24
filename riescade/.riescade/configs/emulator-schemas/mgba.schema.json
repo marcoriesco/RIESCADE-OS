@@ -21,6 +21,10 @@
           "configKey": "internal_resolution",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "1X (240x160)",
               "value": "1"
             },
@@ -96,6 +100,10 @@
           "default": "auto",
           "configKey": "mgba_shader",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "AGB001",
               "value": "agb001.shader"
@@ -175,6 +183,10 @@
           "default": "auto",
           "configKey": "mgba_renderer",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "OPENGL",
               "value": "0"

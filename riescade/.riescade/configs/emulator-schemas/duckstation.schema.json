@@ -21,6 +21,10 @@
           "configKey": "internal_resolution",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "1X (NATIVE)",
               "value": "1"
             },
@@ -113,6 +117,10 @@
           "configKey": "psx_ratio",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "NATIVE",
               "value": "Auto (Game Native)"
             },
@@ -164,6 +172,10 @@
           "configKey": "duckstation_deinterlace",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "PROGRESSIVE",
               "value": "Progressive"
             },
@@ -212,6 +224,10 @@
           "configKey": "Texture_Enhancement",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Nearest Neighbor",
               "value": "Nearest"
             },
@@ -252,6 +268,10 @@
           "default": "auto",
           "configKey": "duck_shaders",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "FXAA",
               "value": "anti-aliasing/fxaa"
@@ -361,6 +381,10 @@
           "configKey": "duck_msaa",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Nenhum",
               "value": "msaa_1"
             },
@@ -401,6 +425,10 @@
           "default": "auto",
           "configKey": "duck_ditheringmode",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "TRUE COLOR",
               "value": "TrueColor"
@@ -466,6 +494,10 @@
           "configKey": "gfxbackend",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "OpenGL",
               "value": "OpenGL"
             },
@@ -517,6 +549,10 @@
           "configKey": "psx_region",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "PAL",
               "value": "PAL"
             },
@@ -540,6 +576,10 @@
           "default": "auto",
           "configKey": "duck_bios",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "PSX Ativado PSP BIOS",
               "value": "psxonpsp660.bin"
@@ -582,6 +622,10 @@
           "configKey": "ExecutionMode",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Recompiler (fastest)",
               "value": "Recompiler"
             },
@@ -605,6 +649,10 @@
           "default": "auto",
           "configKey": "duckstation_memcardtype",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "PER GAME (TITLE)",
               "value": "PerGameTitle"
@@ -684,6 +732,10 @@
           "configKey": "performance_overlay",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Desativado",
               "value": "off"
             },
@@ -753,6 +805,10 @@
           "configKey": "audiobackend",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "CUBEB",
               "value": "Cubeb"
             },
@@ -789,6 +845,10 @@
           "configKey": "duck_controller1",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "DUALSHOCK",
               "value": "AnalogController"
             },
@@ -820,6 +880,10 @@
           "configKey": "duck_controller2",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "DUALSHOCK",
               "value": "AnalogController"
             },
@@ -845,6 +909,10 @@
           "configKey": "duck_controller3",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "DUALSHOCK",
               "value": "AnalogController"
             },
@@ -865,6 +933,10 @@
           "default": "auto",
           "configKey": "duck_controller4",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "DUALSHOCK",
               "value": "AnalogController"
@@ -939,6 +1011,10 @@
           "default": "auto",
           "configKey": "duck_gun_ab",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Keyboard PageUp/PageDown",
               "value": "key_1"

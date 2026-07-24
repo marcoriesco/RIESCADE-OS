@@ -51,6 +51,10 @@
           "configKey": "oricutron_rendermode",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "OPENGL",
               "value": "opengl"
             },
@@ -75,6 +79,10 @@
           "default": "auto",
           "configKey": "oricutron_machine",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "ATMOS",
               "value": "atmos"
@@ -112,6 +120,10 @@
           "default": "auto",
           "configKey": "oricutron_joyinterface",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Nenhum",
               "value": "none"

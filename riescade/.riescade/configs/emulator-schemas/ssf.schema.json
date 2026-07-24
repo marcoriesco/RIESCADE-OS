@@ -54,6 +54,10 @@
           "configKey": "use_external_bios",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Multi-region",
               "value": "saturn_bios.bin"
             },
@@ -81,6 +85,10 @@
           "default": "auto",
           "configKey": "saturn_region",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Japan",
               "value": "1"
@@ -110,6 +118,10 @@
           "default": "auto",
           "configKey": "ssf_discindex",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "1",
               "value": "1"
@@ -160,6 +172,10 @@
           "configKey": "saturn_padlayout",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "L/R as Z/C",
               "value": "lr_zc"
             },
@@ -190,6 +206,10 @@
           "default": "auto",
           "configKey": "saturn_pad_ssf",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Não",
               "value": "0"

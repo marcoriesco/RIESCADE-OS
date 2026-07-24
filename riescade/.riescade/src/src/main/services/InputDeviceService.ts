@@ -1,8 +1,8 @@
 import { exec } from 'child_process';
 import { promisify } from 'util';
-import { writeFileSync } from 'fs';
+import { writeFileSync, mkdirSync } from 'fs';
 import { join } from 'path';
-import { getRiescadePath } from '../utils/paths';
+import { getStatePath } from '../utils/paths';
 
 const execAsync = promisify(exec);
 
@@ -276,7 +276,9 @@ export class InputDeviceService {
     // The launcher is a separate process. Persist a small Raw Input inventory
     // so it can auto-select a keyboard without needing the settings screen open.
     try {
-      const inventoryPath = join(getRiescadePath(), 'configs', 'input-devices.json');
+      const statePath = getStatePath();
+      mkdirSync(statePath, { recursive: true });
+      const inventoryPath = join(statePath, 'input-devices.json');
       writeFileSync(inventoryPath, JSON.stringify({
         updatedAt: cachedScanResult.lastScan,
         devices: devices

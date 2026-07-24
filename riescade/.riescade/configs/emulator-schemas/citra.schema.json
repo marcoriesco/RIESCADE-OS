@@ -21,6 +21,10 @@
           "configKey": "citra_resolution_factor",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "NATIVE (400x240)",
               "value": "1"
             },
@@ -81,6 +85,10 @@
           "configKey": "citraqt_layout_option",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "TOP-BOTTOM SCREEN",
               "value": "0"
             },
@@ -124,6 +132,10 @@
           "default": "auto",
           "configKey": "citra_texture_filter",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "ANIME4K",
               "value": "1"
@@ -173,6 +185,10 @@
           "configKey": "graphics_api",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "SOFTWARE",
               "value": "0"
             },
@@ -205,6 +221,10 @@
           "default": "auto",
           "configKey": "citra_region_value",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "USA",
               "value": "1"
@@ -245,6 +265,10 @@
           "default": "auto",
           "configKey": "n3ds_language",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Japanese",
               "value": "0"
@@ -319,6 +343,10 @@
           "default": "auto",
           "configKey": "n3ds_motion",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "MOUSE",
               "value": "mouse"

@@ -28,6 +28,10 @@
           "configKey": "redream_aspect",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "4/3",
               "value": "4:3"
             },
@@ -51,6 +55,10 @@
           "default": "auto",
           "configKey": "redream_res",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "1X (NATIVE)",
               "value": "1"
@@ -86,6 +94,10 @@
           "configKey": "redream_cable",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "TV (RGB)",
               "value": "rgb"
             },
@@ -107,6 +119,10 @@
           "default": "auto",
           "configKey": "redream_broadcast",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "NTSC",
               "value": "ntsc"
@@ -133,6 +149,10 @@
           "default": "auto",
           "configKey": "redream_alpha_sorting",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "per-strip (fast, least accurate)",
               "value": "0"
@@ -171,6 +191,10 @@
           "configKey": "redream_language",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "English",
               "value": "english"
             },
@@ -204,6 +228,10 @@
           "configKey": "redream_region",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Japan",
               "value": "japan"
             },
@@ -224,6 +252,10 @@
           "default": "auto",
           "configKey": "dreamcast_m3uindex",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "1",
               "value": "1"

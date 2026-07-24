@@ -22,6 +22,10 @@
           "configKey": "resolution_setup",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "0.5x (360p/540p)",
               "value": "0"
             },
@@ -78,6 +82,10 @@
           "configKey": "use_vsync",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "FIFO (Vsync Ativado)",
               "value": "2"
             },
@@ -105,6 +113,10 @@
           "default": "auto",
           "configKey": "suyu_ratio",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Padrão",
               "value": "0"
@@ -139,6 +151,10 @@
           "configKey": "gpu_accuracy",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "HIGH",
               "value": "1"
             },
@@ -172,6 +188,10 @@
           "configKey": "astc_recompression",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "UNCOMPRESSED (Padrão, best quality)",
               "value": "0"
             },
@@ -197,6 +217,10 @@
           "configKey": "anti_aliasing",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Nenhum",
               "value": "0"
             },
@@ -221,6 +245,10 @@
           "default": "auto",
           "configKey": "scaling_filter",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Nearest Neighbor",
               "value": "0"
@@ -259,6 +287,10 @@
           "configKey": "suyu_anisotropy",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Padrão",
               "value": "1"
             },
@@ -291,6 +323,10 @@
           "configKey": "backend",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "OPENGL",
               "value": "0"
             },
@@ -318,6 +354,10 @@
           "default": "auto",
           "configKey": "suyu_language",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "American English",
               "value": "1"
@@ -404,6 +444,10 @@
           "configKey": "suyu_region_value",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "JAPAN",
               "value": "0"
             },
@@ -453,6 +497,10 @@
           "configKey": "cpu_accuracy",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "ACCURATE",
               "value": "1"
             },
@@ -487,6 +535,10 @@
           "configKey": "suyu_memory",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "4GB (Padrão)",
               "value": "0"
             },
@@ -519,6 +571,10 @@
           "configKey": "sound_index",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "STEREO",
               "value": "1"
             },
@@ -542,6 +598,10 @@
           "default": "auto",
           "configKey": "audio_backend",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "CUBEB",
               "value": "cubeb"
@@ -579,6 +639,10 @@
           "configKey": "player_0_type",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "PRO CONTROLLER",
               "value": "0"
             },
@@ -612,6 +676,10 @@
           "configKey": "player_1_type",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "PRO CONTROLLER",
               "value": "0"
             },
@@ -641,6 +709,10 @@
           "configKey": "player_2_type",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "PRO CONTROLLER",
               "value": "0"
             },
@@ -669,6 +741,10 @@
           "default": "auto",
           "configKey": "player_3_type",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "PRO CONTROLLER",
               "value": "0"

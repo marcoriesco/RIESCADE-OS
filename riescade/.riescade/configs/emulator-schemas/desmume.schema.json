@@ -31,6 +31,10 @@
           "configKey": "desmume_PrescaleHD",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "1X",
               "value": "1"
             },
@@ -107,6 +111,10 @@
           "default": "auto",
           "configKey": "desmume_Filter",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "NORMAL",
               "value": "0"
@@ -219,6 +227,10 @@
           "configKey": "desmume_layout",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "VERTICAL (Padrão)",
               "value": "0"
             },
@@ -243,6 +255,10 @@
           "default": "auto",
           "configKey": "desmume_hratio",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "SAME SIZE",
               "value": "1"
@@ -290,6 +306,10 @@
           "default": "auto",
           "configKey": "desmume_rotate",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Não",
               "value": "0"
@@ -340,6 +360,10 @@
           "configKey": "desmume_TextureScalingFactor",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "1x",
               "value": "1"
             },
@@ -364,6 +388,10 @@
           "default": "auto",
           "configKey": "desmume_MultisampleSize",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Não",
               "value": "0"
@@ -401,6 +429,10 @@
           "configKey": "desmume_GpuBpp",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "24 BIT",
               "value": "24"
             },
@@ -425,6 +457,10 @@
           "default": "auto",
           "configKey": "desmume_Renderer",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "SOFTWARE",
               "value": "2"
@@ -494,6 +530,10 @@
           "configKey": "desmume_cpu_mode",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "INTERPRETER",
               "value": "0"
             },
@@ -543,6 +583,10 @@
           "default": "auto",
           "configKey": "desmume_display_method",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "OPENGL",
               "value": "3"
@@ -637,6 +681,10 @@
           "default": "auto",
           "configKey": "desmume_SoundCore2",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "DIRECTSOUND",
               "value": "2"

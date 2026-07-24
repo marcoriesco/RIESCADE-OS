@@ -21,6 +21,10 @@
           "configKey": "zaccaria_rotate",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "LEFT",
               "value": "left"
             },
@@ -46,6 +50,10 @@
           "configKey": "zaccaria_players",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "1",
               "value": "1"
             },
@@ -70,6 +78,10 @@
           "default": "auto",
           "configKey": "zaccaria_gamemode",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "CLASSIC ARCADE",
               "value": "classic_arcade"

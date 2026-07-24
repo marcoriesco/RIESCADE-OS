@@ -21,6 +21,10 @@
           "configKey": "gopher64_resolution",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "1X",
               "value": "1"
             },
@@ -83,6 +87,10 @@
           "configKey": "mupen64_inputprofile1",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "C-BUTTONS=RIGHT-STICK Z=LEFT-TRIGGER",
               "value": "c_stick_zl"
             },
@@ -111,6 +119,10 @@
           "default": "auto",
           "configKey": "mupen64_inputprofile2",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "C-BUTTONS=RIGHT-STICK Z=LEFT-TRIGGER",
               "value": "c_stick_zl"
@@ -141,6 +153,10 @@
           "configKey": "mupen64_inputprofile3",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "C-BUTTONS=RIGHT-STICK Z=LEFT-TRIGGER",
               "value": "c_stick_zl"
             },
@@ -169,6 +185,10 @@
           "default": "auto",
           "configKey": "mupen64_inputprofile4",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "C-BUTTONS=RIGHT-STICK Z=LEFT-TRIGGER",
               "value": "c_stick_zl"

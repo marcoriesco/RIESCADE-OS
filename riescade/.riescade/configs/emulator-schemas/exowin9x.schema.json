@@ -21,6 +21,10 @@
           "configKey": "exo_resolution",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "MEDIUM(1280x960)",
               "value": "medium"
             },

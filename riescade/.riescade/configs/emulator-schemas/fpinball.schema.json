@@ -26,6 +26,10 @@
           "configKey": "ratio",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "16/9",
               "value": "16/9"
             },
@@ -52,6 +56,10 @@
           "default": "auto",
           "configKey": "DefaultCamera",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "FULL TABLE",
               "value": "0"
@@ -105,6 +113,10 @@
           "configKey": "preset",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "MAX",
               "value": "max"
             },
@@ -128,6 +140,10 @@
           "default": "auto",
           "configKey": "fp_texture_filter",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Nenhum",
               "value": "0"
@@ -158,6 +174,10 @@
           "default": "auto",
           "configKey": "fp_antialiasing",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Não",
               "value": "0"

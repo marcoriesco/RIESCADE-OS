@@ -36,6 +36,10 @@
           "configKey": "ship2_resolution",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "2X(480)",
               "value": "480"
             },
@@ -77,6 +81,10 @@
           "configKey": "ship2_ratio",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "NATIVE (4:3)",
               "value": "native"
             },
@@ -105,6 +113,10 @@
           "default": "auto",
           "configKey": "ship2_texturefilter",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "THREE POINT",
               "value": "0"
@@ -156,6 +168,10 @@
           "configKey": "ship2_backend",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "DIRECTX",
               "value": "0_DirectX"
             },
@@ -181,6 +197,10 @@
           "configKey": "ship2_audiobackend",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "WASAPI",
               "value": "wasapi"
             },
@@ -205,6 +225,10 @@
           "default": "auto",
           "configKey": "ship_controllayout",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "STANDARD (Z LEFTTRIGGER)",
               "value": "z_left"

@@ -39,6 +39,10 @@
           "configKey": "ll_region",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "EXPORT",
               "value": "EX"
             },
@@ -123,6 +127,10 @@
           "configKey": "ll_gun_reload",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "MOUSE RIGHT",
               "value": "MOUSE_RIGHT_BUTTON"
             },
@@ -152,6 +160,10 @@
           "configKey": "ll_gun_button",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "MOUSE MIDDLE",
               "value": "MOUSE_MIDDLE_BUTTON"
             },
@@ -180,6 +192,10 @@
           "default": "auto",
           "configKey": "ll_gun_action",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "START (KEY 1)",
               "value": "KEY_1"
@@ -251,6 +267,10 @@
           "default": "auto",
           "configKey": "ds_output",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "TO WINDOW",
               "value": "win"

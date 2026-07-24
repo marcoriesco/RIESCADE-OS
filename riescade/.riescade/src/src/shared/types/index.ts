@@ -17,6 +17,8 @@ export interface System {
 export interface Emulator {
   name: string
   cores: string[]
+  source?: string
+  command?: string
 }
 
 export interface Game {
@@ -24,6 +26,8 @@ export interface Game {
   name: string
   desc?: string
   video?: string
+  image?: string
+  thumbnail?: string
   marquee?: string
   rating?: number
   releasedate?: string
@@ -67,4 +71,3 @@ export interface Game {
   scrapDate?: string
   gameCount?: number
 }
-

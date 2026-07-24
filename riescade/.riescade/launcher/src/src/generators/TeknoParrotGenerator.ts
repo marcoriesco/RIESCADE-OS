@@ -2,7 +2,7 @@ import { existsSync, readFileSync, writeFileSync, copyFileSync, mkdirSync, readd
 import { join, basename, dirname } from 'path';
 import { createHash } from 'crypto';
 import { BaseGenerator } from './BaseGenerator.js';
-import { getEmulatorsPath, getConfigsPath, getRiescadePath } from '../utils/paths.js';
+import { getEmulatorsPath, getConfigsPath, getRiescadePath, getStatePath } from '../utils/paths.js';
 import { Logger } from '../utils/logger.js';
 import { Config } from '../config.js';
 import { ControllerInfo } from '../types.js';
@@ -446,7 +446,9 @@ export class TeknoParrotGenerator extends BaseGenerator {
     }
 
     // Prefer the inventory refreshed automatically by the frontend.
-    const inventoryPath = join(getConfigsPath(), 'input-devices.json');
+    const stateInventoryPath = join(getStatePath(), 'input-devices.json');
+    const legacyInventoryPath = join(getConfigsPath(), 'input-devices.json');
+    const inventoryPath = existsSync(stateInventoryPath) ? stateInventoryPath : legacyInventoryPath;
     if (existsSync(inventoryPath)) {
       try {
         const inventory = JSON.parse(readFileSync(inventoryPath, 'utf8'));
@@ -722,11 +724,11 @@ export class TeknoParrotGenerator extends BaseGenerator {
   // ────────────────────────────────────────────────────────────────────────
 
   private getHashFilePath(): string {
-    const launcherConfigsDir = join(getRiescadePath(), 'launcher', 'configs');
-    if (!existsSync(launcherConfigsDir)) {
-      mkdirSync(launcherConfigsDir, { recursive: true });
+    const stateDir = getStatePath();
+    if (!existsSync(stateDir)) {
+      mkdirSync(stateDir, { recursive: true });
     }
-    return join(launcherConfigsDir, 'teknoparrot-generated-hash.json');
+    return join(stateDir, 'teknoparrot-generated-hash.json');
   }
 
   private computeHash(): string {

@@ -21,6 +21,10 @@
           "configKey": "eka2l1_upscale",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "4x",
               "value": "4"
             },
@@ -51,6 +55,10 @@
           "default": "auto",
           "configKey": "eka2l1_rotate",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Não",
               "value": "0"
@@ -89,6 +97,10 @@
           "default": "auto",
           "configKey": "eka2l1_upscale_filter",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Nenhum",
               "value": "false"
@@ -165,6 +177,10 @@
           "default": "auto",
           "configKey": "eka2l1_device",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "N-GAGE (S60v1)",
               "value": "NEM-4"

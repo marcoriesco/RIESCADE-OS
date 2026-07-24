@@ -3,9 +3,45 @@ import { existsSync, createWriteStream } from 'fs'
 import { join } from 'path'
 import { lookup as dnsLookup } from 'dns/promises'
 import { spawn } from 'child_process'
+import { createHash } from 'crypto'
 import { getRetroBatPath, getRiescadePath } from '../utils/paths'
 
+interface VerifiedUpdate {
+  version: string
+  zipUrl: string
+  sha256: string
+  size?: number
+}
+
+const UPDATE_MANIFEST_URL = 'https://raw.githubusercontent.com/marcoriesco/RIESCADE-OS/main/updater.json'
+const ALLOWED_UPDATE_HOSTS = new Set(['github.com', 'objects.githubusercontent.com'])
+const MAX_UPDATE_SIZE = 4 * 1024 * 1024 * 1024
+
+function parseVerifiedUpdate(data: any): VerifiedUpdate {
+  const version = typeof data?.version === 'string' ? data.version.replace(/^v/, '') : ''
+  const zipUrl = typeof data?.zipUrl === 'string' ? data.zipUrl : ''
+  const sha256 = typeof data?.sha256 === 'string' ? data.sha256.toLowerCase() : ''
+  const size = Number.isSafeInteger(data?.size) && data.size > 0 ? data.size : undefined
+  const parsedUrl = new URL(zipUrl)
+
+  if (!/^\d+\.\d+\.\d+$/.test(version)) throw new Error('Manifesto de atualização possui versão inválida.')
+  if (parsedUrl.protocol !== 'https:' || !ALLOWED_UPDATE_HOSTS.has(parsedUrl.hostname)) {
+    throw new Error('Manifesto de atualização aponta para uma origem não autorizada.')
+  }
+  if (!/^[a-f0-9]{64}$/.test(sha256)) {
+    throw new Error('Manifesto de atualização não possui um SHA-256 válido.')
+  }
+  if (!/\.(zip|7z)$/i.test(parsedUrl.pathname)) {
+    throw new Error('Manifesto de atualização aponta para um formato não suportado.')
+  }
+  if (size && size > MAX_UPDATE_SIZE) throw new Error('Pacote de atualização excede o tamanho permitido.')
+
+  return { version, zipUrl, sha256, size }
+}
+
 export function registerUpdaterIpc(getMainWindow: () => BrowserWindow | null): void {
+  let verifiedUpdate: VerifiedUpdate | null = null
+
   ipcMain.handle('check-for-updates', async () => {
     interface DiagnosticAttempt {
       attempt: number
@@ -44,7 +80,7 @@ export function registerUpdaterIpc(getMainWindow: () => BrowserWindow | null): v
       let errorCause: string | undefined
 
       try {
-        const response = await fetch('https://raw.githubusercontent.com/marcoriesco/RIESCADE-OS/main/updater.json', {
+        const response = await fetch(UPDATE_MANIFEST_URL, {
           headers: {
             'User-Agent': 'RIESCADE-Updater'
           },
@@ -123,7 +159,23 @@ export function registerUpdaterIpc(getMainWindow: () => BrowserWindow | null): v
       }
     }
 
-    const releaseVersion = responseData.version || ''
+    let manifest: VerifiedUpdate
+    try {
+      manifest = parseVerifiedUpdate(responseData)
+      verifiedUpdate = manifest
+    } catch (error: any) {
+      verifiedUpdate = null
+      return {
+        updateAvailable: false,
+        version: '',
+        releaseNotes: '',
+        error: true,
+        errorMsg: error.message || 'Manifesto de atualização inválido.',
+        diagnostics: attempts
+      }
+    }
+
+    const releaseVersion = manifest.version
     const currentVersion = app.getVersion()
 
     const cleanTag = releaseVersion.replace(/^v/, '')
@@ -142,19 +194,17 @@ export function registerUpdaterIpc(getMainWindow: () => BrowserWindow | null): v
     }
 
     const updateAvailable = compareSemver(cleanTag, cleanApp) > 0
-    const zipUrl = responseData.zipUrl || null
-
     return {
       updateAvailable,
       version: cleanTag,
       releaseNotes: responseData.releaseNotes || '',
-      zipUrl,
       diagnostics: attempts
     }
   })
 
-  ipcMain.handle('download-and-install-update', async (event, zipUrl: string) => {
-    if (!zipUrl) throw new Error('No zip URL provided')
+  ipcMain.handle('download-and-install-update', async (event) => {
+    if (!verifiedUpdate) throw new Error('Verifique a atualização novamente antes de instalar.')
+    const { zipUrl, sha256: expectedSha256, size: expectedSize } = verifiedUpdate
     try {
       const ext = zipUrl.endsWith('.7z') ? '.7z' : '.zip'
       const zipPath = join(app.getPath('temp'), `riescade-update${ext}`)
@@ -165,12 +215,21 @@ export function registerUpdaterIpc(getMainWindow: () => BrowserWindow | null): v
 
       const totalBytesStr = response.headers.get('content-length')
       const totalBytes = totalBytesStr ? parseInt(totalBytesStr, 10) : 0
+      if (totalBytes > MAX_UPDATE_SIZE || (expectedSize && totalBytes && totalBytes !== expectedSize)) {
+        throw new Error('O tamanho do pacote não corresponde ao manifesto.')
+      }
       let downloadedBytes = 0
+      const hash = createHash('sha256')
 
       const fileStream = createWriteStream(zipPath)
       for await (const chunk of response.body as any) {
+        hash.update(chunk)
         fileStream.write(chunk)
         downloadedBytes += chunk.length
+        if (downloadedBytes > MAX_UPDATE_SIZE) {
+          fileStream.destroy()
+          throw new Error('O pacote excede o tamanho máximo permitido.')
+        }
         const percent = totalBytes > 0 ? Math.round((downloadedBytes / totalBytes) * 100) : 0
         event.sender.send('update-progress', {
           status: 'downloading',
@@ -181,10 +240,19 @@ export function registerUpdaterIpc(getMainWindow: () => BrowserWindow | null): v
       }
       fileStream.end()
 
-      await new Promise((resolve, reject) => {
-        fileStream.on('finish', resolve)
+      await new Promise<void>((resolve, reject) => {
+        fileStream.on('finish', () => resolve())
         fileStream.on('error', reject)
       })
+
+      if (expectedSize && downloadedBytes !== expectedSize) {
+        throw new Error('O pacote baixado está incompleto.')
+      }
+      const actualSha256 = hash.digest('hex')
+      if (actualSha256 !== expectedSha256) {
+        throw new Error('A verificação de integridade da atualização falhou.')
+      }
+      verifiedUpdate = null
 
       const tempExtractDir = join(app.getPath('temp'), 'rcupd')
       const currentAppDir = getRetroBatPath()

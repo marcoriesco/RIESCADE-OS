@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState, useMemo, useCallback } from "react";
-import { Gamepad2, Heart, Loader2, Star, Play, ChevronRight, Maximize2, X, Search, Folder, ChevronLeft, HardDrive, ChevronDown, Check, MoreHorizontal, RefreshCw, BookOpen, Settings, Edit3, Save } from "lucide-react";
+import { Gamepad2, Heart, Loader2, Star, Play, ChevronRight, Maximize2, Minimize2, X, Search, Folder, ChevronLeft, HardDrive, ChevronDown, Check, MoreHorizontal, RefreshCw, BookOpen, Settings, Edit3, Save, CloudDownload } from "lucide-react";
 import { System, Game, hasMultipleEmulators } from "../types";
 import { ScrollArea } from "./ScrollArea";
 import { OverlayScrollbarsComponentRef } from "overlayscrollbars-react";
@@ -52,6 +52,27 @@ import { playUISound } from "../utils/audioManager";
 
 const missingMediaCache = new Set<string>();
 
+function formatFileSize(bytes: number): string {
+  if (!Number.isFinite(bytes) || bytes <= 0) return "0 B";
+  const units = ["B", "KB", "MB", "GB", "TB"];
+  const index = Math.min(Math.floor(Math.log(bytes) / Math.log(1024)), units.length - 1);
+  return `${(bytes / Math.pow(1024, index)).toFixed(index === 0 ? 0 : 2)} ${units[index]}`;
+}
+
+function formatFileDate(timestamp?: number): string {
+  return timestamp ? new Date(timestamp).toLocaleString() : "—";
+}
+
+function formatPlayers(value: unknown): string {
+  const raw = String(value ?? "").trim();
+  if (!raw) return "";
+
+  // Preserve ranges and lists such as "1-2" or "1,2". Only remove a
+  // meaningless decimal suffix introduced when SQLite returns an integer as REAL.
+  const normalized = /^\d+\.0+$/.test(raw) ? raw.replace(/\.0+$/, "") : raw;
+  return `${normalized} ${normalized === "1" ? "Jogador" : "Jogadores"}`;
+}
+
 export default function SystemAppContent({
   system, color, Icon, onLaunchGame, search: propSearch, setSearch: propSetSearch, onActiveGameArtChanged, onOpenTool, settings
 }: {
@@ -59,7 +80,7 @@ export default function SystemAppContent({
   system: System;
   color: string;
   Icon: any;
-  onLaunchGame: (game: Game, system: System, saveStateSlot?: number) => void;
+  onLaunchGame: (game: Game, system: System, saveStateSlot?: number, saveStatePath?: string) => void;
   search?: string;
   setSearch?: (s: string) => void;
   onActiveGameArtChanged?: (art: string | null) => void;
@@ -111,6 +132,16 @@ export default function SystemAppContent({
   const [showSavesSidebar, setShowSavesSidebar] = useState(false);
   const [sidebarTab, setSidebarTab] = useState<"collections" | "saves">("collections");
   const [showMetadataSidebar, setShowMetadataSidebar] = useState(false);
+  const [gameFileInfo, setGameFileInfo] = useState<{
+    exists: boolean;
+    path: string;
+    name: string;
+    extension: string;
+    size: number;
+    createdAt?: number;
+    modifiedAt?: number;
+  } | null>(null);
+  const [gameFileInfoLoading, setGameFileInfoLoading] = useState(false);
   const [metaForm, setMetaForm] = useState<{
     name: string;
     developer: string;
@@ -138,6 +169,9 @@ export default function SystemAppContent({
   });
 
   const [isScraping, setIsScraping] = useState(false);
+  const [scrapeNotificationMode, setScrapeNotificationMode] = useState(false);
+  const scrapeNotificationModeRef = useRef(false);
+  const scrapeSessionActiveRef = useRef(false);
   const [showManualSearchModal, setShowManualSearchModal] = useState(false);
   const [manualSearchQuery, setManualSearchQuery] = useState("");
   const [manualSearchData, setManualSearchData] = useState<{
@@ -158,6 +192,7 @@ export default function SystemAppContent({
     total: number;
     successCount: number;
     failCount: number;
+    motors?: number;
   } | null>(null);
   const [showScrapeFinished, setShowScrapeFinished] = useState(false);
   const [scrapeFinishedData, setScrapeFinishedData] = useState<{
@@ -166,6 +201,13 @@ export default function SystemAppContent({
     failed?: number;
     reason?: string;
   } | null>(null);
+  const preferScrapeNotification = settings?.["ScraperNotificationMode"]?.value === true
+    || settings?.["ScraperNotificationMode"]?.value === "true";
+
+  const setScrapeDisplayAsNotification = useCallback((compact: boolean) => {
+    scrapeNotificationModeRef.current = compact;
+    setScrapeNotificationMode(compact);
+  }, []);
 
   const [preferredMediaType, setPreferredMediaType] = useState<string>("cover");
   const [availableMediaTypes, setAvailableMediaTypes] = useState<Record<string, boolean>>({
@@ -184,25 +226,23 @@ export default function SystemAppContent({
 
   const [mediaLoading, setMediaLoading] = useState(false);
   const [gridMediaLoading, setGridMediaLoading] = useState(false);
+  const [mediaRevision, setMediaRevision] = useState(0);
 
 
 
 
-  const reloadLibrary = useCallback(() => {
+  const reloadLibrary = useCallback(async () => {
     if (system.name === 'collections') {
       if (activeCollection !== null) {
-        window.api.getCollectionGames(activeCollection).then((gameList: Game[]) => {
-          setCollectionGames(gameList || []);
-        });
+        const gameList = await window.api.getCollectionGames(activeCollection);
+        setCollectionGames(gameList || []);
       } else {
-        window.api.getGames(system.name).then((gameList: Game[]) => {
-          setGames(gameList || []);
-        });
+        const gameList = await window.api.getGames(system.name);
+        setGames(gameList || []);
       }
     } else {
-      window.api.getGames(system.name).then((gameList: Game[]) => {
-        setGames(gameList || []);
-      });
+      const gameList = await window.api.getGames(system.name);
+      setGames(gameList || []);
     }
   }, [system.name, activeCollection]);
 
@@ -243,6 +283,19 @@ export default function SystemAppContent({
     }
   }, [system.name, system.path]);
 
+  const refreshMedia = useCallback(async (forcePhysicalScan: boolean) => {
+    missingMediaCache.clear();
+    setFailedImages({});
+    setImageError(false);
+    setMediaRevision(Date.now());
+
+    if (forcePhysicalScan) {
+      await window.api.preloadLibrary(true, system.name);
+    }
+    await reloadLibrary();
+    await checkMediaAvailability();
+  }, [system.name, reloadLibrary, checkMediaAvailability]);
+
   const handleManualSearchSubmit = async () => {
     setShowManualSearchModal(false);
     await window.api.submitManualScrapeQuery(manualSearchQuery);
@@ -264,6 +317,10 @@ export default function SystemAppContent({
   // Listen to scraper events
   useEffect(() => {
     const unsubProgress = window.api.on('scrape-progress', (_, progress) => {
+      if (!scrapeSessionActiveRef.current) {
+        scrapeSessionActiveRef.current = true;
+        setScrapeDisplayAsNotification(preferScrapeNotification);
+      }
       setIsScraping(true);
       setIsCancellingScrape(false);
       setScrapeProgress(progress);
@@ -274,17 +331,27 @@ export default function SystemAppContent({
       setIsCancellingScrape(false);
       setScrapeProgress(null);
       setScrapeFinishedData(result);
-      setShowScrapeFinished(true);
-      
-      // Clear image cache states to force reload downloaded medias
-      missingMediaCache.clear();
-      setFailedImages({});
-      setImageError(false);
+      scrapeSessionActiveRef.current = false;
 
-      window.api.preloadLibrary(false, system.name).then(() => {
-        reloadLibrary();
-        checkMediaAvailability();
-      });
+      if (scrapeNotificationModeRef.current) {
+        setShowScrapeFinished(false);
+        window.dispatchEvent(new CustomEvent("show-toast", {
+          detail: {
+            title: result.success ? "Scraper concluído" : "Scraper interrompido",
+            description: result.success
+              ? `${result.count ?? 0} jogo(s) atualizado(s), ${result.failed ?? 0} falha(s).`
+              : (result.reason || "A operação não foi concluída."),
+            type: result.success ? "success" : "error"
+          }
+        }));
+      } else {
+        setShowScrapeFinished(true);
+      }
+      setScrapeDisplayAsNotification(false);
+      
+      // Scraper updates the database directly. Reloading it here without a
+      // physical rescan preserves the new metadata and refreshes same-name media.
+      void refreshMedia(false);
     });
 
     const unsubManualSearch = window.api.on('scrape-manual-search-required', (_, data) => {
@@ -298,7 +365,13 @@ export default function SystemAppContent({
       unsubFinished();
       unsubManualSearch();
     };
-  }, [reloadLibrary, checkMediaAvailability]);
+  }, [preferScrapeNotification, refreshMedia, setScrapeDisplayAsNotification]);
+
+  useEffect(() => {
+    if (isScraping && preferScrapeNotification) {
+      setScrapeDisplayAsNotification(true);
+    }
+  }, [isScraping, preferScrapeNotification, setScrapeDisplayAsNotification]);
 
   // Load preferred media type per-system on mount and system change
   useEffect(() => {
@@ -338,6 +411,16 @@ export default function SystemAppContent({
     // Brief loading overlay for the grid transition
     setTimeout(() => setGridMediaLoading(false), 400);
   };
+
+  const withMediaRevision = useCallback((mediaPath?: string) => {
+    if (!mediaPath) return "";
+    const normalized = mediaPath.replace(/\\/g, '/');
+    const url = normalized.startsWith("http") || normalized.startsWith("file://")
+      ? normalized
+      : `file:///${normalized}`;
+    if (!mediaRevision) return url;
+    return `${url}${url.includes("?") ? "&" : "?"}v=${mediaRevision}`;
+  }, [mediaRevision]);
 
   const getGameMediaUrl = useCallback((g: Game, type: string) => {
     if (g.isCollectionFolder) return g.cover || g.fanart || "";
@@ -381,12 +464,12 @@ export default function SystemAppContent({
         mediaPath = g.cover;
     }
 
-    const url = mediaPath ? (mediaPath.startsWith("http") || mediaPath.startsWith("file://") ? mediaPath : `file:///${mediaPath}`) : "";
+    const url = withMediaRevision(mediaPath);
     if (url && missingMediaCache.has(url)) {
       return "";
     }
     return url;
-  }, []);
+  }, [withMediaRevision]);
 
   // Reset display limit when system, search, filter or metadata filters change
   useEffect(() => {
@@ -737,11 +820,8 @@ export default function SystemAppContent({
 
   const videoUrl = useMemo(() => {
     if (!selectedGame || !selectedGame.video) return "";
-    const rawVideo = selectedGame.video;
-    return rawVideo.startsWith("http") || rawVideo.startsWith("file://") 
-      ? rawVideo 
-      : `file:///${rawVideo.replace(/\\/g, '/')}`;
-  }, [selectedGame]);
+    return withMediaRevision(selectedGame.video);
+  }, [selectedGame, withMediaRevision]);
 
   const masterVolume = useMemo(() => {
     const sVal = settings?.["Volume"]?.value;
@@ -927,23 +1007,36 @@ export default function SystemAppContent({
     });
     setShowSavesSidebar(false);
     setShowMetadataSidebar(true);
-  }, [selectedGame]);
+    setGameFileInfo(null);
+    setGameFileInfoLoading(true);
+    window.api.getGameFileInfo(selectedGame.system || system.name, selectedGame.path)
+      .then(setGameFileInfo)
+      .catch(() => setGameFileInfo({
+        exists: false,
+        path: selectedGame.path,
+        name: selectedGame.path.split(/[\\/]/).pop() || selectedGame.path,
+        extension: "",
+        size: 0
+      }))
+      .finally(() => setGameFileInfoLoading(false));
+  }, [selectedGame, system.name]);
 
   const handleSaveMetadata = async () => {
     if (!selectedGame) return;
+    const parsedRating = Number.parseFloat(metaForm.rating);
     const updatedGame: Game = {
       ...selectedGame,
-      name: metaForm.name,
-      developer: metaForm.developer,
-      publisher: metaForm.publisher,
-      releasedate: metaForm.releasedate,
-      genre: metaForm.genre,
-      players: metaForm.players,
-      rating: metaForm.rating ? parseFloat(metaForm.rating) : 0,
-      desc: metaForm.desc,
-      gamefamily: metaForm.gamefamily,
-      region: metaForm.region,
-      lang: metaForm.lang
+      name: metaForm.name.trim() || selectedGame.name,
+      developer: metaForm.developer.trim(),
+      publisher: metaForm.publisher.trim(),
+      releasedate: metaForm.releasedate.trim(),
+      genre: metaForm.genre.trim(),
+      players: metaForm.players.trim(),
+      rating: Number.isFinite(parsedRating) ? Math.min(1, Math.max(0, parsedRating)) : selectedGame.rating,
+      desc: metaForm.desc.trim(),
+      gamefamily: metaForm.gamefamily.trim(),
+      region: metaForm.region.trim().toLowerCase(),
+      lang: metaForm.lang.trim().toLowerCase()
     };
 
     await window.api.updateGame(system.name, updatedGame);
@@ -1195,20 +1288,14 @@ export default function SystemAppContent({
                             }}
                             className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs hover:bg-white/10 text-left transition cursor-pointer text-white/80 hover:text-white"
                           >
-                            <Search className="w-4 h-4 text-accent" />
+                            <CloudDownload className="w-4 h-4 text-accent" />
                             <span>Buscar metadados do sistema</span>
                           </button>
 
                           <button
                             onClick={() => {
                               setShowPlatformMenu(false);
-                              missingMediaCache.clear();
-                              setFailedImages({});
-                              setImageError(false);
-                              window.api.preloadLibrary(true, system.name).then(() => {
-                                reloadLibrary();
-                                checkMediaAvailability();
-                              });
+                              void refreshMedia(true);
                             }}
                             className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs hover:bg-white/10 text-left transition cursor-pointer text-white/80 hover:text-white"
                           >
@@ -1267,14 +1354,14 @@ export default function SystemAppContent({
                                 <div className="relative w-full h-full flex items-center justify-center overflow-hidden bg-[#1a1a1a]">
                                   {hasFanart && (
                                     <img 
-                                      src={g.fanart} 
+                                      src={withMediaRevision(g.fanart)}
                                       alt={g.name} 
                                       className="absolute inset-0 w-full h-full object-cover opacity-40 group-hover:scale-105 transition-all duration-300"
                                     />
                                   )}
                                   {hasLogo ? (
                                     <img 
-                                      src={g.logo || g.marquee} 
+                                      src={withMediaRevision(g.logo || g.marquee)}
                                       alt={g.name} 
                                       className="relative w-[80%] max-h-[70%] object-contain filter drop-shadow-[0_4px_8px_rgba(0,0,0,0.6)] group-hover:scale-110 transition-all duration-300 z-10"
                                     />
@@ -1322,7 +1409,7 @@ export default function SystemAppContent({
                                 index: idx
                               });
                             }}
-                            className={`group flex flex-col w-full rounded-md overflow-hidden text-left transition-all border-4 relative bg-[#1a1a1a] ${
+                            className={`group flex flex-col w-full min-h-[140px] rounded-md overflow-hidden text-left transition-all border-4 relative bg-[#1a1a1a] ${
                               idx === selectedIdx 
                                 ? "border-accent shadow-[0_0_15px_var(--accent-color-glass)] z-10" 
                                 : "border-white/5 hover:border-white/10"
@@ -1395,7 +1482,7 @@ export default function SystemAppContent({
                       type="text"
                       value={metaForm.name}
                       onChange={e => setMetaForm(prev => ({ ...prev, name: e.target.value }))}
-                      className="w-full bg-[#1a1a1a] border border-white/10 rounded-md px-3 py-1.5 text-white text-xs focus:outline-none focus:border-emerald-400 transition"
+                      className="w-full bg-[#1a1a1a] border border-white/10 rounded-md px-3 py-1.5 text-white text-xs focus:outline-none focus:border-accent transition"
                     />
                   </div>
 
@@ -1405,7 +1492,7 @@ export default function SystemAppContent({
                       type="text"
                       value={metaForm.genre}
                       onChange={e => setMetaForm(prev => ({ ...prev, genre: e.target.value }))}
-                      className="w-full bg-[#1a1a1a] border border-white/10 rounded-md px-3 py-1.5 text-white text-xs focus:outline-none focus:border-emerald-400 transition"
+                      className="w-full bg-[#1a1a1a] border border-white/10 rounded-md px-3 py-1.5 text-white text-xs focus:outline-none focus:border-accent transition"
                     />
                   </div>
 
@@ -1416,7 +1503,7 @@ export default function SystemAppContent({
                         type="text"
                         value={metaForm.developer}
                         onChange={e => setMetaForm(prev => ({ ...prev, developer: e.target.value }))}
-                        className="w-full bg-[#1a1a1a] border border-white/10 rounded-md px-3 py-1.5 text-white text-xs focus:outline-none focus:border-emerald-400 transition"
+                        className="w-full bg-[#1a1a1a] border border-white/10 rounded-md px-3 py-1.5 text-white text-xs focus:outline-none focus:border-accent transition"
                       />
                     </div>
                     <div className="flex flex-col gap-1">
@@ -1425,7 +1512,7 @@ export default function SystemAppContent({
                         type="text"
                         value={metaForm.publisher}
                         onChange={e => setMetaForm(prev => ({ ...prev, publisher: e.target.value }))}
-                        className="w-full bg-[#1a1a1a] border border-white/10 rounded-md px-3 py-1.5 text-white text-xs focus:outline-none focus:border-emerald-400 transition"
+                        className="w-full bg-[#1a1a1a] border border-white/10 rounded-md px-3 py-1.5 text-white text-xs focus:outline-none focus:border-accent transition"
                       />
                     </div>
                   </div>
@@ -1438,7 +1525,7 @@ export default function SystemAppContent({
                         placeholder="YYYYMMDD"
                         value={metaForm.releasedate}
                         onChange={e => setMetaForm(prev => ({ ...prev, releasedate: e.target.value }))}
-                        className="w-full bg-[#1a1a1a] border border-white/10 rounded-md px-3 py-1.5 text-white text-xs focus:outline-none focus:border-emerald-400 transition"
+                        className="w-full bg-[#1a1a1a] border border-white/10 rounded-md px-3 py-1.5 text-white text-xs focus:outline-none focus:border-accent transition"
                       />
                     </div>
                     <div className="flex flex-col gap-1">
@@ -1448,7 +1535,7 @@ export default function SystemAppContent({
                         placeholder="1-2"
                         value={metaForm.players}
                         onChange={e => setMetaForm(prev => ({ ...prev, players: e.target.value }))}
-                        className="w-full bg-[#1a1a1a] border border-white/10 rounded-md px-3 py-1.5 text-white text-xs focus:outline-none focus:border-emerald-400 transition"
+                        className="w-full bg-[#1a1a1a] border border-white/10 rounded-md px-3 py-1.5 text-white text-xs focus:outline-none focus:border-accent transition"
                       />
                     </div>
                   </div>
@@ -1463,7 +1550,7 @@ export default function SystemAppContent({
                         max="1"
                         value={metaForm.rating}
                         onChange={e => setMetaForm(prev => ({ ...prev, rating: e.target.value }))}
-                        className="w-full bg-[#1a1a1a] border border-white/10 rounded-md px-3 py-1.5 text-white text-xs focus:outline-none focus:border-emerald-400 transition"
+                        className="w-full bg-[#1a1a1a] border border-white/10 rounded-md px-3 py-1.5 text-white text-xs focus:outline-none focus:border-accent transition"
                       />
                     </div>
                     <div className="flex flex-col gap-1">
@@ -1473,7 +1560,29 @@ export default function SystemAppContent({
                         placeholder="us, eu, jp"
                         value={metaForm.region}
                         onChange={e => setMetaForm(prev => ({ ...prev, region: e.target.value }))}
-                        className="w-full bg-[#1a1a1a] border border-white/10 rounded-md px-3 py-1.5 text-white text-xs focus:outline-none focus:border-emerald-400 transition"
+                        className="w-full bg-[#1a1a1a] border border-white/10 rounded-md px-3 py-1.5 text-white text-xs focus:outline-none focus:border-accent transition"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-2">
+                    <div className="flex flex-col gap-1">
+                      <label className="text-[10px] font-bold uppercase text-white/40 tracking-wider">Família / Série</label>
+                      <input
+                        type="text"
+                        value={metaForm.gamefamily}
+                        onChange={e => setMetaForm(prev => ({ ...prev, gamefamily: e.target.value }))}
+                        className="w-full bg-[#1a1a1a] border border-white/10 rounded-md px-3 py-1.5 text-white text-xs focus:outline-none focus:border-accent transition"
+                      />
+                    </div>
+                    <div className="flex flex-col gap-1">
+                      <label className="text-[10px] font-bold uppercase text-white/40 tracking-wider">Idioma</label>
+                      <input
+                        type="text"
+                        placeholder="pt, en, ja"
+                        value={metaForm.lang}
+                        onChange={e => setMetaForm(prev => ({ ...prev, lang: e.target.value }))}
+                        className="w-full bg-[#1a1a1a] border border-white/10 rounded-md px-3 py-1.5 text-white text-xs focus:outline-none focus:border-accent transition"
                       />
                     </div>
                   </div>
@@ -1484,8 +1593,43 @@ export default function SystemAppContent({
                       rows={4}
                       value={metaForm.desc}
                       onChange={e => setMetaForm(prev => ({ ...prev, desc: e.target.value }))}
-                      className="w-full bg-[#1a1a1a] border border-white/10 rounded-md p-2.5 text-white text-xs leading-relaxed focus:outline-none focus:border-emerald-400 transition resize-none"
+                      className="w-full bg-[#1a1a1a] border border-white/10 rounded-md p-2.5 text-white text-xs leading-relaxed focus:outline-none focus:border-accent transition resize-none"
                     />
+                  </div>
+
+                  <div className="mt-1 rounded-md border border-white/10 bg-black/20 p-3">
+                    <div className="mb-2 flex items-center gap-2">
+                      <HardDrive className="h-3.5 w-3.5 text-cyan-400" />
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-white/60">Arquivo físico — somente leitura</span>
+                    </div>
+                    {gameFileInfoLoading ? (
+                      <div className="flex items-center gap-2 py-2 text-[10px] text-white/40">
+                        <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                        Consultando arquivo...
+                      </div>
+                    ) : gameFileInfo ? (
+                      <div className="space-y-2 text-[10px]">
+                        {[
+                          ["Status", gameFileInfo.exists ? "Encontrado" : "Não encontrado"],
+                          ["Nome", gameFileInfo.name || "—"],
+                          ["Extensão", gameFileInfo.extension || "—"],
+                          ["Tamanho", gameFileInfo.exists ? formatFileSize(gameFileInfo.size) : "—"],
+                          ["Modificado", gameFileInfo.exists ? formatFileDate(gameFileInfo.modifiedAt) : "—"],
+                          ["Criado", gameFileInfo.exists ? formatFileDate(gameFileInfo.createdAt) : "—"]
+                        ].map(([label, value]) => (
+                          <div key={label} className="grid grid-cols-[72px_1fr] gap-2">
+                            <span className="text-white/35">{label}</span>
+                            <span className="break-all text-white/75">{value}</span>
+                          </div>
+                        ))}
+                        <div className="border-t border-white/5 pt-2">
+                          <span className="mb-1 block text-white/35">Caminho completo</span>
+                          <span className="block break-all rounded bg-black/25 px-2 py-1.5 font-mono text-[9px] leading-relaxed text-white/65">
+                            {gameFileInfo.path}
+                          </span>
+                        </div>
+                      </div>
+                    ) : null}
                   </div>
                 </div>
 
@@ -1499,7 +1643,7 @@ export default function SystemAppContent({
                   </button>
                   <button
                     onClick={handleSaveMetadata}
-                    className="flex-1 py-2 px-3 bg-emerald-500 hover:bg-emerald-600 rounded-md text-xs font-bold text-white shadow-lg transition flex items-center justify-center gap-1.5 cursor-pointer"
+                    className="flex-1 py-2 px-3 bg-accent hover:bg-accent-hover rounded-md text-xs font-bold text-white shadow-lg transition flex items-center justify-center gap-1.5 cursor-pointer"
                   >
                     <Save className="w-3.5 h-3.5" />
                     <span>Salvar</span>
@@ -1596,7 +1740,7 @@ export default function SystemAppContent({
                         saveStates.map(state => (
                           <button
                             key={state.path}
-                            onClick={() => onLaunchGame(selectedGame, system, state.slot)}
+                            onClick={() => onLaunchGame(selectedGame, system, state.slot, state.path)}
                             className="w-full flex items-center gap-3 bg-[#1a1a1a] hover:bg-white/5 border border-white/5 p-2 rounded-md transition text-left cursor-pointer group"
                           >
                             {state.screenshotUrl ? (
@@ -1611,7 +1755,8 @@ export default function SystemAppContent({
                                 {state.slot === -1 ? 'Autosave' : `Slot ${state.slot}`}
                               </div>
                               <div className="text-[10px] text-white/40 truncate">
-                                {new Date(state.date).toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' })}
+                                {new Date(state.date).toLocaleString(undefined, { dateStyle: 'short', timeStyle: 'short' })}
+                                {Number.isFinite(state.size) ? ` · ${formatFileSize(state.size)}` : ''}
                               </div>
                             </div>
                           </button>
@@ -1741,9 +1886,9 @@ export default function SystemAppContent({
                 ) : (
                   (() => {
                     const fanart = selectedGame.fanart || selectedGame.image || "";
-                    const fanartUrl = fanart ? (fanart.startsWith("http") || fanart.startsWith("file://") ? fanart : `file:///${fanart.replace(/\\/g, '/')}`) : "";
+                    const fanartUrl = withMediaRevision(fanart);
                     const logo = selectedGame.logo || selectedGame.marquee || "";
-                    const logoUrl = logo ? (logo.startsWith("http") || logo.startsWith("file://") ? logo : `file:///${logo.replace(/\\/g, '/')}`) : "";
+                    const logoUrl = withMediaRevision(logo);
                     const coverUrl = getGameMediaUrl(selectedGame, preferredMediaType);
 
                     return (coverUrl || fanartUrl || logoUrl) && (
@@ -1855,7 +2000,7 @@ export default function SystemAppContent({
                             }}
                             className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs hover:bg-white/10 text-left transition cursor-pointer text-white/80 hover:text-white"
                           >
-                            <Search className="w-4 h-4 text-cyan-400" />
+                            <CloudDownload className="w-4 h-4 text-cyan-400" />
                             <span>Buscar metadados (Scrape)</span>
                           </button>
                         </div>
@@ -1952,7 +2097,7 @@ export default function SystemAppContent({
                         <div className="flex justify-between items-center mt-1">
                           <span className="text-white/40 font-medium">Jogadores</span>
                           <span className="font-semibold text-white/90 text-right">
-                            {String(players) === "1" ? "1.0 Jogador" : String(players) === "2" ? "2.0 Jogadores" : `${parseFloat(String(players)).toFixed(1)} Jogadores`}
+                            {formatPlayers(players)}
                           </span>
                         </div>
                       )}
@@ -1964,23 +2109,30 @@ export default function SystemAppContent({
                 {canSwitchEmulator && (
                   <div className="flex flex-col gap-1.5 text-left">
                     <span className="text-[10px] text-white/40 uppercase tracking-wider font-bold">Emulador / Core</span>
-                    <RadixSelect
-                      value={selectValue}
-                      onValueChange={handleEmulatorValueChange}
-                      options={emulatorChoices.map(choice => ({ label: choice.label, value: choice.value }))}
-                      placeholder="Padrão (Auto)"
-                    />
-                    {emuToConfig && (
-                      <button
-                        onClick={() => {
-                          onOpenTool?.("settings", emuToConfig, selectedCoreToConfig);
-                        }}
-                        className="mt-1 flex items-center justify-center gap-1.5 py-1.5 px-3 rounded bg-white/5 border border-white/5 hover:bg-white/10 hover:border-white/10 text-[10px] font-bold text-white/70 hover:text-white transition cursor-pointer select-none"
-                      >
-                        <Settings className="w-3.5 h-3.5 text-accent" />
-                        <span>CONFIGURAR {emuLabelToConfig}</span>
-                      </button>
-                    )}
+                    <div className="flex items-stretch gap-2">
+                      <div className="min-w-0 flex-1">
+                        <RadixSelect
+                          value={selectValue}
+                          onValueChange={handleEmulatorValueChange}
+                          options={emulatorChoices.map(choice => ({ label: choice.label, value: choice.value }))}
+                          placeholder="Padrão (Auto)"
+                        />
+                      </div>
+                      {emuToConfig && (
+                        <button
+                          onClick={() => {
+                            onOpenTool?.("settings", emuToConfig, selectedCoreToConfig);
+                          }}
+                          className="group relative flex w-9 shrink-0 items-center justify-center rounded-md border border-white/5 bg-[#1a1a1a] text-accent transition hover:border-accent-focus hover:bg-accent-light cursor-pointer"
+                          aria-label={`Configurar ${emuLabelToConfig}`}
+                        >
+                          <Settings className="w-4 h-4 transition-transform group-hover:rotate-45" />
+                          <span className="pointer-events-none absolute bottom-full right-0 z-50 mb-2 whitespace-nowrap rounded-md border border-white/10 bg-black px-2 py-1 text-[10px] font-medium text-white opacity-0 shadow-xl transition-opacity group-hover:opacity-100">
+                            Configurar {emuLabelToConfig}
+                          </span>
+                        </button>
+                      )}
+                    </div>
                   </div>
                 )}
 
@@ -2039,8 +2191,69 @@ export default function SystemAppContent({
         </div>
       )}
 
+      {/* Compact, non-blocking scraper notification */}
+      {isScraping && scrapeProgress && scrapeNotificationMode && (
+        <div className="fixed left-1/2 top-6 z-[999] w-80 max-w-[calc(100vw-32px)] -translate-x-1/2 select-none text-white">
+          <div className="toast-root glass-strong overflow-hidden rounded-xl border border-white/10 p-3.5 shadow-2xl animate-in fade-in slide-in-from-top-2 duration-200">
+            <div className="flex items-center gap-3">
+              <div className="shrink-0">
+                <CloudDownload className="h-5 w-5 animate-pulse text-accent" />
+              </div>
+              <div className="min-w-0 flex-1">
+                <div className="flex items-center justify-between gap-2">
+                  <p className="truncate text-sm font-bold text-white">
+                    Scraper · {scrapeProgress.systemName}
+                  </p>
+                  <span className="shrink-0 text-[10px] font-bold text-accent">
+                    {scrapeProgress.current} / {scrapeProgress.total}
+                  </span>
+                </div>
+                <p className="mt-0.5 truncate text-[12px] text-white/50" title={scrapeProgress.gameName}>
+                  {scrapeProgress.gameName}
+                </p>
+              </div>
+              {!preferScrapeNotification && (
+                <button
+                  type="button"
+                  onClick={() => setScrapeDisplayAsNotification(false)}
+                  className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md text-white/45 transition hover:bg-white/10 hover:text-white cursor-pointer"
+                  title="Expandir progresso"
+                >
+                  <Maximize2 className="h-3.5 w-3.5" />
+                </button>
+              )}
+              <button
+                type="button"
+                disabled={isCancellingScrape}
+                onClick={() => {
+                  setIsCancellingScrape(true);
+                  window.api.cancelScrape();
+                }}
+                className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md text-white/45 transition hover:bg-red-500/15 hover:text-red-300 disabled:opacity-40 cursor-pointer"
+                title={isCancellingScrape ? "Cancelando..." : "Cancelar scraper"}
+              >
+                {isCancellingScrape ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <X className="h-3.5 w-3.5" />}
+              </button>
+            </div>
+            <div className="mt-3 h-1 w-full overflow-hidden rounded-full bg-white/10">
+              <div
+                className="h-full rounded-full bg-accent transition-all duration-300"
+                style={{ width: `${scrapeProgress.total > 0 ? (scrapeProgress.current / scrapeProgress.total) * 100 : 0}%` }}
+              />
+            </div>
+            <div className="mt-2 flex items-center justify-between text-[9px] font-semibold">
+              <span className="text-emerald-400">{scrapeProgress.successCount} sucessos</span>
+              <span className="text-red-400">{scrapeProgress.failCount} falhas</span>
+              <span className="text-white/30">
+                {scrapeProgress.motors ?? 1} {(scrapeProgress.motors ?? 1) === 1 ? "motor" : "motores"}
+              </span>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Scraper Progress Overlay Modal */}
-      {isScraping && scrapeProgress && (
+      {isScraping && scrapeProgress && !scrapeNotificationMode && (
         <div className="fixed inset-0 bg-black/75 backdrop-blur-md flex items-center justify-center z-[999] select-none text-white transition-opacity duration-300">
           <div className="bg-[#0f0f12] border border-white/10 p-6 rounded-2xl w-[460px] flex flex-col gap-4 shadow-2xl relative animate-in fade-in zoom-in duration-200">
             <div className="flex items-center gap-3">
@@ -2049,8 +2262,18 @@ export default function SystemAppContent({
               </div>
               <div>
                 <h3 className="text-sm font-bold text-white tracking-wide">Buscando metadados...</h3>
-                <p className="text-[10px] text-white/40 uppercase tracking-widest font-semibold mt-0.5">ScreenScraper.fr</p>
+                <p className="text-[10px] text-white/40 uppercase tracking-widest font-semibold mt-0.5">
+                  ScreenScraper.fr · {scrapeProgress.motors ?? 1} {(scrapeProgress.motors ?? 1) === 1 ? "motor" : "motores"}
+                </p>
               </div>
+              <button
+                type="button"
+                onClick={() => setScrapeDisplayAsNotification(true)}
+                className="ml-auto flex h-8 w-8 items-center justify-center rounded-lg border border-white/5 bg-white/5 text-white/50 transition hover:border-accent-focus hover:bg-accent-light hover:text-accent cursor-pointer"
+                title="Continuar em modo notificação"
+              >
+                <Minimize2 className="h-4 w-4" />
+              </button>
             </div>
 
             <div className="bg-white/5 border border-white/5 rounded-xl p-3.5 flex flex-col gap-2">
@@ -2118,7 +2341,7 @@ export default function SystemAppContent({
           <div className="bg-[#0f0f12] border border-white/10 p-6 rounded-2xl w-[420px] flex flex-col gap-4 shadow-2xl relative animate-in fade-in zoom-in duration-200">
             <div className="flex items-center gap-3">
               <div className="w-8 h-8 rounded-lg bg-accent/15 flex items-center justify-center">
-                <Search className="w-4 h-4 text-accent" />
+                <CloudDownload className="w-4 h-4 text-accent" />
               </div>
               <div>
                 <h3 className="text-sm font-bold text-white tracking-wide">Jogo não encontrado</h3>
@@ -2288,7 +2511,7 @@ export default function SystemAppContent({
               }}
               className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs hover:bg-white/10 text-left transition cursor-pointer text-white/80 hover:text-white"
             >
-              <Search className="w-4 h-4 text-cyan-400" />
+              <CloudDownload className="w-4 h-4 text-cyan-400" />
               <span>Buscar metadados (Scrape)</span>
             </button>
 

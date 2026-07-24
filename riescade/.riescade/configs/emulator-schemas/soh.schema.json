@@ -21,6 +21,10 @@
           "configKey": "soh_resolution",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "2X(480)",
               "value": "480"
             },
@@ -62,6 +66,10 @@
           "configKey": "soh_Ratio",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "NATIVE (4:3)",
               "value": "native"
             },
@@ -98,6 +106,10 @@
           "configKey": "soh_texturefilter",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "THREE POINT",
               "value": "0"
             },
@@ -130,6 +142,10 @@
           "default": "auto",
           "configKey": "soh_backend",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "DIRECTX",
               "value": "0_DirectX"
@@ -173,6 +189,10 @@
           "configKey": "soh_language",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "ENGLISH",
               "value": "0"
             },
@@ -202,6 +222,10 @@
           "configKey": "soh_audiobackend",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "WASAPI",
               "value": "wasapi"
             },
@@ -226,6 +250,10 @@
           "default": "auto",
           "configKey": "ship_controllayout",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "STANDARD (Z LEFTTRIGGER)",
               "value": "z_left"

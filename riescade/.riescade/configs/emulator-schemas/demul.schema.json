@@ -21,6 +21,10 @@
           "configKey": "internal_resolution",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "1X NATIVE",
               "value": "1"
             },
@@ -67,6 +71,10 @@
           "configKey": "demul_ratio",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "16/9",
               "value": "2"
             },
@@ -89,6 +97,10 @@
           "default": "auto",
           "configKey": "demul_videomode",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "AUTO",
               "value": "1024"
@@ -137,6 +149,10 @@
           "default": "auto",
           "configKey": "cpumode",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "DYNAREC",
               "value": "1"
@@ -188,6 +204,10 @@
           "default": "auto",
           "configKey": "ds_output",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "TO WINDOW",
               "value": "win"

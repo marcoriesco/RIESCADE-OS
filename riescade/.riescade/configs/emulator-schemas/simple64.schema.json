@@ -21,6 +21,10 @@
           "configKey": "parallel_upscaling",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "1x",
               "value": "1"
             },
@@ -107,6 +111,10 @@
           "configKey": "simple64_inputplugin",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "STANDARD",
               "value": "simple64-input-qt.dll"
             },
@@ -127,6 +135,10 @@
           "default": "auto",
           "configKey": "mupen64_inputprofile1",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "C-BUTTONS=RIGHT-STICK Z=LEFT-TRIGGER",
               "value": "c_stick_zl"
@@ -158,6 +170,10 @@
           "configKey": "simple64_pak1",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "MEMORY",
               "value": "Memory"
             },
@@ -183,6 +199,10 @@
           "default": "auto",
           "configKey": "mupen64_inputprofile2",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "C-BUTTONS=RIGHT-STICK Z=LEFT-TRIGGER",
               "value": "c_stick_zl"
@@ -213,6 +233,10 @@
           "configKey": "simple64_pak2",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "MEMORY",
               "value": "Memory"
             },
@@ -238,6 +262,10 @@
           "default": "auto",
           "configKey": "mupen64_inputprofile3",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "C-BUTTONS=RIGHT-STICK Z=LEFT-TRIGGER",
               "value": "c_stick_zl"
@@ -268,6 +296,10 @@
           "configKey": "simple64_pak3",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "MEMORY",
               "value": "Memory"
             },
@@ -293,6 +325,10 @@
           "default": "auto",
           "configKey": "mupen64_inputprofile4",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "C-BUTTONS=RIGHT-STICK Z=LEFT-TRIGGER",
               "value": "c_stick_zl"
@@ -322,6 +358,10 @@
           "default": "auto",
           "configKey": "simple64_pak4",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "MEMORY",
               "value": "Memory"

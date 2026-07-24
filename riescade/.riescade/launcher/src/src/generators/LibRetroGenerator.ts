@@ -67,6 +67,18 @@ export class LibRetroGenerator extends BaseGenerator {
       cfg['global_core_options'] = 'true';
       cfg['input_autodetect_enable'] = 'true'; // Let RetroArch configure controls natively
 
+      const selectedStatePath = this.args.rawArgs['-state_path'];
+      const autosaveRequested = this.args.rawArgs['-autosave'] === '1';
+      if (selectedStatePath) {
+        // Numbered slots are loaded by --entryslot. Autosave uses the
+        // standard .state.auto file associated with the explicit base path.
+        cfg['savestate_auto_load'] = /\.state\.auto$/i.test(selectedStatePath) ? 'true' : 'false';
+        cfg['savestate_auto_save'] = 'false';
+      } else {
+        cfg['savestate_auto_load'] = autosaveRequested ? 'true' : 'false';
+        cfg['savestate_auto_save'] = autosaveRequested ? 'true' : 'false';
+      }
+
       // Map controllers
       this.mapControllers(cfg);
 
@@ -87,8 +99,20 @@ export class LibRetroGenerator extends BaseGenerator {
     const launchArgs = [
       '-L',
       corePath,
-      this.rom
     ];
+
+    const selectedStatePath = this.args.rawArgs['-state_path'];
+    const selectedSlot = this.args.rawArgs['-state_slot'];
+    if (selectedStatePath) {
+      const stateBasePath = selectedStatePath
+        .replace(/\.auto$/i, '')
+        .replace(/(\.state)\d+$/i, '$1');
+      launchArgs.push('--savestate', stateBasePath);
+    }
+    if (selectedSlot !== undefined && Number(selectedSlot) >= 0) {
+      launchArgs.push('--entryslot', selectedSlot);
+    }
+    launchArgs.push(this.rom);
 
     return {
       executable,

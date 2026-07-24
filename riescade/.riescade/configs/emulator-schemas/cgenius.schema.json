@@ -27,6 +27,10 @@
           "configKey": "cgenius_filter",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Nenhum",
               "value": "1"
             },
@@ -51,6 +55,10 @@
           "default": "auto",
           "configKey": "cgenius_resolution",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "320x200",
               "value": "320x200"
@@ -83,6 +91,10 @@
           "default": "auto",
           "configKey": "ratio",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "4/3",
               "value": "4:3"
@@ -139,6 +151,10 @@
           "default": "auto",
           "configKey": "OGLfilter",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "NEAREST NEIGHBOR",
               "value": "nearest"

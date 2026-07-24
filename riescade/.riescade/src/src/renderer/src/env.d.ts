@@ -1,17 +1,27 @@
 /// <reference types="vite/client" />
-import { ElectronAPI } from '@electron-toolkit/preload'
+export {}
 
 declare global {
   interface Window {
-    electron: ElectronAPI
     api: {
       preloadLibrary: (forcePhysicalScan?: boolean, systemName?: string) => Promise<any>
       getSystems: () => Promise<any>
       getGames: (systemName: string) => Promise<any>
       updateGame: (systemName: string, gameData: any) => Promise<void>
       deleteGame: (systemName: string, gamePath: string, deletePhysical: boolean) => Promise<void>
-      launchGame: (game: any, system: any, saveStateSlot?: number) => Promise<any>
+      launchGame: (game: any, system: any, saveStateSlot?: number, saveStatePath?: string) => Promise<any>
+      checkEmulatorStatus: (emulatorName: string, systemName: string) => Promise<any>
+      downloadAndInstallEmulator: (emulatorName: string, systemName: string) => Promise<any>
       scanSaveStates: (systemName: string, gamePath: string) => Promise<any[]>
+      getGameFileInfo: (systemName: string, gamePath: string) => Promise<{
+        exists: boolean
+        path: string
+        name: string
+        extension: string
+        size: number
+        createdAt?: number
+        modifiedAt?: number
+      }>
       getCustomCollections: () => Promise<string[]>
       getCollectionGames: (collectionName: string) => Promise<any[]>
       getThemes: () => Promise<any>
@@ -53,7 +63,7 @@ declare global {
       closeWindow: () => void
       getVersion: () => Promise<{ app: string; es: string }>
       checkForUpdates: () => Promise<any>
-      downloadAndInstallUpdate: (zipUrl: string) => Promise<boolean>
+      downloadAndInstallUpdate: () => Promise<boolean>
       getOverlayPath: (name: string) => Promise<string>
       getCollectionsForGame: (systemName: string, gamePath: string) => Promise<string[]>
       toggleGameInCollection: (collectionName: string, systemName: string, gamePath: string, action: 'add' | 'remove') => Promise<boolean>
@@ -67,6 +77,7 @@ declare global {
       clearCaches: () => Promise<any>
       getMusicFiles: (subfolder?: string) => Promise<string[]>
       getMusicPath: () => Promise<string>
+      testScreenScraper: (ssid: string, sspassword: string) => Promise<any>
       startScrape: (options?: { systemName?: string; gamePath?: string }) => Promise<boolean>
       cancelScrape: () => Promise<boolean>
       submitManualScrapeQuery: (query: string) => Promise<boolean>

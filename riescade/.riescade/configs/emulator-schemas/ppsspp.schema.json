@@ -21,6 +21,10 @@
           "configKey": "ppsspp_resolution",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "NATIVE",
               "value": "1"
             },
@@ -73,6 +77,10 @@
           "configKey": "ppsspp_ratio",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "16:9",
               "value": "1"
             },
@@ -117,6 +125,10 @@
           "default": "auto",
           "configKey": "ppsspp_shader",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "GLSL HQ x4",
               "value": "4xHqGLSL"
@@ -271,6 +283,10 @@
           "configKey": "ppsspp_msaa",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Desativado",
               "value": "0"
             },
@@ -299,6 +315,10 @@
           "default": "auto",
           "configKey": "ppsspp_textureenhancement",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "xBRZ",
               "value": "0"
@@ -356,6 +376,10 @@
           "configKey": "ppsspp_anisotropicfilter",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Desativado",
               "value": "0"
             },
@@ -388,6 +412,10 @@
           "default": "auto",
           "configKey": "ppsspp_texture_filtering",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "NEAREST NEIGHBOR",
               "value": "2"
@@ -445,6 +473,10 @@
           "default": "auto",
           "configKey": "ppsspp_backend",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "OPENGL",
               "value": "0 (OPENGL)"
@@ -511,6 +543,10 @@
           "default": "auto",
           "configKey": "ppsspp_lang",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "English (US)",
               "value": "1"
@@ -590,6 +626,10 @@
           "configKey": "ppsspp_audiobackend",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "DIRECTSOUND (compatible)",
               "value": "1"
             },
@@ -631,6 +671,10 @@
           "default": "auto",
           "configKey": "ppsspp_forceindex",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "1",
               "value": "0"

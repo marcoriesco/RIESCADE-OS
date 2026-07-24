@@ -21,6 +21,10 @@
           "configKey": "stretch",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "KEEP ASPECT RATIO",
               "value": "0"
             },
@@ -40,6 +44,10 @@
           "default": "auto",
           "configKey": "cemu_vsync",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Duplo-BUFFER",
               "value": "1"
@@ -89,6 +97,10 @@
           "configKey": "upscaleFilter",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "BILINEAR",
               "value": "0"
             },
@@ -117,6 +129,10 @@
           "configKey": "downscaleFilter",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "BILINEAR",
               "value": "0"
             },
@@ -144,6 +160,10 @@
           "configKey": "video_renderer",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "OPENGL",
               "value": "0"
             },
@@ -170,6 +190,10 @@
           "default": "auto",
           "configKey": "wiiu_language",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Japanese",
               "value": "0"
@@ -227,6 +251,10 @@
           "configKey": "overlay",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "FULL",
               "value": "full"
             },
@@ -267,6 +295,10 @@
           "configKey": "channels",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "MONO",
               "value": "0"
             },
@@ -297,6 +329,10 @@
           "default": "auto",
           "configKey": "audio_renderer",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "DIRECTSOUND",
               "value": "0"
@@ -329,6 +365,10 @@
           "default": "auto",
           "configKey": "cemu_forcexinput",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "SDL",
               "value": "0"
@@ -386,6 +426,10 @@
           "configKey": "cemu_controllerp0",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "GAMEPAD",
               "value": "gamepad"
             },
@@ -407,6 +451,10 @@
           "default": "auto",
           "configKey": "cemu_controllerp1",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "PRO CONTROLLER",
               "value": "procontroller"
@@ -430,6 +478,10 @@
           "configKey": "cemu_controllerp2",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "PRO CONTROLLER",
               "value": "procontroller"
             },
@@ -448,6 +500,10 @@
           "configKey": "cemu_controllerp3",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "PRO CONTROLLER",
               "value": "procontroller"
             },
@@ -465,6 +521,10 @@
           "default": "auto",
           "configKey": "use_wiimotes",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Não",
               "value": "0"
@@ -496,6 +556,10 @@
           "configKey": "cemu_wiimotep0",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "MOTION PLUS",
               "value": "5"
             },
@@ -520,6 +584,10 @@
           "default": "auto",
           "configKey": "cemu_wiimotep1",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "MOTION PLUS",
               "value": "5"
@@ -546,6 +614,10 @@
           "configKey": "cemu_wiimotep2",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "MOTION PLUS",
               "value": "5"
             },
@@ -570,6 +642,10 @@
           "default": "auto",
           "configKey": "cemu_wiimotep3",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "MOTION PLUS",
               "value": "5"
@@ -596,6 +672,10 @@
           "default": "auto",
           "configKey": "cemu_gamepadscreen",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Nenhum",
               "value": "none"
@@ -628,6 +708,10 @@
           "default": "auto",
           "configKey": "cemu_gamepadmic",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Nenhum",
               "value": "none"

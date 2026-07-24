@@ -31,6 +31,10 @@
           "configKey": "psxmame_gpu_plugin",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "OPENGL (Padrão)",
               "value": "ogl_renderer.znc"
             },
@@ -72,6 +76,10 @@
           "configKey": "psxmame_scanlines",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Não",
               "value": "0"
             },
@@ -95,6 +103,10 @@
           "configKey": "psxmame_depth32",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "32 BITS",
               "value": "1"
             },
@@ -112,6 +124,10 @@
           "default": "auto",
           "configKey": "psxmame_filtering",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Não",
               "value": "0"
@@ -139,6 +155,10 @@
           "default": "auto",
           "configKey": "psxmame_video",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "GDI",
               "value": "gdi"
@@ -223,6 +243,10 @@
           "configKey": "psxmame_samplerate",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "48000",
               "value": "48000"
             },
@@ -258,6 +282,10 @@
           "default": "auto",
           "configKey": "psxmame_controller_configmode",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "RETROBAT Automático",
               "value": "retrobat_auto"

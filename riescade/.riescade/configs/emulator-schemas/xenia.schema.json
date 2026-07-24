@@ -21,6 +21,10 @@
           "configKey": "xenia_resolution",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "1280x720 (Padrão)",
               "value": "1_1"
             },
@@ -53,6 +57,10 @@
           "default": "auto",
           "configKey": "render_target_path",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "RTV/FBO",
               "value": "performance"
@@ -90,6 +98,10 @@
           "configKey": "query_occlusion_fake_sample_count",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "1000",
               "value": "1000"
             },
@@ -112,6 +124,10 @@
           "configKey": "xenia_queue_priority",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "NORMAL",
               "value": "0"
             },
@@ -129,6 +145,10 @@
           "default": "auto",
           "configKey": "postprocess_antialiasing",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Nenhum",
               "value": "off"
@@ -159,6 +179,10 @@
           "configKey": "gpu",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "DIRECT3D12",
               "value": "d3d12"
             },
@@ -185,6 +209,10 @@
           "default": "auto",
           "configKey": "xenia_lang",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "English",
               "value": "1"
@@ -260,6 +288,10 @@
           "configKey": "license_mask",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "FIRST LICENCE ENABLED",
               "value": "1"
             },
@@ -329,6 +361,10 @@
           "configKey": "apu",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "NOP",
               "value": "nop"
             },
@@ -358,6 +394,10 @@
           "default": "auto",
           "configKey": "xenia_hid",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "SDL",
               "value": "sdl"

@@ -21,6 +21,10 @@
           "configKey": "gba_video_output",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "24 BIT COLOR",
               "value": "24bit True Color"
             },
@@ -42,6 +46,10 @@
           "default": "auto",
           "configKey": "gba_colors",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "BACKLIGHT",
               "value": "GBA SP (backlight)"
@@ -68,6 +76,10 @@
           "configKey": "gba_video_renderer",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "NOCASH",
               "value": "nocash"
             },
@@ -92,6 +104,10 @@
           "default": "auto",
           "configKey": "gba_nbplayers",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "2",
               "value": "-Two Machines"

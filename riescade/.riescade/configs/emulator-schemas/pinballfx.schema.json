@@ -44,6 +44,10 @@
           "configKey": "pinballfx_gamemode",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Clássico",
               "value": "Classic"
             },

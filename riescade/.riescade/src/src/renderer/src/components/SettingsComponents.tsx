@@ -95,7 +95,9 @@ export const SettingSlider = ({ label, name, min, max, step, suffix = "", desc, 
   label: string; name: string; min: number; max: number; step: number; suffix?: string; desc?: string;
   type?: "int" | "float"; ctx: SettingsCtx;
 }) => {
-  const val = parseFloat(ctx.getSetting(name, String(Math.floor((min + max) / 2))));
+  const parsed = parseFloat(ctx.getSetting(name, String(Math.floor((min + max) / 2))));
+  const val = Number.isFinite(parsed) ? Math.max(min, Math.min(max, parsed)) : min;
+  const progress = max === min ? 0 : ((val - min) / (max - min)) * 100;
   return (
     <div className="flex items-center justify-between bg-black/15 border border-white/5 rounded-md px-4 py-3 text-sm hover:bg-white/5 transition duration-200">
       <div className="flex flex-col gap-0.5 flex-1 min-w-0 pr-3">
@@ -111,8 +113,10 @@ export const SettingSlider = ({ label, name, min, max, step, suffix = "", desc, 
           value={val}
           onChange={e => { e.stopPropagation(); ctx.saveSetting(name, e.target.value, type); }}
           className="w-28 h-1 bg-white/10 rounded-md appearance-none cursor-pointer accent-range transition focus:outline-none"
+          style={{ "--range-progress": `${progress}%` } as React.CSSProperties}
+          aria-label={label}
         />
-        <span className="text-white/60 font-mono text-[10px] w-12 text-right bg-white/5 border border-white/5 rounded-md px-1.5 py-0.5 select-none">
+        <span className="text-accent font-mono text-[10px] w-12 text-right bg-accent-light border border-accent-focus rounded-md px-1.5 py-0.5 select-none">
           {val}{suffix}
         </span>
       </div>
@@ -123,10 +127,10 @@ export const SettingSlider = ({ label, name, min, max, step, suffix = "", desc, 
 export const SettingInput = ({ label, name, desc, isPassword = false, ctx }: {
   label: string; name: string; desc?: string; isPassword?: boolean; ctx: SettingsCtx;
 }) => (
-  <div className="flex items-center justify-between bg-black/15 border border-white/5 rounded-md px-4 py-3 text-xs hover:bg-white/5 transition duration-200">
+  <div className="flex items-center justify-between bg-black/15 border border-white/5 rounded-md px-4 py-3 text-sm hover:bg-white/5 transition duration-200">
     <div className="flex flex-col gap-0.5 flex-1 min-w-0 pr-3">
       <span className="font-medium text-white/90">{label}</span>
-      {desc && <span className="text-[10px] text-white/40 leading-relaxed font-sans">{desc}</span>}
+      {desc && <span className="text-[12px] text-white/40 leading-relaxed font-sans">{desc}</span>}
     </div>
     <input
       type={isPassword ? "password" : "text"}

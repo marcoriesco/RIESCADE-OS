@@ -51,14 +51,11 @@ import { DosBoxStagingGenerator } from './generators/DosBoxStagingGenerator.js';
 import { EasyRpgGenerator } from './generators/EasyRpgGenerator.js';
 import { EDukeGenerator } from './generators/EDukeGenerator.js';
 import { Eka2l1Generator } from './generators/Eka2l1Generator.js';
-import { ExeLauncherGenerator } from './generators/ExeLauncherGenerator.js';
-import { ExeLauncherGenerator } from './generators/ExeLauncherGenerator.js';
 import { exoDOSGenerator } from './generators/exoDOSGenerator.js';
 import { FbneoGenerator } from './generators/FbneoGenerator.js';
 import { ForceEngineGenerator } from './generators/ForceEngineGenerator.js';
 import { FpinballGenerator } from './generators/FpinballGenerator.js';
 import { GemRBGenerator } from './generators/GemRBGenerator.js';
-import { ExeLauncherGenerator } from './generators/ExeLauncherGenerator.js';
 import { Gopher64Generator } from './generators/Gopher64Generator.js';
 import { GsPlusGenerator } from './generators/GsPlusGenerator.js';
 import { GZDoomGenerator } from './generators/GZDoomGenerator.js';
@@ -102,7 +99,6 @@ import { Singe2Generator } from './generators/Singe2Generator.js';
 import { Snes9xGenerator } from './generators/Snes9xGenerator.js';
 import { SolarusGenerator } from './generators/SolarusGenerator.js';
 import { SSFGenerator } from './generators/SSFGenerator.js';
-import { ExeLauncherGenerator } from './generators/ExeLauncherGenerator.js';
 import { StellaGenerator } from './generators/StellaGenerator.js';
 import { SudachiGenerator } from './generators/SudachiGenerator.js';
 import { SuyuGenerator } from './generators/SuyuGenerator.js';
@@ -761,6 +757,7 @@ async function main() {
       psMonitor = startHotkeyMonitor(monitors, () => {
         Logger.info(`Hotkey exit requested. Terminating emulator...`);
         try {
+          if (!child.pid) throw new Error('Emulator process has no PID.');
           spawn('taskkill', ['/F', '/T', '/PID', child.pid.toString()]);
         } catch (err) {
           Logger.error(`Failed to execute taskkill:`, err);

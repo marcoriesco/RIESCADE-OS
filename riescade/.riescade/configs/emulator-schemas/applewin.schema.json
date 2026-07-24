@@ -21,6 +21,10 @@
           "configKey": "screentype",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Monochrome (Custom)",
               "value": "0"
             },
@@ -74,6 +78,10 @@
           "configKey": "cputype",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Apple ][ (Original)",
               "value": "apple2"
             },
@@ -111,6 +119,10 @@
           "configKey": "applewin_joytype1",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "JOYSTICK",
               "value": "1"
             },
@@ -139,6 +151,10 @@
           "default": "auto",
           "configKey": "applewin_joytype2",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "DISABLED",
               "value": "0"

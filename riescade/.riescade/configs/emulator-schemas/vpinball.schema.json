@@ -21,6 +21,10 @@
           "configKey": "vp_vsync",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "FRAME PACING",
               "value": "3"
             },
@@ -107,6 +111,10 @@
           "default": "auto",
           "configKey": "Monitor",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "1",
               "value": "1"
@@ -254,6 +262,10 @@
           "configKey": "vp_ambient_occlusion",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Sim",
               "value": "1"
             },
@@ -277,6 +289,10 @@
           "default": "auto",
           "configKey": "vp_antialiasing",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Desativado",
               "value": "0"
@@ -318,6 +334,10 @@
           "configKey": "vp_sharpen",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Desativado",
               "value": "0"
             },
@@ -347,6 +367,10 @@
           "default": "auto",
           "configKey": "vp_supersampling",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Desativado",
               "value": "1"
@@ -388,6 +412,10 @@
           "default": "auto",
           "configKey": "vpmame_dmd",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "INTERNAL",
               "value": "0"
@@ -452,6 +480,10 @@
           "configKey": "vpmame_colordmd",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Não",
               "value": "0"
             },
@@ -478,6 +510,10 @@
           "configKey": "vpdof_contractors",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "BOTH",
               "value": "2"
             },
@@ -501,6 +537,10 @@
           "default": "auto",
           "configKey": "vpdof_knocker",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "BOTH",
               "value": "2"
@@ -526,6 +566,10 @@
           "configKey": "vpdof_chimes",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "BOTH",
               "value": "2"
             },
@@ -549,6 +593,10 @@
           "default": "auto",
           "configKey": "vpdof_bell",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "BOTH",
               "value": "2"
@@ -574,6 +622,10 @@
           "configKey": "vpdof_gear",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "BOTH",
               "value": "2"
             },
@@ -597,6 +649,10 @@
           "default": "auto",
           "configKey": "vpdof_shaker",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "BOTH",
               "value": "2"
@@ -622,6 +678,10 @@
           "configKey": "vpdof_targets",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "BOTH",
               "value": "2"
             },
@@ -645,6 +705,10 @@
           "default": "auto",
           "configKey": "vpdof_droptargets",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "BOTH",
               "value": "2"
@@ -685,6 +749,10 @@
           "configKey": "vpmame_cabinet",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Sim",
               "value": "1"
             },
@@ -703,6 +771,10 @@
           "default": "auto",
           "configKey": "vpdof_flippers",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "BOTH",
               "value": "2"
@@ -743,6 +815,10 @@
           "configKey": "vp_audiochannels",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "2 CHANNEL",
               "value": "0"
             },
@@ -779,6 +855,10 @@
           "configKey": "vpmame_soundmode",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": 0,
               "value": "0"
             },
@@ -811,6 +891,10 @@
           "default": "auto",
           "configKey": "vp_inputdriver",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "DIRECTINPUT",
               "value": "0"
@@ -857,6 +941,10 @@
           "default": "auto",
           "configKey": "vp_rumble",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Desativado",
               "value": "0"

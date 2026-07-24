@@ -21,6 +21,10 @@
           "configKey": "tp_fsmode",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "WINDOWED",
               "value": "0"
             },
@@ -60,6 +64,10 @@
           "configKey": "tp_play_resolution",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "480p",
               "value": "480p"
             },
@@ -88,6 +96,10 @@
           "default": "auto",
           "configKey": "tp_play_gpuapi",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "VULKAN",
               "value": "Vulkan"
@@ -124,6 +136,10 @@
           "configKey": "tp_rpcs3_gpuapi",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "VULKAN",
               "value": "Vulkan"
             },
@@ -148,6 +164,10 @@
           "default": "auto",
           "configKey": "tp_region",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "USA/ENGLISH",
               "value": "usa"
@@ -243,6 +263,10 @@
           "configKey": "tp_padindex1",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": 0,
               "value": "0"
             },
@@ -268,6 +292,10 @@
           "configKey": "tp_padindex2",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": 0,
               "value": "0"
             },
@@ -292,6 +320,10 @@
           "default": "auto",
           "configKey": "tp_inputdriver",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "XINPUT",
               "value": "XInput"
@@ -322,6 +354,10 @@
           "configKey": "tp_gunkeyboard",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Ativado GUN",
               "value": "0"
             },
@@ -344,6 +380,10 @@
           "default": "auto",
           "configKey": "tp_gunindex1",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "1",
               "value": "0"
@@ -374,6 +414,10 @@
           "configKey": "tp_gunindex2",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "1",
               "value": "0"
             },
@@ -402,6 +446,10 @@
           "default": "auto",
           "configKey": "tp_gunindex3",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "1",
               "value": "0"
@@ -432,6 +480,10 @@
           "configKey": "tp_gunindex4",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "1",
               "value": "0"
             },
@@ -461,6 +513,10 @@
           "default": "auto",
           "configKey": "tp_kbindex",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": 0,
               "value": "0"
@@ -507,6 +563,10 @@
           "default": "auto",
           "configKey": "ds_output",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "TO WINDOW",
               "value": "win"

@@ -21,6 +21,10 @@
           "configKey": "openjazz_resolution",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "320x200",
               "value": "320x200"
             },

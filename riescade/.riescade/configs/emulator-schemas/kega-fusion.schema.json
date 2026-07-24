@@ -21,6 +21,10 @@
           "configKey": "kega_internal_resolution",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "640x480",
               "value": "224,1,128,2"
             },
@@ -81,6 +85,10 @@
           "configKey": "kega_scanlines",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Nenhum",
               "value": "4"
             },
@@ -109,6 +117,10 @@
           "default": "auto",
           "configKey": "kega_scaler",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "2xPM HQ",
               "value": "1"
@@ -204,6 +216,10 @@
           "configKey": "kega_rendermode",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "NORMAL",
               "value": "0"
             },
@@ -232,6 +248,10 @@
           "default": "auto",
           "configKey": "kega_region",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "USA",
               "value": "0"

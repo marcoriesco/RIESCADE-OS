@@ -38,6 +38,10 @@ export function getRiescadePath(): string {
   return join(getRetroBatPath(), 'riescade', '.riescade')
 }
 
+export function getStatePath(): string {
+  return join(getRiescadePath(), 'state')
+}
+
 export function getRomsPath(): string {
   return join(getRetroBatPath(), 'roms')
 }

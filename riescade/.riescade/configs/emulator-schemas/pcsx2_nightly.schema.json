@@ -454,7 +454,7 @@
           "configKey": "pcsx2_slot1_memory",
           "values": [
             {
-              "label": "Automático (Compartilhado)",
+              "label": "AUTO",
               "value": "auto"
             },
             {

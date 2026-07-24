@@ -1,6 +1,6 @@
 import { exec } from 'child_process'
 import { writeFileSync, existsSync, mkdirSync, readFileSync, unlinkSync, statSync, openSync, readSync, closeSync } from 'fs'
-import { join, resolve, dirname } from 'path'
+import { join, resolve, dirname, relative, isAbsolute } from 'path'
 import { tmpdir } from 'os'
 import { Game, System } from '../../shared/types'
 import { getRetroBatPath, getRiescadePath } from '../utils/paths'
@@ -10,7 +10,7 @@ import { ControllerManager, ControllerInfo } from './ControllerManager'
 // import { TeknoParrotAutoConfig } from './emulators/TeknoParrotAutoConfig'
 
 export class LauncherService {
-  public launch(game: Game, system: System, activeControllers: ControllerInfo[] = [], saveStateSlot?: number, netplayOptions?: any): Promise<void> {
+  public launch(game: Game, system: System, activeControllers: ControllerInfo[] = [], saveStateSlot?: number, netplayOptions?: any, saveStatePath?: string): Promise<void> {
     return new Promise((resolvePromise, reject) => {
       const { BrowserWindow, app } = require('electron')
       const sendLauncherStatus = (status: 'loading' | 'running' | 'closed') => {
@@ -200,14 +200,14 @@ export class LauncherService {
         const { spawn } = require('child_process')
         const child = spawn(resolvedExePath, exeArgs, { cwd: execCwd })
 
-        child.on('error', (err) => {
+        child.on('error', (err: Error) => {
           clearTimeout(runTimer)
           sendLauncherStatus('closed')
           console.error('Failed to spawn custom emulator:', err)
           reject(new Error(err.message || 'Failed to launch emulator.'))
         })
 
-        child.on('exit', (code) => {
+        child.on('exit', (code: number | null) => {
           clearTimeout(runTimer)
           sendLauncherStatus('closed')
           if (code !== 0 && code !== null) {
@@ -248,7 +248,7 @@ export class LauncherService {
             '-Command',
             'Get-PnpDevice -Status OK | Where-Object { $_.InstanceId -like "*VID_*" -and $_.InstanceId -like "*PID_*" } | Select-Object -ExpandProperty InstanceId'
           ], { encoding: 'utf8' })
-          let rawPaths = stdout.split('\n').map(s => s.trim()).filter(s => s.length > 0)
+          let rawPaths: string[] = stdout.split('\n').map((s: string) => s.trim()).filter((s: string) => s.length > 0)
           
           // Filter out parent/raw USB paths to ensure we pick the correct HID/IG node paths
           devicePaths = rawPaths.filter((dp: string) => {
@@ -336,6 +336,18 @@ export class LauncherService {
       }
 
       let saveStateArgs: string[] = []
+      if (saveStatePath) {
+        const savesRoot = resolve(getRetroBatPath(), 'riescade', 'saves')
+        const resolvedStatePath = resolve(saveStatePath)
+        const stateRelativePath = relative(savesRoot, resolvedStatePath)
+        const isValidStatePath = stateRelativePath === '' ||
+          (!stateRelativePath.startsWith('..') && !isAbsolute(stateRelativePath))
+        if (isValidStatePath && existsSync(resolvedStatePath)) {
+          saveStateArgs.push('-state_path', `"${resolvedStatePath}"`)
+        } else {
+          console.warn(`Ignored invalid or missing save state path: ${saveStatePath}`)
+        }
+      }
       if (saveStateSlot !== undefined) {
         if (saveStateSlot === -2) {
           saveStateArgs.push('-autosave', '0')

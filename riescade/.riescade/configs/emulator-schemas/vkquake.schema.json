@@ -21,6 +21,10 @@
           "configKey": "vkquake_vsync",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Desativado",
               "value": "0"
             },

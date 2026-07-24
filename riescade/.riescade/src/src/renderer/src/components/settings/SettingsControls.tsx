@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { RefreshCw, Copy, Download, Sliders, CheckCircle, Circle, Wrench, Bug, Info, ChevronRight, Check, Crosshair, MousePointer, Target, ChevronDown, Gamepad2 } from "lucide-react";
 import * as Select from "@radix-ui/react-select";
 import { SettingsCtx } from "../../types";
@@ -36,9 +36,16 @@ export interface SettingsControlsProps {
 function SettingsControlsComponent({ ctx }: SettingsControlsProps) {
   const [controllers, setControllers] = useState<any[]>([]);
   const [selectedController, setSelectedController] = useState<any | null>(null);
+  const selectedControllerRef = useRef<any | null>(null);
   const [controllerConfigs, setControllerConfigs] = useState<Record<string, any>>({});
   const [gamepadState, setGamepadState] = useState<{ buttons: any[]; axes: number[] } | null>(null);
+  const [activeControllerIds, setActiveControllerIds] = useState<Set<string>>(() => new Set());
+  const activityTimersRef = useRef<Map<string, number>>(new Map());
   const [scanningControllers, setScanningControllers] = useState(false);
+
+  useEffect(() => {
+    selectedControllerRef.current = selectedController;
+  }, [selectedController]);
 
   const [mainControlTab, setMainControlTab] = useState<'controles' | 'lightgun' | 'opcoes'>('controles');
   const [activeControlSubTab, setActiveControlSubTab] = useState<'configuracoes' | 'testes' | 'calibracao' | 'mapeamento' | 'informacoes'>('configuracoes');
@@ -79,9 +86,21 @@ function SettingsControlsComponent({ ctx }: SettingsControlsProps) {
   }, []);
 
   useEffect(() => {
+    const applyControllers = (data: any[]) => {
+      const list = data || [];
+      setControllers(list);
+      setSelectedController((previous: any | null) => {
+        if (!previous) return list[0] || null;
+        return list.find(controller =>
+          String(controller.instanceId ?? '') === String(previous.instanceId ?? '') ||
+          (!controller.instanceId && controller.guid === previous.guid)
+        ) || list[0] || null;
+      });
+    };
+
     // 1. Initial load
     window.api.detectControllers().then((data: any[]) => {
-      setControllers(data || []);
+      applyControllers(data);
     });
 
     // 2. Load configurations
@@ -90,20 +109,37 @@ function SettingsControlsComponent({ ctx }: SettingsControlsProps) {
     });
 
     // 3. Listen to updates
-    const onControllerUpdated = (_: any, data: { controllers?: any[]; configs?: any }) => {
-      if (data.controllers) setControllers(data.controllers);
-      if (data.configs) setControllerConfigs(data.configs);
-    };
+    const unsubscribeControllers = window.api.on('controllers-updated', (_event, data: any[]) => {
+      applyControllers(data);
+    });
 
-    if ((window.api as any).onControllerUpdated) {
-      (window.api as any).onControllerUpdated(onControllerUpdated);
-    }
+    const unsubscribeInput = window.api.on('controller-input', (_event, input: { type: string; instanceId: number; value: number }) => {
+      const isAxis = input.type.includes('AXIS');
+      if (isAxis && Math.abs(input.value) < 8000) return;
+      const key = String(input.instanceId);
+      setActiveControllerIds(current => new Set(current).add(key));
+
+      const previousTimer = activityTimersRef.current.get(key);
+      if (previousTimer) window.clearTimeout(previousTimer);
+      const timer = window.setTimeout(() => {
+        activityTimersRef.current.delete(key);
+        setActiveControllerIds(current => {
+          const next = new Set(current);
+          next.delete(key);
+          return next;
+        });
+      }, 280);
+      activityTimersRef.current.set(key, timer);
+    });
 
     // 4. Listen to Gamepad Input for Realtime test
     let animationFrameId: number;
     const pollGamepad = () => {
       const gamepads = navigator.getGamepads ? navigator.getGamepads() : [];
-      const activeGpad = Array.from(gamepads).find(g => g !== null);
+      const selected = selectedControllerRef.current;
+      const preferredIndex = selected?.xinputIndex ?? selected?.playerIndex;
+      const activeGpad = (preferredIndex >= 0 ? gamepads[preferredIndex] : null) ||
+        Array.from(gamepads).find(g => g !== null);
 
       if (activeGpad) {
         setGamepadState({
@@ -120,7 +156,11 @@ function SettingsControlsComponent({ ctx }: SettingsControlsProps) {
     pollGamepad();
 
     return () => {
+      unsubscribeControllers();
+      unsubscribeInput();
       if (animationFrameId) cancelAnimationFrame(animationFrameId);
+      activityTimersRef.current.forEach((timer: number) => window.clearTimeout(timer));
+      activityTimersRef.current.clear();
     };
   }, []);
 
@@ -130,7 +170,7 @@ function SettingsControlsComponent({ ctx }: SettingsControlsProps) {
       [guid]: { ...(controllerConfigs[guid] || {}), ...newConfig }
     };
     setControllerConfigs(updated);
-    window.api.saveControllerConfigs(updated);
+    window.api.saveControllerConfig(guid, updated[guid]);
   };
 
   const finishWizard = (mappings: Record<string, any>) => {
@@ -358,7 +398,8 @@ function SettingsControlsComponent({ ctx }: SettingsControlsProps) {
                 ) : (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     {controllers.map((c, i) => {
-                      const isSelected = selectedController?.guid === c.guid || (!selectedController && i === 0);
+                      const isSelected = String(selectedController?.instanceId ?? selectedController?.guid) === String(c.instanceId ?? c.guid) || (!selectedController && i === 0);
+                      const isActive = activeControllerIds.has(String(c.instanceId));
                       const player1Guid = ctx.getSetting("controllers.p1");
                       const player2Guid = ctx.getSetting("controllers.p2");
 
@@ -371,6 +412,10 @@ function SettingsControlsComponent({ ctx }: SettingsControlsProps) {
                           key={c.guid || c.instanceId}
                           onClick={() => setSelectedController(c)}
                           className={`p-3.5 rounded-xl border transition-all cursor-pointer flex items-center justify-between gap-3 ${
+                            isActive
+                              ? 'bg-accent-light border-accent-focus shadow-[0_0_16px_var(--accent-color-light)] '
+                              : ''
+                          }${
                             isSelected 
                               ? 'bg-accent/10 border-accent text-white shadow-lg shadow-accent/10' 
                               : 'bg-white/5 border-white/5 hover:bg-white/10 text-white/80'
@@ -390,9 +435,9 @@ function SettingsControlsComponent({ ctx }: SettingsControlsProps) {
                             </div>
                           </div>
 
-                          {isSelected && (
-                            <div className="w-2 h-2 rounded-full bg-accent animate-pulse shrink-0" />
-                          )}
+                          <div className={`w-2 h-2 rounded-full shrink-0 ${
+                            isActive ? 'bg-emerald-400 animate-ping' : isSelected ? 'bg-accent animate-pulse' : 'bg-white/15'
+                          }`} />
                         </div>
                       );
                     })}

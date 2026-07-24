@@ -21,6 +21,10 @@
           "configKey": "cdogs_scalemode",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "NEAREST NEIGHBOR",
               "value": "Nearest neighbor"
             },
@@ -83,6 +87,10 @@
           "default": "auto",
           "configKey": "cdogs_splitscreen",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "NEVER",
               "value": "Never"

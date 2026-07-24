@@ -79,7 +79,9 @@ export class SettingsParser {
           try {
             const { SystemsParser } = require('./SystemsParser')
             SystemsParser.clearCache()
-          } catch (err) {}
+          } catch (err) {
+            console.warn('[SettingsParser] Failed to clear systems cache after settings change.', err)
+          }
         }
       }
     } catch (error) {

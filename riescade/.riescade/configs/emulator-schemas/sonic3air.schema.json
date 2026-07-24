@@ -21,6 +21,10 @@
           "configKey": "sonic3_shader",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "SHARP",
               "value": "0"
             },
@@ -60,6 +64,10 @@
           "configKey": "sonic3_vsync",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Sim",
               "value": "1"
             },
@@ -96,6 +104,10 @@
           "default": "auto",
           "configKey": "sonic3_renderer",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "OPENGL",
               "value": "opengl-full"

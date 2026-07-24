@@ -22,6 +22,10 @@
           "configKey": "dbs_glshader",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "CRT Automático",
               "value": "crt-auto"
             },
@@ -122,6 +126,10 @@
           "configKey": "dbs_aspect",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "CORRECTION Ativado",
               "value": "on"
             },
@@ -149,6 +157,10 @@
           "default": "auto",
           "configKey": "dbs_vsync",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Ativado",
               "value": "on"
@@ -178,6 +190,10 @@
           "configKey": "dbs_integer_scaling",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "VERTICAL",
               "value": "vertical"
             },
@@ -202,6 +218,10 @@
           "default": "auto",
           "configKey": "dbs_machine",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "SVGA",
               "value": "svga"
@@ -272,6 +292,10 @@
           "configKey": "dbs_reelmagic",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Desativado",
               "value": "off"
             },
@@ -297,6 +321,10 @@
           "configKey": "dbs_host_rate",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "SERIAL DEVICE INTERFACE",
               "value": "sdi"
             },
@@ -317,6 +345,10 @@
           "default": "auto",
           "configKey": "dbs_presentation_mode",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "CONSTANTE FRAME RATE",
               "value": "cfr"
@@ -370,6 +402,10 @@
           "configKey": "dbs_output",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "OpenGL",
               "value": "opengl"
             },
@@ -394,6 +430,10 @@
           "default": "auto",
           "configKey": "dbs_texture_renderer",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "DIRECT3D",
               "value": "direct3d"
@@ -439,6 +479,10 @@
           "configKey": "dbs_cputype",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "386",
               "value": "386"
             },
@@ -474,6 +518,10 @@
           "default": "auto",
           "configKey": "dbs_cpu_cycles",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "8088 (4.77 MHz)",
               "value": "300"
@@ -534,6 +582,10 @@
           "default": "auto",
           "configKey": "dbs_cpu_cycles_protected",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "8088 (4.77 MHz)",
               "value": "300"
@@ -607,6 +659,10 @@
           "configKey": "dbs_core",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "NORMAL",
               "value": "normal"
             },
@@ -642,6 +698,10 @@
           "default": "auto",
           "configKey": "dbs_memsize",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "4MB",
               "value": "4"
@@ -734,6 +794,10 @@
           "configKey": "dbs_vmemsize",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "1MB",
               "value": "1"
             },
@@ -786,6 +850,10 @@
           "configKey": "dbs_voodoo_memsize",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "4MB",
               "value": "4"
             },
@@ -806,6 +874,10 @@
           "default": "auto",
           "configKey": "dbs_startup_verbosity",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "WELCOME AND STDOUT",
               "value": "high"
@@ -855,6 +927,10 @@
           "configKey": "dosbox_midi",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "SYSTEM",
               "value": "system"
             },
@@ -884,6 +960,10 @@
           "default": "auto",
           "configKey": "dosbox_sblaster_conf",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Port 220 IRQ 7 DMA 1/5",
               "value": "A220 I7 D1 H5"
@@ -957,6 +1037,10 @@
           "configKey": "dbs_tandy",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Ativado",
               "value": "on"
             },
@@ -980,6 +1064,10 @@
           "default": "auto",
           "configKey": "dbs_lpt_dac",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Desativado",
               "value": "off"
@@ -1027,6 +1115,10 @@
           "default": "auto",
           "configKey": "dbs_joysticktype",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "2 AXIS",
               "value": "2axis"

@@ -26,6 +26,10 @@
           "configKey": "dolphin_shaders",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Nenhum",
               "value": "(off)"
             },
@@ -274,6 +278,10 @@
           "configKey": "ratio",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "16/9",
               "value": "16/9"
             },
@@ -297,6 +305,10 @@
           "default": "auto",
           "configKey": "internal_resolution",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "1X (640x528)",
               "value": "1"
@@ -391,6 +403,10 @@
           "configKey": "SafeTextureCacheColorSamples",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "RAPID",
               "value": "128"
             },
@@ -427,6 +443,10 @@
           "configKey": "anisotropic_filtering",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Não",
               "value": "0"
             },
@@ -459,6 +479,10 @@
           "default": "auto",
           "configKey": "antialiasing",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Não",
               "value": "1"
@@ -497,6 +521,10 @@
           "configKey": "ssaa",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "MSAA",
               "value": "0"
             },
@@ -517,6 +545,10 @@
           "default": "auto",
           "configKey": "ForceFiltering",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Não",
               "value": "0"
@@ -542,6 +574,10 @@
           "default": "auto",
           "configKey": "OutputResampling",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Padrão",
               "value": "0"
@@ -639,6 +675,10 @@
           "configKey": "dolphin_gfxbackend",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "OPENGL",
               "value": "OGL"
             },
@@ -675,6 +715,10 @@
           "default": "auto",
           "configKey": "ShaderCompilationMode",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "HYBRID",
               "value": "2"
@@ -779,6 +823,10 @@
           "configKey": "dolphin_showfps",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Não",
               "value": "no"
             },
@@ -852,6 +900,10 @@
           "configKey": "EFBCopies",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "TO TEXTURE",
               "value": "efb_to_texture_defer"
             },
@@ -911,6 +963,10 @@
           "configKey": "dolphin_audiobackend",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "CUBEB",
               "value": "Cubeb"
             },
@@ -942,6 +998,10 @@
           "default": "auto",
           "configKey": "dolphin_mouse_cursor",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "WHEN MOVING",
               "value": "2"

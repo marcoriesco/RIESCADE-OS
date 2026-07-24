@@ -1,5 +1,19 @@
 import { contextBridge, ipcRenderer } from 'electron'
-import { electronAPI } from '@electron-toolkit/preload'
+
+const allowedEventChannels = new Set([
+  'controllers-updated',
+  'controller-input',
+  'open-app-window',
+  'systems-loading-progress',
+  'setting-changed',
+  'emulator-setting-changed',
+  'emulator-download-progress',
+  'launcher-status',
+  'update-progress',
+  'scrape-progress',
+  'scrape-finished',
+  'scrape-manual-search-required'
+])
 
 // Simplified API - all config is done through EmulationStation
 const api = {
@@ -9,10 +23,11 @@ const api = {
   getGames: (systemName: string) => ipcRenderer.invoke('get-games', systemName),
   updateGame: (systemName: string, gameData: any) => ipcRenderer.invoke('update-game', systemName, gameData),
   deleteGame: (systemName: string, gamePath: string, deletePhysical: boolean) => ipcRenderer.invoke('delete-game', systemName, gamePath, deletePhysical),
-  launchGame: (game: any, system: any, saveStateSlot?: number) => ipcRenderer.invoke('launch-game', game, system, saveStateSlot),
+  launchGame: (game: any, system: any, saveStateSlot?: number, saveStatePath?: string) => ipcRenderer.invoke('launch-game', game, system, saveStateSlot, saveStatePath),
   checkEmulatorStatus: (emulatorName: string, systemName: string) => ipcRenderer.invoke('check-emulator-status', emulatorName, systemName),
-  downloadAndInstallEmulator: (emulatorName: string, sourceUrl: string) => ipcRenderer.invoke('download-install-emulator', emulatorName, sourceUrl),
+  downloadAndInstallEmulator: (emulatorName: string, systemName: string) => ipcRenderer.invoke('download-install-emulator', emulatorName, systemName),
   scanSaveStates: (systemName: string, gamePath: string) => ipcRenderer.invoke('scan-save-states', systemName, gamePath),
+  getGameFileInfo: (systemName: string, gamePath: string) => ipcRenderer.invoke('get-game-file-info', systemName, gamePath),
   getCustomCollections: () => ipcRenderer.invoke('get-custom-collections'),
   getCollectionGames: (collectionName: string) => ipcRenderer.invoke('get-collection-games', collectionName),
   getCollectionsForGame: (systemName: string, gamePath: string) => ipcRenderer.invoke('get-collections-for-game', systemName, gamePath),
@@ -76,7 +91,7 @@ const api = {
   closeWindow: () => ipcRenderer.send('window-control', 'close'),
   getVersion: () => ipcRenderer.invoke('get-version'),
   checkForUpdates: () => ipcRenderer.invoke('check-for-updates'),
-  downloadAndInstallUpdate: (zipUrl: string) => ipcRenderer.invoke('download-and-install-update', zipUrl),
+  downloadAndInstallUpdate: () => ipcRenderer.invoke('download-and-install-update'),
   getOverlayPath: (name: string) => ipcRenderer.invoke('get-overlay-path', name),
   getMusicFiles: (subfolder?: string) => ipcRenderer.invoke('get-music-files', subfolder),
   getMusicPath: () => ipcRenderer.invoke('get-music-path'),
@@ -107,22 +122,13 @@ const api = {
   // Events
 
   on: (channel: string, callback: (...args: any[]) => void) => {
+    if (!allowedEventChannels.has(channel)) {
+      throw new Error(`Canal IPC não autorizado: ${channel}`)
+    }
     const subscription = (event: any, ...args: any[]) => callback(event, ...args)
     ipcRenderer.on(channel, subscription)
     return () => ipcRenderer.removeListener(channel, subscription)
   }
 }
 
-if (process.contextIsolated) {
-  try {
-    contextBridge.exposeInMainWorld('electron', electronAPI)
-    contextBridge.exposeInMainWorld('api', api)
-  } catch (error) {
-    console.error(error)
-  }
-} else {
-  // @ts-ignore (define in dts)
-  window.electron = electronAPI
-  // @ts-ignore (define in dts)
-  window.api = api
-}
+contextBridge.exposeInMainWorld('api', api)

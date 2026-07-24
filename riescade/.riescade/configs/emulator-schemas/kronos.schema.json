@@ -31,6 +31,10 @@
           "configKey": "kronos_resolution",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "ORIGINAL",
               "value": "1"
             },
@@ -58,6 +62,10 @@
           "default": "auto",
           "configKey": "kronos_ratio",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "PRESERVE ASPECT",
               "value": "0"
@@ -88,6 +96,10 @@
           "configKey": "kronos_scaler",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Nenhum",
               "value": "0"
             },
@@ -116,6 +128,10 @@
           "default": "auto",
           "configKey": "kronos_filtering",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Nenhum",
               "value": "0"
@@ -182,6 +198,10 @@
           "configKey": "saturn_language",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "english",
               "value": "0"
             },
@@ -219,6 +239,10 @@
           "configKey": "saturn_discnumber",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "1",
               "value": "0"
             },
@@ -253,6 +277,10 @@
           "configKey": "kronos_force_bios",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Multi-region",
               "value": "saturn_bios.bin"
             },
@@ -280,6 +308,10 @@
           "default": "auto",
           "configKey": "kronos_cartridge",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "DRAM 32 Mbit",
               "value": "7"
@@ -323,6 +355,10 @@
           "configKey": "kronos_audiocore",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "DIRECTX",
               "value": "2"
             },
@@ -350,6 +386,10 @@
           "default": "auto",
           "configKey": "kronos_padlayout",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "L/R as Y/Z",
               "value": "lr_yz"
@@ -383,6 +423,10 @@
           "configKey": "kronos_multitap",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Não",
               "value": "0"
             },
@@ -408,6 +452,10 @@
           "configKey": "saturn_pad_kronos",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Não",
               "value": "0"
             },
@@ -430,6 +478,10 @@
           "default": "auto",
           "configKey": "kronos_gunport",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "PORT 2",
               "value": "2"

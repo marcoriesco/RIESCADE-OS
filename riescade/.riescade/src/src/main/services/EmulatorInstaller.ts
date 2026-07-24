@@ -187,7 +187,9 @@ function getFolderContainingExe(extractDir: string, exeName: string): string {
             return subPath
           }
         }
-      } catch (e) {}
+      } catch (e) {
+        console.debug('[EmulatorInstaller] Could not remove temporary archive.', e)
+      }
     }
   }
   return extractDir
@@ -208,7 +210,9 @@ export class EmulatorInstaller {
       if (existsSync(versionFile)) {
         try {
           installedVersion = readFileSync(versionFile, 'utf8').trim()
-        } catch (e) {}
+        } catch (e) {
+          console.warn(`[EmulatorInstaller] Could not read installed version from ${versionFile}.`, e)
+        }
       }
     }
 

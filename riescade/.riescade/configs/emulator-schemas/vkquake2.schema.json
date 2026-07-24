@@ -29,6 +29,10 @@
           "configKey": "vkquake2_antialiasing",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Nenhum",
               "value": "0"
             },

@@ -43,6 +43,10 @@
           "configKey": "stella_monitor",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": 0,
               "value": "0"
             },
@@ -101,6 +105,10 @@
           "configKey": "stella_tvfilter",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Nenhum",
               "value": "0"
             },
@@ -133,6 +141,10 @@
           "default": "auto",
           "configKey": "stella_scanlines",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Não SCANLINES",
               "value": "Off"
@@ -182,6 +194,10 @@
           "default": "auto",
           "configKey": "stella_overscan",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Desativado",
               "value": "Off"
@@ -235,6 +251,10 @@
           "default": "auto",
           "configKey": "stella_renderer",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "DIRECT3D",
               "value": "direct3d"
@@ -320,6 +340,10 @@
           "configKey": "stella_audio_quality",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "HIGH QUALITY / MEDIUM LAG",
               "value": "3"
             },
@@ -365,6 +389,10 @@
           "configKey": "stella_mouse",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "FOR ANALOG DEVICES ONLY",
               "value": "analog"
             },
@@ -385,6 +413,10 @@
           "default": "auto",
           "configKey": "stella_deadzone",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "5%",
               "value": "3"
@@ -430,6 +462,10 @@
           "configKey": "stella_autofire",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Não",
               "value": "0"
             },
@@ -468,6 +504,10 @@
           "default": "auto",
           "configKey": "stella_cursor",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "IN UI ONLY",
               "value": "2"

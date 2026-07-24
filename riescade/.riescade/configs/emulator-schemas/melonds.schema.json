@@ -22,6 +22,10 @@
           "configKey": "melonds_internal_resolution",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "NATIVE (256x192)",
               "value": "1"
             },
@@ -99,6 +103,10 @@
           "configKey": "melonds_ratio_top",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "4:3",
               "value": "0"
             },
@@ -131,6 +139,10 @@
           "default": "auto",
           "configKey": "melonds_ratio_bottom",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "4:3",
               "value": "0"
@@ -175,6 +187,10 @@
           "configKey": "melonds_screen_layout",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "NATURAL",
               "value": "0"
             },
@@ -212,6 +228,10 @@
           "default": "auto",
           "configKey": "melonds_screen_sizing",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "EVEN (SAME SIZE)",
               "value": "0"
@@ -260,6 +280,10 @@
           "configKey": "melonds_rotate",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Não",
               "value": "0"
             },
@@ -299,6 +323,10 @@
           "configKey": "melonds_renderer",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "OPENGL(COMPUTE SHADERS)",
               "value": "2"
             },
@@ -331,6 +359,10 @@
           "configKey": "melonds_console",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "DS",
               "value": "ds"
             },
@@ -349,6 +381,10 @@
           "default": "auto",
           "configKey": "melonds_firmware_language",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "English",
               "value": "1"
@@ -416,6 +452,10 @@
           "configKey": "slowmo_toggle",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "HOLD",
               "value": "0"
             },
@@ -449,6 +489,10 @@
           "default": "auto",
           "configKey": "melonds_micInputType",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "REAL MICROPHONE",
               "value": "1"

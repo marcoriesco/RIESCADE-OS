@@ -22,6 +22,10 @@
           "configKey": "mesen_filter",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Nenhum",
               "value": "None"
             },
@@ -125,6 +129,10 @@
           "configKey": "mesen_ratio",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Não STRETCHING",
               "value": "NoStretching"
             },
@@ -195,6 +203,10 @@
           "default": "auto",
           "configKey": "mesen_autosave",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Desativado",
               "value": "false"

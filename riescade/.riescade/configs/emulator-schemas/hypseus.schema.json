@@ -33,6 +33,10 @@
           "configKey": "ratio",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "4/3",
               "value": "4/3"
             },
@@ -62,6 +66,10 @@
           "default": "auto",
           "configKey": "hypseus_renderer",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "OPENGL",
               "value": "opengl"

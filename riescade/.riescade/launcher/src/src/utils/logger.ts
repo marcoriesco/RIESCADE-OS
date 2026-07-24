@@ -1,9 +1,10 @@
-import { existsSync, mkdirSync, appendFileSync } from 'fs';
+import { existsSync, mkdirSync, appendFileSync, readFileSync } from 'fs';
 import { join } from 'path';
-import { getLogsPath } from './paths.js'; // Note the .js extension because we're using NodeNext resolution
+import { getConfigsPath, getLogsPath } from './paths.js'; // Note the .js extension because we're using NodeNext resolution
 
 export class Logger {
   private static logFile: string | null = null;
+  private static level = 'default';
 
   private static init() {
     if (this.logFile) return;
@@ -12,6 +13,15 @@ export class Logger {
       mkdirSync(logsDir, { recursive: true });
     }
     this.logFile = join(logsDir, 'riescadeLauncher.log');
+    try {
+      const settingsPath = join(getConfigsPath(), 'settings.json');
+      if (existsSync(settingsPath)) {
+        const settings = JSON.parse(readFileSync(settingsPath, 'utf8'));
+        this.level = String(settings?.LogLevel?.value || 'default').toLowerCase();
+      }
+    } catch {
+      this.level = 'default';
+    }
   }
 
   public static info(message: string) {
@@ -40,6 +50,15 @@ export class Logger {
 
   private static write(level: string, message: string) {
     this.init();
+    const priorities: Record<string, number> = { DEBUG: 10, INFO: 20, WARN: 30, ERROR: 40 };
+    const thresholds: Record<string, number> = {
+      debug: 10,
+      default: 20,
+      warning: 30,
+      error: 40,
+      disabled: Number.POSITIVE_INFINITY
+    };
+    if ((priorities[level] || 20) < (thresholds[this.level] ?? thresholds.default)) return;
     const timestamp = new Date().toISOString();
     const logLine = `[${timestamp}] [${level}] ${message}\n`;
     console.log(logLine.trim());

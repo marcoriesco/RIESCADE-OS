@@ -22,6 +22,10 @@
           "configKey": "raine_ratio",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Não",
               "value": "0"
             },
@@ -56,6 +60,10 @@
           "configKey": "raine_rotate",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Normal",
               "value": "0"
             },
@@ -84,6 +92,10 @@
           "configKey": "raine_render",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "TEXTURE",
               "value": "1"
             },
@@ -104,6 +116,10 @@
           "configKey": "raine_filter",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "NEAREST NEIGHBOR",
               "value": "9728"
             },
@@ -123,6 +139,10 @@
           "default": "auto",
           "configKey": "raine_doublebuffer",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Adaptável",
               "value": "1"
@@ -217,6 +237,10 @@
           "default": "auto",
           "configKey": "raine_sample_rate",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "44100",
               "value": "44100"

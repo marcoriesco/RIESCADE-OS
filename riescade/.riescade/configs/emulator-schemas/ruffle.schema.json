@@ -21,6 +21,10 @@
           "configKey": "ruffle_quality",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "HIGH",
               "value": "high"
             },
@@ -61,6 +65,10 @@
           "default": "auto",
           "configKey": "ruffle_renderer",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "VULKAN",
               "value": "vulkan"

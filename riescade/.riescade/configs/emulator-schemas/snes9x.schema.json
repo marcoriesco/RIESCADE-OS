@@ -22,6 +22,10 @@
           "configKey": "snes9x_ntsc_filters",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Nenhum",
               "value": "0"
             },
@@ -167,6 +171,10 @@
           "configKey": "snes9x_ratio",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "4/3",
               "value": "4/3"
             },
@@ -225,6 +233,10 @@
           "default": "auto",
           "configKey": "snes9x_renderer",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "OPENGL",
               "value": "2"
@@ -299,6 +311,10 @@
           "configKey": "snes9x_mouse",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Não",
               "value": "no"
             },
@@ -321,6 +337,10 @@
           "default": "auto",
           "configKey": "snes9x_guntype",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Superscope",
               "value": "superscope"

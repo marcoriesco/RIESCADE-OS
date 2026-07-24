@@ -33,6 +33,10 @@
           "configKey": "scumm_rotation",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Não",
               "value": "0"
             },
@@ -60,6 +64,10 @@
           "default": "auto",
           "configKey": "scaler",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Normal 1x",
               "value": "normal1"
@@ -146,6 +154,10 @@
           "configKey": "antialiasing",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Não",
               "value": "0"
             },
@@ -178,6 +190,10 @@
           "configKey": "gfx_mode",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "OPENGL",
               "value": "opengl"
             },
@@ -205,6 +221,10 @@
           "default": "auto",
           "configKey": "render_mode",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "HERCULES GREEN",
               "value": "hercGreen"
@@ -317,6 +337,10 @@
           "default": "auto",
           "configKey": "scumm_subtitles",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "BOTH",
               "value": "both"

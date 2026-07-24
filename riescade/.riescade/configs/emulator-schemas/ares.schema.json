@@ -21,6 +21,10 @@
           "configKey": "ares_aspect",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "SCALE (BEST FIT)",
               "value": "Scale"
             },
@@ -43,6 +47,10 @@
           "default": "auto",
           "configKey": "ares_gpusync",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "SYNC",
               "value": "sync"
@@ -160,6 +168,10 @@
           "configKey": "ares_renderer",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "OPENGL",
               "value": "OpenGL 3.2"
             },
@@ -190,6 +202,10 @@
           "default": "auto",
           "configKey": "ares_region",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "PAL",
               "value": "PAL"
@@ -241,6 +257,10 @@
           "configKey": "ares_aspectcorrection",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "STANDARD",
               "value": "Standard"
             },
@@ -271,6 +291,10 @@
           "default": "auto",
           "configKey": "ares_audio_renderer",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "WASAPI",
               "value": "WASAPI"

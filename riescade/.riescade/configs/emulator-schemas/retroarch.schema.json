@@ -117,7 +117,7 @@
           "configKey": "retroarch_core",
           "values": [
             {
-              "label": "Todos os Cores",
+              "label": "AUTO",
               "value": "auto"
             },
             {
@@ -823,6 +823,10 @@
           "configKey": "a5200_mix_frames",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "NONE",
               "value": "disabled"
             },
@@ -903,6 +907,10 @@
           "configKey": "a5200_input_hack",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "NONE",
               "value": "disabled"
             },
@@ -925,6 +933,10 @@
           "default": "auto",
           "configKey": "a5200_controller1",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "JOYSTICK (OSD KEYPAD)",
               "value": "1"
@@ -975,6 +987,10 @@
           "configKey": "amiarcadia_machine",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "ARCADIA 2001",
               "value": "Arcadia"
             },
@@ -993,6 +1009,10 @@
           "default": "auto",
           "configKey": "amiarcadia_region",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "PAL",
               "value": "PAL"
@@ -1051,6 +1071,10 @@
           "default": "auto",
           "configKey": "atari800_resolution",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "NATIVE (336x240)",
               "value": "336x240"
@@ -1117,6 +1141,10 @@
           "configKey": "atari800_ntscpal",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "NTSC",
               "value": "NTSC"
             },
@@ -1151,6 +1179,10 @@
           "configKey": "atari800_artifacting",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "NO",
               "value": "none"
             },
@@ -1181,6 +1213,10 @@
           "default": "auto",
           "configKey": "atari800_system",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "400/800 (48K) (OS B)",
               "value": "400/800 (OS B)"
@@ -1243,6 +1279,10 @@
           "configKey": "a800_controller1",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "ATARI JOYSTICK",
               "value": "513"
             },
@@ -1270,6 +1310,10 @@
           "configKey": "a800_controller2",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "ATARI JOYSTICK",
               "value": "513"
             },
@@ -1296,6 +1340,10 @@
           "default": "auto",
           "configKey": "a800_control_hacks",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "NONE",
               "value": "none"
@@ -1332,6 +1380,10 @@
           "default": "auto",
           "configKey": "azaharlr_resolution_factor",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "1X NATIVE",
               "value": "1"
@@ -1384,6 +1436,10 @@
           "configKey": "azaharlr_layout_option",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "TOP-BOTTOM SCREEN",
               "value": "default"
             },
@@ -1429,6 +1485,10 @@
           "configKey": "azaharlr_texture_filter",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "NONE",
               "value": "none"
             },
@@ -1472,6 +1532,10 @@
           "default": "auto",
           "configKey": "azaharlr_audio_emulation",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "HLE FAST",
               "value": "hle"
@@ -1526,6 +1590,10 @@
           "configKey": "azaharlr_region_value",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "AUSTRALIA",
               "value": "Australia"
             },
@@ -1564,6 +1632,10 @@
           "default": "auto",
           "configKey": "azaharlr_language",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Japanese",
               "value": "Japanese"
@@ -1624,6 +1696,10 @@
           "configKey": "azaharlr_is_new_3ds",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "NEW 3DS",
               "value": "New 3DS"
             },
@@ -1651,6 +1727,10 @@
           "default": "auto",
           "configKey": "azaharlr_graphics_api",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "OPENGL",
               "value": "OpenGL"
@@ -1683,6 +1763,10 @@
           "default": "auto",
           "configKey": "azaharlr_analog_function",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "C-STICK AND TOUCHSCREEN POINTER",
               "value": "c_stick_and_touchscreen"
@@ -1764,6 +1848,10 @@
           "configKey": "b2_model",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "ACORN 1770",
               "value": "B/Acorn 1770"
             },
@@ -1819,6 +1907,10 @@
           "default": "auto",
           "configKey": "bennugd_override_scaling",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "OFF",
               "value": "off"
@@ -1885,6 +1977,10 @@
           "configKey": "bk_model",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "BK-0010",
               "value": "BK-0010"
             },
@@ -1919,6 +2015,10 @@
           "default": "auto",
           "configKey": "bk_peripheral",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "NONE",
               "value": "none"
@@ -1964,6 +2064,10 @@
           "configKey": "bk_aspect_ratio",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "1:1",
               "value": "1:1"
             },
@@ -2007,6 +2111,10 @@
           "configKey": "bk_keyboard_type",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "POLL",
               "value": "poll"
             },
@@ -2025,6 +2133,10 @@
           "default": "auto",
           "configKey": "bk_layout",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "QWERTY",
               "value": "qwerty"
@@ -2150,6 +2262,10 @@
           "configKey": "bluemsx_vdp_synctype",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "50HZ",
               "value": "50Hz"
             },
@@ -2168,6 +2284,10 @@
           "default": "auto",
           "configKey": "bluemsx_msxtype",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "MSX",
               "value": "MSX"
@@ -2228,6 +2348,10 @@
           "configKey": "bluemsx_controller1",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "RETROPAD",
               "value": "1"
             },
@@ -2247,6 +2371,10 @@
           "configKey": "bluemsx_controller2",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "RETROPAD",
               "value": "1"
             },
@@ -2265,6 +2393,10 @@
           "default": "auto",
           "configKey": "boom3_resolution",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "960x544 (DEFAULT)",
               "value": "960x544"
@@ -2317,6 +2449,10 @@
           "default": "auto",
           "configKey": "Doom3ControllerP1",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "GAMEPAD CLASSIC",
               "value": "1"
@@ -2443,6 +2579,10 @@
           "configKey": "bsnes_aspect_ratio",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "PIXEL PERFECT 8/7",
               "value": "8:7"
             },
@@ -2487,6 +2627,10 @@
           "default": "auto",
           "configKey": "bsnes_video_filter",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "NONE",
               "value": "None"
@@ -2567,6 +2711,10 @@
           "configKey": "SnesControllerP1",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "gamepad",
               "value": "1"
             },
@@ -2585,6 +2733,10 @@
           "default": "auto",
           "configKey": "SnesControllerP2",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "gamepad",
               "value": "1"
@@ -2639,6 +2791,10 @@
           "configKey": "gun_type",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Superscope",
               "value": "260"
             },
@@ -2672,6 +2828,10 @@
           "default": "auto",
           "configKey": "gun_ab",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "MOUSE RIGHT/MIDDLE",
               "value": "mouse"
@@ -3101,6 +3261,10 @@
           "configKey": "bsnes_mode7_perspective",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "AUTO (wide)",
               "value": "auto (wide)"
             },
@@ -3170,6 +3334,10 @@
           "configKey": "SnesControllerP1",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "gamepad",
               "value": "1"
             },
@@ -3188,6 +3356,10 @@
           "default": "auto",
           "configKey": "SnesControllerP2",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "gamepad",
               "value": "1"
@@ -3242,6 +3414,10 @@
           "configKey": "gun_type",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Superscope",
               "value": "260"
             },
@@ -3275,6 +3451,10 @@
           "default": "auto",
           "configKey": "gun_ab",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "MOUSE RIGHT/MIDDLE",
               "value": "mouse"
@@ -3404,8 +3584,8 @@
           "configKey": "bsnes_jg_aspect",
           "values": [
             {
-              "label": "REGION-BASED PIXEL",
-              "value": "Auto"
+              "label": "AUTO",
+              "value": "auto"
             },
             {
               "label": "1:1 PAR",
@@ -3434,6 +3614,10 @@
           "default": "auto",
           "configKey": "bsnes_jg_rsqual",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "FAST",
               "value": "fast"
@@ -3527,6 +3711,10 @@
           "configKey": "SnesControllerP1",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "gamepad",
               "value": "1"
             },
@@ -3545,6 +3733,10 @@
           "default": "auto",
           "configKey": "SnesControllerP2",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "gamepad",
               "value": "1"
@@ -3599,6 +3791,10 @@
           "configKey": "gun_type",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Superscope",
               "value": "260"
             },
@@ -3632,6 +3828,10 @@
           "default": "auto",
           "configKey": "gun_ab",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "MOUSE RIGHT/MIDDLE",
               "value": "mouse"
@@ -3893,6 +4093,10 @@
           "configKey": "cannonball_gear",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "AUTOMATIC",
               "value": "Automatic"
             },
@@ -3935,6 +4139,10 @@
           "configKey": "cap32_gfx_colors",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "16 BIT",
               "value": "16bit"
             },
@@ -3957,6 +4165,10 @@
           "default": "auto",
           "configKey": "cap32_scr_tube",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "COLOR",
               "value": "color"
@@ -4035,6 +4247,10 @@
           "configKey": "cap32_model",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "6128",
               "value": "6128"
             },
@@ -4062,6 +4278,10 @@
           "configKey": "cap32_ram",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "128",
               "value": "128"
             },
@@ -4088,6 +4308,10 @@
           "default": "auto",
           "configKey": "cap32_lang_layout",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "ENGLISH",
               "value": "english"
@@ -4127,6 +4351,10 @@
           "configKey": "cap32_controller1",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Retropad",
               "value": "1"
             },
@@ -4154,6 +4382,10 @@
           "configKey": "cap32_controller2",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Retropad",
               "value": "1"
             },
@@ -4180,6 +4412,10 @@
           "default": "auto",
           "configKey": "cap32_combokey",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Y",
               "value": "y"
@@ -4232,6 +4468,10 @@
           "configKey": "cap32_lightgun_input",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "NO",
               "value": "disabled"
             },
@@ -4263,6 +4503,10 @@
           "default": "auto",
           "configKey": "gun_ab",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "MOUSE RIGHT/MIDDLE",
               "value": "mouse"
@@ -4317,6 +4561,10 @@
           "configKey": "citralr_resolution_factor",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "1X NATIVE",
               "value": "1x (Native)"
             },
@@ -4368,6 +4616,10 @@
           "configKey": "citralr_layout_option",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "TOP-BOTTOM SCREEN",
               "value": "Default Top-Bottom Screen"
             },
@@ -4412,6 +4664,10 @@
           "default": "auto",
           "configKey": "citralr_texture_filter",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "NONE",
               "value": "none"
@@ -4491,6 +4747,10 @@
           "configKey": "citra_region_value",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "AUSTRALIA",
               "value": "Australia"
             },
@@ -4529,6 +4789,10 @@
           "default": "auto",
           "configKey": "n3ds_language",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Japanese",
               "value": "0"
@@ -4606,6 +4870,10 @@
           "default": "auto",
           "configKey": "citra_analog_function",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "C-STICK AND TOUCHSCREEN POINTER",
               "value": "C-Stick and Touchscreen Pointer"
@@ -4693,6 +4961,10 @@
           "configKey": "crocods_controller1",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Retropad",
               "value": "1"
             },
@@ -4711,6 +4983,10 @@
           "default": "auto",
           "configKey": "crocods_controller2",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Retropad",
               "value": "1"
@@ -4745,6 +5021,10 @@
           "default": "auto",
           "configKey": "desmume_internal_resolution",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "x1 (256x192)",
               "value": "256x192"
@@ -4812,6 +5092,10 @@
           "configKey": "desmume_screens_layout",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "TOP/BOTTOM",
               "value": "top/bottom"
             },
@@ -4855,6 +5139,10 @@
           "configKey": "desmume_hybrid_layout_ratio",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "3:1",
               "value": "3:1"
             },
@@ -4873,6 +5161,10 @@
           "default": "auto",
           "configKey": "desmume_hybrid_showboth_screens",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "SHOW BOTH",
               "value": "enabled"
@@ -4908,6 +5200,10 @@
           "configKey": "desmume_gfx_texture_scaling",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "NO",
               "value": "1"
             },
@@ -4930,6 +5226,10 @@
           "default": "auto",
           "configKey": "desmume_gfx_multisampling",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "DISABLED",
               "value": "disabled"
@@ -4965,6 +5265,10 @@
           "default": "auto",
           "configKey": "desmume_color_depth",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "16 BITS",
               "value": "16-bit"
@@ -5008,6 +5312,10 @@
           "default": "auto",
           "configKey": "desmume_firmware_language",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "English",
               "value": "English"
@@ -5062,6 +5370,10 @@
           "configKey": "desmume_cpu_mode",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "INTERPRETER",
               "value": "interpreter"
             },
@@ -5098,6 +5410,10 @@
           "default": "auto",
           "configKey": "desmume_internal_resolution",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "x1 (256x192)",
               "value": "256x192"
@@ -5165,6 +5481,10 @@
           "configKey": "desmume_screens_layout",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "TOP/BOTTOM",
               "value": "top/bottom"
             },
@@ -5207,6 +5527,10 @@
           "default": "auto",
           "configKey": "desmume_hybrid_showboth_screens",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "SHOW BOTH",
               "value": "enabled"
@@ -5257,6 +5581,10 @@
           "configKey": "desmume_firmware_language",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "English",
               "value": "English"
             },
@@ -5292,6 +5620,10 @@
           "configKey": "desmume_cpu_mode",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "INTERPRETER",
               "value": "interpreter"
             },
@@ -5319,6 +5651,10 @@
           "default": "auto",
           "configKey": "dolphin_efb_scale",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "x1",
               "value": "1"
@@ -5370,6 +5706,10 @@
           "configKey": "dolphin_aspect_ratio",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "STRETCH",
               "value": "3"
             },
@@ -5413,6 +5753,10 @@
           "default": "auto",
           "configKey": "dolphin_shader_compilation_mode",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "SYNC",
               "value": "0"
@@ -5486,6 +5830,10 @@
           "configKey": "dolphin_anti_aliasing",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "NONE",
               "value": "0"
             },
@@ -5525,6 +5873,10 @@
           "configKey": "dolphin_max_anisotropy",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "1x",
               "value": "0"
             },
@@ -5555,6 +5907,10 @@
           "default": "auto",
           "configKey": "dolphin_force_texture_filtering_mode",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "DEFAULT",
               "value": "0"
@@ -5639,6 +5995,10 @@
           "configKey": "dolphin_language",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "English",
               "value": "1"
             },
@@ -5708,6 +6068,10 @@
           "configKey": "dolphin_cpu_core",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "JIT64 (recommended)",
               "value": "1"
             },
@@ -5766,6 +6130,10 @@
           "default": "auto",
           "configKey": "gamecube_buttons",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "NINTENDO LAYOUT",
               "value": "standard"
@@ -5839,6 +6207,10 @@
           "configKey": "dolphin_p1_controller",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "WIIMOTE",
               "value": "1"
             },
@@ -5877,6 +6249,10 @@
           "default": "auto",
           "configKey": "dolphin_p2_controller",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "WIIMOTE",
               "value": "1"
@@ -5917,6 +6293,10 @@
           "configKey": "dolphin_p3_controller",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "WIIMOTE",
               "value": "1"
             },
@@ -5955,6 +6335,10 @@
           "default": "auto",
           "configKey": "dolphin_p4_controller",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "WIIMOTE",
               "value": "1"
@@ -5995,6 +6379,10 @@
           "configKey": "dolphin_sensor_bar_position",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "BOTTOM",
               "value": "0"
             },
@@ -6013,6 +6401,10 @@
           "default": "auto",
           "configKey": "dolphin_ir_mode",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "RIGHT STICK (ABSOLUTE)",
               "value": "1"
@@ -6036,6 +6428,10 @@
           "default": "auto",
           "configKey": "dolphin_ir_modifier",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "ALWAYS ON",
               "value": "None"
@@ -6075,6 +6471,10 @@
           "default": "auto",
           "configKey": "dolphin_swing_modifier",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "DISABLED",
               "value": "Disabled"
@@ -6446,6 +6846,10 @@
           "configKey": "dosbox_pure_aspect_correction",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "ORIGINAL",
               "value": "false"
             },
@@ -6476,6 +6880,10 @@
           "default": "auto",
           "configKey": "dosbox_pure_force60fps",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "OFF",
               "value": "false"
@@ -6544,6 +6952,10 @@
           "configKey": "dosbox_pure_machine",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "SVGA",
               "value": "svga"
             },
@@ -6583,6 +6995,10 @@
           "configKey": "dosbox_pure_svga",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "S3 TRIO64",
               "value": "svga_s3"
             },
@@ -6617,6 +7033,10 @@
           "default": "auto",
           "configKey": "dosbox_pure_svgamem",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "512k",
               "value": "0"
@@ -6653,6 +7073,10 @@
           "configKey": "cga",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "EARLY MODEL - COMPOSITE MODE AUTO",
               "value": "early_auto"
             },
@@ -6688,6 +7112,10 @@
           "configKey": "hercules",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "BLACK AND WHITE",
               "value": "white"
             },
@@ -6710,6 +7138,10 @@
           "default": "auto",
           "configKey": "dosbox_pure_voodoo",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "8MB Memory",
               "value": "8mb"
@@ -6737,6 +7169,10 @@
           "default": "auto",
           "configKey": "dosbox_pure_voodoo_perf",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "HARDWARE OPENGL",
               "value": "4"
@@ -6768,6 +7204,10 @@
           "default": "auto",
           "configKey": "dosbox_pure_voodoo_scale",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "1X",
               "value": "1"
@@ -6812,6 +7252,10 @@
           "configKey": "dosbox_pure_overscan",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "OFF",
               "value": "0"
             },
@@ -6838,6 +7282,10 @@
           "default": "auto",
           "configKey": "dosbox_pure_sblaster_type",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "SOUNDBLASTER 16",
               "value": "sb16"
@@ -6877,6 +7325,10 @@
           "default": "auto",
           "configKey": "dosbox_sblaster_conf",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Port 220 IRQ 7 DMA 1/5",
               "value": "A220 I7 D1 H5"
@@ -6929,6 +7381,10 @@
           "configKey": "dosbox_pure_sblaster_adlib_emu",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "DEFAULT",
               "value": "default"
             },
@@ -6947,6 +7403,10 @@
           "default": "auto",
           "configKey": "dosbox_pure_sblaster_adlib_mode",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "CMS",
               "value": "cms"
@@ -6982,6 +7442,10 @@
           "default": "auto",
           "configKey": "midi",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "NO",
               "value": "disabled"
@@ -7058,6 +7522,10 @@
           "configKey": "dosbox_pure_conf",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "OFF",
               "value": "false"
             },
@@ -7080,6 +7548,10 @@
           "default": "auto",
           "configKey": "dosbox_pure_cpu_type",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "386",
               "value": "386"
@@ -7111,6 +7583,10 @@
           "default": "auto",
           "configKey": "dosbox_pure_cycles",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "MAX",
               "value": "max"
@@ -7171,6 +7647,10 @@
           "configKey": "dosbox_pure_cpu_core",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "DYNAMIC RECOMPILATION",
               "value": "dynamic"
             },
@@ -7193,6 +7673,10 @@
           "default": "auto",
           "configKey": "dosbox_pure_memory_size",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "NO",
               "value": "none"
@@ -7257,6 +7741,10 @@
           "configKey": "dosbox_pure_bootos_ramdisk",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "KEEP",
               "value": "false"
             },
@@ -7289,6 +7777,10 @@
           "configKey": "dosbox_pure_perfstats",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "OFF",
               "value": "none"
             },
@@ -7312,6 +7804,10 @@
           "configKey": "dosbox_pure_on_screen_keyboard",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "ON-SCREEN KEYBOARD",
               "value": "keyboard"
             },
@@ -7334,6 +7830,10 @@
           "default": "auto",
           "configKey": "menu_time",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "SHUTDOWN CORE IMMEDIATELY",
               "value": "none"
@@ -7376,6 +7876,10 @@
           "default": "auto",
           "configKey": "dos_controller1",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "PAD MAPPER Generic Keyboard",
               "value": "1"
@@ -7436,6 +7940,10 @@
           "configKey": "dos_controller2",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "PAD MAPPER Generic Keyboard",
               "value": "1"
             },
@@ -7494,6 +8002,10 @@
           "default": "auto",
           "configKey": "keyboard_layout",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "BRAZIL",
               "value": "br"
@@ -7606,6 +8118,10 @@
           "configKey": "dosbox_pure_auto_mapping",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "ON",
               "value": "true"
             },
@@ -7628,6 +8144,10 @@
           "default": "auto",
           "configKey": "dcgb_emulated_gameboys",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "1",
               "value": "1"
@@ -7656,6 +8176,10 @@
           "configKey": "dcgb_screen_placement",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "SPLIT SCREEN",
               "value": "splitscreen"
             },
@@ -7678,6 +8202,10 @@
           "default": "auto",
           "configKey": "dcgb_audio_output",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "GAMEBOY 1",
               "value": "Game Boy #1"
@@ -7736,6 +8264,10 @@
           "configKey": "dcgb_multiplayer_linked_devive",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "4 PLAYER ADAPTER",
               "value": "Gameboy 4 Player Adapter"
             },
@@ -7786,6 +8318,10 @@
           "configKey": "drs_internal_upscale_factor",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "x2",
               "value": "2x (CS+, default)"
             },
@@ -7812,6 +8348,10 @@
           "default": "auto",
           "configKey": "drs_screen_ratio",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "4:3",
               "value": "4:3 (original)"
@@ -7924,6 +8464,10 @@
           "configKey": "psxcontroller1",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Digital Controller",
               "value": "1"
             },
@@ -7955,6 +8499,10 @@
           "configKey": "psxcontroller2",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Digital Controller",
               "value": "1"
             },
@@ -7985,6 +8533,10 @@
           "default": "auto",
           "configKey": "ecwolf_resolution",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "NATIVE (320x200)",
               "value": "320x200"
@@ -8029,6 +8581,10 @@
           "configKey": "ecwolf_ratio",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "16:9",
               "value": "16:9"
             },
@@ -8063,6 +8619,10 @@
           "default": "auto",
           "configKey": "ecwolf_fps",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "35",
               "value": "35"
@@ -8114,6 +8674,10 @@
           "default": "auto",
           "configKey": "ecwolf_palette",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "RGB565 (16-bit)",
               "value": "rgb565"
@@ -8173,6 +8737,10 @@
           "configKey": "emuscv_console",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "EPOCH",
               "value": "EPOCH"
             },
@@ -8205,6 +8773,10 @@
           "configKey": "emuscv_langage",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "ENGLISH",
               "value": "EN"
             },
@@ -8227,6 +8799,10 @@
           "default": "auto",
           "configKey": "emuscv_resolution",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "LOW",
               "value": "LOW"
@@ -8251,6 +8827,10 @@
           "configKey": "emuscv_fps",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "50",
               "value": "YENO50"
             },
@@ -8269,6 +8849,10 @@
           "default": "auto",
           "configKey": "emuscv_display",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "EMUSCV",
               "value": "EMUSCV"
@@ -8293,6 +8877,10 @@
           "configKey": "emuscv_pixelaspect",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "RECTANGULAR",
               "value": "RECTANGULAR"
             },
@@ -8311,6 +8899,10 @@
           "default": "auto",
           "configKey": "emuscv_palette",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "STANDARD",
               "value": "STANDARD"
@@ -8505,6 +9097,10 @@
           "configKey": "ep128_controller1",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "CORE DEFAULT",
               "value": "513"
             },
@@ -8547,6 +9143,10 @@
           "default": "auto",
           "configKey": "ep128_controller2",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "CORE DEFAULT",
               "value": "513"
@@ -8645,6 +9245,10 @@
           "configKey": "fba_samplerate",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "44100",
               "value": "44100"
             },
@@ -8687,6 +9291,10 @@
           "configKey": "fba_diagkey",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "START + L + R",
               "value": "Start + L + R"
             },
@@ -8717,6 +9325,10 @@
           "default": "auto",
           "configKey": "fba_neogeo_mode",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "UNIVERSE BIOS",
               "value": "UNIBIOS"
@@ -8777,6 +9389,10 @@
           "default": "auto",
           "configKey": "fba_controller",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "CLASSIC",
               "value": "5"
@@ -8843,6 +9459,10 @@
           "default": "auto",
           "configKey": "gun_ab",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "MOUSE RIGHT/MIDDLE",
               "value": "mouse"
@@ -8996,6 +9616,10 @@
           "configKey": "fba2012_samplerate",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "44100",
               "value": "44100"
             },
@@ -9038,6 +9662,10 @@
           "configKey": "fba2012_diagkey",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "START + L + R",
               "value": "Start + L + R"
             },
@@ -9068,6 +9696,10 @@
           "default": "auto",
           "configKey": "fba2012_neogeo_mode",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "UNIVERSE BIOS",
               "value": "UNIBIOS"
@@ -9128,6 +9760,10 @@
           "default": "auto",
           "configKey": "fba2012_controller",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "MODERN",
               "value": "517"
@@ -9194,6 +9830,10 @@
           "default": "auto",
           "configKey": "gun_ab",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "MOUSE RIGHT/MIDDLE",
               "value": "mouse"
@@ -9362,6 +10002,10 @@
           "configKey": "fba2012ng_diagkey",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "NONE",
               "value": "None"
             },
@@ -9396,6 +10040,10 @@
           "default": "auto",
           "configKey": "fba2012ng_neogeo_mode",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "UNIVERSE BIOS",
               "value": "UNIBIOS"
@@ -9447,6 +10095,10 @@
           "default": "auto",
           "configKey": "fba2012_neogeo_control",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "CLASSIC",
               "value": "1"
@@ -9740,6 +10392,10 @@
           "configKey": "fba2012cps2_controls",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "gamepad",
               "value": "gamepad"
             },
@@ -9834,6 +10490,10 @@
           "configKey": "fbalpha2012_cps3_samplerate",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "44100",
               "value": "44100"
             },
@@ -9904,6 +10564,10 @@
           "configKey": "fbalpha2012_cps3_diagnostic_input",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "START + L + R",
               "value": "Start + L + R"
             },
@@ -9935,6 +10599,10 @@
           "configKey": "fbalpha2012_cps3_controls_p1",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "gamepad",
               "value": "gamepad"
             },
@@ -9953,6 +10621,10 @@
           "default": "auto",
           "configKey": "fbalpha2012_cps3_lr_controls_p1",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "L1/R1",
               "value": "normal"
@@ -9973,6 +10645,10 @@
           "configKey": "fbalpha2012_cps3_controls_p2",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "gamepad",
               "value": "gamepad"
             },
@@ -9991,6 +10667,10 @@
           "default": "auto",
           "configKey": "fbalpha2012_cps3_lr_controls_p2",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "L1/R1",
               "value": "normal"
@@ -10071,6 +10751,10 @@
           "configKey": "fbneo-vertical-mode",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "NO",
               "value": "disabled"
             },
@@ -10106,7 +10790,7 @@
               "value": "disabled"
             },
             {
-              "label": "AUTOMATIC",
+              "label": "AUTO",
               "value": "auto"
             },
             {
@@ -10140,6 +10824,10 @@
           "default": "auto",
           "configKey": "fbneo_samplerate",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "44100",
               "value": "44100"
@@ -10183,6 +10871,10 @@
           "default": "auto",
           "configKey": "fbneo_diagkey",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "START + L + R",
               "value": "Start + L + R"
@@ -10243,6 +10935,10 @@
           "default": "auto",
           "configKey": "fbneo_controller",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "CLASSIC",
               "value": "5"
@@ -10364,6 +11060,10 @@
           "default": "auto",
           "configKey": "gun_ab",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "MOUSE RIGHT/MIDDLE",
               "value": "mouse"
@@ -10487,6 +11187,10 @@
           "configKey": "megadrive_control_layout",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "L/R as X/Z",
               "value": "lr_xz"
             },
@@ -10517,6 +11221,10 @@
           "default": "auto",
           "configKey": "fbneo_neogeo_mode",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "DIPSWITCH",
               "value": "DIPSWITCH"
@@ -10587,6 +11295,10 @@
           "configKey": "internal_resolution",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "320x240",
               "value": "320x240"
             },
@@ -10652,6 +11364,10 @@
           "default": "auto",
           "configKey": "cable_type",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "TV (RGB)",
               "value": "TV (RGB)"
@@ -10751,6 +11467,10 @@
           "configKey": "anisotropic_filtering",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "NO",
               "value": "off"
             },
@@ -10781,6 +11501,10 @@
           "default": "auto",
           "configKey": "reicast_texture_filtering",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "NEAREST NEIGHBOR",
               "value": "1"
@@ -10827,6 +11551,10 @@
           "default": "auto",
           "configKey": "reicast_alpha_sorting",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "per-strip (fast, least accurate)",
               "value": "per-strip (fast, least accurate)"
@@ -10899,6 +11627,10 @@
           "configKey": "reicast_broadcast",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "NTSC",
               "value": "NTSC"
             },
@@ -10926,6 +11658,10 @@
           "configKey": "reicast_region",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Japan",
               "value": "Japan"
             },
@@ -10948,6 +11684,10 @@
           "default": "auto",
           "configKey": "reicast_language",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Deutsch",
               "value": "German"
@@ -10983,6 +11723,10 @@
           "default": "auto",
           "configKey": "reicast_per_content_vmus",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "4 VMUs (ALL)",
               "value": "disabled"
@@ -11057,6 +11801,10 @@
           "default": "auto",
           "configKey": "flycast_controller",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "DREAMCAST CONTROLLER",
               "value": "1"
@@ -11194,6 +11942,10 @@
           "configKey": "reicast_lightgun1_crosshair",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "NONE",
               "value": "disabled"
             },
@@ -11225,6 +11977,10 @@
           "configKey": "reicast_lightgun2_crosshair",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "NONE",
               "value": "disabled"
             },
@@ -11255,6 +12011,10 @@
           "default": "auto",
           "configKey": "gun_ab",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "MOUSE RIGHT/MIDDLE",
               "value": "mouse"
@@ -11474,6 +12234,10 @@
           "configKey": "gearcoleco_controller",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "RETROPAD",
               "value": "1"
             },
@@ -11508,6 +12272,10 @@
           "configKey": "geargrafx_aspect_ratio",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "1:1 PAR",
               "value": "1:1 PAR"
             },
@@ -11539,6 +12307,10 @@
           "configKey": "geargrafx_console_type",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "PC ENGINE (JP)",
               "value": "PC Engine (JAP)"
             },
@@ -11562,6 +12334,10 @@
           "configKey": "geargrafx_cdrom_type",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "STANDARD",
               "value": "Standard"
             },
@@ -11584,6 +12360,10 @@
           "default": "auto",
           "configKey": "geargrafx_cdrom_bios",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "SYSTEM CARD 3",
               "value": "System Card 3"
@@ -11659,6 +12439,10 @@
           "default": "auto",
           "configKey": "geargrafx_controller",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "PC ENGINE PAD",
               "value": "257"
@@ -11743,6 +12527,10 @@
           "configKey": "gearsystem_controller",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "RETROPAD",
               "value": "1"
             },
@@ -11789,6 +12577,10 @@
           "default": "auto",
           "configKey": "gun_ab",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "MOUSE RIGHT/MIDDLE",
               "value": "mouse"
@@ -11888,6 +12680,10 @@
           "configKey": "genesis_plus_gx_overscan",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "NO",
               "value": "disabled"
             },
@@ -11915,6 +12711,10 @@
           "configKey": "render",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "SINGLE FIELD",
               "value": "single field"
             },
@@ -11933,6 +12733,10 @@
           "default": "auto",
           "configKey": "ntsc_filter",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "NO",
               "value": "disabled"
@@ -12010,6 +12814,10 @@
           "configKey": "genesis_plus_gx_region",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "PAL",
               "value": "pal"
             },
@@ -12032,6 +12840,10 @@
           "default": "auto",
           "configKey": "genesis_plus_gx_vdp_mode",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "NTSC 60HZ",
               "value": "60hz"
@@ -12112,6 +12924,10 @@
           "configKey": "genesis_plus_gx_left_border",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "NO",
               "value": "disabled"
             },
@@ -12143,6 +12959,10 @@
           "default": "auto",
           "configKey": "genesis_plus_gx_controller",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "JOYPAD 2 BUTTONS",
               "value": "769"
@@ -12203,6 +13023,10 @@
           "configKey": "ym2612",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "MAME (YM2612)",
               "value": "mame (ym2612)"
             },
@@ -12234,6 +13058,10 @@
           "configKey": "genesis_plus_gx_add_on",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Mega CD",
               "value": "megacd"
             },
@@ -12252,6 +13080,10 @@
           "default": "auto",
           "configKey": "lock_on",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "NO",
               "value": "disabled"
@@ -12279,6 +13111,10 @@
           "default": "auto",
           "configKey": "megadrive_control_layout",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "L/R as X/Z",
               "value": "lr_xz"
@@ -12320,6 +13156,10 @@
           "configKey": "gun_type",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "MENACER",
               "value": "516"
             },
@@ -12354,6 +13194,10 @@
           "configKey": "gun_input",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "LIGHTGUN",
               "value": "lightgun"
             },
@@ -12381,6 +13225,10 @@
           "default": "auto",
           "configKey": "gun_ab",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "MOUSE RIGHT/MIDDLE",
               "value": "mouse"
@@ -12555,6 +13403,10 @@
           "configKey": "core_aspect",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "PAR",
               "value": "PAR"
             },
@@ -12577,6 +13429,10 @@
           "default": "auto",
           "configKey": "renderer",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "ACCURATE",
               "value": "accurate"
@@ -12633,6 +13489,10 @@
           "default": "auto",
           "configKey": "region",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "JAPAN NTSC",
               "value": "Japan NTSC"
@@ -12705,6 +13565,10 @@
           "default": "auto",
           "configKey": "overclk68k",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "NO",
               "value": "disabled"
@@ -12799,6 +13663,10 @@
           "configKey": "picodrive_smsmapper",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Sega",
               "value": "Sega"
             },
@@ -12859,6 +13727,10 @@
           "default": "auto",
           "configKey": "megadrive_control_layout",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "L/R as X/Z",
               "value": "lr_xz"
@@ -12930,6 +13802,10 @@
           "configKey": "m2000_keyboard_mapping",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "SYMBOLIC",
               "value": "symbolic"
             },
@@ -12948,6 +13824,10 @@
           "default": "auto",
           "configKey": "internal_resolution",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "640x480",
               "value": "640x480"
@@ -13016,6 +13896,10 @@
           "default": "auto",
           "configKey": "mame_rotation_mode",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "INTERNAL",
               "value": "internal"
@@ -13123,6 +14007,10 @@
           "configKey": "mame_read_config",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "YES",
               "value": "1"
             },
@@ -13145,6 +14033,10 @@
           "default": "auto",
           "configKey": "mame_output",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "TO WINDOW",
               "value": "windows"
@@ -13267,6 +14159,10 @@
           "configKey": "lightgun_mode",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "NO",
               "value": "none"
             },
@@ -13329,6 +14225,10 @@
           "configKey": "force_softlist",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "No",
               "value": "none"
             },
@@ -13355,6 +14255,10 @@
           "default": "auto",
           "configKey": "altromtype",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Cassette 1",
               "value": "cass1"
@@ -13399,6 +14303,10 @@
           "configKey": "adam_joy",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "NONE",
               "value": "none"
             },
@@ -13421,6 +14329,10 @@
           "default": "auto",
           "configKey": "altmodel",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Apple IIe ENHANCED (default)",
               "value": "apple2ee"
@@ -13454,6 +14366,10 @@
           "configKey": "ramsize",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "48k",
               "value": "48K"
             },
@@ -13480,6 +14396,10 @@
           "default": "auto",
           "configKey": "gameio",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "NONE",
               "value": "none"
@@ -13553,6 +14473,10 @@
           "configKey": "bbc_sticktype",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "NONE",
               "value": "none"
             },
@@ -13584,6 +14508,10 @@
           "configKey": "addblankdisk",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "NO",
               "value": "none"
             },
@@ -13606,6 +14534,10 @@
           "default": "auto",
           "configKey": "fmtowns_joytype",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "NONE",
               "value": "none"
@@ -13641,6 +14573,10 @@
           "default": "auto",
           "configKey": "mame_bios",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "JAPAN",
               "value": "japan"
@@ -13751,7 +14687,7 @@
               "value": "disabled"
             },
             {
-              "label": "AUTOMATIC",
+              "label": "AUTO",
               "value": "auto"
             },
             {
@@ -13814,6 +14750,10 @@
           "configKey": "mame2003_sample_rate",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "44100",
               "value": "44100"
             },
@@ -13865,6 +14805,10 @@
           "configKey": "mame2003_input_interface",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "retropad",
               "value": "retropad"
             },
@@ -13910,7 +14854,7 @@
               "value": "disabled"
             },
             {
-              "label": "AUTOMATIC",
+              "label": "AUTO",
               "value": "auto"
             },
             {
@@ -13973,6 +14917,10 @@
           "configKey": "mame2003-plus_sample_rate",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "44100",
               "value": "44100"
             },
@@ -14024,6 +14972,10 @@
           "configKey": "mame2003-plus_neogeo_bios",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Console AES World",
               "value": "asia-aes"
             },
@@ -14042,6 +14994,10 @@
           "default": "auto",
           "configKey": "mame_controller1",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "RETROPAD",
               "value": "1"
@@ -14070,6 +15026,10 @@
           "configKey": "mame_controller2",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "RETROPAD",
               "value": "1"
             },
@@ -14096,6 +15056,10 @@
           "default": "auto",
           "configKey": "mame2003-plus_input_interface",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "retropad",
               "value": "retropad"
@@ -14128,6 +15092,10 @@
           "default": "auto",
           "configKey": "mame2003-plus_xy_device",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "MOUSE",
               "value": "mouse"
@@ -14201,6 +15169,10 @@
           "configKey": "mame_current_frame_skip",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "NO",
               "value": "0"
             },
@@ -14260,6 +15232,10 @@
           "configKey": "mame_current_sample_rate",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "44100",
               "value": "44100Hz"
             },
@@ -14301,6 +15277,10 @@
           "default": "auto",
           "configKey": "mame_current_xy_type",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "MOUSE",
               "value": "mouse"
@@ -14547,6 +15527,10 @@
           "configKey": "potator_palette",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Greyscale",
               "value": "default"
             },
@@ -14670,6 +15654,10 @@
           "default": "auto",
           "configKey": "race_language",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "English",
               "value": "english"
@@ -14999,6 +15987,10 @@
           "configKey": "pce_controller1",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "JOYPAD",
               "value": "1"
             },
@@ -15017,6 +16009,10 @@
           "default": "auto",
           "configKey": "pce_controller2",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "JOYPAD",
               "value": "1"
@@ -15106,6 +16102,10 @@
           "configKey": "pce_h_overscan",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Crop horizontal",
               "value": "disabled"
             },
@@ -15124,6 +16124,10 @@
           "default": "auto",
           "configKey": "pce_palette",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Composite",
               "value": "Composite"
@@ -15152,6 +16156,10 @@
           "default": "auto",
           "configKey": "pce_scaling",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Low",
               "value": "lores"
@@ -15186,6 +16194,10 @@
           "default": "auto",
           "configKey": "pce_psgrevision",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "HuC6280 (PC-Engine)",
               "value": "HuC6280"
@@ -15311,6 +16323,10 @@
           "configKey": "pce_ocmultiplier",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "1x",
               "value": "1"
             },
@@ -15378,6 +16394,10 @@
           "configKey": "pce_adpcmextraprec",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "10 BIT",
               "value": "10-bit"
             },
@@ -15396,6 +16416,10 @@
           "default": "auto",
           "configKey": "pce_cdbios",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "GAMES EXPRESS",
               "value": "Game Express"
@@ -15450,6 +16474,10 @@
           "default": "auto",
           "configKey": "pce_cdspeed",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "1X",
               "value": "1"
@@ -15508,6 +16536,10 @@
           "configKey": "pce_controller1",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "JOYPAD",
               "value": "1"
             },
@@ -15526,6 +16558,10 @@
           "default": "auto",
           "configKey": "pce_controller2",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "JOYPAD",
               "value": "1"
@@ -15654,6 +16690,10 @@
           "configKey": "pcfx_controller1",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "JOYPAD",
               "value": "1"
             },
@@ -15672,6 +16712,10 @@
           "default": "auto",
           "configKey": "pcfx_controller2",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "JOYPAD",
               "value": "1"
@@ -15782,6 +16826,10 @@
           "configKey": "sameduck_colorcorrect",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "EMULATE HARDWARE",
               "value": "emulate hardware"
             },
@@ -15821,6 +16869,10 @@
           "default": "auto",
           "configKey": "samecdi_resolution",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "640x480 (NATIVE)",
               "value": "640x480"
@@ -15940,6 +16992,10 @@
           "configKey": "internal_resolution",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "1X",
               "value": "1"
             },
@@ -16037,8 +17093,8 @@
               "value": "Native"
             },
             {
-              "label": "CORRECTED (NTSC)",
-              "value": "Auto"
+              "label": "AUTO",
+              "value": "auto"
             },
             {
               "label": "4/3",
@@ -16072,6 +17128,10 @@
           "configKey": "swanstation_cropmode",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "ONLY OVERSCAN AREA",
               "value": "Overscan"
             },
@@ -16094,6 +17154,10 @@
           "default": "auto",
           "configKey": "msaa",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "1X",
               "value": "1"
@@ -16149,6 +17213,10 @@
           "default": "auto",
           "configKey": "swanstation_texturefilter",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "NEAREST NEIGHBOR",
               "value": "Nearest"
@@ -16216,6 +17284,10 @@
           "configKey": "swanstation_region",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "PAL",
               "value": "PAL"
             },
@@ -16247,6 +17319,10 @@
           "default": "auto",
           "configKey": "swanstation_cpucore",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Interpreter",
               "value": "Interpreter"
@@ -16280,6 +17356,10 @@
           "configKey": "swanstation_memcard1",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "SHARED",
               "value": "Shared"
             },
@@ -16306,6 +17386,10 @@
           "default": "auto",
           "configKey": "swanstation_memcard2",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "NONE",
               "value": "None"
@@ -16349,6 +17433,10 @@
           "configKey": "swanstation_GPU",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "OPENGL",
               "value": "OpenGL"
             },
@@ -16375,6 +17463,10 @@
           "default": "auto",
           "configKey": "swanstation_controller_p1",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Digital Controller",
               "value": "1"
@@ -16403,6 +17495,10 @@
           "configKey": "swanstation_controller_p2",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Digital Controller",
               "value": "1"
             },
@@ -16430,6 +17526,10 @@
           "configKey": "swanstation_controller_p3",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Digital Controller",
               "value": "1"
             },
@@ -16456,6 +17556,10 @@
           "default": "auto",
           "configKey": "swanstation_controller_p4",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Digital Controller",
               "value": "1"
@@ -16492,6 +17596,10 @@
           "default": "auto",
           "configKey": "swanstation_Controller_AnalogCombo",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "L1 + R1 + START",
               "value": "4"
@@ -16558,6 +17666,10 @@
           "default": "auto",
           "configKey": "gun_ab",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "MOUSE RIGHT/MIDDLE",
               "value": "mouse"
@@ -16672,6 +17784,10 @@
           "configKey": "internal_resolution",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "NATIVE",
               "value": "1x(native)"
             },
@@ -16736,6 +17852,10 @@
           "configKey": "widescreen_hack_aspect_ratio",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "16/9",
               "value": "16:9"
             },
@@ -16762,6 +17882,10 @@
           "default": "auto",
           "configKey": "msaa",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "1X",
               "value": "1x"
@@ -16793,6 +17917,10 @@
           "default": "auto",
           "configKey": "texture_filtering",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "3-Point",
               "value": "3-point"
@@ -16837,6 +17965,10 @@
           "default": "auto",
           "configKey": "dither_mode",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "NO",
               "value": "disabled"
@@ -16894,6 +18026,10 @@
           "configKey": "beetle_psx_original_bios",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "NO",
               "value": "0"
             },
@@ -16931,6 +18067,10 @@
           "configKey": "beetle_psx_hw_cd_access_method",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "ASYNCHRONOUS",
               "value": "async"
             },
@@ -16953,6 +18093,10 @@
           "default": "auto",
           "configKey": "beetle_psx_hw_cpu_freq_scale",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "100(native)",
               "value": "100%"
@@ -17037,6 +18181,10 @@
           "configKey": "beetle_psx_hw_gte_overclock",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "NO",
               "value": "disabled"
             },
@@ -17071,6 +18219,10 @@
           "configKey": "mednafen_psx_renderer",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "OPENGL",
               "value": "hardware_gl"
             },
@@ -17093,6 +18245,10 @@
           "default": "auto",
           "configKey": "mednafen_controller_p1",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Digital Controller",
               "value": "1"
@@ -17125,6 +18281,10 @@
           "configKey": "mednafen_controller_p2",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Digital Controller",
               "value": "1"
             },
@@ -17155,6 +18315,10 @@
           "default": "auto",
           "configKey": "mednafen_controller_p3",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Digital Controller",
               "value": "1"
@@ -17187,6 +18351,10 @@
           "configKey": "mednafen_controller_p4",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Digital Controller",
               "value": "1"
             },
@@ -17218,6 +18386,10 @@
           "configKey": "analog_toggle",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "NO",
               "value": "enabled"
             },
@@ -17236,6 +18408,10 @@
           "default": "auto",
           "configKey": "beetle_psx_hw_analog_toggle_combo",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "L1 + R1 + START",
               "value": "l1+r1+start"
@@ -17288,6 +18464,10 @@
           "configKey": "gun_type",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "GUNCON",
               "value": "260"
             },
@@ -17306,6 +18486,10 @@
           "default": "auto",
           "configKey": "gun_input_mode",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "LIGHTGUN",
               "value": "lightgun"
@@ -17350,6 +18534,10 @@
           "configKey": "gun_cursor",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "CROSS",
               "value": "cross"
             },
@@ -17372,6 +18560,10 @@
           "default": "auto",
           "configKey": "gun_ab",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "MOUSE RIGHT/MIDDLE",
               "value": "mouse"
@@ -17441,6 +18633,10 @@
           "configKey": "neon_enhancement",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "NATIVE",
               "value": "disabled"
             },
@@ -17487,6 +18683,10 @@
           "default": "auto",
           "configKey": "pcsx_rearmed_spu_interpolation",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "SIMPLE",
               "value": "simple"
@@ -17544,6 +18744,10 @@
           "default": "auto",
           "configKey": "pcsx_rearmed_region",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "NTSC",
               "value": "NTSC"
@@ -17605,6 +18809,10 @@
           "default": "auto",
           "configKey": "pcsx_game_fixes",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Off",
               "value": "disabled"
@@ -17677,6 +18885,10 @@
           "configKey": "pcsx_controller_p1",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Digital Controller",
               "value": "1"
             },
@@ -17707,6 +18919,10 @@
           "default": "auto",
           "configKey": "pcsx_controller_p2",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Digital Controller",
               "value": "1"
@@ -17739,6 +18955,10 @@
           "configKey": "pcsx_controller_p3",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Digital Controller",
               "value": "1"
             },
@@ -17769,6 +18989,10 @@
           "default": "auto",
           "configKey": "pcsx_controller_p4",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Digital Controller",
               "value": "1"
@@ -17834,6 +19058,10 @@
           "configKey": "pcsx_rearmed_crosshair1",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "NONE",
               "value": "disabled"
             },
@@ -17864,6 +19092,10 @@
           "default": "auto",
           "configKey": "pcsx_rearmed_crosshair2",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "NONE",
               "value": "disabled"
@@ -17919,6 +19151,10 @@
           "default": "auto",
           "configKey": "gun_ab",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "MOUSE RIGHT/MIDDLE",
               "value": "mouse"
@@ -18003,6 +19239,10 @@
           "configKey": "beetle_saturn_region",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "JAPAN (NTSC)",
               "value": "Japan"
             },
@@ -18066,6 +19306,10 @@
           "configKey": "beetle_saturn_autortc_lang",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "English",
               "value": "english"
             },
@@ -18100,6 +19344,10 @@
           "default": "auto",
           "configKey": "beetle_saturn_cart",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "NO",
               "value": "None"
@@ -18163,6 +19411,10 @@
           "configKey": "saturn_padlayout",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "L/R as Z/C",
               "value": "lr_zc"
             },
@@ -18194,6 +19446,10 @@
           "default": "auto",
           "configKey": "mednafen_saturn_controller",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "JOYPAD",
               "value": "1"
@@ -18299,6 +19555,10 @@
           "configKey": "beetle_saturn_virtuagun_crosshair",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "CROSS",
               "value": "Cross"
             },
@@ -18336,6 +19596,10 @@
           "default": "auto",
           "configKey": "gun_ab",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "MOUSE RIGHT/MIDDLE",
               "value": "mouse"
@@ -18669,6 +19933,10 @@
           "configKey": "supergrafx_controller1",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "JOYPAD",
               "value": "1"
             },
@@ -18687,6 +19955,10 @@
           "default": "auto",
           "configKey": "supergrafx_controller2",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "JOYPAD",
               "value": "1"
@@ -18812,6 +20084,10 @@
           "configKey": "mednafen_wswan_rotate",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "MANUAL",
               "value": "manual"
             },
@@ -18835,6 +20111,10 @@
           "configKey": "mednafen_wswan_rotatekeymap",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "PORTRAIT",
               "value": "enabled"
             },
@@ -18853,6 +20133,10 @@
           "default": "auto",
           "configKey": "melonds_opengl_resolution",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "NATIVE (256x192)",
               "value": "1x native (256x192)"
@@ -18927,6 +20211,10 @@
           "configKey": "melonds_screen_layout",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "TOP/BOTTOM",
               "value": "Top/Bottom"
             },
@@ -18985,6 +20273,10 @@
           "configKey": "melonds_hybrid_ratio",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "3:1",
               "value": "3"
             },
@@ -19003,6 +20295,10 @@
           "default": "auto",
           "configKey": "melonds_hybrid_small_screen",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "BOTTOM SCREEN",
               "value": "Bottom"
@@ -19026,6 +20322,10 @@
           "default": "auto",
           "configKey": "nds_console",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "DS",
               "value": "DS"
@@ -19054,6 +20354,10 @@
           "default": "auto",
           "configKey": "melonds_touch_mode",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "DISABLED",
               "value": "disabled"
@@ -19091,6 +20395,10 @@
           "configKey": "melonds_mic_input",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "BLOW NOISE",
               "value": "Blow Noise"
             },
@@ -19109,6 +20417,10 @@
           "default": "auto",
           "configKey": "melondsds_resolution",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "NATIVE (256x192)",
               "value": "1"
@@ -19183,6 +20495,10 @@
           "configKey": "melondsds_screen_layout1",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "TOP/BOTTOM",
               "value": "top-bottom"
             },
@@ -19245,6 +20561,10 @@
           "default": "auto",
           "configKey": "melondsds_screen_layout2",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "TOP/BOTTOM",
               "value": "top-bottom"
@@ -19309,6 +20629,10 @@
           "configKey": "melondsds_hybrid_ratio",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "3:1",
               "value": "3"
             },
@@ -19327,6 +20651,10 @@
           "default": "auto",
           "configKey": "melondsds_hybrid_smallscreen",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "SHOW BOTH",
               "value": "both"
@@ -19371,6 +20699,10 @@
           "configKey": "melondsds_filter",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "NEAREST",
               "value": "nearest"
             },
@@ -19399,6 +20731,10 @@
           "configKey": "melondsds_audio_depth",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "10 bits",
               "value": "10bit"
             },
@@ -19417,6 +20753,10 @@
           "default": "auto",
           "configKey": "melondsds_audio_interpolation",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "OFF",
               "value": "DS"
@@ -19445,6 +20785,10 @@
           "configKey": "melondsds_console",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "DS",
               "value": "ds"
             },
@@ -19472,6 +20816,10 @@
           "default": "auto",
           "configKey": "melondsds_language",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "English",
               "value": "en"
@@ -19548,6 +20896,10 @@
           "configKey": "melondsds_cursor_mode",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "WHILE TOUCHING",
               "value": "touching"
             },
@@ -19575,6 +20927,10 @@
           "configKey": "melondsds_touch_mode",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "POINTER",
               "value": "touch"
             },
@@ -19593,6 +20949,10 @@
           "default": "auto",
           "configKey": "melonds_mic_input",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "REAL MICROPHONE",
               "value": "microphone"
@@ -19651,6 +21011,10 @@
           "configKey": "noods_screenArrangement",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "VERTICAL",
               "value": "Vertical"
             },
@@ -19673,6 +21037,10 @@
           "default": "auto",
           "configKey": "noods_screenSizing",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "EVEN",
               "value": "Even"
@@ -19697,6 +21065,10 @@
           "configKey": "noods_screenRotation",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "NO",
               "value": "Normal"
             },
@@ -19719,6 +21091,10 @@
           "default": "auto",
           "configKey": "noods_screenGap",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "NONE",
               "value": "None"
@@ -19765,6 +21141,10 @@
           "configKey": "noods_screenFilter",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "NEAREST",
               "value": "Nearest"
             },
@@ -19787,6 +21167,10 @@
           "default": "auto",
           "configKey": "noods_dsiMode",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "DS",
               "value": "disabled"
@@ -19825,6 +21209,10 @@
           "configKey": "noods_touchMode",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "POINTER",
               "value": "Pointer"
             },
@@ -19847,6 +21235,10 @@
           "default": "auto",
           "configKey": "noods_micInputMode",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "SILENCE",
               "value": "Silence"
@@ -19871,6 +21263,10 @@
           "configKey": "noods_micButtonMode",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "TOGGLE",
               "value": "Toggle"
             },
@@ -19893,6 +21289,10 @@
           "default": "auto",
           "configKey": "noods_swapScreenMode",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "TOGGLE",
               "value": "Toggle"
@@ -20048,6 +21448,10 @@
           "configKey": "mesen_aspect_ratio",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "No Stretching",
               "value": "No Stretching"
             },
@@ -20096,6 +21500,10 @@
           "configKey": "ntsc_filter",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "NO",
               "value": "Disabled"
             },
@@ -20138,6 +21546,10 @@
           "default": "auto",
           "configKey": "palette",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "DEFAULT",
               "value": "Default"
@@ -20291,6 +21703,10 @@
           "configKey": "mesen_region",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "NTSC",
               "value": "NTSC"
             },
@@ -20313,6 +21729,10 @@
           "default": "auto",
           "configKey": "mesen_overclock",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "NONE",
               "value": "None"
@@ -20369,6 +21789,10 @@
           "configKey": "mesen_controller1",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "GAMEPAD",
               "value": "257"
             },
@@ -20400,6 +21824,10 @@
           "configKey": "mesen_controller2",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "GAMEPAD",
               "value": "257"
             },
@@ -20430,6 +21858,10 @@
           "default": "auto",
           "configKey": "mesen_nes_turbo",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "NO",
               "value": "Disabled"
@@ -20485,6 +21917,10 @@
           "default": "auto",
           "configKey": "gun_ab",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "MOUSE RIGHT/MIDDLE",
               "value": "mouse"
@@ -20662,6 +22098,10 @@
           "configKey": "mesen_controller1",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "SNES CONTROLLER",
               "value": "257"
             },
@@ -20680,6 +22120,10 @@
           "default": "auto",
           "configKey": "mesen_controller2",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "SNES CONTROLLER",
               "value": "257"
@@ -20752,6 +22196,10 @@
           "default": "auto",
           "configKey": "gun_ab",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "MOUSE RIGHT/MIDDLE",
               "value": "mouse"
@@ -20866,6 +22314,10 @@
           "configKey": "43screensize",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "320x240",
               "value": "320x240"
             },
@@ -20941,6 +22393,10 @@
           "configKey": "169screensize",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "640x360",
               "value": "640x360"
             },
@@ -20989,6 +22445,10 @@
           "configKey": "mupen_CropOverscan",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "OFF",
               "value": "none"
             },
@@ -21028,6 +22488,10 @@
           "configKey": "MultiSampling",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "NO",
               "value": "0"
             },
@@ -21058,6 +22522,10 @@
           "default": "auto",
           "configKey": "Texture_Enhancement",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "NO",
               "value": "None"
@@ -21126,6 +22594,10 @@
           "configKey": "Texture_filter",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "NO",
               "value": "None"
             },
@@ -21165,6 +22637,10 @@
           "configKey": "BilinearMode",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "3 POINT (ORIGINAL)",
               "value": "3point"
             },
@@ -21192,6 +22668,10 @@
           "default": "auto",
           "configKey": "mupen64plus-EnableNativeResTexrects",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "DISABLED",
               "value": "Disabled"
@@ -21224,6 +22704,10 @@
           "default": "auto",
           "configKey": "mupen64plus-cpucore",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "pure interpreter",
               "value": "pure_interpreter"
@@ -21263,6 +22747,10 @@
           "configKey": "TexturesPack",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "NO",
               "value": "disabled"
             },
@@ -21295,6 +22783,10 @@
           "configKey": "mupen64plus-parallel-rdp-upscaling",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "1x",
               "value": "1x"
             },
@@ -21321,6 +22813,10 @@
           "default": "auto",
           "configKey": "mupen64plus-parallel-rdp-downscaling",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "NO",
               "value": "disable"
@@ -21366,6 +22862,10 @@
           "default": "auto",
           "configKey": "mupen64plus-parallel-rdp-deinterlace-method",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "BOB",
               "value": "Bob"
@@ -21452,6 +22952,10 @@
           "configKey": "mupen64plus-pak1",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "NO",
               "value": "none"
             },
@@ -21478,6 +22982,10 @@
           "default": "auto",
           "configKey": "mupen64plus-pak2",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "NO",
               "value": "none"
@@ -21506,6 +23014,10 @@
           "configKey": "mupen64plus-pak3",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "NO",
               "value": "none"
             },
@@ -21532,6 +23044,10 @@
           "default": "auto",
           "configKey": "mupen64plus-pak4",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "NO",
               "value": "none"
@@ -21560,6 +23076,10 @@
           "configKey": "ipl_bios",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "JAPAN",
               "value": "IPL_JAP.n64"
             },
@@ -21582,6 +23102,10 @@
           "default": "auto",
           "configKey": "lr_n64_buttons",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "STANDARD",
               "value": "standard"
@@ -21640,6 +23164,10 @@
           "default": "auto",
           "configKey": "lrps2_upscale_multiplier",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "1X (NATIVE)",
               "value": "1x Native (PS2)"
@@ -21716,6 +23244,10 @@
           "configKey": "lrps2_widescreen_hint",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "OFF",
               "value": "disabled"
             },
@@ -21755,6 +23287,10 @@
           "default": "auto",
           "configKey": "lrps2_deinterlace_mode",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Blend bff (slight blur)",
               "value": "Blend BFF"
@@ -21803,6 +23339,10 @@
           "configKey": "lrps2_texture_filtering",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Bilinear (PS2 default)",
               "value": "Bilinear (PS2)"
             },
@@ -21830,6 +23370,10 @@
           "configKey": "lrps2_trilinear_filtering",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "OFF",
               "value": "disabled"
             },
@@ -21852,6 +23396,10 @@
           "default": "auto",
           "configKey": "lrps2_anisotropic_filtering",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "NO",
               "value": "disabled"
@@ -21884,6 +23432,10 @@
           "configKey": "lrps2_dithering",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "UNSCALED",
               "value": "Unscaled"
             },
@@ -21910,6 +23462,10 @@
           "default": "auto",
           "configKey": "lrps2_blending_accuracy",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "BASIC",
               "value": "Basic"
@@ -21954,6 +23510,10 @@
           "default": "auto",
           "configKey": "lrps2_pgs_ssaa",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "NATIVE",
               "value": "Native"
@@ -22007,6 +23567,10 @@
           "default": "auto",
           "configKey": "lrps2_bios",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "USA 230",
               "value": "ps2-0230a-20080220.bin"
@@ -22075,6 +23639,10 @@
           "configKey": "lrps2_uncapped_framerate_hint",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "NO",
               "value": "disabled"
             },
@@ -22097,6 +23665,10 @@
           "default": "auto",
           "configKey": "lrps2_renderer",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "OPENGL",
               "value": "OpenGL"
@@ -22283,8 +23855,8 @@
           "configKey": "sameboy_model",
           "values": [
             {
-              "label": "Auto Detect (DMG/GCB)",
-              "value": "Auto"
+              "label": "AUTO",
+              "value": "auto"
             },
             {
               "label": "Game Boy (DMG)",
@@ -22314,6 +23886,10 @@
           "configKey": "sameboy_rtc",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "SYNC TO SYSTEM CLOCK",
               "value": "sync to system clock"
             },
@@ -22333,6 +23909,10 @@
           "configKey": "sameboy_screen_layout",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "SIDE BY SIDE",
               "value": "left-right"
             },
@@ -22351,6 +23931,10 @@
           "default": "auto",
           "configKey": "sameboy_mono_palette",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "GREYSCALE",
               "value": "greyscale"
@@ -22379,6 +23963,10 @@
           "configKey": "sameboy_audio_output",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "GAMEBOY 1",
               "value": "Game Boy #1"
             },
@@ -22397,6 +23985,10 @@
           "default": "auto",
           "configKey": "sameboy_color_correction_mode",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "MODERN BALANCED",
               "value": "emulate hardware"
@@ -22527,6 +24119,10 @@
           "configKey": "snes9x_region",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "NTSC",
               "value": "ntsc"
             },
@@ -22545,6 +24141,10 @@
           "default": "auto",
           "configKey": "snes9x_overscan",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "NO",
               "value": "disabled"
@@ -22572,6 +24172,10 @@
           "default": "auto",
           "configKey": "snes9x_blargg",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "NO",
               "value": "disabled"
@@ -22608,6 +24212,10 @@
           "configKey": "snes9x_hires_blend",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "NO",
               "value": "disabled"
             },
@@ -22630,6 +24238,10 @@
           "default": "auto",
           "configKey": "snes9x_audio_interpolation",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "NO",
               "value": "none"
@@ -22707,6 +24319,10 @@
           "configKey": "snes9x_overclock_cycles",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "OFF",
               "value": "disabled"
             },
@@ -22733,6 +24349,10 @@
           "default": "auto",
           "configKey": "snes9x_overclock_superfx",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "50%",
               "value": "50%"
@@ -22828,6 +24448,10 @@
           "configKey": "SnesControllerP1",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "gamepad",
               "value": "1"
             },
@@ -22850,6 +24474,10 @@
           "default": "auto",
           "configKey": "SnesControllerP2",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "gamepad",
               "value": "1"
@@ -22904,6 +24532,10 @@
           "configKey": "gun_type",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Superscope",
               "value": "260"
             },
@@ -22930,6 +24562,10 @@
           "default": "auto",
           "configKey": "snes9x_lightgun_mode",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "LIGHTGUN",
               "value": "Lightgun"
@@ -22964,6 +24600,10 @@
           "default": "auto",
           "configKey": "gun_ab",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "MOUSE RIGHT/MIDDLE",
               "value": "mouse"
@@ -23213,6 +24853,10 @@
           "configKey": "snes9x_2005_region",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "NTSC",
               "value": "NTSC"
             },
@@ -23424,6 +25068,10 @@
           "configKey": "stella_palette",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "STANDARD",
               "value": "standard"
             },
@@ -23450,6 +25098,10 @@
           "default": "auto",
           "configKey": "stella_filter",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "NONE",
               "value": "disabled"
@@ -23490,6 +25142,10 @@
           "default": "auto",
           "configKey": "stella_console",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "PAL",
               "value": "pal"
@@ -23564,6 +25220,10 @@
           "default": "auto",
           "configKey": "gun_ab",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "MOUSE RIGHT/MIDDLE",
               "value": "mouse"
@@ -23663,6 +25323,10 @@
           "configKey": "stella2014_color_depth",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "16 BIT",
               "value": "16bit"
             },
@@ -23681,6 +25345,10 @@
           "default": "auto",
           "configKey": "stella2014_mix_frames",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "OFF",
               "value": "disabled"
@@ -23731,6 +25399,10 @@
           "default": "auto",
           "configKey": "frodo_resolution",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "384x288 (ORIGINAL)",
               "value": "384x288"
@@ -23861,6 +25533,10 @@
           "configKey": "vice_c128_model",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "C128 NTSC",
               "value": "C128 NTSC"
             },
@@ -23895,6 +25571,10 @@
           "default": "auto",
           "configKey": "vice_c128_ram_expansion_unit",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "NONE",
               "value": "none"
@@ -23961,7 +25641,7 @@
           "configKey": "vice_aspect_ratio",
           "values": [
             {
-              "label": "Automatic",
+              "label": "AUTO",
               "value": "auto"
             },
             {
@@ -24008,7 +25688,7 @@
               "value": "auto_disable"
             },
             {
-              "label": "AUTOMATIC",
+              "label": "AUTO",
               "value": "auto"
             }
           ],
@@ -24022,6 +25702,10 @@
           "default": "auto",
           "configKey": "vice_crop_mode",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Horizontal + Vertical",
               "value": "both"
@@ -24061,6 +25745,10 @@
           "default": "auto",
           "configKey": "vice_external_palette",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Internal",
               "value": "default"
@@ -24117,6 +25805,10 @@
           "configKey": "vice_gfx_colors",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Thousands (16-bit)",
               "value": "16bit"
             },
@@ -24151,6 +25843,10 @@
           "configKey": "vice_controller1",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "RETROPAD",
               "value": "1"
             },
@@ -24173,6 +25869,10 @@
           "default": "auto",
           "configKey": "vice_controller2",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "RETROPAD",
               "value": "1"
@@ -24197,6 +25897,10 @@
           "configKey": "vice_joyport",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "PORT 2",
               "value": "2"
             },
@@ -24215,6 +25919,10 @@
           "default": "auto",
           "configKey": "vice_joyport_type",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "JOYSTICK",
               "value": "1"
@@ -24295,6 +26003,10 @@
           "configKey": "vice_retropad_options",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "B=Fire/A=Fire2",
               "value": "disabled"
             },
@@ -24366,6 +26078,10 @@
           "default": "auto",
           "configKey": "vice_pet_model",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "PET 8032",
               "value": "8032"
@@ -24455,7 +26171,7 @@
               "value": "auto_disable"
             },
             {
-              "label": "AUTOMATIC",
+              "label": "AUTO",
               "value": "auto"
             }
           ],
@@ -24469,6 +26185,10 @@
           "default": "auto",
           "configKey": "vice_crop_mode",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Horizontal + Vertical",
               "value": "both"
@@ -24508,6 +26228,10 @@
           "default": "auto",
           "configKey": "vice_pet_external_palette",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Internal",
               "value": "default"
@@ -24581,6 +26305,10 @@
           "configKey": "c64_model",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "C64 NTSC auto",
               "value": "C64 NTSC auto"
             },
@@ -24639,6 +26367,10 @@
           "default": "auto",
           "configKey": "vice_ram_expansion_unit",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "NONE",
               "value": "none"
@@ -24705,7 +26437,7 @@
           "configKey": "vice_aspect_ratio",
           "values": [
             {
-              "label": "Automatic",
+              "label": "AUTO",
               "value": "auto"
             },
             {
@@ -24752,7 +26484,7 @@
               "value": "auto_disable"
             },
             {
-              "label": "AUTOMATIC",
+              "label": "AUTO",
               "value": "auto"
             }
           ],
@@ -24766,6 +26498,10 @@
           "default": "auto",
           "configKey": "vice_crop_mode",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Horizontal + Vertical",
               "value": "both"
@@ -24805,6 +26541,10 @@
           "default": "auto",
           "configKey": "vice_external_palette",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Internal",
               "value": "default"
@@ -24861,6 +26601,10 @@
           "configKey": "vice_gfx_colors",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Thousands (16-bit)",
               "value": "16bit"
             },
@@ -24895,6 +26639,10 @@
           "configKey": "vice_controller1",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "RETROPAD",
               "value": "1"
             },
@@ -24917,6 +26665,10 @@
           "default": "auto",
           "configKey": "vice_controller2",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "RETROPAD",
               "value": "1"
@@ -24941,6 +26693,10 @@
           "configKey": "vice_joyport",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "PORT 2",
               "value": "2"
             },
@@ -24959,6 +26715,10 @@
           "default": "auto",
           "configKey": "vice_joyport_type",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "JOYSTICK",
               "value": "1"
@@ -25039,6 +26799,10 @@
           "configKey": "vice_retropad_options",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "B=Fire/A=Fire2",
               "value": "disabled"
             },
@@ -25111,6 +26875,10 @@
           "configKey": "vic20_model",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "VIC-20 NTSC Auto",
               "value": "VIC20 NTSC auto"
             },
@@ -25141,6 +26909,10 @@
           "default": "auto",
           "configKey": "vic20_memexpansion",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "NONE",
               "value": "Disabled"
@@ -25186,7 +26958,7 @@
           "configKey": "vice_aspect_ratio",
           "values": [
             {
-              "label": "Automatic",
+              "label": "AUTO",
               "value": "auto"
             },
             {
@@ -25233,7 +27005,7 @@
               "value": "auto_disable"
             },
             {
-              "label": "AUTOMATIC",
+              "label": "AUTO",
               "value": "auto"
             }
           ],
@@ -25247,6 +27019,10 @@
           "default": "auto",
           "configKey": "vice_crop_mode",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Horizontal + Vertical",
               "value": "both"
@@ -25287,6 +27063,10 @@
           "configKey": "vic20_palette",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Internal",
               "value": "default"
             },
@@ -25317,6 +27097,10 @@
           "default": "auto",
           "configKey": "vice_gfx_colors",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Thousands (16-bit)",
               "value": "16bit"
@@ -25352,6 +27136,10 @@
           "configKey": "vice_controller1",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "RETROPAD",
               "value": "1"
             },
@@ -25374,6 +27162,10 @@
           "default": "auto",
           "configKey": "vice_controller2",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "RETROPAD",
               "value": "1"
@@ -25398,6 +27190,10 @@
           "configKey": "vice_joyport",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "PORT 2",
               "value": "2"
             },
@@ -25416,6 +27212,10 @@
           "default": "auto",
           "configKey": "vice_joyport_type",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "JOYSTICK",
               "value": "1"
@@ -25496,6 +27296,10 @@
           "configKey": "vice_retropad_options",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "B=Fire/A=Fire2",
               "value": "disabled"
             },
@@ -25568,6 +27372,10 @@
           "configKey": "vice_plus4_model",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "C16 NTSC",
               "value": "C16 NTSC"
             },
@@ -25612,7 +27420,7 @@
           "configKey": "vice_aspect_ratio",
           "values": [
             {
-              "label": "Automatic",
+              "label": "AUTO",
               "value": "auto"
             },
             {
@@ -25659,7 +27467,7 @@
               "value": "auto_disable"
             },
             {
-              "label": "AUTOMATIC",
+              "label": "AUTO",
               "value": "auto"
             }
           ],
@@ -25673,6 +27481,10 @@
           "default": "auto",
           "configKey": "vice_crop_mode",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Horizontal + Vertical",
               "value": "both"
@@ -25713,6 +27525,10 @@
           "configKey": "vice_plus4_external_palette",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Internal",
               "value": "default"
             },
@@ -25739,6 +27555,10 @@
           "default": "auto",
           "configKey": "vice_gfx_colors",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Thousands (16-bit)",
               "value": "16bit"
@@ -25774,6 +27594,10 @@
           "configKey": "vice_controller1",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "RETROPAD",
               "value": "1"
             },
@@ -25796,6 +27620,10 @@
           "default": "auto",
           "configKey": "vice_controller2",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "RETROPAD",
               "value": "1"
@@ -25820,6 +27648,10 @@
           "configKey": "vice_joyport",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "PORT 2",
               "value": "2"
             },
@@ -25838,6 +27670,10 @@
           "default": "auto",
           "configKey": "vice_joyport_type",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "JOYSTICK",
               "value": "1"
@@ -25918,6 +27754,10 @@
           "configKey": "vice_retropad_options",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "B=Fire/A=Fire2",
               "value": "disabled"
             },
@@ -25969,6 +27809,10 @@
           "configKey": "81_video_presets",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "CLEAN",
               "value": "clean"
             },
@@ -26000,6 +27844,10 @@
           "default": "auto",
           "configKey": "81_sound",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "None",
               "value": "none"
@@ -26074,6 +27922,10 @@
           "configKey": "zx81_controller1",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "None",
               "value": "0"
             },
@@ -26096,6 +27948,10 @@
           "default": "auto",
           "configKey": "zx81_controller2",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "None",
               "value": "0"
@@ -26134,6 +27990,10 @@
           "default": "auto",
           "configKey": "fceumm_aspect",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "8:7 PAR",
               "value": "8:7 PAR"
@@ -26188,6 +28048,10 @@
           "configKey": "fceumm_ntsc_filter",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Off",
               "value": "disabled"
             },
@@ -26227,6 +28091,10 @@
           "default": "auto",
           "configKey": "fceumm_palette",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "default",
               "value": "default"
@@ -26343,6 +28211,10 @@
           "configKey": "fceumm_sndquality",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Low",
               "value": "Low"
             },
@@ -26396,6 +28268,10 @@
           "configKey": "fceumm_region",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "NTSC",
               "value": "NTSC"
             },
@@ -26433,6 +28309,10 @@
           "default": "auto",
           "configKey": "fceumm_overclocking",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "disabled",
               "value": "disabled"
@@ -26514,6 +28394,10 @@
           "configKey": "gun_input",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "LIGHTGUN",
               "value": "clightgun"
             },
@@ -26541,6 +28425,10 @@
           "default": "auto",
           "configKey": "gun_ab",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "MOUSE RIGHT/MIDDLE",
               "value": "mouse"
@@ -26730,6 +28618,10 @@
           "configKey": "freej2me_resolution",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "240x320",
               "value": "240x320"
             },
@@ -26849,6 +28741,10 @@
           "configKey": "freej2me_rotate",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "NO",
               "value": "0"
             },
@@ -26914,6 +28810,10 @@
           "default": "auto",
           "configKey": "fuse_machine",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Spectrum 48K",
               "value": "Spectrum 48K"
@@ -27005,6 +28905,10 @@
           "configKey": "zx_control_type",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Joystick only",
               "value": "1"
             },
@@ -27027,6 +28931,10 @@
           "default": "auto",
           "configKey": "zx_controller1",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "None",
               "value": "0"
@@ -27074,6 +28982,10 @@
           "default": "auto",
           "configKey": "zx_controller2",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "None",
               "value": "0"
@@ -27137,6 +29049,10 @@
           "configKey": "gambatte_gbc_color_correction",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "GBC ONLY",
               "value": "GBC only"
             },
@@ -27159,6 +29075,10 @@
           "default": "auto",
           "configKey": "gambatte_gb_internal_palette",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "GB - DMG",
               "value": "GB - DMG"
@@ -27251,6 +29171,10 @@
           "configKey": "gambatte_gb_colorization",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "NO",
               "value": "disabled"
             },
@@ -27285,6 +29209,10 @@
           "default": "auto",
           "configKey": "gambatte_mix_frames",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "OFF",
               "value": "disabled"
@@ -27363,6 +29291,10 @@
           "configKey": "gambatte_gb_hwmode",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "GAME BOY",
               "value": "GB"
             },
@@ -27401,6 +29333,10 @@
           "configKey": "geolith_aspect",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "1:1 (SQUARE PIXELS)",
               "value": "1:1"
             },
@@ -27423,6 +29359,10 @@
           "default": "auto",
           "configKey": "geolith_sprlimit",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "96 (HARDWARE ACCURATE)",
               "value": "96"
@@ -27451,6 +29391,10 @@
           "configKey": "geolith_system_type",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "AES (HOME CONSOLE)",
               "value": "aes"
             },
@@ -27473,6 +29417,10 @@
           "default": "auto",
           "configKey": "geolith_region",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "USA",
               "value": "us"
@@ -27609,6 +29557,10 @@
           "configKey": "gpsp_bios",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "EXTERNAL",
               "value": "official"
             },
@@ -27706,6 +29658,10 @@
           "configKey": "handy_rot",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "NO",
               "value": "None"
             },
@@ -27733,6 +29689,10 @@
           "configKey": "handy_gfx_colors",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "16 BIT",
               "value": "16bit"
             },
@@ -27751,6 +29711,10 @@
           "default": "auto",
           "configKey": "handy_lcd_ghosting",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Off",
               "value": "disabled"
@@ -27848,6 +29812,10 @@
           "configKey": "hatari_machinetype",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "ST",
               "value": "st"
             },
@@ -27874,6 +29842,10 @@
           "default": "auto",
           "configKey": "hatari_tos",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "TOS.IMG",
               "value": "default"
@@ -27909,6 +29881,10 @@
           "default": "auto",
           "configKey": "hatari_ramsize",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "1MB",
               "value": "1"
@@ -27987,6 +29963,10 @@
           "configKey": "hatarib_aspect",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "SQUARE PIXEL",
               "value": "0"
             },
@@ -28014,6 +29994,10 @@
           "configKey": "hatarib_monitor",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "RGB COLOR (low/medium resolution)",
               "value": "1"
             },
@@ -28040,6 +30024,10 @@
           "default": "auto",
           "configKey": "hatarib_samplerate",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "48000 HZ",
               "value": "48000"
@@ -28080,6 +30068,10 @@
           "configKey": "hatarib_lpf",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "CLEAN LOWPASS",
               "value": "3"
             },
@@ -28106,6 +30098,10 @@
           "default": "auto",
           "configKey": "hatarib_machine",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "ST",
               "value": "0"
@@ -28141,6 +30137,10 @@
           "default": "auto",
           "configKey": "hatarib_tos",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "TOS.IMG",
               "value": "tosimg"
@@ -28184,6 +30184,10 @@
           "default": "auto",
           "configKey": "hatarib_memory",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "1MB",
               "value": "1024"
@@ -28232,6 +30236,10 @@
           "configKey": "hatarib_cpu_clock",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "8 MHZ",
               "value": "8"
             },
@@ -28264,6 +30272,10 @@
           "configKey": "hatarib_emutos_framerate",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "NTSC 60HZ",
               "value": "0"
             },
@@ -28282,6 +30294,10 @@
           "default": "auto",
           "configKey": "hatarib_emutos_region",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "USA (NTSC)",
               "value": "0"
@@ -28441,6 +30457,10 @@
           "configKey": "hatarib_statusbar",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "FULL",
               "value": "1"
             },
@@ -28479,8 +30499,8 @@
           "configKey": "jollycv_aspect",
           "values": [
             {
-              "label": "REGION-BASED PIXEL",
-              "value": "Auto"
+              "label": "AUTO",
+              "value": "auto"
             },
             {
               "label": "PERFECTLY SQUARE (1:1)",
@@ -28536,6 +30556,10 @@
           "configKey": "jollycv_tmspalette",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "TEATIME",
               "value": "TeaTime"
             },
@@ -28558,6 +30582,10 @@
           "default": "auto",
           "configKey": "kronos_resolution_mode",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "NATIVE",
               "value": "original"
@@ -28600,6 +30628,10 @@
           "default": "auto",
           "configKey": "kronos_videoformattype",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "NTSC",
               "value": "NTSC"
@@ -28677,6 +30709,10 @@
           "configKey": "kronos_language_id",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "English",
               "value": "English"
             },
@@ -28711,6 +30747,10 @@
           "default": "auto",
           "configKey": "kronos_addon_cartridge",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "NONE",
               "value": "none"
@@ -28754,6 +30794,10 @@
           "default": "auto",
           "configKey": "kronos_stv_favorite_region",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "EUROPE",
               "value": "EU"
@@ -28800,6 +30844,10 @@
           "configKey": "saturn_padlayout",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "L/R as Z/C",
               "value": "lr_zc"
             },
@@ -28832,6 +30880,10 @@
           "configKey": "kronos_controller",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "JOYPAD",
               "value": "1"
             },
@@ -28858,6 +30910,10 @@
           "default": "auto",
           "configKey": "kronos_multitap",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "NO",
               "value": "disabled"
@@ -28924,6 +30980,10 @@
           "default": "auto",
           "configKey": "gun_ab",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "MOUSE RIGHT/MIDDLE",
               "value": "mouse"
@@ -29038,6 +31098,10 @@
           "configKey": "mgba_interframe_blending",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "OFF",
               "value": "OFF"
             },
@@ -29068,6 +31132,10 @@
           "default": "auto",
           "configKey": "mgba_gb_colors",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Grayscale",
               "value": "Grayscale"
@@ -29225,6 +31293,10 @@
           "configKey": "mgba_gb_model",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Super Game Boy",
               "value": "Super Game Boy"
             }
@@ -29254,6 +31326,10 @@
           "default": "auto",
           "configKey": "mgba_color_correction",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "OFF",
               "value": "OFF"
@@ -29371,6 +31447,10 @@
           "configKey": "neocd_region",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "JAPAN",
               "value": "Japan"
             },
@@ -29393,6 +31473,10 @@
           "default": "auto",
           "configKey": "neocd_bios",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "CDZ",
               "value": "neocd_z.rom (CDZ)"
@@ -29466,6 +31550,10 @@
           "configKey": "nestopia_blargg_ntsc_filter",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "OFF",
               "value": "disabled"
             },
@@ -29496,6 +31584,10 @@
           "default": "auto",
           "configKey": "nestopia_cropoverscan",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "TOP 8 - BOTTOM 8",
               "value": "t8_b8_l0_r0"
@@ -29536,6 +31628,10 @@
           "default": "auto",
           "configKey": "nestopia_palette",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "consumer",
               "value": "consumer"
@@ -29669,6 +31765,10 @@
           "configKey": "nestopia_favored_system",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "NTSC",
               "value": "ntsc"
             },
@@ -29696,6 +31796,10 @@
           "configKey": "nestopia_overclock",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "1X",
               "value": "1x"
             },
@@ -29715,6 +31819,10 @@
           "configKey": "nestopia_controller1",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "NES GAMEPAD",
               "value": "257"
             }
@@ -29729,6 +31837,10 @@
           "default": "auto",
           "configKey": "nestopia_controller2",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "NES GAMEPAD",
               "value": "257"
@@ -29786,6 +31898,10 @@
           "configKey": "nestopia_select_adapter",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "NTSC",
               "value": "ntsc"
             },
@@ -29828,6 +31944,10 @@
           "default": "auto",
           "configKey": "gun_ab",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "MOUSE RIGHT/MIDDLE",
               "value": "mouse"
@@ -30002,6 +32122,10 @@
           "configKey": "np2kai_model",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "PC-9801VX",
               "value": "PC-9801VX"
             },
@@ -30024,6 +32148,10 @@
           "default": "auto",
           "configKey": "np2kai_joymode",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "OFF",
               "value": "OFF"
@@ -30126,6 +32254,10 @@
           "configKey": "o2em_mix_frames",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Off",
               "value": "disabled"
             },
@@ -30191,6 +32323,10 @@
           "configKey": "o2em_region",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Autodetect",
               "value": "autodetect"
             },
@@ -30213,6 +32349,10 @@
           "default": "auto",
           "configKey": "o2em_bios",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Odyssey 2 (NTSC)",
               "value": "o2rom.bin"
@@ -30264,6 +32404,10 @@
           "default": "auto",
           "configKey": "openlara_resolution",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "NATIVE (320x240)",
               "value": "320x240"
@@ -30363,6 +32507,10 @@
           "default": "auto",
           "configKey": "openlara_framerate",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "NATIVE (60fps)",
               "value": "60fps"
@@ -30477,6 +32625,10 @@
           "configKey": "4do_region",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "NTSC 320x240 60HZ",
               "value": "ntsc"
             },
@@ -30500,6 +32652,10 @@
           "configKey": "4do_bios",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Panasonic FZ-1",
               "value": "Panasonic FZ-1"
             },
@@ -30522,6 +32678,10 @@
           "default": "auto",
           "configKey": "cpu_overclock",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "1.0x (12.50Mhz)",
               "value": "1.0x (12.50Mhz)"
@@ -30562,6 +32722,10 @@
           "configKey": "active_devices",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "1",
               "value": "1"
             },
@@ -30588,6 +32752,10 @@
           "default": "auto",
           "configKey": "4do_controller1",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "3DO JOYPAD",
               "value": "1"
@@ -30616,6 +32784,10 @@
           "configKey": "4do_controller2",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "3DO JOYPAD",
               "value": "1"
             },
@@ -30643,6 +32815,10 @@
           "configKey": "4do_controller3",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "3DO JOYPAD",
               "value": "1"
             },
@@ -30669,6 +32845,10 @@
           "default": "auto",
           "configKey": "4do_controller4",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "3DO JOYPAD",
               "value": "1"
@@ -30726,6 +32906,10 @@
           "default": "auto",
           "configKey": "gun_ab",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "MOUSE RIGHT/MIDDLE",
               "value": "mouse"
@@ -30834,6 +33018,10 @@
           "configKey": "opera_region",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "NTSC 320x240 60HZ",
               "value": "ntsc"
             },
@@ -30856,6 +33044,10 @@
           "default": "auto",
           "configKey": "opera_bios",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Panasonic FZ-1 (U)",
               "value": "panafz1.bin"
@@ -30899,6 +33091,10 @@
           "default": "auto",
           "configKey": "cpu_overclock",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "0.5x ( 6.25Mhz)",
               "value": "0.5x ( 6.25Mhz)"
@@ -30956,6 +33152,10 @@
           "configKey": "opera_madam_matrix_engine",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "HARDWARE",
               "value": "hardware"
             },
@@ -30975,6 +33175,10 @@
           "configKey": "nvram_storage",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "PER GAME",
               "value": "per game"
             },
@@ -30993,6 +33197,10 @@
           "default": "auto",
           "configKey": "opera_hack",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "CRASH N BURN",
               "value": "hack_timing_1"
@@ -31025,6 +33233,10 @@
           "configKey": "active_devices",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "1",
               "value": "1"
             },
@@ -31051,6 +33263,10 @@
           "default": "auto",
           "configKey": "opera_controller1",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "3DO JOYPAD",
               "value": "1"
@@ -31079,6 +33295,10 @@
           "configKey": "opera_controller2",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "3DO JOYPAD",
               "value": "1"
             },
@@ -31106,6 +33326,10 @@
           "configKey": "opera_controller3",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "3DO JOYPAD",
               "value": "1"
             },
@@ -31132,6 +33356,10 @@
           "default": "auto",
           "configKey": "opera_controller4",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "3DO JOYPAD",
               "value": "1"
@@ -31199,6 +33427,10 @@
           "configKey": "gun_ab",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "MOUSE RIGHT/MIDDLE",
               "value": "mouse"
             },
@@ -31251,6 +33483,10 @@
           "default": "auto",
           "configKey": "parallel_resolution",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "640x480 (NATIVE)",
               "value": "640x480"
@@ -31336,6 +33572,10 @@
           "configKey": "parallel_gfx_plugin",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "GLIDE64",
               "value": "glide64"
             },
@@ -31367,6 +33607,10 @@
           "configKey": "parallel_gfx_accuracy",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "VERY HIGH (slower)",
               "value": "veryhigh"
             },
@@ -31394,6 +33638,10 @@
           "configKey": "parallel_upscaling",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "1x",
               "value": "1x"
             },
@@ -31420,6 +33668,10 @@
           "default": "auto",
           "configKey": "parallel_downsampling",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "NO",
               "value": "disable"
@@ -31493,6 +33745,10 @@
           "configKey": "parallel_filtering",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "N64 3-point",
               "value": "N64 3-point"
             },
@@ -31524,6 +33780,10 @@
           "default": "auto",
           "configKey": "parallel_cpucore",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "DYNAMIC RECOMPILER",
               "value": "dynamic_recompiler"
@@ -31562,6 +33822,10 @@
           "default": "auto",
           "configKey": "lr_n64_buttons",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "STANDARD",
               "value": "standard"
@@ -31612,6 +33876,10 @@
           "configKey": "parallel_pak1",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "NONE",
               "value": "none"
             },
@@ -31634,6 +33902,10 @@
           "default": "auto",
           "configKey": "parallel_pak2",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "NONE",
               "value": "none"
@@ -31658,6 +33930,10 @@
           "configKey": "parallel_pak3",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "NONE",
               "value": "none"
             },
@@ -31680,6 +33956,10 @@
           "default": "auto",
           "configKey": "parallel_pak4",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "NONE",
               "value": "none"
@@ -31713,6 +33993,10 @@
           "configKey": "ipl_bios",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "JAPAN",
               "value": "IPL_JAP.n64"
             },
@@ -31735,6 +34019,10 @@
           "default": "auto",
           "configKey": "pokemini_video_scale",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "1X NATIVE",
               "value": "1x (Native)"
@@ -31798,6 +34086,10 @@
           "default": "auto",
           "configKey": "pokemini_palette",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Default",
               "value": "Default"
@@ -31941,6 +34233,10 @@
           "configKey": "pokemini_rumble",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "NO RUMBLE/NO SHAKE",
               "value": "all_off"
             },
@@ -31975,6 +34271,10 @@
           "default": "auto",
           "configKey": "ppsspp_internal_resolution",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "1x",
               "value": "480x272"
@@ -32065,7 +34365,7 @@
               "value": "Percent of FPS"
             },
             {
-              "label": "AUTOMATIC",
+              "label": "AUTO",
               "value": "auto"
             }
           ],
@@ -32079,6 +34379,10 @@
           "default": "auto",
           "configKey": "ppsspp_texture_anisotropic_filtering",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "NO",
               "value": "disabled"
@@ -32111,6 +34415,10 @@
           "configKey": "ppsspp_texture_filtering",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "nearest",
               "value": "nearest"
             },
@@ -32133,6 +34441,10 @@
           "default": "auto",
           "configKey": "ppsspp_texture_scaling_type",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "xbrz",
               "value": "xbrz"
@@ -32184,6 +34496,10 @@
           "default": "auto",
           "configKey": "ppsspp_inflight_frames",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "NO BUFFER",
               "value": "No buffer"
@@ -32247,6 +34563,10 @@
           "configKey": "ppsspp_language",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Deutsch",
               "value": "German"
             },
@@ -32306,6 +34626,10 @@
           "configKey": "ppsspp_cpu_core",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "DYNAREC (JIT)",
               "value": "JIT"
             },
@@ -32337,6 +34661,10 @@
           "default": "auto",
           "configKey": "ppsspp_io_timing_method",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Fast",
               "value": "Fast"
@@ -32370,6 +34698,10 @@
           "configKey": "PerformanceMode",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Fast",
               "value": "Fast"
             },
@@ -32392,6 +34724,10 @@
           "default": "auto",
           "configKey": "ppsspp_button_preference",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "CROSS",
               "value": "Cross"
@@ -32441,6 +34777,10 @@
           "default": "auto",
           "configKey": "prboom_resolution",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "NATIVE (320x200)",
               "value": "320x200"
@@ -32510,6 +34850,10 @@
           "configKey": "DoomControllerP1",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "GAMEPAD CLASSIC",
               "value": "1"
             },
@@ -32547,6 +34891,10 @@
           "default": "auto",
           "configKey": "prosystem_color_depth",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "16 BIT",
               "value": "16bit"
@@ -32621,6 +34969,10 @@
           "configKey": "video_resolution",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "360p",
               "value": "lores"
             },
@@ -32643,6 +34995,10 @@
           "default": "auto",
           "configKey": "video_standard",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "ntsc auto",
               "value": "NTSC auto"
@@ -32703,7 +35059,7 @@
               "value": "maximum"
             },
             {
-              "label": "AUTOMATIC",
+              "label": "AUTO",
               "value": "auto"
             }
           ],
@@ -32717,6 +35073,10 @@
           "default": "auto",
           "configKey": "puae_crop_mode",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Horizontal + Vertical",
               "value": "both"
@@ -32756,6 +35116,10 @@
           "default": "auto",
           "configKey": "puae_gfx_colors",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "16 BIT",
               "value": "16bit"
@@ -32806,6 +35170,10 @@
           "configKey": "cpu_compatibility",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "normal",
               "value": "normal"
             },
@@ -32832,6 +35200,10 @@
           "default": "auto",
           "configKey": "cpu_multiplier",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "3.546895Mhz",
               "value": "1"
@@ -32871,6 +35243,10 @@
           "default": "auto",
           "configKey": "puae_kickstart",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "AROS",
               "value": "aros"
@@ -32938,6 +35314,10 @@
           "configKey": "puae_controller1",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "RetroPad",
               "value": "257"
             },
@@ -32973,6 +35353,10 @@
           "configKey": "puae_controller2",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "RetroPad",
               "value": "257"
             },
@@ -33007,6 +35391,10 @@
           "default": "auto",
           "configKey": "puae_analogmouse",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "BOTH STICKS",
               "value": "both"
@@ -33074,6 +35462,10 @@
           "configKey": "puae_joyport_order",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "1-2-3-4",
               "value": "1234"
             },
@@ -33101,6 +35493,10 @@
           "configKey": "puae_joyport",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "JOYSTICK (PORT1)",
               "value": "joystick"
             },
@@ -33119,6 +35515,10 @@
           "default": "auto",
           "configKey": "model",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "A500 (v1.2, 0.5M Chip)",
               "value": "A500OG"
@@ -33146,6 +35546,10 @@
           "default": "auto",
           "configKey": "floppy_speed",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "1x",
               "value": "100"
@@ -33193,6 +35597,10 @@
           "configKey": "whdload",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Show if available",
               "value": "config"
             },
@@ -33219,6 +35627,10 @@
           "default": "auto",
           "configKey": "pad_options",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "B FIRE / A 2ND FIRE",
               "value": "disabled"
@@ -33247,6 +35659,10 @@
           "configKey": "puae_cd_speed",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "DEFAULT",
               "value": "100"
             },
@@ -33274,6 +35690,10 @@
           "default": "auto",
           "configKey": "pad32_options",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "B Red / A Blue",
               "value": "disabled"
@@ -33347,6 +35767,10 @@
           "configKey": "q88_sound_board",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "OPN (Yamaha YM2203)",
               "value": "OPN"
             },
@@ -33365,6 +35789,10 @@
           "default": "auto",
           "configKey": "q88_basic_mode",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "N88-BASIC V2",
               "value": "N88 V2"
@@ -33392,6 +35820,10 @@
           "default": "auto",
           "configKey": "q88_cpu_clock",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "4 MHz",
               "value": "4"
@@ -33456,6 +35888,10 @@
           "configKey": "pc88_controller1",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "JOYPAD",
               "value": "1"
             },
@@ -33504,6 +35940,10 @@
           "default": "auto",
           "configKey": "px68k_frameskip",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Full Frame",
               "value": "Full Frame"
@@ -33560,6 +36000,10 @@
           "configKey": "px68k_cpuspeed",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "10MHz (default)",
               "value": "10Mhz"
             },
@@ -33594,6 +36038,10 @@
           "default": "auto",
           "configKey": "px68k_ramsize",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "2MB",
               "value": "2MB"
@@ -33653,6 +36101,10 @@
           "configKey": "px68k_joytype",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Default (2 Buttons)",
               "value": "Default (2 Buttons)"
             },
@@ -33676,6 +36128,10 @@
           "configKey": "px68k_joy_mouse",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Mouse",
               "value": "Mouse"
             },
@@ -33694,6 +36150,10 @@
           "default": "auto",
           "configKey": "px68k_joy1_select",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Default",
               "value": "Default"
@@ -33746,6 +36206,10 @@
           "configKey": "x1_resolute",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "LOW",
               "value": "LOW"
             },
@@ -33795,6 +36259,10 @@
           "configKey": "x1_romtype",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "X1",
               "value": "X1"
             },
@@ -33817,6 +36285,10 @@
           "default": "auto",
           "configKey": "x1_keymode",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "KEYBOARD",
               "value": "Keyboard"
@@ -33859,6 +36331,10 @@
           "default": "auto",
           "configKey": "SoundMode",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "FluidSynth",
               "value": "fluidsynth"
@@ -33911,6 +36387,10 @@
           "configKey": "multi_midi",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "ON",
               "value": "true"
             },
@@ -33929,6 +36409,10 @@
           "default": "auto",
           "configKey": "soundfont",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Roland SC-55",
               "value": "Roland_SC-55.sf2"
@@ -33964,6 +36448,10 @@
           "configKey": "TextSpeech",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Speech",
               "value": "Speech"
             },
@@ -33986,6 +36474,10 @@
           "default": "auto",
           "configKey": "scummvm_pointer_device",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "RETROPAD AND MOUSE",
               "value": "mouse"
@@ -34025,6 +36517,10 @@
           "configKey": "scummvm_analog_response",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "linear",
               "value": "linear"
             },
@@ -34043,6 +36539,10 @@
           "default": "auto",
           "configKey": "supermodel_resolution",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "NATIVE",
               "value": "native"
@@ -34088,6 +36588,10 @@
           "default": "auto",
           "configKey": "supermodel_service_buttons",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "STICK BUTTONS",
               "value": "sticks"
@@ -34261,6 +36765,10 @@
           "configKey": "tgbdual_screen_placement",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "SIDE BY SIDE",
               "value": "left-right"
             },
@@ -34340,6 +36848,10 @@
           "configKey": "quake_resolution",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "NATIVE (320x200)",
               "value": "320x200"
             },
@@ -34389,6 +36901,10 @@
           "default": "auto",
           "configKey": "quake_device_type",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "CLASSIC GAMEPAD",
               "value": "1"
@@ -34449,6 +36965,10 @@
           "default": "auto",
           "configKey": "vitaquakeii_resolution",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "NATIVE (960x544)",
               "value": "960x544"
@@ -34561,6 +37081,10 @@
           "configKey": "vitaquakeii_gl_texture_filtering",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "NEAREST HQ",
               "value": "nearest_hq"
             },
@@ -34597,6 +37121,10 @@
           "configKey": "vitaquakeii_hand",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "RIGHT",
               "value": "right"
             },
@@ -34624,6 +37152,10 @@
           "configKey": "vitaquakeii_xhair",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "WHITE CROSS",
               "value": "cross"
             },
@@ -34650,6 +37182,10 @@
           "default": "auto",
           "configKey": "vitaquakeii_renderer",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "OPENGL",
               "value": "opengl"
@@ -34693,6 +37229,10 @@
           "default": "auto",
           "configKey": "quake2_device_type",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "ANALOG GAMEPAD",
               "value": "1"
@@ -34814,6 +37354,10 @@
           "default": "auto",
           "configKey": "vecx_res_multi",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "1X",
               "value": "1"
@@ -34986,6 +37530,10 @@
           "configKey": "yabasanshiro_resolution_mode",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "NATIVE",
               "value": "original"
             },
@@ -35060,6 +37608,10 @@
           "configKey": "yabasanshiro_system_language",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "English",
               "value": "english"
             },
@@ -35095,6 +37647,10 @@
           "configKey": "yabasanshiro_addon_cart",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "1M EXTENDED RAM",
               "value": "1M_extended_ram"
             },
@@ -35123,6 +37679,10 @@
           "configKey": "yabasanshiro_multitap",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "NO",
               "value": "disabled"
             },
@@ -35149,6 +37709,10 @@
           "default": "auto",
           "configKey": "yabasanshiro_controller",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "SATURN PAD",
               "value": "1"
@@ -35787,6 +38351,10 @@
           "configKey": "craft_resolution",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "640x480",
               "value": "640x480"
             },
@@ -35925,6 +38493,10 @@
           "configKey": "gong_player2",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "1",
               "value": "CPU"
             },
@@ -35942,6 +38514,10 @@
           "default": "auto",
           "configKey": "mrboom_aspect",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "NATIVE",
               "value": "Native"
@@ -35964,6 +38540,10 @@
           "default": "auto",
           "configKey": "mrboom_levelselect",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "CANDY",
               "value": "Candy"
@@ -36010,6 +38590,10 @@
           "default": "auto",
           "configKey": "mrboom_teammode",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "SELFIE",
               "value": "Selfie"

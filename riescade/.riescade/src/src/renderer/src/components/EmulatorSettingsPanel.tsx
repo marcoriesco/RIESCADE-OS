@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo, useCallback } from 'react'
 import { Search, RotateCcw, Link2, ChevronRight, Monitor, Cpu, Volume2, Settings, Gamepad2, Wrench, Palette, Share2, Cog, X } from 'lucide-react'
 import { SettingGroup, SettingToggle, SettingSelect, SettingSlider, SettingInput } from './SettingsComponents'
 import type { SettingsCtx } from '../types'
+import { useI18n } from '../i18n'
 
 // Schema types matching backend EmulatorSchemaService
 interface SchemaOption {
@@ -66,6 +67,7 @@ export const EmulatorSettingsPanel: React.FC<EmulatorSettingsPanelProps> = ({
   initialGroup,
   initialCore
 }) => {
+  const { t } = useI18n()
   const [schema, setSchema] = useState<EmulatorSchema | null>(null)
   const [resolvedSettings, setResolvedSettings] = useState<Record<string, { value: any; source: string }>>({})
   const [loading, setLoading] = useState(true)
@@ -227,7 +229,7 @@ export const EmulatorSettingsPanel: React.FC<EmulatorSettingsPanelProps> = ({
     return (
       <div className="flex flex-col items-center justify-center py-16 gap-3 animate-in fade-in duration-200">
         <div className="w-8 h-8 rounded-full border-2 border-accent/30 border-t-accent animate-spin" />
-        <span className="text-xs text-white/40 font-medium">Carregando configurações...</span>
+        <span className="text-xs text-white/40 font-medium">{t('loadingSettings')}</span>
       </div>
     )
   }
@@ -248,7 +250,7 @@ export const EmulatorSettingsPanel: React.FC<EmulatorSettingsPanelProps> = ({
           type="text"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          placeholder="Buscar configuração..."
+          placeholder={t('searchSetting')}
           className="w-full pl-9 pr-9 py-2 bg-white/5 border border-white/10 rounded-lg text-sm text-white placeholder-white/30 outline-none focus:border-accent/50 focus:bg-white/[0.07] transition-all"
         />
         {searchQuery && (
@@ -256,7 +258,7 @@ export const EmulatorSettingsPanel: React.FC<EmulatorSettingsPanelProps> = ({
             type="button"
             onClick={() => setSearchQuery('')}
             className="absolute right-3 top-1/2 -translate-y-1/2 text-white/40 hover:text-white transition p-0.5 cursor-pointer"
-            title="Limpar busca"
+            title={t('clearSearch')}
           >
             <X className="w-4 h-4" />
           </button>
@@ -315,7 +317,7 @@ export const EmulatorSettingsPanel: React.FC<EmulatorSettingsPanelProps> = ({
                     {isInherited && (
                       <span className="flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-medium bg-blue-500/15 text-blue-400 border border-blue-500/20">
                         <Link2 className="w-3 h-3" />
-                        Global
+                        {t('global')}
                       </span>
                     )}
                     {isOverridden && (
@@ -325,7 +327,7 @@ export const EmulatorSettingsPanel: React.FC<EmulatorSettingsPanelProps> = ({
                         title="Resetar para o valor global"
                       >
                         <RotateCcw className="w-3 h-3" />
-                        Reset
+                        {t('reset')}
                       </button>
                     )}
                   </div>
@@ -391,7 +393,7 @@ export const EmulatorSettingsPanel: React.FC<EmulatorSettingsPanelProps> = ({
             className="flex items-center gap-2 px-4 py-2.5 rounded-lg bg-red-500/10 text-red-400 border border-red-500/15 hover:bg-red-500/20 hover:border-red-500/25 transition-all text-sm font-medium w-full justify-center"
           >
             <RotateCcw className="w-4 h-4" />
-            Resetar Todas as Configurações ({overrideCount} {overrideCount === 1 ? 'override' : 'overrides'})
+            {t('resetAll')} ({overrideCount} {overrideCount === 1 ? 'override' : 'overrides'})
           </button>
         </div>
       )}

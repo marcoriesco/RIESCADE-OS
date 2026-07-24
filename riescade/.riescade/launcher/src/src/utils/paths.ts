@@ -19,6 +19,10 @@ export function getConfigsPath(): string {
   return join(getRiescadePath(), 'configs');
 }
 
+export function getStatePath(): string {
+  return join(getRiescadePath(), 'state');
+}
+
 export function getLogsPath(): string {
   return join(getRiescadePath(), 'logs');
 }

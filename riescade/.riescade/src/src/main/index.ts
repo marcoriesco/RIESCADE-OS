@@ -1,5 +1,5 @@
-import { app, shell, BrowserWindow, ipcMain, dialog } from 'electron'
-import { join, dirname, extname, basename } from 'path'
+import { app, shell, BrowserWindow, ipcMain, dialog, screen } from 'electron'
+import { join, dirname, extname, basename, resolve, relative, isAbsolute } from 'path'
 import { exec } from 'child_process'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import { LibraryService } from './services/LibraryService'
@@ -16,7 +16,7 @@ import { InputDeviceService } from './services/InputDeviceService'
 import { registerUpdaterIpc } from './services/UpdaterService'
 import { Game, System } from '../shared/types'
 import { ControllerManager } from './services/ControllerManager'
-import { watch, FSWatcher, readFileSync, existsSync, writeFileSync, mkdirSync, statSync } from 'fs'
+import { watch, FSWatcher, readFileSync, existsSync, writeFileSync, mkdirSync, statSync, promises as fsPromises } from 'fs'
 import { getRetroBatPath, getConfigPath, getResourcesPath, getRiescadePath, getDatabasePath, getMusicPath } from './utils/paths'
 import { XMLParser, XMLBuilder } from 'fast-xml-parser'
 import { SYSTEM_TO_SCREENSCRAPER_PLATFORM } from './services/ScraperService'
@@ -27,6 +27,44 @@ const settingsParser = new SettingsParser()
 const systemService = new SystemService(libraryService)
 const scraperService = new ScraperService(libraryService)
 const emulatorSchemaService = new EmulatorSchemaService()
+
+const originalConsole = {
+  log: console.log.bind(console),
+  info: console.info.bind(console),
+  debug: console.debug.bind(console),
+  warn: console.warn.bind(console),
+  error: console.error.bind(console)
+}
+
+function applyLogLevel(value?: string): void {
+  const level = String(value || 'default').toLowerCase()
+  const noop = () => {}
+  console.log = level === 'default' || level === 'debug' ? originalConsole.log : noop
+  console.info = level === 'default' || level === 'debug' ? originalConsole.info : noop
+  console.debug = level === 'debug' ? originalConsole.debug : noop
+  console.warn = level === 'default' || level === 'debug' || level === 'warning' ? originalConsole.warn : noop
+  console.error = level !== 'disabled' ? originalConsole.error : noop
+}
+
+applyLogLevel(settingsParser.getSetting('LogLevel', 'string') || 'default')
+
+function isPathInside(candidatePath: string, allowedRoot: string): boolean {
+  const candidate = resolve(candidatePath)
+  const root = resolve(allowedRoot)
+  const rel = relative(root, candidate)
+  return rel === '' || (!rel.startsWith('..') && !isAbsolute(rel))
+}
+
+function resolveAllowedAppPath(filePath: string): string {
+  if (typeof filePath !== 'string' || !filePath.trim()) throw new Error('Caminho inválido.')
+  let cleanPath = filePath.trim()
+  if (cleanPath.startsWith('file:///')) cleanPath = decodeURIComponent(cleanPath.substring(8))
+  const resolvedPath = resolve(cleanPath)
+  if (!isPathInside(resolvedPath, getRetroBatPath())) {
+    throw new Error('Acesso negado a caminho externo ao RIESCADE OS.')
+  }
+  return resolvedPath
+}
 
 // Configure Chromium GPU graphics backend switches based on user settings
 const enabledFeatures: string[] = []
@@ -74,6 +112,14 @@ function sendToMainWindow(channel: string, ...args: any[]): void {
   }
 }
 
+function broadcastToWindows(channel: string, ...args: any[]): void {
+  BrowserWindow.getAllWindows().forEach(window => {
+    if (!window.isDestroyed() && !window.webContents.isDestroyed()) {
+      window.webContents.send(channel, ...args)
+    }
+  })
+}
+
 function saveWindowConfig(): void {
   if (!mainWindow || mainWindow.isDestroyed()) return
   const shouldSave = settingsParser.getSetting('RIESCADE.SaveWindowPositions', 'bool') !== false
@@ -106,6 +152,54 @@ function saveWindowConfig(): void {
   }
 }
 
+function getConfiguredDisplay() {
+  const displays = screen.getAllDisplays()
+  const preference = settingsParser.getSetting('RIESCADE.FrontendDisplay', 'string') || 'auto'
+  if (preference === 'primary') return screen.getPrimaryDisplay()
+  if (preference === 'secondary') {
+    const primaryId = screen.getPrimaryDisplay().id
+    return displays.find(display => display.id !== primaryId) || screen.getPrimaryDisplay()
+  }
+  return null
+}
+
+function applyConfiguredDisplayPreference(): void {
+  if (!mainWindow || mainWindow.isDestroyed()) return
+  const target = getConfiguredDisplay()
+  if (!target) return
+
+  const wasFullScreen = mainWindow.isFullScreen()
+  const wasMaximized = mainWindow.isMaximized()
+  const currentBounds = mainWindow.getNormalBounds()
+  const targetArea = target.workArea
+  const currentDisplay = screen.getDisplayMatching(mainWindow.getBounds())
+  if (currentDisplay.id === target.id) return
+
+  const moveWindow = () => {
+    if (!mainWindow || mainWindow.isDestroyed()) return
+    if (wasMaximized) mainWindow.unmaximize()
+
+    const width = Math.min(Math.max(currentBounds.width, 800), targetArea.width)
+    const height = Math.min(Math.max(currentBounds.height, 600), targetArea.height)
+    mainWindow.setBounds({
+      x: targetArea.x + Math.round((targetArea.width - width) / 2),
+      y: targetArea.y + Math.round((targetArea.height - height) / 2),
+      width,
+      height
+    })
+
+    if (wasFullScreen) mainWindow.setFullScreen(true)
+    else if (wasMaximized) mainWindow.maximize()
+  }
+
+  if (wasFullScreen) {
+    mainWindow.once('leave-full-screen', moveWindow)
+    mainWindow.setFullScreen(false)
+  } else {
+    moveWindow()
+  }
+}
+
 function createWindow(): void {
   const shouldSave = settingsParser.getSetting('RIESCADE.SaveWindowPositions', 'bool') !== false
   const isFullScreen = shouldSave ? settingsParser.getSetting('Window.FullScreen', 'bool') !== false : true
@@ -132,12 +226,19 @@ function createWindow(): void {
     icon: join(getResourcesPath(), 'riescade.ico'),
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
-      sandbox: false,
-      webSecurity: false
+      contextIsolation: true,
+      nodeIntegration: false,
+      sandbox: true,
+      webSecurity: app.isPackaged
     }
   }
   
-  if (savedX !== null && savedY !== null) {
+  const configuredDisplay = getConfiguredDisplay()
+  if (configuredDisplay) {
+    const area = configuredDisplay.workArea
+    options.x = area.x + Math.round((area.width - width) / 2)
+    options.y = area.y + Math.round((area.height - height) / 2)
+  } else if (savedX !== null && savedY !== null) {
     options.x = parseInt(savedX, 10)
     options.y = parseInt(savedY, 10)
   }
@@ -151,6 +252,7 @@ function createWindow(): void {
   }
 
   mainWindow.on('ready-to-show', () => {
+    applyConfiguredDisplayPreference()
     mainWindow!.show()
   })
 
@@ -175,6 +277,9 @@ function createWindow(): void {
 
 
 app.whenReady().then(() => {
+  screen.on('display-added', applyConfiguredDisplayPreference)
+  screen.on('display-removed', applyConfiguredDisplayPreference)
+  screen.on('display-metrics-changed', applyConfiguredDisplayPreference)
   electronApp.setAppUserModelId('com.riescade')
 
   app.on('browser-window-created', (_, window) => {
@@ -191,7 +296,7 @@ app.whenReady().then(() => {
   // Start polling game controllers and emit changes to the frontend
   const controllerManager = ControllerManager.getInstance()
   controllerManager.startPolling((controllers) => {
-    sendToMainWindow('controllers-updated', controllers)
+    broadcastToWindows('controllers-updated', controllers)
   }, 2000)
 
   app.on('will-quit', () => {
@@ -318,17 +423,17 @@ app.whenReady().then(() => {
       if (existsSync(dbPath)) {
         dbSize = statSync(dbPath).size
       }
-    } catch {}
+    } catch (error) {
+      console.warn('[Database] Could not read database file size.', error)
+    }
 
-    const totalGamesRow = db.prepare('SELECT COUNT(*) as count FROM games').get() as any
-    const totalSystemsRow = db.prepare("SELECT COUNT(*) as count FROM systems WHERE name != '__es_systems.cfg'").get() as any
-    const lastSyncRow = db.prepare('SELECT MAX(last_scan_at) as last_scan FROM systems').get() as any
+    const stats = db.getStats()
 
     return {
-      totalGames: totalGamesRow?.count || 0,
-      totalSystems: totalSystemsRow?.count || 0,
+      totalGames: stats.totalGames,
+      totalSystems: stats.totalSystems,
       dbSize,
-      lastSyncAt: lastSyncRow?.last_scan || 0
+      lastSyncAt: stats.lastSyncAt
     }
   })
 
@@ -382,8 +487,9 @@ app.whenReady().then(() => {
       return results
     }
 
+    const allowedSystemPath = resolveAllowedAppPath(systemPath)
     for (const f of folders) {
-      results[f] = fs.existsSync(join(systemPath, 'media', f))
+      results[f] = fs.existsSync(join(allowedSystemPath, 'media', f))
     }
     return results
   })
@@ -400,13 +506,16 @@ app.whenReady().then(() => {
     return EmulatorInstaller.checkStatus(emulatorName, sourceUrl)
   })
 
-  ipcMain.handle('download-install-emulator', async (event, emulatorName: string, sourceUrl: string) => {
-    return EmulatorInstaller.downloadAndInstall(emulatorName, sourceUrl, (pct) => {
+  ipcMain.handle('download-install-emulator', async (event, emulatorName: string, systemName: string) => {
+    const systemObj = libraryService.getSystems().find(s => s.name === systemName)
+    const emulatorObj = systemObj?.emulators?.find(e => e.name === emulatorName)
+    if (!emulatorObj?.source) throw new Error('Fonte oficial do emulador não encontrada na configuração do sistema.')
+    return EmulatorInstaller.downloadAndInstall(emulatorName, emulatorObj.source, (pct) => {
       event.sender.send('emulator-download-progress', { emulatorName, pct })
     })
   })
 
-  ipcMain.handle('launch-game', async (_, game: Game, system: System, saveStateSlot?: number) => {
+  ipcMain.handle('launch-game', async (_, game: Game, system: System, saveStateSlot?: number, saveStatePath?: string) => {
     let targetSystem = system
     if (system.name === 'collections') {
       const realSystem = libraryService.getSystems().find(s => s.name.toLowerCase() === game.system.toLowerCase())
@@ -415,7 +524,7 @@ app.whenReady().then(() => {
       }
     }
 
-    const result = await launcherService.launch(game, targetSystem, ControllerManager.getInstance().getConnected(), saveStateSlot)
+    const result = await launcherService.launch(game, targetSystem, ControllerManager.getInstance().getConnected(), saveStateSlot, undefined, saveStatePath)
     
     // Focus main window when the game exits
     if (mainWindow && !mainWindow.isDestroyed()) {
@@ -445,6 +554,29 @@ app.whenReady().then(() => {
 
   ipcMain.handle('scan-save-states', async (_, systemName: string, gamePath: string) => {
     return libraryService.getGameSaveStates(systemName, gamePath)
+  })
+
+  ipcMain.handle('get-game-file-info', async (_, systemName: string, gamePath: string) => {
+    const system = libraryService.getSystems().find(item => item.name.toLowerCase() === systemName.toLowerCase())
+    if (!system || system.path.startsWith('virtual://')) {
+      return { exists: false, path: gamePath, name: basename(gamePath), extension: extname(gamePath), size: 0 }
+    }
+
+    const physicalPath = isAbsolute(gamePath) ? resolve(gamePath) : resolve(system.path, gamePath)
+    if (!isPathInside(physicalPath, system.path) || !existsSync(physicalPath)) {
+      return { exists: false, path: physicalPath, name: basename(physicalPath), extension: extname(physicalPath), size: 0 }
+    }
+
+    const stats = statSync(physicalPath)
+    return {
+      exists: stats.isFile(),
+      path: physicalPath,
+      name: basename(physicalPath),
+      extension: extname(physicalPath).toLowerCase(),
+      size: stats.isFile() ? stats.size : 0,
+      createdAt: stats.birthtimeMs,
+      modifiedAt: stats.mtimeMs
+    }
   })
 
   ipcMain.handle('update-game', async (_, systemName: string, gameData: Game) => {
@@ -535,6 +667,12 @@ app.whenReady().then(() => {
 
   ipcMain.handle('save-setting', async (_, name: string, value: any, type: 'string' | 'bool' | 'int' | 'float') => {
     const res = settingsParser.saveSetting(name, value, type)
+    if (name === 'RIESCADE.FrontendDisplay') {
+      applyConfiguredDisplayPreference()
+    }
+    if (name === 'LogLevel') {
+      applyLogLevel(String(value))
+    }
     
     // Broadcast setting change to main window
     sendToMainWindow('setting-changed', { name, value, type })
@@ -898,8 +1036,9 @@ app.whenReady().then(() => {
 
   ipcMain.handle('get-file-content', async (_, filePath: string) => {
     try {
-      if (existsSync(filePath)) {
-        return readFileSync(filePath, 'utf-8')
+      const allowedPath = resolveAllowedAppPath(filePath)
+      if (existsSync(allowedPath)) {
+        return await fsPromises.readFile(allowedPath, 'utf-8')
       }
       return null
     } catch (e) {
@@ -910,12 +1049,8 @@ app.whenReady().then(() => {
 
   ipcMain.handle('check-file-exists', async (_, filePath: string) => {
     try {
-      if (!filePath) return false
-      let cleanPath = filePath
-      if (cleanPath.startsWith('file:///')) {
-        cleanPath = cleanPath.substring(8)
-      }
-      return existsSync(cleanPath)
+      await fsPromises.access(resolveAllowedAppPath(filePath))
+      return true
     } catch (e) {
       return false
     }
@@ -983,7 +1118,8 @@ app.whenReady().then(() => {
   })
 
   ipcMain.handle('start-scrape', async (event, options?: { systemName?: string; gamePath?: string }) => {
-    scraperService.scrape(options)
+    if (scraperService.isActive()) return false
+    void scraperService.scrape(options, event.sender)
     return true
   })
 
@@ -1008,7 +1144,7 @@ app.whenReady().then(() => {
       const devpassword = 'JRLmOtnZXwo'
       const softname = 'retrobat'
       
-      let url = `https://api.screenscraper.fr/api2/systemesListe.php?devid=${devid}&devpassword=${devpassword}&softname=${softname}&output=json`
+      let url = `https://api.screenscraper.fr/api2/ssuserInfos.php?devid=${devid}&devpassword=${devpassword}&softname=${softname}&output=json`
       if (ssid) {
         url += `&ssid=${encodeURIComponent(ssid)}`
       }
@@ -1031,12 +1167,25 @@ app.whenReady().then(() => {
       const requestsToday = parseInt(user.requeststoday || '0', 10)
       const maxRequests = parseInt(user.maxrequestsperday || '0', 10)
       const requestsRemaining = maxRequests - requestsToday
+      const motors = parseInt(
+        user.maxthreads
+          || user.maxThreads
+          || user.threads
+          || user.moteurs
+          || json.response?.maxthreads
+          || '1',
+        10
+      )
+      const availableMotors = String(Number.isFinite(motors) && motors > 0 ? motors : 1)
+      settingsParser.saveSetting('ScreenScraperMotors', availableMotors, 'int')
       
       return { 
         success: true, 
         username: user.id || ssid, 
         requests: String(requestsRemaining), 
-        maxRequests: String(maxRequests) 
+        maxRequests: String(maxRequests),
+        motors: availableMotors,
+        maxThreads: availableMotors
       }
     } catch (err: any) {
       return { success: false, reason: err.message || 'Falha na conexão.' }
@@ -1228,423 +1377,13 @@ app.whenReady().then(() => {
     return results
   }
 
-  async function queryArcadeDB(gameName: string): Promise<any[]> {
-    let cleanName = gameName.replace(/\.[a-zA-Z0-9]{2,4}$/, '')
-    cleanName = cleanName.replace(/\([^)]*\)/g, '').replace(/\[[^\]]*\]/g, '')
-    cleanName = cleanName.replace(/[_-]/g, '')
-    cleanName = cleanName.replace(/[\s.]/g, '').toLowerCase().trim()
-    if (!cleanName) cleanName = gameName.toLowerCase().replace(/[\s.]/g, '')
-
-    const url = `http://adb.arcadeitalia.net/service_scraper.php?ajax=query_mame&lang=en&use_parent=1&game_name=${encodeURIComponent(cleanName)}`
-    const response = await fetch(url)
-    if (!response.ok) {
-      throw new Error(`ArcadeDB status ${response.status}`)
-    }
-
-    const json = await response.json()
-    if (!json.result || !Array.isArray(json.result)) {
-      return []
-    }
-
-    const results: any[] = []
-    for (const game of json.result) {
-      const gameNameParsed = game.short_title || game.title || gameName
-      let relDate = ''
-      if (game.year) {
-        relDate = `${game.year}0101T000000`
-      }
-
-      results.push({
-        id: `arcadedb-${gameNameParsed.replace(/\s+/g, '-').toLowerCase()}`,
-        name: gameNameParsed,
-        db: 'ArcadeDB',
-        releasedate: relDate,
-        developer: game.manufacturer || '',
-        publisher: game.manufacturer || '',
-        genre: game.genre || '',
-        rating: undefined,
-        desc: game.history || '',
-        players: game.players ? String(game.players) : '',
-        media: {
-          image: game.url_image_ingame || game.url_image_flyer || '',
-          thumbnail: game.url_image_flyer || game.url_image_ingame || '',
-          marquee: game.url_image_marquee || game.url_image_title || '',
-          video: game.url_video_shortplay_hd || game.url_video_shortplay || ''
-        }
-      })
-    }
-
-    return results
-  }
-
-  async function queryIGDB(gameName: string, clientID: string, secret: string): Promise<any[]> {
-    if (!clientID || !secret) {
-      throw new Error('CREDENCIAIS_AUSENTES: IGDB Client ID ou Client Secret ausentes.')
-    }
-
-    const authUrl = 'https://id.twitch.tv/oauth2/token'
-    const tokenResponse = await fetch(authUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
-      body: `client_id=${encodeURIComponent(clientID)}&client_secret=${encodeURIComponent(secret)}&grant_type=client_credentials`
-    })
-
-    if (!tokenResponse.ok) {
-      throw new Error(`IGDB OAuth falhou com status ${tokenResponse.status}`)
-    }
-
-    const tokenData = await tokenResponse.json()
-    const accessToken = tokenData.access_token
-    if (!accessToken) {
-      throw new Error('IGDB OAuth falhou em obter token de acesso.')
-    }
-
-    let cleanedName = gameName.replace(/\.[a-zA-Z0-9]{2,4}$/, '')
-    cleanedName = cleanedName.replace(/\([^)]*\)/g, '').replace(/\[[^\]]*\]/g, '')
-    cleanedName = cleanedName.replace(/[_-]/g, ' ')
-    cleanedName = cleanedName.replace(/\s+/g, ' ').trim()
-    if (!cleanedName) cleanedName = gameName
-
-    const searchUrl = 'https://api.igdb.com/v4/games'
-    const query = `fields id, name, platforms.name, genres.name, game_modes.name, multiplayer_modes.offlinemax, release_dates.date, release_dates.region, release_dates.platform, cover.*, screenshots.*, artworks.*, url, summary, aggregated_rating, involved_companies.company.name, involved_companies.developer, involved_companies.publisher; search "${cleanedName}"; limit 10;`
-
-    const searchResponse = await fetch(searchUrl, {
-      method: 'POST',
-      headers: {
-        'Client-ID': clientID,
-        'Authorization': `Bearer ${accessToken}`,
-        'Content-Type': 'text/plain',
-        'Accept': 'application/json'
-      },
-      body: query
-    })
-
-    if (!searchResponse.ok) {
-      throw new Error(`IGDB Search falhou com status ${searchResponse.status}`)
-    }
-
-    const games = await searchResponse.json()
-    if (!Array.isArray(games)) return []
-
-    const results: any[] = []
-    for (const game of games) {
-      let dev = ''
-      let pub = ''
-      if (game.involved_companies && Array.isArray(game.involved_companies)) {
-        for (const comp of game.involved_companies) {
-          const name = comp.company?.name
-          if (name) {
-            if (comp.developer) dev = name
-            if (comp.publisher) pub = name
-          }
-        }
-      }
-
-      let relDate = ''
-      if (game.release_dates && Array.isArray(game.release_dates) && game.release_dates.length > 0) {
-        const timestamp = game.release_dates[0].date
-        if (timestamp) {
-          const dateObj = new Date(timestamp * 1000)
-          relDate = dateObj.toISOString().replace(/[-:]/g, '').split('.')[0] + 'T000000'
-        }
-      }
-
-      const genreStr = game.genres ? game.genres.map((g: any) => g.name).join(', ') : ''
-      const playersStr = game.multiplayer_modes ? String(Math.max(...game.multiplayer_modes.map((m: any) => m.offlinemax || 1))) : ''
-      const ratingNum = game.aggregated_rating ? game.aggregated_rating / 100 : undefined
-
-      results.push({
-        id: `igdb-${game.id}`,
-        name: game.name || gameName,
-        db: 'IGDB',
-        releasedate: relDate,
-        developer: dev,
-        publisher: pub,
-        genre: genreStr,
-        rating: ratingNum,
-        desc: game.summary || '',
-        players: playersStr,
-        media: {
-          image: game.screenshots && game.screenshots.length > 0 ? `https://images.igdb.com/igdb/image/upload/t_screenshot_huge/${game.screenshots[0].image_id}.jpg` : '',
-          thumbnail: game.cover ? `https://images.igdb.com/igdb/image/upload/t_original/${game.cover.image_id}.jpg` : '',
-          marquee: game.artworks && game.artworks.length > 0 ? `https://images.igdb.com/igdb/image/upload/t_1080p/${game.artworks[0].image_id}.jpg` : '',
-          video: ''
-        }
-      })
-    }
-
-    return results
-  }
-
-  async function queryTheGamesDB(gameName: string, apiKey: string, configPath: string): Promise<any[]> {
-    if (!apiKey) {
-      throw new Error('CREDENCIAIS_AUSENTES: TheGamesDB API key ausente.')
-    }
-
-    let cleanedName = gameName.replace(/\.[a-zA-Z0-9]{2,4}$/, '')
-    cleanedName = cleanedName.replace(/\([^)]*\)/g, '').replace(/\[[^\]]*\]/g, '')
-    cleanedName = cleanedName.replace(/[_-]/g, ' ')
-    cleanedName = cleanedName.replace(/\s+/g, ' ').trim()
-    if (!cleanedName) cleanedName = gameName
-
-    const url = `https://api.thegamesdb.net/v1/Games/ByGameName?apikey=${apiKey}&fields=players,publishers,genres,overview,last_updated,rating,platform,alternates&include=boxart&name=${encodeURIComponent(cleanedName)}`
-    const response = await fetch(url)
-    if (!response.ok) {
-      throw new Error(`TheGamesDB status ${response.status}`)
-    }
-
-    const json = await response.json()
-    if (!json.data || !json.data.games || !Array.isArray(json.data.games)) {
-      return []
-    }
-
-    let devMap: any = {}
-    let pubMap: any = {}
-    let genMap: any = {}
-
-    try {
-      const fs = require('fs')
-      const joinPath = require('path').join
-      const devFile = joinPath(configPath, 'scrapers', 'gamesdb_developers.json')
-      const pubFile = joinPath(configPath, 'scrapers', 'gamesdb_publishers.json')
-      const genFile = joinPath(configPath, 'scrapers', 'gamesdb_genres.json')
-
-      if (fs.existsSync(devFile)) devMap = JSON.parse(fs.readFileSync(devFile, 'utf-8'))?.data?.developers || {}
-      if (fs.existsSync(pubFile)) pubMap = JSON.parse(fs.readFileSync(pubFile, 'utf-8'))?.data?.publishers || {}
-      if (fs.existsSync(genFile)) genMap = JSON.parse(fs.readFileSync(genFile, 'utf-8'))?.data?.genres || {}
-    } catch (err) {
-      console.error('Failed to parse TheGamesDB JSON maps:', err)
-    }
-
-    const getMappedNames = (ids: any[], map: any) => {
-      if (!ids || !Array.isArray(ids)) return ''
-      return ids.map(id => map[id]?.name || map[id] || String(id)).join(', ')
-    }
-
-    const boxartInclude = json.include?.boxart || {}
-    const baseUrlLarge = boxartInclude.base_url?.large || 'https://legacy.thegamesdb.net/images/original/'
-
-    const results: any[] = []
-    for (const game of json.data.games) {
-      let relDate = ''
-      if (game.release_date) {
-        relDate = game.release_date.replace(/-/g, '') + 'T000000'
-      }
-
-      const devStr = getMappedNames(game.developers, devMap)
-      const pubStr = getMappedNames(game.publishers, pubMap)
-      const genreStr = getMappedNames(game.genres, genMap)
-
-      let frontBoxart = ''
-      const gameId = String(game.id)
-      if (boxartInclude.data && boxartInclude.data[gameId] && Array.isArray(boxartInclude.data[gameId])) {
-        const matchFront = boxartInclude.data[gameId].find((b: any) => b.type === 'boxart' && b.side === 'front')
-        const fallback = boxartInclude.data[gameId][0]
-        const relativePath = matchFront ? matchFront.filename : (fallback ? fallback.filename : '')
-        if (relativePath) {
-          frontBoxart = `${baseUrlLarge}${relativePath}`
-        }
-      }
-
-      results.push({
-        id: `thegamesdb-${game.id}`,
-        name: game.game_title || gameName,
-        db: 'TheGamesDB',
-        releasedate: relDate,
-        developer: devStr,
-        publisher: pubStr,
-        genre: genreStr,
-        rating: game.rating ? game.rating / 10 : undefined,
-        desc: game.overview || '',
-        players: game.players ? String(game.players) : '',
-        media: {
-          image: frontBoxart,
-          thumbnail: frontBoxart,
-          marquee: '',
-          video: ''
-        }
-      })
-    }
-
-    return results
-  }
-
-  async function queryHfsDB(gameName: string, hfsUser: string, hfsPass: string): Promise<any[]> {
-    if (!hfsUser || !hfsPass) {
-      throw new Error('CREDENCIAIS_AUSENTES: HfsDB username ou password ausentes.')
-    }
-
-    const basicAuth = Buffer.from(`${hfsUser}:${hfsPass}`).toString('base64');
-    const tokenResponse = await fetch('https://db.hfsplay.fr/api/v1/auth/token', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Basic ${basicAuth}`,
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
-      body: `username=${encodeURIComponent(hfsUser)}&password=${encodeURIComponent(hfsPass)}`
-    });
-
-    if (!tokenResponse.ok) {
-      throw new Error(`HfsDB Auth falhou com status ${tokenResponse.status}`)
-    }
-
-    const tokenData = await tokenResponse.json()
-    const token = tokenData.token
-    if (!token) {
-      throw new Error('HfsDB Auth falhou em obter token.')
-    }
-
-    let cleanedName = gameName.replace(/\.[a-zA-Z0-9]{2,4}$/, '')
-    cleanedName = cleanedName.replace(/\([^)]*\)/g, '').replace(/\[[^\]]*\]/g, '')
-    cleanedName = cleanedName.replace(/[_-]/g, ' ')
-    cleanedName = cleanedName.replace(/\s+/g, ' ').trim()
-    if (!cleanedName) cleanedName = gameName
-
-    const searchUrl = `https://db.hfsplay.fr/api/v1/games?search=${encodeURIComponent(cleanedName)}&limit=25`
-    const searchResponse = await fetch(searchUrl, {
-      headers: {
-        'Authorization': `Token ${token}`
-      }
-    })
-
-    if (!searchResponse.ok) {
-      throw new Error(`HfsDB Search falhou com status ${searchResponse.status}`)
-    }
-
-    const json = await searchResponse.json()
-    if (!json.results || !Array.isArray(json.results)) {
-      return []
-    }
-
-    const findHfsMedia = (game: any, scrapeSource: string): string => {
-      if (!game.medias || !Array.isArray(game.medias)) return '';
-      const getMediaTagNames = (source: string): string[] => {
-        if (source === 'ss' || source === 'mixrbv2' || source === 'mixrbv1' || source === 'mixrbv') {
-          return ['screenshot/in game', 'screenshot/title', 'screenshot'];
-        }
-        if (source === 'sstitle') {
-          return ['screenshot/title', 'screenshot/in game', 'screenshot'];
-        }
-        if (source === 'box-2D') {
-          return ['cover2d/front', 'cover2d', 'artwork/Flyer', 'cover3d'];
-        }
-        if (source === 'box-3D') {
-          return ['cover3d', 'cover2d/front'];
-        }
-        if (source === 'wheel' || source === 'wheel-hd') {
-          return ['logo'];
-        }
-        if (source === 'marquee') {
-          return ['wheel', 'artwork/Marquee'];
-        }
-        if (source === 'video') {
-          return ['video'];
-        }
-        if (source === 'manual') {
-          return ['manual'];
-        }
-        if (source === 'fanart') {
-          return ['wallpaper', 'artwork'];
-        }
-        if (source === 'box-2D-back') {
-          return ['cover2d/back'];
-        }
-        return [];
-      };
-
-      const tags = getMediaTagNames(scrapeSource);
-      for (const tag of tags) {
-        let tagName = tag;
-        let tagType = '';
-        const idx = tag.indexOf('/');
-        if (idx !== -1) {
-          tagType = tag.substring(idx + 1);
-          tagName = tag.substring(0, idx);
-        }
-
-        for (const media of game.medias) {
-          if (!media.type || !media.file) continue;
-          if (media.type !== tagName) continue;
-
-          if (tagType) {
-            if (media.metadata && Array.isArray(media.metadata)) {
-              const match = media.metadata.find((m: any) => m.name === tagName + 'type' && m.value === tagType);
-              if (match) return media.file;
-            }
-            if (media.description === tagType) {
-              return media.file;
-            }
-            continue;
-          }
-          return media.file;
-        }
-      }
-      return '';
-    }
-
-    const results: any[] = []
-    for (const game of json.results) {
-      const gameNameParsed = game.name_pt || game.name_en || game.name || gameName
-      const gameDesc = game.description_pt || game.description_en || game.description || ''
-
-      let dev = ''
-      let pub = ''
-      let gen = ''
-      let players = ''
-
-      if (game.metadata && Array.isArray(game.metadata)) {
-        for (const meta of game.metadata) {
-          if (!meta.name || !meta.value) continue
-          if (meta.name === 'genre') gen = meta.value
-          else if (meta.name === 'editor') pub = meta.value
-          else if (meta.name === 'manufacturer') pub = meta.value
-          else if (meta.name === 'developer') dev = meta.value
-          else if (meta.name === 'players') {
-            players = meta.value
-              .replace(' joueurs', '')
-              .replace(' joueur', '')
-              .replace('+ de ', '')
-          }
-        }
-      }
-
-      let relDate = ''
-      for (const rel of ['released_at_WORLD', 'released_at_US', 'released_at_PAL', 'released_at_JPN']) {
-        if (game[rel]) {
-          relDate = game[rel].replace(/-/g, '').split('T')[0] + 'T000000'
-          break
-        }
-      }
-
-      results.push({
-        id: `hfsdb-${game.id}`,
-        name: gameNameParsed,
-        db: 'HfsDB',
-        releasedate: relDate,
-        developer: dev,
-        publisher: pub,
-        genre: gen,
-        rating: undefined,
-        desc: gameDesc,
-        players: players,
-        media: {
-          image: findHfsMedia(game, 'fanart') || findHfsMedia(game, 'ss'),
-          thumbnail: findHfsMedia(game, 'box-2D') || findHfsMedia(game, 'box-3D'),
-          marquee: findHfsMedia(game, 'wheel') || findHfsMedia(game, 'marquee'),
-          video: findHfsMedia(game, 'video')
-        }
-      })
-    }
-
-    return results
-  }
-
-  ipcMain.handle('search-game-media', async (_, systemName: string, gameName: string, databases: string[], gamePath?: string) => {
+  ipcMain.handle('search-game-media', async (_, systemName: string, gameName: string, _databases: string[], gamePath?: string) => {
     try {
       const preferredRegion = settingsParser.getSetting('ScraperRegion', 'string') || 'eu'
-      const systemLanguage = (settingsParser.getSetting('Language', 'string') || 'pt').substring(0, 2).toLowerCase()
+      const configuredLanguage = settingsParser.getSetting('Language', 'string') || 'auto'
+      const systemLanguage = (configuredLanguage === 'auto'
+        ? app.getLocale()
+        : configuredLanguage).substring(0, 2).toLowerCase()
 
       const ssid = settingsParser.getSetting('ScreenScraperUser', 'string') || ''
       const sspassword = settingsParser.getSetting('ScreenScraperPass', 'string') || ''
@@ -1653,65 +1392,18 @@ app.whenReady().then(() => {
       const systemId = SYSTEM_TO_SCREENSCRAPER_PLATFORM[systemName.toLowerCase()] || 
                        (systemInfo ? SYSTEM_TO_SCREENSCRAPER_PLATFORM[systemInfo.platform.toLowerCase()] : 0)
 
-      const promises: Promise<any[]>[] = []
-      const credentialRequiredSelected: string[] = []
+      const results = await queryScreenScraper(
+        systemName,
+        gameName,
+        gamePath,
+        preferredRegion,
+        systemLanguage,
+        ssid,
+        sspassword,
+        systemId
+      )
 
-      for (const db of databases) {
-        if (db === 'ScreenScraper') {
-          promises.push(
-            queryScreenScraper(systemName, gameName, gamePath, preferredRegion, systemLanguage, ssid, sspassword, systemId)
-              .catch(err => {
-                console.error('ScreenScraper failed:', err)
-                return []
-              })
-          )
-          credentialRequiredSelected.push('ScreenScraper')
-        } else if (db === 'ArcadeDB') {
-          promises.push(
-            queryArcadeDB(gameName)
-              .catch(err => {
-                console.error('ArcadeDB failed:', err)
-                return []
-              })
-          )
-        } else if (db === 'IGDB') {
-          const clientID = settingsParser.getSetting('IGDBClientID', 'string') || 'a6j303y0qtil1b4uzhmwtu7tg1s138'
-          const secret = settingsParser.getSetting('IGDBSecret', 'string') || 'bj1qgz4yvsmot64j2ocn1edl0nmdec'
-          promises.push(
-            queryIGDB(gameName, clientID, secret)
-              .catch(err => {
-                console.error('IGDB failed:', err)
-                return []
-              })
-          )
-          credentialRequiredSelected.push('IGDB')
-        } else if (db === 'TheGamesDB') {
-          const apiKey = settingsParser.getSetting('TheGamesDBApiKey', 'string') || 'd79b07c4e5715ec00435fa10410ab2b15c2a24762af9c3e0832694a213b74a79'
-          promises.push(
-            queryTheGamesDB(gameName, apiKey, getConfigPath())
-              .catch(err => {
-                console.error('TheGamesDB failed:', err)
-                return []
-              })
-          )
-        } else if (db === 'HfsDB') {
-          const hfsUser = settingsParser.getSetting('HfsDBUser', 'string') || 'riescade'
-          const hfsPass = settingsParser.getSetting('HfsDBPass', 'string') || 'ZbrSya@eu8iBNyR'
-          promises.push(
-            queryHfsDB(gameName, hfsUser, hfsPass)
-              .catch(err => {
-                console.error('HfsDB failed:', err)
-                return []
-              })
-          )
-        }
-      }
-
-      const resultsListList = await Promise.all(promises)
-      const results = resultsListList.flat()
-
-      // If ONLY credential-requiring databases were selected and ALL of them failed to return any results
-      if (databases.length > 0 && credentialRequiredSelected.length === databases.length && results.length === 0) {
+      if (results.length === 0) {
         throw new Error('CONFIGURAÇÃO INCOMPLETA: Credenciais ausentes ou inválidas nas configurações do menu.')
       }
 
@@ -1823,6 +1515,13 @@ app.on('window-all-closed', () => {
 })
 
 async function downloadFile(url: string, destPathWithoutExt: string, defaultExt: string): Promise<string> {
+  const parsedUrl = new URL(url)
+  if (parsedUrl.protocol !== 'https:' || !(parsedUrl.hostname === 'screenscraper.fr' || parsedUrl.hostname.endsWith('.screenscraper.fr'))) {
+    throw new Error('Download de mídia bloqueado: somente ScreenScraper é permitido.')
+  }
+  if (!isPathInside(destPathWithoutExt, getRetroBatPath())) {
+    throw new Error('Destino de mídia externo ao RIESCADE OS.')
+  }
   const response = await fetch(url)
   if (!response.ok) {
     throw new Error(`Failed to download ${url}: ${response.statusText}`)
@@ -1858,7 +1557,9 @@ async function downloadFile(url: string, destPathWithoutExt: string, defaultExt:
           ext = temp
         }
       }
-    } catch (e) {}
+    } catch (e) {
+      console.debug(`[Media] Could not infer extension from URL ${url}.`, e)
+    }
   }
 
   if (!ext || ext.length > 5 || ext === 'php') {

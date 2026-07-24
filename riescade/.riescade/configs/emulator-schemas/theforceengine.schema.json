@@ -21,6 +21,10 @@
           "configKey": "forceengine_internal_resolution",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "200p",
               "value": "320x200"
             },
@@ -133,6 +137,10 @@
           "configKey": "forceengine_color_mode",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "TRUE COLOR",
               "value": "2"
             },
@@ -157,6 +165,10 @@
           "configKey": "forceengine_sky_mode",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "CYLINDER",
               "value": "1"
             },
@@ -176,6 +188,10 @@
           "default": "auto",
           "configKey": "forceengine_renderer",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "OPENGL",
               "value": "1"
@@ -231,6 +247,10 @@
           "default": "auto",
           "configKey": "forceengine_subtitles",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Nenhum",
               "value": "none"

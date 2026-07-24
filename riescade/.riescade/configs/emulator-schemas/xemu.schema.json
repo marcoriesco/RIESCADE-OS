@@ -21,6 +21,10 @@
           "configKey": "xemu_ratio",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "NATIVE",
               "value": "native"
             },
@@ -44,6 +48,10 @@
           "default": "auto",
           "configKey": "render_scale",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "1X (NATIVE)",
               "value": "1"
@@ -108,6 +116,10 @@
           "configKey": "xemu_scale",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Center",
               "value": "center"
             },
@@ -131,6 +143,10 @@
           "default": "auto",
           "configKey": "xemu_avpack",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "HDTV",
               "value": "hdtv"
@@ -179,6 +195,10 @@
           "configKey": "xemu_renderer",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "OPENGL",
               "value": "OPENGL"
             },
@@ -208,6 +228,10 @@
           "configKey": "system_memory",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "128MB",
               "value": "128"
             },
@@ -227,6 +251,10 @@
           "default": "auto",
           "configKey": "xemu_flashrom",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "COMPLEX 4627",
               "value": "Complex_4627.bin"
@@ -251,6 +279,10 @@
           "default": "auto",
           "configKey": "xbox_language",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "English",
               "value": "1"

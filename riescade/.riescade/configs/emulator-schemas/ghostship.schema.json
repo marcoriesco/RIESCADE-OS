@@ -21,6 +21,10 @@
           "configKey": "ghostship_resolution",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "240p (NATIVE)",
               "value": "240"
             },
@@ -62,6 +66,10 @@
           "configKey": "ghostship_ratio",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "NATIVE (4:3)",
               "value": "native"
             },
@@ -97,6 +105,10 @@
           "default": "auto",
           "configKey": "ghostship_texturefilter",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "LINEAR",
               "value": "1"
@@ -141,6 +153,10 @@
           "configKey": "ghostship_renderer",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "OPENGL",
               "value": "OpenGL"
             },
@@ -166,6 +182,10 @@
           "configKey": "ghostship_audioapi",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "WASAPI",
               "value": "wasapi"
             },
@@ -190,6 +210,10 @@
           "default": "auto",
           "configKey": "ship_controllayout",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "STANDARD (Z LEFTTRIGGER)",
               "value": "z_left"

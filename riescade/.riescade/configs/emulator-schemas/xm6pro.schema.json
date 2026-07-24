@@ -41,6 +41,10 @@
           "configKey": "68k_stretch",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "4/3",
               "value": "false"
             },
@@ -67,6 +71,10 @@
           "default": "auto",
           "configKey": "68k_clock",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "10 MHZ (STANDARD)",
               "value": "0"
@@ -103,6 +111,10 @@
           "default": "auto",
           "configKey": "68k_ram",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "2 MB",
               "value": "0"
@@ -169,6 +181,10 @@
           "configKey": "68k_midi_index",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "0 (Não DEVICE SELECTED)",
               "value": "0"
             },
@@ -220,6 +236,10 @@
           "default": "auto",
           "configKey": "68k_midi_interrupt",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "LEVEL 4",
               "value": "0"

@@ -39,6 +39,10 @@
           "configKey": "hatari_machine",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "ATARI ST",
               "value": "st"
             },
@@ -66,6 +70,10 @@
           "default": "auto",
           "configKey": "hatari_tos",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "TOS 2.06",
               "value": "tos206.img"
@@ -97,6 +105,10 @@
           "configKey": "hatari_frequency",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "8 MHZ",
               "value": "8"
             },
@@ -120,6 +132,10 @@
           "default": "auto",
           "configKey": "hatari_memory",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "1MB",
               "value": "1024"

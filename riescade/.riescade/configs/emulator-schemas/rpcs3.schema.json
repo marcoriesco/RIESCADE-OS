@@ -21,6 +21,10 @@
           "configKey": "rpcs3_internal_resolution",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "NATIVE (1280x720)",
               "value": "100"
             },
@@ -69,6 +73,10 @@
           "configKey": "rpcs3_ratio",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "16/9",
               "value": "16:9"
             },
@@ -87,6 +95,10 @@
           "default": "auto",
           "configKey": "rpcs3_vsync",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "ADAPTIVE",
               "value": "Adaptive"
@@ -110,6 +122,10 @@
           "default": "auto",
           "configKey": "rpcs3_fullscreen_mode",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "BORDERLESS",
               "value": "Disable"
@@ -143,6 +159,10 @@
           "default": "auto",
           "configKey": "framelimit",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "NATIVE",
               "value": "PS3 Native"
@@ -188,6 +208,10 @@
           "configKey": "shader_quality",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "HIGH",
               "value": "High"
             },
@@ -211,6 +235,10 @@
           "default": "auto",
           "configKey": "zcull_accuracy",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "PRECISE",
               "value": "Precise"
@@ -310,6 +338,10 @@
           "configKey": "rpcs3_vblank_frequency",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "60HZ",
               "value": "60"
             },
@@ -341,6 +373,10 @@
           "default": "auto",
           "configKey": "rpcs3_scaling_filter",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Bilinear",
               "value": "Bilinear"
@@ -375,6 +411,10 @@
           "default": "auto",
           "configKey": "anisotropicfilter",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "AUTO",
               "value": "0"
@@ -447,6 +487,10 @@
           "configKey": "enable3d",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Não",
               "value": "Disabled"
             },
@@ -509,6 +553,10 @@
           "configKey": "gfxbackend",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "VULKAN",
               "value": "Vulkan"
             },
@@ -536,6 +584,10 @@
           "configKey": "shadermode",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "ASYNC (MULTI THREADED)",
               "value": "Async Recompiler (multi-threaded)"
             },
@@ -559,6 +611,10 @@
           "default": "auto",
           "configKey": "ps3_region",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "AMERICA",
               "value": "SCEA"
@@ -594,6 +650,10 @@
           "default": "auto",
           "configKey": "ps3_language",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "English (US)",
               "value": "English (US)"
@@ -687,6 +747,10 @@
           "configKey": "ppudecoder",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "LLVM Recompiler",
               "value": "Recompiler (LLVM)"
             },
@@ -716,6 +780,10 @@
           "default": "auto",
           "configKey": "spudecoder",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "LLVM Recompiler",
               "value": "Recompiler (LLVM)"
@@ -768,6 +836,10 @@
           "configKey": "spublocksize",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "SAFE",
               "value": "Safe"
             },
@@ -802,6 +874,10 @@
           "configKey": "rpcs3_rsxfifoaccuracy",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "FAST",
               "value": "Fast"
             },
@@ -825,6 +901,10 @@
           "default": "auto",
           "configKey": "rpcs3_xfloat",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "ACCURATE",
               "value": "Accurate"
@@ -868,6 +948,10 @@
           "configKey": "rpcs3_sleeptimersaccuracy",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "USLEEP ONLY",
               "value": "Usleep Only"
             },
@@ -891,6 +975,10 @@
           "default": "auto",
           "configKey": "performance_overlay",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Desativado",
               "value": "off"
@@ -950,6 +1038,10 @@
           "configKey": "audiochannels",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "STEREO",
               "value": "Stereo"
             },
@@ -973,6 +1065,10 @@
           "default": "auto",
           "configKey": "time_stretching",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "LOW",
               "value": "low"
@@ -1005,6 +1101,10 @@
           "default": "auto",
           "configKey": "audiobackend",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "CUBEB",
               "value": "Cubeb"
@@ -1065,6 +1165,10 @@
           "configKey": "rpcs3_keyboard",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "BASIC",
               "value": "Basic"
             }
@@ -1079,6 +1183,10 @@
           "default": "auto",
           "configKey": "rpcs3_mouse",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "BASIC",
               "value": "Basic"
@@ -1098,6 +1206,10 @@
           "default": "auto",
           "configKey": "rpcs3_move",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "FAKE",
               "value": "Fake"
@@ -1122,6 +1234,10 @@
           "configKey": "rpcs3_camera",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "FAKE",
               "value": "Fake"
             },
@@ -1140,6 +1256,10 @@
           "default": "auto",
           "configKey": "rpcs3_cameraType",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "EYETOY",
               "value": "EyeToy"
@@ -1163,6 +1283,10 @@
           "default": "auto",
           "configKey": "rpcs3_guns",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Não",
               "value": "none"

@@ -23,9 +23,10 @@ export function calculateFileCRC32(filePath: string): Promise<string> {
     const stream = fs.createReadStream(filePath)
     let crc = 0xffffffff
 
-    stream.on('data', (chunk: Buffer) => {
-      for (let i = 0; i < chunk.length; i++) {
-        crc = crcTable[(crc ^ chunk[i]) & 0xff] ^ (crc >>> 8)
+    stream.on('data', (chunk: string | Buffer) => {
+      const buffer = typeof chunk === 'string' ? Buffer.from(chunk) : chunk
+      for (let i = 0; i < buffer.length; i++) {
+        crc = crcTable[(crc ^ buffer[i]) & 0xff] ^ (crc >>> 8)
       }
     })
 

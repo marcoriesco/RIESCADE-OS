@@ -21,6 +21,10 @@
           "configKey": "bigpemu_scaling",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "FIT TO AXIS",
               "value": "5"
             },
@@ -59,6 +63,10 @@
           "default": "auto",
           "configKey": "bigpemu_ratio",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "4/3",
               "value": "2"
@@ -129,6 +137,10 @@
           "configKey": "bigpemu_shader",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "CHEESY SCANLINES",
               "value": "cheesy_scanlines.dstack"
             },
@@ -177,6 +189,10 @@
           "configKey": "bigpemu_antialiasing",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Nenhum",
               "value": "0"
             },
@@ -207,6 +223,10 @@
           "default": "auto",
           "configKey": "bigpemu_renderer",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "OPENGL",
               "value": "BigPEmu_Video_OpenGL"
@@ -263,6 +283,10 @@
           "configKey": "bigpemu_sdl",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "SDL",
               "value": "1"
             },
@@ -281,6 +305,10 @@
           "default": "auto",
           "configKey": "bigpemu_multitap",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Nenhum",
               "value": "none"

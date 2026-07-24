@@ -21,6 +21,10 @@
           "configKey": "ymir_ratio",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Padrão",
               "value": "default"
             },
@@ -42,6 +46,10 @@
           "default": "auto",
           "configKey": "ymir_videoformat",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "NTSC",
               "value": "NTSC"
@@ -83,6 +91,10 @@
           "configKey": "ymir_renderer",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "DIRECT3D12",
               "value": "Direct3D12"
             },
@@ -115,6 +127,10 @@
           "default": "auto",
           "configKey": "ymir_force_bios",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Multi-region",
               "value": "saturn_bios.bin"
@@ -158,6 +174,10 @@
           "configKey": "ymir_peripheral",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "STANDARD CONTROLLER",
               "value": "ControlPad"
             },
@@ -174,6 +194,10 @@
           "default": "auto",
           "configKey": "saturn_padlayout",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "L/R as Y/Z",
               "value": "lr_yz"
@@ -203,6 +227,10 @@
           "default": "auto",
           "configKey": "saturn_pad_ymir",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Não",
               "value": "0"

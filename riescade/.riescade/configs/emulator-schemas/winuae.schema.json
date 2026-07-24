@@ -28,6 +28,10 @@
           "configKey": "winuae_gfxrenderer",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "D3D9",
               "value": "direct3d"
             },

@@ -60,7 +60,9 @@ export class LibraryService {
     LibraryService.verticalGameIds = null
     try {
       SystemsParser.clearCache()
-    } catch (e) {}
+    } catch (e) {
+      console.warn('[LibraryService] Failed to clear systems cache.', e)
+    }
     // Note: DB is NOT cleared on cache clear - it persists across sessions
   }
 
@@ -257,7 +259,9 @@ export class LibraryService {
           console.log(`[StartLoader:Backend] sendProgress(${p}, '${statusKey}')`)
           win.webContents.send('systems-loading-progress', p, statusKey)
         }
-      } catch (err) {}
+      } catch (err) {
+        console.warn(`[LibraryService] Failed to inspect system configuration at ${p}.`, err)
+      }
     }
 
     const useDb = LibraryService.isDbMode()
@@ -285,7 +289,9 @@ export class LibraryService {
           currentSystemsJsonMtime = Math.round(statSync(systemsJsonPath).mtimeMs)
           currentEsSystemsFileCount = 1
         }
-      } catch {}
+      } catch (error) {
+        console.warn(`[LibraryService] Failed to inspect systems configuration at ${systemsJsonPath}.`, error)
+      }
 
       // Check es_systems.cfg and overrides modification
       const systemsJsonRecord = dbService.getSystemSyncMetadata('__es_systems.cfg')
@@ -449,7 +455,9 @@ export class LibraryService {
         const statusKey = isFirstRun ? 'INDEXING_DATABASE' : 'UPDATING_DATABASE'
         win.webContents.send('systems-loading-progress', 100, statusKey)
       }
-    } catch (err) {}
+    } catch (err) {
+      console.warn('[LibraryService] Failed to initialize or synchronize the database.', err)
+    }
   }
 
   public async rebuildDatabase(onProgress?: (systemName: string, current: number, total: number) => void): Promise<void> {
@@ -687,7 +695,7 @@ export class LibraryService {
       if (LibraryService.cachedGames.has(nameLower)) {
         return LibraryService.cachedGames.get(nameLower)!
       }
-      const games = this.getGamesRaw(systemName, false, false)
+      const games = this.getGamesRaw(systemName, false)
       LibraryService.cachedGames.set(nameLower, games)
       LibraryService.fullyLoadedSystems.add(nameLower)
       return games
@@ -1130,7 +1138,9 @@ export class LibraryService {
             deleteDirFiles(fullPath)
             try {
               fs.rmdirSync(fullPath)
-            } catch (e) {}
+            } catch (e) {
+              console.debug(`[LibraryService] Could not remove directory ${fullPath}.`, e)
+            }
           }
         }
       } catch (e) {
@@ -1221,6 +1231,7 @@ export class LibraryService {
               slot,
               path: fullPath,
               date: stat.mtimeMs,
+              size: stat.size,
               screenshotUrl
             })
           }

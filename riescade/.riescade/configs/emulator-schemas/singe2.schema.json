@@ -36,6 +36,10 @@
           "configKey": "singe2_padIndex",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": 0,
               "value": "0"
             },
@@ -87,6 +91,10 @@
           "default": "auto",
           "configKey": "singe2_mouseIndex",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": 0,
               "value": "0"

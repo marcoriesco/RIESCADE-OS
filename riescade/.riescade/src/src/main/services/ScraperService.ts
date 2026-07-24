@@ -1,10 +1,10 @@
 import { join, dirname, extname, basename } from 'path'
-import { existsSync, mkdirSync, writeFileSync, unlinkSync } from 'fs'
+import { existsSync, mkdirSync, writeFileSync, unlinkSync, renameSync } from 'fs'
 import { getRomsPath, getConfigPath } from '../utils/paths'
 import { LibraryService } from './LibraryService'
 import { SettingsParser } from '../parsers/SettingsParser'
 import { Game } from '../../shared/types'
-import { BrowserWindow, app } from 'electron'
+import { BrowserWindow, WebContents } from 'electron'
 import sharp from 'sharp'
 
 export const SYSTEM_TO_SCREENSCRAPER_PLATFORM: Record<string, number> = {
@@ -130,6 +130,11 @@ function findMedia(medias: any[], typeList: string[], preferredRegion: string): 
 }
 
 async function downloadFile(url: string, destPath: string): Promise<void> {
+  const parsedUrl = new URL(url)
+  if (parsedUrl.protocol !== 'https:' ||
+      !(parsedUrl.hostname === 'screenscraper.fr' || parsedUrl.hostname.endsWith('.screenscraper.fr'))) {
+    throw new Error('Media download blocked: only ScreenScraper HTTPS URLs are allowed')
+  }
   const dir = dirname(destPath)
   if (!existsSync(dir)) {
     mkdirSync(dir, { recursive: true })
@@ -139,7 +144,19 @@ async function downloadFile(url: string, destPath: string): Promise<void> {
     throw new Error(`Failed to download ${url}: ${response.statusText}`)
   }
   const buffer = Buffer.from(await response.arrayBuffer())
-  writeFileSync(destPath, buffer)
+  const temporaryPath = `${destPath}.part`
+  writeFileSync(temporaryPath, buffer)
+  try {
+    renameSync(temporaryPath, destPath)
+  } catch (error) {
+    try {
+      if (existsSync(destPath)) unlinkSync(destPath)
+      renameSync(temporaryPath, destPath)
+    } catch {
+      if (existsSync(temporaryPath)) unlinkSync(temporaryPath)
+      throw error
+    }
+  }
 }
 
 async function convertToWebp(srcPath: string): Promise<string> {
@@ -153,7 +170,11 @@ async function convertToWebp(srcPath: string): Promise<string> {
       .toFile(webpPath)
     
     // Remove original file
-    try { unlinkSync(srcPath) } catch (_) {}
+    try {
+      unlinkSync(srcPath)
+    } catch (error) {
+      console.debug(`[ScraperService] Could not remove source media ${srcPath}.`, error)
+    }
     
     return webpPath
   } catch (e) {
@@ -166,6 +187,7 @@ export class ScraperService {
   private libraryService: LibraryService
   private settingsParser: SettingsParser
   private isCancelled = false
+  private isRunning = false
   private manualSearchResolver: ((value: string | null) => void) | null = null
 
   constructor(libraryService: LibraryService) {
@@ -180,22 +202,34 @@ export class ScraperService {
     }
   }
 
+  public isActive(): boolean {
+    return this.isRunning
+  }
+
   public resolveManualSearch(query: string | null): void {
     if (this.manualSearchResolver) {
       this.manualSearchResolver(query)
     }
   }
 
-  public async scrape(options?: { systemName?: string; gamePath?: string }): Promise<void> {
+  public async scrape(options?: { systemName?: string; gamePath?: string }, sender?: WebContents): Promise<void> {
+    if (this.isRunning) return
+    this.isRunning = true
     this.isCancelled = false
     LibraryService.clearCache()
-    const win = BrowserWindow.getAllWindows()[0]
     const sendUpdate = (channel: string, data: any) => {
       try {
+        if (sender && !sender.isDestroyed()) {
+          sender.send(channel, data)
+          return
+        }
+        const win = BrowserWindow.getAllWindows()[0]
         if (win && !win.isDestroyed()) {
           win.webContents.send(channel, data)
         }
-      } catch (e) {}
+      } catch (e) {
+        console.warn('[ScraperService] Could not send scraper progress to the frontend.', e)
+      }
     }
 
     try {
@@ -209,6 +243,43 @@ export class ScraperService {
       
       const ssid = customUser || ''
       const sspassword = customPass || ''
+      const storedMotors = parseInt(
+        String(this.settingsParser.getSetting('ScreenScraperMotors', 'int') || '1'),
+        10
+      )
+      let availableMotors = Number.isFinite(storedMotors) && storedMotors > 0 ? storedMotors : 1
+
+      if (ssid && sspassword) {
+        try {
+          const accountUrl = new URL('https://api.screenscraper.fr/api2/ssuserInfos.php')
+          accountUrl.searchParams.set('devid', devid)
+          accountUrl.searchParams.set('devpassword', devpassword)
+          accountUrl.searchParams.set('softname', softname)
+          accountUrl.searchParams.set('output', 'json')
+          accountUrl.searchParams.set('ssid', ssid)
+          accountUrl.searchParams.set('sspassword', sspassword)
+
+          const accountResponse = await fetch(accountUrl)
+          if (accountResponse.ok) {
+            const accountJson = await accountResponse.json()
+            const accountUser = accountJson.response?.ssuser || {}
+            const parsedMotors = parseInt(
+              accountUser.maxthreads
+                || accountUser.maxThreads
+                || accountUser.threads
+                || accountUser.moteurs
+                || '1',
+              10
+            )
+            if (Number.isFinite(parsedMotors) && parsedMotors > 0) {
+              availableMotors = parsedMotors
+              this.settingsParser.saveSetting('ScreenScraperMotors', availableMotors, 'int')
+            }
+          }
+        } catch (error) {
+          console.warn('[ScraperService] Could not read the user motor limit; using one motor.', error)
+        }
+      }
 
       const filter = this.settingsParser.getSetting('ScrapperFilter', 'string') || 'all'
       const preferredRegion = this.settingsParser.getSetting('ScraperRegion', 'string') || 'us'
@@ -238,14 +309,17 @@ export class ScraperService {
       const scrapeOverWriteMedias = this.settingsParser.getSetting('ScrapeOverWriteMedias', 'bool') ?? false
 
       // Fetch system settings
-      const systemLanguage = (this.settingsParser.getSetting('Language', 'string') || 'pt').substring(0, 2).toLowerCase()
+      const configuredLanguage = this.settingsParser.getSetting('Language', 'string') || 'auto'
+      const systemLanguage = (configuredLanguage === 'auto'
+        ? Intl.DateTimeFormat().resolvedOptions().locale
+        : configuredLanguage).substring(0, 2).toLowerCase()
 
       // Selected systems
       const scraperSystemsSetting = this.settingsParser.getSetting('ScraperSystems', 'string') || ''
       const selectedSystems = scraperSystemsSetting
         .split(',')
-        .map(s => s.trim())
-        .filter(s => s.length > 0)
+        .map((s: string) => s.trim())
+        .filter((s: string) => s.length > 0)
 
       const allSystems = this.libraryService.getSystems()
       const physicalSystems = allSystems.filter(sys => {
@@ -340,10 +414,10 @@ export class ScraperService {
 
       let successCount = 0
       let failCount = 0
+      let completedCount = 0
 
-      for (let i = 0; i < jobs.length; i++) {
+      const processJob = async (i: number): Promise<void> => {
         if (this.isCancelled) {
-          sendUpdate('scrape-finished', { success: false, reason: 'Scraping was cancelled by user', count: successCount })
           return
         }
 
@@ -366,10 +440,11 @@ export class ScraperService {
           systemName: system.fullname || system.name.toUpperCase(),
           systemCode: system.name,
           gameName: game.name || romNameNoExt,
-          current: i + 1,
+          current: completedCount,
           total: jobs.length,
           successCount,
-          failCount
+          failCount,
+          motors: availableMotors
         })
 
         try {
@@ -389,7 +464,9 @@ export class ScraperService {
             let bodyText = ''
             try {
               bodyText = (await response.text()).trim()
-            } catch (e) {}
+            } catch (e) {
+              console.debug('[ScraperService] Could not read ScreenScraper error body.', e)
+            }
 
             const maskUrl = (rawUrl: string) => {
               return rawUrl
@@ -602,8 +679,7 @@ export class ScraperService {
 
             if (newQuery && newQuery.trim().length > 0) {
               (jobs[i] as any).manualQuery = newQuery.trim()
-              i--
-              continue
+              return processJob(i)
             }
           }
 
@@ -612,6 +688,39 @@ export class ScraperService {
 
         // Polite delay to prevent rate limiting
         await new Promise(resolve => setTimeout(resolve, 500))
+        completedCount++
+        sendUpdate('scrape-progress', {
+          systemName: system.fullname || system.name.toUpperCase(),
+          systemCode: system.name,
+          gameName: game.name || romNameNoExt,
+          current: completedCount,
+          total: jobs.length,
+          successCount,
+          failCount,
+          motors: availableMotors
+        })
+      }
+
+      let nextJobIndex = 0
+      const workerCount = Math.min(availableMotors, jobs.length)
+      const workers = Array.from({ length: workerCount }, async () => {
+        while (!this.isCancelled) {
+          const jobIndex = nextJobIndex++
+          if (jobIndex >= jobs.length) return
+          await processJob(jobIndex)
+        }
+      })
+
+      await Promise.all(workers)
+
+      if (this.isCancelled) {
+        sendUpdate('scrape-finished', {
+          success: false,
+          reason: 'Scraping was cancelled by user',
+          count: successCount,
+          failed: failCount
+        })
+        return
       }
 
       sendUpdate('scrape-finished', { success: true, count: successCount, failed: failCount })
@@ -619,6 +728,9 @@ export class ScraperService {
     } catch (err: any) {
       console.error('Fatal error in ScraperService:', err)
       sendUpdate('scrape-finished', { success: false, reason: err.message || 'Unknown fatal scraper error' })
+    } finally {
+      this.manualSearchResolver = null
+      this.isRunning = false
     }
   }
 }

@@ -30,6 +30,10 @@
           "configKey": "SpriteFogOfWar",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "ACCELERATED",
               "value": "0"
             },
@@ -46,6 +50,10 @@
           "default": "auto",
           "configKey": "Bpp",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "32",
               "value": "32"
@@ -77,6 +85,10 @@
           "default": "auto",
           "configKey": "DebugMode",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Desativado",
               "value": "0"
@@ -139,6 +151,10 @@
           "default": "auto",
           "configKey": "Encoding",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Padrão",
               "value": "default"

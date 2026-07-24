@@ -41,9 +41,18 @@ export class ControllerManager {
   public sdlVersion = '3.0.0'
   
   private watchProcess: any | null = null
+  private pollingTimer: NodeJS.Timeout | null = null
+  private restartTimer: NodeJS.Timeout | null = null
   private stdoutBuffer = ''
   private onUpdateCallback: ((controllers: ControllerInfo[]) => void) | null = null
   private isDetecting = false
+
+  private controllerListSignature(controllers: ControllerInfo[]): string {
+    return controllers
+      .map(controller => `${controller.instanceId ?? controller.guid}:${controller.name}:P${controller.playerIndex}`)
+      .sort()
+      .join('|')
+  }
 
   public static getInstance(): ControllerManager {
     if (!ControllerManager.instance) {
@@ -565,74 +574,75 @@ public class Program {
   public async detectAll(): Promise<ControllerInfo[]> {
     if (this.isDetecting) return this.connectedControllers
     this.isDetecting = true
-
-    let sdlPads: any[] = []
-    if (existsSync(this.helperExePath)) {
-      try {
+    try {
+      let sdlPads: any[] = []
+      if (existsSync(this.helperExePath)) {
         const stdout = await this.execFileAsync(this.helperExePath, [])
         const lines = stdout.split('\n')
         const jsonLine = lines.find(l => l.trim().startsWith('['))
         if (jsonLine) {
           sdlPads = JSON.parse(jsonLine.trim())
         }
-      } catch (err: any) {
-        console.error('Error running sdl3_detector.exe:', err)
-        this.log(`Error running sdl3_detector.exe: ${err.message}`)
-      }
-    }
-
-    const list: ControllerInfo[] = []
-
-    sdlPads.forEach(pad => {
-      const guid = pad.guid
-      let name = pad.name
-      const vid = pad.vendorId
-      const pid = pad.productId
-      const serial = pad.serial
-      
-      const config = this.findInputConfig(guid, name, vid, pid)
-      if (config && config.device && config.device.deviceName) {
-        name = config.device.deviceName
       }
 
-      const virtualInfo = this.checkVirtual(name, serial || pad.instanceId.toString() || '')
+      const list: ControllerInfo[] = []
 
-      let type: ControllerInfo['type'] = pad.isGamepad ? 'dinput' : 'hid'
-      const lowerName = name.toLowerCase()
-      if (lowerName.includes('xbox') || lowerName.includes('xinput') || (vid === '045e' && (pid === '028e' || pid === '02a1'))) {
-        type = 'xinput'
-      }
+      sdlPads.forEach(pad => {
+        const guid = pad.guid
+        let name = pad.name
+        const vid = pad.vendorId
+        const pid = pad.productId
+        const serial = pad.serial
+        
+        const config = this.findInputConfig(guid, name, vid, pid)
+        if (config && config.device && config.device.deviceName) {
+          name = config.device.deviceName
+        }
 
-      list.push({
-        guid,
-        name,
-        vendorId: vid,
-        productId: pid,
-        type,
-        connected: true,
-        playerIndex: -1,
-        xinputIndex: pad.playerIndex !== -1 ? pad.playerIndex : undefined,
-        buttons: pad.buttons,
-        axes: pad.axes,
-        hats: pad.hats,
-        instanceId: pad.instanceId.toString(),
-        isVirtual: virtualInfo.isVirtual,
-        virtualSource: virtualInfo.source
+        const instanceId = String(pad.instanceId ?? '')
+        const virtualInfo = this.checkVirtual(name, serial || instanceId)
+
+        let type: ControllerInfo['type'] = pad.isGamepad ? 'dinput' : 'hid'
+        const lowerName = name.toLowerCase()
+        if (lowerName.includes('xbox') || lowerName.includes('xinput') || (vid === '045e' && (pid === '028e' || pid === '02a1'))) {
+          type = 'xinput'
+        }
+
+        list.push({
+          guid,
+          name,
+          vendorId: vid,
+          productId: pid,
+          type,
+          connected: true,
+          playerIndex: -1,
+          xinputIndex: pad.playerIndex !== -1 ? pad.playerIndex : undefined,
+          buttons: pad.buttons,
+          axes: pad.axes,
+          hats: pad.hats,
+          instanceId,
+          isVirtual: virtualInfo.isVirtual,
+          virtualSource: virtualInfo.source
+        })
       })
-    })
 
-    const assigned = this.rebuildPlayerAssignments(list)
+      const assigned = this.rebuildPlayerAssignments(list)
+      const previousSignature = this.controllerListSignature(this.connectedControllers)
+      const currentSignature = this.controllerListSignature(assigned)
 
-    const previousNames = this.connectedControllers.map(c => `${c.name}(P${c.playerIndex + 1})`).join(', ')
-    const currentNames = assigned.map(c => `${c.name}(P${c.playerIndex + 1})`).join(', ')
+      if (previousSignature !== currentSignature) {
+        this.log(`Controllers list changed (detectAll): [${currentSignature}]`)
+      }
 
-    if (previousNames !== currentNames) {
-      this.log(`Controllers list changed (detectAll): [${currentNames}]`)
+      this.connectedControllers = assigned
+      return this.connectedControllers
+    } catch (err: any) {
+      console.error('Error running sdl3_detector.exe:', err)
+      this.log(`Error running sdl3_detector.exe: ${err.message}`)
+      return this.connectedControllers
+    } finally {
+      this.isDetecting = false
     }
-
-    this.connectedControllers = assigned
-    this.isDetecting = false
-    return this.connectedControllers
   }
 
   private updateDebounceTimer: NodeJS.Timeout | null = null
@@ -662,7 +672,8 @@ public class Program {
         name = config.device.deviceName
       }
 
-      const virtualInfo = this.checkVirtual(name, serial || pad.instanceId.toString() || '')
+      const instanceId = String(pad.instanceId ?? '')
+      const virtualInfo = this.checkVirtual(name, serial || instanceId)
 
       let type: ControllerInfo['type'] = pad.isGamepad ? 'dinput' : 'hid'
       const lowerName = name.toLowerCase()
@@ -682,7 +693,7 @@ public class Program {
         buttons: pad.buttons,
         axes: pad.axes,
         hats: pad.hats,
-        instanceId: pad.instanceId.toString(),
+        instanceId,
         isVirtual: virtualInfo.isVirtual,
         virtualSource: virtualInfo.source
       })
@@ -690,8 +701,8 @@ public class Program {
 
     const assigned = this.rebuildPlayerAssignments(list)
 
-    const previousNames = this.connectedControllers.map(c => `${c.guid}:${c.name}(P${c.playerIndex + 1})`).join(', ')
-    const currentNames = assigned.map(c => `${c.guid}:${c.name}(P${c.playerIndex + 1})`).join(', ')
+    const previousNames = this.controllerListSignature(this.connectedControllers)
+    const currentNames = this.controllerListSignature(assigned)
 
     if (previousNames !== currentNames) {
       this.log(`Controllers list changed (watch): [${currentNames}]`)
@@ -702,18 +713,6 @@ public class Program {
     } else {
       this.connectedControllers = assigned
     }
-  }
-
-  private findProfile(guid: string, name: string): any | null {
-    if (this.profiles[guid]) {
-      return this.profiles[guid]
-    }
-    for (const [pGuid, pData] of Object.entries(this.profiles)) {
-      if (pData.aliases && pData.aliases.some((alias: string) => alias.toLowerCase() === name.toLowerCase())) {
-        return pData
-      }
-    }
-    return null
   }
 
   private checkVirtual(name: string, instanceId: string): { isVirtual: boolean, source: ControllerInfo['virtualSource'] } {
@@ -739,7 +738,7 @@ public class Program {
       return { isVirtual: true, source: 'unknown' }
     }
 
-    return { isVirtual: false }
+    return { isVirtual: false, source: undefined }
   }
 
   private rebuildPlayerAssignments(connected: ControllerInfo[]): ControllerInfo[] {
@@ -794,11 +793,25 @@ public class Program {
 
   public startPolling(onUpdate: (controllers: ControllerInfo[]) => void, intervalMs = 2000): void {
     this.onUpdateCallback = onUpdate
-    if (this.watchProcess) return
+    if (this.watchProcess || this.pollingTimer) return
 
     const spawnWatch = () => {
       if (!existsSync(this.helperExePath)) {
-        this.log('Helper executable not found, waiting to compile or re-check')
+        this.log('Helper executable not found; using periodic controller detection')
+        const poll = async () => {
+          const previousSignature = this.controllerListSignature(this.connectedControllers)
+          const controllers = await this.detectAll()
+          if (previousSignature !== this.controllerListSignature(controllers)) {
+            this.onUpdateCallback?.(controllers)
+          }
+          if (existsSync(this.helperExePath) && this.pollingTimer) {
+            clearInterval(this.pollingTimer)
+            this.pollingTimer = null
+            spawnWatch()
+          }
+        }
+        void poll()
+        this.pollingTimer = setInterval(() => void poll(), intervalMs)
         return
       }
 
@@ -852,7 +865,10 @@ public class Program {
         this.log(`sdl3_detector.exe exited with code ${code}`)
         this.watchProcess = null
         if (this.onUpdateCallback) {
-          setTimeout(() => spawnWatch(), 2000)
+          this.restartTimer = setTimeout(() => {
+            this.restartTimer = null
+            spawnWatch()
+          }, 2000)
         }
       })
 
@@ -865,6 +881,14 @@ public class Program {
   }
 
   public stopPolling(): void {
+    if (this.pollingTimer) {
+      clearInterval(this.pollingTimer)
+      this.pollingTimer = null
+    }
+    if (this.restartTimer) {
+      clearTimeout(this.restartTimer)
+      this.restartTimer = null
+    }
     if (this.watchProcess) {
       try {
         this.watchProcess.kill()

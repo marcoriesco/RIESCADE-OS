@@ -22,6 +22,10 @@
           "configKey": "VerticalMonitorIndex",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "1",
               "value": "1"
             },
@@ -83,6 +87,10 @@
           "configKey": "fbneo_scanlines",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Nenhum",
               "value": "0"
             },
@@ -113,6 +121,10 @@
           "default": "auto",
           "configKey": "fbneo_renderer",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "DIRECTX9",
               "value": "3"
@@ -199,6 +211,10 @@
           "default": "auto",
           "configKey": "fbneo_audiodriver",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "DIRECT SOUND",
               "value": "0"

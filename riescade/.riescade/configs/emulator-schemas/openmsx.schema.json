@@ -47,6 +47,10 @@
           "configKey": "msx_scale_algo",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "SIMPLE",
               "value": "simple"
             },
@@ -103,6 +107,10 @@
           "configKey": "msx_resampler",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "BLIP (Good speed\\quality)",
               "value": "blip"
             },
@@ -133,6 +141,10 @@
           "configKey": "msx_custom_gamepad",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "USER MAPPING 1",
               "value": "userjoystick1"
             },
@@ -153,6 +165,10 @@
           "default": "auto",
           "configKey": "msx_joytype",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "MSX JOYSTICK",
               "value": "msxjoystick"

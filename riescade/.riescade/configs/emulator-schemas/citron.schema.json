@@ -22,6 +22,10 @@
           "configKey": "citron_resolution_setup",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "1x (720p/1080p)",
               "value": "3"
             },
@@ -90,6 +94,10 @@
           "configKey": "citron_use_vsync",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "FIFO (Vsync Ativado)",
               "value": "2"
             },
@@ -117,6 +125,10 @@
           "default": "auto",
           "configKey": "citron_ratio",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Padrão",
               "value": "0"
@@ -155,6 +167,10 @@
           "configKey": "citron_gpu_accuracy",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "HIGH",
               "value": "2"
             },
@@ -192,6 +208,10 @@
           "configKey": "citron_astc_recompression",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "UNCOMPRESSED (Padrão, best quality)",
               "value": "0"
             },
@@ -216,6 +236,10 @@
           "default": "auto",
           "configKey": "citron_anti_aliasing",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Nenhum",
               "value": "0"
@@ -245,6 +269,10 @@
           "default": "auto",
           "configKey": "citron_scaling_filter",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Nearest Neighbor",
               "value": "0"
@@ -307,6 +335,10 @@
           "configKey": "citron_anisotropy",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Padrão",
               "value": "1"
             },
@@ -346,6 +378,10 @@
           "default": "auto",
           "configKey": "citron_language",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "American English",
               "value": "1"
@@ -432,6 +468,10 @@
           "configKey": "citron_region_value",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "JAPAN",
               "value": "0"
             },
@@ -481,6 +521,10 @@
           "configKey": "citron_cpu_accuracy",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "ACCURATE",
               "value": "1"
             },
@@ -514,6 +558,10 @@
           "default": "auto",
           "configKey": "citron_memory",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "4GB (Padrão)",
               "value": "0"
@@ -563,6 +611,10 @@
           "configKey": "citron_sound_index",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "STEREO",
               "value": "1"
             },
@@ -586,6 +638,10 @@
           "default": "auto",
           "configKey": "citron_audio_backend",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "CUBEB",
               "value": "cubeb"
@@ -627,6 +683,10 @@
           "configKey": "citron_player_0_type",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "PRO CONTROLLER",
               "value": "0"
             },
@@ -660,6 +720,10 @@
           "configKey": "citron_player_1_type",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "PRO CONTROLLER",
               "value": "0"
             },
@@ -689,6 +753,10 @@
           "configKey": "citron_player_2_type",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "PRO CONTROLLER",
               "value": "0"
             },
@@ -717,6 +785,10 @@
           "default": "auto",
           "configKey": "citron_player_3_type",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "PRO CONTROLLER",
               "value": "0"

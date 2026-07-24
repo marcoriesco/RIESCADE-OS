@@ -30,6 +30,10 @@
           "configKey": "TVShader",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Não",
               "value": "0"
             },
@@ -74,6 +78,10 @@
           "configKey": "ratio",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "4/3 2/2",
               "value": "Auto 4:3/3:2"
             },
@@ -116,6 +124,10 @@
           "default": "auto",
           "configKey": "internalresolution",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Nativa (PS2)",
               "value": "1"
@@ -178,6 +190,10 @@
           "configKey": "fmv_ratio",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Desativado",
               "value": "Off"
             },
@@ -210,6 +226,10 @@
           "default": "auto",
           "configKey": "interlace",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Nenhum",
               "value": "1"
@@ -279,6 +299,10 @@
           "configKey": "bilinear_filtering",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Sim (SMOOTH)",
               "value": "1"
             },
@@ -302,6 +326,10 @@
           "default": "auto",
           "configKey": "texture_filtering",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "BILINEAR (PS2)",
               "value": "2"
@@ -332,6 +360,10 @@
           "configKey": "trilinear_filtering",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Desativado",
               "value": "0"
             },
@@ -356,6 +388,10 @@
           "default": "auto",
           "configKey": "anisotropic_filtering",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Desativado",
               "value": "0"
@@ -415,6 +451,10 @@
           "configKey": "dithering",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "UNSCALED",
               "value": "2"
             },
@@ -444,6 +484,10 @@
           "configKey": "pcsx2_casmode",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Desativado",
               "value": "0"
             },
@@ -469,6 +513,10 @@
           "configKey": "hires_textures",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Não",
               "value": "0"
             },
@@ -492,6 +540,10 @@
           "default": "auto",
           "configKey": "renderer",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "DIRECT3D 11",
               "value": "3"
@@ -561,6 +613,10 @@
           "configKey": "pcsx2_forcebios",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "USA 230",
               "value": "ps2-0230a-20080220.bin"
             },
@@ -592,6 +648,10 @@
           "default": "auto",
           "configKey": "pcsx2_slot1_memory",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "STANDARD MEMORY CARD",
               "value": "standard"
@@ -693,6 +753,10 @@
           "configKey": "pcsx2_osdposition",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "BOTTOM CENTER",
               "value": "8"
             },
@@ -745,6 +809,10 @@
           "configKey": "pcsx2_perfposition",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "TOP CENTER",
               "value": "2"
             },
@@ -796,6 +864,10 @@
           "default": "auto",
           "configKey": "pcsx2_achievposition",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "TOP CENTER",
               "value": "2"
@@ -861,7 +933,7 @@
           "values": [
             {
               "label": "AUTO",
-              "value": "Auto"
+              "value": "auto"
             },
             {
               "label": "MANUAL ADRESS",
@@ -897,7 +969,7 @@
           "values": [
             {
               "label": "AUTO",
-              "value": "Auto"
+              "value": "auto"
             },
             {
               "label": "MANUAL ADRESS",
@@ -1033,6 +1105,10 @@
           "configKey": "UserHacks_HalfPixelOffset",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Desativado",
               "value": "0"
             },
@@ -1065,6 +1141,10 @@
           "default": "auto",
           "configKey": "UserHacks_round_sprite_offset",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Desativado",
               "value": "0"
@@ -1123,6 +1203,10 @@
           "default": "auto",
           "configKey": "TextureOffsets",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "X:0500 Y:0500 (Persona 3, Haunting Ground)",
               "value": "1"
@@ -1286,6 +1370,10 @@
           "configKey": "pcsx2_apu",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "CUBEB",
               "value": "Cubeb"
             },
@@ -1315,6 +1403,10 @@
           "configKey": "pcsx2_input_driver_force",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "FORCE SDL",
               "value": "1"
             },
@@ -1333,6 +1425,10 @@
           "default": "auto",
           "configKey": "pcsx2_multitap",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Não",
               "value": "none"
@@ -1377,6 +1473,10 @@
           "configKey": "pcsx2_triggersdriving",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "TRIGGERS AS SQUARE AND CROSS",
               "value": "square_cross"
             },
@@ -1398,6 +1498,10 @@
           "default": "auto",
           "configKey": "pcsx2_pressure",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "LEFT STICK",
               "value": "leftstick"
@@ -1471,6 +1575,10 @@
           "configKey": "pcsx2_gun",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "USB 1",
               "value": "USB1"
             },
@@ -1490,6 +1598,10 @@
           "default": "auto",
           "configKey": "pcsx2_gunmapping",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "KB & MOUSE (MOUSE MID\\LEFT as START\\A)",
               "value": "keyboard_middle"
@@ -1527,6 +1639,10 @@
           "configKey": "gun_calibrate",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "MIDDLE MOUSE",
               "value": "middle_mouse"
             },
@@ -1554,6 +1670,10 @@
           "default": "auto",
           "configKey": "pcsx2_crosshair",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Nenhum",
               "value": "disabled"
@@ -1607,6 +1727,10 @@
           "configKey": "pcsx2_wheeltype",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "DRIVING FORCE",
               "value": "0"
             },
@@ -1631,6 +1755,10 @@
           "default": "auto",
           "configKey": "pcsx2_wheeltype2",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "DRIVING FORCE",
               "value": "0"
@@ -1664,6 +1792,10 @@
           "default": "auto",
           "configKey": "pcsx2_wheel1_index",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": 0,
               "value": "0"
@@ -1713,6 +1845,10 @@
           "default": "auto",
           "configKey": "pcsx2_wheel2_index",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": 0,
               "value": "0"

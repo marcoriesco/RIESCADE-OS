@@ -21,6 +21,10 @@
           "configKey": "jgen_shader",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Nenhum",
               "value": "None"
             },
@@ -57,6 +61,10 @@
           "configKey": "jgen_vsync",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "ENABLED",
               "value": "Enabled"
             },
@@ -80,6 +88,10 @@
           "default": "auto",
           "configKey": "jgen_filter",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "LINEAR",
               "value": "Linear"
@@ -114,6 +126,10 @@
           "configKey": "jgen_scanlines",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Nenhum",
               "value": "None"
             },
@@ -137,6 +153,10 @@
           "default": "auto",
           "configKey": "jgen_renderer",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "VULKAN",
               "value": "Vulkan"

@@ -21,6 +21,10 @@
           "configKey": "zinc_colordepth",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "32 bits",
               "value": "32"
             },
@@ -39,6 +43,10 @@
           "default": "auto",
           "configKey": "zinc_scanlines",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Nenhum",
               "value": "0"
@@ -62,6 +70,10 @@
           "default": "auto",
           "configKey": "zinc_renderer",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "OPENGL",
               "value": "ogl"
@@ -116,6 +128,10 @@
           "configKey": "zinc_controller_config",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "DYNAMIC PROFILE",
               "value": "autoconfig"
             },
@@ -139,6 +155,10 @@
           "default": "auto",
           "configKey": "zinc_control_scheme",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "STANDARD",
               "value": "standard"
@@ -175,6 +195,10 @@
           "default": "auto",
           "configKey": "zinc_p1_forceindex",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "1",
               "value": "1"
@@ -216,6 +240,10 @@
           "default": "auto",
           "configKey": "zinc_p2_forceindex",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "1",
               "value": "1"

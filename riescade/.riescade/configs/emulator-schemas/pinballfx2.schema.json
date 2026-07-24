@@ -44,6 +44,10 @@
           "configKey": "pinballfx2_players",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "1",
               "value": "1"
             },

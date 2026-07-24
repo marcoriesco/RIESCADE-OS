@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useMemo, useCallback } from "react";
-import { ChevronRight, Search, Folder, Star, User, Shield, Settings, Palette, Gamepad2, Volume2, Cpu, Info, Database, Trash2, Edit3, X, ChevronLeft, Filter, HardDrive, RefreshCw, Eye, EyeOff, Check, ChevronDown, Save, Trophy, Loader2, Sliders, CheckCircle, Circle, Wrench, Bug, Copy, Download, Activity } from "lucide-react";
+import { ChevronRight, Search, Folder, Star, User, Shield, Settings, Palette, Gamepad2, Volume2, Cpu, Info, Database, Trash2, Edit3, X, ChevronLeft, Filter, HardDrive, RefreshCw, Eye, EyeOff, Check, ChevronDown, Save, Trophy, Loader2, Sliders, CheckCircle, Circle, Wrench, Bug, Copy, Download, Activity, CloudDownload } from "lucide-react";
 import { System, SettingsCtx } from "../types";
 import { TOOL_APPS, getSystemTheme } from "../constants";
 import {
@@ -8,6 +8,7 @@ import {
 import { EmulatorSettingsPanel } from "./EmulatorSettingsPanel";
 import { ScrollArea } from "./ScrollArea";
 import * as Select from "@radix-ui/react-select";
+import { SUPPORTED_LANGUAGES, useI18n } from "../i18n";
 
 const DatabaseApp = React.lazy(() => import("./DatabaseApp"));
 const SettingsControls = React.lazy(() => import("./settings/SettingsControls"));
@@ -80,14 +81,15 @@ function RadixSelect({
 
 
 const SETTINGS_TABS = [
-  { id: "conta", name: "Minha Conta", icon: User },
-  { id: "emuladores", name: "Emuladores", icon: Gamepad2 },
-  { id: "personalizacao", name: "Personalização", icon: Palette },
-  { id: "controles", name: "Controles", icon: Gamepad2 },
-  { id: "audio", name: "Áudio", icon: Volume2 },
-  { id: "scraper", name: "Scraper", icon: Cpu },
-  { id: "avancado", name: "Avançado", icon: Cpu },
-  { id: "sobre", name: "Sobre", icon: Info }
+  { id: "conta", nameKey: "account", icon: User },
+  { id: "interface", nameKey: "interface", icon: Sliders },
+  { id: "emuladores", nameKey: "emulators", icon: Gamepad2 },
+  { id: "personalizacao", nameKey: "personalization", icon: Palette },
+  { id: "controles", nameKey: "controls", icon: Gamepad2 },
+  { id: "audio", nameKey: "audio", icon: Volume2 },
+  { id: "scraper", nameKey: "scraper", icon: CloudDownload },
+  { id: "avancado", nameKey: "advanced", icon: Cpu },
+  { id: "sobre", nameKey: "about", icon: Info }
 ];
 
 const EMULATOR_NAMES: Record<string, string> = {
@@ -399,6 +401,7 @@ export default function ToolAppContent({
   emulatorSettings?: any;
   onSaveEmulatorSetting?: (emulator: string, name: string, value: any) => void;
 }) {
+  const { t, setLanguage } = useI18n();
   const [activeSettingsTab, setActiveSettingsTab] = useState("conta");
   const [activeEmuSubmenu, setActiveEmuSubmenu] = useState<string>("global");
   const [emuMenuOpen, setEmuMenuOpen] = useState(false);
@@ -428,6 +431,7 @@ export default function ToolAppContent({
   const [initialCore, setInitialCore] = useState<string | undefined>();
 
   const selectedEmuRef = useRef<HTMLButtonElement | null>(null);
+  const emulatorMenuRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const handleNavigate = (e: any) => {
@@ -450,13 +454,22 @@ export default function ToolAppContent({
   }, []);
 
   useEffect(() => {
-    if (activeSettingsTab === "emuladores" && activeEmuSubmenu && selectedEmuRef.current) {
+    if (
+      activeSettingsTab === "emuladores" &&
+      emuMenuOpen &&
+      activeEmuSubmenu &&
+      selectedEmuRef.current &&
+      emulatorMenuRef.current
+    ) {
       const el = selectedEmuRef.current;
-      setTimeout(() => {
-        el.scrollIntoView({ block: "nearest", behavior: "smooth" });
+      const menu = emulatorMenuRef.current;
+      const timer = window.setTimeout(() => {
+        const itemTop = el.getBoundingClientRect().top - menu.getBoundingClientRect().top + menu.scrollTop;
+        menu.scrollTo({ top: Math.max(0, itemTop), behavior: "smooth" });
       }, 50);
+      return () => window.clearTimeout(timer);
     }
-  }, [activeEmuSubmenu, activeSettingsTab]);
+  }, [activeEmuSubmenu, activeSettingsTab, emuMenuOpen, emulatorSchemas.length]);
 
   useEffect(() => {
     window.api.getRiescadeLogoPath().then((path) => {
@@ -482,7 +495,6 @@ export default function ToolAppContent({
     status: 'idle' | 'checking' | 'no-update' | 'available' | 'downloading' | 'error';
     version?: string;
     releaseNotes?: string;
-    zipUrl?: string | null;
     errorMsg?: string;
     percent?: number;
     downloadedBytes?: number;
@@ -523,7 +535,6 @@ export default function ToolAppContent({
             status: 'available',
             version: res.version,
             releaseNotes: res.releaseNotes,
-            zipUrl: res.zipUrl
           });
         } else {
           setUpdateState({ status: 'no-update' });
@@ -538,9 +549,9 @@ export default function ToolAppContent({
   };
 
   const handleInstallUpdate = () => {
-    if (updateState.zipUrl) {
+    if (updateState.status === 'available') {
       setUpdateState(prev => ({ ...prev, status: 'downloading', percent: 0 }));
-      window.api.downloadAndInstallUpdate(updateState.zipUrl)
+      window.api.downloadAndInstallUpdate()
         .catch((err: any) => {
           setUpdateState({
             status: 'error',
@@ -570,8 +581,13 @@ export default function ToolAppContent({
     }, [getSetting]);
 
     const saveSetting = useCallback((name: string, value: any, type: "string" | "bool" | "int" | "float" = "string") => {
+      if (name === "Language") setLanguage(String(value));
       if (onSaveSetting) onSaveSetting(name, value, type);
-    }, [onSaveSetting]);
+    }, [onSaveSetting, setLanguage]);
+
+    useEffect(() => {
+      setLanguage(getSetting("Language", "auto"));
+    }, [getSetting, setLanguage]);
 
     // Build settings context object to pass to stable module-level components
     const ctx: SettingsCtx = useMemo(() => ({ getSetting, isBoolOn, saveSetting }), [getSetting, isBoolOn, saveSetting]);
@@ -651,7 +667,7 @@ export default function ToolAppContent({
 
 
     // --- Settings tabs definition ---
-    const settingsTabs = SETTINGS_TABS;
+    const settingsTabs = SETTINGS_TABS.map(tab => ({ ...tab, name: t(tab.nameKey) }));
 
     return (
       <div className="flex h-full text-white">
@@ -683,7 +699,7 @@ export default function ToolAppContent({
 
           {/* Navigation */}
           <div className="flex-1 overflow-y-auto p-3">
-            <div className="text-xs font-bold uppercase text-white/25 tracking-widest px-3.5 py-2 mt-1">Configurações</div>
+            <div className="text-xs font-bold uppercase text-white/25 tracking-widest px-3.5 py-2 mt-1">{t("settings")}</div>
             <div className="flex flex-col gap-1">
               {settingsTabs.map((tab) => {
                 const TabIcon = tab.icon;
@@ -717,7 +733,10 @@ export default function ToolAppContent({
                       )}
                     </button>
                     {tab.id === "emuladores" && emuMenuOpen && (
-                      <div className="flex flex-col gap-1 pl-4 border-l border-white/5 ml-5.5 my-1 max-h-[340px] overflow-y-auto pr-1 select-none scrollbar-thin">
+                      <div
+                        ref={emulatorMenuRef}
+                        className="flex flex-col gap-1 pl-4 border-l border-white/5 ml-5.5 my-1 max-h-[340px] overflow-y-auto pr-1 select-none scrollbar-thin"
+                      >
                         {emulatorSchemas.length > 0 ? (
                           emulatorSchemas.map((schema) => {
                             const isSelected = activeSettingsTab === "emuladores" && activeEmuSubmenu === schema.id;
@@ -780,7 +799,7 @@ export default function ToolAppContent({
               </div>
               <div className="flex flex-col min-w-0">
                 <span className="text-xs font-semibold text-white/90 truncate">RIESCADE Player</span>
-                <span className="text-xs text-white/35">Online</span>
+                <span className="text-xs text-white/35">{t("online")}</span>
               </div>
             </div>
           </div>
@@ -793,18 +812,17 @@ export default function ToolAppContent({
           {activeSettingsTab === "conta" && (
             <div className="flex flex-col h-full overflow-hidden">
               <div className="shrink-0 px-6 pt-8 pb-2 max-w-[800px]">
-                <h2 className="text-xl font-bold text-white mb-1">Minha Conta</h2>
-                <p className="text-sm text-white/40">Gerencie suas informações pessoais e configurações de conta.</p>
+                <h2 className="text-xl font-bold text-white mb-1">{t("account")}</h2>
+                <p className="text-sm text-white/40">{t("accountDescription")}</p>
               </div>
               <ScrollArea className="flex-1 min-h-0">
                 <div className="px-6 pb-6 max-w-[800px]">
-                  {/* Account Info Section */}
                   <div className="mb-8">
-                    <h3 className="text-base font-bold text-white mb-4">Informações da conta</h3>
+                    <h3 className="text-base font-bold text-white mb-4">{t("accountInfo")}</h3>
                     <div className="space-y-3">
                       {[
-                        { label: "Nome de usuário", value: "RIESCADE Player", action: "Editar" },
-                        { label: "E-mail", value: "**************@gmail.com", action: "Editar", link: "Mostrar" },
+                        { label: t("username"), value: "RIESCADE Player", action: t("edit") },
+                        { label: "E-mail", value: "**************@gmail.com", action: t("edit"), link: t("show") },
                       ].map((field, i) => (
                         <div key={i} className="flex items-center justify-between bg-black/20 border border-white/5 rounded-md px-4 py-3">
                           <div className="flex flex-col">
@@ -813,7 +831,7 @@ export default function ToolAppContent({
                           </div>
                           <div className="flex items-center gap-3">
                             {field.link && (
-                              <button className="text-xs text-blue-400 hover:text-blue-300 transition cursor-pointer font-medium">
+                              <button className="text-xs text-accent hover:opacity-80 transition cursor-pointer font-medium">
                                 {field.link}
                               </button>
                             )}
@@ -826,12 +844,11 @@ export default function ToolAppContent({
                     </div>
                   </div>
 
-                  {/* Account Status Section */}
                   <div>
-                    <h3 className="text-base font-bold text-white mb-4">Status da Conta</h3>
+                    <h3 className="text-base font-bold text-white mb-4">{t("accountStatus")}</h3>
                     <div className="flex items-center gap-2.5 bg-black/20 border border-white/5 rounded-md px-4 py-3">
                       <div className="w-2 h-2 rounded-full bg-emerald-500 shrink-0" />
-                      <span className="text-sm text-white/70">Sua conta está toda em ordem</span>
+                      <span className="text-sm text-white/70">{t("accountOk")}</span>
                     </div>
                   </div>
                 </div>
@@ -845,22 +862,33 @@ export default function ToolAppContent({
           {activeSettingsTab === "interface" && (
             <div className="flex flex-col h-full overflow-hidden">
               <div className="shrink-0 px-6 pt-8 pb-2 max-w-[800px]">
-                <h2 className="text-xl font-bold text-white mb-1">Interface</h2>
-                <p className="text-sm text-white/40">Aparência, ícones do desktop/taskbar, tema e idioma.</p>
+                <h2 className="text-xl font-bold text-white mb-1">{t("interface")}</h2>
+                <p className="text-sm text-white/40">{t("interfaceDescription")}</p>
               </div>
 
               <ScrollArea className="flex-1 min-h-0">
                 <div className="px-6 pb-6 max-w-[800px] space-y-2">
-                  <SettingGroup label="Ícones do Desktop e Taskbar" />
+                  <SettingGroup label={t("languageGroup")} />
+                    <SettingSelect
+                      label={t("language")}
+                      name="Language"
+                      desc={t("languageDescription")}
+                      options={SUPPORTED_LANGUAGES.map(option => ({
+                        value: option.value,
+                        label: option.value === "auto" ? t("automaticWindows") : option.label
+                      }))}
+                      ctx={ctx}
+                    />
 
-                  {/* Search & Category Filter */}
+                  <SettingGroup label={t("desktopTaskbarIcons")} />
+
                   <div className="flex items-center gap-3 mb-4 select-none">
                     <div className="relative flex-1 group">
                       <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-white/40 group-focus-within:text-accent transition duration-200" />
                       <input 
                         value={settingsSearch} 
                         onChange={(e) => setSettingsSearch(e.target.value)} 
-                        placeholder="Pesquisar ferramentas ou sistemas..."
+                        placeholder={t("searchToolsSystems")}
                         className="w-full bg-[#121212] border border-white/10 rounded-md pl-9 pr-8 py-2 text-xs text-white placeholder:text-white/30 focus:outline-none focus:border-accent hover:border-accent transition duration-200" 
                       />
                       {settingsSearch && (
@@ -868,14 +896,14 @@ export default function ToolAppContent({
                           type="button"
                           onClick={() => setSettingsSearch("")}
                           className="absolute right-2.5 top-1/2 -translate-y-1/2 text-white/40 hover:text-white transition p-0.5 cursor-pointer"
-                          title="Limpar busca"
+                          title={t("clearSearch")}
                         >
                           <X className="w-3.5 h-3.5" />
                         </button>
                       )}
                     </div>
                     <div className="flex bg-black/25 p-1 rounded-md border border-white/5 text-xs items-center shrink-0">
-                      {[{ id: "all", label: "Tudo" }, { id: "tools", label: "Ferramentas" }, { id: "systems", label: "Sistemas" }].map(cat => (
+                      {[{ id: "all", label: t("all") }, { id: "tools", label: t("tools") }, { id: "systems", label: t("systems") }].map(cat => (
                         <button 
                           key={cat.id} 
                           onClick={() => setSettingsCategory(cat.id as any)}
@@ -911,28 +939,28 @@ export default function ToolAppContent({
                           <div className="flex flex-col min-w-0">
                             <span className="font-semibold text-xs text-white/95 truncate">{item.name}</span>
                             <span className="text-[9px] text-white/35 uppercase tracking-wider font-semibold">
-                              {item.type === "tool" ? "Ferramenta" : "Sistema de Jogos"}
+                              {item.type === "tool" ? t("tool") : t("gameSystem")}
                             </span>
                           </div>
                         </div>
                         <div className="flex items-center gap-4 shrink-0 font-sans" onClick={(e) => e.stopPropagation()}>
                           <label className="flex items-center gap-2 cursor-pointer select-none" onClick={e => e.stopPropagation()}>
-                            <span className="text-xs text-white/50 font-medium">Desktop</span>
-                            <input 
-                              type="checkbox" 
+                            <span className="text-xs text-white/50 font-medium">{t("desktop")}</span>
+                            <input
+                              type="checkbox"
                               checked={isDesk}
                               onChange={e => { e.stopPropagation(); handleToggleDesktop(item.key); }}
-                              className="w-4 h-4 cursor-pointer accent-range" 
+                              className="w-4 h-4 cursor-pointer accent-range"
                             />
                           </label>
                           <div className="w-px h-6 bg-white/10" />
                           <label className="flex items-center gap-2 cursor-pointer select-none" onClick={e => e.stopPropagation()}>
-                            <span className="text-xs text-white/50 font-medium">Taskbar</span>
-                            <input 
-                              type="checkbox" 
+                            <span className="text-xs text-white/50 font-medium">{t("taskbar")}</span>
+                            <input
+                              type="checkbox"
                               checked={isTask}
                               onChange={e => { e.stopPropagation(); handleToggleTaskbar(item.key); }}
-                              className="w-4 h-4 cursor-pointer accent-range" 
+                              className="w-4 h-4 cursor-pointer accent-range"
                             />
                           </label>
                         </div>
@@ -1228,9 +1256,11 @@ export default function ToolAppContent({
                             const pass = ctx.getSetting('ScreenScraperPass') || '';
                             const res = await window.api.testScreenScraper(user, pass);
                             if (res.success) {
+                              const motors = res.motors ?? res.maxThreads ?? 1;
+                              ctx.saveSetting("ScreenScraperMotors", motors, "int");
                               setTestResult({
                                 success: true,
-                                message: `Sucesso! Conectado como ${res.username}. Requisições hoje: ${res.requests} / ${res.maxRequests}`
+                                message: `Sucesso! Conectado como ${res.username}. Requisições disponíveis: ${res.requests} / ${res.maxRequests}. Motores: ${motors}`
                               });
                             } else {
                               setTestResult({
@@ -1271,7 +1301,27 @@ export default function ToolAppContent({
                     )}
                   </div>
 
+                  <SettingGroup label="Comportamento" />
+                  <SettingToggle
+                    label="Executar em modo notificação"
+                    desc="Mostra o progresso em um painel compacto e permite continuar usando o frontend durante o scraper."
+                    name="ScraperNotificationMode"
+                    ctx={ctx}
+                  />
+
                   <SettingGroup label="Configurações de Metadados" />
+                  <SettingSelect
+                    label="Filtro do Scraper"
+                    name="ScrapperFilter"
+                    defaultValue="all"
+                    options={[
+                      { label: "Todos os jogos", value: "all" },
+                      { label: "Com alguma mídia ausente", value: "missing" },
+                      { label: "Sem nenhuma mídia", value: "missing_all" }
+                    ]}
+                    desc="Define quais jogos entram no scraper em lote. O scraper individual sempre processa o jogo escolhido."
+                    ctx={ctx}
+                  />
                   <SettingSelect
                     label="Região de Preferência"
                     name="ScraperRegion"
@@ -1287,6 +1337,9 @@ export default function ToolAppContent({
                     desc="Define a região prioritária para o download de capas e logos."
                     ctx={ctx}
                   />
+                  <SettingToggle label="Baixar Título" name="ScrapeNames" ctx={ctx} />
+                  <SettingToggle label="Baixar Descrição" name="ScrapeDescription" ctx={ctx} />
+                  <SettingToggle label="Baixar Avaliação" name="ScrapeRatings" ctx={ctx} />
                   <SettingToggle label="Sobrescrever Título" name="ScrapeOverWriteNames" desc="Permite atualizar o título do jogo caso ele já exista." ctx={ctx} />
                   <SettingToggle label="Sobrescrever Descrição" name="ScrapeOverWriteDesc" desc="Permite atualizar a sinopse do jogo caso ela já exista." ctx={ctx} />
                   <SettingToggle label="Sobrescrever Metadados" name="ScrapeOverWriteMetadata" desc="Atualiza gênero, desenvolvedor, distribuidora, jogadores e nota." ctx={ctx} />
@@ -1353,6 +1406,20 @@ export default function ToolAppContent({
               </div>
               <ScrollArea className="flex-1 min-h-0">
                 <div className="px-6 pb-6 max-w-[800px] space-y-2">
+                  <SettingGroup label="MONITORES" />
+                  <SettingSelect
+                    label="Monitor do RIESCADE"
+                    name="RIESCADE.FrontendDisplay"
+                    defaultValue="auto"
+                    desc="Em instalações com duas telas, permite manter o RIESCADE na tela secundária enquanto os jogos usam a tela principal. Se a tela escolhida for desconectada, o frontend volta para a principal."
+                    options={[
+                      { label: "Automático / posição salva", value: "auto" },
+                      { label: "Tela principal", value: "primary" },
+                      { label: "Tela secundária", value: "secondary" }
+                    ]}
+                    ctx={ctx}
+                  />
+
                   <SettingGroup label="Gráficos E GPU" />
                   <SettingSelect 
                     label="Aceleração Gráfica do Frontend" 

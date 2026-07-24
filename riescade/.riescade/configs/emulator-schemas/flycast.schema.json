@@ -21,6 +21,10 @@
           "configKey": "flycast_resolution",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "640x480 (NATIVE)",
               "value": "480"
             },
@@ -85,6 +89,10 @@
           "configKey": "flycast_ratio",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "4/3",
               "value": "normal"
             },
@@ -107,6 +115,10 @@
           "default": "auto",
           "configKey": "flycast_vsync",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Sim",
               "value": "yes"
@@ -133,6 +145,10 @@
           "configKey": "flycast_cable",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "VGA",
               "value": "0"
             },
@@ -157,6 +173,10 @@
           "default": "auto",
           "configKey": "flycast_broadcast",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "NTSC",
               "value": "0"
@@ -198,6 +218,10 @@
           "configKey": "flycast_transparent_sorting",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "per-pixel (accurate)",
               "value": "pixel"
             },
@@ -221,6 +245,10 @@
           "default": "auto",
           "configKey": "flycast_fxaa",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "DISABLED",
               "value": "1"
@@ -254,6 +282,10 @@
           "default": "auto",
           "configKey": "flycast_texture_filter",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "NEAREST NEIGHBOR",
               "value": "1"
@@ -342,6 +374,10 @@
           "configKey": "flycast_video",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "VULKAN",
               "value": "vulkan"
             },
@@ -421,6 +457,10 @@
           "configKey": "flycast_autoframeskip",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "DISABLED",
               "value": "0"
             },
@@ -445,6 +485,10 @@
           "configKey": "flycast_region",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Japan",
               "value": "0"
             },
@@ -468,6 +512,10 @@
           "default": "auto",
           "configKey": "flycast_language",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "English",
               "value": "1"
@@ -556,6 +604,10 @@
           "configKey": "flycast_network",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "DISABLED",
               "value": "disabled"
             },
@@ -605,6 +657,10 @@
           "default": "auto",
           "configKey": "flycast_dynarec",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Dynarec",
               "value": "yes"
@@ -664,6 +720,10 @@
           "configKey": "flycast_audio",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "DIRECTSOUND",
               "value": "directsound"
             },
@@ -691,6 +751,10 @@
           "default": "auto",
           "configKey": "flycast_controller1",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "CONTROLLER",
               "value": "0"
@@ -728,6 +792,10 @@
           "configKey": "flycast_extension1",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Nenhum",
               "value": "10"
             },
@@ -755,6 +823,10 @@
           "default": "auto",
           "configKey": "flycast_controller2",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "CONTROLLER",
               "value": "0"
@@ -791,6 +863,10 @@
           "configKey": "flycast_extension2",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Nenhum",
               "value": "10"
             },
@@ -819,6 +895,10 @@
           "configKey": "flycast_controller3",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "CONTROLLER",
               "value": "0"
             },
@@ -839,6 +919,10 @@
           "default": "auto",
           "configKey": "flycast_extension3",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Nenhum",
               "value": "10"
@@ -865,6 +949,10 @@
           "configKey": "flycast_controller4",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "CONTROLLER",
               "value": "0"
             },
@@ -885,6 +973,10 @@
           "default": "auto",
           "configKey": "flycast_extension4",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Nenhum",
               "value": "10"
@@ -927,6 +1019,10 @@
           "configKey": "flycast_mousegunbuttons",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "A/reload/start",
               "value": "a_r_s"
             },
@@ -968,6 +1064,10 @@
           "default": "auto",
           "configKey": "ds_output",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "TO WINDOW",
               "value": "win"

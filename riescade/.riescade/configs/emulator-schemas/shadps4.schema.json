@@ -39,6 +39,10 @@
           "configKey": "shadps4_lang",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "English (US)",
               "value": "1"
             },
@@ -170,6 +174,10 @@
           "default": "auto",
           "configKey": "shadps4_version",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "0.15.0",
               "value": "0.15.0"

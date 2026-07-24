@@ -27,6 +27,10 @@
           "configKey": "filter",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "SIMPLE 2X",
               "value": "0"
             },
@@ -85,6 +89,10 @@
           "default": "auto",
           "configKey": "ratio",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Esticar",
               "value": "1"

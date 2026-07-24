@@ -21,6 +21,10 @@
           "configKey": "jzintv_internal_resolution",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "320x200,8bpp",
               "value": "0"
             },
@@ -61,6 +65,10 @@
           "default": "auto",
           "configKey": "jzintv_bitdepth",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "8bpp",
               "value": "8"
@@ -104,6 +112,10 @@
           "default": "auto",
           "configKey": "jzintv_gram_size",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "64 tiles (standard)",
               "value": "0"
@@ -178,6 +190,10 @@
           "configKey": "intv_button_a",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "TOP SIDE BUTTONS",
               "value": "A_T"
             },
@@ -250,6 +266,10 @@
           "default": "auto",
           "configKey": "intv_button_b",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "TOP SIDE BUTTONS",
               "value": "A_T"
@@ -324,6 +344,10 @@
           "configKey": "intv_button_x",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "TOP SIDE BUTTONS",
               "value": "A_T"
             },
@@ -396,6 +420,10 @@
           "default": "auto",
           "configKey": "intv_button_y",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "TOP SIDE BUTTONS",
               "value": "A_T"
@@ -470,6 +498,10 @@
           "configKey": "intv_button_leftshoulder",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "TOP SIDE BUTTONS",
               "value": "A_T"
             },
@@ -542,6 +574,10 @@
           "default": "auto",
           "configKey": "intv_button_rightshoulder",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "TOP SIDE BUTTONS",
               "value": "A_T"
@@ -616,6 +652,10 @@
           "configKey": "intv_button_leftstick",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "TOP SIDE BUTTONS",
               "value": "A_T"
             },
@@ -688,6 +728,10 @@
           "default": "auto",
           "configKey": "intv_button_rightstick",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "TOP SIDE BUTTONS",
               "value": "A_T"
@@ -762,6 +806,10 @@
           "configKey": "intv_button_lefttrigger",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "TOP SIDE BUTTONS",
               "value": "A_T"
             },
@@ -834,6 +882,10 @@
           "default": "auto",
           "configKey": "intv_button_righttrigger",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "TOP SIDE BUTTONS",
               "value": "A_T"
@@ -908,6 +960,10 @@
           "configKey": "intv_button_dpad",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "KEYPAD",
               "value": "keypad"
             },
@@ -933,6 +989,10 @@
           "configKey": "intv_button_leftjoy",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "DIRECTIONS",
               "value": "directions"
             },
@@ -953,6 +1013,10 @@
           "default": "auto",
           "configKey": "intv_button_rightjoy",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "DIRECTIONS",
               "value": "directions"

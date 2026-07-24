@@ -22,6 +22,10 @@
           "configKey": "steam_wait",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "30s",
               "value": "30"
             },
@@ -77,6 +81,10 @@
           "default": "auto",
           "configKey": "ds_output",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "TO WINDOW",
               "value": "win"

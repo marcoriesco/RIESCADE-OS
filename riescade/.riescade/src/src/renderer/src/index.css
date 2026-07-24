@@ -405,4 +405,47 @@ html, body, #root {
   animation: slideInFromRight 0.32s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
+/* Theme-aware native controls */
+input.accent-range {
+  accent-color: var(--accent-color);
+}
+
+input[type="range"].accent-range {
+  height: 5px;
+  border-radius: 999px;
+  background: linear-gradient(
+    to right,
+    var(--accent-color) 0%,
+    var(--accent-color) var(--range-progress, 50%),
+    rgba(255, 255, 255, 0.1) var(--range-progress, 50%),
+    rgba(255, 255, 255, 0.1) 100%
+  );
+}
+
+input[type="range"].accent-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 15px;
+  height: 15px;
+  border-radius: 999px;
+  border: 2px solid rgba(255, 255, 255, 0.9);
+  background: var(--accent-color);
+  box-shadow: 0 0 0 4px var(--accent-color-light);
+  transition: box-shadow 160ms ease, transform 160ms ease;
+}
+
+input[type="range"].accent-range:hover::-webkit-slider-thumb,
+input[type="range"].accent-range:focus-visible::-webkit-slider-thumb {
+  box-shadow: 0 0 0 5px var(--accent-color-focus);
+  transform: scale(1.08);
+}
+
+input[type="range"].accent-range::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  border-radius: 999px;
+  border: 2px solid rgba(255, 255, 255, 0.9);
+  background: var(--accent-color);
+  box-shadow: 0 0 0 4px var(--accent-color-light);
+}
 

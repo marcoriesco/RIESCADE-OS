@@ -21,6 +21,10 @@
           "configKey": "bsyndrome_aspect",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Padrão",
               "value": "default"
             },

@@ -29,6 +29,10 @@
           "configKey": "altirra_renderer",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "DIRECT3D 11",
               "value": "d3d11"
             },
@@ -62,6 +66,10 @@
           "configKey": "altirra_kernel",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Padrão",
               "value": "default"
             },
@@ -80,6 +88,10 @@
           "default": "auto",
           "configKey": "altirra_machine",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "ATARI 800",
               "value": "800"
@@ -118,6 +130,10 @@
           "configKey": "altirra_inputdriver",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "DIRECTINPUT",
               "value": "dinput"
             },
@@ -150,6 +166,10 @@
           "default": "auto",
           "configKey": "altirra_forcepadindex1",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "1",
               "value": "1"
@@ -187,6 +207,10 @@
           "default": "auto",
           "configKey": "altirra_forcepadindex2",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "1",
               "value": "1"

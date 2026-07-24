@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
+const crypto = require('crypto');
 const readline = require('readline');
 
 function askQuestion(query) {
@@ -87,6 +88,12 @@ async function run() {
 
   const projectRoot = path.resolve(__dirname, '..', '..', '..', '..');
   const packageJsonPath = path.join(__dirname, '..', 'package.json');
+
+  const initialStatus = execSync('git status --porcelain', { cwd: projectRoot, encoding: 'utf8' }).trim();
+  if (initialStatus) {
+    console.error('\x1b[31mError: the repository has uncommitted changes. Commit or stash them before creating a release.\x1b[0m');
+    process.exit(1);
+  }
   
   // 1. Update version in package.json
   console.log('📝 Updating version in package.json...');
@@ -143,10 +150,38 @@ async function run() {
       console.log('   ✓ riescade/');
     }
     // Remove the database file (each user generates their own)
-    const dbFile = path.join(esDest, '.riescade', 'riescade.db');
-    if (fs.existsSync(dbFile)) {
-      fs.unlinkSync(dbFile);
-      console.log('   ✓ riescade.db excluded');
+    for (const dbName of ['riescade.db', 'riescade.db-wal', 'riescade.db-shm']) {
+      const dbFile = path.join(esDest, '.riescade', dbName);
+      if (fs.existsSync(dbFile)) fs.unlinkSync(dbFile);
+    }
+    console.log('   ✓ runtime database files excluded');
+
+    for (const runtimeFile of [
+      path.join(esDest, '.riescade', 'configs', 'input-devices.json'),
+      path.join(esDest, '.riescade', 'launcher', 'configs', 'teknoparrot-generated-hash.json')
+    ]) {
+      if (fs.existsSync(runtimeFile)) fs.unlinkSync(runtimeFile);
+    }
+
+    const stateDir = path.join(esDest, '.riescade', 'state');
+    if (fs.existsSync(stateDir)) fs.rmSync(stateDir, { recursive: true, force: true });
+    fs.mkdirSync(stateDir, { recursive: true });
+    fs.writeFileSync(path.join(stateDir, '.keep'), '', 'utf8');
+    console.log('   ✓ runtime state emptied (.keep added)');
+
+    // Keep all distributed defaults, but never publish the current user's ScreenScraper login.
+    const releaseSettingsPath = path.join(esDest, '.riescade', 'configs', 'settings.json');
+    if (fs.existsSync(releaseSettingsPath)) {
+      const releaseSettings = JSON.parse(fs.readFileSync(releaseSettingsPath, 'utf8'));
+      for (const credentialName of ['ScreenScraperUser', 'ScreenScraperPass']) {
+        const current = releaseSettings[credentialName];
+        releaseSettings[credentialName] = {
+          value: '',
+          type: current && typeof current.type === 'string' ? current.type : 'string'
+        };
+      }
+      fs.writeFileSync(releaseSettingsPath, JSON.stringify(releaseSettings, null, 2) + '\n', 'utf8');
+      console.log('   ✓ ScreenScraper user credentials cleared from release copy');
     }
 
     // Clean up local user save files, screenshots, and videos from the release package
@@ -238,6 +273,8 @@ async function run() {
   fs.rmSync(tempDir, { recursive: true, force: true });
 
   const sevenZipSizeMB = (fs.statSync(zipPath).size / (1024 * 1024)).toFixed(1);
+  const sevenZipSize = fs.statSync(zipPath).size;
+  const sevenZipSha256 = crypto.createHash('sha256').update(fs.readFileSync(zipPath)).digest('hex');
   console.log(`✅ 7z package created (${sevenZipSizeMB} MB)`);
 
   // Create updater.json file for the update checker to query
@@ -246,14 +283,21 @@ async function run() {
   const updaterContent = {
     version: version,
     releaseNotes: `Automated release for RIESCADE OS v${version}`,
-    zipUrl: `https://github.com/marcoriesco/RIESCADE-OS/releases/download/v${version}/RIESCADE_OS.7z`
+    zipUrl: `https://github.com/marcoriesco/RIESCADE-OS/releases/download/v${version}/RIESCADE_OS.7z`,
+    sha256: sevenZipSha256,
+    size: sevenZipSize
   };
   fs.writeFileSync(updaterJsonPath, JSON.stringify(updaterContent, null, 2) + '\n', 'utf8');
   console.log('✅ updater.json created/updated.');
 
   // 4. Git Commit, Tag & Push
   console.log('🐙 Staging and committing version changes...');
-  execSync('git add -A', { stdio: 'inherit', cwd: projectRoot });
+  const releaseFiles = [
+    path.relative(projectRoot, packageJsonPath),
+    path.relative(projectRoot, updaterJsonPath)
+  ];
+  if (fs.existsSync(versionInfoPath)) releaseFiles.push(path.relative(projectRoot, versionInfoPath));
+  execSync(`git add -- ${releaseFiles.map(file => `"${file}"`).join(' ')}`, { stdio: 'inherit', cwd: projectRoot });
   try {
     execSync(`git commit -m "chore(release): v${version}"`, { stdio: 'inherit', cwd: projectRoot });
   } catch (e) {
@@ -262,13 +306,16 @@ async function run() {
   
   console.log(`🏷️ Tagging Git commit with v${version}...`);
   try {
-    execSync(`git tag -d v${version}`, { stdio: 'ignore', cwd: projectRoot });
-  } catch (e) {}
+    execSync(`git rev-parse -q --verify "refs/tags/v${version}"`, { stdio: 'ignore', cwd: projectRoot });
+    throw new Error(`Tag v${version} already exists. Release tags are immutable.`);
+  } catch (e) {
+    if (String(e.message || e).includes('immutable')) throw e;
+  }
   execSync(`git tag v${version}`, { stdio: 'inherit', cwd: projectRoot });
 
   console.log('📤 Pushing commits and tag to GitHub repository...');
   execSync('git push origin main', { stdio: 'inherit', cwd: projectRoot });
-  execSync(`git push origin v${version} --force`, { stdio: 'inherit', cwd: projectRoot });
+  execSync(`git push origin v${version}`, { stdio: 'inherit', cwd: projectRoot });
   console.log('✅ Git branch and tag pushed.');
 
   // 5. Create GitHub Release

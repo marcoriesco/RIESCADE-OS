@@ -28,6 +28,10 @@
           "configKey": "groovy_profile",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "LCD Arcade (Vewlix) / PC / Modern TV",
               "value": "LCD_ARCADE"
             },
@@ -80,6 +84,10 @@
           "default": "auto",
           "configKey": "mame_rotate",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Não",
               "value": "off"
@@ -165,6 +173,10 @@
           "configKey": "mame_video_driver",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "D3D",
               "value": "d3d"
             },
@@ -231,6 +243,10 @@
           "configKey": "mame_audio_driver",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "DIRECTSOUND",
               "value": "dsound"
             },
@@ -260,6 +276,10 @@
           "configKey": "mame_joystick_driver",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "WIN HYBRID",
               "value": "winhybrid"
             },
@@ -281,6 +301,10 @@
           "default": "auto",
           "configKey": "mame_ctrlr_profile",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "RETROBAT Automático",
               "value": "retrobat_auto"
@@ -366,6 +390,10 @@
           "configKey": "mame_mouse",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Nenhum",
               "value": "none"
             },
@@ -393,6 +421,10 @@
           "default": "auto",
           "configKey": "mame_pedal",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Nenhum",
               "value": "none"
@@ -424,6 +456,10 @@
           "configKey": "mame_lightgun",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Nenhum",
               "value": "none"
             },
@@ -451,6 +487,10 @@
           "default": "auto",
           "configKey": "mame_paddle",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Nenhum",
               "value": "none"
@@ -482,6 +522,10 @@
           "configKey": "mame_adstick",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Nenhum",
               "value": "none"
             },
@@ -511,6 +555,10 @@
           "default": "auto",
           "configKey": "mame_positional",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Nenhum",
               "value": "none"
@@ -542,6 +590,10 @@
           "configKey": "mame_trackball",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Nenhum",
               "value": "none"
             },
@@ -572,6 +624,10 @@
           "configKey": "mame_dial",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Nenhum",
               "value": "none"
             },
@@ -601,6 +657,10 @@
           "default": "auto",
           "configKey": "mame_p1_forceindex",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": 0,
               "value": "0"
@@ -647,6 +707,10 @@
           "configKey": "mame_p2_forceindex",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": 0,
               "value": "0"
             },
@@ -692,6 +756,10 @@
           "configKey": "mame_p3_forceindex",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": 0,
               "value": "0"
             },
@@ -736,6 +804,10 @@
           "default": "auto",
           "configKey": "mame_p4_forceindex",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": 0,
               "value": "0"
@@ -804,6 +876,10 @@
           "default": "auto",
           "configKey": "mame_output",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "WINDOWS",
               "value": "windows"

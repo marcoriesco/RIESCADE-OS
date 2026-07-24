@@ -22,6 +22,10 @@
           "configKey": "dosbox_pure_machine",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "SVGA",
               "value": "svga"
             },
@@ -59,6 +63,10 @@
           "configKey": "dosbox_pure_aspect_correction",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "ORIGINAL",
               "value": "false"
             },
@@ -88,6 +96,10 @@
           "default": "auto",
           "configKey": "dosbox_pure_svga",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "S3 TRIO64",
               "value": "svga_s3"
@@ -123,6 +135,10 @@
           "configKey": "dosbox_pure_voodoo",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "8MB Memory",
               "value": "8mb"
             },
@@ -148,6 +164,10 @@
           "default": "auto",
           "configKey": "dosbox_pure_voodoo_perf",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "HARDWARE OPENGL",
               "value": "4"
@@ -178,6 +198,10 @@
           "default": "auto",
           "configKey": "dosbox_pure_voodoo_scale",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "1X",
               "value": "1"
@@ -221,6 +245,10 @@
           "configKey": "dosbox_interface_scaling",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "SHARP",
               "value": "sharp"
             },
@@ -245,6 +273,10 @@
           "default": "auto",
           "configKey": "dosbox_interface_crtfilter",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Nenhum",
               "value": "0"
@@ -278,6 +310,10 @@
           "default": "auto",
           "configKey": "dosbox_pure_overscan",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Desativado",
               "value": "0"
@@ -313,6 +349,10 @@
           "configKey": "dosbox_pure_conf",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Desativado",
               "value": "false"
             },
@@ -334,6 +374,10 @@
           "default": "auto",
           "configKey": "dosbox_pure_cycles",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "MAX",
               "value": "max"
@@ -392,6 +436,10 @@
           "default": "auto",
           "configKey": "dosbox_pure_memory_size",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Não",
               "value": "none"
@@ -455,6 +503,10 @@
           "configKey": "dosbox_pure_cpu_type",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "386",
               "value": "386"
             },
@@ -485,6 +537,10 @@
           "configKey": "dosbox_pure_cpu_core",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "DYNAMIC RECOMPILATION",
               "value": "dynamic"
             },
@@ -506,6 +562,10 @@
           "default": "auto",
           "configKey": "dosbox_pure_bootos_ramdisk",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "KEEP",
               "value": "false"
@@ -535,6 +595,10 @@
           "default": "auto",
           "configKey": "dosbox_pure_svgamem",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "512k",
               "value": "0"
@@ -570,6 +634,10 @@
           "configKey": "dosbox_pure_perfstats",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Desativado",
               "value": "none"
             },
@@ -599,6 +667,10 @@
           "default": "auto",
           "configKey": "dosbox_sblaster_conf",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Port 220 IRQ 7 DMA 1/5",
               "value": "A220 I7 D1 H5"
@@ -650,6 +722,10 @@
           "configKey": "dosbox_midi",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "SYSTEM",
               "value": "system"
             },
@@ -679,6 +755,10 @@
           "default": "auto",
           "configKey": "dosbox_pure_sblaster_type",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "SOUNDBLASTER 16",
               "value": "sb16"
@@ -718,6 +798,10 @@
           "configKey": "dosbox_pure_sblaster_adlib_mode",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "CMS",
               "value": "cms"
             },
@@ -751,6 +835,10 @@
           "default": "auto",
           "configKey": "dosbox_pure_sblaster_adlib_emu",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Padrão",
               "value": "default"
@@ -793,6 +881,10 @@
           "configKey": "dosbox_pure_mouse_input",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "VIRTUAL MOUSE MOVEMENT",
               "value": "virtual"
             },
@@ -826,6 +918,10 @@
           "configKey": "dosbox_pure_auto_mapping",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Ativado",
               "value": "true"
             },
@@ -846,6 +942,10 @@
           "default": "auto",
           "configKey": "dosbox_pure_keyboard_layout",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "US(Padrão)",
               "value": "us"

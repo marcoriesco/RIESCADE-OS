@@ -21,6 +21,10 @@
           "configKey": "ryujinx_vsync",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "SWITCH",
               "value": "0"
             },
@@ -43,6 +47,10 @@
           "default": "auto",
           "configKey": "res_scale",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Native (720p/1080p)",
               "value": "1"
@@ -76,6 +84,10 @@
           "default": "auto",
           "configKey": "aspect_ratio",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "4/3",
               "value": "Fixed4x3"
@@ -122,6 +134,10 @@
           "default": "auto",
           "configKey": "ryujinx_scaling_filter",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Bilinear",
               "value": "Bilinear"
@@ -171,6 +187,10 @@
           "configKey": "ryujinx_antialiasing",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Nenhum",
               "value": "None"
             },
@@ -207,6 +227,10 @@
           "configKey": "max_anisotropy",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Não",
               "value": "-1"
             },
@@ -237,6 +261,10 @@
           "default": "auto",
           "configKey": "backend",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "OPENGL",
               "value": "OpenGl"
@@ -294,6 +322,10 @@
           "configKey": "system_region",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "JAPAN",
               "value": "Japan"
             },
@@ -332,6 +364,10 @@
           "default": "auto",
           "configKey": "switch_language",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "English (US)",
               "value": "AmericanEnglish"
@@ -417,6 +453,10 @@
           "configKey": "memory_manager_mode",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "SOFTWARE",
               "value": "SoftwarePageTable"
             },
@@ -458,6 +498,10 @@
           "configKey": "ryujinx_network",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Não",
               "value": "no"
             },
@@ -488,6 +532,10 @@
           "default": "auto",
           "configKey": "audio_backend",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "OPENAL",
               "value": "OpenAl"
@@ -525,6 +573,10 @@
           "configKey": "ryujinx_padtype1",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "PRO CONTROLLER",
               "value": "ProController"
             },
@@ -554,6 +606,10 @@
           "configKey": "ryujinx_padtype2",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "PRO CONTROLLER",
               "value": "ProController"
             },
@@ -579,6 +635,10 @@
           "configKey": "ryujinx_padtype3",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "PRO CONTROLLER",
               "value": "ProController"
             },
@@ -603,6 +663,10 @@
           "default": "auto",
           "configKey": "ryujinx_padtype4",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "PRO CONTROLLER",
               "value": "ProController"
@@ -653,6 +717,10 @@
           "default": "auto",
           "configKey": "ryujinx_maxcontrollers",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "1",
               "value": "1"

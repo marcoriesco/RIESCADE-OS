@@ -22,6 +22,10 @@
           "configKey": "p64_shader",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Não",
               "value": "0"
             },
@@ -104,6 +108,10 @@
           "configKey": "p64_ratio",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "4:3",
               "value": "1"
             },
@@ -164,6 +172,10 @@
           "configKey": "p64_antialiasing",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Nenhum",
               "value": "none"
             },
@@ -215,6 +227,10 @@
           "configKey": "p64_bilinear",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "STANDARD",
               "value": "1"
             },
@@ -234,6 +250,10 @@
           "default": "auto",
           "configKey": "p64_nativerestexrects",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "DISABLE",
               "value": "0"
@@ -259,6 +279,10 @@
           "default": "auto",
           "configKey": "p64_texture_filter",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Não",
               "value": "0"
@@ -327,6 +351,10 @@
           "configKey": "p64_perfstats",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Desativado",
               "value": "off"
             },
@@ -358,6 +386,10 @@
           "default": "auto",
           "configKey": "p64_correcttexrectcoords",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "NEVER",
               "value": "0"
@@ -392,6 +424,10 @@
           "configKey": "mupen64_inputprofile1",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "C-BUTTONS=RIGHT-STICK Z=LEFT-TRIGGER",
               "value": "c_stick_zl"
             },
@@ -421,6 +457,10 @@
           "default": "auto",
           "configKey": "mupen64_inputprofile2",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "C-BUTTONS=RIGHT-STICK Z=LEFT-TRIGGER",
               "value": "c_stick_zl"
@@ -452,6 +492,10 @@
           "configKey": "mupen64_inputprofile3",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "C-BUTTONS=RIGHT-STICK Z=LEFT-TRIGGER",
               "value": "c_stick_zl"
             },
@@ -481,6 +525,10 @@
           "default": "auto",
           "configKey": "mupen64_inputprofile4",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "C-BUTTONS=RIGHT-STICK Z=LEFT-TRIGGER",
               "value": "c_stick_zl"

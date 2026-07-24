@@ -41,6 +41,12 @@ yarn-error.log*
 *.tmp
 *.old
 *.db
+*.db-wal
+*.db-shm
+riescade/.riescade/state/*
+!riescade/.riescade/state/.keep
+riescade/.riescade/configs/input-devices.json
+riescade/.riescade/launcher/configs/teknoparrot-generated-hash.json
 
 # IDEs and Tools
 .vscode/

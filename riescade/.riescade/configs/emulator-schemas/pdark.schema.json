@@ -29,6 +29,10 @@
           "configKey": "pdark_texturefilter",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "BILINEAR",
               "value": "1"
             },
@@ -64,6 +68,10 @@
           "default": "auto",
           "configKey": "pdark_region",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Europe",
               "value": "EUR"

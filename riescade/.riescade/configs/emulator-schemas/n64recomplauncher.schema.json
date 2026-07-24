@@ -28,6 +28,10 @@
           "configKey": "pdark_region",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Europe",
               "value": "EUR"
             },

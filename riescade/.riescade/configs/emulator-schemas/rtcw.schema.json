@@ -21,6 +21,10 @@
           "configKey": "rtcw_resolution",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Automático(NATIVE)",
               "value": "-2"
             },
@@ -154,6 +158,10 @@
           "configKey": "rtcw_aspect",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Desativado",
               "value": "0"
             },
@@ -183,6 +191,10 @@
           "configKey": "rtcw_texturefilter",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "TRILINEAR",
               "value": "GL_LINEAR_MIPMAP_LINEAR"
             },
@@ -199,6 +211,10 @@
           "default": "auto",
           "configKey": "rtcw_texturequality",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "HIGH",
               "value": "0"
@@ -220,6 +236,10 @@
           "default": "auto",
           "configKey": "rtcw_lighting",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "LIGHT MAP (HIGH)",
               "value": "0"

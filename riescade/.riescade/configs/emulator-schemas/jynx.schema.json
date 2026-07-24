@@ -29,6 +29,10 @@
           "configKey": "jynx_colourset",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Padrão",
               "value": "0"
             },
@@ -68,6 +72,10 @@
           "default": "auto",
           "configKey": "jynx_machine",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "LYNX 48K (Padrão)",
               "value": "0"

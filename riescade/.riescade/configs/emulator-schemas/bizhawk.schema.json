@@ -21,6 +21,10 @@
           "configKey": "bizhawk_filter",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Nenhum",
               "value": "0"
             },
@@ -43,6 +47,10 @@
           "default": "auto",
           "configKey": "bizhawk_vsync",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Sim",
               "value": "true"
@@ -67,6 +75,10 @@
           "default": "auto",
           "configKey": "bizhawk_finalfilter",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Nenhum",
               "value": "0"
@@ -105,6 +117,10 @@
           "configKey": "bizhawk_renderer",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "DIRECT3D 9",
               "value": "2"
             },
@@ -128,6 +144,10 @@
           "default": "auto",
           "configKey": "bizhawk_3ds_layoutmode",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "TOP-BOTTOM SCREEN",
               "value": "0"
@@ -185,6 +205,10 @@
           "configKey": "bizhawk_3ds_texturefilter",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Nenhum",
               "value": "0"
             },
@@ -220,6 +244,10 @@
           "default": "auto",
           "configKey": "bizhawk_3ds_texturesampling",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "GAME CONTROLLED",
               "value": "0"
@@ -264,6 +292,10 @@
           "configKey": "bizhawk_melonds_layout",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "NATURAL",
               "value": "0"
             },
@@ -305,6 +337,10 @@
           "configKey": "bizhawk_melonds_rotate",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Não",
               "value": "0"
             },
@@ -331,6 +367,10 @@
           "default": "auto",
           "configKey": "bizhawk_n64_resolution",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "320x240",
               "value": "320x240"
@@ -400,6 +440,10 @@
           "configKey": "bizhawk_n64_gfx",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "GLIDE N64",
               "value": "4"
             },
@@ -431,6 +475,10 @@
           "default": "auto",
           "configKey": "bizhawk_sms_format",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "NTSC",
               "value": "0"
@@ -470,6 +518,10 @@
           "configKey": "bizhawk_A26_difficulty",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "ADVANCED",
               "value": "true"
             },
@@ -490,6 +542,10 @@
           "configKey": "bizhawk_n64_cpucore",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "INTERPRETER",
               "value": "0"
             },
@@ -508,6 +564,10 @@
           "default": "auto",
           "configKey": "bizhawk_channelf_version",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "CHANNELF",
               "value": "0"
@@ -528,6 +588,10 @@
           "configKey": "bizhawk_channelf_region",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "NTSC",
               "value": "0"
             },
@@ -546,6 +610,10 @@
           "default": "auto",
           "configKey": "bizhawk_wswan_language",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "ENGLISH",
               "value": "1"
@@ -566,6 +634,10 @@
           "default": "auto",
           "configKey": "bizhawk_3ds_region",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "EUROPE",
               "value": "2"
@@ -605,6 +677,10 @@
           "default": "auto",
           "configKey": "bizhawk_3ds_language",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "English",
               "value": "1"
@@ -666,6 +742,10 @@
           "configKey": "bizhawk_3ds_new3ds",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "NEW 3DS",
               "value": "1"
             },
@@ -710,6 +790,10 @@
           "configKey": "bizhawk_md_region",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "USA",
               "value": "1"
             },
@@ -745,6 +829,10 @@
           "default": "auto",
           "configKey": "bizhawk_melonds_dsi",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "DS",
               "value": "0"
@@ -796,6 +884,10 @@
           "configKey": "bizhawk_n64_rsp",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "HLE",
               "value": "0"
             },
@@ -815,6 +907,10 @@
           "configKey": "bizhawk_ngp_language",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "ENGLISH",
               "value": "english"
             },
@@ -833,6 +929,10 @@
           "default": "auto",
           "configKey": "nes_region",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "NTSC",
               "value": "1"
@@ -856,6 +956,10 @@
           "default": "auto",
           "configKey": "bizhawk_psx_region",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "EUROPE",
               "value": "eu"
@@ -899,6 +1003,10 @@
           "configKey": "bizhawk_saturn_language",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "English",
               "value": "english"
             },
@@ -934,6 +1042,10 @@
           "default": "auto",
           "configKey": "bizhawk_saturn_region",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "JAPAN",
               "value": "japanese"
@@ -979,6 +1091,10 @@
           "configKey": "bizhawk_saturn_expansion",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Nenhum",
               "value": "none"
             },
@@ -1009,6 +1125,10 @@
           "default": "auto",
           "configKey": "bizhawk_sms_region",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "EXPORT (EU/US)",
               "value": "0"
@@ -1041,6 +1161,10 @@
           "default": "auto",
           "configKey": "bizhawk_zx_machine",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "ZX SPECTRUM 16",
               "value": "0"
@@ -1106,6 +1230,10 @@
           "configKey": "bizhawk_audiooutput",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "DIRECT SOUND",
               "value": "0"
             },
@@ -1169,6 +1297,10 @@
           "configKey": "ares64_inputprofile",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Z=LEFT-TRIGGER",
               "value": "zl"
             },
@@ -1193,6 +1325,10 @@
           "configKey": "bizhawk_n64_pak1",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Nenhum",
               "value": "1"
             },
@@ -1215,6 +1351,10 @@
           "default": "auto",
           "configKey": "bizhawk_n64_pak2",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Nenhum",
               "value": "1"
@@ -1239,6 +1379,10 @@
           "configKey": "bizhawk_n64_pak3",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Nenhum",
               "value": "1"
             },
@@ -1261,6 +1405,10 @@
           "default": "auto",
           "configKey": "bizhawk_n64_pak4",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Nenhum",
               "value": "1"
@@ -1301,6 +1449,10 @@
           "configKey": "bizhawk3ds_analog_function",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "C-STICK AND TOUCHSCREEN POINTER",
               "value": "C-Stick and Touchscreen Pointer"
             },
@@ -1331,6 +1483,10 @@
           "default": "auto",
           "configKey": "megadrive_control_layout",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "L/R as X/Z",
               "value": "lr_xz"
@@ -1377,6 +1533,10 @@
           "default": "auto",
           "configKey": "bizhawk_intv_padtype",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "STANDARD (DISC)",
               "value": "Standard (Analog Disc)"
@@ -1436,6 +1596,10 @@
           "configKey": "bizhawk_psx_mouse",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "PORT 1",
               "value": "1"
             },
@@ -1458,6 +1622,10 @@
           "default": "auto",
           "configKey": "saturn_padlayout",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "L/R as Z/C",
               "value": "lr_zc"

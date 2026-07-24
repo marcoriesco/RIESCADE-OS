@@ -7,6 +7,10 @@
   "scripts": {
     "dev": "electron-vite dev",
     "build": "electron-vite build",
+    "validate": "node scripts/validate-project.js",
+    "typecheck": "tsc --noEmit",
+    "test:native": "electron scripts/native-smoke.cjs",
+    "test": "npm run validate && npm run build",
     "dist": "npm run build && electron-builder --win --dir",
     "deploy": "npm run dist && node scripts/deploy.js",
     "release": "node scripts/release.js",

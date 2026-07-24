@@ -183,7 +183,9 @@ export class DatabaseService {
         try {
           db.prepare("SELECT image FROM games LIMIT 1").get();
           hasOldColumns = true;
-        } catch {}
+        } catch {
+          console.debug('[DatabaseService] Legacy media columns are already absent.')
+        }
 
         if (hasOldColumns) {
           console.log('[Migration] Recreating games table without media columns...');
@@ -315,9 +317,9 @@ export class DatabaseService {
               try {
                 const fs = require('fs')
                 const content = fs.readFileSync(join(collectionsDir, f), 'utf-8')
-                const lines = content.split(/\r?\n/).map(line => line.trim()).filter(line => line.length > 0)
+                const lines: string[] = content.split(/\r?\n/).map((line: string) => line.trim()).filter((line: string) => line.length > 0)
                 
-                lines.forEach(line => {
+                lines.forEach((line: string) => {
                   const match = line.match(/^\.\/roms\/([^/]+)\/(.+)$/)
                   if (match) {
                     const systemName = match[1]
@@ -415,7 +417,9 @@ export class DatabaseService {
       if (existsSync(system.path)) {
         folderMtime = statSync(system.path).mtimeMs
       }
-    } catch {}
+    } catch (error) {
+      console.warn(`[DatabaseService] Could not read folder timestamp for ${system.name}.`, error)
+    }
 
     // Get current immediate file count
     let fileCount = 0
@@ -423,7 +427,9 @@ export class DatabaseService {
       if (existsSync(system.path)) {
         fileCount = readdirSync(system.path).length
       }
-    } catch {}
+    } catch (error) {
+      console.warn(`[DatabaseService] Could not count files for ${system.name}.`, error)
+    }
 
     // 4. Scan physical files
     const extensions = (system.extension || '').split(/\s+/).filter(e => e.trim().length > 0)
@@ -960,10 +966,17 @@ export class DatabaseService {
     const db = this.ensureOpen()
 
     console.log('🗑️  Clearing database for full rebuild...')
-    db.exec('DELETE FROM games')
-    db.exec('DELETE FROM systems')
-
-    await this.syncAll(systems, scanPhysicalGames, onProgress)
+    db.exec('BEGIN IMMEDIATE')
+    try {
+      db.exec('DELETE FROM games')
+      db.exec('DELETE FROM systems')
+      await this.syncAll(systems, scanPhysicalGames, onProgress)
+      db.exec('COMMIT')
+    } catch (error) {
+      if (db.inTransaction) db.exec('ROLLBACK')
+      console.error('[DatabaseService] Full rebuild failed; previous database was restored.', error)
+      throw error
+    }
   }
 
   /**
@@ -996,6 +1009,14 @@ export class DatabaseService {
       lastScanAt: s.last_scan_at || 0,
       gameCount: countMap.get(s.name) || 0
     }))
+  }
+
+  public getStats(): { totalGames: number; totalSystems: number; lastSyncAt: number } {
+    const db = this.ensureOpen()
+    const totalGames = (db.prepare('SELECT COUNT(*) as count FROM games').get() as any)?.count || 0
+    const totalSystems = (db.prepare("SELECT COUNT(*) as count FROM systems WHERE name != '__es_systems.cfg'").get() as any)?.count || 0
+    const lastSyncAt = (db.prepare('SELECT MAX(last_scan_at) as value FROM systems').get() as any)?.value || 0
+    return { totalGames, totalSystems, lastSyncAt }
   }
 
   /**
@@ -1378,4 +1399,3 @@ export class DatabaseService {
     }
   }
 }
-

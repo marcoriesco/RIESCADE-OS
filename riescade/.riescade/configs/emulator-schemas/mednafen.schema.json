@@ -21,6 +21,10 @@
           "configKey": "mednafen_ratio",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "PRESERVE ASPECT",
               "value": "aspect"
             },
@@ -57,6 +61,10 @@
           "configKey": "mednafen_interlace",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "WEAVE",
               "value": "weave"
             },
@@ -86,6 +94,10 @@
           "default": "auto",
           "configKey": "mednafen_scaler",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Nenhum",
               "value": "none"
@@ -148,6 +160,10 @@
           "default": "auto",
           "configKey": "mednafen_nes_videopreset",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Nenhum",
               "value": "none"
@@ -215,6 +231,10 @@
           "configKey": "mednafen_md_region",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "EUROPE",
               "value": "overseas_pal"
             },
@@ -244,6 +264,10 @@
           "configKey": "mednafen_ngp_language",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "ENGLISH",
               "value": "english"
             },
@@ -261,6 +285,10 @@
           "configKey": "mednafen_pcfx_cpu",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "FAST",
               "value": "fast"
             },
@@ -277,6 +305,10 @@
           "default": "auto",
           "configKey": "mednafen_psx_region",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "NORTH AMERICA",
               "value": "na"
@@ -301,6 +333,10 @@
           "default": "auto",
           "configKey": "mednafen_psx_memcards",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Nenhum",
               "value": "none"
@@ -338,6 +374,10 @@
           "default": "auto",
           "configKey": "mednafen_saturn_region",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "EUROPE",
               "value": "eu"
@@ -382,6 +422,10 @@
           "configKey": "mednafen_saturn_language",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "english",
               "value": "english"
             },
@@ -415,6 +459,10 @@
           "configKey": "mednafen_saturn_ramcart",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Nenhum",
               "value": "none"
             },
@@ -444,6 +492,10 @@
           "default": "auto",
           "configKey": "mednafen_wswan_lang",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "ENGLISH",
               "value": "english"
@@ -491,6 +543,10 @@
           "default": "auto",
           "configKey": "mednafen_apu",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "WASAPI (SHARED)",
               "value": "wasapish"
@@ -595,6 +651,10 @@
           "configKey": "mednafen_controller_type",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "JOYSTICK (2-AXIS 2-BUTTONS)",
               "value": "joystick"
             },
@@ -633,6 +693,10 @@
           "configKey": "megadrive_control_layout",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "L/R as X/Z",
               "value": "lr_xz"
             },
@@ -663,6 +727,10 @@
           "default": "auto",
           "configKey": "mednafen_md_multitap",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Não",
               "value": "0"
@@ -726,6 +794,10 @@
           "configKey": "mednafen_pcfx_multitap",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Não",
               "value": "0"
             },
@@ -753,6 +825,10 @@
           "configKey": "mednafen_pcfx_mode1",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "A",
               "value": "a"
             },
@@ -769,6 +845,10 @@
           "default": "auto",
           "configKey": "mednafen_pcfx_mode2",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "A",
               "value": "a"
@@ -787,6 +867,10 @@
           "default": "auto",
           "configKey": "mednafen_psx_analogcombo",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "SELECT+R1+L1",
               "value": "3073"
@@ -812,6 +896,10 @@
           "default": "auto",
           "configKey": "mednafen_psx_multitap",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Não",
               "value": "0"
@@ -839,6 +927,10 @@
           "default": "auto",
           "configKey": "mednafen_psx_mouse",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "PORT 1",
               "value": "1"
@@ -871,6 +963,10 @@
           "configKey": "mednafen_psx_gun",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "GUNCON",
               "value": "guncon"
             },
@@ -887,6 +983,10 @@
           "default": "auto",
           "configKey": "saturn_padlayout",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "L/R as Z/C",
               "value": "lr_zc"
@@ -918,6 +1018,10 @@
           "default": "auto",
           "configKey": "mednafen_ss_multitap",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Não",
               "value": "0"
@@ -952,6 +1056,10 @@
           "default": "auto",
           "configKey": "mednafen_snes_multitap",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Não",
               "value": "0"

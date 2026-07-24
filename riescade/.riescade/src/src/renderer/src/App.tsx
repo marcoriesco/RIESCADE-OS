@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useRef, useState, useMemo } from "react"
 import {
   Search, Power, X, Minus, Square, Gamepad2, Monitor,
   Folder, Grid3x3, Wifi, Volume2, Battery, Loader2,
-  MoreHorizontal, Heart, Download, Check, AlertTriangle, Play, Settings
+  MoreHorizontal, Heart, Download, Check, AlertTriangle, Play, Settings, Info, CloudDownload, Music2
 } from "lucide-react";
 import * as Toast from '@radix-ui/react-toast';
 import * as Tooltip from '@radix-ui/react-tooltip';
@@ -16,6 +16,7 @@ import defaultBg from '../../main/resources/default.webp';
 import defaultVideo from '../../main/resources/default.mp4';
 import riescadeLogo from '../../main/resources/riescade.webp';
 import { playUISound, setAppMuted } from "./utils/audioManager";
+import { useI18n } from "./i18n";
 
 
 const DEFAULT_SYSTEM_BG = "radial-gradient(1200px 800px at 20% 10%, rgb(35 35 35) 0%, transparent 60%), radial-gradient(1000px 700px at 85% 90%, rgb(12 12 12) 0%, transparent 55%), linear-gradient(rgb(4 4 4) 0%, rgb(22 22 22) 100%)";
@@ -41,6 +42,7 @@ try {
 }
 
 export default function App() {
+  const { setLanguage } = useI18n();
   const [systems, setSystems] = useState<System[]>([]);
   const [launcherOpen, setLauncherOpen] = useState(false);
   const [startMenuSearch, setStartMenuSearch] = useState("");
@@ -244,7 +246,7 @@ export default function App() {
             detail: {
               title: "🎵 Tocando Música",
               description: track.name,
-              type: "info"
+              type: "music"
             }
           }));
         }
@@ -281,7 +283,7 @@ export default function App() {
           detail: {
             title: "Volume do Sistema",
             description: `${masterVolume}%`,
-            type: "info"
+            type: "volume"
           }
         }));
       }
@@ -343,13 +345,14 @@ export default function App() {
 
 
   const handleSaveSetting = useCallback((name: string, value: any, type: "string" | "bool" | "int" | "float") => {
+    if (name === "Language") setLanguage(String(value));
     window.api.saveSetting(name, value, type).then(() => {
       setSettings((prev: any) => ({
         ...prev,
         [name]: { value }
       }));
     });
-  }, []);
+  }, [setLanguage]);
 
   const handleSaveEmulatorSetting = useCallback((emulator: string, name: string, value: any) => {
     window.api.saveEmulatorSetting(emulator, name, value).then(() => {
@@ -397,6 +400,8 @@ export default function App() {
   const [openMenuSystemId, setOpenMenuSystemId] = useState<string | null>(null);
   const [activeGameArt, setActiveGameArt] = useState<string | null>(null);
   const [controllers, setControllers] = useState<any[]>([]);
+  const [activeControllerKeys, setActiveControllerKeys] = useState<Set<string>>(() => new Set());
+  const controllerActivityTimersRef = useRef<Map<string, number>>(new Map());
   const [menuOpen, setMenuOpen] = useState(false);
   const [showExitConfirm, setShowExitConfirm] = useState(false);
 
@@ -410,7 +415,8 @@ export default function App() {
   const [installerProgress, setInstallerProgress] = useState(0);
   const [installerError, setInstallerError] = useState('');
   const [isUpdatePrompt, setIsUpdatePrompt] = useState(false);
-  const [toasts, setToasts] = useState<{ id: string; title: string; description: string; type: "favorite" | "controller"; favorite?: boolean; open: boolean }[]>([]);
+  type ToastType = "favorite" | "controller" | "success" | "error" | "info" | "collection" | "scraper" | "volume" | "music";
+  const [toasts, setToasts] = useState<{ id: string; title: string; description: string; type?: ToastType; favorite?: boolean; open: boolean }[]>([]);
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
 
@@ -419,19 +425,16 @@ export default function App() {
       const detail = (e as CustomEvent).detail;
       const id = Math.random().toString(36).substring(2, 9);
       
-      let added = false;
       setToasts((prev) => {
-        // Prevent duplicate open toasts for same controller or same title/description
-        const existingIdx = prev.findIndex((t) => t.open && (
-          (t.title === detail.title && t.description === detail.description) ||
-          (detail.type === "controller" && t.type === "controller" && t.title === detail.title)
-        ));
+        // Suppress only the exact same event; simultaneous controllers must keep separate notifications.
+        const existingIdx = prev.findIndex((t) =>
+          t.open && t.title === detail.title && t.description === detail.description
+        );
 
         if (existingIdx !== -1) {
           return prev.map((t, idx) => idx === existingIdx ? { ...t, description: detail.description } : t);
         }
 
-        added = true;
         return [...prev, { id, ...detail, open: true }];
       });
       
@@ -478,10 +481,26 @@ export default function App() {
           <div className="shrink-0">
             {toast.type === "controller" ? (
               <Gamepad2 className="w-5 h-5 text-accent animate-pulse" />
-            ) : toast.favorite ? (
-              <Heart className="w-5 h-5 fill-[var(--accent-color)] text-[var(--accent-color)]" />
+            ) : toast.type === "favorite" ? (
+              toast.favorite ? (
+                <Heart className="w-5 h-5 fill-[var(--accent-color)] text-[var(--accent-color)]" />
+              ) : (
+                <Heart className="w-5 h-5 text-white/50" />
+              )
+            ) : toast.type === "success" ? (
+              <Check className="w-5 h-5 text-emerald-400" />
+            ) : toast.type === "error" ? (
+              <AlertTriangle className="w-5 h-5 text-red-400" />
+            ) : toast.type === "collection" ? (
+              <Folder className="w-5 h-5 text-accent" />
+            ) : toast.type === "scraper" ? (
+              <CloudDownload className="w-5 h-5 text-accent" />
+            ) : toast.type === "volume" ? (
+              <Volume2 className="w-5 h-5 text-accent" />
+            ) : toast.type === "music" ? (
+              <Music2 className="w-5 h-5 text-accent" />
             ) : (
-              <Heart className="w-5 h-5 text-white/50" />
+              <Info className="w-5 h-5 text-accent" />
             )}
           </div>
           <div className="flex-1 min-w-0">
@@ -509,7 +528,29 @@ export default function App() {
   }, []);
 
   const [fps, setFps] = useState(60);
-  const showFps = settings["DrawFramerate"]?.value === true;
+  const drawFramerateValue = settings["DrawFramerate"]?.value;
+  const showFps = drawFramerateValue === true || String(drawFramerateValue).toLowerCase() === "true" || drawFramerateValue === 1;
+
+  useEffect(() => {
+    const level = String(settings["LogLevel"]?.value || "default").toLowerCase();
+    const consoleRef = console as any;
+    if (!consoleRef.__riescadeOriginalMethods) {
+      consoleRef.__riescadeOriginalMethods = {
+        log: console.log.bind(console),
+        info: console.info.bind(console),
+        debug: console.debug.bind(console),
+        warn: console.warn.bind(console),
+        error: console.error.bind(console)
+      };
+    }
+    const original = consoleRef.__riescadeOriginalMethods;
+    const noop = () => {};
+    console.log = level === "default" || level === "debug" ? original.log : noop;
+    console.info = level === "default" || level === "debug" ? original.info : noop;
+    console.debug = level === "debug" ? original.debug : noop;
+    console.warn = level === "default" || level === "debug" || level === "warning" ? original.warn : noop;
+    console.error = level !== "disabled" ? original.error : noop;
+  }, [settings["LogLevel"]?.value]);
 
   useEffect(() => {
     if (!showFps) return;
@@ -564,6 +605,20 @@ export default function App() {
   }, [settings]);
 
   const prevControllersRef = useRef<any[]>([]);
+  const controllerKey = useCallback((controller: any) =>
+    String(controller?.instanceId ?? controller?.guid ?? `${controller?.name || 'controller'}:${controller?.playerIndex ?? -1}`), []);
+  const showControllerNotificationsRef = useRef(true);
+  const showControllerActivityRef = useRef(true);
+
+  useEffect(() => {
+    showControllerNotificationsRef.current =
+      settings["ShowControllerNotifications"]?.value !== false &&
+      settings["ShowControllerNotifications"]?.value !== "false";
+    showControllerActivityRef.current =
+      settings["ShowControllerActivity"]?.value !== false &&
+      settings["ShowControllerActivity"]?.value !== "false";
+    if (!showControllerActivityRef.current) setActiveControllerKeys(new Set());
+  }, [settings]);
 
   // Listen for native controllers updates from Electron main process
   useEffect(() => {
@@ -579,15 +634,13 @@ export default function App() {
       const updatedList = newControllers || [];
       const prevList = prevControllersRef.current;
 
-      const prevGuids = prevList.map(c => c.guid || c.instanceId);
-      const newGuids = updatedList.map(c => c.guid || c.instanceId);
+      const prevGuids = prevList.map(controllerKey);
+      const newGuids = updatedList.map(controllerKey);
 
-      const showNotifications = settings["ShowControllerNotifications"]?.value !== false && settings["ShowControllerNotifications"]?.value !== "false";
-
-      if (showNotifications) {
+      if (showControllerNotificationsRef.current) {
         // Find connected ones
         updatedList.forEach(c => {
-          const key = c.guid || c.instanceId;
+          const key = controllerKey(c);
           if (!prevGuids.includes(key)) {
             window.dispatchEvent(
               new CustomEvent("show-toast", {
@@ -603,7 +656,7 @@ export default function App() {
 
         // Find disconnected ones
         prevList.forEach(c => {
-          const key = c.guid || c.instanceId;
+          const key = controllerKey(c);
           if (!newGuids.includes(key)) {
             window.dispatchEvent(
               new CustomEvent("show-toast", {
@@ -620,12 +673,51 @@ export default function App() {
 
       prevControllersRef.current = updatedList;
       setControllers(updatedList);
+      setActiveControllerKeys(current => {
+        const connectedKeys = new Set(newGuids);
+        return new Set([...current].filter(key => connectedKeys.has(key)));
+      });
     });
 
     return () => {
       unsubscribe();
     };
-  }, [settings]);
+  }, [controllerKey]);
+
+  useEffect(() => {
+    const unsubscribe = window.api.on('controller-input', (_event, input: { type: string; instanceId: number; value: number }) => {
+      if (!showControllerActivityRef.current) return;
+      const isAxis = input.type.includes('AXIS');
+      if (isAxis && Math.abs(input.value) < 8000) return;
+
+      const key = String(input.instanceId);
+      setActiveControllerKeys(current => {
+        if (current.has(key)) return current;
+        const next = new Set(current);
+        next.add(key);
+        return next;
+      });
+
+      const previousTimer = controllerActivityTimersRef.current.get(key);
+      if (previousTimer) window.clearTimeout(previousTimer);
+      const timer = window.setTimeout(() => {
+        controllerActivityTimersRef.current.delete(key);
+        setActiveControllerKeys(current => {
+          if (!current.has(key)) return current;
+          const next = new Set(current);
+          next.delete(key);
+          return next;
+        });
+      }, 280);
+      controllerActivityTimersRef.current.set(key, timer);
+    });
+
+    return () => {
+      unsubscribe();
+      controllerActivityTimersRef.current.forEach(timer => window.clearTimeout(timer));
+      controllerActivityTimersRef.current.clear();
+    };
+  }, []);
 
   // Helper callbacks for virtual windows
   const focusVirtualWindow = useCallback((id: string) => {
@@ -988,6 +1080,8 @@ export default function App() {
       command: "",
       platform: "pc",
       theme: toolId === "all" ? "auto-allgames" : toolId === "favorites" ? "auto-favorites" : "custom-collections",
+      logo: "",
+      art: "",
       hardware: toolId === "collections" ? "custom-collections" : "auto collection",
       emulators: []
     };
@@ -1161,6 +1255,7 @@ export default function App() {
         setSystems(sysList || []);
         setSettings(appSettings || {});
         setEmulatorSettings(emuSettings || {});
+        setLanguage(String(appSettings?.Language?.value || "auto"));
         
         setTimeout(() => {
           setLibraryLoading(false);
@@ -1170,7 +1265,7 @@ export default function App() {
       console.error("Failed to preload library:", err);
       setLibraryLoading(false);
     });
-  }, []);
+  }, [setLanguage]);
 
   // Open App - Opens virtual windows
   const openApp = useCallback((type: "system" | "tool", appId: string, subId?: string, coreId?: string) => {
@@ -1257,12 +1352,12 @@ export default function App() {
     return unsubscribe;
   }, []);
 
-  const launchDirectly = (game: Game, system: System, saveStateSlot?: number) => {
+  const launchDirectly = (game: Game, system: System, saveStateSlot?: number, saveStatePath?: string) => {
     setIsLaunching(true);
     setLaunchingGame(game);
     setIsGameRunning(true);
     setAppMuted(true);
-    window.api.launchGame(game, system, saveStateSlot).then(() => {
+    window.api.launchGame(game, system, saveStateSlot, saveStatePath).then(() => {
       setIsLaunching(false);
       setLaunchingGame(null);
       setIsGameRunning(false);
@@ -1280,7 +1375,12 @@ export default function App() {
     setInstallerProgress(0);
     setInstallerError('');
 
-    window.api.downloadAndInstallEmulator(installerEmulator, installerSourceUrl).then(() => {
+    if (!installerSystem) {
+      setInstallerStatus('error');
+      setInstallerError('Sistema do emulador não identificado.');
+      return;
+    }
+    window.api.downloadAndInstallEmulator(installerEmulator, installerSystem.name).then(() => {
       setInstallerStatus('completed');
       setTimeout(() => {
         setInstallerOpen(false);
@@ -1295,7 +1395,7 @@ export default function App() {
   };
 
   // Launch Game Handler
-  const handleLaunchGame = (game: Game, system: System, saveStateSlot?: number) => {
+  const handleLaunchGame = (game: Game, system: System, saveStateSlot?: number, saveStatePath?: string) => {
     let targetSystem = system;
     if (system.name === 'collections') {
       const realSystem = systems.find(s => s.name.toLowerCase() === game.system.toLowerCase());
@@ -1352,10 +1452,10 @@ export default function App() {
         return;
       }
 
-      launchDirectly(game, targetSystem, saveStateSlot);
+      launchDirectly(game, targetSystem, saveStateSlot, saveStatePath);
     }).catch((err) => {
       console.error('Failed to check emulator status, launching fallback:', err);
-      launchDirectly(game, targetSystem, saveStateSlot);
+      launchDirectly(game, targetSystem, saveStateSlot, saveStatePath);
     });
   };
 
@@ -1809,6 +1909,11 @@ export default function App() {
     <Toast.Provider swipeDirection="up" duration={Infinity}>
       <div key="desktop-container" className="w-screen h-screen flex flex-col overflow-hidden select-none">
 
+      {showFps && (
+        <div className="fixed top-3 right-3 z-[10001] pointer-events-none rounded-md border border-white/10 bg-black/70 px-2.5 py-1 font-mono text-xs font-bold text-emerald-400 shadow-lg backdrop-blur-md">
+          FPS {fps}
+        </div>
+      )}
 
       <div
         ref={desktopRef}
@@ -2415,28 +2520,30 @@ export default function App() {
                 </Tooltip.Root>
               )}
 
-              {showFps && (
-                <span className="text-[10px] font-sans text-white/50 tracking-wide select-none ml-1 bg-white/5 px-1.5 py-0.5 rounded border border-white/5 shrink-0">
-                  FPS <span className="font-bold">{fps}</span>
-                </span>
-              )}
-
-              {taskbarShowControllers && controllers.map((c, idx) => (
-                <Tooltip.Root key={c.guid + idx}>
+              {taskbarShowControllers && controllers.map((c, idx) => {
+                const isActive = activeControllerKeys.has(controllerKey(c));
+                return (
+                <Tooltip.Root key={controllerKey(c)}>
                   <Tooltip.Trigger asChild>
-                    <span className="flex items-center cursor-help bg-white/5 border border-white/5 rounded px-1.5 py-0.5 select-none shrink-0 gap-1 text-[9px] hover:border-accent/40 transition">
-                      <Gamepad2 className="w-3.5 h-3.5 text-accent animate-pulse" />
+                    <span className={`relative flex items-center cursor-help rounded px-1.5 py-0.5 select-none shrink-0 gap-1 text-[9px] transition-all duration-150 ${
+                      isActive
+                        ? 'bg-accent/25 border border-accent/70 shadow-[0_0_12px_var(--accent-color)] scale-110'
+                        : 'bg-white/5 border border-white/5 hover:border-accent/40'
+                    }`}>
+                      {isActive && <span className="absolute inset-0 rounded bg-accent/20 animate-ping pointer-events-none" />}
+                      <Gamepad2 className={`relative w-3.5 h-3.5 text-accent ${isActive ? 'animate-pulse' : ''}`} />
                       <span className="font-bold text-accent">P{c.playerIndex + 1}</span>
                     </span>
                   </Tooltip.Trigger>
                   <Tooltip.Portal>
                     <Tooltip.Content className="tooltip-content" side="top" sideOffset={8}>
-                      {`${c.name} (Jogador ${c.playerIndex + 1})`}
+                      {`${c.name} (Jogador ${c.playerIndex + 1})${isActive ? ' • Ativo' : ''}`}
                       <Tooltip.Arrow className="tooltip-arrow" width={10} height={5} />
                     </Tooltip.Content>
                   </Tooltip.Portal>
                 </Tooltip.Root>
-              ))}
+                );
+              })}
 
               <Tooltip.Root>
                 <Tooltip.Trigger asChild>

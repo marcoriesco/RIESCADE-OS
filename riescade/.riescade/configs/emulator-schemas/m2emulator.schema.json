@@ -31,6 +31,10 @@
           "configKey": "m2_widescreen",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "4:3",
               "value": "0"
             },
@@ -127,6 +131,10 @@
           "configKey": "m2_joystick_driver",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "XINPUT",
               "value": "xinput"
             },
@@ -155,6 +163,10 @@
           "configKey": "m2_joystick_autoconfig",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "DYNAMIC",
               "value": "dynamic"
             },
@@ -182,6 +194,10 @@
           "default": "auto",
           "configKey": "m2_forcep1index",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "1",
               "value": "1"
@@ -224,6 +240,10 @@
           "default": "auto",
           "configKey": "m2_forcep2index",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "1",
               "value": "1"
@@ -286,6 +306,10 @@
           "configKey": "m2_crosshair",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Não",
               "value": "0"
             },
@@ -333,6 +357,10 @@
           "configKey": "m2_rawinput_p1",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": 0,
               "value": "0"
             },
@@ -370,6 +398,10 @@
           "configKey": "m2_rawinput_p2",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": 0,
               "value": "0"
             },
@@ -406,6 +438,10 @@
           "default": "auto",
           "configKey": "ds_output",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "TO WINDOW",
               "value": "win"

@@ -32,7 +32,9 @@ export class SystemService {
       case 'reload-frontend':
         try {
           LibraryService.clearCache()
-        } catch (e) {}
+        } catch (e) {
+          console.warn('[SystemService] Failed to clear library cache before reload.', e)
+        }
         BrowserWindow.getAllWindows().forEach(w => w.reload())
         break
       case 'exit-frontend':

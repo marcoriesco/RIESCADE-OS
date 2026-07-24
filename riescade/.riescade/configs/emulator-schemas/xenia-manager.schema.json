@@ -21,6 +21,10 @@
           "configKey": "xenia_resolution",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "1280x720 (Padrão)",
               "value": "1_1"
             },
@@ -46,6 +50,10 @@
           "configKey": "xenia_widescreen",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "16:9",
               "value": "true"
             },
@@ -70,6 +78,10 @@
           "default": "auto",
           "configKey": "xenia_internal_display_resolution",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "1280x720 (Padrão)",
               "value": "8"
@@ -157,6 +169,10 @@
           "configKey": "xenia_video_standard",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "NTSC",
               "value": "1"
             },
@@ -178,6 +194,10 @@
           "default": "auto",
           "configKey": "xenia_avpack",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "HDMI (Padrão)",
               "value": "8"
@@ -228,6 +248,10 @@
           "configKey": "render_target_path",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "RTV/FBO",
               "value": "performance"
             },
@@ -256,6 +280,10 @@
           "configKey": "readback_resolve",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "FAST",
               "value": "fast"
             },
@@ -277,6 +305,10 @@
           "default": "auto",
           "configKey": "query_occlusion_sample_lower_threshold",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "80",
               "value": "80"
@@ -300,6 +332,10 @@
           "configKey": "query_occlusion_sample_upper_threshold",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "100",
               "value": "100"
             },
@@ -320,6 +356,10 @@
           "configKey": "xenia_queue_priority",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "NORMAL",
               "value": "0"
             },
@@ -337,6 +377,10 @@
           "default": "auto",
           "configKey": "xenia_framerate_limit",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "60 (Padrão)",
               "value": "60"
@@ -360,6 +404,10 @@
           "configKey": "postprocess_antialiasing",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Nenhum",
               "value": "off"
             },
@@ -381,6 +429,10 @@
           "default": "auto",
           "configKey": "postprocess_scaling_and_sharpening",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "BILINEAR",
               "value": "bilinear"
@@ -416,6 +468,10 @@
           "configKey": "xenia_anisotropic_override",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "DISABLED",
               "value": "0"
             },
@@ -449,6 +505,10 @@
           "configKey": "gpu",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "DIRECT3D12",
               "value": "d3d12"
             },
@@ -475,6 +535,10 @@
           "default": "auto",
           "configKey": "xenia_lang",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "English",
               "value": "1"
@@ -549,6 +613,10 @@
           "default": "auto",
           "configKey": "license_mask",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "FIRST LICENCE ENABLED",
               "value": "1"
@@ -671,6 +739,10 @@
           "configKey": "apu",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "NOP",
               "value": "nop"
             },
@@ -700,6 +772,10 @@
           "default": "auto",
           "configKey": "xenia_hid",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "SDL",
               "value": "sdl"

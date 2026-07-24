@@ -4,8 +4,16 @@
     "type": "bool"
   },
   "ScrapeVideos": {
+    "value": true,
+    "type": "bool"
+  },
+  "ScraperNotificationMode": {
     "value": false,
     "type": "bool"
+  },
+  "ScreenScraperMotors": {
+    "value": 2,
+    "type": "int"
   },
   "VideoLowersMusic": {
     "value": true,
@@ -63,6 +71,10 @@
     "value": true,
     "type": "bool"
   },
+  "ScrapeRatings": {
+    "value": true,
+    "type": "bool"
+  },
   "ThreadedLoading": {
     "value": true,
     "type": "bool"
@@ -101,10 +113,6 @@
   },
   "ScreenScraperPass": {
     "value": "qui02nho04",
-    "type": "string"
-  },
-  "ScreenScraperUser": {
-    "value": "marcoriesco",
     "type": "string"
   },
   "SortSystems": {
@@ -160,7 +168,7 @@
     "type": "string"
   },
   "Language": {
-    "value": "pt_BR",
+    "value": "auto",
     "type": "string"
   },
   "RIESCADE.ThemeSet": {
@@ -188,7 +196,7 @@
     "type": "string"
   },
   "Window.system-switch.Maximized": {
-    "value": false,
+    "value": true,
     "type": "bool"
   },
   "Window.system-switch.X": {
@@ -204,7 +212,7 @@
     "type": "int"
   },
   "Window.system-switch.Height": {
-    "value": 882,
+    "value": 941,
     "type": "int"
   },
   "Window.system-teknoparrot.Maximized": {
@@ -292,7 +300,7 @@
     "type": "int"
   },
   "Window.system-snes.Maximized": {
-    "value": false,
+    "value": true,
     "type": "bool"
   },
   "Window.system-snes.X": {
@@ -372,15 +380,15 @@
     "type": "int"
   },
   "Window.tool-settings.Maximized": {
-    "value": true,
+    "value": false,
     "type": "bool"
   },
   "Window.tool-settings.X": {
-    "value": 269,
+    "value": 299,
     "type": "int"
   },
   "Window.tool-settings.Y": {
-    "value": 177,
+    "value": 40,
     "type": "int"
   },
   "Window.tool-settings.Width": {
@@ -576,7 +584,7 @@
     "type": "int"
   },
   "Window.system-arcade.Maximized": {
-    "value": false,
+    "value": true,
     "type": "bool"
   },
   "RIESCADE.PreferredMediaType.xbox360": {
@@ -744,7 +752,7 @@
     "type": "bool"
   },
   "ScrapperDownloadFanart": {
-    "value": false,
+    "value": true,
     "type": "bool"
   },
   "ScrapperDownloadCover": {
@@ -756,31 +764,31 @@
     "type": "bool"
   },
   "ScrapperDownloadCover3D": {
-    "value": false,
+    "value": true,
     "type": "bool"
   },
   "ScrapperDownloadCoverBack": {
-    "value": false,
+    "value": true,
     "type": "bool"
   },
   "ScrapperDownloadLogo": {
-    "value": false,
+    "value": true,
     "type": "bool"
   },
   "ScrapperDownloadScreenshot": {
-    "value": false,
+    "value": true,
     "type": "bool"
   },
   "ScrapperDownloadTitle": {
-    "value": false,
+    "value": true,
     "type": "bool"
   },
   "ScrapperDownloadMix": {
-    "value": false,
+    "value": true,
     "type": "bool"
   },
   "ScrapperDownloadManual": {
-    "value": false,
+    "value": true,
     "type": "bool"
   },
   "RIESCADE.PreferredMediaType.all": {
@@ -788,7 +796,7 @@
     "type": "string"
   },
   "ScrapperDownloadMarquee": {
-    "value": false,
+    "value": true,
     "type": "bool"
   },
   "RIESCADE.SaveWindowPositions": {
@@ -926,5 +934,17 @@
   "RIESCADE.TPLightgun1Device": {
     "value": "rawinput:%5C%5C%3F%5CHID%23VID_1BCF%26PID_08A0%26Col01%237%263b460199%260%260000%23%7B378de44c-56ef-11d1-bc8c-00a0c91405dd%7D",
     "type": "string"
+  },
+  "RIESCADE.FrontendDisplay": {
+    "value": "auto",
+    "type": "string"
+  },
+  "ScreenScraperUser": {
+    "value": "marcoriesco",
+    "type": "string"
+  },
+  "ScrapperDownloadCartridge": {
+    "value": true,
+    "type": "bool"
   }
 }

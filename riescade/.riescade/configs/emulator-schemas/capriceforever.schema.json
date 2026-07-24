@@ -41,6 +41,10 @@
           "configKey": "caprice_renderer",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "DIRECTX",
               "value": "directx"
             },
@@ -92,6 +96,10 @@
           "default": "auto",
           "configKey": "caprice_brand",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "AMSTRAD",
               "value": "Amstrad"
@@ -170,6 +178,10 @@
           "default": "auto",
           "configKey": "caprice_xmem",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Não",
               "value": "no"
@@ -253,6 +265,10 @@
           "configKey": "caprice_addspeech",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Nenhum",
               "value": "none"
             },
@@ -289,6 +305,10 @@
           "default": "auto",
           "configKey": "caprice_gamepadprofile",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "RETROBAT Automático",
               "value": "retrobat"

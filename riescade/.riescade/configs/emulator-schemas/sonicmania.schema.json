@@ -21,6 +21,10 @@
           "configKey": "sonicmania_shader",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Nenhum",
               "value": "0"
             },
@@ -83,6 +87,10 @@
           "default": "auto",
           "configKey": "sonicmania_lang",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "English",
               "value": "0"

@@ -6,7 +6,8 @@
   "scripts": {
     "bundle": "node esbuild.js",
     "package": "pkg dist/index.js -t node18-win-x64 -o ../riescadeLauncher.exe",
-    "build": "npm run bundle && npm run package"
+    "build": "npm run bundle && npm run package",
+    "typecheck": "tsc --noEmit"
   },
   "keywords": [],
   "author": "Marco Riesco",

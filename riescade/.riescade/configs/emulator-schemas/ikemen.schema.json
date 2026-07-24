@@ -31,6 +31,10 @@
           "configKey": "resolution",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "1920x1080",
               "value": "1920_1080"
             },

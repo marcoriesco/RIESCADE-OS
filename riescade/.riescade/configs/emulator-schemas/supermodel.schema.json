@@ -32,6 +32,10 @@
           "configKey": "widescreen",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Desativado",
               "value": "0"
             },
@@ -160,6 +164,10 @@
           "configKey": "inputdriver",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "SDL",
               "value": "sdlgamepad"
             },
@@ -187,6 +195,10 @@
           "default": "auto",
           "configKey": "model3_p1index",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "1",
               "value": "1"
@@ -229,6 +241,10 @@
           "configKey": "model3_p2index",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "1",
               "value": "1"
             },
@@ -270,6 +286,10 @@
           "default": "auto",
           "configKey": "wheel_index",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "1",
               "value": "1"
@@ -344,6 +364,10 @@
           "configKey": "crosshairs",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Nenhum",
               "value": "0"
             },
@@ -380,6 +404,10 @@
           "configKey": "supermodel_gun1",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "1",
               "value": "1"
             },
@@ -408,6 +436,10 @@
           "default": "auto",
           "configKey": "supermodel_gun2",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "1",
               "value": "1"
@@ -441,6 +473,10 @@
           "default": "auto",
           "configKey": "supermodel_output",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "TO WINDOW",
               "value": "win"

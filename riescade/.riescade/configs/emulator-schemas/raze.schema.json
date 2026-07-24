@@ -21,6 +21,10 @@
           "configKey": "raze_scalemode",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "NORMAL",
               "value": "0"
             },
@@ -56,6 +60,10 @@
           "default": "auto",
           "configKey": "raze_ratio",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "4/3",
               "value": "3"
@@ -114,6 +122,10 @@
           "configKey": "raze_texture_filter",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Nenhum",
               "value": "0"
             },
@@ -142,6 +154,10 @@
           "default": "auto",
           "configKey": "raze_anisotropic_filtering",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Não",
               "value": "1"
@@ -174,6 +190,10 @@
           "default": "auto",
           "configKey": "raze_msaa",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Não",
               "value": "1"
@@ -211,6 +231,10 @@
           "configKey": "raze_fxaa",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "Nenhum",
               "value": "0"
             },
@@ -242,6 +266,10 @@
           "default": "auto",
           "configKey": "raze_renderer",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "OPENGL",
               "value": "0"
@@ -275,6 +303,10 @@
           "configKey": "raze_mididevice",
           "values": [
             {
+              "label": "AUTO",
+              "value": "auto"
+            },
+            {
               "label": "FLUIDSYNTH",
               "value": "-5"
             },
@@ -302,6 +334,10 @@
           "default": "auto",
           "configKey": "raze_crosshair",
           "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            },
             {
               "label": "Desativado",
               "value": "off"
