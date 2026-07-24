@@ -75,22 +75,6 @@
     "value": true,
     "type": "bool"
   },
-  "ThreadedLoading": {
-    "value": true,
-    "type": "bool"
-  },
-  "OptimizeVRAM": {
-    "value": true,
-    "type": "bool"
-  },
-  "OptimizeVideo": {
-    "value": true,
-    "type": "bool"
-  },
-  "UseFileCache": {
-    "value": true,
-    "type": "bool"
-  },
   "global.netplay": {
     "value": true,
     "type": "bool"
@@ -143,10 +127,6 @@
     "value": "RIESCADE",
     "type": "string"
   },
-  "global.retroarch.menu_driver": {
-    "value": "xmb",
-    "type": "string"
-  },
   "global.shaderset": {
     "value": "[riescade]",
     "type": "string"
@@ -182,10 +162,6 @@
   "ScraperSystems": {
     "value": "none",
     "type": "string"
-  },
-  "MaxVRAM": {
-    "value": 516,
-    "type": "int"
   },
   "audio.display_titles_time": {
     "value": 3,
@@ -264,15 +240,15 @@
     "type": "bool"
   },
   "Window.X": {
-    "value": -8,
+    "value": 1,
     "type": "int"
   },
   "Window.Y": {
-    "value": -8,
+    "value": 0,
     "type": "int"
   },
   "Window.Width": {
-    "value": 1920,
+    "value": 1918,
     "type": "int"
   },
   "Window.Height": {
@@ -380,15 +356,15 @@
     "type": "int"
   },
   "Window.tool-settings.Maximized": {
-    "value": false,
+    "value": true,
     "type": "bool"
   },
   "Window.tool-settings.X": {
-    "value": 299,
+    "value": 598,
     "type": "int"
   },
   "Window.tool-settings.Y": {
-    "value": 40,
+    "value": 79,
     "type": "int"
   },
   "Window.tool-settings.Width": {
@@ -396,7 +372,7 @@
     "type": "int"
   },
   "Window.tool-settings.Height": {
-    "value": 896,
+    "value": 792,
     "type": "int"
   },
   "Window.tool-collections.Maximized": {
@@ -939,6 +915,14 @@
     "value": "auto",
     "type": "string"
   },
+  "RIESCADE.MultiDisplayMode": {
+    "value": "off",
+    "type": "string"
+  },
+  "RIESCADE.TaskbarDisplay": {
+    "value": "primary",
+    "type": "string"
+  },
   "ScreenScraperUser": {
     "value": "marcoriesco",
     "type": "string"
@@ -946,5 +930,17 @@
   "ScrapperDownloadCartridge": {
     "value": true,
     "type": "bool"
+  },
+  "Window.system-lindbergh.Maximized": {
+    "value": true,
+    "type": "bool"
+  },
+  "RIESCADE.PreferredMediaType.lindbergh": {
+    "value": "cover",
+    "type": "string"
+  },
+  "switch.emulator": {
+    "value": "eden-nightly",
+    "type": "string"
   }
 }

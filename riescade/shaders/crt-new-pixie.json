@@ -1,0 +1,10 @@
+{
+  "$schema": "riescade-shader-profile-v1",
+  "name": "crt-new-pixie",
+  "default": {
+    "shaderGL": "crt/crt-mattias",
+    "shader": "crt/newpixie-crt",
+    "ares": "crt/newpixie-crt"
+  },
+  "systems": {}
+}

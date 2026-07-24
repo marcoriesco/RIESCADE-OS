@@ -32,7 +32,7 @@ export class LibRetroGenerator extends BaseGenerator {
         }
       }
 
-      // Apply general configurations from emulator.json
+      // Apply the resolved global, emulator, system and game configuration.
       const fullscreen = Config.getEmulatorSetting('libretro', 'fullscreen', 'true');
       cfg['video_fullscreen'] = (fullscreen === 'true' || fullscreen === true) ? 'true' : 'false';
 
@@ -64,7 +64,8 @@ export class LibRetroGenerator extends BaseGenerator {
       const vsync = Config.getEmulatorSetting('libretro', 'vsync', 'true');
       cfg['video_vsync'] = (vsync === 'true' || vsync === true) ? 'true' : 'false';
 
-      cfg['menu_driver'] = 'ozone';
+      const menuDriver = String(Config.getEmulatorSetting('libretro', 'menu_driver', 'ozone'));
+      cfg['menu_driver'] = menuDriver === 'auto' ? 'ozone' : menuDriver;
       cfg['global_core_options'] = 'true';
       cfg['input_autodetect_enable'] = 'true'; // Let RetroArch configure controls natively
 
@@ -72,7 +73,10 @@ export class LibRetroGenerator extends BaseGenerator {
         this.system,
         this.rom,
         String(Config.getCoreSetting(this.core, 'bezels', 'auto')),
-        String(Config.getCoreSetting(this.core, 'shaders', 'auto'))
+        String(Config.getCoreSetting(this.core, 'shaders', 'auto')),
+        String(Config.getCoreSetting(this.core, 'videofilters',
+          Config.getCoreSetting(this.core, 'filters', 'auto'))),
+        videoDriver === 'gl' || videoDriver === 'glcore' || videoDriver === 'opengl'
       );
       cfg['input_overlay_enable'] = visuals.overlayConfig ? 'true' : 'false';
       if (visuals.overlayConfig) cfg['input_overlay'] = visuals.overlayConfig;
@@ -80,6 +84,8 @@ export class LibRetroGenerator extends BaseGenerator {
       cfg['video_shader_enable'] = visuals.shaderPreset ? 'true' : 'false';
       if (visuals.shaderPreset) cfg['video_shader'] = visuals.shaderPreset;
       else delete cfg['video_shader'];
+      if (visuals.videoFilter) cfg['video_filter'] = visuals.videoFilter;
+      else delete cfg['video_filter'];
 
       const selectedStatePath = this.args.rawArgs['-state_path'];
       const autosaveRequested = this.args.rawArgs['-autosave'] === '1';
@@ -176,6 +182,32 @@ export class LibRetroGenerator extends BaseGenerator {
       }
     } catch (e) {
       Logger.error('LibRetroGenerator: Failed to load controllers.json', e);
+    }
+
+    // Native RetroArch exit mapping is kept as a redundant path when both
+    // bindings are buttons. The launcher SDL3 monitor covers axes and hats.
+    try {
+      const inputPath = join(getConfigsPath(), 'input.json');
+      if (existsSync(inputPath) && this.args.controllers.length > 0) {
+        const inputConfig = JSON.parse(readFileSync(inputPath, 'utf8'));
+        const firstController = this.args.controllers[0];
+        const profile = (inputConfig.inputConfigs || []).find((item: any) =>
+          String(item.device?.deviceGUID || item.deviceGUID || '').toLowerCase() === firstController.guid.toLowerCase()
+        ) || (inputConfig.inputConfigs || []).find((item: any) =>
+          String(item.device?.deviceName || item.deviceName || '').toLowerCase() === firstController.name.toLowerCase()
+        );
+        const inputs = profile?.inputs || [];
+        const quitCombo = profile?.hotkey?.combos?.find((combo: any) => combo.action === 'quit');
+        const hotkey = inputs.find((input: any) => input.name === 'hotkey');
+        const exit = inputs.find((input: any) => input.name === (quitCombo?.button || 'start'));
+        if (hotkey?.type === 'button' && exit?.type === 'button') {
+          cfg['input_enable_hotkey_btn'] = String(hotkey.id);
+          cfg['input_exit_emulator_btn'] = String(exit.id);
+          Logger.info(`LibRetroGenerator: Native exit combo set to buttons ${hotkey.id} + ${exit.id}.`);
+        }
+      }
+    } catch (error) {
+      Logger.warn(`LibRetroGenerator: Could not configure native exit combo: ${error}`);
     }
 
     // Up to 4 players

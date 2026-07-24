@@ -1,0 +1,17 @@
+{
+  "$schema": "riescade-shader-profile-v1",
+  "name": "ntsc-vcr",
+  "default": {
+    "shaderdx12": "vhs/vhs_mpalko",
+    "shader": "vhs/ntsc-vcr",
+    "ares": "vhs/ntsc-vcr"
+  },
+  "systems": {
+    "model2": {
+      "shader": "disabled"
+    },
+    "model3": {
+      "shader": "disabled"
+    }
+  }
+}

@@ -30,6 +30,7 @@ const EMULATOR_EXES: Record<string, string> = {
   'duckstation': 'duckstation/duckstation-qt-x64-ReleaseLTC.exe',
   'ppsspp': 'ppsspp/PPSSPPWindows64.exe',
   'flycast': 'flycast/flycast.exe',
+  'linuxloader': 'linuxloader/linuxloader.exe',
   'xemu': 'xemu/xemu.exe',
   'xenia': 'xenia/xenia.exe',
   'xenia-canary': 'xenia-canary/xenia-canary.exe',
@@ -46,12 +47,13 @@ const EMULATOR_EXES: Record<string, string> = {
 interface EmulatorCatalogEntry {
   name: string
   aliases?: string[]
-  executable: string
+  executable?: string
   installDir: string
   source?: string
   provider?: 'github' | 'gitea' | 'direct'
   assetPattern?: string
   preserve?: string[]
+  updateMode?: 'github-release' | 'release' | 'manual'
 }
 
 let emulatorCatalogCache: Record<string, EmulatorCatalogEntry> | null = null
@@ -77,6 +79,10 @@ function getCatalogEntry(emulatorName: string): EmulatorCatalogEntry | undefined
   return Object.values(catalog).find(entry =>
     entry.aliases?.some(alias => alias.toLowerCase() === normalized)
   )
+}
+
+function normalizeVersion(value: unknown): string {
+  return String(value || '').trim().toLowerCase()
 }
 
 function resolveReleaseApi(sourceUrl: string, provider?: string): { apiUrl: string; isGitea: boolean } {
@@ -298,7 +304,9 @@ export class EmulatorInstaller {
       const data = await fetchJson(releaseApi.apiUrl)
       if (releaseApi.isGitea) {
         if (Array.isArray(data) && data.length > 0) {
-          latestVersion = data[0].name || data[0].tag_name || installedVersion
+          // Gitea release names are human-readable and can change independently
+          // from the immutable tag stored after installation.
+          latestVersion = data[0].tag_name || data[0].name || installedVersion
         }
       } else {
         latestVersion = data.tag_name || data.name || installedVersion
@@ -310,7 +318,9 @@ export class EmulatorInstaller {
         sourceUrl,
         installedVersion,
         latestVersion,
-        updateAvailable: installed && installedVersion !== 'unknown' && installedVersion !== latestVersion
+        updateAvailable: installed
+          && installedVersion !== 'unknown'
+          && normalizeVersion(installedVersion) !== normalizeVersion(latestVersion)
       }
     } catch (err) {
       console.error(`Failed to check latest release for ${emulatorName}:`, err)
@@ -388,7 +398,7 @@ export class EmulatorInstaller {
         throw new Error(`The downloaded package does not contain the expected executable ${exeName}.`)
       }
 
-      const tag = latestRelease.name || latestRelease.tag_name || 'latest'
+      const tag = latestRelease.tag_name || latestRelease.name || 'latest'
       writeFileSync(join(stagingDir, '.version'), tag, 'utf8')
 
       rmSync(backupDir, { recursive: true, force: true })

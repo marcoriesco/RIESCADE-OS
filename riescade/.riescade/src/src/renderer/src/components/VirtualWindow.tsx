@@ -21,6 +21,7 @@ interface VirtualWindowProps {
   onMinimize: (id: string) => void;
   onMaximize: (id: string) => void;
   onUpdateBounds: (id: string, bounds: { x: number; y: number; width: number; height: number }) => void;
+  desktopAreas?: { x: number; y: number; width: number; height: number }[];
   children: React.ReactNode;
 }
 
@@ -44,12 +45,19 @@ function VirtualWindow({
   onMinimize,
   onMaximize,
   onUpdateBounds,
+  desktopAreas,
   children
 }: VirtualWindowProps) {
   const windowRef = useRef<HTMLDivElement>(null);
   
   // Local ref tracking window bounds to prevent react renders during drag/resize
   const boundsRef = useRef({
+    x: initialX,
+    y: initialY,
+    width: initialWidth,
+    height: initialHeight
+  });
+  const restoreBoundsRef = useRef({
     x: initialX,
     y: initialY,
     width: initialWidth,
@@ -79,15 +87,48 @@ function VirtualWindow({
     windowRef.current.style.pointerEvents = 'auto';
 
     if (isMaximized) {
-      windowRef.current.style.transform = 'translate3d(0px, 0px, 0px)';
-      windowRef.current.style.width = '100%';
-      windowRef.current.style.height = '100%';
+      const centerX = initialX + initialWidth / 2;
+      const centerY = initialY + initialHeight / 2;
+      const targetArea = desktopAreas?.find(area =>
+        centerX >= area.x && centerX < area.x + area.width &&
+        centerY >= area.y && centerY < area.y + area.height
+      ) || desktopAreas?.[0];
+      windowRef.current.style.transform = `translate3d(${targetArea?.x || 0}px, ${targetArea?.y || 0}px, 0px)`;
+      windowRef.current.style.width = targetArea ? `${targetArea.width}px` : '100%';
+      windowRef.current.style.height = targetArea ? `${targetArea.height}px` : '100%';
     } else {
       windowRef.current.style.transform = `translate3d(${initialX}px, ${initialY}px, 0px)`;
       windowRef.current.style.width = `${initialWidth}px`;
       windowRef.current.style.height = `${initialHeight}px`;
     }
-  }, [initialX, initialY, initialWidth, initialHeight, isMaximized, isMinimized]);
+  }, [initialX, initialY, initialWidth, initialHeight, isMaximized, isMinimized, desktopAreas]);
+
+  useEffect(() => {
+    const keepVisible = () => {
+      if (isMaximized || isMinimized) return;
+      const desktopWidth = window.innerWidth;
+      const desktopHeight = Math.max(400, window.innerHeight - 56);
+      const current = boundsRef.current;
+      const next = {
+        width: Math.min(Math.max(current.width, 500), desktopWidth),
+        height: Math.min(Math.max(current.height, 400), desktopHeight),
+        x: 0,
+        y: 0
+      };
+      next.x = Math.max(-next.width + 120, Math.min(desktopWidth - 120, current.x));
+      next.y = Math.max(0, Math.min(desktopHeight - 40, current.y));
+      if (next.x === current.x && next.y === current.y && next.width === current.width && next.height === current.height) return;
+      boundsRef.current = next;
+      if (windowRef.current) {
+        windowRef.current.style.transform = `translate3d(${next.x}px, ${next.y}px, 0px)`;
+        windowRef.current.style.width = `${next.width}px`;
+        windowRef.current.style.height = `${next.height}px`;
+      }
+      onUpdateBounds(id, next);
+    };
+    window.addEventListener('resize', keepVisible);
+    return () => window.removeEventListener('resize', keepVisible);
+  }, [id, isMaximized, isMinimized, onUpdateBounds]);
 
   const handleMouseDown = useCallback(() => {
     if (!active) {
@@ -110,7 +151,9 @@ function VirtualWindow({
     onClose(id);
   }, [onClose, id]);
 
-  const handleMaximizeDoubleClick = useCallback(() => {
+  const handleMaximizeDoubleClick = useCallback((e: React.MouseEvent) => {
+    const target = e.target as HTMLElement;
+    if (target.closest('button, input, select, textarea, a, [role="button"], [contenteditable="true"], .no-drag')) return;
     onMaximize(id);
   }, [onMaximize, id]);
 
@@ -122,10 +165,7 @@ function VirtualWindow({
     // Don't drag if clicking interactive controls (buttons, menus, inputs)
     const target = e.target as HTMLElement;
     if (
-      target.closest('button') ||
-      target.closest('input') ||
-      target.closest('select') ||
-      target.closest('.no-drag')
+      target.closest('button, input, select, textarea, a, [role="button"], [contenteditable="true"], .no-drag')
     ) {
       return;
     }
@@ -136,6 +176,14 @@ function VirtualWindow({
     let startY = e.clientY;
     let startPosX = boundsRef.current.x;
     let startPosY = boundsRef.current.y;
+    const desktopHeight = Math.max(400, window.innerHeight - 56);
+    const snappedWidth = Math.floor(window.innerWidth / 2);
+    const isLeftSnapped = boundsRef.current.width === snappedWidth && boundsRef.current.height === desktopHeight && boundsRef.current.x === 0;
+    const isRightSnapped = boundsRef.current.width === snappedWidth && boundsRef.current.height === desktopHeight && boundsRef.current.x === snappedWidth;
+
+    if (!isMaximized && !isLeftSnapped && !isRightSnapped) {
+      restoreBoundsRef.current = { ...boundsRef.current };
+    }
 
     const el = windowRef.current;
     if (el) {
@@ -171,12 +219,9 @@ function VirtualWindow({
     }
 
     // Drag-to-unsnap if dragging a snapped window
-    const isLeftSnapped = boundsRef.current.width === Math.floor(window.innerWidth / 2) && boundsRef.current.height === window.innerHeight - 56 && boundsRef.current.x === 0;
-    const isRightSnapped = boundsRef.current.width === Math.floor(window.innerWidth / 2) && boundsRef.current.height === window.innerHeight - 56 && boundsRef.current.x === Math.floor(window.innerWidth / 2);
-
     if (isLeftSnapped || isRightSnapped) {
-      const normalWidth = initialWidth;
-      const normalHeight = initialHeight;
+      const normalWidth = Math.min(restoreBoundsRef.current.width, window.innerWidth);
+      const normalHeight = Math.min(restoreBoundsRef.current.height, desktopHeight);
       
       let newX = e.clientX - normalWidth / 2;
       newX = Math.max(0, Math.min(window.innerWidth - normalWidth, newX));
@@ -218,7 +263,7 @@ function VirtualWindow({
       const minVisibleWidth = 120;
       const minVisibleHeight = 40;
       newX = Math.max(-boundsRef.current.width + minVisibleWidth, Math.min(window.innerWidth - minVisibleWidth, newX));
-      newY = Math.max(0, Math.min(window.innerHeight - minVisibleHeight, newY));
+      newY = Math.max(0, Math.min(desktopHeight - minVisibleHeight, newY));
 
       boundsRef.current.x = newX;
       boundsRef.current.y = newY;
@@ -274,6 +319,7 @@ function VirtualWindow({
     const handleMouseUp = () => {
       document.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseup', handleMouseUp);
+      window.removeEventListener('blur', handleMouseUp);
       
       if (rafId) {
         cancelAnimationFrame(rafId);
@@ -293,7 +339,7 @@ function VirtualWindow({
         onMaximize(id);
       } else if (currentSnapType === 'left') {
         const snappedWidth = Math.floor(window.innerWidth / 2);
-        const snappedHeight = window.innerHeight - 56;
+        const snappedHeight = desktopHeight;
         boundsRef.current = {
           x: 0,
           y: 0,
@@ -308,7 +354,7 @@ function VirtualWindow({
         onUpdateBounds(id, boundsRef.current);
       } else if (currentSnapType === 'right') {
         const snappedWidth = Math.floor(window.innerWidth / 2);
-        const snappedHeight = window.innerHeight - 56;
+        const snappedHeight = desktopHeight;
         const snappedX = Math.floor(window.innerWidth / 2);
         boundsRef.current = {
           x: snappedX,
@@ -334,6 +380,7 @@ function VirtualWindow({
 
     document.addEventListener('mousemove', handleMouseMove);
     document.addEventListener('mouseup', handleMouseUp);
+    window.addEventListener('blur', handleMouseUp);
   };
 
   const handleResizeStart = (
@@ -373,7 +420,8 @@ function VirtualWindow({
       let newY = startPosY;
 
       if (direction.includes('e')) {
-        newWidth = Math.max(500, startWidth + dx);
+        const availableWidth = Math.max(500, window.innerWidth - Math.max(0, startPosX));
+        newWidth = Math.max(500, Math.min(availableWidth, startWidth + dx));
       } else if (direction.includes('w')) {
         const deltaX = Math.min(dx, startWidth - 500);
         newWidth = startWidth - deltaX;
@@ -381,7 +429,8 @@ function VirtualWindow({
       }
 
       if (direction.includes('s')) {
-        newHeight = Math.max(400, startHeight + dy);
+        const availableHeight = Math.max(400, window.innerHeight - 56 - Math.max(0, startPosY));
+        newHeight = Math.max(400, Math.min(availableHeight, startHeight + dy));
       } else if (direction.includes('n')) {
         let deltaY = Math.min(dy, startHeight - 400);
         deltaY = Math.max(deltaY, -startPosY);
@@ -390,10 +439,10 @@ function VirtualWindow({
       }
 
       boundsRef.current = {
-        x: newX,
-        y: newY,
-        width: newWidth,
-        height: newHeight
+        x: Math.max(-newWidth + 120, Math.min(window.innerWidth - 120, newX)),
+        y: Math.max(0, Math.min(window.innerHeight - 96, newY)),
+        width: Math.min(newWidth, window.innerWidth),
+        height: Math.min(newHeight, Math.max(400, window.innerHeight - 56))
       };
 
       if (el) {
@@ -413,6 +462,7 @@ function VirtualWindow({
     const handleMouseUp = () => {
       document.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseup', handleMouseUp);
+      window.removeEventListener('blur', handleMouseUp);
 
       if (rafId) {
         cancelAnimationFrame(rafId);
@@ -433,6 +483,7 @@ function VirtualWindow({
 
     document.addEventListener('mousemove', handleMouseMove);
     document.addEventListener('mouseup', handleMouseUp);
+    window.addEventListener('blur', handleMouseUp);
   };
 
   return (

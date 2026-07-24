@@ -1419,6 +1419,34 @@ export default function ToolAppContent({
                     ]}
                     ctx={ctx}
                   />
+                  <SettingSelect
+                    label="Usar segundo monitor"
+                    name="RIESCADE.MultiDisplayMode"
+                    defaultValue="off"
+                    desc="Use uma tela auxiliar para mídias ou transforme os monitores em um único desktop estendido."
+                    options={[
+                      { label: "Desativado", value: "off" },
+                      { label: "Tela auxiliar de jogos", value: "companion" },
+                      { label: "Desktop estendido", value: "extended" }
+                    ]}
+                    onValueChange={async (value) => {
+                      await window.api.confirmMultiDisplayMode(value);
+                    }}
+                    ctx={ctx}
+                  />
+                  {String(ctx.getSetting("RIESCADE.MultiDisplayMode") || "off") === "extended" && (
+                    <SettingSelect
+                      label="Barra de tarefas"
+                      name="RIESCADE.TaskbarDisplay"
+                      defaultValue="primary"
+                      desc="Escolha em qual monitor a barra de tarefas e o menu principal serão exibidos."
+                      options={[
+                        { label: "Tela principal", value: "primary" },
+                        { label: "Tela secundária", value: "secondary" }
+                      ]}
+                      ctx={ctx}
+                    />
+                  )}
 
                   <SettingGroup label="Gráficos E GPU" />
                   <SettingSelect 
@@ -1442,7 +1470,6 @@ export default function ToolAppContent({
                     desc="Força aceleração por hardware mesmo em GPUs consideradas instáveis pelo Chromium (--ignore-gpu-blocklist). Desative se ocorrerem travamentos de vídeo." 
                     ctx={ctx} 
                   />
-                  <SettingSlider label="Limite de VRAM" name="MaxVRAM" min={40} max={1000} step={10} suffix=" Mb" ctx={ctx} />
                   <SettingToggle label="V-Sync do Frontend" name="VSync" ctx={ctx} />
 
 
@@ -1484,16 +1511,6 @@ export default function ToolAppContent({
 
                   <SettingGroup label="Interface do Frontend" />
                   <SettingToggle label="Gravar posições das janelas" name="RIESCADE.SaveWindowPositions" desc="Gravar posições e tamanhos de todas as janelas do sistema operacional." ctx={ctx} />
-                  <SettingSelect label="Menu do RetroArch" name="global.retroarch.menu_driver" options={[
-                    { label: "Automático", value: "" }, { label: "RGUI", value: "rgui" },
-                    { label: "XMB", value: "xmb" }, { label: "Ozone", value: "ozone" }
-                  ]} ctx={ctx} />
-
-                  <SettingGroup label="Otimizações" />
-                  <SettingToggle label="Carregamento em Segundo Plano" name="ThreadedLoading" ctx={ctx} />
-                  <SettingToggle label="Otimizar VRAM de Imagens" name="OptimizeVRAM" ctx={ctx} />
-                  <SettingToggle label="Otimizar VRAM de Vídeos" name="OptimizeVideo" ctx={ctx} />
-                  <SettingToggle label="Cache do Sistema de Arquivos" name="UseFileCache" ctx={ctx} />
                 </div>
               </ScrollArea>
             </div>

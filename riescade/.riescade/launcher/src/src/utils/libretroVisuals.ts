@@ -1,4 +1,4 @@
-import { existsSync, mkdirSync, writeFileSync } from 'fs';
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
 import { basename, extname, join } from 'path';
 import { getEmulatorsPath, getRetroBatPath, getStatePath } from './paths.js';
 import { Logger } from './logger.js';
@@ -6,6 +6,7 @@ import { Logger } from './logger.js';
 export interface LibretroVisuals {
   overlayConfig?: string;
   shaderPreset?: string;
+  videoFilter?: string;
 }
 
 function firstExisting(paths: string[]): string | undefined {
@@ -61,30 +62,92 @@ function ensureOverlayConfig(imagePath: string): string {
   return output;
 }
 
-function resolveShader(configured: string): string | undefined {
+function resolveShaderReference(reference: string, kind: 'slang' | 'glsl'): string | undefined {
+  const retroarchShaders = join(getEmulatorsPath(), 'retroarch', 'shaders');
+  const extension = kind === 'slang' ? '.slangp' : '.glslp';
+  const subfolder = kind === 'slang' ? 'shaders_slang' : 'shaders_glsl';
+  const filename = extname(reference) ? reference : `${reference}${extension}`;
+  return firstExisting([
+    join(retroarchShaders, subfolder, filename),
+    join(retroarchShaders, filename)
+  ]);
+}
+
+function readShaderProfile(profileName: string, system: string, preferGl: boolean): string | undefined {
+  const cleanName = profileName.replace(/\.json$/i, '');
+  const configPath = join(getRetroBatPath(), 'riescade', 'shaders', `${cleanName}.json`);
+  if (!existsSync(configPath)) return undefined;
+
+  let profile: any;
+  try {
+    profile = JSON.parse(readFileSync(configPath, 'utf8'));
+  } catch {
+    return undefined;
+  }
+  if (profile?.$schema !== 'riescade-shader-profile-v1') return undefined;
+  const defaults = profile.default || {};
+  const specific = profile.systems?.[system.toLowerCase()] || {};
+  const candidates: Array<[string | undefined, 'slang' | 'glsl']> = preferGl
+    ? [
+        [specific.shaderGL, 'glsl'],
+        [specific.shader, 'slang'],
+        [defaults.shaderGL, 'glsl'],
+        [defaults.shader, 'slang']
+      ]
+    : [
+        [specific.shader, 'slang'],
+        [specific.shaderGL, 'glsl'],
+        [defaults.shader, 'slang'],
+        [defaults.shaderGL, 'glsl']
+      ];
+  for (const [reference, kind] of candidates) {
+    if (!reference) continue;
+    if (String(reference).toLowerCase() === 'disabled') return undefined;
+    const resolved = resolveShaderReference(reference, kind);
+    if (resolved) return resolved;
+  }
+  return undefined;
+}
+
+function resolveShader(configured: string, system: string, preferGl: boolean): string | undefined {
   if (!configured || configured.toLowerCase() === 'none' || configured.toLowerCase() === 'auto') return undefined;
   if (existsSync(configured)) return configured;
+  const profile = readShaderProfile(configured, system, preferGl);
+  if (profile) return profile;
   const roots = [
     join(getRetroBatPath(), 'riescade', 'shaders'),
-    join(getRetroBatPath(), 'riescade', 'system', 'shaders'),
     join(getEmulatorsPath(), 'retroarch', 'shaders')
   ];
   const extensions = extname(configured) ? [''] : ['.slangp', '.glslp', '.cgp'];
   return firstExisting(roots.flatMap(root => extensions.map(ext => join(root, `${configured}${ext}`))));
 }
 
+function resolveVideoFilter(configured: string): string | undefined {
+  if (!configured || configured.toLowerCase() === 'none' || configured.toLowerCase() === 'auto') return undefined;
+  if (existsSync(configured)) return configured;
+  const root = join(getEmulatorsPath(), 'retroarch', 'filters', 'video');
+  const filename = extname(configured) ? configured : `${configured}.filt`;
+  const candidate = join(root, filename);
+  return existsSync(candidate) ? candidate : undefined;
+}
+
 export function resolveLibretroVisuals(
   system: string,
   romPath: string,
   bezelSetting: string,
-  shaderSetting: string
+  shaderSetting: string,
+  videoFilterSetting: string,
+  preferGl = false
 ): LibretroVisuals {
   const bezelImage = resolveBezel(system, romPath, bezelSetting);
-  const shaderPreset = resolveShader(shaderSetting);
+  const shaderPreset = resolveShader(shaderSetting, system, preferGl);
+  const videoFilter = resolveVideoFilter(videoFilterSetting);
   if (bezelImage) Logger.info(`LibRetro visuals: selected bezel ${bezelImage}`);
   if (shaderPreset) Logger.info(`LibRetro visuals: selected shader ${shaderPreset}`);
+  if (videoFilter) Logger.info(`LibRetro visuals: selected video filter ${videoFilter}`);
   return {
     overlayConfig: bezelImage ? ensureOverlayConfig(bezelImage) : undefined,
-    shaderPreset
+    shaderPreset,
+    videoFilter
   };
 }

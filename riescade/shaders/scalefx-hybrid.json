@@ -1,0 +1,18 @@
+{
+  "$schema": "riescade-shader-profile-v1",
+  "name": "scalefx-hybrid",
+  "default": {
+    "shaderdx12": "edge-smoothing/scalenx/scale2xplus",
+    "shaderGL": "scalefx/scalefx-hybrid",
+    "shader": "edge-smoothing/scalefx/scalefx-hybrid",
+    "ares": "edge-smoothing/scalefx/scalefx-hybrid"
+  },
+  "systems": {
+    "model2": {
+      "shader": "disabled"
+    },
+    "model3": {
+      "shader": "disabled"
+    }
+  }
+}

@@ -1,4 +1,4 @@
-import { readFileSync, writeFileSync, existsSync } from 'fs'
+import { readFileSync, writeFileSync, existsSync, copyFileSync, renameSync } from 'fs'
 import { join } from 'path'
 import { getRiescadePath } from '../utils/paths'
 
@@ -93,7 +93,35 @@ export class EmulatorParser {
   constructor() {}
 
   private getEmulatorJsonPath(): string {
-    return join(getRiescadePath(), 'configs', 'emulator.json')
+    const configsPath = join(getRiescadePath(), 'configs')
+    const currentPath = join(configsPath, 'emulator-settings.json')
+    const legacyPath = join(configsPath, 'emulator.json')
+    const migratedBackupPath = join(configsPath, 'emulator.json.migrated')
+
+    // Existing installations may still have the old filename. Import it once,
+    // preserving the original as a recoverable migration backup.
+    if (existsSync(legacyPath) && !existsSync(migratedBackupPath)) {
+      if (!existsSync(currentPath)) {
+        copyFileSync(legacyPath, currentPath)
+      } else {
+        try {
+          const defaults = JSON.parse(readFileSync(currentPath, 'utf-8'))
+          const legacy = JSON.parse(readFileSync(legacyPath, 'utf-8'))
+          const merged = { ...defaults, ...legacy }
+          if (defaults._global || legacy.global || legacy._global) {
+            merged._global = { ...(defaults._global || {}), ...(legacy.global || {}), ...(legacy._global || {}) }
+            delete merged.global
+          }
+          writeFileSync(currentPath, JSON.stringify(merged, null, 2), 'utf-8')
+        } catch (error) {
+          console.error('Failed to merge legacy emulator settings:', error)
+          return legacyPath
+        }
+      }
+      renameSync(legacyPath, migratedBackupPath)
+    }
+
+    return currentPath
   }
 
   public getAllSettings(): any {
@@ -104,7 +132,7 @@ export class EmulatorParser {
       const content = readFileSync(filePath, 'utf-8')
       return JSON.parse(content)
     } catch (error) {
-      console.error('Error parsing emulator.json:', error)
+      console.error('Error parsing emulator-settings.json:', error)
       return {}
     }
   }
@@ -113,11 +141,12 @@ export class EmulatorParser {
     const filePath = this.getEmulatorJsonPath()
     const allSettings = this.getAllSettings()
 
-    if (!allSettings[emulator]) {
-      allSettings[emulator] = {}
+    const targetEmulator = emulator === 'global' ? '_global' : emulator
+    if (!allSettings[targetEmulator]) {
+      allSettings[targetEmulator] = {}
     }
 
-    allSettings[emulator][name] = value
+    allSettings[targetEmulator][name] = value
 
     try {
       const jsonContent = JSON.stringify(allSettings, null, 2)
@@ -133,8 +162,9 @@ export class EmulatorParser {
    */
   public getResolvedSettings(emulator: string): Record<string, { value: any; source: 'emulator' | 'global' | 'default' }> {
     const allSettings = this.getAllSettings()
-    const globalConfig = allSettings['global'] || {}
-    const emuConfig = allSettings[emulator] || {}
+    const globalConfig = allSettings['_global'] || allSettings['global'] || {}
+    const targetEmulator = emulator === 'global' ? '_global' : emulator
+    const emuConfig = allSettings[targetEmulator] || {}
     const result: Record<string, { value: any; source: 'emulator' | 'global' | 'default' }> = {}
 
     // First, include all emulator-specific settings
@@ -167,8 +197,9 @@ export class EmulatorParser {
    */
   public getSettingSource(emulator: string, key: string): 'emulator' | 'global' | 'default' {
     const allSettings = this.getAllSettings()
-    const emuConfig = allSettings[emulator] || {}
-    const globalConfig = allSettings['global'] || {}
+    const targetEmulator = emulator === 'global' ? '_global' : emulator
+    const emuConfig = allSettings[targetEmulator] || {}
+    const globalConfig = allSettings['_global'] || allSettings['global'] || {}
 
     const emuVal = emuConfig[key]
     if (emuVal !== undefined && emuVal !== 'auto') {
@@ -190,8 +221,9 @@ export class EmulatorParser {
     const filePath = this.getEmulatorJsonPath()
     const allSettings = this.getAllSettings()
 
-    if (allSettings[emulator] && allSettings[emulator][key] !== undefined) {
-      delete allSettings[emulator][key]
+    const targetEmulator = emulator === 'global' ? '_global' : emulator
+    if (allSettings[targetEmulator] && allSettings[targetEmulator][key] !== undefined) {
+      delete allSettings[targetEmulator][key]
 
       try {
         const jsonContent = JSON.stringify(allSettings, null, 2)
@@ -211,8 +243,9 @@ export class EmulatorParser {
     const filePath = this.getEmulatorJsonPath()
     const allSettings = this.getAllSettings()
 
-    if (allSettings[emulator]) {
-      allSettings[emulator] = {}
+    const targetEmulator = emulator === 'global' ? '_global' : emulator
+    if (allSettings[targetEmulator]) {
+      allSettings[targetEmulator] = {}
 
       try {
         const jsonContent = JSON.stringify(allSettings, null, 2)

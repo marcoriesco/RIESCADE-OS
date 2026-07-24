@@ -7,7 +7,7 @@
     "hdr": "auto",
     "monitor_index": "auto",
     "gpu_index": "auto",
-    "shaders": "none",
+    "shaders": "auto",
     "bezels": "none",
     "filters": "none",
     "discord": "false",
@@ -3322,7 +3322,9 @@
     "yabasanshiro_saturn_pad": "auto",
     "yabause_retroachievements.hardcore": "auto",
     "yabause_rewind": "auto",
-    "yabause_autosave": "auto"
+    "yabause_autosave": "auto",
+    "bezels": "[riescade]",
+    "shaders": "none"
   },
   "eden": {
     "vsync": "1",

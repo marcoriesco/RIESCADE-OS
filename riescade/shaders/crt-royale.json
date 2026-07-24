@@ -1,0 +1,9 @@
+{
+  "$schema": "riescade-shader-profile-v1",
+  "name": "crt-royale",
+  "default": {
+    "shader": "crt/crt-royale",
+    "ares": "crt/crt-royale"
+  },
+  "systems": {}
+}

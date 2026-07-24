@@ -21,6 +21,7 @@ export interface LaunchArgs {
   emulator: string;
   core: string;
   rom: string;
+  gameConfigKey?: string;
   controllers: ControllerInfo[];
   // Legacy per-player fields (kept for backward compatibility during migration)
   p1guid?: string;

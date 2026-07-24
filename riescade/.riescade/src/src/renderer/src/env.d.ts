@@ -28,6 +28,12 @@ declare global {
       getActiveTheme: () => Promise<string>
       loadTheme: (themeName: string) => Promise<any>
       getSettings: () => Promise<any>
+      getDisplayLayout: () => Promise<{
+        virtualBounds: { x: number; y: number; width: number; height: number }
+        displays: { id: number; primary: boolean; x: number; y: number; width: number; height: number }[]
+      }>
+      confirmMultiDisplayMode: (mode: string) => Promise<boolean>
+      getSecondaryDisplayState: () => Promise<any>
       getGpuDiagnostics: () => Promise<any>
       getPointingDevices: (forceRefresh?: boolean) => Promise<{ lastScan: number; devices: any[] }>
       saveSetting: (name: string, value: any, type: string) => Promise<any>
@@ -37,6 +43,9 @@ declare global {
       getEmulatorSchemas: () => Promise<{ id: string; name: string; description?: string; icon?: string; groupCount: number; optionCount: number }[]>
       getEmulatorSchema: (id: string) => Promise<any>
       getResolvedEmulatorSettings: (emulator: string) => Promise<Record<string, { value: any; source: 'emulator' | 'global' | 'default' }>>
+      getScopedSettings: (scope: 'system' | 'game', context: { system: string; emulator: string; core?: string; rom?: string }) => Promise<any>
+      saveScopedSetting: (scope: 'system' | 'game', context: { system: string; emulator: string; core?: string; rom?: string }, name: string, value: any) => Promise<any>
+      resetScopedSetting: (scope: 'system' | 'game', context: { system: string; emulator: string; core?: string; rom?: string }, name?: string) => Promise<any>
       resetEmulatorSetting: (emulator: string, key: string) => Promise<void>
       resetAllEmulatorSettings: (emulator: string) => Promise<void>
       reloadEmulatorSchemas: () => Promise<any>

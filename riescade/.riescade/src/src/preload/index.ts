@@ -12,7 +12,9 @@ const allowedEventChannels = new Set([
   'update-progress',
   'scrape-progress',
   'scrape-finished',
-  'scrape-manual-search-required'
+  'scrape-manual-search-required',
+  'secondary-display-state',
+  'display-layout-changed'
 ])
 
 // Simplified API - all config is done through EmulationStation
@@ -40,6 +42,9 @@ const api = {
 
   // Settings (read from ES config, write for UI prefs)
   getSettings: () => ipcRenderer.invoke('get-settings'),
+  getDisplayLayout: () => ipcRenderer.invoke('get-display-layout'),
+  confirmMultiDisplayMode: (mode: string) => ipcRenderer.invoke('confirm-multi-display-mode', mode),
+  getSecondaryDisplayState: () => ipcRenderer.invoke('get-secondary-display-state'),
   getGpuDiagnostics: () => ipcRenderer.invoke('get-gpu-diagnostics'),
   getPointingDevices: (forceRefresh?: boolean) => ipcRenderer.invoke('get-pointing-devices', forceRefresh),
   saveSetting: (name: string, value: any, type: 'string' | 'bool' | 'int' | 'float') =>
@@ -52,6 +57,12 @@ const api = {
   getEmulatorSchemas: () => ipcRenderer.invoke('get-emulator-schemas'),
   getEmulatorSchema: (id: string) => ipcRenderer.invoke('get-emulator-schema', id),
   getResolvedEmulatorSettings: (emulator: string) => ipcRenderer.invoke('get-resolved-emulator-settings', emulator),
+  getScopedSettings: (scope: 'system' | 'game', context: any) =>
+    ipcRenderer.invoke('get-scoped-settings', scope, context),
+  saveScopedSetting: (scope: 'system' | 'game', context: any, name: string, value: any) =>
+    ipcRenderer.invoke('save-scoped-setting', scope, context, name, value),
+  resetScopedSetting: (scope: 'system' | 'game', context: any, name?: string) =>
+    ipcRenderer.invoke('reset-scoped-setting', scope, context, name),
   resetEmulatorSetting: (emulator: string, key: string) => ipcRenderer.invoke('reset-emulator-setting', emulator, key),
   resetAllEmulatorSettings: (emulator: string) => ipcRenderer.invoke('reset-all-emulator-settings', emulator),
   reloadEmulatorSchemas: () => ipcRenderer.invoke('reload-emulator-schemas'),

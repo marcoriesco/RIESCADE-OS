@@ -1,0 +1,18 @@
+{
+  "$schema": "riescade-shader-profile-v1",
+  "name": "ntsc-256px",
+  "default": {
+    "shaderdx12": "ntsc/tiny_ntsc",
+    "shaderGL": "ntsc/ntsc-256px",
+    "shader": "ntsc/ntsc-256px-composite",
+    "ares": "ntsc/ntsc-256px-composite"
+  },
+  "systems": {
+    "model2": {
+      "shader": "disabled"
+    },
+    "model3": {
+      "shader": "disabled"
+    }
+  }
+}

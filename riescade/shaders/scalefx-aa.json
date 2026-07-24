@@ -1,0 +1,17 @@
+{
+  "$schema": "riescade-shader-profile-v1",
+  "name": "scalefx-aa",
+  "default": {
+    "shaderGL": "presets/scalefx-aa",
+    "shader": "presets/scalefx-plus-smoothing/scalefx-aa",
+    "ares": "presets/scalefx-aa"
+  },
+  "systems": {
+    "model2": {
+      "shader": "disabled"
+    },
+    "model3": {
+      "shader": "disabled"
+    }
+  }
+}

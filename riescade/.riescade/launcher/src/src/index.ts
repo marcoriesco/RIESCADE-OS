@@ -31,7 +31,7 @@ import { Shadps4Generator } from './generators/Shadps4Generator.js';
 import { Vita3kGenerator } from './generators/Vita3kGenerator.js';
 import { WindowsGenerator } from './generators/WindowsGenerator.js';
 import { findFreeDriveLetter, mountSquashfs, unmountSquashfs, resolveRomInDrive } from './utils/squashfs.js';
-import { getRetroBatPath } from './utils/paths.js';
+import { getRetroBatPath, getRiescadePath } from './utils/paths.js';
 import { AltirraGenerator } from './generators/AltirraGenerator.js';
 import { ExeLauncherGenerator } from './generators/ExeLauncherGenerator.js';
 import { AmigaForeverGenerator } from './generators/AmigaForeverGenerator.js';
@@ -183,6 +183,7 @@ function parseArgs(args: string[]): LaunchArgs {
     emulator: rawArgs['-emulator'] || '',
     core: rawArgs['-core'] || '',
     rom: rawArgs['-rom'] || '',
+    gameConfigKey: rawArgs['-gameconfigkey'],
     controllers,
     p1guid: rawArgs['-p1guid'],
     p2guid: rawArgs['-p2guid'],
@@ -210,6 +211,7 @@ function parseArgs(args: string[]): LaunchArgs {
 }
 
 function getGenerator(args: LaunchArgs): BaseGenerator {
+  Config.setLaunchContext(args);
   const emu = args.emulator.toLowerCase();
   const sys = args.system.toLowerCase();
 
@@ -556,54 +558,79 @@ function getGenerator(args: LaunchArgs): BaseGenerator {
 }
 
 interface ControllerMonitor {
+  guid: string;
+  name: string;
+  hotkey: InputBinding;
+  start: InputBinding;
+}
+
+interface InputBinding {
+  type: 'button' | 'axis' | 'hat';
   id: number;
-  hk: number;
-  st: number;
+  value: number;
 }
 
 function getControllerMonitors(parsedArgs: LaunchArgs): ControllerMonitor[] {
   const monitors: ControllerMonitor[] = [];
-  const inputConfig = Config.getInputConfig();
-  const configs = inputConfig.inputConfigs || [];
+  const configs = ((Config.getInputConfig() as any).inputConfigs || []) as any[];
 
-  for (let player = 1; player <= 4; player++) {
-    const guid = parsedArgs.rawArgs[`-p${player}guid`]?.toLowerCase();
-    const name = parsedArgs.rawArgs[`-p${player}name`]?.toLowerCase();
-    const indexStr = parsedArgs.rawArgs[`-p${player}index`];
+  for (const controller of parsedArgs.controllers) {
+    const guid = String(controller.guid || '').toLowerCase();
+    const name = String(controller.name || '').toLowerCase();
+    const matched = configs.find(config =>
+      String(config.device?.deviceGUID || config.deviceGUID || '').toLowerCase() === guid
+    ) || configs.find(config =>
+      String(config.device?.deviceName || config.deviceName || '').toLowerCase() === name
+    );
 
-    if (!guid && !indexStr) continue;
+    const inputs = (matched?.inputs || []) as any[];
+    const quitCombo = matched?.hotkey?.combos?.find((combo: any) => combo.action === 'quit');
+    const comboInputName = quitCombo?.button || 'start';
+    const startInput = inputs.find(input => input.name === comboInputName);
+    let hotkeyInput = inputs.find(input => input.name === 'hotkey');
 
-    const deviceIndex = indexStr !== undefined ? parseInt(indexStr, 10) : (player - 1);
-
-    let matched = configs.find(c => c.deviceGUID?.toString().toLowerCase() === guid);
-    if (!matched && name) {
-      matched = configs.find(c => c.deviceName?.toLowerCase() === name);
+    if (!hotkeyInput && matched?.hotkey?.button) {
+      const configured = matched.hotkey.button;
+      const sameInput = inputs.find(input => input.type === configured.type && input.id === configured.id);
+      hotkeyInput = { ...configured, value: sameInput?.value ?? configured.value ?? 1 };
     }
 
-    if (matched && matched.type === 'joystick') {
-      const hotkeyInput = matched.inputs.find(i => i.name === 'hotkey' && i.type === 'button');
-      const startInput = matched.inputs.find(i => i.name === 'start' && i.type === 'button');
-
-      if (hotkeyInput && startInput) {
-        monitors.push({
-          id: deviceIndex,
-          hk: hotkeyInput.id,
-          st: startInput.id
-        });
-        Logger.info(`ControllerMonitor: Registered monitor for Player ${player} (Joystick ID: ${deviceIndex}, Hotkey Button: ${hotkeyInput.id}, Start Button: ${startInput.id})`);
-      }
+    // A drifting analog stick can be captured accidentally by the controller
+    // wizard. Never use the same axis as both an analog direction and HOTKEY.
+    const analogNames = new Set(['leftx', 'lefty', 'rightx', 'righty']);
+    const duplicatesAnalogAxis = hotkeyInput?.type === 'axis' && inputs.some(input =>
+      analogNames.has(String(input.name || '').toLowerCase())
+      && input.type === 'axis'
+      && Number(input.id) === Number(hotkeyInput.id)
+    );
+    if (duplicatesAnalogAxis) {
+      Logger.warn(`ControllerMonitor: Ignoring invalid HOTKEY axis ${hotkeyInput.id} because it is also mapped to an analog stick.`);
+      hotkeyInput = undefined;
     }
-  }
 
-  // Fallback: if no controller mapped explicitly in input.json, register standard button IDs
-  if (monitors.length === 0) {
-    const p1indexStr = parsedArgs.rawArgs[`-p1index`];
-    if (p1indexStr !== undefined) {
-      const p1Index = parseInt(p1indexStr, 10);
-      monitors.push({ id: p1Index, hk: 4, st: 6 }); // PS/Switch layout (Select + Start)
-      monitors.push({ id: p1Index, hk: 6, st: 7 }); // Xbox layout (Select + Start)
-      Logger.info(`ControllerMonitor: Registered fallback monitors for Joystick ID ${p1Index} (Select=4, Start=6 and Select=6, Start=7)`);
+    // Prefer the explicitly mapped Back/Select button when HOTKEY is absent or
+    // invalid. This matches the conventional HOTKEY + START combination.
+    if (!hotkeyInput) {
+      hotkeyInput = inputs.find(input => ['back', 'select'].includes(String(input.name || '').toLowerCase()));
     }
+
+    if (hotkeyInput && startInput && ['button', 'axis', 'hat'].includes(hotkeyInput.type) && ['button', 'axis', 'hat'].includes(startInput.type)) {
+      monitors.push({
+        guid,
+        name,
+        hotkey: { type: hotkeyInput.type, id: Number(hotkeyInput.id), value: Number(hotkeyInput.value ?? 1) },
+        start: { type: startInput.type, id: Number(startInput.id), value: Number(startInput.value ?? 1) }
+      });
+      Logger.info(`ControllerMonitor: Player ${controller.player} uses ${hotkeyInput.type} ${hotkeyInput.id} + ${startInput.type} ${startInput.id}.`);
+      continue;
+    }
+
+    // Conservative fallback for standard gamepads when no profile exists.
+    monitors.push(
+      { guid, name, hotkey: { type: 'button', id: 4, value: 1 }, start: { type: 'button', id: 6, value: 1 } },
+      { guid, name, hotkey: { type: 'button', id: 6, value: 1 }, start: { type: 'button', id: 7, value: 1 } }
+    );
+    Logger.warn(`ControllerMonitor: No quit combo found for ${controller.name}; standard Back/Select + Start fallbacks enabled.`);
   }
 
   return monitors;
@@ -611,79 +638,123 @@ function getControllerMonitors(parsedArgs: LaunchArgs): ControllerMonitor[] {
 
 function startHotkeyMonitor(monitors: ControllerMonitor[], onExitRequested: () => void): any {
   if (monitors.length === 0) return null;
-
-  const monitorsArrayStr = monitors.map(m => `@{id=${m.id}; hk=${m.hk}; st=${m.st}}`).join(', ');
-
-  const script = `
-$Signature = @"
-using System;
-using System.Runtime.InteropServices;
-public class Win32Joy {
-    [DllImport("winmm.dll")]
-    public static extern int joyGetPosEx(int uJoyID, ref JOYINFOEX pji);
-    [StructLayout(LayoutKind.Sequential)]
-    public struct JOYINFOEX {
-        public int dwSize;
-        public int dwFlags;
-        public int dwXpos;
-        public int dwYpos;
-        public int dwZpos;
-        public int dwRpos;
-        public int dwUpos;
-        public int dwVpos;
-        public int dwButtons;
-        public int dwButtonNumber;
-        public int dwPOV;
-        public int dwReserved1;
-        public int dwReserved2;
-    }
-}
-"@
-Add-Type -TypeDefinition $Signature
-$info = New-Object Win32Joy+JOYINFOEX
-$info.dwSize = [System.Runtime.InteropServices.Marshal]::SizeOf($info)
-$info.dwFlags = 255
-
-$monitors = @(${monitorsArrayStr})
-
-while ($true) {
-    foreach ($m in $monitors) {
-        $res = [Win32Joy]::joyGetPosEx($m.id, [ref]$info)
-        if ($res -eq 0) {
-            $btn = $info.dwButtons
-            $hkPressed = ($btn -band (1 -shl $m.hk)) -ne 0
-            $stPressed = ($btn -band (1 -shl $m.st)) -ne 0
-            if ($hkPressed -and $stPressed) {
-                Write-Output "KILL"
-                Exit
-            }
-        }
-    }
-    Start-Sleep -Milliseconds 100
-}
-  `;
-
-  try {
-    const ps = spawn('powershell', ['-ExecutionPolicy', 'Bypass', '-NoProfile', '-Command', '-'], {
-      stdio: ['pipe', 'pipe', 'ignore']
-    });
-
-    ps.stdin.write(script);
-    ps.stdin.end();
-
-    ps.stdout.on('data', (data: any) => {
-      const output = data.toString().trim();
-      if (output.includes('KILL')) {
-        Logger.info(`ControllerMonitor: HOTKEY + START combination detected!`);
-        onExitRequested();
-      }
-    });
-
-    return ps;
-  } catch (err) {
-    Logger.error('Failed to spawn PowerShell hotkey monitor:', err);
+  const helper = join(getRiescadePath(), 'bin', 'sdl3_detector.exe');
+  if (!require('fs').existsSync(helper)) {
+    Logger.error(`ControllerMonitor: SDL3 detector not found at ${helper}.`);
     return null;
   }
+
+  const process = spawn(helper, ['--watch'], { stdio: ['pipe', 'pipe', 'ignore'], cwd: dirname(helper) });
+  const deviceByInstance = new Map<number, { guid: string; name: string }>();
+  const state = new Map<string, number>();
+  let buffer = '';
+  let exitTriggered = false;
+
+  const isActive = (instanceId: number, binding: InputBinding): boolean => {
+    const value = state.get(`${instanceId}:${binding.type}:${binding.id}`) || 0;
+    if (binding.type === 'button') return value !== 0;
+    if (binding.type === 'hat') return binding.value ? (value & binding.value) !== 0 : value !== 0;
+    return binding.value < 0 ? value <= -16000 : value >= 16000;
+  };
+
+  const evaluate = (instanceId: number) => {
+    const device = deviceByInstance.get(instanceId);
+    if (!device || exitTriggered) return;
+    const monitor = monitors.find(item =>
+      (item.guid && item.guid === device.guid) || (!item.guid && item.name === device.name)
+    );
+    if (monitor && isActive(instanceId, monitor.hotkey) && isActive(instanceId, monitor.start)) {
+      exitTriggered = true;
+      Logger.info('ControllerMonitor: HOTKEY + START combination detected.');
+      onExitRequested();
+      process.kill();
+    }
+  };
+
+  process.stdout.on('data', (data: Buffer) => {
+    buffer += data.toString('utf8');
+    const lines = buffer.split(/\r?\n/);
+    buffer = lines.pop() || '';
+    for (const rawLine of lines) {
+      const line = rawLine.trim();
+      if (!line || line.startsWith('SDL_VERSION:')) continue;
+      if (line.startsWith('[')) {
+        try {
+          const devices = JSON.parse(line);
+          deviceByInstance.clear();
+          state.clear();
+          for (const device of devices) {
+            deviceByInstance.set(Number(device.instanceId), {
+              guid: String(device.guid || '').toLowerCase(),
+              name: String(device.name || '').toLowerCase()
+            });
+          }
+        } catch (error) {
+          Logger.warn(`ControllerMonitor: Invalid SDL device list: ${error}`);
+        }
+        continue;
+      }
+
+      const parts = line.split(':');
+      if (parts.length !== 4) continue;
+      const eventType = parts[0];
+      const instanceId = Number(parts[1]);
+      const inputId = Number(parts[2]);
+      const value = Number(parts[3]);
+      const type = eventType.endsWith('BUTTON') ? 'button' : eventType.endsWith('AXIS') ? 'axis' : eventType === 'HAT' ? 'hat' : null;
+      if (!type || !Number.isFinite(instanceId) || !Number.isFinite(inputId) || !Number.isFinite(value)) continue;
+      state.set(`${instanceId}:${type}:${inputId}`, value);
+      evaluate(instanceId);
+    }
+  });
+
+  process.on('error', error => Logger.error('ControllerMonitor: SDL3 monitor failed.', error));
+  return process;
+}
+
+function terminateProcessTree(child: any): void {
+  try {
+    if (!child.pid) throw new Error('Emulator process has no PID.');
+    spawn('taskkill', ['/F', '/T', '/PID', child.pid.toString()]);
+  } catch (err) {
+    Logger.error(`Failed to execute taskkill:`, err);
+    child.kill();
+  }
+}
+
+function requestEmulatorExit(parsedArgs: LaunchArgs, child: any): void {
+  const isTeknoParrot = parsedArgs.emulator.toLowerCase() === 'teknoparrot'
+    || parsedArgs.system.toLowerCase() === 'teknoparrot';
+
+  if (!isTeknoParrot) {
+    terminateProcessTree(child);
+    return;
+  }
+
+  // TeknoParrot games use Escape as their normal shutdown path. Send it to
+  // the active game window so the game and TeknoParrot can clean up normally.
+  Logger.info('TeknoParrot hotkey exit: sending ESC to the foreground game window.');
+  const escapeSender = spawn('powershell.exe', [
+    '-NoProfile',
+    '-NonInteractive',
+    '-WindowStyle', 'Hidden',
+    '-Command',
+    "Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.SendKeys]::SendWait('{ESC}')"
+  ], { windowsHide: true, stdio: 'ignore' });
+
+  escapeSender.on('error', error => {
+    Logger.error('TeknoParrot hotkey exit: failed to send ESC.', error);
+    terminateProcessTree(child);
+  });
+
+  // Safety fallback for a hung game or a window that rejected the key.
+  const fallback = setTimeout(() => {
+    if (child.exitCode === null && !child.killed) {
+      Logger.warn('TeknoParrot hotkey exit: game did not close after ESC; terminating its process tree.');
+      terminateProcessTree(child);
+    }
+  }, 8000);
+  fallback.unref();
 }
 
 async function main() {
@@ -752,21 +823,15 @@ async function main() {
 
     Logger.info(`[Running]`);
 
-    // Start controller hotkey exit monitor (only for standalone emulators, i.e., not libretro)
-    const isLibRetro = parsedArgs.emulator.toLowerCase() === 'libretro';
-    const monitors = isLibRetro ? [] : getControllerMonitors(parsedArgs);
+    // The same SDL3 monitor is used for every emulator, including Libretro,
+    // RetroArch CC and TeknoParrot.
+    const monitors = getControllerMonitors(parsedArgs);
     let psMonitor: any = null;
 
     if (monitors.length > 0) {
       psMonitor = startHotkeyMonitor(monitors, () => {
-        Logger.info(`Hotkey exit requested. Terminating emulator...`);
-        try {
-          if (!child.pid) throw new Error('Emulator process has no PID.');
-          spawn('taskkill', ['/F', '/T', '/PID', child.pid.toString()]);
-        } catch (err) {
-          Logger.error(`Failed to execute taskkill:`, err);
-          child.kill();
-        }
+        Logger.info(`Hotkey exit requested.`);
+        requestEmulatorExit(parsedArgs, child);
       });
     }
 

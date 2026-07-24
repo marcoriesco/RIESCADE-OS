@@ -1,0 +1,17 @@
+{
+  "$schema": "riescade-shader-profile-v1",
+  "name": "vhs",
+  "default": {
+    "shaderdx12": "vhs/gristleVHS",
+    "shader": "vhs/vhs",
+    "ares": "vhs/vhs"
+  },
+  "systems": {
+    "model2": {
+      "shader": "disabled"
+    },
+    "model3": {
+      "shader": "disabled"
+    }
+  }
+}

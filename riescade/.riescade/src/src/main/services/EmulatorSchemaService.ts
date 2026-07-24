@@ -1,6 +1,6 @@
 import { readFileSync, existsSync, readdirSync, writeFileSync, mkdirSync } from 'fs'
-import { join, dirname } from 'path'
-import { getRiescadePath } from '../utils/paths'
+import { basename, join, extname } from 'path'
+import { getEmulatorsPath, getRetroBatPath, getRiescadePath } from '../utils/paths'
 
 export interface SchemaOption {
   id: string
@@ -15,6 +15,7 @@ export interface SchemaOption {
   max?: number
   step?: number
   suffix?: string
+  dynamicSource?: 'libretro-shaders' | 'libretro-decorations' | 'libretro-video-filters'
 }
 
 export interface SchemaGroup {
@@ -90,7 +91,69 @@ export class EmulatorSchemaService {
 
   public getSchema(id: string): EmulatorSchema | null {
     if (!this.loaded) this.loadAll()
-    return this.schemas.get(id) || null
+    const schema = this.schemas.get(id)
+    if (!schema) return null
+    const hydrated = JSON.parse(JSON.stringify(schema)) as EmulatorSchema
+    this.hydrateDynamicResources(hydrated)
+    return hydrated
+  }
+
+  private hydrateDynamicResources(schema: EmulatorSchema): void {
+    const dynamicValues: Record<string, { label: string; value: string }[]> = {
+      'libretro-decorations': this.listDecorationTypes(),
+      'libretro-shaders': this.listShaderPresets(),
+      'libretro-video-filters': this.listVideoFilters()
+    }
+    for (const group of schema.groups) {
+      for (const option of group.options) {
+        if (!option.dynamicSource) continue
+        option.values = [
+          { label: 'AUTO', value: 'auto' },
+          { label: 'Desativado', value: 'none' },
+          ...(dynamicValues[option.dynamicSource] || [])
+        ]
+      }
+    }
+  }
+
+  private listDecorationTypes(): { label: string; value: string }[] {
+    const root = join(getRetroBatPath(), 'riescade', 'decorations')
+    if (!existsSync(root)) return []
+    return readdirSync(root, { withFileTypes: true })
+      .filter(entry => entry.isDirectory())
+      .map(entry => ({ label: entry.name, value: entry.name }))
+      .sort((a, b) => a.label.localeCompare(b.label, undefined, { sensitivity: 'base' }))
+  }
+
+  private listShaderPresets(): { label: string; value: string }[] {
+    const root = join(getRetroBatPath(), 'riescade', 'shaders')
+    if (!existsSync(root)) return []
+    return readdirSync(root, { withFileTypes: true })
+      .filter(entry => {
+        if (!entry.isFile() || extname(entry.name).toLowerCase() !== '.json') return false
+        try {
+          const profile = JSON.parse(readFileSync(join(root, entry.name), 'utf8'))
+          const sections = [profile.default, ...Object.values(profile.systems || {})]
+          return profile.$schema === 'riescade-shader-profile-v1' &&
+            sections.some((section: any) => section?.shader || section?.shaderGL)
+        } catch {
+          return false
+        }
+      })
+      .map(entry => {
+        const value = basename(entry.name, extname(entry.name))
+        return { label: value, value }
+      })
+      .sort((a, b) => a.label.localeCompare(b.label, undefined, { sensitivity: 'base' }))
+  }
+
+  private listVideoFilters(): { label: string; value: string }[] {
+    const root = join(getEmulatorsPath(), 'retroarch', 'filters', 'video')
+    if (!existsSync(root)) return []
+    return readdirSync(root, { withFileTypes: true })
+      .filter(entry => entry.isFile() && extname(entry.name).toLowerCase() === '.filt')
+      .map(entry => ({ label: entry.name.replace(/\.filt$/i, ''), value: entry.name }))
+      .sort((a, b) => a.label.localeCompare(b.label, undefined, { sensitivity: 'base' }))
   }
 
   public getSchemaList(): { id: string; name: string; description?: string; icon?: string; groupCount: number; optionCount: number }[] {

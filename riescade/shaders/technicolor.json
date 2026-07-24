@@ -1,0 +1,9 @@
+{
+  "$schema": "riescade-shader-profile-v1",
+  "name": "technicolor",
+  "default": {
+    "shader": "film/technicolor",
+    "ares": "film/technicolor"
+  },
+  "systems": {}
+}

@@ -1,0 +1,17 @@
+{
+  "$schema": "riescade-shader-profile-v1",
+  "name": "scalehq",
+  "default": {
+    "shaderGL": "scalehq/2xScaleHQ",
+    "shader": "edge-smoothing/scalehq/2xScaleHQ",
+    "ares": "edge-smoothing/scalehq/2xScaleHQ"
+  },
+  "systems": {
+    "model2": {
+      "shader": "disabled"
+    },
+    "model3": {
+      "shader": "disabled"
+    }
+  }
+}

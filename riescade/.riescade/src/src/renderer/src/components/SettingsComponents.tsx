@@ -45,9 +45,9 @@ export const SettingToggle = ({ label, name, desc, ctx }: {
   );
 };
 
-export const SettingSelect = ({ label, name, options, desc, type = "string", defaultValue, ctx }: {
+export const SettingSelect = ({ label, name, options, desc, type = "string", defaultValue, onValueChange, ctx }: {
   label: string; name: string; options: { label: string; value: string }[]; desc?: string;
-  type?: "string" | "int"; defaultValue?: string; ctx: SettingsCtx;
+  type?: "string" | "int"; defaultValue?: string; onValueChange?: (value: string) => void | Promise<void>; ctx: SettingsCtx;
 }) => {
   const rawVal = ctx.getSetting(name);
   const value = (rawVal !== null && rawVal !== undefined) ? String(rawVal) : (defaultValue !== undefined ? defaultValue : "auto");
@@ -59,7 +59,10 @@ export const SettingSelect = ({ label, name, options, desc, type = "string", def
         {desc && <span className="text-xs text-white/40 leading-relaxed font-sans">{desc}</span>}
       </div>
       <div className="relative max-w-[220px] shrink-0">
-        <Select.Root value={value} onValueChange={(val) => ctx.saveSetting(name, val, type)}>
+        <Select.Root value={value} onValueChange={(val) => {
+          if (onValueChange) void onValueChange(val);
+          else ctx.saveSetting(name, val, type);
+        }}>
           <Select.Trigger className="flex items-center justify-between gap-1.5 bg-white/5 border border-white/10 rounded-md px-3 py-2 text-xs text-white/90 hover:bg-white/10 hover:border-accent focus:border-accent transition cursor-pointer focus:outline-none min-w-[140px] text-left">
             <Select.Value />
             <Select.Icon>

@@ -399,6 +399,7 @@ export class LauncherService {
         '-system', system.name,
         '-emulator', emulator,
         '-core', core,
+        '-gameconfigkey', `"${system.name}|${String(game.path).replace(/\\/g, '/')}"`,
         ...saveStateArgs,
         ...netplayArgs,
         '-rom', `"${romPath}"`

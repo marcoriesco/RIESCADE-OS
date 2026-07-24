@@ -25,6 +25,10 @@
     "bezels": {
       "configKey": "bezels",
       "globalKey": "bezels"
+    },
+    "filters": {
+      "configKey": "videofilters",
+      "globalKey": "filters"
     }
   },
   "groups": [
@@ -34,6 +38,36 @@
       "icon": "settings",
       "order": 1,
       "options": [
+        {
+          "id": "menu_driver",
+          "label": "Menu do RetroArch",
+          "description": "Interface exibida ao abrir o menu interno do RetroArch.",
+          "type": "select",
+          "default": "ozone",
+          "configKey": "menu_driver",
+          "values": [
+            {
+              "label": "AUTO (Ozone)",
+              "value": "auto"
+            },
+            {
+              "label": "Ozone",
+              "value": "ozone"
+            },
+            {
+              "label": "XMB",
+              "value": "xmb"
+            },
+            {
+              "label": "RGUI",
+              "value": "rgui"
+            },
+            {
+              "label": "GLUI",
+              "value": "glui"
+            }
+          ]
+        },
         {
           "id": "ratio",
           "label": "Proporção de Tela",
@@ -107,6 +141,62 @@
           "type": "toggle",
           "default": "auto",
           "configKey": "disableautocontrollers"
+        }
+      ]
+    },
+    {
+      "id": "visuals",
+      "title": "Shaders, Molduras e Filtros",
+      "icon": "palette",
+      "order": 2,
+      "options": [
+        {
+          "id": "shaders",
+          "label": "Shader",
+          "description": "Perfil carregado de riescade/shaders e resolvido para os presets instalados no RetroArch.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "shaders",
+          "inheritsGlobal": "shaders",
+          "dynamicSource": "libretro-shaders",
+          "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            }
+          ]
+        },
+        {
+          "id": "bezels",
+          "label": "Decoration / Moldura",
+          "description": "Pacote carregado de riescade/decorations.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "bezels",
+          "inheritsGlobal": "bezels",
+          "dynamicSource": "libretro-decorations",
+          "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            }
+          ]
+        },
+        {
+          "id": "videofilters",
+          "label": "Filtro de Vídeo",
+          "description": "Filtro carregado de emulators/retroarch/filters/video.",
+          "type": "select",
+          "default": "auto",
+          "configKey": "videofilters",
+          "inheritsGlobal": "filters",
+          "dynamicSource": "libretro-video-filters",
+          "values": [
+            {
+              "label": "AUTO",
+              "value": "auto"
+            }
+          ]
         }
       ]
     },
@@ -37903,20 +37993,6 @@
           "type": "toggle",
           "default": "auto",
           "configKey": "enable_hdr"
-        },
-        {
-          "id": "videofilters",
-          "label": "Filtros de Vídeo",
-          "description": "Configuração para filtros de vídeo.",
-          "type": "select",
-          "default": "auto",
-          "configKey": "videofilters",
-          "values": [
-            {
-              "label": "AUTO",
-              "value": "auto"
-            }
-          ]
         },
         {
           "id": "video_hard_sync",

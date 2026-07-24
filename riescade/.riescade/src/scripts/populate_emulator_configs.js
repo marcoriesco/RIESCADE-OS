@@ -3,7 +3,7 @@ const path = require('path');
 
 // Paths
 const projectSrcDir = path.resolve(__dirname, '..');
-const emulatorJsonPath = path.resolve(projectSrcDir, '..', 'configs', 'emulator.json');
+const emulatorJsonPath = path.resolve(projectSrcDir, '..', 'configs', 'emulator-settings.json');
 const schemaOutputDir = path.resolve(projectSrcDir, '..', 'configs', 'emulator-schemas');
 const emulatorsDir = path.resolve(projectSrcDir, '..', '..', 'emulators');
 
@@ -141,18 +141,18 @@ function readIniValue(filePath, section, key) {
 }
 
 // Main execution
-console.log('Loading emulator.json...');
+console.log('Loading emulator-settings.json...');
 let emulatorData = {};
 if (fs.existsSync(emulatorJsonPath)) {
   try {
     emulatorData = JSON.parse(fs.readFileSync(emulatorJsonPath, 'utf-8'));
   } catch (e) {
-    console.error('Error parsing emulator.json:', e);
+    console.error('Error parsing emulator-settings.json:', e);
     process.exit(1);
   }
 }
 
-// Remove legacy core_* and libretro/angle keys from emulator.json
+// Remove legacy core_* and libretro/angle keys from emulator-settings.json
 for (const key of Object.keys(emulatorData)) {
   if (key.startsWith('core_') || key === 'libretro' || key === 'angle') {
     delete emulatorData[key];
@@ -201,7 +201,7 @@ for (const file of files) {
     for (const opt of (group.options || [])) {
       const optionId = opt.id;
       
-      // 1. If emulator.json already has a value, preserve it
+      // 1. If emulator-settings.json already has a value, preserve it
       if (emulatorData[emuId][optionId] !== undefined) {
         continue;
       }
@@ -244,4 +244,4 @@ for (const file of files) {
 
 // Save back
 fs.writeFileSync(emulatorJsonPath, JSON.stringify(emulatorData, null, 2), 'utf-8');
-console.log('emulator.json updated successfully!');
+console.log('emulator-settings.json updated successfully!');

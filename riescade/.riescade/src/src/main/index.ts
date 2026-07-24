@@ -7,6 +7,7 @@ import { LauncherService } from './services/LauncherService'
 import { EmulatorInstaller } from './services/EmulatorInstaller'
 import { SettingsParser } from './parsers/SettingsParser'
 import { EmulatorParser } from './parsers/EmulatorParser'
+import { ScopedSettingsParser, SettingsContext, SettingsScope } from './parsers/ScopedSettingsParser'
 import { ThemeSettingsParser } from './parsers/ThemeSettingsParser'
 import { SystemService } from './services/SystemService'
 import { ScraperService } from './services/ScraperService'
@@ -99,8 +100,18 @@ if (enabledFeatures.length > 0) {
 
 let themeWatcher: FSWatcher | null = null
 let mainWindow: BrowserWindow | null = null
+let secondaryWindow: BrowserWindow | null = null
+let secondaryDisplayState: any = null
 let themeReloadTimeout: NodeJS.Timeout | null = null
+let windowSaveTimeout: NodeJS.Timeout | null = null
 let romsWatcher: RomsWatcherService | null = null
+let appliedMultiDisplayMode = settingsParser.getSetting('RIESCADE.MultiDisplayMode', 'string') || 'off'
+let windowModeTransition = false
+let normalWindowState: {
+  fullScreen: boolean
+  maximized: boolean
+  bounds: Electron.Rectangle
+} | null = null
 
 function sendToMainWindow(channel: string, ...args: any[]): void {
   try {
@@ -122,6 +133,8 @@ function broadcastToWindows(channel: string, ...args: any[]): void {
 
 function saveWindowConfig(): void {
   if (!mainWindow || mainWindow.isDestroyed()) return
+  if (windowModeTransition) return
+  if (settingsParser.getSetting('RIESCADE.MultiDisplayMode', 'string') === 'extended') return
   const shouldSave = settingsParser.getSetting('RIESCADE.SaveWindowPositions', 'bool') !== false
   if (!shouldSave) return
 
@@ -163,17 +176,238 @@ function getConfiguredDisplay() {
   return null
 }
 
+function getSecondaryDisplay() {
+  const displays = screen.getAllDisplays()
+  if (displays.length < 2) return null
+  const mainDisplay = mainWindow && !mainWindow.isDestroyed()
+    ? screen.getDisplayMatching(mainWindow.getBounds())
+    : getConfiguredDisplay() || screen.getPrimaryDisplay()
+  return displays.find(display => display.id !== mainDisplay.id) || null
+}
+
+function getExtendedDesktopBounds(): Electron.Rectangle {
+  const displays = screen.getAllDisplays()
+  // Respect the area reserved by the native Windows taskbar. Using the raw
+  // monitor bounds places the RIESCADE taskbar underneath it.
+  const left = Math.min(...displays.map(display => display.workArea.x))
+  const top = Math.min(...displays.map(display => display.workArea.y))
+  const right = Math.max(...displays.map(display => display.workArea.x + display.workArea.width))
+  const bottom = Math.max(...displays.map(display => display.workArea.y + display.workArea.height))
+  return { x: left, y: top, width: right - left, height: bottom - top }
+}
+
+function getDisplayLayout() {
+  const virtualBounds = getExtendedDesktopBounds()
+  const primaryId = screen.getPrimaryDisplay().id
+  return {
+    virtualBounds,
+    displays: screen.getAllDisplays().map(display => ({
+      id: display.id,
+      primary: display.id === primaryId,
+      x: display.workArea.x - virtualBounds.x,
+      y: display.workArea.y - virtualBounds.y,
+      width: display.workArea.width,
+      height: display.workArea.height
+    }))
+  }
+}
+
+function loadRendererWindow(window: BrowserWindow, query?: Record<string, string>): void {
+  if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
+    const url = new URL(process.env['ELECTRON_RENDERER_URL'])
+    Object.entries(query || {}).forEach(([key, value]) => url.searchParams.set(key, value))
+    void window.loadURL(url.toString())
+  } else {
+    void window.loadFile(join(__dirname, '../renderer/index.html'), query ? { query } : undefined)
+  }
+}
+
+function syncSecondaryDisplay(): void {
+  const mode = settingsParser.getSetting('RIESCADE.MultiDisplayMode', 'string') || 'off'
+  const display = getSecondaryDisplay()
+
+  if (mode === 'off' || mode === 'extended' || !display) {
+    if (secondaryWindow && !secondaryWindow.isDestroyed()) secondaryWindow.destroy()
+    secondaryWindow = null
+    return
+  }
+
+  if (!secondaryWindow || secondaryWindow.isDestroyed()) {
+    secondaryWindow = new BrowserWindow({
+      ...display.bounds,
+      show: false,
+      frame: false,
+      autoHideMenuBar: true,
+      backgroundColor: '#080a0f',
+      icon: join(getResourcesPath(), 'riescade.ico'),
+      webPreferences: {
+        preload: join(__dirname, '../preload/index.js'),
+        contextIsolation: true,
+        nodeIntegration: false,
+        sandbox: true,
+        webSecurity: app.isPackaged
+      }
+    })
+    secondaryWindow.setMenuBarVisibility(false)
+    secondaryWindow.on('closed', () => {
+      secondaryWindow = null
+    })
+    secondaryWindow.once('ready-to-show', () => {
+      if (!secondaryWindow || secondaryWindow.isDestroyed()) return
+      secondaryWindow.setBounds(display.bounds)
+      secondaryWindow.setFullScreen(true)
+      secondaryWindow.showInactive()
+      if (secondaryDisplayState) {
+        secondaryWindow.webContents.send('secondary-display-state', secondaryDisplayState)
+      }
+    })
+    loadRendererWindow(secondaryWindow, { windowType: 'secondary', mode })
+    return
+  }
+
+  const placeSecondaryWindow = () => {
+    if (!secondaryWindow || secondaryWindow.isDestroyed()) return
+    secondaryWindow.setBounds(display.bounds)
+    secondaryWindow.setFullScreen(true)
+    secondaryWindow.showInactive()
+  }
+  if (secondaryWindow.isFullScreen()) {
+    secondaryWindow.once('leave-full-screen', placeSecondaryWindow)
+    secondaryWindow.setFullScreen(false)
+  } else {
+    placeSecondaryWindow()
+  }
+}
+
+function constrainBoundsToVisibleArea(bounds: Electron.Rectangle): Electron.Rectangle {
+  const display = screen.getDisplayMatching(bounds)
+  const area = display.workArea
+  const width = Math.min(Math.max(Number.isFinite(bounds.width) ? bounds.width : 1280, 800), area.width)
+  const height = Math.min(Math.max(Number.isFinite(bounds.height) ? bounds.height : 720, 600), area.height)
+  const minVisibleWidth = Math.min(120, width)
+  const minVisibleHeight = Math.min(40, height)
+  const x = Math.max(area.x - width + minVisibleWidth, Math.min(area.x + area.width - minVisibleWidth, bounds.x))
+  const y = Math.max(area.y, Math.min(area.y + area.height - minVisibleHeight, bounds.y))
+  return { x: Math.round(x), y: Math.round(y), width: Math.round(width), height: Math.round(height) }
+}
+
 function applyConfiguredDisplayPreference(): void {
   if (!mainWindow || mainWindow.isDestroyed()) return
+  const multiDisplayMode = settingsParser.getSetting('RIESCADE.MultiDisplayMode', 'string') || 'off'
+  if (multiDisplayMode === 'extended' && screen.getAllDisplays().length > 1) {
+    if (appliedMultiDisplayMode !== 'extended') {
+      normalWindowState = {
+        fullScreen: mainWindow.isFullScreen() ||
+          settingsParser.getSetting('Window.FullScreen', 'bool') !== false,
+        maximized: mainWindow.isMaximized(),
+        bounds: mainWindow.isFullScreen() || mainWindow.isMaximized()
+          ? mainWindow.getNormalBounds()
+          : mainWindow.getBounds()
+      }
+    }
+    appliedMultiDisplayMode = 'extended'
+    windowModeTransition = true
+    const placeExtendedDesktop = () => {
+      if (!mainWindow || mainWindow.isDestroyed()) return
+      const bounds = getExtendedDesktopBounds()
+      mainWindow.setBounds(bounds, false)
+      mainWindow.show()
+      // Windows may restore the previous normal bounds one tick after leaving
+      // fullscreen/maximized. Reapply the virtual-desktop rectangle afterwards.
+      setImmediate(() => {
+        if (!mainWindow || mainWindow.isDestroyed()) return
+        mainWindow.setBounds(bounds, false)
+        mainWindow.setResizable(false)
+        mainWindow.setMovable(false)
+        mainWindow.setMaximizable(false)
+        mainWindow.focus()
+        windowModeTransition = false
+      })
+      syncSecondaryDisplay()
+    }
+    if (mainWindow.isFullScreen()) {
+      mainWindow.once('leave-full-screen', placeExtendedDesktop)
+      mainWindow.setFullScreen(false)
+    } else if (mainWindow.isMaximized()) {
+      mainWindow.once('unmaximize', placeExtendedDesktop)
+      mainWindow.unmaximize()
+    } else {
+      placeExtendedDesktop()
+    }
+    return
+  }
+
+  if (appliedMultiDisplayMode === 'extended') {
+    appliedMultiDisplayMode = multiDisplayMode
+    windowModeTransition = true
+    const restoreState = normalWindowState
+    normalWindowState = null
+    const target = getConfiguredDisplay() || screen.getPrimaryDisplay()
+    const area = target.workArea
+    const savedBounds = restoreState?.bounds
+    const width = Math.min(Math.max(savedBounds?.width || 1280, 800), area.width)
+    const height = Math.min(Math.max(savedBounds?.height || 720, 600), area.height)
+    const bounds = {
+      x: area.x + Math.round((area.width - width) / 2),
+      y: area.y + Math.round((area.height - height) / 2),
+      width,
+      height
+    }
+    mainWindow.setResizable(true)
+    mainWindow.setMovable(true)
+    mainWindow.setMaximizable(true)
+    const restoreFullScreen = restoreState?.fullScreen ??
+      (settingsParser.getSetting('Window.FullScreen', 'bool') !== false)
+    const restoreMaximized = !restoreFullScreen && (restoreState?.maximized ??
+      settingsParser.getSetting('Window.Maximized', 'bool') === true)
+
+    mainWindow.setBounds(bounds, false)
+    if (restoreFullScreen) {
+      mainWindow.once('enter-full-screen', () => {
+        windowModeTransition = false
+      })
+      mainWindow.setFullScreen(true)
+    } else if (restoreMaximized) {
+      mainWindow.once('maximize', () => {
+        windowModeTransition = false
+      })
+      mainWindow.maximize()
+    } else {
+      windowModeTransition = false
+    }
+    syncSecondaryDisplay()
+    return
+  }
+  appliedMultiDisplayMode = multiDisplayMode
   const target = getConfiguredDisplay()
-  if (!target) return
+  if (!target) {
+    if (!mainWindow.isMaximized() && !mainWindow.isFullScreen()) {
+      const current = mainWindow.getBounds()
+      const safe = constrainBoundsToVisibleArea(current)
+      if (safe.x !== current.x || safe.y !== current.y || safe.width !== current.width || safe.height !== current.height) {
+        mainWindow.setBounds(safe)
+      }
+    }
+    syncSecondaryDisplay()
+    return
+  }
 
   const wasFullScreen = mainWindow.isFullScreen()
   const wasMaximized = mainWindow.isMaximized()
   const currentBounds = mainWindow.getNormalBounds()
   const targetArea = target.workArea
   const currentDisplay = screen.getDisplayMatching(mainWindow.getBounds())
-  if (currentDisplay.id === target.id) return
+  if (currentDisplay.id === target.id) {
+    if (!wasMaximized && !wasFullScreen) {
+      const current = mainWindow.getBounds()
+      const safe = constrainBoundsToVisibleArea(current)
+      if (safe.x !== current.x || safe.y !== current.y || safe.width !== current.width || safe.height !== current.height) {
+        mainWindow.setBounds(safe)
+      }
+    }
+    syncSecondaryDisplay()
+    return
+  }
 
   const moveWindow = () => {
     if (!mainWindow || mainWindow.isDestroyed()) return
@@ -190,6 +424,7 @@ function applyConfiguredDisplayPreference(): void {
 
     if (wasFullScreen) mainWindow.setFullScreen(true)
     else if (wasMaximized) mainWindow.maximize()
+    syncSecondaryDisplay()
   }
 
   if (wasFullScreen) {
@@ -198,6 +433,7 @@ function applyConfiguredDisplayPreference(): void {
   } else {
     moveWindow()
   }
+  syncSecondaryDisplay()
 }
 
 function createWindow(): void {
@@ -213,14 +449,25 @@ function createWindow(): void {
   const savedX = shouldSave ? settingsParser.getSetting('Window.X', 'int') : null
   const savedY = shouldSave ? settingsParser.getSetting('Window.Y', 'int') : null
   
-  const width = savedWidth !== null ? parseInt(savedWidth, 10) : defaultWidth
-  const height = savedHeight !== null ? parseInt(savedHeight, 10) : defaultHeight
+  let width = savedWidth !== null ? parseInt(savedWidth, 10) : defaultWidth
+  let height = savedHeight !== null ? parseInt(savedHeight, 10) : defaultHeight
+  const multiDisplayMode = settingsParser.getSetting('RIESCADE.MultiDisplayMode', 'string') || 'off'
+  const isExtendedDesktop = multiDisplayMode === 'extended' && screen.getAllDisplays().length > 1
   
   const options: any = {
     width,
     height,
+    minWidth: 800,
+    minHeight: 600,
     show: false,
     frame: false,
+    thickFrame: !isExtendedDesktop,
+    resizable: !isExtendedDesktop,
+    movable: !isExtendedDesktop,
+    maximizable: !isExtendedDesktop,
+    fullscreenable: !isExtendedDesktop,
+    hasShadow: !isExtendedDesktop,
+    roundedCorners: !isExtendedDesktop,
     autoHideMenuBar: true,
     backgroundColor: '#0c0e14',
     icon: join(getResourcesPath(), 'riescade.ico'),
@@ -232,23 +479,49 @@ function createWindow(): void {
       webSecurity: app.isPackaged
     }
   }
-  
-  const configuredDisplay = getConfiguredDisplay()
-  if (configuredDisplay) {
-    const area = configuredDisplay.workArea
-    options.x = area.x + Math.round((area.width - width) / 2)
-    options.y = area.y + Math.round((area.height - height) / 2)
-  } else if (savedX !== null && savedY !== null) {
-    options.x = parseInt(savedX, 10)
-    options.y = parseInt(savedY, 10)
+
+  if (isExtendedDesktop) {
+    const extendedBounds = getExtendedDesktopBounds()
+    Object.assign(options, extendedBounds)
+  } else {
+    const configuredDisplay = getConfiguredDisplay()
+    if (configuredDisplay) {
+      const area = configuredDisplay.workArea
+      width = Math.min(Math.max(Number.isFinite(width) ? width : defaultWidth, 800), area.width)
+      height = Math.min(Math.max(Number.isFinite(height) ? height : defaultHeight, 600), area.height)
+      options.width = width
+      options.height = height
+      options.x = area.x + Math.round((area.width - width) / 2)
+      options.y = area.y + Math.round((area.height - height) / 2)
+    } else if (savedX !== null && savedY !== null) {
+      const safeBounds = constrainBoundsToVisibleArea({
+        x: parseInt(savedX, 10),
+        y: parseInt(savedY, 10),
+        width,
+        height
+      })
+      options.x = safeBounds.x
+      options.y = safeBounds.y
+      options.width = safeBounds.width
+      options.height = safeBounds.height
+      width = safeBounds.width
+      height = safeBounds.height
+    }
   }
   
   mainWindow = new BrowserWindow(options)
+  if (multiDisplayMode === 'extended') {
+    mainWindow.setResizable(false)
+    mainWindow.setMovable(false)
+    mainWindow.setMaximizable(false)
+  }
   
-  if (isFullScreen) {
-    mainWindow.setFullScreen(true)
-  } else if (isMaximized) {
-    mainWindow.maximize()
+  if (multiDisplayMode !== 'extended') {
+    if (isFullScreen) {
+      mainWindow.setFullScreen(true)
+    } else if (isMaximized) {
+      mainWindow.maximize()
+    }
   }
 
   mainWindow.on('ready-to-show', () => {
@@ -257,8 +530,29 @@ function createWindow(): void {
   })
 
   mainWindow.on('close', () => {
+    if (windowSaveTimeout) {
+      clearTimeout(windowSaveTimeout)
+      windowSaveTimeout = null
+    }
     saveWindowConfig()
   })
+  mainWindow.on('closed', () => {
+    mainWindow = null
+    if (secondaryWindow && !secondaryWindow.isDestroyed()) secondaryWindow.destroy()
+    secondaryWindow = null
+  })
+
+  const scheduleWindowConfigSave = () => {
+    if (windowSaveTimeout) clearTimeout(windowSaveTimeout)
+    windowSaveTimeout = setTimeout(() => {
+      windowSaveTimeout = null
+      saveWindowConfig()
+    }, 400)
+  }
+  mainWindow.on('move', scheduleWindowConfigSave)
+  mainWindow.on('resize', scheduleWindowConfigSave)
+  mainWindow.on('maximize', scheduleWindowConfigSave)
+  mainWindow.on('unmaximize', scheduleWindowConfigSave)
 
   mainWindow.webContents.setWindowOpenHandler((details) => {
     shell.openExternal(details.url)
@@ -267,19 +561,19 @@ function createWindow(): void {
 
   // HMR for renderer base on vite dev server
   // Load the remote URL for development or the local html file for production.
-  if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
-    mainWindow.loadURL(process.env['ELECTRON_RENDERER_URL'])
-  } else {
-    mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
-  }
+  loadRendererWindow(mainWindow)
 }
 
 
 
 app.whenReady().then(() => {
-  screen.on('display-added', applyConfiguredDisplayPreference)
-  screen.on('display-removed', applyConfiguredDisplayPreference)
-  screen.on('display-metrics-changed', applyConfiguredDisplayPreference)
+  const handleDisplayChange = () => {
+    applyConfiguredDisplayPreference()
+    broadcastToWindows('display-layout-changed', getDisplayLayout())
+  }
+  screen.on('display-added', handleDisplayChange)
+  screen.on('display-removed', handleDisplayChange)
+  screen.on('display-metrics-changed', handleDisplayChange)
   electronApp.setAppUserModelId('com.riescade')
 
   app.on('browser-window-created', (_, window) => {
@@ -287,6 +581,7 @@ app.whenReady().then(() => {
   })
 
   createWindow()
+  syncSecondaryDisplay()
 
   // Refresh the Raw Input inventory in the background at every frontend start.
   // The standalone launcher consumes this inventory for automatic keyboard and
@@ -509,8 +804,9 @@ app.whenReady().then(() => {
   ipcMain.handle('download-install-emulator', async (event, emulatorName: string, systemName: string) => {
     const systemObj = libraryService.getSystems().find(s => s.name === systemName)
     const emulatorObj = systemObj?.emulators?.find(e => e.name === emulatorName)
-    if (!emulatorObj?.source) throw new Error('Fonte oficial do emulador não encontrada na configuração do sistema.')
-    return EmulatorInstaller.downloadAndInstall(emulatorName, emulatorObj.source, (pct) => {
+    // The centralized catalog is the primary source. A source declared by the
+    // system remains supported for backwards compatibility.
+    return EmulatorInstaller.downloadAndInstall(emulatorName, emulatorObj?.source || '', (pct) => {
       event.sender.send('emulator-download-progress', { emulatorName, pct })
     })
   })
@@ -665,10 +961,48 @@ app.whenReady().then(() => {
     return InputDeviceService.scanPointingDevices(Boolean(forceRefresh))
   })
 
+  ipcMain.handle('get-display-layout', async () => getDisplayLayout())
+
+  ipcMain.handle('confirm-multi-display-mode', async (event, mode: string) => {
+    const allowedModes = new Set(['off', 'companion', 'extended'])
+    if (!allowedModes.has(mode)) return false
+    const currentMode = settingsParser.getSetting('RIESCADE.MultiDisplayMode', 'string') || 'off'
+    if (mode === currentMode) return false
+
+    const owner = BrowserWindow.fromWebContents(event.sender) || mainWindow
+    const result = owner
+      ? await dialog.showMessageBox(owner, {
+          type: 'question',
+          title: 'Reiniciar o RIESCADE',
+          message: 'Reiniciar o frontend para alterar o modo dos monitores?',
+          detail: 'As janelas abertas serão fechadas e o RIESCADE iniciará novamente com o novo modo.',
+          buttons: ['Reiniciar agora', 'Cancelar'],
+          defaultId: 0,
+          cancelId: 1,
+          noLink: true
+        })
+      : await dialog.showMessageBox({
+          type: 'question',
+          title: 'Reiniciar o RIESCADE',
+          message: 'Reiniciar o frontend para alterar o modo dos monitores?',
+          buttons: ['Reiniciar agora', 'Cancelar'],
+          defaultId: 0,
+          cancelId: 1,
+          noLink: true
+        })
+
+    if (result.response !== 0) return false
+    settingsParser.saveSetting('RIESCADE.MultiDisplayMode', mode, 'string')
+    app.relaunch()
+    setImmediate(() => app.exit(0))
+    return true
+  })
+
   ipcMain.handle('save-setting', async (_, name: string, value: any, type: 'string' | 'bool' | 'int' | 'float') => {
     const res = settingsParser.saveSetting(name, value, type)
-    if (name === 'RIESCADE.FrontendDisplay') {
+    if (name === 'RIESCADE.FrontendDisplay' || name === 'RIESCADE.MultiDisplayMode') {
       applyConfiguredDisplayPreference()
+      syncSecondaryDisplay()
     }
     if (name === 'LogLevel') {
       applyLogLevel(String(value))
@@ -749,6 +1083,25 @@ app.whenReady().then(() => {
     return emulatorParser.getResolvedSettings(emulator)
   })
 
+  ipcMain.handle('get-scoped-settings', async (_, scope: SettingsScope, context: SettingsContext) => {
+    const parser = new ScopedSettingsParser()
+    return { entry: parser.getEntry(scope, context), resolved: parser.getResolved(scope, context) }
+  })
+
+  ipcMain.handle('save-scoped-setting', async (_, scope: SettingsScope, context: SettingsContext, name: string, value: any) => {
+    const parser = new ScopedSettingsParser()
+    parser.saveSetting(scope, context, name, value)
+    sendToMainWindow('scoped-setting-changed', { scope, context, name, value })
+    return { entry: parser.getEntry(scope, context), resolved: parser.getResolved(scope, context) }
+  })
+
+  ipcMain.handle('reset-scoped-setting', async (_, scope: SettingsScope, context: SettingsContext, name?: string) => {
+    const parser = new ScopedSettingsParser()
+    parser.reset(scope, context, name)
+    sendToMainWindow('scoped-setting-changed', { scope, context, name, value: 'auto' })
+    return { entry: parser.getEntry(scope, context), resolved: parser.getResolved(scope, context) }
+  })
+
   ipcMain.handle('reset-emulator-setting', async (_, emulator: string, key: string) => {
     const emulatorParser = new EmulatorParser()
     emulatorParser.resetSetting(emulator, key)
@@ -826,7 +1179,11 @@ app.whenReady().then(() => {
       return
     }
     if (command === 'active-game-art-changed') {
+      secondaryDisplayState = data
       sendToMainWindow('active-game-art-changed', data)
+      if (secondaryWindow && !secondaryWindow.isDestroyed()) {
+        secondaryWindow.webContents.send('secondary-display-state', data)
+      }
       return
     }
     systemService.executeCommand(command)
@@ -835,6 +1192,8 @@ app.whenReady().then(() => {
   ipcMain.handle('detect-controllers', async () => {
     return ControllerManager.getInstance().detectAll()
   })
+
+  ipcMain.handle('get-secondary-display-state', async () => secondaryDisplayState)
 
   ipcMain.handle('rumble-controller', async (_, { instanceId, durationMs }) => {
     ControllerManager.getInstance().rumble(instanceId, durationMs)

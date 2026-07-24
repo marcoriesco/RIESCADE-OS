@@ -248,10 +248,11 @@
         {
           "id": "shaders",
           "label": "Shaders",
-          "description": "Pacote de shaders padrão aplicado aos emuladores.",
+          "description": "Perfil JSON de shader usado como padrão e herdado pelos emuladores compatíveis.",
           "type": "select",
           "default": "auto",
           "configKey": "shaders",
+          "dynamicSource": "libretro-shaders",
           "values": [
             {
               "label": "AUTO",
@@ -270,6 +271,7 @@
           "type": "select",
           "default": "auto",
           "configKey": "bezels",
+          "dynamicSource": "libretro-decorations",
           "values": [
             {
               "label": "AUTO",
@@ -296,6 +298,7 @@
           "type": "select",
           "default": "auto",
           "configKey": "filters",
+          "dynamicSource": "libretro-video-filters",
           "values": [
             {
               "label": "AUTO",

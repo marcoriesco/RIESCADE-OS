@@ -4,6 +4,7 @@ import { System, Game, hasMultipleEmulators } from "../types";
 import { ScrollArea } from "./ScrollArea";
 import { OverlayScrollbarsComponentRef } from "overlayscrollbars-react";
 import * as Select from "@radix-ui/react-select";
+import { EmulatorSettingsPanel } from "./EmulatorSettingsPanel";
 
 function RadixSelect({
   value,
@@ -123,6 +124,13 @@ export default function SystemAppContent({
   // New States for context menu, saves sidebar, and scraper
   const [showContextMenu, setShowContextMenu] = useState(false);
   const [showPlatformMenu, setShowPlatformMenu] = useState(false);
+  const [settingsScope, setSettingsScope] = useState<{
+    scope: "system" | "game";
+    emulator: string;
+    core: string;
+    game?: Game;
+  } | null>(null);
+  const [selectedGameOverrideCount, setSelectedGameOverrideCount] = useState(0);
   const [gameContextMenu, setGameContextMenu] = useState<{
     x: number;
     y: number;
@@ -864,7 +872,25 @@ export default function SystemAppContent({
     if (selectedGame) {
       const rawArt = selectedGame.fanart || selectedGame.cover || selectedGame.cover3d || null;
       gameArtUrl = rawArt ? (rawArt.startsWith("http") || rawArt.startsWith("file://") ? rawArt : `file:///${rawArt.replace(/\\/g, '/')}`) : null;
-      window.api.executeCommand("active-game-art-changed", { systemName: system.name, art: gameArtUrl });
+      window.api.executeCommand("active-game-art-changed", {
+        systemName: system.name,
+        systemFullname: system.fullname,
+        systemArt: system.art || null,
+        art: gameArtUrl,
+        game: {
+          name: selectedGame.name,
+          desc: selectedGame.desc,
+          video: selectedGame.video,
+          marquee: selectedGame.marquee || selectedGame.logo,
+          cover: selectedGame.cover || selectedGame.cover3d || selectedGame.image || selectedGame.thumbnail,
+          rating: selectedGame.rating,
+          releasedate: selectedGame.releasedate,
+          developer: selectedGame.developer,
+          publisher: selectedGame.publisher,
+          genre: selectedGame.genre,
+          players: selectedGame.players
+        }
+      });
     } else {
       window.api.executeCommand("active-game-art-changed", { systemName: system.name, art: null });
     }
@@ -948,6 +974,41 @@ export default function SystemAppContent({
     }
     return nameStr;
   }, [emuToConfig, selectedCoreToConfig]);
+
+  useEffect(() => {
+    let cancelled = false;
+    if (!selectedGame || !emuToConfig) {
+      setSelectedGameOverrideCount(0);
+      return;
+    }
+    void window.api.getScopedSettings("game", {
+      system: system.name,
+      emulator: emuToConfig,
+      core: selectedCoreToConfig,
+      rom: selectedGame.path
+    }).then((data) => {
+      if (!cancelled) setSelectedGameOverrideCount(Object.keys(data?.entry?.settings || {}).length);
+    });
+    return () => { cancelled = true; };
+  }, [selectedGame?.path, emuToConfig, selectedCoreToConfig, system.name]);
+
+  const openScopedSettings = useCallback((scope: "system" | "game", game?: Game) => {
+    const gameEmulator = game?.emulator && game.emulator !== "auto" ? game.emulator : "";
+    const configuredEmulator = settings?.[`${system.name}.emulator`]?.value;
+    const systemEmulator = configuredEmulator && configuredEmulator !== "auto" ? String(configuredEmulator) : "";
+    const emulator = gameEmulator || systemEmulator || system.emulators?.[0]?.name || "";
+    if (!emulator) return;
+    const matching = system.emulators?.find((item: any) => item.name === emulator);
+    const gameCore = game?.core && game.core !== "auto" ? game.core : "";
+    const configuredCore = settings?.[`${system.name}.core`]?.value;
+    const systemCore = configuredCore && configuredCore !== "auto" ? String(configuredCore) : "";
+    setSettingsScope({
+      scope,
+      emulator,
+      core: gameCore || systemCore || matching?.cores?.[0] || "",
+      game
+    });
+  }, [system, settings]);
 
   const handleEmulatorValueChangeForGame = (game: Game, val: string) => {
     let updatedGame = { ...game };
@@ -1280,6 +1341,17 @@ export default function SystemAppContent({
                           <div className="px-3 py-1 text-[10px] text-white/40 uppercase font-semibold tracking-wider mb-1.5">
                             Ações da Plataforma
                           </div>
+
+                          <button
+                            onClick={() => {
+                              setShowPlatformMenu(false);
+                              openScopedSettings("system");
+                            }}
+                            className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs hover:bg-white/10 text-left transition cursor-pointer text-white/80 hover:text-white"
+                          >
+                            <Settings className="w-4 h-4 text-accent" />
+                            <span>Configurações do sistema</span>
+                          </button>
                           
                           <button
                             onClick={() => {
@@ -1943,6 +2015,17 @@ export default function SystemAppContent({
                           <div className="px-3 py-1 text-[10px] text-white/40 uppercase font-semibold tracking-wider mb-1.5">
                             Gerenciar jogo
                           </div>
+
+                          <button
+                            onClick={() => {
+                              setShowContextMenu(false);
+                              openScopedSettings("game", selectedGame);
+                            }}
+                            className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs hover:bg-white/10 text-left transition cursor-pointer text-white/80 hover:text-white"
+                          >
+                            <Settings className="w-4 h-4 text-accent" />
+                            <span>Configurações deste jogo</span>
+                          </button>
                           
                           <button
                             onClick={() => {
@@ -2121,14 +2204,17 @@ export default function SystemAppContent({
                       {emuToConfig && (
                         <button
                           onClick={() => {
-                            onOpenTool?.("settings", emuToConfig, selectedCoreToConfig);
+                            openScopedSettings("game", selectedGame);
                           }}
                           className="group relative flex w-9 shrink-0 items-center justify-center rounded-md border border-white/5 bg-[#1a1a1a] text-accent transition hover:border-accent-focus hover:bg-accent-light cursor-pointer"
-                          aria-label={`Configurar ${emuLabelToConfig}`}
+                          aria-label={`Configurar ${selectedGame.name}`}
                         >
                           <Settings className="w-4 h-4 transition-transform group-hover:rotate-45" />
+                          {selectedGameOverrideCount > 0 && (
+                            <span className="absolute right-1 top-1 h-1.5 w-1.5 rounded-full bg-accent shadow-[0_0_6px_var(--accent-color)]" />
+                          )}
                           <span className="pointer-events-none absolute bottom-full right-0 z-50 mb-2 whitespace-nowrap rounded-md border border-white/10 bg-black px-2 py-1 text-[10px] font-medium text-white opacity-0 shadow-xl transition-opacity group-hover:opacity-100">
-                            Configurar {emuLabelToConfig}
+                            Configurar este jogo — {emuLabelToConfig}
                           </span>
                         </button>
                       )}
@@ -2443,6 +2529,54 @@ export default function SystemAppContent({
       )}
 
       {/* Right-click Context Menu */}
+      {settingsScope && (
+        <div className="fixed inset-0 z-[10000] flex items-center justify-center bg-black/75 p-6 backdrop-blur-sm">
+          <button
+            className="absolute inset-0 cursor-default"
+            onClick={() => setSettingsScope(null)}
+            aria-label="Fechar configurações"
+          />
+          <div className="relative flex max-h-[88vh] w-full max-w-4xl flex-col overflow-hidden rounded-xl border border-white/10 bg-[#111113] shadow-2xl">
+            <div className="flex items-center justify-between border-b border-white/10 px-5 py-4">
+              <div className="min-w-0">
+                <h2 className="truncate text-base font-semibold text-white">
+                  {settingsScope.scope === "game"
+                    ? `Configurar ${settingsScope.game?.name || "jogo"}`
+                    : `Configurar ${system.fullname || system.name}`}
+                </h2>
+                <p className="mt-0.5 text-xs text-white/45">
+                  {settingsScope.emulator.toUpperCase()}
+                  {settingsScope.core ? ` • ${settingsScope.core.toUpperCase()}` : ""}
+                </p>
+              </div>
+              <button
+                onClick={() => setSettingsScope(null)}
+                className="rounded-lg p-2 text-white/50 transition hover:bg-white/10 hover:text-white"
+                aria-label="Fechar"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+            <ScrollArea className="min-h-0 flex-1 px-5 py-5">
+              <EmulatorSettingsPanel
+                emulatorId={settingsScope.emulator}
+                emulatorSettings={{}}
+                onSaveEmulatorSetting={() => undefined}
+                initialCore={settingsScope.core}
+                scope={settingsScope.scope}
+                scopeContext={{
+                  system: system.name,
+                  emulator: settingsScope.emulator,
+                  core: settingsScope.core,
+                  rom: settingsScope.game?.path
+                }}
+                onOverridesChange={settingsScope.scope === "game" ? setSelectedGameOverrideCount : undefined}
+              />
+            </ScrollArea>
+          </div>
+        </div>
+      )}
+
       {gameContextMenu && (
         <>
           <div className="fixed inset-0 z-40" onClick={() => setGameContextMenu(null)} />
@@ -2456,6 +2590,18 @@ export default function SystemAppContent({
             <div className="px-3 py-1 text-[10px] text-white/40 uppercase font-semibold tracking-wider mb-1.5">
               Gerenciar jogo
             </div>
+
+            <button
+              onClick={() => {
+                const menuGame = games[gameContextMenu.index] || gameContextMenu.game;
+                setGameContextMenu(null);
+                openScopedSettings("game", menuGame);
+              }}
+              className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs hover:bg-white/10 text-left transition cursor-pointer text-white/80 hover:text-white"
+            >
+              <Settings className="w-4 h-4 text-accent" />
+              <span>Configurações deste jogo</span>
+            </button>
             
             <button
               onClick={() => {

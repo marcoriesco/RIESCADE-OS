@@ -1,0 +1,16 @@
+{
+  "$schema": "riescade-shader-profile-v1",
+  "name": "tvout-interlacing",
+  "default": {
+    "shader": "presets/tvout+interlacing/tvout+interlacing",
+    "ares": "presets/tvout+interlacing/tvout+interlacing"
+  },
+  "systems": {
+    "model2": {
+      "shader": "disabled"
+    },
+    "model3": {
+      "shader": "disabled"
+    }
+  }
+}

@@ -152,6 +152,17 @@ function validateGeneratorRegistry() {
   if (!indexSource.includes('return new GenericGenerator(args)')) {
     fail('Fallback GenericGenerator ausente no launcher.');
   }
+  if (!indexSource.includes("sdl3_detector.exe") || !indexSource.includes("getControllerMonitors(parsedArgs)")) {
+    fail('Monitor global HOTKEY + START baseado em SDL3 ausente do launcher.');
+  }
+  if (/isLibRetro\s*\?\s*\[\]/.test(indexSource)) {
+    fail('Monitor HOTKEY + START está desativado para Libretro.');
+  }
+
+  const libretroGenerator = fs.readFileSync(path.join(launcherSource, 'generators', 'LibRetroGenerator.ts'), 'utf8');
+  if (!libretroGenerator.includes("input_enable_hotkey_btn") || !libretroGenerator.includes("input_exit_emulator_btn")) {
+    fail('Mapeamento nativo redundante de saída ausente no LibretroGenerator.');
+  }
 }
 
 function validateTeknoParrotControls() {
@@ -193,6 +204,42 @@ function validateScraperSources() {
   }
 }
 
+function validateEmulatorCatalog() {
+  const systemsPath = path.join(appRoot, 'configs', 'systems.json');
+  const catalogPath = path.join(appRoot, 'configs', 'emulators-catalog.json');
+  const systems = JSON.parse(fs.readFileSync(systemsPath, 'utf8'));
+  const catalogDocument = JSON.parse(fs.readFileSync(catalogPath, 'utf8'));
+  const catalog = catalogDocument.emulators || {};
+  const referenced = new Set();
+
+  for (const system of systems.systems || []) {
+    for (const emulator of system.emulators || []) {
+      referenced.add(String(emulator.name || '').toLowerCase());
+    }
+  }
+
+  for (const id of [...referenced].sort()) {
+    const entry = catalog[id];
+    if (!entry) {
+      fail(`Emulador referenciado sem entrada no catálogo: ${id}.`);
+      continue;
+    }
+    if (!entry.installDir) fail(`Emulador ${id} sem installDir no catálogo.`);
+    if (!['github-release', 'release', 'manual'].includes(entry.updateMode)) {
+      fail(`Emulador ${id} possui updateMode inválido: ${entry.updateMode}.`);
+    }
+    if (entry.updateMode !== 'manual' && !entry.executable) {
+      fail(`Emulador atualizável ${id} não possui executável canônico.`);
+    }
+    if (entry.updateMode === 'github-release') {
+      if (entry.provider !== 'github' || !/^https:\/\/github\.com\/[^/]+\/[^/]+\/releases\/?$/.test(entry.source || '')) {
+        fail(`Emulador ${id} não possui fonte GitHub Releases válida.`);
+      }
+      if (!entry.assetPattern) fail(`Emulador ${id} não possui assetPattern para Windows.`);
+    }
+  }
+}
+
 function validateReleaseContract() {
   const releasePath = path.join(appRoot, 'src', 'scripts', 'release.js');
   const releaseSource = fs.readFileSync(releasePath, 'utf8');
@@ -219,6 +266,7 @@ validateGeneratorRegistry();
 validateGeneratorConfigLinks();
 validateTeknoParrotControls();
 validateScraperSources();
+validateEmulatorCatalog();
 validateReleaseContract();
 
 if (errors.length) {

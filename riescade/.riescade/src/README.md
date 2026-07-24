@@ -25,11 +25,14 @@ cmd /c npm install
 cmd /c npm run dev
 ```
 
-### 3. Deploy for Production
+### 3. Build and Deploy for Production
 
 ```bash
-cmd /c npm run deploy
+cmd /c npm run build
 ```
+
+Use `npm run compile` only when you need to compile the frontend without
+packaging or copying the executables.
 
 ## Structure
 

@@ -157,6 +157,34 @@ export default function App() {
     return settings["taskbar.showControllers"]?.value !== false && settings["taskbar.showControllers"]?.value !== "false";
   }, [settings]);
 
+  const [displayLayout, setDisplayLayout] = useState<{
+    virtualBounds: { x: number; y: number; width: number; height: number };
+    displays: { id: number; primary: boolean; x: number; y: number; width: number; height: number }[];
+  } | null>(null);
+  const isExtendedDesktop = settings["RIESCADE.MultiDisplayMode"]?.value === "extended";
+  const taskbarDisplayArea = useMemo(() => {
+    if (!isExtendedDesktop || !displayLayout || displayLayout.displays.length < 2) return null;
+    const preference = String(settings["RIESCADE.TaskbarDisplay"]?.value || "primary");
+    const primary = displayLayout.displays.find(display => display.primary) || displayLayout.displays[0];
+    return preference === "secondary"
+      ? displayLayout.displays.find(display => !display.primary) || primary
+      : primary;
+  }, [displayLayout, isExtendedDesktop, settings]);
+
+  useEffect(() => {
+    let active = true;
+    window.api.getDisplayLayout().then(layout => {
+      if (active) setDisplayLayout(layout);
+    });
+    const unsubscribe = window.api.on("display-layout-changed", (_event: any, layout: any) => {
+      if (active) setDisplayLayout(layout);
+    });
+    return () => {
+      active = false;
+      unsubscribe();
+    };
+  }, []);
+
   const [taskbarHidden, setTaskbarHidden] = useState(false);
   const isMouseNearBottomRef = useRef(false);
 
@@ -169,8 +197,12 @@ export default function App() {
     let hideTimer: NodeJS.Timeout | null = null;
 
     const handleMouseMove = (e: MouseEvent) => {
-      const nearBottom = e.clientY >= window.innerHeight - 25;
-      const insideTaskbarArea = e.clientY >= window.innerHeight - 90;
+      const displayLeft = taskbarDisplayArea?.x ?? 0;
+      const displayRight = displayLeft + (taskbarDisplayArea?.width ?? window.innerWidth);
+      const displayBottom = (taskbarDisplayArea?.y ?? 0) + (taskbarDisplayArea?.height ?? window.innerHeight);
+      const insideHorizontalArea = e.clientX >= displayLeft && e.clientX <= displayRight;
+      const nearBottom = insideHorizontalArea && e.clientY >= displayBottom - 25 && e.clientY <= displayBottom;
+      const insideTaskbarArea = insideHorizontalArea && e.clientY >= displayBottom - 90 && e.clientY <= displayBottom;
 
       if (nearBottom || insideTaskbarArea) {
         isMouseNearBottomRef.current = true;
@@ -201,7 +233,7 @@ export default function App() {
       if (hideTimer) clearTimeout(hideTimer);
       window.removeEventListener("mousemove", handleMouseMove);
     };
-  }, [taskbarAutoHide, taskbarAutoHideTimeout]);
+  }, [taskbarAutoHide, taskbarAutoHideTimeout, taskbarDisplayArea]);
 
 
 
@@ -1017,13 +1049,15 @@ export default function App() {
       const defaultX = Math.max(20, Math.round((desktopWidth - width) / 2));
       const defaultY = Math.max(70, Math.round((desktopHeight - height) / 2));
       
+      const maxDesktopHeight = Math.max(400, desktopHeight);
+      const initialWidth = Math.min(Math.max(savedWidth !== undefined ? parseInt(savedWidth, 10) : width, 500), desktopWidth);
+      const initialHeight = Math.min(Math.max(savedHeight !== undefined ? parseInt(savedHeight, 10) : height, 400), maxDesktopHeight);
       let initialX = savedX !== undefined ? parseInt(savedX, 10) : defaultX;
       let initialY = savedY !== undefined ? parseInt(savedY, 10) : defaultY;
-      
-      if (initialX < 0 || initialX > window.innerWidth - 100 || initialY < 0 || initialY > window.innerHeight - 100) {
-        initialX = defaultX;
-        initialY = defaultY;
-      }
+      if (!Number.isFinite(initialX)) initialX = defaultX;
+      if (!Number.isFinite(initialY)) initialY = defaultY;
+      initialX = Math.max(-initialWidth + 120, Math.min(desktopWidth - 120, initialX));
+      initialY = Math.max(0, Math.min(maxDesktopHeight - 40, initialY));
       
       const newWin: VirtualWindow = {
         id: winKey,
@@ -1032,8 +1066,8 @@ export default function App() {
         title,
         x: initialX,
         y: initialY,
-        width: savedWidth !== undefined ? parseInt(savedWidth, 10) : width,
-        height: savedHeight !== undefined ? parseInt(savedHeight, 10) : height,
+        width: initialWidth,
+        height: initialHeight,
         isMinimized: false,
         isMaximized: savedMaximized,
         zIndex: maxZ + 1
@@ -1064,6 +1098,22 @@ export default function App() {
   const windowType = params.get("windowType");   // "system" | "tool" | null
   const systemName = params.get("systemName");   // ex: "snes"
   const toolId = params.get("toolId");           // ex: "settings"
+  const [secondaryDisplayState, setSecondaryDisplayState] = useState<any>(null);
+
+  useEffect(() => {
+    if (windowType !== "secondary") return;
+    let active = true;
+    window.api.getSecondaryDisplayState().then((state) => {
+      if (active && state) setSecondaryDisplayState(state);
+    });
+    const unsubscribe = window.api.on("secondary-display-state", (_event: any, state: any) => {
+      if (active) setSecondaryDisplayState(state);
+    });
+    return () => {
+      active = false;
+      unsubscribe();
+    };
+  }, [windowType]);
 
   const toolApp = useMemo(() => {
     if (!toolId) return undefined;
@@ -1489,6 +1539,82 @@ export default function App() {
             </div>
           )}
         </div>
+      </div>
+    );
+  }
+
+  if (windowType === "secondary") {
+    const state = secondaryDisplayState;
+    const game = state?.game;
+    const toMediaUrl = (value?: string | null) => {
+      if (!value) return null;
+      return value.startsWith("http") || value.startsWith("file://")
+        ? value
+        : `file:///${value.replace(/\\/g, "/")}`;
+    };
+    const background = toMediaUrl(state?.art || state?.systemArt);
+    const cover = toMediaUrl(game?.cover || state?.art);
+    const marquee = toMediaUrl(game?.marquee);
+    const video = toMediaUrl(game?.video);
+    const releaseYear = game?.releasedate ? String(game.releasedate).slice(0, 4) : "";
+
+    return (
+      <div className="relative w-screen h-screen overflow-hidden select-none bg-[#080a0f] text-white">
+        {background && (
+          <div
+            className="absolute inset-0 bg-cover bg-center opacity-30 blur-sm scale-105"
+            style={{ backgroundImage: `url("${background}")` }}
+          />
+        )}
+        <div className="absolute inset-0 bg-gradient-to-r from-black/95 via-black/70 to-black/35" />
+        {!game ? (
+          <div className="relative z-10 h-full flex flex-col items-center justify-center gap-4 text-center px-12">
+            <div className="text-xs uppercase tracking-[0.35em] text-accent font-bold">RIESCADE</div>
+            <h1 className="text-3xl font-bold">Tela auxiliar pronta</h1>
+            <p className="text-white/45 max-w-xl">Abra um sistema e selecione um jogo para exibir suas mídias e informações neste monitor.</p>
+          </div>
+        ) : (
+          <div className="relative z-10 h-full grid grid-cols-[minmax(260px,38%)_1fr] gap-[5vw] items-center px-[6vw] py-[7vh]">
+            <div className="h-full flex items-center justify-center min-w-0">
+              {video ? (
+                <video
+                  key={video}
+                  src={video}
+                  poster={cover || undefined}
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  className="max-w-full max-h-full object-contain rounded-2xl shadow-2xl border border-white/10"
+                />
+              ) : cover ? (
+                <img src={cover} alt="" className="max-w-full max-h-full object-contain rounded-2xl shadow-2xl" />
+              ) : (
+                <div className="aspect-[3/4] h-[60vh] max-h-full rounded-2xl border border-white/10 bg-white/5 flex items-center justify-center text-white/25">
+                  Sem mídia
+                </div>
+              )}
+            </div>
+            <div className="min-w-0 flex flex-col">
+              <div className="text-xs uppercase tracking-[0.28em] text-accent font-bold mb-4">
+                {state?.systemFullname || state?.systemName}
+              </div>
+              {marquee && <img src={marquee} alt="" className="max-w-[70%] max-h-28 object-contain object-left mb-6" />}
+              <h1 className="text-[clamp(2rem,4.5vw,5rem)] leading-[1.05] font-black tracking-tight">{game.name}</h1>
+              <div className="flex flex-wrap gap-x-4 gap-y-2 mt-5 text-sm text-white/55">
+                {releaseYear && <span>{releaseYear}</span>}
+                {game.genre && <span>{game.genre}</span>}
+                {game.players && <span>{game.players} jogador(es)</span>}
+                {game.developer && <span>{game.developer}</span>}
+              </div>
+              {game.desc && (
+                <p className="mt-7 text-[clamp(0.9rem,1.35vw,1.25rem)] leading-relaxed text-white/65 line-clamp-8 max-w-4xl">
+                  {game.desc}
+                </p>
+              )}
+            </div>
+          </div>
+        )}
       </div>
     );
   }
@@ -1977,6 +2103,7 @@ export default function App() {
               onMinimize={minimizeVirtualWindow}
               onMaximize={toggleMaximizeVirtualWindow}
               onUpdateBounds={updateVirtualWindowBounds}
+              desktopAreas={isExtendedDesktop ? displayLayout?.displays : undefined}
             >
               {win.type === 'system' || isVirtualTool ? (
                 <SystemAppContent
@@ -2060,9 +2187,15 @@ export default function App() {
 
       {/* App Launcher Start Menu */}
       <div
-        className={`start-menu-overlay absolute inset-0 z-[100] flex items-center justify-center pt-16 pb-32 ${
+        className={`start-menu-overlay absolute ${taskbarDisplayArea ? "" : "inset-0"} z-[100] flex items-center justify-center pt-16 pb-32 ${
           launcherOpen ? "open" : ""
         }`}
+        style={taskbarDisplayArea ? {
+          left: taskbarDisplayArea.x,
+          top: taskbarDisplayArea.y,
+          width: taskbarDisplayArea.width,
+          height: taskbarDisplayArea.height
+        } : undefined}
         onClick={(e) => { e.stopPropagation(); setLauncherOpen(false); }}
       >
         <div
@@ -2267,7 +2400,12 @@ export default function App() {
       {/* Windows-style Taskbar bottom edge hover trigger */}
       {taskbarAutoHide && (
         <div 
-          className="fixed bottom-0 left-0 right-0 h-3 z-[89]" 
+          className="fixed h-3 z-[89]"
+          style={taskbarDisplayArea ? {
+            left: taskbarDisplayArea.x,
+            top: taskbarDisplayArea.y + taskbarDisplayArea.height - 12,
+            width: taskbarDisplayArea.width
+          } : { bottom: 0, left: 0, right: 0 }}
           onMouseEnter={() => setTaskbarHidden(false)}
         />
       )}
@@ -2278,9 +2416,17 @@ export default function App() {
         return (
           <Tooltip.Provider delayDuration={400}>
             <div 
-              className={`taskbar-dock absolute bottom-4 left-1/2 -translate-x-1/2 z-[90] transition-all duration-300 ${
+              className={`taskbar-dock absolute -translate-x-1/2 z-[90] transition-all duration-300 ${
                 isTaskbarHidden ? "translate-y-28 opacity-0 pointer-events-none" : "translate-y-0 opacity-100"
               }`} 
+              style={{
+                left: taskbarDisplayArea
+                  ? taskbarDisplayArea.x + taskbarDisplayArea.width / 2
+                  : "50%",
+                bottom: taskbarDisplayArea
+                  ? window.innerHeight - (taskbarDisplayArea.y + taskbarDisplayArea.height) + 16
+                  : 16
+              }}
               onMouseEnter={() => setTaskbarHidden(false)}
               onClick={(e) => e.stopPropagation()}
             >

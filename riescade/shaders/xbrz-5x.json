@@ -1,0 +1,10 @@
+{
+  "$schema": "riescade-shader-profile-v1",
+  "name": "xbrz-5x",
+  "default": {
+    "shaderGL": "xbrz/5xbrz-linear",
+    "shader": "edge-smoothing/xbrz/5xbrz-linear",
+    "ares": "edge-smoothing/xbrz/5xbrz-linear"
+  },
+  "systems": {}
+}
