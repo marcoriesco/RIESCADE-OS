@@ -1,0 +1,149 @@
+{
+  "$schema": "riescade-emulators-catalog-v1",
+  "version": 1,
+  "emulators": {
+    "ares": {
+      "name": "ares",
+      "executable": "ares/ares.exe",
+      "installDir": "ares"
+    },
+    "cemu": {
+      "name": "Cemu",
+      "executable": "cemu/Cemu.exe",
+      "installDir": "cemu"
+    },
+    "citron": {
+      "name": "Citron",
+      "executable": "citron/citron-cmd.exe",
+      "installDir": "citron",
+      "source": "https://github.com/citron-neo/emulator/releases",
+      "provider": "github",
+      "assetPattern": "(windows|win).*(x64|amd64).*\\.zip$"
+    },
+    "dolphin": {
+      "name": "Dolphin",
+      "aliases": ["dolphin-emu"],
+      "executable": "dolphin-emu/Dolphin.exe",
+      "installDir": "dolphin-emu",
+      "preserve": ["User"]
+    },
+    "duckstation": {
+      "name": "DuckStation",
+      "executable": "duckstation/duckstation-qt-x64-ReleaseLTC.exe",
+      "installDir": "duckstation"
+    },
+    "eden": {
+      "name": "Eden",
+      "executable": "eden/eden.exe",
+      "installDir": "eden",
+      "source": "https://git.eden-emu.dev/eden-ci/master/releases",
+      "provider": "gitea",
+      "assetPattern": "(windows|win).*(x64|amd64).*\\.zip$",
+      "preserve": ["user"]
+    },
+    "eden-nightly": {
+      "name": "Eden Nightly",
+      "executable": "eden-nightly/eden.exe",
+      "installDir": "eden-nightly",
+      "source": "https://git.eden-emu.dev/eden-ci/nightly/releases",
+      "provider": "gitea",
+      "assetPattern": "(windows|win).*(x64|amd64).*\\.zip$",
+      "preserve": ["user"]
+    },
+    "flycast": {
+      "name": "Flycast",
+      "executable": "flycast/flycast.exe",
+      "installDir": "flycast"
+    },
+    "mame": {
+      "name": "MAME",
+      "aliases": ["mame64"],
+      "executable": "mame/mame.exe",
+      "installDir": "mame",
+      "preserve": ["cfg", "nvram", "ini"]
+    },
+    "model2": {
+      "name": "Model 2 Emulator",
+      "executable": "m2emulator/emulator.exe",
+      "installDir": "m2emulator"
+    },
+    "pcsx2": {
+      "name": "PCSX2",
+      "executable": "pcsx2/pcsx2-qt.exe",
+      "installDir": "pcsx2",
+      "preserve": ["inis", "bios", "memcards"]
+    },
+    "pcsx2-16": {
+      "name": "PCSX2 1.6",
+      "executable": "pcsx2-16/pcsx2.exe",
+      "installDir": "pcsx2-16",
+      "preserve": ["inis", "bios", "memcards"]
+    },
+    "pcsx2x6": {
+      "name": "PCSX2x6",
+      "executable": "pcsx2x6/pcsx2-qt.exe",
+      "installDir": "pcsx2x6",
+      "source": "https://github.com/PS2Homebrew-arcade/pcsx2x6/releases",
+      "provider": "github",
+      "assetPattern": "(windows|win).*(x64|amd64).*\\.zip$",
+      "preserve": ["inis", "bios", "memcards"]
+    },
+    "ppsspp": {
+      "name": "PPSSPP",
+      "executable": "ppsspp/PPSSPPWindows64.exe",
+      "installDir": "ppsspp",
+      "preserve": ["memstick"]
+    },
+    "redream": {
+      "name": "Redream",
+      "executable": "redream/redream.exe",
+      "installDir": "redream"
+    },
+    "libretro": {
+      "name": "RetroArch",
+      "executable": "retroarch/retroarch.exe",
+      "installDir": "retroarch",
+      "preserve": ["config", "saves", "states", "system", "playlists", "overlays", "shaders"]
+    },
+    "ryujinx": {
+      "name": "Ryujinx",
+      "executable": "ryujinx/Ryujinx.exe",
+      "installDir": "ryujinx",
+      "source": "https://git.ryujinx.app/Ryubing/Canary/releases",
+      "provider": "gitea",
+      "assetPattern": "(windows|win).*(x64|amd64).*\\.zip$",
+      "preserve": ["portable", "bis", "sdcard", "system"]
+    },
+    "shadps4": {
+      "name": "shadPS4",
+      "executable": "shadps4/shadPS4.exe",
+      "installDir": "shadps4"
+    },
+    "supermodel": {
+      "name": "Supermodel",
+      "executable": "supermodel/Supermodel.exe",
+      "installDir": "supermodel",
+      "preserve": ["Config", "NVRAM"]
+    },
+    "vita3k": {
+      "name": "Vita3K",
+      "executable": "vita3k/Vita3K.exe",
+      "installDir": "vita3k"
+    },
+    "xemu": {
+      "name": "xemu",
+      "executable": "xemu/xemu.exe",
+      "installDir": "xemu"
+    },
+    "xenia": {
+      "name": "Xenia",
+      "executable": "xenia/xenia.exe",
+      "installDir": "xenia"
+    },
+    "xenia-canary": {
+      "name": "Xenia Canary",
+      "executable": "xenia-canary/xenia-canary.exe",
+      "installDir": "xenia-canary"
+    }
+  }
+}

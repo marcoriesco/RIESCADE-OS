@@ -5,7 +5,7 @@ import { getEmulatorsPath, getRetroBatPath } from '../utils/paths.js';
 import { Logger } from '../utils/logger.js';
 import { Config } from '../config.js';
 
-export class Mame64Generator extends BaseGenerator {
+export class MameGenerator extends BaseGenerator {
   public configure(): void {
     Logger.info(`Mame64Generator: Configuring MAME64`);
     
@@ -40,11 +40,11 @@ export class Mame64Generator extends BaseGenerator {
       Logger.warn(`Mame64Generator: MAME executable not found at ${exePath}.`);
     }
 
-    const fullscreen = Config.getEmulatorSetting('mame64', 'fullscreen', 'true') === 'true';
-    const vsync = Config.getEmulatorSetting('mame64', 'vsync', 'true') === 'true';
-    const video = Config.getEmulatorSetting('mame64', 'video_driver', 'd3d');
-    const sound = Config.getEmulatorSetting('mame64', 'audio_driver', 'dsound');
-    const aspect = Config.getEmulatorSetting('mame64', 'aspect_ratio', 'auto');
+    const fullscreen = Config.getEmulatorSetting('mame', 'fullscreen', 'true') === 'true';
+    const vsync = Config.getEmulatorSetting('mame', 'vsync', 'true') === 'true';
+    const video = Config.getEmulatorSetting('mame', 'video_driver', 'd3d');
+    const sound = Config.getEmulatorSetting('mame', 'audio_driver', 'dsound');
+    const aspect = Config.getEmulatorSetting('mame', 'aspect_ratio', 'auto');
 
     const commandArgs: string[] = [
       '-skip_gameinfo',

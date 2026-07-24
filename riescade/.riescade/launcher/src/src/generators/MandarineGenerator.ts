@@ -1,7 +1,7 @@
 import { existsSync, readFileSync } from 'fs';
 import { join } from 'path';
 import { BaseGenerator } from './BaseGenerator.js';
-import { getEmulatorsPath } from '../utils/paths.js';
+import { getEmulatorsPath, getConfigsPath } from '../utils/paths.js';
 import { Logger } from '../utils/logger.js';
 import { Config } from '../config.js';
 import { updateIniSetting } from '../utils/ini.js';
@@ -14,13 +14,13 @@ export class MandarineGenerator extends BaseGenerator {
     const configPath = join(emulatorsDir, 'mandarine', 'qt-config.ini');
 
     try {
-      const schemaPath = join(process.cwd(), 'configs', 'emulator-schemas', 'mandarine.schema.json');
+      const schemaPath = join(getConfigsPath(), 'emulator-schemas', 'mandarine.schema.json');
       if (existsSync(schemaPath)) {
         const schema = JSON.parse(readFileSync(schemaPath, 'utf8'));
         for (const group of (schema.groups || [])) {
           for (const opt of (group.options || [])) {
             if (opt.realKey) {
-              const val = Config.getEmulatorSetting('mandarine', opt.id, opt.default || 'auto');
+              const val = Config.getEmulatorSetting('mandarine', opt.configKey || opt.id, opt.default || 'auto');
               const section = opt.realSection || 'Settings';
               updateIniSetting(configPath, section, opt.realKey, val);
             }

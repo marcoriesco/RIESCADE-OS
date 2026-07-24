@@ -1,0 +1,33 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "devilutionx",
+  "name": "DevilutionX",
+  "description": "Configurações do DevilutionX.",
+  "icon": "devilutionx",
+  "configFiles": [],
+  "globalMappings": {
+    "fullscreen": {
+      "configKey": "fullscreen",
+      "globalKey": "fullscreen"
+    }
+  },
+  "groups": [
+    {
+      "id": "video",
+      "title": "Vídeo",
+      "icon": "monitor",
+      "order": 1,
+      "options": [
+        {
+          "id": "fullscreen",
+          "label": "Tela cheia",
+          "description": "Inicia o DevilutionX em tela cheia.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "fullscreen",
+          "inheritsGlobal": "fullscreen"
+        }
+      ]
+    }
+  ]
+}

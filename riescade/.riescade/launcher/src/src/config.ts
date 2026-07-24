@@ -144,6 +144,14 @@ export class Config {
     return val;
   }
 
+  public static getCoreSetting(core: string, key: string, defaultValue?: any): any {
+    this.load();
+    const retroarch = this.emulatorConfig['libretro'] || {};
+    const coreValue = retroarch[`core.${core}.${key}`] ?? retroarch.cores?.[core]?.[key];
+    if (coreValue !== undefined && coreValue !== 'auto') return coreValue;
+    return this.getEmulatorSetting('libretro', key, defaultValue);
+  }
+
   private static loadSchemas(): void {
     const schemasDir = join(getConfigsPath(), 'emulator-schemas');
     if (!existsSync(schemasDir)) return;

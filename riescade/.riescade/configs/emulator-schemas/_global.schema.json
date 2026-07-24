@@ -278,6 +278,14 @@
             {
               "label": "Desativado",
               "value": "none"
+            },
+            {
+              "label": "Padrão",
+              "value": "default"
+            },
+            {
+              "label": "Padrão sem reflexo",
+              "value": "default_unglazed"
             }
           ]
         },

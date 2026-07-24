@@ -4,6 +4,7 @@ import { BaseGenerator } from './BaseGenerator.js';
 import { getEmulatorsPath, getConfigsPath } from '../utils/paths.js';
 import { Logger } from '../utils/logger.js';
 import { Config, InputConfig, InputItem } from '../config.js';
+import { resolveLibretroVisuals } from '../utils/libretroVisuals.js';
 
 export class LibRetroGenerator extends BaseGenerator {
   private retroarchDir: string = '';
@@ -32,10 +33,10 @@ export class LibRetroGenerator extends BaseGenerator {
       }
 
       // Apply general configurations from emulator.json
-      const fullscreen = Config.getEmulatorSetting('retroarch', 'fullscreen', 'true');
+      const fullscreen = Config.getEmulatorSetting('libretro', 'fullscreen', 'true');
       cfg['video_fullscreen'] = (fullscreen === 'true' || fullscreen === true) ? 'true' : 'false';
 
-      const aspect = Config.getEmulatorSetting('retroarch', 'aspect_ratio', 'auto');
+      const aspect = Config.getEmulatorSetting('libretro', 'aspect_ratio', 'auto');
       if (aspect === 'Fixed4x3' || aspect === '4:3' || aspect === '4x3') {
         cfg['aspect_ratio_index'] = '0';
         cfg['video_aspect_ratio_auto'] = 'false';
@@ -50,22 +51,35 @@ export class LibRetroGenerator extends BaseGenerator {
         cfg['aspect_ratio_index'] = '20';
       }
 
-      const videoDriver = Config.getEmulatorSetting('retroarch', 'video_driver', 'auto');
+      const videoDriver = Config.getEmulatorSetting('libretro', 'video_driver', 'auto');
       if (videoDriver && videoDriver !== 'auto') {
         cfg['video_driver'] = videoDriver.toLowerCase();
       }
 
-      const audioDriver = Config.getEmulatorSetting('retroarch', 'audio_driver', 'auto');
+      const audioDriver = Config.getEmulatorSetting('libretro', 'audio_driver', 'auto');
       if (audioDriver && audioDriver !== 'auto') {
         cfg['audio_driver'] = audioDriver.toLowerCase();
       }
 
-      const vsync = Config.getEmulatorSetting('retroarch', 'vsync', 'true');
+      const vsync = Config.getEmulatorSetting('libretro', 'vsync', 'true');
       cfg['video_vsync'] = (vsync === 'true' || vsync === true) ? 'true' : 'false';
 
       cfg['menu_driver'] = 'ozone';
       cfg['global_core_options'] = 'true';
       cfg['input_autodetect_enable'] = 'true'; // Let RetroArch configure controls natively
+
+      const visuals = resolveLibretroVisuals(
+        this.system,
+        this.rom,
+        String(Config.getCoreSetting(this.core, 'bezels', 'auto')),
+        String(Config.getCoreSetting(this.core, 'shaders', 'auto'))
+      );
+      cfg['input_overlay_enable'] = visuals.overlayConfig ? 'true' : 'false';
+      if (visuals.overlayConfig) cfg['input_overlay'] = visuals.overlayConfig;
+      else delete cfg['input_overlay'];
+      cfg['video_shader_enable'] = visuals.shaderPreset ? 'true' : 'false';
+      if (visuals.shaderPreset) cfg['video_shader'] = visuals.shaderPreset;
+      else delete cfg['video_shader'];
 
       const selectedStatePath = this.args.rawArgs['-state_path'];
       const autosaveRequested = this.args.rawArgs['-autosave'] === '1';

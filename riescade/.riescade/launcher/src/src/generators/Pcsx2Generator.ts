@@ -9,7 +9,7 @@ import { updateIniSetting } from '../utils/ini.js';
 export class Pcsx2Generator extends BaseGenerator {
   public configure(): void {
     const emuName = this.emulator.toLowerCase();
-    const resolvedEmu = (emuName === 'pcsx2qt' || emuName === 'pcsx2-16' || emuName === 'ps2') ? 'pcsx2' : emuName;
+    const resolvedEmu = (emuName === 'pcsx2qt' || emuName === 'ps2') ? 'pcsx2' : emuName;
     Logger.info(`Pcsx2Generator: Configuring ${resolvedEmu}`);
     
     const emulatorsDir = getEmulatorsPath();
@@ -34,7 +34,7 @@ export class Pcsx2Generator extends BaseGenerator {
   public getLaunchCommand(): { executable: string; args: string[] } {
     const emulatorsDir = getEmulatorsPath();
     const emuName = this.emulator.toLowerCase();
-    const resolvedEmu = (emuName === 'pcsx2qt' || emuName === 'pcsx2-16' || emuName === 'ps2') ? 'pcsx2' : emuName;
+    const resolvedEmu = (emuName === 'pcsx2qt' || emuName === 'ps2') ? 'pcsx2' : emuName;
     const pcsx2Dir = join(emulatorsDir, resolvedEmu);
     
     // Check if pcsx2-qt.exe exists (v1.7+), otherwise fall back to pcsx2.exe (v1.6)

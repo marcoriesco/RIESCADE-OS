@@ -1,0 +1,58 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "pcsx2-16",
+  "name": "PCSX2 1.6",
+  "description": "Configurações do PCSX2 1.6.",
+  "icon": "pcsx2",
+  "configFiles": [],
+  "globalMappings": {
+    "fullscreen": { "configKey": "fullscreen", "globalKey": "fullscreen" },
+    "aspect_ratio": { "configKey": "aspect_ratio", "globalKey": "aspect_ratio" },
+    "video_driver": { "configKey": "video_driver", "globalKey": "video_driver" }
+  },
+  "groups": [
+    {
+      "id": "video",
+      "title": "Vídeo",
+      "icon": "monitor",
+      "order": 1,
+      "options": [
+        {
+          "id": "fullscreen",
+          "label": "Tela cheia",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "fullscreen",
+          "inheritsGlobal": "fullscreen"
+        },
+        {
+          "id": "aspect_ratio",
+          "label": "Proporção de tela",
+          "type": "select",
+          "default": "auto",
+          "configKey": "aspect_ratio",
+          "inheritsGlobal": "aspect_ratio",
+          "values": [
+            { "label": "AUTO", "value": "auto" },
+            { "label": "4:3", "value": "4:3" },
+            { "label": "16:9", "value": "16:9" }
+          ]
+        },
+        {
+          "id": "video_driver",
+          "label": "Renderizador",
+          "type": "select",
+          "default": "auto",
+          "configKey": "video_driver",
+          "inheritsGlobal": "video_driver",
+          "values": [
+            { "label": "AUTO", "value": "auto" },
+            { "label": "Direct3D 11", "value": "3" },
+            { "label": "OpenGL", "value": "12" },
+            { "label": "Software", "value": "13" }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -203,8 +203,26 @@ Arquivos específicos do computador do desenvolvedor ou usuário não devem faze
 - Inventário de dispositivos.
 - Estado e hashes gerados em tempo de execução.
 - Credenciais pessoais do ScreenScraper.
+- Código-fonte do frontend e do launcher.
 
-A rotina de release preserva as pastas necessárias, remove dados temporários e entrega a pasta `state` vazia.
+A rotina de release preserva os binários e configurações necessários, exclui `riescade/.riescade/src` e `riescade/.riescade/launcher/src`, remove dados temporários e entrega a pasta `state` vazia.
+
+## Emuladores, shaders e molduras
+
+O catálogo `riescade/.riescade/configs/emulators-catalog.json` centraliza executável, pasta de instalação, fonte oficial e arquivos que devem ser preservados durante uma atualização. Downloads são preparados em uma pasta temporária, validados e só então substituem a instalação; em caso de falha, a versão anterior é restaurada.
+
+Para cores Libretro, shaders podem ser colocados em `riescade/shaders`, `riescade/system/shaders` ou `emulators/retroarch/shaders`. Todas as molduras ficam exclusivamente em `riescade/decorations` e não são incluídas por padrão na distribuição.
+
+A procura por molduras respeita a prioridade jogo, nome indexado, sistema e padrão. O formato principal é:
+
+```text
+riescade/decorations/<tipo>/games/<sistema>/<rom>.png
+riescade/decorations/<tipo>/games/<rom>.png
+riescade/decorations/<tipo>/<sistema>/<sistema>.png
+riescade/decorations/<tipo>/default.png
+```
+
+Depois, o sistema tenta as alternativas `default_unglazed/<sistema>/<sistema>.png` e `default/<sistema>/<sistema>.png`, sempre dentro de `riescade/decorations`. Um `.cfg` com o mesmo nome da imagem é utilizado quando existir; caso contrário, o launcher gera a configuração de overlay automaticamente.
 
 ## Aviso legal
 

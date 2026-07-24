@@ -5,6 +5,9 @@ import { readFileSync, writeFileSync, existsSync } from 'fs';
  * Preserves existing formatting and comments.
  */
 export function updateIniSetting(filePath: string, section: string, key: string, value: string | boolean | number): void {
+  if (String(value).trim().toLowerCase() === 'auto') {
+    return;
+  }
   if (!existsSync(filePath)) {
     // If the file doesn't exist, we create it with the section and key/value
     const content = `[${section}]\n${key} = ${value}\n`;

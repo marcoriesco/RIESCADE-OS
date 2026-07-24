@@ -1,7 +1,7 @@
 import { existsSync, readFileSync } from 'fs';
 import { join } from 'path';
 import { BaseGenerator } from './BaseGenerator.js';
-import { getEmulatorsPath } from '../utils/paths.js';
+import { getEmulatorsPath, getConfigsPath } from '../utils/paths.js';
 import { Logger } from '../utils/logger.js';
 import { Config } from '../config.js';
 import { updateIniSetting } from '../utils/ini.js';
@@ -14,13 +14,13 @@ export class Mupen64Generator extends BaseGenerator {
     const configPath = join(emulatorsDir, 'mupen64', 'mupen64plus.cfg');
 
     try {
-      const schemaPath = join(process.cwd(), 'configs', 'emulator-schemas', 'mupen64.schema.json');
+      const schemaPath = join(getConfigsPath(), 'emulator-schemas', 'mupen64.schema.json');
       if (existsSync(schemaPath)) {
         const schema = JSON.parse(readFileSync(schemaPath, 'utf8'));
         for (const group of (schema.groups || [])) {
           for (const opt of (group.options || [])) {
             if (opt.realKey) {
-              const val = Config.getEmulatorSetting('mupen64', opt.id, opt.default || 'auto');
+              const val = Config.getEmulatorSetting('mupen64', opt.configKey || opt.id, opt.default || 'auto');
               const section = opt.realSection || 'Settings';
               updateIniSetting(configPath, section, opt.realKey, val);
             }

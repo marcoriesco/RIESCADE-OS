@@ -1,0 +1,10 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "uniplayer",
+  "name": "UniPlayer",
+  "description": "UniPlayer. Não possui opções automáticas adicionais.",
+  "icon": "uniplayer",
+  "configFiles": [],
+  "globalMappings": {},
+  "groups": []
+}

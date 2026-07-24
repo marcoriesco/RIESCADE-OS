@@ -189,7 +189,7 @@ const EMULATOR_NAMES: Record<string, string> = {
   "raine": "Raine (Arcade 68000)",
   "raze": "Raze (Build Engine)",
   "redream": "Redream (Sega Dreamcast)",
-  "retroarch": "RetroArch (Libretro Frontend)",
+  "libretro": "RetroArch (Libretro Frontend)",
   "rpcs3": "RPCS3 (PlayStation 3)",
   "rtcw": "Return to Castle Wolfenstein (iRTCW)",
   "ruffle": "Ruffle (Flash Player)",
@@ -338,7 +338,7 @@ const EMULATOR_DESCRIPTIONS: Record<string, string> = {
   "raine": "Ajuste os parâmetros específicos do emulador Raine.",
   "raze": "Ajuste os parâmetros da engine Raze.",
   "redream": "Ajuste os parâmetros específicos do emulador Redream.",
-  "retroarch": "Configurações globais de emulação, vídeo, shaders e mais.",
+  "libretro": "Configurações globais de emulação, vídeo, shaders e mais.",
   "rpcs3": "Ajuste os parâmetros específicos do emulador RPCS3.",
   "rtcw": "Ajuste os parâmetros para Return to Castle Wolfenstein.",
   "ruffle": "Ajuste os parâmetros do emulador de Flash Ruffle.",
@@ -440,7 +440,7 @@ export default function ToolAppContent({
         setActiveSettingsTab(data.tab);
         if (data.subTab) {
           setEmuMenuOpen(true);
-          const targetSub = data.subTab === "libretro" ? "retroarch" : data.subTab;
+          const targetSub = data.subTab;
           setActiveEmuSubmenu(targetSub);
           setInitialGroup(data.initialGroup);
           setInitialCore(data.initialCore);

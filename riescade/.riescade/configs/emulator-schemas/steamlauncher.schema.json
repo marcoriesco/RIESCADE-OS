@@ -1,0 +1,33 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "steamlauncher",
+  "name": "Steam Launcher",
+  "description": "Configurações do lançador Steam.",
+  "icon": "steam",
+  "configFiles": [],
+  "globalMappings": {
+    "fullscreen": {
+      "configKey": "fullscreen",
+      "globalKey": "fullscreen"
+    }
+  },
+  "groups": [
+    {
+      "id": "video",
+      "title": "Vídeo",
+      "icon": "monitor",
+      "order": 1,
+      "options": [
+        {
+          "id": "fullscreen",
+          "label": "Tela cheia",
+          "description": "Solicita a inicialização em tela cheia.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "fullscreen",
+          "inheritsGlobal": "fullscreen"
+        }
+      ]
+    }
+  ]
+}

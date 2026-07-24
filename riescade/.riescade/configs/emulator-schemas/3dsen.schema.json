@@ -1,0 +1,10 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "3dsen",
+  "name": "3dSen",
+  "description": "Emulador 3dSen. Não possui opções automáticas adicionais.",
+  "icon": "3dsen",
+  "configFiles": [],
+  "globalMappings": {},
+  "groups": []
+}

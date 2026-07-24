@@ -54,10 +54,20 @@ function validateJsonFiles() {
 
 function validateEmulatorSchemas() {
   const schemasRoot = path.join(appRoot, 'configs', 'emulator-schemas');
+  const schemaIds = new Map();
 
   for (const fileName of fs.readdirSync(schemasRoot).filter(name => name.endsWith('.schema.json'))) {
     const relativePath = path.relative(projectRoot, path.join(schemasRoot, fileName));
     const schema = JSON.parse(fs.readFileSync(path.join(schemasRoot, fileName), 'utf8'));
+    const expectedFileName = `${schema.id}.schema.json`;
+    if (fileName !== '_global.schema.json' && fileName !== expectedFileName) {
+      fail(`Nome de schema divergente do ID: ${fileName} deveria ser ${expectedFileName}.`);
+    }
+    if (schemaIds.has(schema.id)) {
+      fail(`ID de schema duplicado "${schema.id}": ${schemaIds.get(schema.id)} e ${fileName}.`);
+    } else {
+      schemaIds.set(schema.id, fileName);
+    }
     for (const group of schema.groups || []) {
       for (const option of group.options || []) {
         if (!option.id || !option.configKey || !Object.hasOwn(option, 'default')) {
@@ -81,6 +91,44 @@ function validateEmulatorSchemas() {
             fail(`Opção padrão AUTO ausente ou inconsistente em ${relativePath}: ${option.id}.`);
           }
         }
+      }
+    }
+  }
+}
+
+function validateGeneratorConfigLinks() {
+  const schemasRoot = path.join(appRoot, 'configs', 'emulator-schemas');
+  const generatorsRoot = path.join(launcherSource, 'generators');
+  for (const fileName of fs.readdirSync(generatorsRoot).filter(name => name.endsWith('Generator.ts'))) {
+    const source = fs.readFileSync(path.join(generatorsRoot, fileName), 'utf8');
+    if (/process\.cwd\(\).*emulator-schemas/.test(source)) {
+      fail(`Gerador usa diretório de trabalho para localizar schema: ${fileName}.`);
+    }
+    for (const match of source.matchAll(/emulator-schemas',\s*'([^']+\.schema\.json)'/g)) {
+      if (!fs.existsSync(path.join(schemasRoot, match[1]))) {
+        fail(`Gerador referencia schema inexistente: ${fileName} -> ${match[1]}.`);
+      }
+    }
+  }
+
+  const systems = JSON.parse(fs.readFileSync(path.join(appRoot, 'configs', 'systems.json'), 'utf8')).systems || [];
+  const schemaIds = new Set(
+    fs.readdirSync(schemasRoot)
+      .filter(name => name.endsWith('.schema.json'))
+      .map(name => JSON.parse(fs.readFileSync(path.join(schemasRoot, name), 'utf8')).id)
+  );
+  for (const system of systems) {
+    const names = (system.emulators || []).map(emulator => emulator.name);
+    const duplicates = names.filter((name, index) => names.indexOf(name) !== index);
+    for (const name of new Set(duplicates)) {
+      fail(`Emulador duplicado no sistema ${system.name}: ${name}.`);
+    }
+    if (names.includes('mame64')) {
+      fail(`Nome antigo mame64 encontrado no sistema ${system.name}; use mame.`);
+    }
+    for (const name of names) {
+      if (!schemaIds.has(name)) {
+        fail(`Emulador sem schema no sistema ${system.name}: ${name}.`);
       }
     }
   }
@@ -168,6 +216,7 @@ function validateReleaseContract() {
 validateJsonFiles();
 validateEmulatorSchemas();
 validateGeneratorRegistry();
+validateGeneratorConfigLinks();
 validateTeknoParrotControls();
 validateScraperSources();
 validateReleaseContract();

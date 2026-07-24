@@ -57,7 +57,7 @@
           ]
         },
         {
-          "name": "mame64",
+          "name": "mame",
           "cores": []
         },
         {
@@ -125,7 +125,7 @@
           ]
         },
         {
-          "name": "mame64",
+          "name": "mame",
           "cores": []
         },
         {
@@ -321,7 +321,7 @@
           "cores": []
         },
         {
-          "name": "mame64",
+          "name": "mame",
           "cores": ["neogeo"]
         }
       ]
@@ -364,7 +364,7 @@
           "cores": ["mame"]
         },
         {
-          "name": "mame64",
+          "name": "mame",
           "cores": []
         }
       ]
@@ -831,7 +831,7 @@
           "cores": ["saturn"]
         },
         {
-          "name": "mame64",
+          "name": "mame",
           "cores": []
         }
       ]
@@ -1775,7 +1775,7 @@
           "cores": ["mame"]
         },
         {
-          "name": "mame64",
+          "name": "mame",
           "cores": []
         }
       ]
@@ -1804,7 +1804,7 @@
           "cores": ["mame"]
         },
         {
-          "name": "mame64",
+          "name": "mame",
           "cores": []
         }
       ]
@@ -1923,7 +1923,7 @@
           "cores": ["mame"]
         },
         {
-          "name": "mame64",
+          "name": "mame",
           "cores": ["xegs"]
         },
         {
@@ -2144,7 +2144,7 @@
           "cores": ["mame"]
         },
         {
-          "name": "mame64",
+          "name": "mame",
           "cores": ["aquarius"]
         }
       ]
@@ -2424,7 +2424,7 @@
           "cores": ["o2em", "mame"]
         },
         {
-          "name": "mame64",
+          "name": "mame",
           "cores": ["videopac"]
         },
         {
@@ -2463,7 +2463,7 @@
           "cores": ["mame"]
         },
         {
-          "name": "mame64",
+          "name": "mame",
           "cores": ["vg5k"]
         }
       ]
@@ -2580,7 +2580,7 @@
           ]
         },
         {
-          "name": "mame64",
+          "name": "mame",
           "cores": []
         }
       ]
@@ -3436,7 +3436,7 @@
           "cores": ["mame"]
         },
         {
-          "name": "mame64",
+          "name": "mame",
           "cores": []
         }
       ]
@@ -3824,7 +3824,7 @@
           "cores": ["same_cdi", "mame"]
         },
         {
-          "name": "mame64",
+          "name": "mame",
           "cores": ["cdi"]
         }
       ]
@@ -3859,7 +3859,7 @@
           "cores": ["mame"]
         },
         {
-          "name": "mame64",
+          "name": "mame",
           "cores": ["advision"]
         }
       ]
@@ -3879,7 +3879,7 @@
           "cores": ["mame"]
         },
         {
-          "name": "mame64",
+          "name": "mame",
           "cores": ["tvgames"]
         }
       ]
@@ -3898,7 +3898,7 @@
           "cores": ["sameduck", "mame"]
         },
         {
-          "name": "mame64",
+          "name": "mame",
           "cores": ["megaduck"]
         }
       ]
@@ -3982,7 +3982,7 @@
           "cores": ["mame"]
         },
         {
-          "name": "mame64",
+          "name": "mame",
           "cores": ["pv1000"]
         }
       ]
@@ -4018,7 +4018,7 @@
           "cores": ["mame"]
         },
         {
-          "name": "mame64",
+          "name": "mame",
           "cores": ["casloopy"]
         }
       ]
@@ -4037,7 +4037,7 @@
           "cores": ["jollycv", "mame"]
         },
         {
-          "name": "mame64",
+          "name": "mame",
           "cores": ["crvision"]
         }
       ]
@@ -4057,7 +4057,7 @@
           "cores": ["mame"]
         },
         {
-          "name": "mame64",
+          "name": "mame",
           "cores": ["gamecom"]
         }
       ]
@@ -4077,7 +4077,7 @@
           "cores": ["mame"]
         },
         {
-          "name": "mame64",
+          "name": "mame",
           "cores": ["gamepock"]
         }
       ]
@@ -4097,7 +4097,7 @@
           "cores": ["mame"]
         },
         {
-          "name": "mame64",
+          "name": "mame",
           "cores": ["gp32"]
         }
       ]
@@ -4117,7 +4117,7 @@
           "cores": ["mame"]
         },
         {
-          "name": "mame64",
+          "name": "mame",
           "cores": ["pegasus"]
         }
       ]
@@ -4151,7 +4151,7 @@
           "cores": ["emuscv", "mame"]
         },
         {
-          "name": "mame64",
+          "name": "mame",
           "cores": ["scv"]
         }
       ]
@@ -4171,7 +4171,7 @@
           "cores": ["mame"]
         },
         {
-          "name": "mame64",
+          "name": "mame",
           "cores": ["fm7"]
         }
       ]
@@ -4191,7 +4191,7 @@
           "cores": ["mame"]
         },
         {
-          "name": "mame64",
+          "name": "mame",
           "cores": ["apfm1000"]
         }
       ]
@@ -4217,7 +4217,7 @@
           ]
         },
         {
-          "name": "mame64",
+          "name": "mame",
           "cores": ["bbcmicro"]
         }
       ]
@@ -4237,7 +4237,7 @@
           "cores": ["mame"]
         },
         {
-          "name": "mame64",
+          "name": "mame",
           "cores": ["electron"]
         }
       ]
@@ -4257,7 +4257,7 @@
           "cores": ["mame"]
         },
         {
-          "name": "mame64",
+          "name": "mame",
           "cores": ["adam"]
         }
       ]
@@ -4277,7 +4277,7 @@
           "cores": ["mame"]
         },
         {
-          "name": "mame64",
+          "name": "mame",
           "cores": ["atom"]
         }
       ]
@@ -4297,7 +4297,7 @@
           "cores": ["mame"]
         },
         {
-          "name": "mame64",
+          "name": "mame",
           "cores": ["archimedes"]
         }
       ]
@@ -4317,7 +4317,7 @@
           "cores": ["amiarcadia", "mame"]
         },
         {
-          "name": "mame64",
+          "name": "mame",
           "cores": ["arcadia"]
         }
       ]
@@ -4337,7 +4337,7 @@
           "cores": ["mame"]
         },
         {
-          "name": "mame64",
+          "name": "mame",
           "cores": ["gmaster"]
         }
       ]
@@ -4357,7 +4357,7 @@
           "cores": ["mame"]
         },
         {
-          "name": "mame64",
+          "name": "mame",
           "cores": ["astrocde"]
         }
       ]
@@ -4377,7 +4377,7 @@
           "cores": ["mame"]
         },
         {
-          "name": "mame64",
+          "name": "mame",
           "cores": ["mame64"]
         }
       ]
@@ -4397,7 +4397,7 @@
           "cores": ["mame"]
         },
         {
-          "name": "mame64",
+          "name": "mame",
           "cores": ["tutor"]
         }
       ]
@@ -4417,7 +4417,7 @@
           "cores": ["mame"]
         },
         {
-          "name": "mame64",
+          "name": "mame",
           "cores": ["coco"]
         },
         {
@@ -4460,7 +4460,7 @@
           "cores": ["tsugaru"]
         },
         {
-          "name": "mame64",
+          "name": "mame",
           "cores": ["fmtownsux"]
         }
       ]
@@ -4486,7 +4486,7 @@
           ]
         },
         {
-          "name": "mame64",
+          "name": "mame",
           "cores": ["lcdgames"]
         }
       ]
@@ -4506,7 +4506,7 @@
           "cores": ["mame"]
         },
         {
-          "name": "mame64",
+          "name": "mame",
           "cores": ["vsmile"]
         }
       ]
@@ -4530,7 +4530,7 @@
           "cores": ["mame"]
         },
         {
-          "name": "mame64",
+          "name": "mame",
           "cores": ["camplynx"]
         }
       ]
@@ -4550,7 +4550,7 @@
           "cores": ["amiarcadia", "mame"]
         },
         {
-          "name": "mame64",
+          "name": "mame",
           "cores": ["vc4000"]
         }
       ]
@@ -4570,7 +4570,7 @@
           "cores": ["mame"]
         },
         {
-          "name": "mame64",
+          "name": "mame",
           "cores": ["supracan"]
         }
       ]
@@ -4590,7 +4590,7 @@
           "cores": ["mame"]
         },
         {
-          "name": "mame64",
+          "name": "mame",
           "cores": ["gamate"]
         }
       ]
@@ -4636,7 +4636,7 @@
           "cores": ["mame", "mame2016"]
         },
         {
-          "name": "mame64",
+          "name": "mame",
           "cores": []
         }
       ]
@@ -5061,7 +5061,7 @@
           "cores": ["mame2003_plus", "mame", "mame2003_midway", "mame2016"]
         },
         {
-          "name": "mame64",
+          "name": "mame",
           "cores": []
         }
       ]
@@ -5104,7 +5104,7 @@
           ]
         },
         {
-          "name": "mame64",
+          "name": "mame",
           "cores": []
         }
       ]
@@ -5138,7 +5138,7 @@
           "cores": ["mame"]
         },
         {
-          "name": "mame64",
+          "name": "mame",
           "cores": []
         }
       ]
@@ -5166,7 +5166,7 @@
           ]
         },
         {
-          "name": "mame64",
+          "name": "mame",
           "cores": []
         }
       ]
@@ -5186,7 +5186,7 @@
           "cores": ["mame"]
         },
         {
-          "name": "mame64",
+          "name": "mame",
           "cores": ["cinematronics"]
         }
       ]
@@ -5205,7 +5205,7 @@
           "cores": ["mame"]
         },
         {
-          "name": "mame64",
+          "name": "mame",
           "cores": []
         },
         {
@@ -5428,7 +5428,7 @@
           "cores": ["mame"]
         },
         {
-          "name": "mame64",
+          "name": "mame",
           "cores": ["tvgames"]
         }
       ]
@@ -5452,7 +5452,7 @@
           ]
         },
         {
-          "name": "mame64",
+          "name": "mame",
           "cores": []
         }
       ]
@@ -5708,7 +5708,7 @@
           "cores": []
         },
         {
-          "name": "mame64",
+          "name": "mame",
           "cores": ["neogeo"]
         }
       ]
@@ -6236,7 +6236,7 @@
           "cores": ["mame"]
         },
         {
-          "name": "mame64",
+          "name": "mame",
           "cores": ["socrates"]
         }
       ]
@@ -6255,7 +6255,7 @@
           "cores": ["mame"]
         },
         {
-          "name": "mame64",
+          "name": "mame",
           "cores": []
         }
       ]
@@ -6428,7 +6428,7 @@
           ]
         },
         {
-          "name": "mame64",
+          "name": "mame",
           "cores": []
         }
       ]
@@ -6452,7 +6452,7 @@
           ]
         },
         {
-          "name": "mame64",
+          "name": "mame",
           "cores": []
         }
       ]
@@ -6535,7 +6535,7 @@
           "cores": []
         },
         {
-          "name": "UniPlayer",
+          "name": "uniplayer",
           "cores": []
         }
       ]
@@ -6608,7 +6608,7 @@
       "hardware": "computer",
       "emulators": [
         {
-          "name": "retroarchCC",
+          "name": "retroarchcc",
           "cores": []
         },
         {

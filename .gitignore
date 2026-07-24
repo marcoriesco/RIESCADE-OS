@@ -43,6 +43,7 @@ yarn-error.log*
 *.db
 *.db-wal
 *.db-shm
+riescade/decorations/*
 riescade/.riescade/state/*
 !riescade/.riescade/state/.keep
 riescade/.riescade/configs/input-devices.json
@@ -74,10 +75,3 @@ RIESCADE_OS.7z
 
 # Isolated Emulator Launcher Development
 riescade/launcher/src/
-
-# System folders not needed in release (used by external tools: configgen, rb_gui, installer)
-system/configgen/
-system/download/
-system/modules/
-system/scripts/
-system/templates/

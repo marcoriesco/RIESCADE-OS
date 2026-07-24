@@ -1,6 +1,6 @@
 {
   "$schema": "riescade-emulator-schema-v1",
-  "id": "retroarch",
+  "id": "libretro",
   "name": "RetroArch (Libretro Frontend)",
   "description": "Configurações globais de emulação, vídeo, shaders e mais.",
   "icon": "retroarch",
@@ -17,6 +17,14 @@
     "audio_driver": {
       "configKey": "audio_driver",
       "globalKey": "audio_driver"
+    },
+    "shaders": {
+      "configKey": "shaders",
+      "globalKey": "shaders"
+    },
+    "bezels": {
+      "configKey": "bezels",
+      "globalKey": "bezels"
     }
   },
   "groups": [

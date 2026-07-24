@@ -741,30 +741,26 @@ app.whenReady().then(() => {
   })
 
   ipcMain.handle('get-emulator-schema', async (_, id: string) => {
-    const targetId = id === 'libretro' ? 'retroarch' : id
-    return emulatorSchemaService.getSchema(targetId)
+    return emulatorSchemaService.getSchema(id)
   })
 
   ipcMain.handle('get-resolved-emulator-settings', async (_, emulator: string) => {
-    const targetEmu = emulator === 'libretro' ? 'retroarch' : emulator
     const emulatorParser = new EmulatorParser()
-    return emulatorParser.getResolvedSettings(targetEmu)
+    return emulatorParser.getResolvedSettings(emulator)
   })
 
   ipcMain.handle('reset-emulator-setting', async (_, emulator: string, key: string) => {
-    const targetEmu = emulator === 'libretro' ? 'retroarch' : emulator
     const emulatorParser = new EmulatorParser()
-    emulatorParser.resetSetting(targetEmu, key)
-    sendToMainWindow('emulator-setting-changed', { emulator: targetEmu, name: key, value: 'auto' })
-    triggerLauncherConfig(targetEmu)
+    emulatorParser.resetSetting(emulator, key)
+    sendToMainWindow('emulator-setting-changed', { emulator, name: key, value: 'auto' })
+    triggerLauncherConfig(emulator)
   })
 
   ipcMain.handle('reset-all-emulator-settings', async (_, emulator: string) => {
-    const targetEmu = emulator === 'libretro' ? 'retroarch' : emulator
     const emulatorParser = new EmulatorParser()
-    emulatorParser.resetAllSettings(targetEmu)
-    sendToMainWindow('emulator-settings-reset', { emulator: targetEmu })
-    triggerLauncherConfig(targetEmu)
+    emulatorParser.resetAllSettings(emulator)
+    sendToMainWindow('emulator-settings-reset', { emulator })
+    triggerLauncherConfig(emulator)
   })
 
   ipcMain.handle('reload-emulator-schemas', async () => {

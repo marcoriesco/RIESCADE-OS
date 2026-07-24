@@ -136,7 +136,7 @@ async function run() {
     }
   }
 
-  // --- EMULATIONSTATION folder (complete .riescade minus src/) ---
+  // --- RIESCADE runtime folder (exclude frontend and launcher source trees) ---
   const esSource = path.join(projectRoot, 'riescade');
   const esDest = path.join(tempDir, 'riescade');
   if (fs.existsSync(esSource)) {
@@ -148,6 +148,11 @@ async function run() {
       console.log('   ✓ riescade/.riescade/ (src/ excluded)');
     } else {
       console.log('   ✓ riescade/');
+    }
+    const launcherSrcDir = path.join(esDest, '.riescade', 'launcher', 'src');
+    if (fs.existsSync(launcherSrcDir)) {
+      fs.rmSync(launcherSrcDir, { recursive: true, force: true });
+      console.log('   ✓ riescade/.riescade/launcher/src excluded');
     }
     // Remove the database file (each user generates their own)
     for (const dbName of ['riescade.db', 'riescade.db-wal', 'riescade.db-shm']) {

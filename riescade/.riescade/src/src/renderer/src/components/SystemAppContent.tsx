@@ -889,7 +889,7 @@ export default function SystemAppContent({
     
     if (system && system.emulators) {
       system.emulators.forEach((emu: any) => {
-        const emuDisplayName = (emu.name === 'libretro' ? 'retroarch' : emu.name).toUpperCase();
+        const emuDisplayName = emu.name.toUpperCase();
         if (emu.cores && emu.cores.length > 0) {
           emu.cores.forEach((core: string) => {
             choices.push({
@@ -937,7 +937,7 @@ export default function SystemAppContent({
       raw = selectValue.split(":")[0] || "";
     }
     if (!raw) return null;
-    return raw === "libretro" ? "retroarch" : raw;
+    return raw;
   }, [selectValue, system]);
 
   const emuLabelToConfig = useMemo(() => {

@@ -1,6 +1,6 @@
-import { existsSync, readFileSync, writeFileSync, mkdirSync, readdirSync, statSync, copyFileSync, unlinkSync, rmdirSync } from 'fs'
-import { join, resolve, dirname } from 'path'
-import { getRetroBatPath } from '../utils/paths'
+import { existsSync, readFileSync, writeFileSync, mkdirSync, readdirSync, statSync, copyFileSync, unlinkSync, rmdirSync, renameSync, rmSync, mkdtempSync } from 'fs'
+import { join, dirname, basename } from 'path'
+import { getRetroBatPath, getRiescadePath } from '../utils/paths'
 import https from 'https'
 import { exec } from 'child_process'
 import { tmpdir } from 'os'
@@ -20,6 +20,7 @@ const EMULATOR_EXES: Record<string, string> = {
   'eden-nightly': 'eden-nightly/eden.exe',
   'citron': 'citron/citron-cmd.exe',
   'retroarch': 'retroarch/retroarch.exe',
+  'libretro': 'retroarch/retroarch.exe',
   'pcsx2': 'pcsx2/pcsx2-qt.exe',
   'pcsx2-16': 'pcsx2-16/pcsx2.exe',
   'pcsx2x6': 'pcsx2x6/pcsx2-qt.exe',
@@ -40,6 +41,68 @@ const EMULATOR_EXES: Record<string, string> = {
   'vita3k': 'vita3k/Vita3K.exe',
   'redream': 'redream/redream.exe',
   'shadps4': 'shadps4/shadPS4.exe'
+}
+
+interface EmulatorCatalogEntry {
+  name: string
+  aliases?: string[]
+  executable: string
+  installDir: string
+  source?: string
+  provider?: 'github' | 'gitea' | 'direct'
+  assetPattern?: string
+  preserve?: string[]
+}
+
+let emulatorCatalogCache: Record<string, EmulatorCatalogEntry> | null = null
+
+function getEmulatorCatalog(): Record<string, EmulatorCatalogEntry> {
+  if (emulatorCatalogCache) return emulatorCatalogCache
+  const catalogPath = join(getRiescadePath(), 'configs', 'emulators-catalog.json')
+  let loadedCatalog: Record<string, EmulatorCatalogEntry> = {}
+  try {
+    const parsed = JSON.parse(readFileSync(catalogPath, 'utf8'))
+    loadedCatalog = parsed.emulators || {}
+  } catch (error) {
+    console.warn(`[EmulatorInstaller] Could not load ${catalogPath}; using built-in paths.`, error)
+  }
+  emulatorCatalogCache = loadedCatalog
+  return loadedCatalog
+}
+
+function getCatalogEntry(emulatorName: string): EmulatorCatalogEntry | undefined {
+  const normalized = emulatorName.toLowerCase()
+  const catalog = getEmulatorCatalog()
+  if (catalog[normalized]) return catalog[normalized]
+  return Object.values(catalog).find(entry =>
+    entry.aliases?.some(alias => alias.toLowerCase() === normalized)
+  )
+}
+
+function resolveReleaseApi(sourceUrl: string, provider?: string): { apiUrl: string; isGitea: boolean } {
+  const parsed = new URL(sourceUrl)
+  const pathParts = parsed.pathname.split('/').filter(Boolean)
+  if (pathParts.length < 2) {
+    throw new Error(`Invalid release repository source: ${sourceUrl}`)
+  }
+  const owner = pathParts[0]
+  const repo = pathParts[1]
+
+  if (provider === 'github' || parsed.hostname.toLowerCase() === 'github.com') {
+    return {
+      apiUrl: `https://api.github.com/repos/${owner}/${repo}/releases/latest`,
+      isGitea: false
+    }
+  }
+
+  if (provider === 'gitea' || sourceUrl.includes('/releases')) {
+    return {
+      apiUrl: `${parsed.protocol}//${parsed.host}/api/v1/repos/${owner}/${repo}/releases`,
+      isGitea: true
+    }
+  }
+
+  throw new Error(`Unsupported release repository source: ${sourceUrl}`)
 }
 
 function fetchJson(url: string): Promise<any> {
@@ -198,8 +261,10 @@ function getFolderContainingExe(extractDir: string, exeName: string): string {
 export class EmulatorInstaller {
   public static async checkStatus(emulatorName: string, sourceUrl?: string): Promise<EmulatorStatus> {
     const retroBatPath = getRetroBatPath()
-    const targetEmu = emulatorName === 'libretro' ? 'retroarch' : emulatorName
-    const relExe = EMULATOR_EXES[targetEmu] || EMULATOR_EXES[emulatorName]
+    const targetEmu = emulatorName.toLowerCase()
+    const catalogEntry = getCatalogEntry(targetEmu)
+    const relExe = catalogEntry?.executable || EMULATOR_EXES[targetEmu] || EMULATOR_EXES[emulatorName]
+    sourceUrl = sourceUrl || catalogEntry?.source
     const fullExePath = relExe ? join(retroBatPath, 'emulators', relExe) : ''
     const installed = !!fullExePath && existsSync(fullExePath)
 
@@ -216,10 +281,10 @@ export class EmulatorInstaller {
       }
     }
 
-    // If no sourceUrl is defined, we do not support auto-download/update. Return status as fully installed to bypass.
+    // Installation can still be detected even when no supported download source is registered.
     if (!sourceUrl) {
       return {
-        installed: true,
+        installed,
         name: emulatorName,
         installedVersion,
         latestVersion: installedVersion,
@@ -229,28 +294,14 @@ export class EmulatorInstaller {
 
     try {
       let latestVersion = installedVersion
-      let apiUrl = ''
-
-      if (sourceUrl.includes('github.com')) {
-        const match = sourceUrl.match(/github\.com\/([^/]+)\/([^/]+)/)
-        if (match) {
-          const owner = match[1]
-          const repo = match[2].replace(/\/releases.*$/, '')
-          apiUrl = `https://api.github.com/repos/${owner}/${repo}/releases/latest`
-          const data = await fetchJson(apiUrl)
-          latestVersion = data.tag_name || data.name || installedVersion
+      const releaseApi = resolveReleaseApi(sourceUrl, catalogEntry?.provider)
+      const data = await fetchJson(releaseApi.apiUrl)
+      if (releaseApi.isGitea) {
+        if (Array.isArray(data) && data.length > 0) {
+          latestVersion = data[0].name || data[0].tag_name || installedVersion
         }
-      } else if (sourceUrl.includes('git.eden-emu.dev')) {
-        const match = sourceUrl.match(/git\.eden-emu\.dev\/([^/]+)\/([^/]+)/)
-        if (match) {
-          const owner = match[1]
-          const repo = match[2].replace(/\/releases.*$/, '')
-          apiUrl = `https://git.eden-emu.dev/api/v1/repos/${owner}/${repo}/releases`
-          const data = await fetchJson(apiUrl)
-          if (Array.isArray(data) && data.length > 0) {
-            latestVersion = data[0].name || data[0].tag_name || installedVersion
-          }
-        }
+      } else {
+        latestVersion = data.tag_name || data.name || installedVersion
       }
 
       return {
@@ -280,39 +331,19 @@ export class EmulatorInstaller {
     onProgress: (pct: number) => void
   ): Promise<void> {
     const retroBatPath = getRetroBatPath()
-    const targetEmu = emulatorName === 'libretro' ? 'retroarch' : emulatorName
-    const relExe = EMULATOR_EXES[targetEmu] || EMULATOR_EXES[emulatorName]
+    const targetEmu = emulatorName.toLowerCase()
+    const catalogEntry = getCatalogEntry(targetEmu)
+    const relExe = catalogEntry?.executable || EMULATOR_EXES[targetEmu] || EMULATOR_EXES[emulatorName]
+    sourceUrl = sourceUrl || catalogEntry?.source || ''
     if (!relExe) {
       throw new Error(`Emulator ${emulatorName} has no registered executable path.`)
     }
 
     const targetExePath = join(retroBatPath, 'emulators', relExe)
     const targetDir = dirname(targetExePath)
-    const exeName = targetExePath.substring(targetExePath.lastIndexOf(join('/')) + 1).split(/[\/\\]/).pop() || ''
+    const exeName = basename(targetExePath)
 
-    let apiUrl = ''
-    let isGitea = false
-
-    if (sourceUrl.includes('github.com')) {
-      const match = sourceUrl.match(/github\.com\/([^/]+)\/([^/]+)/)
-      if (match) {
-        const owner = match[1]
-        const repo = match[2].replace(/\/releases.*$/, '')
-        apiUrl = `https://api.github.com/repos/${owner}/${repo}/releases/latest`
-      }
-    } else if (sourceUrl.includes('git.eden-emu.dev')) {
-      isGitea = true
-      const match = sourceUrl.match(/git\.eden-emu\.dev\/([^/]+)\/([^/]+)/)
-      if (match) {
-        const owner = match[1]
-        const repo = match[2].replace(/\/releases.*$/, '')
-        apiUrl = `https://git.eden-emu.dev/api/v1/repos/${owner}/${repo}/releases`
-      }
-    }
-
-    if (!apiUrl) {
-      throw new Error(`Unsupported release repository source: ${sourceUrl}`)
-    }
+    const { apiUrl, isGitea } = resolveReleaseApi(sourceUrl, catalogEntry?.provider)
 
     const releaseData = await fetchJson(apiUrl)
     const latestRelease = isGitea ? releaseData[0] : releaseData
@@ -320,44 +351,71 @@ export class EmulatorInstaller {
       throw new Error(`No releases found at API: ${apiUrl}`)
     }
 
-    const winZipAsset = findWindowsAsset(latestRelease.assets || [], emulatorName)
+    const winZipAsset = findWindowsAsset(latestRelease.assets || [], emulatorName, catalogEntry?.assetPattern)
     if (!winZipAsset) {
       throw new Error(`Could not find a valid Windows 64-bit .zip release asset for ${emulatorName}.`)
     }
 
     const downloadUrl = winZipAsset.browser_download_url
-    const tempZipPath = join(tmpdir(), `riescade_dl_${emulatorName}.zip`)
-    const tempExtractPath = join(tmpdir(), `riescade_ext_${emulatorName}`)
+    const tempRoot = mkdtempSync(join(tmpdir(), 'riescade-emulator-'))
+    const tempZipPath = join(tempRoot, 'download.zip')
+    const tempExtractPath = join(tempRoot, 'extracted')
+    const stagingDir = `${targetDir}.riescade-new`
+    const backupDir = `${targetDir}.riescade-backup`
 
-    // 1. Download File
-    await downloadFile(downloadUrl, tempZipPath, onProgress)
-
-    // 2. Extract File
-    await extractZip(tempZipPath, tempExtractPath)
-
-    // 3. Locate folder containing the .exe
-    const srcFolder = getFolderContainingExe(tempExtractPath, exeName)
-
-    // 4. Move files to target directory
-    mkdirSync(targetDir, { recursive: true })
-    copyDirRecursive(srcFolder, targetDir)
-
-    // 5. Write version file
-    const tag = latestRelease.name || latestRelease.tag_name || 'latest'
-    writeFileSync(join(targetDir, '.version'), tag, 'utf8')
-
-    // 6. Cleanup temp files
     try {
-      unlinkSync(tempZipPath)
-      rmDirRecursive(tempExtractPath)
-    } catch (e) {
-      console.warn('Failed to clean up temp files:', e)
+      await downloadFile(downloadUrl, tempZipPath, onProgress)
+      await extractZip(tempZipPath, tempExtractPath)
+      const srcFolder = getFolderContainingExe(tempExtractPath, exeName)
+
+      rmSync(stagingDir, { recursive: true, force: true })
+      mkdirSync(stagingDir, { recursive: true })
+      copyDirRecursive(srcFolder, stagingDir)
+
+      for (const relativePath of catalogEntry?.preserve || []) {
+        const existingPath = join(targetDir, relativePath)
+        const stagedPath = join(stagingDir, relativePath)
+        if (!existsSync(existingPath)) continue
+        if (statSync(existingPath).isDirectory()) {
+          copyDirRecursive(existingPath, stagedPath)
+        } else {
+          mkdirSync(dirname(stagedPath), { recursive: true })
+          copyFileSync(existingPath, stagedPath)
+        }
+      }
+
+      if (!existsSync(join(stagingDir, exeName))) {
+        throw new Error(`The downloaded package does not contain the expected executable ${exeName}.`)
+      }
+
+      const tag = latestRelease.name || latestRelease.tag_name || 'latest'
+      writeFileSync(join(stagingDir, '.version'), tag, 'utf8')
+
+      rmSync(backupDir, { recursive: true, force: true })
+      if (existsSync(targetDir)) renameSync(targetDir, backupDir)
+      try {
+        renameSync(stagingDir, targetDir)
+        rmSync(backupDir, { recursive: true, force: true })
+      } catch (installError) {
+        if (existsSync(targetDir)) rmSync(targetDir, { recursive: true, force: true })
+        if (existsSync(backupDir)) renameSync(backupDir, targetDir)
+        throw installError
+      }
+    } finally {
+      rmSync(stagingDir, { recursive: true, force: true })
+      rmSync(tempRoot, { recursive: true, force: true })
     }
   }
 }
 
-function findWindowsAsset(assets: any[], emuName: string): any | null {
+function findWindowsAsset(assets: any[], emuName: string, assetPattern?: string): any | null {
   if (!assets || assets.length === 0) return null
+
+  if (assetPattern) {
+    const matcher = new RegExp(assetPattern, 'i')
+    const catalogMatch = assets.find(asset => matcher.test(String(asset.name || '')))
+    if (catalogMatch) return catalogMatch
+  }
 
   // Filter zip files containing "win" or "windows"
   const winZipAssets = assets.filter(a => {

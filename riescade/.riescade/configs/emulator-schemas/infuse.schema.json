@@ -1,0 +1,10 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "infuse",
+  "name": "Infuse",
+  "description": "Emulador Infuse. Não possui opções automáticas adicionais.",
+  "icon": "infuse",
+  "configFiles": [],
+  "globalMappings": {},
+  "groups": []
+}

@@ -1,7 +1,7 @@
 import { existsSync, readFileSync } from 'fs';
 import { join } from 'path';
 import { BaseGenerator } from './BaseGenerator.js';
-import { getEmulatorsPath } from '../utils/paths.js';
+import { getEmulatorsPath, getConfigsPath } from '../utils/paths.js';
 import { Logger } from '../utils/logger.js';
 import { Config } from '../config.js';
 import { updateIniSetting } from '../utils/ini.js';
@@ -14,13 +14,13 @@ export class UaeGenerator extends BaseGenerator {
     const configPath = join(emulatorsDir, 'winuae', 'winuae.ini');
 
     try {
-      const schemaPath = join(process.cwd(), 'configs', 'emulator-schemas', 'uae.schema.json');
+      const schemaPath = join(getConfigsPath(), 'emulator-schemas', 'winuae.schema.json');
       if (existsSync(schemaPath)) {
         const schema = JSON.parse(readFileSync(schemaPath, 'utf8'));
         for (const group of (schema.groups || [])) {
           for (const opt of (group.options || [])) {
             if (opt.realKey) {
-              const val = Config.getEmulatorSetting('uae', opt.id, opt.default || 'auto');
+              const val = Config.getEmulatorSetting('winuae', opt.configKey || opt.id, opt.default || 'auto');
               const section = opt.realSection || 'Settings';
               updateIniSetting(configPath, section, opt.realKey, val);
             }
@@ -42,7 +42,7 @@ export class UaeGenerator extends BaseGenerator {
 
     const commandArgs: string[] = [];
     
-    const fullscreen = Config.getEmulatorSetting('uae', 'fullscreen', 'true') === 'true';
+    const fullscreen = Config.getEmulatorSetting('winuae', 'fullscreen', 'true') === 'true';
     if (fullscreen) {
       commandArgs.push('--fullscreen');
     }

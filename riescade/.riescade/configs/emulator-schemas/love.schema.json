@@ -1,0 +1,29 @@
+{
+  "$schema": "riescade-emulator-schema-v1",
+  "id": "love",
+  "name": "LÖVE",
+  "description": "Configurações do LÖVE.",
+  "icon": "love",
+  "configFiles": [],
+  "globalMappings": {
+    "fullscreen": { "configKey": "fullscreen", "globalKey": "fullscreen" }
+  },
+  "groups": [
+    {
+      "id": "video",
+      "title": "Vídeo",
+      "icon": "monitor",
+      "order": 1,
+      "options": [
+        {
+          "id": "fullscreen",
+          "label": "Tela cheia",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "fullscreen",
+          "inheritsGlobal": "fullscreen"
+        }
+      ]
+    }
+  ]
+}

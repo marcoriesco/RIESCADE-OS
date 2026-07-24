@@ -5,13 +5,14 @@ import { Config } from './config.js';
 import { LaunchArgs, ControllerInfo } from './types.js';
 import { BaseGenerator } from './generators/BaseGenerator.js';
 import { LibRetroGenerator } from './generators/LibRetroGenerator.js';
+import { RetroArchCCGenerator } from './generators/RetroArchCCGenerator.js';
 import { Pcsx2Generator } from './generators/Pcsx2Generator.js';
 import { Pcsx2x6Generator } from './generators/Pcsx2x6Generator.js';
 import { DolphinGenerator } from './generators/DolphinGenerator.js';
 import { TeknoParrotGenerator } from './generators/TeknoParrotGenerator.js';
 import { GenericGenerator } from './generators/GenericGenerator.js';
 import { AresGenerator } from './generators/AresGenerator.js';
-import { Mame64Generator } from './generators/Mame64Generator.js';
+import { MameGenerator } from './generators/MameGenerator.js';
 import { XeniaGenerator } from './generators/XeniaGenerator.js';
 import { DuckstationGenerator } from './generators/DuckstationGenerator.js';
 import { RyujinxGenerator } from './generators/RyujinxGenerator.js';
@@ -212,8 +213,11 @@ function getGenerator(args: LaunchArgs): BaseGenerator {
   const emu = args.emulator.toLowerCase();
   const sys = args.system.toLowerCase();
 
-  if (emu === 'libretro' || emu === 'retroarch' || emu === 'angle') {
+  if (emu === 'libretro') {
     return new LibRetroGenerator(args);
+  }
+  if (emu === 'retroarchcc') {
+    return new RetroArchCCGenerator(args);
   }
   if (emu === 'pcsx2' || emu === 'pcsx2-nightly' || emu === 'pcsx2qt' || emu === 'pcsx2-16' || emu === 'ps2' || sys === 'ps2') {
     return new Pcsx2Generator(args);
@@ -230,8 +234,8 @@ function getGenerator(args: LaunchArgs): BaseGenerator {
   if (emu === 'ares' || sys === 'ares') {
     return new AresGenerator(args);
   }
-  if (emu === 'mame64' || emu === 'mame' || sys === 'mame64') {
-    return new Mame64Generator(args);
+  if (emu === 'mame' || sys === 'mame') {
+    return new MameGenerator(args);
   }
   if (emu === 'xenia' || emu === 'xenia-canary' || sys === 'xbox360' || sys === 'xboxlivearcade' || sys === 'xbla') {
     return new XeniaGenerator(args);
@@ -266,7 +270,7 @@ function getGenerator(args: LaunchArgs): BaseGenerator {
   if (emu === 'bigpemu' || sys === 'atarijaguar') {
     return new BigPemuGenerator(args);
   }
-  if (emu === 'model2' || sys === 'model2') {
+  if (emu === 'm2emulator' || sys === 'model2') {
     return new Model2Generator(args);
   }
   if (emu === 'supermodel' || emu === 'model3' || sys === 'model3') {
@@ -332,10 +336,10 @@ function getGenerator(args: LaunchArgs): BaseGenerator {
   if (emu === 'dosbox') {
     return new DosBoxGenerator(args);
   }
-  if (emu === 'dosboxpure') {
+  if (emu === 'dosbox-pure') {
     return new DosBoxPureGenerator(args);
   }
-  if (emu === 'dosboxstaging') {
+  if (emu === 'dosbox-staging') {
     return new DosBoxStagingGenerator(args);
   }
   if (emu === 'easyrpg') {
@@ -359,7 +363,7 @@ function getGenerator(args: LaunchArgs): BaseGenerator {
   if (emu === 'fbneo') {
     return new FbneoGenerator(args);
   }
-  if (emu === 'forceengine') {
+  if (emu === 'theforceengine') {
     return new ForceEngineGenerator(args);
   }
   if (emu === 'fpinball') {
@@ -392,7 +396,7 @@ function getGenerator(args: LaunchArgs): BaseGenerator {
   if (emu === 'jzintv') {
     return new JZintvGenerator(args);
   }
-  if (emu === 'kegafusion') {
+  if (emu === 'kega-fusion') {
     return new KegaFusionGenerator(args);
   }
   if (emu === 'kronos') {
@@ -428,7 +432,7 @@ function getGenerator(args: LaunchArgs): BaseGenerator {
   if (emu === 'mupen64') {
     return new Mupen64Generator(args);
   }
-  if (emu === 'n64recomp') {
+  if (emu === 'n64recomplauncher') {
     return new N64RecompGenerator(args);
   }
   if (emu === 'nes3d') {
@@ -515,7 +519,7 @@ function getGenerator(args: LaunchArgs): BaseGenerator {
   if (emu === 'tsugaru') {
     return new TsugaruGenerator(args);
   }
-  if (emu === 'uae') {
+  if (emu === 'winuae') {
     return new UaeGenerator(args);
   }
   if (emu === 'vpinball') {

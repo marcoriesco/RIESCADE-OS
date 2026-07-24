@@ -1,7 +1,7 @@
 import { existsSync, readFileSync } from 'fs';
 import { join } from 'path';
 import { BaseGenerator } from './BaseGenerator.js';
-import { getEmulatorsPath } from '../utils/paths.js';
+import { getEmulatorsPath, getConfigsPath } from '../utils/paths.js';
 import { Logger } from '../utils/logger.js';
 import { Config } from '../config.js';
 import { updateIniSetting } from '../utils/ini.js';
@@ -14,13 +14,13 @@ export class DosBoxStagingGenerator extends BaseGenerator {
     const configPath = join(emulatorsDir, 'dosbox-staging', 'dosbox-staging.conf');
 
     try {
-      const schemaPath = join(process.cwd(), 'configs', 'emulator-schemas', 'dosboxstaging.schema.json');
+      const schemaPath = join(getConfigsPath(), 'emulator-schemas', 'dosbox-staging.schema.json');
       if (existsSync(schemaPath)) {
         const schema = JSON.parse(readFileSync(schemaPath, 'utf8'));
         for (const group of (schema.groups || [])) {
           for (const opt of (group.options || [])) {
             if (opt.realKey) {
-              const val = Config.getEmulatorSetting('dosboxstaging', opt.id, opt.default || 'auto');
+              const val = Config.getEmulatorSetting('dosbox-staging', opt.configKey || opt.id, opt.default || 'auto');
               const section = opt.realSection || 'Settings';
               updateIniSetting(configPath, section, opt.realKey, val);
             }
@@ -42,7 +42,7 @@ export class DosBoxStagingGenerator extends BaseGenerator {
 
     const commandArgs: string[] = [];
     
-    const fullscreen = Config.getEmulatorSetting('dosboxstaging', 'fullscreen', 'true') === 'true';
+    const fullscreen = Config.getEmulatorSetting('dosbox-staging', 'fullscreen', 'true') === 'true';
     if (fullscreen) {
       commandArgs.push('-fullscreen');
     }

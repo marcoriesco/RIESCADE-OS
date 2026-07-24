@@ -109,11 +109,6 @@ export class LauncherService {
         }
       }
 
-      // Normalize: retroarch → libretro (canonical name expected by riescadeLauncher)
-      if (emulator === 'retroarch') {
-        emulator = 'libretro'
-      }
-
       // 2. Resolve Core
       if (game.core && game.core !== 'auto') {
         core = game.core
@@ -122,10 +117,7 @@ export class LauncherService {
         const systemWideCore = settingsParser.getSetting(`${system.name}.core`, 'string')
 
         const findMatchingEmulator = () => {
-          return system.emulators?.find(e => 
-            e.name === emulator || 
-            (emulator === 'libretro' && (e.name === 'retroarch' || e.name === 'libretro'))
-          )
+          return system.emulators?.find(e => e.name === emulator)
         }
 
         if (hasGameEmulatorOverride) {
@@ -145,9 +137,7 @@ export class LauncherService {
         }
       }
 
-      const selectedEmulator = system.emulators?.find(e => 
-        e.name === emulator || (emulator === 'libretro' && (e.name === 'retroarch' || e.name === 'libretro'))
-      )
+      const selectedEmulator = system.emulators?.find(e => e.name === emulator)
       if (selectedEmulator && selectedEmulator.command) {
         // Parse command line arguments respecting double quotes first
         const parseCommandArgs = (cmdLine: string): string[] => {

@@ -929,7 +929,7 @@ export default function App() {
                 ) : (
                   system?.emulators && system.emulators.length > 0 && (() => {
                     const emu = system.emulators[0];
-                    const emuName = emu.name === 'libretro' ? 'retroarch' : emu.name;
+                    const emuName = emu.name;
                     const emuLabel = (emu.name === 'libretro' ? 'RETROARCH' : emu.name.toUpperCase());
                     return (
                       <>
@@ -1278,13 +1278,13 @@ export default function App() {
     }
 
     if (appId === "settings" && subId) {
-      const targetSub = subId === "libretro" ? "retroarch" : subId;
+      const targetSub = subId;
       setTimeout(() => {
         window.dispatchEvent(new CustomEvent("navigate-settings", { 
           detail: { 
             tab: "emuladores", 
             subTab: targetSub,
-            initialGroup: targetSub === "retroarch" && coreId ? "cores" : undefined,
+            initialGroup: targetSub === "libretro" && coreId ? "cores" : undefined,
             initialCore: coreId
           } 
         }));
@@ -1652,7 +1652,7 @@ export default function App() {
                   ) : (
                     system?.emulators && system.emulators.length > 0 && (() => {
                       const emu = system.emulators[0];
-                      const emuName = emu.name === 'libretro' ? 'retroarch' : emu.name;
+                      const emuName = emu.name;
                       const emuLabel = (emu.name === 'libretro' ? 'RETROARCH' : emu.name.toUpperCase());
                       return (
                         <>
