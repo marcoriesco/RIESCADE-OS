@@ -497,7 +497,7 @@ function VirtualWindow({
       <div
         ref={windowRef}
         onMouseDown={handleMouseDown}
-        className={`window-frame absolute border border-white/10 shadow-2xl flex flex-col overflow-hidden glass-strong ${
+        className={`window-frame tool-window-${appId} absolute border border-white/10 shadow-2xl flex flex-col overflow-hidden glass-strong ${
           isMaximized ? 'rounded-none border-none' : 'rounded-2xl'
         } ${
           active ? 'active-window border-accent/40 ring-1 ring-accent/25' : 'inactive-window opacity-95'
@@ -550,7 +550,7 @@ function VirtualWindow({
         </div>
 
         {/* Content wrapper */}
-        <div className="flex-1 min-h-0 relative z-0">
+        <div className="tool-window-content flex-1 min-h-0 relative z-0">
           {children}
         </div>
 

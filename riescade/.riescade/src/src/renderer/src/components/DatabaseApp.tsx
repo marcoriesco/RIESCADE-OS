@@ -3,6 +3,7 @@ import { Search, Folder, Star, Edit3, X, ChevronLeft, ChevronRight, Filter, Hard
 import { ScrollArea } from "./ScrollArea";
 import * as Select from "@radix-ui/react-select";
 import { Check, ChevronDown } from "lucide-react";
+import { UnderlineTabs } from "./SettingsComponents";
 
 function RadixSelect({
   value,
@@ -576,24 +577,18 @@ export default function DatabaseApp() {
               </div>
 
               {/* Edit Section Tabs */}
-              <div className="flex border-b border-white/5 text-xs bg-black/5 shrink-0 select-none">
-                {[
+              <UnderlineTabs
+                className="px-4 shrink-0 bg-black/5"
+                equalWidth
+                tabs={[
                   { id: "basics", name: "Básicos" },
                   { id: "emulation", name: "Emulação" },
                   { id: "files", name: "Dados/Arquivos" },
                   { id: "media", name: "Imagens/Vídeos" }
-                ].map(t => (
-                  <button
-                    key={t.id}
-                    onClick={() => setEditTab(t.id as any)}
-                    className={`flex-1 py-3 text-center border-b font-semibold transition cursor-pointer ${
-                      editTab === t.id ? "border-accent text-accent" : "border-transparent text-white/50 hover:text-white"
-                    }`}
-                  >
-                    {t.name}
-                  </button>
-                ))}
-              </div>
+                ].map(tab => ({ id: tab.id, label: tab.name }))}
+                value={editTab}
+                onValueChange={(value) => setEditTab(value as typeof editTab)}
+              />
 
               {/* Edit Form Fields */}
               <div className="flex-1 overflow-y-auto p-5 space-y-4">

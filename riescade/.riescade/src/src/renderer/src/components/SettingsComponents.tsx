@@ -3,8 +3,57 @@ import { SettingsCtx } from "../types";
 import { ChevronDown, Check } from "lucide-react";
 import * as Select from "@radix-ui/react-select";
 
+export type UnderlineTab = {
+  id: string;
+  label: string;
+  icon?: React.ComponentType<{ className?: string }>;
+};
+
+export const UnderlineTabs = ({
+  tabs,
+  value,
+  onValueChange,
+  equalWidth = false,
+  className = ""
+}: {
+  tabs: UnderlineTab[];
+  value: string;
+  onValueChange: (value: string) => void;
+  equalWidth?: boolean;
+  className?: string;
+}) => (
+  <div
+    role="tablist"
+    className={`flex items-end gap-6 border-b border-white/[0.08] overflow-x-auto scrollbar-none select-none ${className}`}
+  >
+    {tabs.map((tab) => {
+      const Icon = tab.icon;
+      const active = value === tab.id;
+      return (
+        <button
+          key={tab.id}
+          type="button"
+          role="tab"
+          aria-selected={active}
+          onClick={() => onValueChange(tab.id)}
+          className={`relative flex min-h-10 items-center justify-center gap-2 px-0.5 pb-3 pt-2 text-[13px] font-medium whitespace-nowrap cursor-pointer transition-colors ${
+            equalWidth ? "flex-1" : "shrink-0"
+          } ${
+            active
+              ? "text-white after:absolute after:inset-x-0 after:bottom-[-1px] after:h-0.5 after:rounded-full after:bg-accent"
+              : "text-white/45 hover:text-white/75"
+          }`}
+        >
+          {Icon && <Icon className={`h-4 w-4 ${active ? "text-accent" : "opacity-70"}`} />}
+          <span>{tab.label}</span>
+        </button>
+      );
+    })}
+  </div>
+);
+
 export const SettingGroup = ({ label }: { label: string }) => (
-  <div className="text-[10px] text-white/35 uppercase tracking-widest font-semibold mt-6 mb-2.5 first:mt-0 select-none">
+  <div className="settings-section-title mt-8 mb-3 first:mt-0 select-none">
     {label}
   </div>
 );
@@ -19,9 +68,9 @@ export const SettingToggle = ({ label, name, desc, ctx }: {
   };
 
   return (
-    <div 
+    <div
       onClick={handleToggle}
-      className="flex items-center justify-between bg-black/15 border border-white/5 rounded-md px-4 py-3 text-sm hover:bg-white/5 transition duration-200 cursor-pointer select-none"
+      className="settings-row cursor-pointer select-none"
     >
       <div className="flex flex-col gap-0.5 flex-1 min-w-0 pr-3">
         <span className="font-medium text-white/90">{label}</span>
@@ -31,13 +80,13 @@ export const SettingToggle = ({ label, name, desc, ctx }: {
         type="button"
         role="switch"
         aria-checked={checked}
-        className={`relative inline-flex h-5 w-9 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-black ${
+        className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-black ${
           checked ? "bg-accent" : "bg-white/10"
         }`}
       >
         <span
-          className={`pointer-events-none block h-4 w-4 rounded-full bg-white shadow-lg ring-0 transition-transform duration-200 ease-in-out ${
-            checked ? "translate-x-4" : "translate-x-0"
+          className={`pointer-events-none block h-5 w-5 rounded-full bg-white shadow-lg ring-0 transition-transform duration-200 ease-in-out ${
+            checked ? "translate-x-5" : "translate-x-0"
           }`}
         />
       </button>
@@ -53,7 +102,7 @@ export const SettingSelect = ({ label, name, options, desc, type = "string", def
   const value = (rawVal !== null && rawVal !== undefined) ? String(rawVal) : (defaultValue !== undefined ? defaultValue : "auto");
 
   return (
-    <div className="flex items-center justify-between bg-black/15 border border-white/5 rounded-md px-4 py-3 text-sm hover:bg-white/5 transition duration-200">
+    <div className="settings-row">
       <div className="flex flex-col gap-0.5 flex-1 min-w-0 pr-3">
         <span className="font-medium text-white/90">{label}</span>
         {desc && <span className="text-xs text-white/40 leading-relaxed font-sans">{desc}</span>}
@@ -63,7 +112,7 @@ export const SettingSelect = ({ label, name, options, desc, type = "string", def
           if (onValueChange) void onValueChange(val);
           else ctx.saveSetting(name, val, type);
         }}>
-          <Select.Trigger className="flex items-center justify-between gap-1.5 bg-white/5 border border-white/10 rounded-md px-3 py-2 text-xs text-white/90 hover:bg-white/10 hover:border-accent focus:border-accent transition cursor-pointer focus:outline-none min-w-[140px] text-left">
+          <Select.Trigger className="settings-select-trigger min-w-[180px]">
             <Select.Value />
             <Select.Icon>
               <ChevronDown className="w-3.5 h-3.5 text-white/40" />
@@ -71,13 +120,13 @@ export const SettingSelect = ({ label, name, options, desc, type = "string", def
           </Select.Trigger>
           
           <Select.Portal>
-            <Select.Content className="bg-[#121620] border border-white/10 rounded-md shadow-2xl overflow-hidden z-[9999] animate-in fade-in duration-100 min-w-[var(--radix-select-trigger-width)]">
+            <Select.Content className="settings-select-content min-w-[var(--radix-select-trigger-width)]">
               <Select.Viewport className="p-1">
                 {options.map(opt => (
                   <Select.Item
                     key={opt.value}
                     value={opt.value}
-                    className="relative flex items-center justify-between pl-8 pr-3 py-1.5 text-xs text-white/80 hover:text-white hover:bg-white/5 rounded-md outline-none cursor-pointer select-none data-[state=checked]:text-white data-[state=checked]:bg-white/5"
+                    className="settings-select-item"
                   >
                     <Select.ItemText>{opt.label}</Select.ItemText>
                     <Select.ItemIndicator className="absolute left-2 flex items-center justify-center">
@@ -102,7 +151,7 @@ export const SettingSlider = ({ label, name, min, max, step, suffix = "", desc, 
   const val = Number.isFinite(parsed) ? Math.max(min, Math.min(max, parsed)) : min;
   const progress = max === min ? 0 : ((val - min) / (max - min)) * 100;
   return (
-    <div className="flex items-center justify-between bg-black/15 border border-white/5 rounded-md px-4 py-3 text-sm hover:bg-white/5 transition duration-200">
+    <div className="settings-row">
       <div className="flex flex-col gap-0.5 flex-1 min-w-0 pr-3">
         <span className="font-medium text-white/90">{label}</span>
         {desc && <span className="text-xs text-white/40 leading-relaxed font-sans">{desc}</span>}
@@ -130,7 +179,7 @@ export const SettingSlider = ({ label, name, min, max, step, suffix = "", desc, 
 export const SettingInput = ({ label, name, desc, isPassword = false, ctx }: {
   label: string; name: string; desc?: string; isPassword?: boolean; ctx: SettingsCtx;
 }) => (
-  <div className="flex items-center justify-between bg-black/15 border border-white/5 rounded-md px-4 py-3 text-sm hover:bg-white/5 transition duration-200">
+    <div className="settings-row">
     <div className="flex flex-col gap-0.5 flex-1 min-w-0 pr-3">
       <span className="font-medium text-white/90">{label}</span>
       {desc && <span className="text-[12px] text-white/40 leading-relaxed font-sans">{desc}</span>}
@@ -147,7 +196,7 @@ export const SettingInput = ({ label, name, desc, isPassword = false, ctx }: {
 );
 
 export const SettingInfo = ({ label, value }: { label: string; value: string }) => (
-  <div className="flex items-center justify-between bg-black/15 border border-white/5 rounded-md px-4 py-3 text-sm select-none">
+  <div className="settings-row select-none">
     <span className="font-medium text-white/90">{label}</span>
     <span className="text-white/50 font-mono text-xs bg-white/5 border border-white/5 rounded-md px-2.5 py-0.5">
       {value}

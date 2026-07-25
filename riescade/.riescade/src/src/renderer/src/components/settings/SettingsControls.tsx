@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
-import { RefreshCw, Copy, Download, Sliders, CheckCircle, Circle, Wrench, Bug, Info, ChevronRight, Check, Crosshair, MousePointer, Target, ChevronDown, Gamepad2 } from "lucide-react";
+import { RefreshCw, Copy, Download, Sliders, CheckCircle, Circle, Wrench, Bug, Info, ChevronRight, Check, Crosshair, MousePointer, Target, ChevronDown, Gamepad2, Activity } from "lucide-react";
 import * as Select from "@radix-ui/react-select";
 import { SettingsCtx } from "../../types";
-import { SettingGroup, SettingToggle, SettingSelect } from "../SettingsComponents";
+import { SettingGroup, SettingToggle, SettingSelect, UnderlineTabs } from "../SettingsComponents";
 import { ScrollArea } from "../ScrollArea";
 
 const WIZARD_STEPS = [
@@ -304,10 +304,10 @@ function SettingsControlsComponent({ ctx }: SettingsControlsProps) {
   return (
     <div className="flex flex-col h-full overflow-hidden">
       {/* Header */}
-      <div className="shrink-0 px-6 pt-6 pb-2 max-w-[800px] flex items-center justify-between">
+      <div className="shrink-0 w-full max-w-[880px] mx-auto px-12 pt-10 pb-5 flex items-center justify-between">
         <div>
-          <h2 className="text-xl font-bold text-white mb-1">Controles & Dispositivos</h2>
-          <p className="text-sm text-white/40">Gerenciamento nativo de gamepads, pistolas Lightgun, mouses e calibração.</p>
+          <h2 className="settings-page-title">Controles</h2>
+          <p className="settings-page-description">Gerencie gamepads, pistolas lightgun, mouses e calibração.</p>
         </div>
         {mainControlTab === 'controles' && (
           <button
@@ -348,35 +348,20 @@ function SettingsControlsComponent({ ctx }: SettingsControlsProps) {
       </div>
 
       {/* Main 3 Navigation Tabs */}
-      <div className="shrink-0 px-6 pb-3 max-w-[800px] flex border-b border-white/10 gap-2 overflow-x-auto scrollbar-none">
-        {[
+      <UnderlineTabs
+        className="shrink-0 w-full max-w-[784px] mx-auto"
+        tabs={[
           { id: 'controles', label: 'Controles & Joysticks', icon: Gamepad2 },
           { id: 'lightgun', label: 'Lightguns & Mouse', icon: Crosshair },
-          { id: 'opcoes', label: 'Opções', icon: Sliders },
-        ].map(tab => {
-          const Icon = tab.icon;
-          const isActive = mainControlTab === tab.id;
-          return (
-            <button
-              key={tab.id}
-              type="button"
-              onClick={() => setMainControlTab(tab.id as any)}
-              className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 cursor-pointer shrink-0 ${
-                isActive
-                  ? 'bg-accent text-white shadow-lg shadow-accent/20'
-                  : 'bg-white/5 text-white/60 hover:text-white hover:bg-white/10'
-              }`}
-            >
-              <Icon className="w-4 h-4" />
-              <span>{tab.label}</span>
-            </button>
-          );
-        })}
-      </div>
+          { id: 'opcoes', label: 'Diagnóstico', icon: Activity },
+        ]}
+        value={mainControlTab}
+        onValueChange={(value) => setMainControlTab(value as typeof mainControlTab)}
+      />
 
       {/* Grid content */}
       <ScrollArea className="flex-1 min-h-0">
-        <div className="px-6 pb-6 max-w-[800px] space-y-6 pt-4">
+        <div className="w-full max-w-[880px] mx-auto px-12 pb-12 space-y-6 pt-5">
           
           {/* TAB 1: Controles & Joysticks */}
           {mainControlTab === 'controles' && (
@@ -464,33 +449,17 @@ function SettingsControlsComponent({ ctx }: SettingsControlsProps) {
                   <div className="p-5 bg-gradient-to-br from-white/5 to-white/[0.02] border border-white/10 rounded-xl space-y-4 shadow-lg flex flex-col justify-between">
                     
                     {/* Device Sub-tab navigation */}
-                    <div className="flex border-b border-white/5 pb-2 overflow-x-auto scrollbar-none gap-1">
-                      {[
+                    <UnderlineTabs
+                      tabs={[
                         { id: 'configuracoes', label: 'Ajustes Rápidos', icon: Sliders },
                         { id: 'testes', label: 'Teste em Tempo Real', icon: CheckCircle },
                         { id: 'calibracao', label: 'Calibração', icon: Circle },
                         { id: 'mapeamento', label: 'Mapeamento', icon: Wrench },
                         { id: 'informacoes', label: 'Informações', icon: Info },
-                      ].map(tab => {
-                        const Icon = tab.icon;
-                        const isActive = activeControlSubTab === tab.id;
-                        return (
-                          <button
-                            key={tab.id}
-                            type="button"
-                            onClick={() => setActiveControlSubTab(tab.id as any)}
-                            className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all flex items-center gap-1.5 cursor-pointer shrink-0 ${
-                              isActive 
-                                ? 'bg-accent text-white shadow shadow-accent/20' 
-                                : 'text-white/50 hover:text-white hover:bg-white/5'
-                            }`}
-                          >
-                            <Icon className="w-3.5 h-3.5" />
-                            <span>{tab.label}</span>
-                          </button>
-                        );
-                      })}
-                    </div>
+                      ]}
+                      value={activeControlSubTab}
+                      onValueChange={(value) => setActiveControlSubTab(value as typeof activeControlSubTab)}
+                    />
 
                     {/* Sub-tab 1: Quick Settings */}
                     {activeControlSubTab === "configuracoes" && (
@@ -718,30 +687,21 @@ function SettingsControlsComponent({ ctx }: SettingsControlsProps) {
 
           {/* TAB 2: Lightguns & Mouse */}
           {mainControlTab === 'lightgun' && (
-            <div className="p-5 bg-gradient-to-br from-white/5 to-white/[0.02] border border-white/10 rounded-xl space-y-5 shadow-lg text-left">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-white/5 pb-3">
+            <div className="space-y-6 text-left">
+              <section className="space-y-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                 <div>
-                  <h4 className="text-xs font-bold text-white flex items-center gap-1.5">
+                  <h3 className="text-sm font-semibold text-white/60 flex items-center gap-1.5">
                     <Crosshair className="w-4 h-4 text-accent" />
-                    Dispositivos de Mira & Lightgun (TeknoParrot / Arcade)
-                  </h4>
-                  <p className="text-[10px] text-white/40 mt-0.5">
+                    Dispositivos de Mira e Lightgun
+                  </h3>
+                  <p className="text-xs text-white/40 mt-1">
                     Configuração global de mouses e pistolas (Sinden, Gun4IR, AimTrak) para jogos arcade
                   </p>
                 </div>
-
-                <button
-                  type="button"
-                  onClick={() => handleFetchPointingDevices(true)}
-                  disabled={scanningPointing}
-                  className="px-2.5 py-1.5 bg-white/10 hover:bg-white/15 active:scale-95 text-white/80 rounded-lg text-xs font-semibold transition flex items-center gap-1.5 self-start sm:self-auto cursor-pointer"
-                >
-                  <RefreshCw className={`w-3.5 h-3.5 ${scanningPointing ? 'animate-spin text-accent' : ''}`} />
-                  <span>{scanningPointing ? 'Escaneando...' : 'Reescanear Dispositivos'}</span>
-                </button>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 rounded-xl border border-white/[0.08] bg-white/[0.025] p-4">
                 {/* Mouse Principal */}
                 {(() => {
                   const opts = buildDeviceOptions("○ Auto (Recomendado)", pointingDevices);
@@ -896,20 +856,21 @@ function SettingsControlsComponent({ ctx }: SettingsControlsProps) {
                   );
                 })()}
               </div>
+              </section>
 
               {/* Keyboard Coin & Start binding toggle */}
-              <div className="pt-3 border-t border-white/5 space-y-2">
-                <h5 className="text-xs font-bold text-white/80">Atribuição de Teclado para Jogos de Pistola</h5>
+              <section className="pt-4 border-t border-white/[0.08] space-y-2">
+                <h3 className="text-sm font-semibold text-white/60">Atribuição de Teclado para Jogos de Pistola</h3>
                 <SettingToggle
                   label="Vincular Teclas de Teclado para Moeda (5) e Start (1)"
                   name="RIESCADE.TPAssignKeyboardCoinStart"
                   desc="Garante que as teclas 5 (Ficha) e 1 (Start) do teclado funcionem em jogos Arcade de pistola no TeknoParrot"
                   ctx={ctx}
                 />
-              </div>
+              </section>
 
               {/* Detected Devices Badges */}
-              <div className="pt-3 border-t border-white/5">
+              <section className="pt-4 border-t border-white/[0.08]">
                 <div className="text-[10px] font-bold uppercase text-white/30 tracking-wider mb-2 flex justify-between items-center">
                   <span>Dispositivos HID de Mira Detectados ({pointingDevices.length})</span>
                   {lastPointingScanTime && (
@@ -935,17 +896,17 @@ function SettingsControlsComponent({ ctx }: SettingsControlsProps) {
                     </span>
                   ))}
                 </div>
-              </div>
+              </section>
             </div>
           )}
 
-          {/* TAB 3: Opções */}
+          {/* TAB 3: Diagnóstico */}
           {mainControlTab === 'opcoes' && (
-            <div className="space-y-4">
-              <div className="p-5 bg-white/2 border border-white/5 rounded-xl space-y-4 text-left">
-                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-white/5 pb-3">
+            <div className="space-y-6">
+              <section className="space-y-4 text-left">
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
                   <div>
-                    <h4 className="text-xs font-bold text-white">Debug & Diagnóstico de Entrada (SDL3)</h4>
+                    <h3 className="text-sm font-semibold text-white/60">Diagnóstico de Entrada (SDL3)</h3>
                     <p className="text-xs text-white/40">Monitore eventos e relatórios técnicos do subsistema de entrada.</p>
                   </div>
                   <div className="flex gap-2 shrink-0">
@@ -980,14 +941,14 @@ function SettingsControlsComponent({ ctx }: SettingsControlsProps) {
                     )}
                   </div>
                 </div>
-              </div>
+              </section>
 
               {/* General Options */}
-              <div className="space-y-3 pt-2 border-t border-white/5">
+              <section className="space-y-3 pt-4 border-t border-white/[0.08]">
                 <h3 className="text-sm font-semibold text-white/60">Configurações Gerais de Entrada</h3>
                 <SettingToggle label="Mostrar Notificações de Controle" name="ShowControllerNotifications" ctx={ctx} />
                 <SettingToggle label="Mostrar Atividade do Controle" name="ShowControllerActivity" ctx={ctx} />
-              </div>
+              </section>
             </div>
           )}
 

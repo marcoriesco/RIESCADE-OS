@@ -192,15 +192,15 @@
     "type": "int"
   },
   "Window.system-teknoparrot.Maximized": {
-    "value": true,
+    "value": false,
     "type": "bool"
   },
   "Window.system-teknoparrot.X": {
-    "value": 156,
+    "value": 62,
     "type": "int"
   },
   "Window.system-teknoparrot.Y": {
-    "value": 19,
+    "value": 41,
     "type": "int"
   },
   "Window.system-teknoparrot.Width": {
@@ -256,15 +256,15 @@
     "type": "int"
   },
   "Window.tool-database.Maximized": {
-    "value": true,
+    "value": false,
     "type": "bool"
   },
   "Window.tool-database.X": {
-    "value": 296,
+    "value": 511,
     "type": "int"
   },
   "Window.tool-database.Y": {
-    "value": 86,
+    "value": 157,
     "type": "int"
   },
   "Window.tool-database.Width": {
@@ -356,15 +356,15 @@
     "type": "int"
   },
   "Window.tool-settings.Maximized": {
-    "value": true,
+    "value": false,
     "type": "bool"
   },
   "Window.tool-settings.X": {
-    "value": 598,
+    "value": 215,
     "type": "int"
   },
   "Window.tool-settings.Y": {
-    "value": 79,
+    "value": 55,
     "type": "int"
   },
   "Window.tool-settings.Width": {
@@ -372,7 +372,7 @@
     "type": "int"
   },
   "Window.tool-settings.Height": {
-    "value": 792,
+    "value": 871,
     "type": "int"
   },
   "Window.tool-collections.Maximized": {
@@ -388,7 +388,7 @@
     "type": "int"
   },
   "Window.tool-collections.Width": {
-    "value": 1796,
+    "value": 1652,
     "type": "int"
   },
   "Window.tool-collections.Height": {
@@ -492,7 +492,7 @@
     "type": "int"
   },
   "Window.tool-favorites.Maximized": {
-    "value": true,
+    "value": false,
     "type": "bool"
   },
   "Window.tool-favorites.X": {

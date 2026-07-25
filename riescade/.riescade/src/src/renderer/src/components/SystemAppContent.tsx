@@ -5,6 +5,7 @@ import { ScrollArea } from "./ScrollArea";
 import { OverlayScrollbarsComponentRef } from "overlayscrollbars-react";
 import * as Select from "@radix-ui/react-select";
 import { EmulatorSettingsPanel } from "./EmulatorSettingsPanel";
+import { UnderlineTabs } from "./SettingsComponents";
 
 function RadixSelect({
   value,
@@ -1416,7 +1417,7 @@ export default function SystemAppContent({
                               key={g.path}
                               onClick={() => setSelectedIdx(idx)}
                               onDoubleClick={() => setActiveCollection(g.name)}
-                              className={`group flex flex-col w-full rounded-md overflow-hidden text-left transition-all border-2 relative bg-black/40 ${
+                              className={`group flex flex-col w-full min-h-[140px] rounded-md overflow-hidden text-left transition-all border-2 relative bg-black/40 ${
                                 idx === selectedIdx
                                   ? "border-accent shadow-[0_0_15px_var(--accent-color-glass)] z-10"
                                   : "border-white/5 hover:border-white/10"
@@ -1741,28 +1742,15 @@ export default function SystemAppContent({
                 </div>
 
                 {/* Tab control (Segmented Control) */}
-                <div className="flex bg-black/30 p-1 rounded-md border border-white/5 text-[11px] items-center shrink-0">
-                  <button
-                    onClick={() => setSidebarTab("collections")}
-                    className={`flex-1 py-2 rounded-md text-center font-bold transition cursor-pointer ${
-                      sidebarTab === "collections"
-                        ? "bg-[#1a1a1a] text-white shadow-sm"
-                        : "text-white/40 hover:bg-white/5 hover:text-white/60"
-                    }`}
-                  >
-                    Coleções
-                  </button>
-                  <button
-                    onClick={() => setSidebarTab("saves")}
-                    className={`flex-1 py-2 rounded-md text-center font-bold transition cursor-pointer ${
-                      sidebarTab === "saves"
-                        ? "bg-[#1a1a1a] text-white shadow-sm"
-                        : "text-white/40 hover:bg-white/5 hover:text-white/60"
-                    }`}
-                  >
-                    Save states
-                  </button>
-                </div>
+                <UnderlineTabs
+                  equalWidth
+                  tabs={[
+                    { id: "collections", label: "Coleções" },
+                    { id: "saves", label: "Save states" }
+                  ]}
+                  value={sidebarTab}
+                  onValueChange={(value) => setSidebarTab(value as typeof sidebarTab)}
+                />
 
                 {/* Tab contents */}
                 <div className="flex-1 overflow-y-auto pr-1">

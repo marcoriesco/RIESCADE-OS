@@ -92,6 +92,12 @@ const SETTINGS_TABS = [
   { id: "sobre", nameKey: "about", icon: Info }
 ];
 
+const SETTINGS_GROUP_LABELS: Record<string, string> = {
+  conta: "Geral",
+  emuladores: "Emulação",
+  scraper: "Ferramentas"
+};
+
 const EMULATOR_NAMES: Record<string, string> = {
   "2ship": "2 Ship 2 Harkinian (Zelda MM)",
   "altirra": "Altirra (Atari 8-bit / 5200)",
@@ -405,6 +411,7 @@ export default function ToolAppContent({
   const [activeSettingsTab, setActiveSettingsTab] = useState("conta");
   const [activeEmuSubmenu, setActiveEmuSubmenu] = useState<string>("global");
   const [emuMenuOpen, setEmuMenuOpen] = useState(false);
+  const [settingsNavSearch, setSettingsNavSearch] = useState("");
   const [settingsSearch, setSettingsSearch] = useState("");
   const [settingsCategory, setSettingsCategory] = useState<"all" | "tools" | "systems">("all");
   const [riescadeLogo, setRiescadeLogo] = useState<string>("");
@@ -670,17 +677,16 @@ export default function ToolAppContent({
     const settingsTabs = SETTINGS_TABS.map(tab => ({ ...tab, name: t(tab.nameKey) }));
 
     return (
-      <div className="flex h-full text-white">
-        {/* Discord-like Sidebar - extends to top, merges with titlebar */}
-        <aside className="w-[320px] bg-black/40 border-r border-white/5 flex flex-col shrink-0 select-none">
+      <div className="settings-shell flex h-full text-white">
+        <aside className="settings-sidebar w-[264px] flex flex-col shrink-0 select-none">
           {/* Branding Section - top padding accounts for drag region */}
-          <div className="pt-8 px-4 pb-3 shrink-0">
+          <div className="pt-8 px-5 pb-4 shrink-0">
             <div className="flex items-center gap-3">
               {riescadeLogo ? (
                 <img 
                   src={riescadeLogo} 
                   alt="RIESCADE OS" 
-                  className="w-10 h-10 rounded-full object-cover shadow-lg shrink-0"
+                  className="w-11 h-11 rounded-full object-cover shadow-lg shrink-0"
                 />
               ) : (
                 <div 
@@ -691,21 +697,38 @@ export default function ToolAppContent({
                 </div>
               )}
               <div className="flex flex-col min-w-0">
-                <span className="text-md font-bold text-white tracking-wide">RIESCADE OS</span>
-                <span className="text-sm text-white/40 font-medium">{riescadeVersion}</span>
+                <span className="text-sm font-semibold text-white tracking-wide">RIESCADE OS</span>
+                <span className="text-xs text-white/40 font-medium">{riescadeVersion}</span>
               </div>
+            </div>
+            <div className="relative mt-5 group">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/45 group-focus-within:text-accent transition" />
+              <input
+                value={settingsNavSearch}
+                onChange={(event) => setSettingsNavSearch(event.target.value)}
+                placeholder="Buscar configurações"
+                className="w-full h-10 rounded-lg border border-white/10 bg-white/[0.025] pl-10 pr-3 text-[13px] text-white outline-none placeholder:text-white/35 hover:border-white/20 focus:border-accent transition"
+              />
             </div>
           </div>
 
           {/* Navigation */}
-          <div className="flex-1 overflow-y-auto p-3">
-            <div className="text-xs font-bold uppercase text-white/25 tracking-widest px-3.5 py-2 mt-1">{t("settings")}</div>
-            <div className="flex flex-col gap-1">
-              {settingsTabs.map((tab) => {
+          <div className="flex-1 overflow-y-auto px-3 pb-3">
+            <div className="flex flex-col gap-0.5">
+              {settingsTabs.filter(tab =>
+                !settingsNavSearch.trim() ||
+                tab.name.toLowerCase().includes(settingsNavSearch.trim().toLowerCase())
+              ).map((tab) => {
                 const TabIcon = tab.icon;
                 const isActive = activeSettingsTab === tab.id;
                 return (
-                  <div key={tab.id} className="flex flex-col gap-1">
+                  <React.Fragment key={tab.id}>
+                    {SETTINGS_GROUP_LABELS[tab.id] && (
+                      <div className="px-3 pt-5 pb-1.5 text-[11px] font-semibold uppercase tracking-[0.08em] text-white/32">
+                        {SETTINGS_GROUP_LABELS[tab.id]}
+                      </div>
+                    )}
+                    <div className="flex flex-col gap-1">
                     <button
                       onClick={() => {
                         setActiveSettingsTab(tab.id);
@@ -718,14 +741,14 @@ export default function ToolAppContent({
                           }
                         }
                       }}
-                      className={`cursor-pointer font-medium w-full text-left px-3.5 py-2.5 rounded-md text-sm flex items-center justify-between transition ${
+                      className={`relative cursor-pointer font-medium w-full min-h-9 text-left px-3 py-2 rounded-md text-[13px] flex items-center justify-between transition ${
                         isActive 
-                          ? "bg-white/5 text-white" 
+                          ? "bg-white/[0.09] text-white"
                           : "text-white/60 hover:bg-white/5 hover:text-white"
                       }`}
                     >
                       <div className="flex items-center gap-2.5">
-                        <TabIcon className={`w-4 h-4 shrink-0 transition ${isActive ? 'text-accent' : 'opacity-60'}`} />
+                        <TabIcon className={`w-[17px] h-[17px] shrink-0 transition ${isActive ? 'text-accent' : 'opacity-60'}`} />
                         <span>{tab.name}</span>
                       </div>
                       {tab.id === "emuladores" && (
@@ -735,7 +758,7 @@ export default function ToolAppContent({
                     {tab.id === "emuladores" && emuMenuOpen && (
                       <div
                         ref={emulatorMenuRef}
-                        className="flex flex-col gap-1 pl-4 border-l border-white/5 ml-5.5 my-1 max-h-[340px] overflow-y-auto pr-1 select-none scrollbar-thin"
+                        className="flex flex-col gap-0.5 pl-3 border-l border-white/10 ml-5 my-1 max-h-[300px] overflow-y-auto pr-1 select-none scrollbar-thin"
                       >
                         {emulatorSchemas.length > 0 ? (
                           emulatorSchemas.map((schema) => {
@@ -748,7 +771,7 @@ export default function ToolAppContent({
                                   setActiveSettingsTab("emuladores");
                                   setActiveEmuSubmenu(schema.id);
                                 }}
-                                className={`cursor-pointer w-full text-left py-1.5 px-2 rounded-md text-[13px] font-medium transition ${
+                                className={`cursor-pointer w-full text-left py-1.5 px-2 rounded-md text-[12px] font-medium transition ${
                                   isSelected
                                     ? "text-accent font-bold bg-white/[0.04]"
                                     : "text-white/50 hover:text-white/80 hover:bg-white/[0.02]"
@@ -782,62 +805,42 @@ export default function ToolAppContent({
                         )}
                       </div>
                     )}
-                  </div>
+                    </div>
+                  </React.Fragment>
                 );
               })}
             </div>
           </div>
 
-          {/* Bottom Profile (Static) */}
-          <div className="p-3 border-t border-white/5 shrink-0">
-            <div className="flex items-center gap-2.5 px-2 py-1.5">
-              <div 
-                className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold shadow-md shrink-0"
-                style={{ background: 'linear-gradient(135deg, var(--accent-color), var(--accent-color))' }}
-              >
-                RC
-              </div>
-              <div className="flex flex-col min-w-0">
-                <span className="text-xs font-semibold text-white/90 truncate">RIESCADE Player</span>
-                <span className="text-xs text-white/35">{t("online")}</span>
-              </div>
-            </div>
+          <div className="px-5 py-4 border-t border-white/[0.06] shrink-0">
+            <div className="text-[11px] text-white/32">RIESCADE OS {riescadeVersion}</div>
+            <div className="mt-1 text-[10px] text-white/22">Configurações do sistema</div>
           </div>
         </aside>
         
         {/* Main Content Area */}
-        <div className="flex-1 flex flex-col h-full overflow-hidden bg-black/10">
+        <div className="flex-1 flex flex-col h-full overflow-hidden">
 
           {/* ===== TAB: CONTA (Account - Static) ===== */}
           {activeSettingsTab === "conta" && (
             <div className="flex flex-col h-full overflow-hidden">
-              <div className="shrink-0 px-6 pt-8 pb-2 max-w-[800px]">
-                <h2 className="text-xl font-bold text-white mb-1">{t("account")}</h2>
-                <p className="text-sm text-white/40">{t("accountDescription")}</p>
-              </div>
               <ScrollArea className="flex-1 min-h-0">
-                <div className="px-6 pb-6 max-w-[800px]">
+                <div className="settings-content">
                   <div className="mb-8">
-                    <h3 className="text-base font-bold text-white mb-4">{t("accountInfo")}</h3>
-                    <div className="space-y-3">
+                    <h2 className="settings-page-title">{t("account")}</h2>
+                    <p className="settings-page-description">{t("accountDescription")}</p>
+                  </div>
+                  <div className="mb-8">
+                    <h3 className="settings-section-title mb-3">{t("accountInfo")}</h3>
+                    <div>
                       {[
-                        { label: t("username"), value: "RIESCADE Player", action: t("edit") },
-                        { label: "E-mail", value: "**************@gmail.com", action: t("edit"), link: t("show") },
+                        { label: t("username"), value: "RIESCADE Player" },
+                        { label: "E-mail", value: "**************@gmail.com" },
                       ].map((field, i) => (
-                        <div key={i} className="flex items-center justify-between bg-black/20 border border-white/5 rounded-md px-4 py-3">
+                        <div key={i} className="settings-row">
                           <div className="flex flex-col">
                             <span className="text-xs text-white/40 font-medium">{field.label}</span>
                             <span className="text-sm text-white/90">{field.value}</span>
-                          </div>
-                          <div className="flex items-center gap-3">
-                            {field.link && (
-                              <button className="text-xs text-accent hover:opacity-80 transition cursor-pointer font-medium">
-                                {field.link}
-                              </button>
-                            )}
-                            <button className="px-3 py-1.5 rounded-md bg-white/[0.06] hover:bg-white/[0.1] text-xs text-white/80 font-medium transition cursor-pointer">
-                              {field.action}
-                            </button>
                           </div>
                         </div>
                       ))}
@@ -845,8 +848,8 @@ export default function ToolAppContent({
                   </div>
 
                   <div>
-                    <h3 className="text-base font-bold text-white mb-4">{t("accountStatus")}</h3>
-                    <div className="flex items-center gap-2.5 bg-black/20 border border-white/5 rounded-md px-4 py-3">
+                    <h3 className="settings-section-title mb-3">{t("accountStatus")}</h3>
+                    <div className="flex items-center gap-3 rounded-lg border border-emerald-400/15 bg-emerald-400/[0.055] px-4 py-4">
                       <div className="w-2 h-2 rounded-full bg-emerald-500 shrink-0" />
                       <span className="text-sm text-white/70">{t("accountOk")}</span>
                     </div>
@@ -861,13 +864,12 @@ export default function ToolAppContent({
           {/* ===== TAB: INTERFACE ===== */}
           {activeSettingsTab === "interface" && (
             <div className="flex flex-col h-full overflow-hidden">
-              <div className="shrink-0 px-6 pt-8 pb-2 max-w-[800px]">
-                <h2 className="text-xl font-bold text-white mb-1">{t("interface")}</h2>
-                <p className="text-sm text-white/40">{t("interfaceDescription")}</p>
-              </div>
-
               <ScrollArea className="flex-1 min-h-0">
-                <div className="px-6 pb-6 max-w-[800px] space-y-2">
+                <div className="settings-content space-y-2">
+                  <div className="mb-8">
+                    <h2 className="settings-page-title">{t("interface")}</h2>
+                    <p className="settings-page-description">{t("interfaceDescription")}</p>
+                  </div>
                   <SettingGroup label={t("languageGroup")} />
                     <SettingSelect
                       label={t("language")}
@@ -975,12 +977,12 @@ export default function ToolAppContent({
           {/* ===== TAB: PERSONALIZAÇÃO ===== */}
           {activeSettingsTab === "personalizacao" && (
             <div className="flex flex-col h-full overflow-hidden">
-              <div className="shrink-0 px-6 pt-8 pb-2 max-w-[800px]">
-                <h2 className="text-xl font-bold text-white mb-1">Personalização</h2>
-                <p className="text-sm text-white/40">Escolha a cor de destaque para os menus, botões e barras do sistema.</p>
-              </div>
               <ScrollArea className="flex-1 min-h-0">
-                <div className="px-6 pb-6 max-w-[800px] space-y-2">
+                <div className="settings-content space-y-2">
+                  <div className="mb-8">
+                    <h2 className="settings-page-title">Personalização</h2>
+                    <p className="settings-page-description">Ajuste a aparência e o comportamento visual do RIESCADE OS.</p>
+                  </div>
                   <SettingGroup label="Cor de Destaque" />
                   
                   <div className="bg-black/15 border border-white/5 rounded-md p-4 flex flex-col gap-4">
@@ -1203,12 +1205,12 @@ export default function ToolAppContent({
           {/* ===== TAB: ÁUDIO ===== */}
           {activeSettingsTab === "audio" && (
             <div className="flex flex-col h-full overflow-hidden">
-              <div className="shrink-0 px-6 pt-6 pb-2 max-w-[800px]">
-                <h2 className="text-xl font-bold text-white mb-1">Áudio</h2>
-                <p className="text-sm text-white/40">Volume, música de fundo e sons de navegação.</p>
-              </div>
               <ScrollArea className="flex-1 min-h-0">
-                <div className="px-6 pb-6 max-w-[800px] space-y-2">
+                <div className="settings-content space-y-2">
+                  <div className="mb-8">
+                    <h2 className="settings-page-title">Áudio</h2>
+                    <p className="settings-page-description">Volume, música de fundo e sons de navegação.</p>
+                  </div>
                   <SettingGroup label="Volume" />
                   <SettingSlider label="Volume do Sistema" name="Volume" min={0} max={100} step={1} suffix="%" ctx={ctx} />
                   <SettingSlider label="Volume da Música" name="MusicVolume" min={0} max={100} step={1} suffix="%" ctx={ctx} />
@@ -1232,12 +1234,12 @@ export default function ToolAppContent({
           {/* ===== TAB: SCRAPER ===== */}
           {activeSettingsTab === "scraper" && (
             <div className="flex flex-col h-full overflow-hidden">
-              <div className="shrink-0 px-6 pt-6 pb-2 max-w-[800px]">
-                <h2 className="text-xl font-bold text-white mb-1">Configurações de Scraper</h2>
-                <p className="text-sm text-white/40">Download de Fanarts, capas, logos, manuais e vídeos.</p>
-              </div>
               <ScrollArea className="flex-1 min-h-0">
-                <div className="px-6 pb-6 max-w-[800px] space-y-2">
+                <div className="settings-content space-y-2">
+                  <div className="mb-8">
+                    <h2 className="settings-page-title">Scraper</h2>
+                    <p className="settings-page-description">Download de fanarts, capas, logos, manuais e vídeos.</p>
+                  </div>
                   <SettingGroup label="Contas do Scraper" />
                   <SettingInput label="ScreenScraper Usuário" name="ScreenScraperUser" ctx={ctx} />
                   <SettingInput label="ScreenScraper Senha" name="ScreenScraperPass" isPassword ctx={ctx} />
@@ -1373,16 +1375,12 @@ export default function ToolAppContent({
             const dispDesc = currentSchema ? currentSchema.description : (EMULATOR_DESCRIPTIONS[activeEmuSubmenu] || `Ajuste os parâmetros específicos do emulador ${dispName}.`);
             return (
               <div className="flex flex-col h-full overflow-hidden">
-                <div className="shrink-0 px-6 pt-8 pb-4 max-w-[800px]">
-                  <h2 className="text-xl font-bold text-white mb-1">
-                    Configurações dos Emuladores - {dispName}
-                  </h2>
-                  <p className="text-sm text-white/40">
-                    {dispDesc}
-                  </p>
-                </div>
               <ScrollArea className="flex-1 min-h-0">
-                <div className="px-6 pb-6 max-w-[800px]">
+                <div className="settings-content">
+                  <div className="mb-8">
+                    <h2 className="settings-page-title">Emuladores</h2>
+                    <p className="settings-page-description">{dispName} — {dispDesc}</p>
+                  </div>
                   <EmulatorSettingsPanel
                     emulatorId={activeEmuSubmenu}
                     emulatorSettings={emulatorSettings}
@@ -1400,12 +1398,12 @@ export default function ToolAppContent({
           {/* ===== TAB: AVANÇADO ===== */}
           {activeSettingsTab === "avancado" && (
             <div className="flex flex-col h-full overflow-hidden">
-              <div className="shrink-0 px-6 pt-6 pb-2 max-w-[800px]">
-                <h2 className="text-xl font-bold text-white mb-1">Configurações Avançadas</h2>
-                <p className="text-sm text-white/40">Drivers, latência, opções de desenvolvedor e otimizações.</p>
-              </div>
               <ScrollArea className="flex-1 min-h-0">
-                <div className="px-6 pb-6 max-w-[800px] space-y-2">
+                <div className="settings-content space-y-2">
+                  <div className="mb-8">
+                    <h2 className="settings-page-title">Avançado</h2>
+                    <p className="settings-page-description">Drivers, latência, opções de desenvolvedor e otimizações.</p>
+                  </div>
                   <SettingGroup label="MONITORES" />
                   <SettingSelect
                     label="Monitor do RIESCADE"
@@ -1519,12 +1517,12 @@ export default function ToolAppContent({
           {/* ===== TAB: SOBRE ===== */}
           {activeSettingsTab === "sobre" && (
             <div className="flex flex-col h-full overflow-hidden">
-              <div className="shrink-0 px-6 pt-6 pb-2 max-w-[800px]">
-                <h2 className="text-xl font-bold text-white mb-1">Sobre o Sistema</h2>
-                <p className="text-sm text-white/40">Informações do RIESCADE OS e hardware.</p>
-              </div>
               <ScrollArea className="flex-1 min-h-0">
-                <div className="px-6 pb-6 max-w-[800px] space-y-2">
+                <div className="settings-content space-y-2">
+                  <div className="mb-8">
+                    <h2 className="settings-page-title">Sobre o sistema</h2>
+                    <p className="settings-page-description">Informações do RIESCADE OS e hardware.</p>
+                  </div>
                   <SettingGroup label="Sistema" />
                   <SettingInfo label="Versão" value={`RIESCADE OS ${riescadeVersion}`} />
                   <SettingInfo label="Motor" value="Electron + React + Vite" />
