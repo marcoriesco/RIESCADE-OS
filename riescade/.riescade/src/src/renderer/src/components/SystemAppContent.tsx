@@ -20,7 +20,7 @@ function RadixSelect({
 }) {
   return (
     <Select.Root value={value} onValueChange={onValueChange}>
-      <Select.Trigger className="w-full flex items-center justify-between bg-[#1a1a1a] border border-white/5 rounded-md px-3 py-2 text-xs text-white/90 hover:bg-white/5 transition cursor-pointer focus:outline-none focus:border-accent">
+      <Select.Trigger className="settings-select-trigger w-full">
         <Select.Value placeholder={placeholder} />
         <Select.Icon>
           <ChevronDown className="w-3.5 h-3.5 text-white/40" />
@@ -28,13 +28,13 @@ function RadixSelect({
       </Select.Trigger>
       
       <Select.Portal>
-        <Select.Content className="bg-[#1a1a1a] border border-white/10 rounded-md shadow-2xl overflow-hidden z-[9999] animate-in fade-in duration-100 min-w-[var(--radix-select-trigger-width)]">
+        <Select.Content className="settings-select-content min-w-[var(--radix-select-trigger-width)]">
           <Select.Viewport className="p-1">
             {options.map(opt => (
               <Select.Item
                 key={opt.value}
                 value={opt.value}
-                className="relative flex items-center justify-between pl-8 pr-3 py-2 text-xs text-white/80 hover:text-white hover:bg-white/5 rounded-md outline-none cursor-pointer select-none data-[state=checked]:text-white data-[state=checked]:bg-white/5"
+                className="settings-select-item"
               >
                 <Select.ItemText>{opt.label}</Select.ItemText>
                 <Select.ItemIndicator className="absolute left-2 flex items-center justify-center">
@@ -75,11 +75,38 @@ function formatPlayers(value: unknown): string {
   return `${normalized} ${normalized === "1" ? "Jogador" : "Jogadores"}`;
 }
 
+function releaseDateForInput(value: unknown): string {
+  const raw = String(value ?? "").trim();
+  const match = raw.match(/^(\d{4})[-/]?(\d{2})[-/]?(\d{2})/);
+  return match ? `${match[1]}-${match[2]}-${match[3]}` : "";
+}
+
+function releaseDateForStorage(value: string): string {
+  return value ? `${value.replace(/-/g, "")}T000000` : "";
+}
+
+function normalizePlayersValue(value: unknown): string {
+  return String(value ?? "")
+    .trim()
+    .replace(/\s*(?:jogador(?:es)?|player(?:s)?)\s*/gi, "")
+    .replace(/(\d+)\.0+(?=\D|$)/g, "$1")
+    .replace(/\s*[-–—]\s*/g, "-")
+    .replace(/\s*,\s*/g, ",");
+}
+
+function normalizeRating(value: unknown): number {
+  const parsed = Number.parseFloat(String(value ?? ""));
+  if (!Number.isFinite(parsed)) return 0;
+  const normalized = parsed > 1 ? parsed / 10 : parsed;
+  return Math.min(1, Math.max(0, normalized));
+}
+
 export default function SystemAppContent({
-  system, color, Icon, onLaunchGame, search: propSearch, setSearch: propSetSearch, onActiveGameArtChanged, onOpenTool, settings
+  system, systems = [], color, Icon, onLaunchGame, search: propSearch, setSearch: propSetSearch, onActiveGameArtChanged, onOpenTool, settings
 }: {
   systemName: string;
   system: System;
+  systems?: System[];
   color: string;
   Icon: any;
   onLaunchGame: (game: Game, system: System, saveStateSlot?: number, saveStatePath?: string) => void;
@@ -272,7 +299,7 @@ export default function SystemAppContent({
           manual: false
         });
       }).catch((err: any) => {
-        console.log("Failed to check media folders:", err);
+        console.warn("Failed to check media folders:", err);
       });
     } else {
       // Enable all for virtual systems
@@ -491,7 +518,6 @@ export default function SystemAppContent({
 
   // Single, unified hook to load games, reset filters and manage collection states
   useEffect(() => {
-    console.log("[SystemAppContent] unified hook fired: system.name =", system.name, "activeCollection =", activeCollection);
     setLoading(true);
     setSelectedGenre("all");
     setSelectedYear("all");
@@ -504,9 +530,7 @@ export default function SystemAppContent({
     if (system.name === 'collections') {
       if (activeCollection !== null) {
         setColLoading(true);
-        console.log("[SystemAppContent] Calling window.api.getCollectionGames for:", activeCollection);
         window.api.getCollectionGames(activeCollection).then((gameList: Game[]) => {
-          console.log("[SystemAppContent] getCollectionGames returned games list count:", gameList ? gameList.length : 0);
           setCollectionGames(gameList || []);
           setSelectedIdx(0);
           setColLoading(false);
@@ -519,9 +543,7 @@ export default function SystemAppContent({
         });
       } else {
         setCollectionGames([]);
-        console.log("[SystemAppContent] Calling window.api.getGames for collections list");
         window.api.getGames(system.name).then((gameList: Game[]) => {
-          console.log("[SystemAppContent] getGames(collections) returned folders list count:", gameList ? gameList.length : 0);
           setGames(gameList || []);
           setSelectedIdx(0);
           setLoading(false);
@@ -534,7 +556,6 @@ export default function SystemAppContent({
     } else {
       setActiveCollection(null);
       setCollectionGames([]);
-      console.log("[SystemAppContent] Calling window.api.getGames for system:", system.name);
       window.api.getGames(system.name).then((gameList: Game[]) => {
         setGames(gameList || []);
         setSelectedIdx(0);
@@ -550,7 +571,6 @@ export default function SystemAppContent({
   const targetGamesForFiltering = useMemo(() => {
     const isColView = (system.name === 'collections' && activeCollection !== null);
     const list = isColView ? collectionGames : games;
-    console.log("[SystemAppContent] Recalculating targetGamesForFiltering. system.name:", system.name, "activeCollection:", activeCollection, "isColView:", isColView, "listLength:", list ? list.length : 0);
     if (system.name === 'collections' && activeCollection !== null) {
       return collectionGames;
     }
@@ -646,7 +666,6 @@ export default function SystemAppContent({
       
       return matchSearch && matchFilter && matchGenre && matchYear && matchPlayers && matchRating;
     });
-    console.log("[SystemAppContent] Recalculated filteredGames. original length:", targetGamesForFiltering.length, "filtered length:", res.length, "search query:", search, "games:", res);
     return res;
   }, [targetGamesForFiltering, search, filter, selectedGenre, selectedYear, selectedPlayers, selectedMinRating]);
 
@@ -676,15 +695,12 @@ export default function SystemAppContent({
         }
 
         const onScroll = () => {
-          console.log("[SystemAppContent] onScroll (callback ref) triggered. scrollTop:", viewport.scrollTop, "scrollHeight:", viewport.scrollHeight, "clientHeight:", viewport.clientHeight, "filteredGames.length:", filteredGames.length);
           if (viewport.scrollHeight - viewport.scrollTop <= viewport.clientHeight * 1.5) {
             setDisplayLimit(prev => {
               if (filteredGames.length <= prev) {
-                console.log("[SystemAppContent] onScroll: displayLimit already covers all games:", prev, ">=", filteredGames.length);
                 return prev;
               }
               const next = Math.min(filteredGames.length, prev + 40);
-              console.log("[SystemAppContent] onScroll: Increasing displayLimit from", prev, "to", next);
               return next;
             });
           }
@@ -910,12 +926,17 @@ export default function SystemAppContent({
   }, [selectedGame, system, onActiveGameArtChanged]);
 
   // Build Emulator/Core selection list
+  const selectedGameSystem = useMemo(() => {
+    if (!selectedGame || system.name !== "collections") return system;
+    return systems.find(item => item.name.toLowerCase() === selectedGame.system?.toLowerCase()) || system;
+  }, [selectedGame, system, systems]);
+
   const emulatorChoices = useMemo(() => {
     const choices: { label: string; value: string; emulator: string; core: string }[] = [];
     choices.push({ label: "Padrão (Auto)", value: "auto", emulator: "auto", core: "auto" });
     
-    if (system && system.emulators) {
-      system.emulators.forEach((emu: any) => {
+    if (selectedGameSystem?.emulators) {
+      selectedGameSystem.emulators.forEach((emu: any) => {
         const emuDisplayName = emu.name.toUpperCase();
         if (emu.cores && emu.cores.length > 0) {
           emu.cores.forEach((core: string) => {
@@ -937,11 +958,12 @@ export default function SystemAppContent({
       });
     }
     return choices;
-  }, [system]);
+  }, [selectedGameSystem]);
 
   const canSwitchEmulator = useMemo(() => {
-    return hasMultipleEmulators(system);
-  }, [system]);
+    return hasMultipleEmulators(selectedGameSystem)
+      || (system.name === "collections" && emulatorChoices.length > 1);
+  }, [selectedGameSystem, system.name, emulatorChoices.length]);
 
   const selectValue = useMemo(() => {
     if (!selectedGame) return "auto";
@@ -951,21 +973,21 @@ export default function SystemAppContent({
 
   const selectedCoreToConfig = useMemo(() => {
     if (selectValue === "auto") {
-      return system.emulators?.[0]?.cores?.[0] || "";
+      return selectedGameSystem.emulators?.[0]?.cores?.[0] || "";
     }
     return selectValue.split(":")[1] || "";
-  }, [selectValue, system]);
+  }, [selectValue, selectedGameSystem]);
 
   const emuToConfig = useMemo(() => {
     let raw = "";
     if (selectValue === "auto") {
-      raw = system.emulators?.[0]?.name || "";
+      raw = selectedGameSystem.emulators?.[0]?.name || "";
     } else {
       raw = selectValue.split(":")[0] || "";
     }
     if (!raw) return null;
     return raw;
-  }, [selectValue, system]);
+  }, [selectValue, selectedGameSystem]);
 
   const emuLabelToConfig = useMemo(() => {
     if (!emuToConfig) return "";
@@ -983,7 +1005,7 @@ export default function SystemAppContent({
       return;
     }
     void window.api.getScopedSettings("game", {
-      system: system.name,
+      system: selectedGame.system || system.name,
       emulator: emuToConfig,
       core: selectedCoreToConfig,
       rom: selectedGame.path
@@ -991,17 +1013,20 @@ export default function SystemAppContent({
       if (!cancelled) setSelectedGameOverrideCount(Object.keys(data?.entry?.settings || {}).length);
     });
     return () => { cancelled = true; };
-  }, [selectedGame?.path, emuToConfig, selectedCoreToConfig, system.name]);
+  }, [selectedGame?.path, selectedGame?.system, emuToConfig, selectedCoreToConfig, system.name]);
 
   const openScopedSettings = useCallback((scope: "system" | "game", game?: Game) => {
+    const targetSystem = game && system.name === "collections"
+      ? systems.find(item => item.name.toLowerCase() === game.system?.toLowerCase()) || system
+      : system;
     const gameEmulator = game?.emulator && game.emulator !== "auto" ? game.emulator : "";
-    const configuredEmulator = settings?.[`${system.name}.emulator`]?.value;
+    const configuredEmulator = settings?.[`${targetSystem.name}.emulator`]?.value;
     const systemEmulator = configuredEmulator && configuredEmulator !== "auto" ? String(configuredEmulator) : "";
-    const emulator = gameEmulator || systemEmulator || system.emulators?.[0]?.name || "";
+    const emulator = gameEmulator || systemEmulator || targetSystem.emulators?.[0]?.name || "";
     if (!emulator) return;
-    const matching = system.emulators?.find((item: any) => item.name === emulator);
+    const matching = targetSystem.emulators?.find((item: any) => item.name === emulator);
     const gameCore = game?.core && game.core !== "auto" ? game.core : "";
-    const configuredCore = settings?.[`${system.name}.core`]?.value;
+    const configuredCore = settings?.[`${targetSystem.name}.core`]?.value;
     const systemCore = configuredCore && configuredCore !== "auto" ? String(configuredCore) : "";
     setSettingsScope({
       scope,
@@ -1009,7 +1034,7 @@ export default function SystemAppContent({
       core: gameCore || systemCore || matching?.cores?.[0] || "",
       game
     });
-  }, [system, settings]);
+  }, [system, systems, settings]);
 
   const handleEmulatorValueChangeForGame = (game: Game, val: string) => {
     let updatedGame = { ...game };
@@ -1023,8 +1048,9 @@ export default function SystemAppContent({
       updatedGame.core = core || "";
     }
 
-    window.api.updateGame(system.name, updatedGame).then(() => {
+    window.api.updateGame(game.system || system.name, updatedGame).then(() => {
       setGames(prev => prev.map(g => g.path === game.path ? updatedGame : g));
+      setCollectionGames(prev => prev.map(g => g.path === game.path ? updatedGame : g));
     });
   };
 
@@ -1058,10 +1084,10 @@ export default function SystemAppContent({
       name: selectedGame.name || "",
       developer: selectedGame.developer || g.Developer || "",
       publisher: selectedGame.publisher || g.Publisher || "",
-      releasedate: selectedGame.releasedate || g.ReleaseDate || "",
+      releasedate: releaseDateForInput(selectedGame.releasedate || g.ReleaseDate),
       genre: selectedGame.genre || g.Genre || "",
-      players: selectedGame.players ? String(selectedGame.players) : g.Players ? String(g.Players) : "",
-      rating: selectedGame.rating !== undefined ? String(selectedGame.rating) : g.Rating !== undefined ? String(g.Rating) : "",
+      players: normalizePlayersValue(selectedGame.players ?? g.Players),
+      rating: String(normalizeRating(selectedGame.rating ?? g.Rating)),
       desc: selectedGame.desc || g.Desc || "",
       gamefamily: selectedGame.gamefamily || "",
       region: selectedGame.region || "",
@@ -1091,9 +1117,9 @@ export default function SystemAppContent({
       name: metaForm.name.trim() || selectedGame.name,
       developer: metaForm.developer.trim(),
       publisher: metaForm.publisher.trim(),
-      releasedate: metaForm.releasedate.trim(),
+      releasedate: releaseDateForStorage(metaForm.releasedate),
       genre: metaForm.genre.trim(),
-      players: metaForm.players.trim(),
+      players: normalizePlayersValue(metaForm.players),
       rating: Number.isFinite(parsedRating) ? Math.min(1, Math.max(0, parsedRating)) : selectedGame.rating,
       desc: metaForm.desc.trim(),
       gamefamily: metaForm.gamefamily.trim(),
@@ -1101,8 +1127,9 @@ export default function SystemAppContent({
       lang: metaForm.lang.trim().toLowerCase()
     };
 
-    await window.api.updateGame(system.name, updatedGame);
+    await window.api.updateGame(selectedGame.system || system.name, updatedGame);
     setGames(prev => prev.map(g => g.path === selectedGame.path ? updatedGame : g));
+    setCollectionGames(prev => prev.map(g => g.path === selectedGame.path ? updatedGame : g));
     setShowMetadataSidebar(false);
 
     window.dispatchEvent(
@@ -1134,21 +1161,21 @@ export default function SystemAppContent({
           </div>
           {/* Search */}
           <div className="relative group">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-white/35 group-focus-within:text-accent transition duration-200" />
+            <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-white/45 transition group-focus-within:text-accent" />
             <input 
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder={`Buscar em ${system.fullname}...`}
-              className="w-full bg-white/5 border border-white/5 rounded-md pl-9 pr-8 py-2 text-xs text-white placeholder:text-white/30 focus:outline-none focus:border-accent focus:bg-white/[0.07] transition duration-200"
+              className="h-10 w-full rounded-lg border border-white/10 bg-white/[0.025] pl-10 pr-9 text-[13px] text-white outline-none transition placeholder:text-white/35 hover:border-white/20 focus:border-accent"
             />
             {search && (
               <button
                 type="button"
                 onClick={() => setSearch("")}
-                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-white/40 hover:text-white transition p-0.5 cursor-pointer"
+                className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer p-0.5 text-white/40 transition hover:text-white"
                 title="Limpar busca"
               >
-                <X className="w-3.5 h-3.5" />
+                <X className="h-4 w-4" />
               </button>
             )}
           </div>
@@ -1156,7 +1183,7 @@ export default function SystemAppContent({
 
         {/* Filters Navigation */}
         <ScrollArea className="flex-1 px-4 pb-4">
-          <div className="text-[10px] font-bold uppercase text-white/25 tracking-widest px-3 py-2 mt-1">Filtros</div>
+          <div className="text-sm font-semibold text-white/90 px-3 py-2 mt-1">Filtros</div>
           <div className="flex flex-col gap-0.5">
             <button
               onClick={() => { setFilter("all"); setSelectedIdx(0); }}
@@ -1185,12 +1212,12 @@ export default function SystemAppContent({
 
           <div className="w-full h-px bg-white/5 my-3 mx-2" />
 
-          <div className="text-[10px] font-bold uppercase text-white/25 tracking-widest px-3 py-2">Avançados</div>
+          <div className="text-sm font-semibold text-white/90 px-3 py-2">Avançados</div>
           <div className="flex flex-col gap-2">
 
             {/* Genre Filter */}
             <div className="flex flex-col gap-1">
-              <span className="text-[10px] text-white/35 font-semibold px-1">Gênero</span>
+              <span className="text-[13px] text-white/70 font-medium px-1">Gênero</span>
               <RadixSelect
                 value={selectedGenre}
                 onValueChange={(val) => { setSelectedGenre(val); setSelectedIdx(0); }}
@@ -1204,7 +1231,7 @@ export default function SystemAppContent({
 
             {/* Year Filter */}
             <div className="flex flex-col gap-1">
-              <span className="text-[10px] text-white/35 font-semibold px-1">Ano</span>
+              <span className="text-[13px] text-white/70 font-medium px-1">Ano</span>
               <RadixSelect
                 value={selectedYear}
                 onValueChange={(val) => { setSelectedYear(val); setSelectedIdx(0); }}
@@ -1218,7 +1245,7 @@ export default function SystemAppContent({
 
             {/* Players Filter */}
             <div className="flex flex-col gap-1">
-              <span className="text-[10px] text-white/35 font-semibold px-1">Jogadores</span>
+              <span className="text-[13px] text-white/70 font-medium px-1">Jogadores</span>
               <RadixSelect
                 value={selectedPlayers}
                 onValueChange={(val) => { setSelectedPlayers(val); setSelectedIdx(0); }}
@@ -1235,7 +1262,7 @@ export default function SystemAppContent({
 
             {/* Rating Filter */}
             <div className="flex flex-col gap-1">
-              <span className="text-[10px] text-white/35 font-semibold px-1">Avaliação</span>
+              <span className="text-[13px] text-white/70 font-medium px-1">Avaliação</span>
               <RadixSelect
                 value={selectedMinRating}
                 onValueChange={(val) => { setSelectedMinRating(val); setSelectedIdx(0); }}
@@ -1404,7 +1431,6 @@ export default function SystemAppContent({
                   <div className="grid grid-cols-2 @xl:grid-cols-3 @3xl:grid-cols-4 @5xl:grid-cols-5 gap-3">
                     {(() => {
                       const sliced = filteredGames.slice(0, displayLimit);
-                      console.log("[SystemAppContent] Rendering grid items. displayLimit =", displayLimit, "filteredGames length =", filteredGames.length, "sliced length =", sliced.length, "items:", sliced);
                       return sliced.map((g, idx) => {
                         if (g.isCollectionFolder) {
                           const hasLogo = !!g.logo || !!g.marquee;
@@ -1594,20 +1620,26 @@ export default function SystemAppContent({
                     <div className="flex flex-col gap-1">
                       <label className="text-[10px] font-bold uppercase text-white/40 tracking-wider">Data Lançamento</label>
                       <input
-                        type="text"
-                        placeholder="YYYYMMDD"
+                        type="date"
                         value={metaForm.releasedate}
                         onChange={e => setMetaForm(prev => ({ ...prev, releasedate: e.target.value }))}
-                        className="w-full bg-[#1a1a1a] border border-white/10 rounded-md px-3 py-1.5 text-white text-xs focus:outline-none focus:border-accent transition"
+                        className="w-full bg-[#1a1a1a] border border-white/10 rounded-md px-3 py-1.5 text-white text-xs focus:outline-none focus:border-accent transition [color-scheme:dark]"
                       />
                     </div>
                     <div className="flex flex-col gap-1">
                       <label className="text-[10px] font-bold uppercase text-white/40 tracking-wider">Jogadores</label>
                       <input
                         type="text"
-                        placeholder="1-2"
+                        inputMode="numeric"
+                        placeholder="Ex.: 1-2"
                         value={metaForm.players}
-                        onChange={e => setMetaForm(prev => ({ ...prev, players: e.target.value }))}
+                        onChange={e => {
+                          const value = e.target.value;
+                          if (/^[\d\s,.\-–—]*$/.test(value)) {
+                            setMetaForm(prev => ({ ...prev, players: value }));
+                          }
+                        }}
+                        onBlur={() => setMetaForm(prev => ({ ...prev, players: normalizePlayersValue(prev.players) }))}
                         className="w-full bg-[#1a1a1a] border border-white/10 rounded-md px-3 py-1.5 text-white text-xs focus:outline-none focus:border-accent transition"
                       />
                     </div>
@@ -1615,16 +1647,31 @@ export default function SystemAppContent({
 
                   <div className="grid grid-cols-2 gap-2">
                     <div className="flex flex-col gap-1">
-                      <label className="text-[10px] font-bold uppercase text-white/40 tracking-wider">Avaliação (0 - 1.0)</label>
-                      <input
-                        type="number"
-                        step="0.1"
-                        min="0"
-                        max="1"
-                        value={metaForm.rating}
-                        onChange={e => setMetaForm(prev => ({ ...prev, rating: e.target.value }))}
-                        className="w-full bg-[#1a1a1a] border border-white/10 rounded-md px-3 py-1.5 text-white text-xs focus:outline-none focus:border-accent transition"
-                      />
+                      <label className="text-[10px] font-bold uppercase text-white/40 tracking-wider">Avaliação</label>
+                      <div className="flex h-[31px] items-center gap-1 rounded-md border border-white/10 bg-[#1a1a1a] px-2">
+                        {[1, 2, 3, 4, 5].map(star => {
+                          const currentStars = Math.round(normalizeRating(metaForm.rating) * 5);
+                          const active = star <= currentStars;
+                          return (
+                            <button
+                              key={star}
+                              type="button"
+                              onClick={() => setMetaForm(prev => ({
+                                ...prev,
+                                rating: String(star / 5)
+                              }))}
+                              className="cursor-pointer rounded-sm p-0.5 transition hover:scale-110 focus:outline-none"
+                              aria-label={`${star} ${star === 1 ? "estrela" : "estrelas"}`}
+                              title={`${star} de 5`}
+                            >
+                              <Star className={`h-3.5 w-3.5 ${active ? "fill-amber-400 text-amber-400" : "text-white/25"}`} />
+                            </button>
+                          );
+                        })}
+                        <span className="ml-auto text-[10px] tabular-nums text-white/45">
+                          {Math.round(normalizeRating(metaForm.rating) * 5)}/5
+                        </span>
+                      </div>
                     </div>
                     <div className="flex flex-col gap-1">
                       <label className="text-[10px] font-bold uppercase text-white/40 tracking-wider">Região</label>
@@ -2106,7 +2153,7 @@ export default function SystemAppContent({
                     </span>
                   </button>
 
-                  <div className="flex items-center gap-1.5 px-3 py-1.5 bg-[#1a1a1a] border border-white/5 rounded-md text-xs font-semibold text-white/80">
+                  <div className="flex items-center gap-1.5 px-3 py-2 bg-[#1a1a1a] border border-white/5 rounded-md text-xs font-semibold text-white/80">
                     <Star className="w-3.5 h-3.5 fill-amber-500 text-amber-500" />
                     <span className="text-amber-400 font-bold">
                       {(() => {
@@ -2143,7 +2190,7 @@ export default function SystemAppContent({
                 </div>
 
                 {/* Description Box */}
-                <ScrollArea className="text-xs leading-relaxed text-white/60 h-28 pr-1 text-left">
+                <ScrollArea className="text-[13px] leading-relaxed text-white/60 h-28 pr-1 text-left">
                   <p>
                     {selectedGame.desc || "Nenhuma descrição disponível para este jogo."}
                   </p>
@@ -2153,11 +2200,13 @@ export default function SystemAppContent({
                 {(() => {
                   const genre = selectedGame.genre || (selectedGame as any).Genre;
                   const players = selectedGame.players || (selectedGame as any).Players;
+                  const developer = selectedGame.developer || (selectedGame as any).Developer;
+                  const publisher = selectedGame.publisher || (selectedGame as any).Publisher;
 
-                  if (!genre && !players) return null;
+                  if (!genre && !players && !developer && !publisher) return null;
 
                   return (
-                    <div className="flex flex-col gap-2 bg-[#1a1a1a] border border-white/5 rounded-md p-4 text-xs text-white/70">
+                    <div className="flex flex-col gap-2 bg-[#1a1a1a] border border-white/5 rounded-md p-4 text-[13px] text-white/70">
                       {genre && (
                         <div className="flex justify-between items-center">
                           <span className="text-white/40 font-medium">Gênero</span>
@@ -2172,6 +2221,18 @@ export default function SystemAppContent({
                           </span>
                         </div>
                       )}
+                      {developer && (
+                        <div className="flex justify-between items-center mt-1">
+                          <span className="text-white/40 font-medium">Desenvolvedora</span>
+                          <span className="font-semibold text-white/90 text-right truncate max-w-[150px]" title={String(developer)}>{String(developer)}</span>
+                        </div>
+                      )}
+                      {publisher && (
+                        <div className="flex justify-between items-center mt-1">
+                          <span className="text-white/40 font-medium">Publicadora</span>
+                          <span className="font-semibold text-white/90 text-right truncate max-w-[150px]" title={String(publisher)}>{String(publisher)}</span>
+                        </div>
+                      )}
                     </div>
                   );
                 })()}
@@ -2179,7 +2240,7 @@ export default function SystemAppContent({
                 {/* Emulator/Core Select Option */}
                 {canSwitchEmulator && (
                   <div className="flex flex-col gap-1.5 text-left">
-                    <span className="text-[10px] text-white/40 uppercase tracking-wider font-bold">Emulador / Core</span>
+                    <span className="text-[13px] text-white/70 font-medium">Emulador / Core</span>
                     <div className="flex items-stretch gap-2">
                       <div className="min-w-0 flex-1">
                         <RadixSelect
@@ -2214,7 +2275,7 @@ export default function SystemAppContent({
                 <div className="flex flex-col gap-2 mt-auto pt-3">
                   <button
                     onClick={() => onLaunchGame(selectedGame, system)}
-                    className="w-[calc(100%-8px)] mx-auto hover:scale-[1.02] hover:brightness-110 hover:shadow-lg transition-all rounded-md py-3 text-xl font-bold flex items-center justify-center gap-2 cursor-pointer text-white outline outline-2 outline-offset-2"
+                    className="w-[calc(100%-8px)] mx-auto hover:scale-[1.02] hover:brightness-110 hover:shadow-lg transition-all rounded-md py-3 text-base font-semibold flex items-center justify-center gap-2 cursor-pointer text-white outline outline-2 outline-offset-2"
                     style={{
                       background: 'linear-gradient(135deg, var(--accent-color) 0%, var(--accent-color-hover) 100%)',
                       outlineColor: 'var(--accent-color)'
@@ -2553,7 +2614,7 @@ export default function SystemAppContent({
                 initialCore={settingsScope.core}
                 scope={settingsScope.scope}
                 scopeContext={{
-                  system: system.name,
+                  system: settingsScope.game?.system || system.name,
                   emulator: settingsScope.emulator,
                   core: settingsScope.core,
                   rom: settingsScope.game?.path

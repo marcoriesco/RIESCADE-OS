@@ -360,11 +360,11 @@
     "type": "bool"
   },
   "Window.tool-settings.X": {
-    "value": 215,
+    "value": 275,
     "type": "int"
   },
   "Window.tool-settings.Y": {
-    "value": 55,
+    "value": 53,
     "type": "int"
   },
   "Window.tool-settings.Width": {
@@ -380,19 +380,19 @@
     "type": "bool"
   },
   "Window.tool-collections.X": {
-    "value": 102,
+    "value": 0,
     "type": "int"
   },
   "Window.tool-collections.Y": {
-    "value": 89,
+    "value": 0,
     "type": "int"
   },
   "Window.tool-collections.Width": {
-    "value": 1652,
+    "value": 960,
     "type": "int"
   },
   "Window.tool-collections.Height": {
-    "value": 840,
+    "value": 1023,
     "type": "int"
   },
   "VolumePopup": {
@@ -544,19 +544,19 @@
     "type": "bool"
   },
   "Window.system-arcade.X": {
-    "value": 176,
+    "value": 960,
     "type": "int"
   },
   "Window.system-arcade.Y": {
-    "value": 30,
+    "value": 0,
     "type": "int"
   },
   "Window.system-arcade.Width": {
-    "value": 1344,
+    "value": 960,
     "type": "int"
   },
   "Window.system-arcade.Height": {
-    "value": 873,
+    "value": 1023,
     "type": "int"
   },
   "Window.system-arcade.Maximized": {

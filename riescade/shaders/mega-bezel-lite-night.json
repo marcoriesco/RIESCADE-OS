@@ -1,0 +1,403 @@
+{
+  "$schema": "riescade-shader-profile-v1",
+  "name": "mega-bezel-lite-night",
+  "default": {
+    "shader": "crt/crt-geom",
+    "scanline": true
+  },
+  "systems": {
+    "model2": {
+      "shader": "GeomCRT@CRTGeom.fx"
+    },
+    "model3": {
+      "shader": "GeomCRT@CRTGeom.fx"
+    },
+    "daphne": {
+      "shader": "GeomCRT@CRTGeom.fx"
+    },
+    "solarus": {
+      "shader": "GeomCRT@CRTGeom.fx"
+    },
+    "3do": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/Panasonic_3DO/3DO-[STD]-[Guest-Mini]-[Bezel]-[Night]"
+    },
+    "3ds": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/Nintendo_3DS/3DS-[STD]-[Guest-Mini]-[Night]"
+    },
+    "adam": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/Coleco_Adam/Adam-[STD]-[Guest-Mini]-[Bezel]-[Night]"
+    },
+    "advision": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/Entex_Adventure_Vision/Defender-[STD]-[Guest-Mini]-[Night]"
+    },
+    "amiga": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/Amiga_A500_Plus/A500-[STD]-[Guest-Mini]-[Bezel]-[Night]"
+    },
+    "amiga500": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/Amiga_A500_Plus/A500-[STD]-[Guest-Mini]-[Bezel]-[Night]"
+    },
+    "amstradcpc": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/Amstrad_CPC/CPC464-[STD]-[Guest-Mini]-[Bezel]-[Night]"
+    },
+    "apple2": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/Apple_II/apple_II-[STD]-[Guest-Mini]-[Night]"
+    },
+    "apple2gs": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/Apple_IIgs/Apple_IIgs-[STD]-[Guest-Mini]-[Bezel]-[Night]"
+    },
+    "arcadia": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/Emerson_Arcadia_2001/Arcadia-[STD]-[Guest-Mini]-[Bezel]-[Night]"
+    },
+    "archimedes": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/Acorn_Archimedes/Archimedes-[STD]-[Guest-Mini]-[Bezel]-[Night]"
+    },
+    "astrocade": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/Bally_Astrocade/astrocade-[STD]-[Guest-Mini]-[Bezel]-[Night]"
+    },
+    "atari2600": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/Atari_2600/2600-[STD]-[Guest-Mini]-[Bezel]-[Night]"
+    },
+    "atari5200": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/Atari_5200/5200-[STD]-[Guest-Mini]-[Bezel]-[Night]"
+    },
+    "atari7800": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/Atari_7800/7800-[STD]-[Guest-Mini]-[Bezel]-[Night]"
+    },
+    "atari800": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/Atari_800/Atari_800-[STD]-[Guest-Mini]-[Bezel]-[Night]"
+    },
+    "atarist": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/Atari_ST/Atari_ST-[STD]-[Guest-Mini]-[Bezel]-[Night]"
+    },
+    "atom": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/Acorn_Atom/Atom-[STD]-[Guest-Mini]-[Bezel]-[Night]"
+    },
+    "atomiswave": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/Arcade/Arcade-[STD]-[Guest-Mini][CABINET]"
+    },
+    "bbcmicro": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/BBC_Micro/Micro-[STD]-[Guest-Mini]-[Bezel]-[Night]"
+    },
+    "c64": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/Commodore_64C/64C-[STD]-[Guest-Mini]-[Bezel]-[Night]"
+    },
+    "camplynx": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/Camputers_Lynx/Camplynx_48-[STD]-[Guest-Mini]-[Bezel]-[Night]"
+    },
+    "cave": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/Arcade/Arcade-[STD]-[Guest-Mini][CABINET]"
+    },
+    "cavestory": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/NXEngine/NXEngine-[STD]-[Guest-Mini]-[Night]"
+    },
+    "cdi": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/Philips_CD-i/CD-i-[STD]-[Guest-Mini]-[Bezel]-[Night]"
+    },
+    "channelf": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/Fairchild_Channel_F/ChannelF-[STD]-[Guest-Mini]-[Bezel]-[Night]"
+    },
+    "coco": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/Tandy_CoCo_3/CoCo3-[STD]-[Guest-Mini]-[Bezel]-[Night]"
+    },
+    "colecovision": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/ColecoVision/ColecoVision-[STD]-[Guest-Mini]-[Bezel]-[Night]"
+    },
+    "cps1": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/Arcade/Arcade-[STD]-[Guest-Mini][CABINET]"
+    },
+    "cps2": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/Arcade/Arcade-[STD]-[Guest-Mini][CABINET]"
+    },
+    "cps3": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/Arcade/Arcade-[STD]-[Guest-Mini][CABINET]"
+    },
+    "crvision": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/VTech_CreatiVision/CreatiVision-[STD]-[Guest-Mini]-[Bezel]-[Night]"
+    },
+    "dos": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/DOSBox/DOSBox-[STD]-[Guest-Mini]-[Bezel]-[Night]"
+    },
+    "dreamcast": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/SEGA_Dreamcast/Dreamcast-[STD]-[Guest-Mini]-[Bezel]-[Night]"
+    },
+    "easyrpg": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/EasyRPG/EasyRPG-[STD]-[Guest-Mini]-[Night]"
+    },
+    "fba": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/FB-Neo/FB-Neo-[STD]-[Guest-Mini][CABINET]"
+    },
+    "fbneo": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/FB-Neo/FB-Neo-[STD]-[Guest-Mini][CABINET]"
+    },
+    "fds": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/Nintendo_Famicom/Famicom-[STD]-[Guest-Mini]-[Bezel]-[Night]"
+    },
+    "fm7": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/Fujitsu-FM-7/FM7-[STD]-[Guest-Mini]-[Bezel]-[Night]"
+    },
+    "fmtowns": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/FM-Towns/FM-Towns-[STD]-[Guest-Mini]-[Bezel]-[Night]"
+    },
+    "gamate": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/Bit_Corp_Gamate/Gamate-[STD]-[LCD-GRID]-[Night]"
+    },
+    "gamecom": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/Tiger_game_com/game_com-[STD]-[LCD-GRID]-[Night]"
+    },
+    "gamecube": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/Nintendo_Gamecube/Gamecube-[STD]-[Guest-Mini]-[Bezel]-[Night]"
+    },
+    "gamegear": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/SEGA_Game_Gear/Game_Gear-[STD]-[LCD-GRID]-[Night]"
+    },
+    "gp32": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/Gamepark_GP32/GP32-[STD]-[LCD-GRID]-[Night]"
+    },
+    "gb": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/Nintendo_Game_Boy/Gameboy-[STD]-[Guest-Mini]-[Bezel]-[Night]"
+    },
+    "gb2players": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/Nintendo_GB2Player/GB2Player-[STD]-[LCD-GRID]-[Night]"
+    },
+    "gba": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/Nintendo_GBA/GBA-[STD]-[LCD-GRID]-[Night]"
+    },
+    "gbc": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/Nintendo_Game_Boy_Color/GBC-[STD]-[LCD-GRID]-[Night]"
+    },
+    "gbc2players": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/Nintendo_GBC2Player/GBC2Player-[STD]-[LCD-GRID]-[Night]"
+    },
+    "gmaster": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/Hartung_Gamemaster/Gamemaster-[STD]-[LCD-GRID]-[Night]"
+    },
+    "gx4000": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/Amstrad_GX4000/Amstrad_GX4000-[STD]-[Guest-Mini]-[Bezel]-[Night]"
+    },
+    "hbmame": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/MAME/MAME-[STD]-[Guest-Mini][CABINET]"
+    },
+    "intellivision": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/Mattel_Intellivision/Intellivision-[STD]-[Guest-Mini]-[Bezel]-[Night]"
+    },
+    "jaguar": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/Atari_Jaguar/Jaguar-[STD]-[Guest-Mini]-[Bezel]-[Night]"
+    },
+    "lynx": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/Atari_Lynx/Lynx-[STD]-[LCD-GRID]-[Night]"
+    },
+    "mame": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/MAME/MAME-[STD]-[Guest-Mini][CABINET]"
+    },
+    "mastersystem": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/SEGA_Master_System/SMS-[STD]-[Guest-Mini]-[Bezel]-[Night]"
+    },
+    "megadrive": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/SEGA_Genesis/Genesis_Alt-[STD]-[Guest-Mini]-[Bezel]-[Night]"
+    },
+    "megadrive-msu": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/SEGA_Genesis/Genesis_Alt-[STD]-[Guest-Mini]-[Bezel]-[Night]"
+    },
+    "megaduck": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/Mega_Duck/MegaDuck-[STD]-[LCD-GRID]-[Night]"
+    },
+    "msx": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/MSX/MSX-[STD]-[Guest-Mini]-[Bezel]-[Night]"
+    },
+    "msx1": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/MSX/MSX-[STD]-[Guest-Mini]-[Bezel]-[Night]"
+    },
+    "msx2": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/MSX2/MSX2-[STD]-[Guest-Mini]-[Bezel]-[Night]"
+    },
+    "msx2+": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/MSX2/MSX2-[STD]-[Guest-Mini]-[Bezel]-[Night]"
+    },
+    "n64": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/Nintendo_N64/N64-[STD]-[Guest-Mini]-[Bezel]-[Night]"
+    },
+    "naomi": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/SEGA_Naomi/Naomi-[STD]-[Guest-Mini]-[Night]"
+    },
+    "nds": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/Nintendo_NDS/NDS-[STD]-[Guest-Mini]-[Night]"
+    },
+    "neogeo": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/Neo_Geo_AES/NeoGeo_AES-[STD]-[Guest-Mini]-[Bezel]-[Night]"
+    },
+    "neogeocd": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/Neo_Geo_CD/NeoGeo_CD-[STD]-[Guest-Mini]-[Bezel]-[Night]"
+    },
+    "nes": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/Nintendo_NES/NES-[STD]-[Guest-Mini]-[Bezel]-[Night]"
+    },
+    "ngp": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/Neo_Geo_Pocket/NGP-[STD]-[LCD-GRID]-[Night]"
+    },
+    "ngpc": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/Neo_Geo_Pocket_Color/NGPC-[STD]-[LCD-GRID]-[Night]"
+    },
+    "o2em": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/Magnavox_Odyssey_2/Odyssey2-[STD]-[Guest-Mini]-[Bezel]-[Night]"
+    },
+    "pc88": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/NEC_PC-8801/PC-8801-[STD]-[Guest-Mini]-[Bezel]-[Night]"
+    },
+    "pc98": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/NEC_PC-9801/PC-9801-[STD]-[Guest-Mini]-[Bezel]-[Night]"
+    },
+    "pcengine": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/NEC_PC_Engine/PC_Engine-[STD]-[Guest-Mini]-[Bezel]-[Night]"
+    },
+    "pcenginecd": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/NEC_PC_Engine_CD/PC_Engine_CD-[STD]-[Guest-Mini]-[Bezel]-[Night]"
+    },
+    "pcfx": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/NEC_PC-FX/PC-FX-[STD]-[Guest-Mini]-[Bezel]-[Night]"
+    },
+    "pico8": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/PICO-8/PICO-8-[STD]-[LCD-GRID]-[Night]"
+    },
+    "pokemini": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/Nintendo_Pokemon_Mini/Pokemon_Mini-[STD]-[Guest-Mini]-[Night]"
+    },
+    "prboom": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/PrBoom/PrBoom-[STD]-[Guest-Mini]-[Night]"
+    },
+    "ps2": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/SONY_Playstation_2/Playstation2-[STD]-[Guest-Mini]-[Bezel]-[Night]"
+    },
+    "psp": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/Sony_PSP/PSP-[STD]-[Guest-Mini]-[Night]"
+    },
+    "psx": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/SONY_Playstation/Playstation-[STD]-[Guest-Mini]-[Bezel]-[Night]"
+    },
+    "pv1000": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/Casio_PV-1000/PV-1000-[STD]-[Guest-Mini]-[Bezel]-[Night]"
+    },
+    "satellaview": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/Nintendo_Super_Famicom/Super_Famicom_Alt-[STD]-[Guest-Mini]-[Bezel]-[Night]"
+    },
+    "saturn": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/SEGA_Saturn/Saturn-[STD]-[Guest-Mini]-[Bezel]-[Night]"
+    },
+    "scummvm": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/ScummVM/ScummVM-[STD]-[Guest-Mini]-[Bezel]-[Night]"
+    },
+    "scv": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/Epoch_Super_Cassette_Vision/svision-[STD]-[Guest-Mini]-[Bezel]-[Night]"
+    },
+    "sega32x": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/SEGA_32X/SEGA32X-[STD]-[Guest-Mini]-[Bezel]-[Night]"
+    },
+    "segacd": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/SEGA_CD/SEGACD_Alt-[STD]-[Guest-Mini]-[Bezel]-[Night]"
+    },
+    "sg1000": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/SEGA_SG-1000/SG-1000-[STD]-[Guest-Mini]-[Bezel]-[Night]"
+    },
+    "sgb": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/Nintendo_Super_Game_Boy/Super_Famicom_SGB-[STD]-[Guest-Mini]-[Bezel]-[Night]"
+    },
+    "snes": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/Nintendo_Super_Famicom/Super_Famicom_Alt-[STD]-[Guest-Mini]-[Bezel]-[Night]"
+    },
+    "snes-msu1": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/Nintendo_Playstation_Prototype/Nintendo_PS-[STD]-[Guest-Mini]-[Bezel]-[Night]"
+    },
+    "sufami": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/Nintendo_Super_Famicom/Super_Famicom-[STD]-[Guest-Mini]-[Bezel]-[Night]"
+    },
+    "supergrafx": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/NEC_SuperGrafx/SuperGrafx_Alt-[STD]-[Guest-Mini]-[Bezel]-[Night]"
+    },
+    "supervision": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/Watara_Supervision/Supervision-[STD]-[LCD-GRID]-[Night]"
+    },
+    "supracan": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/Funtech_Super_A'Can/super_acan-[STD]-[Guest-Mini]-[Bezel]-[Night]"
+    },
+    "thomson": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/Thomson_T08/TO8-[STD]-[Guest-Mini]-[Bezel]-[Night]"
+    },
+    "ti99": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/TI-99_4A/TI-99_4A-[STD]-[Guest-Mini]-[Bezel]-[Night]"
+    },
+    "tic80": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/TIC-80/TIC80-[STD]-[LCD-GRID]-[Night]"
+    },
+    "tutor": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/Tomy_Tutor/Tutor-[STD]-[Guest-Mini]-[Bezel]-[Night]"
+    },
+    "tvgames": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/TV/TV1-[STD]-[Guest-Mini]-[Night]"
+    },
+    "tyrquake": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/TyrQuake/TyrQuake-[STD]-[Guest-Mini]-[Night]"
+    },
+    "vectrex": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/GCE_Vectrex/GCE_Vectrex-[STD]-[Guest-Mini]-[Night]"
+    },
+    "virtualboy": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/Nintendo_Virtual_Boy/Virtual_Boy-[STD]-[Guest-Mini]-[Night]"
+    },
+    "vsmile": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/VTech_V.Smile/V.Smile-[STD]-[LCD-GRID]-[Night]"
+    },
+    "wasm4": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/WASM-4/WASM4-[STD]-[LCD-GRID]-[Night]"
+    },
+    "wii": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/Nintendo_Wii/Wii_16x9-[STD]-[Guest-Mini]-[Night]"
+    },
+    "wswan": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/Bandai_WonderSwan/WonderSwan-[STD]-[LCD-GRID]-[Night]"
+    },
+    "wswanc": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/Bandai_WonderSwan_Color/WonderSwan_Color-[STD]-[LCD-GRID]-[Night]"
+    },
+    "x1": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/Sharp_X1/X1-[STD]-[Guest-Mini]-[Bezel]-[Night]"
+    },
+    "x68000": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/Sharp_x68000/x68000-[STD]-[Guest-Mini]-[Bezel]-[Night]"
+    },
+    "xegs": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/Atari_XEGS/Atari_XEGS-[STD]-[Guest-Mini]-[Bezel]-[Night]"
+    },
+    "zx81": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/Sinclair_ZX81/ZX81-[STD]-[Guest-Mini]-[Bezel]-[Night]"
+    },
+    "zxspectrum": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/Sinclair_ZX_Spectrum/ZX_Spectrum-[STD]-[Guest-Mini]-[Bezel]-[Night]"
+    },
+    "arcade": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/Arcade/Arcade-[STD]-[Guest-Mini][CABINET]"
+    },
+    "boom3": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/boom3/boom3-[STD]-[Guest-Mini]-[Night]"
+    },
+    "CannonBall": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/CannonBall/CannonBall-[STD]-[Guest-Mini]-[Night]"
+    },
+    "Craft": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/Craft/Craft-[STD]-[Guest-Mini]-[Night]"
+    },
+    "Dinothawr": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/Dinothawr/Dinothawr-[STD]-[Guest-Mini]-[Night]"
+    },
+    "ECWolf": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/ECWolf/ECWolf-[STD]-[Guest-Mini]-[Night]"
+    },
+    "odyssey2": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/Magnavox_Odyssey_2/Odyssey2-[STD]-[Guest-Mini]-[Bezel]-[Night]"
+    },
+    "REminiscence": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/REminiscence/REminiscence-[STD]-[Guest-Mini]-[Night]"
+    },
+    "XRick": {
+      "shader": "../Mega_Bezel_Packs/Duimon-Mega-Bezel/Presets/Lite/XRick/XRick-[STD]-[Guest-Mini]-[Night]"
+    }
+  }
+}

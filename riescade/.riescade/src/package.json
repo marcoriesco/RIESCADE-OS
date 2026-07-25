@@ -1,6 +1,6 @@
 {
   "name": "riescade",
-  "version": "2.3.0",
+  "version": "2.3.1",
   "description": "RIESCADE Frontend",
   "main": "./out/main/index.js",
   "author": "Marco Riesco",
@@ -16,7 +16,8 @@
     "deploy": "npm run dist && node scripts/deploy.js",
     "release": "node scripts/release.js",
     "preview": "electron-vite preview",
-    "convert-webp": "node scripts/convert-webp.js"
+    "convert-webp": "node scripts/convert-webp.js",
+    "convert-shaders": "node scripts/convert-shader-profiles.js"
   },
   "dependencies": {
     "@electron-toolkit/preload": "^3.0.0",
@@ -26,6 +27,7 @@
     "@radix-ui/react-tooltip": "^1.2.10",
     "@tailwindcss/vite": "^4.3.0",
     "better-sqlite3": "^12.10.0",
+    "js-yaml": "^4.1.0",
     "fast-xml-parser": "^4.4.0",
     "lucide-react": "^1.16.0",
     "overlayscrollbars": "^2.16.0",

@@ -25,3 +25,16 @@ Formato:
 - `shaderGL` referencia um preset em `emulators/retroarch/shaders/shaders_glsl`.
 - `systems` permite substituir o perfil padrão para sistemas específicos.
 - O nome do arquivo é o valor apresentado no RIESCADE.
+
+## Conversão de perfis YAML
+
+Pastas que contenham `rendering-defaults.yml` podem ser convertidas em lote:
+
+```powershell
+cd riescade/.riescade/src
+npm run convert-shaders
+```
+
+O comando cria um JSON na raiz desta pasta com o mesmo nome da pasta de
+origem. A seção `default` é preservada e as demais seções viram entradas de
+`systems`. Arquivos existentes com o mesmo nome são atualizados.

@@ -9,6 +9,7 @@ import { resolveLibretroVisuals } from '../utils/libretroVisuals.js';
 export class LibRetroGenerator extends BaseGenerator {
   private retroarchDir: string = '';
   private retroarchCfgPath: string = '';
+  private shaderPreset?: string;
 
   public async configure(): Promise<void> {
     const emulatorsDir = getEmulatorsPath();
@@ -78,6 +79,7 @@ export class LibRetroGenerator extends BaseGenerator {
           Config.getCoreSetting(this.core, 'filters', 'auto'))),
         videoDriver === 'gl' || videoDriver === 'glcore' || videoDriver === 'opengl'
       );
+      this.shaderPreset = visuals.shaderPreset;
       cfg['input_overlay_enable'] = visuals.overlayConfig ? 'true' : 'false';
       if (visuals.overlayConfig) cfg['input_overlay'] = visuals.overlayConfig;
       else delete cfg['input_overlay'];
@@ -133,6 +135,9 @@ export class LibRetroGenerator extends BaseGenerator {
       launchArgs.push('--entryslot', selectedSlot);
     }
     launchArgs.push(this.rom);
+    if (this.shaderPreset) {
+      launchArgs.push('--set-shader', this.shaderPreset);
+    }
 
     return {
       executable,

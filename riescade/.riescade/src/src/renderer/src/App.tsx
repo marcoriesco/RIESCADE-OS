@@ -1837,6 +1837,7 @@ export default function App() {
             <SystemAppContent
               systemName={systemName}
               system={system}
+              systems={systems}
               color={theme.color}
               Icon={theme.icon}
               onLaunchGame={handleLaunchGame}
@@ -1935,6 +1936,7 @@ export default function App() {
               <SystemAppContent
                 systemName={toolId}
                 system={system}
+                systems={systems}
                 color={theme.color}
                 Icon={theme.icon}
                 onLaunchGame={handleLaunchGame}
@@ -2119,6 +2121,7 @@ export default function App() {
                     hardware: win.appId === "collections" ? "custom-collections" : "auto collection",
                     emulators: []
                   } as any}
+                  systems={systems}
                   color={theme.color}
                   Icon={Icon}
                   onLaunchGame={handleLaunchGame}

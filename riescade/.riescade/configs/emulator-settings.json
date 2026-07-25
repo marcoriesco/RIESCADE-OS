@@ -3324,7 +3324,7 @@
     "yabause_rewind": "auto",
     "yabause_autosave": "auto",
     "bezels": "[riescade]",
-    "shaders": "none"
+    "shaders": "auto"
   },
   "eden": {
     "vsync": "1",
@@ -5332,7 +5332,7 @@
     "monitor_index": "auto",
     "gpu_index": "auto",
     "audio_driver": "auto",
-    "shaders": "auto",
+    "shaders": "mega-bezel-lite-night-noCab",
     "bezels": "auto",
     "filters": "auto",
     "discord": "false"
