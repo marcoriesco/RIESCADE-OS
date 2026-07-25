@@ -1183,7 +1183,7 @@ export default function SystemAppContent({
 
         {/* Filters Navigation */}
         <ScrollArea className="flex-1 px-4 pb-4">
-          <div className="text-sm font-semibold text-white/90 px-3 py-2 mt-1">Filtros</div>
+          <div className="text-sm font-semibold text-white/90 py-2 mt-1">Filtros</div>
           <div className="flex flex-col gap-0.5">
             <button
               onClick={() => { setFilter("all"); setSelectedIdx(0); }}
@@ -1212,7 +1212,7 @@ export default function SystemAppContent({
 
           <div className="w-full h-px bg-white/5 my-3 mx-2" />
 
-          <div className="text-sm font-semibold text-white/90 px-3 py-2">Avançados</div>
+          <div className="text-sm font-semibold text-white/90 py-2">Avançados</div>
           <div className="flex flex-col gap-2">
 
             {/* Genre Filter */}
@@ -2585,7 +2585,7 @@ export default function SystemAppContent({
             onClick={() => setSettingsScope(null)}
             aria-label="Fechar configurações"
           />
-          <div className="relative flex max-h-[88vh] w-full max-w-4xl flex-col overflow-hidden rounded-xl border border-white/10 bg-[#111113] shadow-2xl">
+          <div className="relative flex max-h-[80vh] w-full max-w-4xl flex-col overflow-hidden rounded-xl border border-white/10 bg-[#111113] shadow-2xl">
             <div className="flex items-center justify-between border-b border-white/10 px-5 py-4">
               <div className="min-w-0">
                 <h2 className="truncate text-base font-semibold text-white">

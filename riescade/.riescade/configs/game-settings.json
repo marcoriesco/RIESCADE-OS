@@ -1,5 +1,25 @@
 {
   "$schema": "riescade-game-settings-v1",
   "version": 1,
-  "games": {}
+  "games": {
+    "psp|./Colin McRae - DiRT 2 (USA).cso": {
+      "system": "psp",
+      "rom": "./Colin McRae - DiRT 2 (USA).cso",
+      "emulator": "ppsspp",
+      "core": "",
+      "settings": {
+        "ppsspp_resolution": "3"
+      }
+    },
+    "psp|./300 - March to Glory (USA).cso": {
+      "system": "psp",
+      "rom": "./300 - March to Glory (USA).cso",
+      "emulator": "ppsspp",
+      "core": "",
+      "settings": {
+        "fullscreen": "true",
+        "ppsspp_resolution": "4"
+      }
+    }
+  }
 }

@@ -5,7 +5,12 @@
   "description": "Ajuste os parâmetros específicos do emulador PPSSPP.",
   "icon": "ppsspp",
   "configFiles": [],
-  "globalMappings": {},
+  "globalMappings": {
+    "fullscreen": {
+      "configKey": "fullscreen",
+      "globalKey": "fullscreen"
+    }
+  },
   "groups": [
     {
       "id": "graphics",
@@ -13,6 +18,18 @@
       "icon": "monitor",
       "order": 1,
       "options": [
+        {
+          "id": "fullscreen",
+          "label": "Tela Cheia",
+          "description": "Executa o PPSSPP ocupando toda a tela.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "fullscreen",
+          "inheritsGlobal": "fullscreen",
+          "realKey": "FullScreen",
+          "realSection": "Graphics",
+          "realFile": "ppsspp.ini"
+        },
         {
           "id": "ppsspp_resolution",
           "label": "Resolução Interna",

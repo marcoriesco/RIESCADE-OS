@@ -942,5 +942,9 @@
   "switch.emulator": {
     "value": "eden-nightly",
     "type": "string"
+  },
+  "Window.system-psp.Maximized": {
+    "value": true,
+    "type": "bool"
   }
 }

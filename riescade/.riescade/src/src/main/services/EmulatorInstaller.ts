@@ -44,6 +44,12 @@ const EMULATOR_EXES: Record<string, string> = {
   'shadps4': 'shadps4/shadPS4.exe'
 }
 
+// These targets are handled directly by the launcher and do not represent
+// downloadable emulators under the emulators directory.
+const NATIVE_LAUNCHERS = new Set([
+  'windows'
+])
+
 interface EmulatorCatalogEntry {
   name: string
   aliases?: string[]
@@ -268,6 +274,15 @@ export class EmulatorInstaller {
   public static async checkStatus(emulatorName: string, sourceUrl?: string): Promise<EmulatorStatus> {
     const retroBatPath = getRetroBatPath()
     const targetEmu = emulatorName.toLowerCase()
+    if (NATIVE_LAUNCHERS.has(targetEmu)) {
+      return {
+        installed: true,
+        name: emulatorName,
+        installedVersion: 'native',
+        latestVersion: 'native',
+        updateAvailable: false
+      }
+    }
     const catalogEntry = getCatalogEntry(targetEmu)
     const relExe = catalogEntry?.executable || EMULATOR_EXES[targetEmu] || EMULATOR_EXES[emulatorName]
     sourceUrl = sourceUrl || catalogEntry?.source
