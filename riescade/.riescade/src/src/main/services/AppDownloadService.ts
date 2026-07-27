@@ -258,9 +258,6 @@ export class AppDownloadService {
         throw new Error('A verificação de integridade SHA-256 falhou.')
       }
 
-      if (existsSync(destinationPath)) unlinkSync(destinationPath)
-      renameSync(partialPath, destinationPath)
-
       for (const media of authorization.media ?? []) {
         if (!MEDIA_TYPE_SET.has(media.type)) continue
         const mediaFilename = getSafeMediaFilename(media.filename)
@@ -332,6 +329,8 @@ export class AppDownloadService {
         }
       }
 
+      if (existsSync(destinationPath)) unlinkSync(destinationPath)
+      renameSync(partialPath, destinationPath)
       return { path: destinationPath, filename, sha256: actualSha256 }
     } catch (error) {
       stream.destroy()
