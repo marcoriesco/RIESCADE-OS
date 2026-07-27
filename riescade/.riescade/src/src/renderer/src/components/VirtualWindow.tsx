@@ -514,7 +514,7 @@ function VirtualWindow({
           onDoubleClick={handleMaximizeDoubleClick}
           className="h-10 px-4 pr-0 bg-black/40 flex items-center justify-between select-none shrink-0"
         >
-          <div className="flex items-center gap-2 w-full h-full min-w-0 pr-4">
+          <div className={`flex items-center gap-2 w-full h-full min-w-0 ${headerLeft ? "pr-0" : "pr-4"}`}>
             {headerLeft || (
               <div className="flex items-center gap-2 min-w-0 truncate">
                 {IconComponent && <IconComponent className="w-4 h-4 text-accent shrink-0" />}

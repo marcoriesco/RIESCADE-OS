@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useRef, useState, useMemo } from "react"
 import {
   Search, Power, X, Minus, Square, Gamepad2, Monitor,
   Folder, Grid3x3, Wifi, Volume2, Battery, Loader2,
-  MoreHorizontal, Heart, Download, Check, AlertTriangle, Play, Settings, Info, CloudDownload, Music2
+  MoreHorizontal, Menu, Heart, Download, Check, AlertTriangle, Play, Settings, Info, CloudDownload, Music2
 } from "lucide-react";
 import * as Toast from '@radix-ui/react-toast';
 import * as Tooltip from '@radix-ui/react-tooltip';
@@ -915,21 +915,23 @@ export default function App() {
 
     return (
       <div className="relative flex items-center gap-2 w-full min-w-0">
-        <div className="relative flex items-center no-drag shrink-0" onMouseDown={(e) => e.stopPropagation()}>
+        <div className="relative order-2 ml-auto flex items-center no-drag shrink-0" onMouseDown={(e) => e.stopPropagation()}>
           <button 
             onClick={(e) => { 
               e.stopPropagation(); 
               setOpenMenuSystemId(isMenuOpen ? null : systemName); 
             }}
-            className={`text-white/60 hover:text-white transition cursor-pointer flex items-center justify-center p-1 rounded ${isMenuOpen ? "text-white bg-white/10" : ""}`}
+            className={`relative flex h-8 w-10 cursor-pointer items-center justify-center rounded text-white/65 transition hover:bg-white/10 hover:text-white ${isMenuOpen ? "bg-white/10 text-white" : ""}`}
+            title="Menu da plataforma"
           >
-            <MoreHorizontal className="w-4 h-4" />
+            <Menu className="h-[18px] w-[18px]" />
+            <span className="absolute right-[7px] top-[6px] h-1.5 w-1.5 rounded-full border border-[#111] bg-emerald-400 shadow-[0_0_6px_rgba(52,211,153,0.65)]" />
           </button>
           
           {isMenuOpen && (
             <>
               <div className="fixed inset-0 z-40" onClick={() => setOpenMenuSystemId(null)} />
-              <div className="absolute left-0 top-7 w-64 bg-[#0d0d0d]/95 backdrop-blur-md border border-white/10 rounded-xl shadow-2xl p-2 z-50 text-white animate-in fade-in slide-in-from-top-2 duration-150">
+              <div className="absolute right-0 top-9 w-64 bg-[#0d0d0d]/95 backdrop-blur-md border border-white/10 rounded-xl shadow-2xl p-2 z-50 text-white animate-in fade-in slide-in-from-top-2 duration-150">
                 <button 
                   onClick={() => { handleToggleDesktop(); setOpenMenuSystemId(null); }}
                   className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs hover:bg-white/10 text-left transition"
@@ -1039,7 +1041,7 @@ export default function App() {
           )}
         </div>
         
-        <div className="flex items-center gap-2 min-w-0 truncate pr-4">
+        <div className="order-1 flex items-center gap-2 min-w-0 truncate pr-4">
           {SystemIcon && <SystemIcon className="w-4 h-4 text-accent shrink-0" />}
           <span className="text-sm font-bold text-white/95 truncate tracking-wide">
             {system?.fullname || (matchingTool ? matchingTool.name : systemName.toUpperCase())}
