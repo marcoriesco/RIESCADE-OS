@@ -3,11 +3,21 @@ import { createWriteStream, existsSync, mkdirSync, renameSync, unlinkSync } from
 import { basename, join, parse } from 'path'
 import { BrowserWindow, ipcMain } from 'electron'
 import { getRetroBatPath } from '../utils/paths'
+import { SettingsParser } from '../parsers/SettingsParser'
 
 const API_BASE_URL = 'https://www.riescade.com.br'
 const PILOT_PLATFORM = 'snes'
 const MAX_SNES_DOWNLOAD_SIZE = 128 * 1024 * 1024
 const ALLOWED_EXTENSIONS = new Set(['.zip', '.sfc', '.smc'])
+const MEDIA_TYPES = [
+  'cartdridge', 'cover', 'cover3d', 'coverback', 'fanart', 'logo',
+  'manual', 'marquee', 'mix', 'screenshot', 'title', 'video'
+] as const
+const MEDIA_TYPE_SET = new Set<string>(MEDIA_TYPES)
+const ALLOWED_MEDIA_EXTENSIONS = new Set([
+  '.webp', '.png', '.jpg', '.jpeg', '.gif', '.mp4', '.mkv', '.avi', '.pdf'
+])
+const MAX_MEDIA_DOWNLOAD_SIZE = 512 * 1024 * 1024
 
 export interface AppCatalogAsset {
   id: string
@@ -34,6 +44,12 @@ interface AuthorizedDownload {
   }
   downloadUrl: string
   expiresAt: string
+  media?: Array<{
+    type: string
+    filename: string
+    size: number | null
+    downloadUrl: string
+  }>
 }
 
 function assertAccessToken(accessToken: unknown): string {
@@ -52,6 +68,15 @@ function getSafeSnesFilename(filename: string): string {
   return safeName
 }
 
+function getSafeMediaFilename(filename: string): string {
+  const safeName = basename(filename).replace(/[\u0000-\u001f<>:"/\\|?*]/g, '_')
+  const extension = safeName.slice(safeName.lastIndexOf('.')).toLowerCase()
+  if (!safeName || !ALLOWED_MEDIA_EXTENSIONS.has(extension)) {
+    throw new Error('O servidor informou um formato de mídia não permitido.')
+  }
+  return safeName
+}
+
 function assertAllowedDownloadUrl(value: string): URL {
   const url = new URL(value)
   if (url.protocol !== 'https:' || !url.hostname.endsWith('.backblazeb2.com')) {
@@ -66,6 +91,21 @@ async function readApiError(response: Response): Promise<string> {
 }
 
 export class AppDownloadService {
+  private readonly settings = new SettingsParser()
+
+  private getMediaPreferences(): { mediaTypes: string[]; overwrite: boolean } {
+    const enabled = this.settings.getSetting('Downloads.Media.Enabled', 'bool')
+    const mediaTypes = enabled === false
+      ? []
+      : MEDIA_TYPES.filter(type =>
+          this.settings.getSetting(`Downloads.Media.Types.${type}`, 'bool') !== false
+        )
+    return {
+      mediaTypes,
+      overwrite: this.settings.getSetting('Downloads.Media.Overwrite', 'bool') === true
+    }
+  }
+
   async listCatalog(platform: string): Promise<AppCatalogAsset[]> {
     if (platform !== PILOT_PLATFORM) {
       throw new Error(`A plataforma ${platform} ainda não está disponível para download.`)
@@ -113,6 +153,7 @@ export class AppDownloadService {
       throw new Error('Arquivo SNES inválido.')
     }
 
+    const mediaPreferences = this.getMediaPreferences()
     const authorizationResponse = await fetch(
       `${API_BASE_URL}/api/app/downloads/${encodeURIComponent(assetId)}`,
       {
@@ -122,7 +163,10 @@ export class AppDownloadService {
           'Content-Type': 'application/json',
           'User-Agent': 'RIESCADE-App'
         },
-        body: JSON.stringify({ clientVersion: appVersion }),
+        body: JSON.stringify({
+          clientVersion: appVersion,
+          mediaTypes: mediaPreferences.mediaTypes
+        }),
         signal: AbortSignal.timeout(15_000)
       }
     )
@@ -216,6 +260,78 @@ export class AppDownloadService {
 
       if (existsSync(destinationPath)) unlinkSync(destinationPath)
       renameSync(partialPath, destinationPath)
+
+      for (const media of authorization.media ?? []) {
+        if (!MEDIA_TYPE_SET.has(media.type)) continue
+        const mediaFilename = getSafeMediaFilename(media.filename)
+        const mediaDirectory = join(romDirectory, 'media', media.type)
+        mkdirSync(mediaDirectory, { recursive: true })
+        const mediaDestination = join(mediaDirectory, mediaFilename)
+        if (existsSync(mediaDestination) && !mediaPreferences.overwrite) continue
+
+        const mediaUrl = assertAllowedDownloadUrl(media.downloadUrl)
+        const mediaResponse = await fetch(mediaUrl, {
+          headers: { 'User-Agent': 'RIESCADE-App' },
+          signal: AbortSignal.timeout(30 * 60_000)
+        })
+        if (!mediaResponse.ok || !mediaResponse.body) {
+          throw new Error(`Falha no download da mídia ${media.type} (${mediaResponse.status}).`)
+        }
+
+        const mediaContentLength = Number(mediaResponse.headers.get('content-length') || 0)
+        if (
+          mediaContentLength > MAX_MEDIA_DOWNLOAD_SIZE ||
+          (media.size !== null && mediaContentLength > 0 && mediaContentLength !== media.size)
+        ) {
+          throw new Error(`O tamanho da mídia ${media.type} não corresponde ao catálogo.`)
+        }
+
+        const mediaPartial = `${mediaDestination}.part`
+        if (existsSync(mediaPartial)) unlinkSync(mediaPartial)
+        const mediaStream = createWriteStream(mediaPartial, { flags: 'wx' })
+        let mediaDownloadedBytes = 0
+        try {
+          for await (const chunk of mediaResponse.body as any) {
+            const buffer = Buffer.from(chunk)
+            mediaDownloadedBytes += buffer.length
+            if (mediaDownloadedBytes > MAX_MEDIA_DOWNLOAD_SIZE) {
+              throw new Error(`A mídia ${media.type} excedeu o limite permitido.`)
+            }
+            if (!mediaStream.write(buffer)) {
+              await new Promise<void>(resolve => mediaStream.once('drain', resolve))
+            }
+
+            const mediaTotal = media.size || mediaContentLength
+            window?.webContents.send('app-download-progress', {
+              assetId,
+              platform: PILOT_PLATFORM,
+              title: `${authorization.asset.title} · ${media.type}`,
+              filename: mediaFilename,
+              downloadedBytes: mediaDownloadedBytes,
+              totalBytes: mediaTotal,
+              percent: mediaTotal > 0
+                ? Math.round((mediaDownloadedBytes / mediaTotal) * 100)
+                : 0
+            })
+          }
+
+          mediaStream.end()
+          await new Promise<void>((resolve, reject) => {
+            mediaStream.once('finish', resolve)
+            mediaStream.once('error', reject)
+          })
+          if (media.size !== null && mediaDownloadedBytes !== media.size) {
+            throw new Error(`A mídia ${media.type} foi baixada incompleta.`)
+          }
+          if (existsSync(mediaDestination)) unlinkSync(mediaDestination)
+          renameSync(mediaPartial, mediaDestination)
+        } catch (error) {
+          mediaStream.destroy()
+          if (existsSync(mediaPartial)) unlinkSync(mediaPartial)
+          throw error
+        }
+      }
+
       return { path: destinationPath, filename, sha256: actualSha256 }
     } catch (error) {
       stream.destroy()
