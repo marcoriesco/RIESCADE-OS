@@ -70,4 +70,8 @@ export interface Game {
   scrapName?: string
   scrapDate?: string
   gameCount?: number
+  downloadAssetId?: string
+  downloadName?: string
+  downloadSize?: number | null
+  isRemoteMissing?: boolean
 }

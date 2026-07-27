@@ -446,6 +446,11 @@ export default function App() {
   const [installerGame, setInstallerGame] = useState<Game | null>(null);
   const [installerProgress, setInstallerProgress] = useState(0);
   const [installerError, setInstallerError] = useState('');
+  const [appDownloadProgress, setAppDownloadProgress] = useState<{
+    title: string;
+    filename: string;
+    percent: number;
+  } | null>(null);
   const [isUpdatePrompt, setIsUpdatePrompt] = useState(false);
   type ToastType = "favorite" | "controller" | "success" | "error" | "info" | "collection" | "scraper" | "volume" | "music";
   const [toasts, setToasts] = useState<{ id: string; title: string; description: string; type?: ToastType; favorite?: boolean; open: boolean }[]>([]);
@@ -486,6 +491,25 @@ export default function App() {
     };
     window.addEventListener('show-toast', handleShowToast);
     return () => window.removeEventListener('show-toast', handleShowToast);
+  }, []);
+
+  useEffect(() => {
+    let hideTimer: number | null = null;
+    const unsubscribe = window.api.on("app-download-progress", (_event, data: any) => {
+      setAppDownloadProgress({
+        title: data?.title || data?.filename || "Jogo",
+        filename: data?.filename || "",
+        percent: Math.max(0, Math.min(100, Number(data?.percent) || 0))
+      });
+      if (Number(data?.percent) >= 100) {
+        if (hideTimer !== null) window.clearTimeout(hideTimer);
+        hideTimer = window.setTimeout(() => setAppDownloadProgress(null), 3500);
+      }
+    });
+    return () => {
+      unsubscribe();
+      if (hideTimer !== null) window.clearTimeout(hideTimer);
+    };
   }, []);
 
   const renderToasts = () => (
@@ -2040,6 +2064,24 @@ export default function App() {
       {showFps && (
         <div className="fixed top-3 right-3 z-[10001] pointer-events-none rounded-md border border-white/10 bg-black/70 px-2.5 py-1 font-mono text-xs font-bold text-emerald-400 shadow-lg backdrop-blur-md">
           FPS {fps}
+        </div>
+      )}
+
+      {appDownloadProgress && (
+        <div className="fixed top-10 left-1/2 z-[10020] w-[min(520px,calc(100vw-32px))] -translate-x-1/2 rounded-xl border border-fuchsia-400/25 bg-[#10121a]/95 p-4 shadow-2xl backdrop-blur-xl">
+          <div className="mb-2 flex items-center justify-between gap-4 text-white">
+            <div className="min-w-0">
+              <div className="truncate text-sm font-bold">{appDownloadProgress.title}</div>
+              <div className="truncate text-[10px] text-white/45">{appDownloadProgress.filename}</div>
+            </div>
+            <span className="text-sm font-bold text-fuchsia-300">{appDownloadProgress.percent}%</span>
+          </div>
+          <div className="h-2 overflow-hidden rounded-full bg-white/10">
+            <div
+              className="h-full rounded-full bg-gradient-to-r from-fuchsia-600 to-purple-400 transition-[width] duration-200"
+              style={{ width: `${appDownloadProgress.percent}%` }}
+            />
+          </div>
         </div>
       )}
 

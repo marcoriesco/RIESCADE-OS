@@ -13,6 +13,251 @@ import { SUPPORTED_LANGUAGES, useI18n } from "../i18n";
 const DatabaseApp = React.lazy(() => import("./DatabaseApp"));
 const SettingsControls = React.lazy(() => import("./settings/SettingsControls"));
 
+type AppSession = {
+  expiresAt: string;
+  user: { id: string; email?: string; name?: string | null };
+};
+
+type SnesCatalogAsset = {
+  id: string;
+  title: string;
+  download_name: string;
+  file_size: number | null;
+  sha256: string | null;
+};
+
+function formatBytes(value: number | null): string {
+  if (value === null) return "Tamanho não informado";
+  return `${(value / 1024 / 1024).toFixed(2)} MB`;
+}
+
+function DownloadsApp() {
+  const [session, setSession] = useState<AppSession | null>(null);
+  const [assets, setAssets] = useState<SnesCatalogAsset[]>([]);
+  const [busy, setBusy] = useState(true);
+  const [downloading, setDownloading] = useState<string | null>(null);
+  const [progress, setProgress] = useState<Record<string, number>>({});
+  const [message, setMessage] = useState("");
+
+  const loadCatalog = useCallback(async () => {
+    setBusy(true);
+    setMessage("");
+    try {
+      const currentSession = await window.api.getAppAuthSession();
+      setSession(currentSession);
+      if (currentSession) setAssets(await window.api.listSnesDownloadCatalog());
+      else setAssets([]);
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : String(error));
+    } finally {
+      setBusy(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    void loadCatalog();
+    const unsubscribeAuth = window.api.on("app-auth-changed", () => void loadCatalog());
+    const unsubscribeError = window.api.on("app-auth-error", (_event, error: string) => {
+      setMessage(error);
+      setBusy(false);
+    });
+    const unsubscribeProgress = window.api.on("app-download-progress", (_event, data: any) => {
+      if (typeof data?.assetId === "string" && typeof data?.percent === "number") {
+        setProgress(current => ({ ...current, [data.assetId]: data.percent }));
+      }
+    });
+    return () => {
+      unsubscribeAuth();
+      unsubscribeError();
+      unsubscribeProgress();
+    };
+  }, [loadCatalog]);
+
+  const download = async (asset: SnesCatalogAsset) => {
+    setDownloading(asset.id);
+    setMessage("");
+    try {
+      const result = await window.api.downloadSnesAsset(asset.id);
+      setProgress(current => ({ ...current, [asset.id]: 100 }));
+      setMessage(`${result.filename} foi instalado na pasta SNES.`);
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : String(error));
+    } finally {
+      setDownloading(null);
+    }
+  };
+
+  if (busy) {
+    return (
+      <div className="h-full flex items-center justify-center text-white/70">
+        <Loader2 className="w-6 h-6 animate-spin mr-3" /> Carregando downloads...
+      </div>
+    );
+  }
+
+  if (!session) {
+    return (
+      <div className="h-full flex items-center justify-center p-8 text-white">
+        <div className="max-w-md text-center bg-white/5 border border-white/10 rounded-2xl p-8">
+          <CloudDownload className="w-12 h-12 mx-auto mb-4 text-fuchsia-400" />
+          <h2 className="text-xl font-bold mb-2">Downloads RIESCADE</h2>
+          <p className="text-sm text-white/60 mb-6">
+            O login será aberto no site riescade.com.br. Ao concluir, você voltará automaticamente ao aplicativo.
+          </p>
+          <button
+            onClick={() => {
+              setMessage("Conclua o login no navegador...");
+              window.api.loginAppWithGoogle().catch(error => setMessage(String(error)));
+            }}
+            className="w-full rounded-lg bg-fuchsia-600 hover:bg-fuchsia-500 px-4 py-3 font-semibold transition"
+          >
+            Entrar com Google
+          </button>
+          {message && <p className="mt-4 text-xs text-rose-300">{message}</p>}
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <ScrollArea className="h-full p-5 text-white">
+      <div className="flex items-center justify-between mb-5">
+        <div>
+          <h2 className="text-xl font-bold">Super Nintendo</h2>
+          <p className="text-xs text-white/50">{session.user.email ?? session.user.name ?? "Conta conectada"}</p>
+        </div>
+        <button
+          onClick={async () => {
+            await window.api.logoutApp();
+            setSession(null);
+            setAssets([]);
+          }}
+          className="text-xs px-3 py-2 rounded-lg border border-white/10 hover:bg-white/5"
+        >
+          Sair
+        </button>
+      </div>
+      {message && <div className="mb-4 rounded-lg border border-white/10 bg-white/5 p-3 text-sm">{message}</div>}
+      <div className="space-y-2">
+        {assets.map(asset => (
+          <div key={asset.id} className="flex items-center gap-4 rounded-xl border border-white/10 bg-white/5 p-4">
+            <div className="rounded-lg bg-fuchsia-500/15 p-3">
+              <Gamepad2 className="w-5 h-5 text-fuchsia-300" />
+            </div>
+            <div className="min-w-0 flex-1">
+              <div className="truncate font-semibold">{asset.title}</div>
+              <div className="text-xs text-white/45">{formatBytes(asset.file_size)}</div>
+            </div>
+            <button
+              disabled={downloading !== null}
+              onClick={() => void download(asset)}
+              className="min-w-28 rounded-lg bg-fuchsia-600 px-4 py-2 text-sm font-semibold hover:bg-fuchsia-500 disabled:opacity-50"
+            >
+              {downloading === asset.id ? `${progress[asset.id] ?? 0}%` : "Baixar"}
+            </button>
+          </div>
+        ))}
+      </div>
+    </ScrollArea>
+  );
+}
+
+function AccountSettings() {
+  const [session, setSession] = useState<AppSession | null>(null);
+  const [busy, setBusy] = useState(true);
+  const [message, setMessage] = useState("");
+
+  const refresh = useCallback(async () => {
+    setSession(await window.api.getAppAuthSession());
+    setBusy(false);
+  }, []);
+
+  useEffect(() => {
+    void refresh();
+    const unsubscribeAuth = window.api.on("app-auth-changed", (_event, nextSession) => {
+      setSession(nextSession);
+      setBusy(false);
+      setMessage("");
+    });
+    const unsubscribeError = window.api.on("app-auth-error", (_event, error: string) => {
+      setMessage(error);
+      setBusy(false);
+    });
+    return () => {
+      unsubscribeAuth();
+      unsubscribeError();
+    };
+  }, [refresh]);
+
+  return (
+    <ScrollArea className="flex-1 min-h-0">
+      <div className="settings-content">
+        <div className="mb-8">
+          <h2 className="settings-page-title">Minha conta</h2>
+          <p className="settings-page-description">
+            Use sua conta do riescade.com.br para acessar os downloads no aplicativo.
+          </p>
+        </div>
+        {busy ? (
+          <div className="flex items-center gap-3 text-white/60">
+            <Loader2 className="h-5 w-5 animate-spin" /> Verificando sua conta...
+          </div>
+        ) : session ? (
+          <div className="space-y-5">
+            <div>
+              <h3 className="settings-section-title mb-3">Conta conectada</h3>
+              <div className="rounded-lg border border-emerald-400/15 bg-emerald-400/[0.055] px-4 py-4">
+                <div className="flex items-center gap-3">
+                  <div className="h-2 w-2 rounded-full bg-emerald-500" />
+                  <div>
+                    <div className="text-sm font-semibold text-white/90">
+                      {session.user.name || "RIESCADE Player"}
+                    </div>
+                    <div className="text-xs text-white/45">{session.user.email}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <button
+              onClick={async () => {
+                setBusy(true);
+                await window.api.logoutApp();
+                setSession(null);
+                setBusy(false);
+              }}
+              className="rounded-lg border border-white/10 bg-white/5 px-4 py-2.5 text-xs font-semibold text-white/70 hover:bg-white/10"
+            >
+              Sair da conta
+            </button>
+          </div>
+        ) : (
+          <div className="max-w-lg rounded-xl border border-white/10 bg-white/[0.035] p-5">
+            <div className="mb-4 flex items-start gap-3">
+              <User className="h-6 w-6 text-accent" />
+              <div>
+                <h3 className="text-sm font-bold text-white">Conectar conta</h3>
+                <p className="mt-1 text-xs leading-relaxed text-white/50">
+                  O site será aberto para o login Google e retornará automaticamente ao RIESCADE.
+                </p>
+              </div>
+            </div>
+            <button
+              onClick={async () => {
+                setMessage("Conclua o login no navegador...");
+                await window.api.loginAppWithGoogle();
+              }}
+              className="rounded-lg bg-accent px-4 py-2.5 text-xs font-bold text-white hover:brightness-110"
+            >
+              Entrar com Google
+            </button>
+            {message && <p className="mt-3 text-xs text-amber-200/80">{message}</p>}
+          </div>
+        )}
+      </div>
+    </ScrollArea>
+  );
+}
+
 const WIZARD_STEPS = [
   { key: 'a', label: 'Botão A / Confirmação' },
   { key: 'b', label: 'Botão B / Voltar' },
@@ -824,38 +1069,7 @@ export default function ToolAppContent({
           {/* ===== TAB: CONTA (Account - Static) ===== */}
           {activeSettingsTab === "conta" && (
             <div className="flex flex-col h-full overflow-hidden">
-              <ScrollArea className="flex-1 min-h-0">
-                <div className="settings-content">
-                  <div className="mb-8">
-                    <h2 className="settings-page-title">{t("account")}</h2>
-                    <p className="settings-page-description">{t("accountDescription")}</p>
-                  </div>
-                  <div className="mb-8">
-                    <h3 className="settings-section-title mb-3">{t("accountInfo")}</h3>
-                    <div>
-                      {[
-                        { label: t("username"), value: "RIESCADE Player" },
-                        { label: "E-mail", value: "**************@gmail.com" },
-                      ].map((field, i) => (
-                        <div key={i} className="settings-row">
-                          <div className="flex flex-col">
-                            <span className="text-xs text-white/40 font-medium">{field.label}</span>
-                            <span className="text-sm text-white/90">{field.value}</span>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div>
-                    <h3 className="settings-section-title mb-3">{t("accountStatus")}</h3>
-                    <div className="flex items-center gap-3 rounded-lg border border-emerald-400/15 bg-emerald-400/[0.055] px-4 py-4">
-                      <div className="w-2 h-2 rounded-full bg-emerald-500 shrink-0" />
-                      <span className="text-sm text-white/70">{t("accountOk")}</span>
-                    </div>
-                  </div>
-                </div>
-              </ScrollArea>
+              <AccountSettings />
             </div>
           )}
 
@@ -1880,6 +2094,10 @@ export default function ToolAppContent({
 
   if (appId === "database") {
     return <DatabaseApp />;
+  }
+
+  if (appId === "downloads") {
+    return <DownloadsApp />;
   }
 
   return null;

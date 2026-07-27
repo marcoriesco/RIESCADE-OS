@@ -15,6 +15,13 @@ import { EmulatorSchemaService } from './services/EmulatorSchemaService'
 import { RomsWatcherService } from './services/RomsWatcherService'
 import { InputDeviceService } from './services/InputDeviceService'
 import { registerUpdaterIpc } from './services/UpdaterService'
+import { registerAppDownloadIpc } from './services/AppDownloadService'
+import {
+  AppAuthService,
+  findProtocolUrl,
+  registerAppAuthIpc,
+  registerRiescadeProtocol
+} from './services/AppAuthService'
 import { Game, System } from '../shared/types'
 import { ControllerManager } from './services/ControllerManager'
 import { watch, FSWatcher, readFileSync, existsSync, writeFileSync, mkdirSync, statSync, promises as fsPromises } from 'fs'
@@ -28,6 +35,28 @@ const settingsParser = new SettingsParser()
 const systemService = new SystemService(libraryService)
 const scraperService = new ScraperService(libraryService)
 const emulatorSchemaService = new EmulatorSchemaService()
+const appAuthService = new AppAuthService()
+registerRiescadeProtocol()
+
+const hasSingleInstanceLock = app.requestSingleInstanceLock()
+if (!hasSingleInstanceLock) {
+  app.quit()
+} else {
+  app.on('second-instance', (_event, commandLine) => {
+    const protocolUrl = findProtocolUrl(commandLine)
+    if (protocolUrl) void appAuthService.handleProtocolUrl(protocolUrl, mainWindow)
+    if (mainWindow) {
+      if (mainWindow.isMinimized()) mainWindow.restore()
+      mainWindow.show()
+      mainWindow.focus()
+    }
+  })
+}
+
+app.on('open-url', (event, url) => {
+  event.preventDefault()
+  void appAuthService.handleProtocolUrl(url, mainWindow)
+})
 
 const originalConsole = {
   log: console.log.bind(console),
@@ -567,6 +596,7 @@ function createWindow(): void {
 
 
 app.whenReady().then(() => {
+  appAuthService.loadStoredSession()
   const handleDisplayChange = () => {
     applyConfiguredDisplayPreference()
     broadcastToWindows('display-layout-changed', getDisplayLayout())
@@ -599,6 +629,17 @@ app.whenReady().then(() => {
   })
 
   registerUpdaterIpc(() => mainWindow)
+  registerAppAuthIpc(appAuthService)
+  registerAppDownloadIpc(
+    () => mainWindow,
+    app.getVersion(),
+    () => appAuthService.getAccessToken()
+  )
+
+  const initialProtocolUrl = findProtocolUrl(process.argv)
+  if (initialProtocolUrl) {
+    void appAuthService.handleProtocolUrl(initialProtocolUrl, mainWindow)
+  }
 
   ipcMain.on('open-app-window', (_, type: 'system' | 'tool', id: string) => {
     if (mainWindow && !mainWindow.isDestroyed()) {

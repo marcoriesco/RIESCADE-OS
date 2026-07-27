@@ -73,6 +73,30 @@ declare global {
       getVersion: () => Promise<{ app: string; es: string }>
       checkForUpdates: () => Promise<any>
       downloadAndInstallUpdate: () => Promise<boolean>
+      getAppAuthSession: () => Promise<{
+        expiresAt: string
+        user: { id: string; email?: string; name?: string | null }
+      } | null>
+      loginAppWithGoogle: () => Promise<void>
+      logoutApp: () => Promise<void>
+      listSnesDownloadCatalog: () => Promise<Array<{
+        id: string
+        title: string
+        download_name: string
+        file_size: number | null
+        sha256: string | null
+        installed: boolean
+        rom_path: string
+        cover: string | null
+        cover3d: string | null
+        fanart: string | null
+        logo: string | null
+      }>>
+      downloadSnesAsset: (assetId: string) => Promise<{
+        path: string
+        filename: string
+        sha256: string
+      }>
       getOverlayPath: (name: string) => Promise<string>
       getCollectionsForGame: (systemName: string, gamePath: string) => Promise<string[]>
       toggleGameInCollection: (collectionName: string, systemName: string, gamePath: string, action: 'add' | 'remove') => Promise<boolean>

@@ -59,6 +59,14 @@
   "build": {
     "appId": "com.riescade.frontend",
     "productName": "RIESCADE",
+    "protocols": [
+      {
+        "name": "RIESCADE Login",
+        "schemes": [
+          "riescade"
+        ]
+      }
+    ],
     "directories": {
       "output": "dist"
     },
