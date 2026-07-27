@@ -1540,7 +1540,11 @@ export default function App() {
         setInstallerSystem(targetSystem);
         setInstallerGame(game);
         setInstallerStatus('error');
-        setInstallerError(`O emulador ${emulatorName.toUpperCase()} é necessário para jogar, mas não está instalado no seu sistema e não possui link de download automático cadastrado.`);
+        setInstallerError(
+          status.automaticInstallDisabled
+            ? `O emulador ${emulatorName.toUpperCase()} é necessário para jogar. Ative a instalação de emuladores em Configurações > Downloads > Emuladores.`
+            : `O emulador ${emulatorName.toUpperCase()} é necessário para jogar, mas não está instalado no seu sistema e não possui link de download automático cadastrado.`
+        );
         setInstallerOpen(true);
         return;
       }

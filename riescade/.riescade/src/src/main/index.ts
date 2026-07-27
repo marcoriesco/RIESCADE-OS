@@ -839,11 +839,20 @@ app.whenReady().then(() => {
     const systemObj = systems.find(s => s.name === systemName)
     const emulatorObj = systemObj?.emulators?.find(e => e.name === emulatorName)
     const sourceUrl = emulatorObj?.source
-    return EmulatorInstaller.checkStatus(
+    const status = await EmulatorInstaller.checkStatus(
       emulatorName,
       sourceUrl,
       appAuthService.getSession() ? appAuthService.getAccessToken() : undefined
     )
+    const installMissing = settingsParser.getSetting('Downloads.Emulators.InstallMissing', 'bool') !== false
+    const checkUpdates = settingsParser.getSetting('Downloads.Emulators.CheckUpdates', 'bool') !== false
+
+    return {
+      ...status,
+      sourceUrl: status.installed || installMissing ? status.sourceUrl : undefined,
+      updateAvailable: checkUpdates ? status.updateAvailable : false,
+      automaticInstallDisabled: !status.installed && !installMissing
+    }
   })
 
   ipcMain.handle('download-install-emulator', async (event, emulatorName: string, systemName: string) => {

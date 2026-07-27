@@ -668,6 +668,7 @@ export default function ToolAppContent({
 }) {
   const { t, setLanguage } = useI18n();
   const [activeSettingsTab, setActiveSettingsTab] = useState("conta");
+  const [activeDownloadsTab, setActiveDownloadsTab] = useState<"games" | "emulators">("games");
   const [activeEmuSubmenu, setActiveEmuSubmenu] = useState<string>("global");
   const [emuMenuOpen, setEmuMenuOpen] = useState(false);
   const [settingsNavSearch, setSettingsNavSearch] = useState("");
@@ -845,6 +846,8 @@ export default function ToolAppContent({
         name === "RIESCADE.ShowDesktopIcons" ||
         name === "RIESCADE.DynamicBackground" ||
         name === "Downloads.Media.Enabled" ||
+        name === "Downloads.Emulators.InstallMissing" ||
+        name === "Downloads.Emulators.CheckUpdates" ||
         name.startsWith("Downloads.Media.Types.")
       ) ? "true" : "false";
       const v = getSetting(name, defaultValue);
@@ -1472,37 +1475,96 @@ export default function ToolAppContent({
                   <div className="mb-8">
                     <h2 className="settings-page-title">Downloads</h2>
                     <p className="settings-page-description">
-                      Escolha quais arquivos de mídia serão instalados junto com cada jogo.
+                      Configure o download de games, mídias e emuladores.
                     </p>
                   </div>
 
-                  <SettingGroup label="Comportamento" />
-                  <SettingToggle
-                    label="Baixar mídias junto com a ROM"
-                    name="Downloads.Media.Enabled"
-                    desc="Quando ativado, instala automaticamente as mídias selecionadas após baixar o jogo."
-                    ctx={ctx}
-                  />
-                  <SettingToggle
-                    label="Substituir mídias existentes"
-                    name="Downloads.Media.Overwrite"
-                    desc="Atualiza arquivos de mídia que já estiverem presentes na biblioteca local."
-                    ctx={ctx}
-                  />
+                  <div className="mb-6 flex items-start gap-3 rounded-xl border border-amber-400/20 bg-amber-400/10 p-4">
+                    <Shield className="mt-0.5 h-5 w-5 shrink-0 text-amber-300" />
+                    <div>
+                      <p className="text-sm font-semibold text-amber-100">Recursos exclusivos para assinantes</p>
+                      <p className="mt-1 text-xs leading-relaxed text-amber-100/65">
+                        O download de games, mídias e emuladores, assim como as atualizações, exige uma assinatura ativa.
+                      </p>
+                    </div>
+                  </div>
 
-                  <SettingGroup label="Tipos de mídia" />
-                  <SettingToggle label="Cartucho" name="Downloads.Media.Types.cartdridge" desc="Pasta media/cartdridge." ctx={ctx} />
-                  <SettingToggle label="Capa 2D" name="Downloads.Media.Types.cover" desc="Pasta media/cover." ctx={ctx} />
-                  <SettingToggle label="Capa 3D" name="Downloads.Media.Types.cover3d" desc="Pasta media/cover3d." ctx={ctx} />
-                  <SettingToggle label="Verso da capa" name="Downloads.Media.Types.coverback" desc="Pasta media/coverback." ctx={ctx} />
-                  <SettingToggle label="Fanart" name="Downloads.Media.Types.fanart" desc="Pasta media/fanart." ctx={ctx} />
-                  <SettingToggle label="Logo" name="Downloads.Media.Types.logo" desc="Pasta media/logo." ctx={ctx} />
-                  <SettingToggle label="Manual" name="Downloads.Media.Types.manual" desc="Pasta media/manual." ctx={ctx} />
-                  <SettingToggle label="Marquee" name="Downloads.Media.Types.marquee" desc="Pasta media/marquee." ctx={ctx} />
-                  <SettingToggle label="Mix" name="Downloads.Media.Types.mix" desc="Pasta media/mix." ctx={ctx} />
-                  <SettingToggle label="Captura de tela" name="Downloads.Media.Types.screenshot" desc="Pasta media/screenshot." ctx={ctx} />
-                  <SettingToggle label="Tela de título" name="Downloads.Media.Types.title" desc="Pasta media/title." ctx={ctx} />
-                  <SettingToggle label="Vídeo" name="Downloads.Media.Types.video" desc="Pasta media/video." ctx={ctx} />
+                  <div className="mb-7 flex w-fit gap-1 rounded-xl border border-white/10 bg-black/20 p-1">
+                    <button
+                      type="button"
+                      onClick={() => setActiveDownloadsTab("games")}
+                      className={`flex items-center gap-2 rounded-lg px-4 py-2 text-xs font-semibold transition-colors ${
+                        activeDownloadsTab === "games"
+                          ? "bg-white/10 text-white"
+                          : "text-white/45 hover:bg-white/5 hover:text-white/75"
+                      }`}
+                    >
+                      <Gamepad2 className="h-4 w-4" />
+                      Games
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setActiveDownloadsTab("emulators")}
+                      className={`flex items-center gap-2 rounded-lg px-4 py-2 text-xs font-semibold transition-colors ${
+                        activeDownloadsTab === "emulators"
+                          ? "bg-white/10 text-white"
+                          : "text-white/45 hover:bg-white/5 hover:text-white/75"
+                      }`}
+                    >
+                      <Cpu className="h-4 w-4" />
+                      Emuladores
+                    </button>
+                  </div>
+
+                  {activeDownloadsTab === "games" && (
+                    <>
+                      <SettingGroup label="Comportamento" />
+                      <SettingToggle
+                        label="Baixar mídias junto com a ROM"
+                        name="Downloads.Media.Enabled"
+                        desc="Quando ativado, instala automaticamente as mídias selecionadas após baixar o jogo."
+                        ctx={ctx}
+                      />
+                      <SettingToggle
+                        label="Substituir mídias existentes"
+                        name="Downloads.Media.Overwrite"
+                        desc="Atualiza arquivos de mídia que já estiverem presentes na biblioteca local."
+                        ctx={ctx}
+                      />
+
+                      <SettingGroup label="Tipos de mídia" />
+                      <SettingToggle label="Cartucho" name="Downloads.Media.Types.cartdridge" desc="Pasta media/cartdridge." ctx={ctx} />
+                      <SettingToggle label="Capa 2D" name="Downloads.Media.Types.cover" desc="Pasta media/cover." ctx={ctx} />
+                      <SettingToggle label="Capa 3D" name="Downloads.Media.Types.cover3d" desc="Pasta media/cover3d." ctx={ctx} />
+                      <SettingToggle label="Verso da capa" name="Downloads.Media.Types.coverback" desc="Pasta media/coverback." ctx={ctx} />
+                      <SettingToggle label="Fanart" name="Downloads.Media.Types.fanart" desc="Pasta media/fanart." ctx={ctx} />
+                      <SettingToggle label="Logo" name="Downloads.Media.Types.logo" desc="Pasta media/logo." ctx={ctx} />
+                      <SettingToggle label="Manual" name="Downloads.Media.Types.manual" desc="Pasta media/manual." ctx={ctx} />
+                      <SettingToggle label="Marquee" name="Downloads.Media.Types.marquee" desc="Pasta media/marquee." ctx={ctx} />
+                      <SettingToggle label="Mix" name="Downloads.Media.Types.mix" desc="Pasta media/mix." ctx={ctx} />
+                      <SettingToggle label="Captura de tela" name="Downloads.Media.Types.screenshot" desc="Pasta media/screenshot." ctx={ctx} />
+                      <SettingToggle label="Tela de título" name="Downloads.Media.Types.title" desc="Pasta media/title." ctx={ctx} />
+                      <SettingToggle label="Vídeo" name="Downloads.Media.Types.video" desc="Pasta media/video." ctx={ctx} />
+                    </>
+                  )}
+
+                  {activeDownloadsTab === "emulators" && (
+                    <>
+                      <SettingGroup label="Instalação e atualizações" />
+                      <SettingToggle
+                        label="Instalar emuladores ausentes pelo RIESCADE"
+                        name="Downloads.Emulators.InstallMissing"
+                        desc="Oferece a instalação quando um jogo precisar de um emulador que ainda não está instalado."
+                        ctx={ctx}
+                      />
+                      <SettingToggle
+                        label="Verificar atualizações antes de jogar"
+                        name="Downloads.Emulators.CheckUpdates"
+                        desc="Consulta a versão disponível e oferece a atualização do emulador antes de abrir o jogo."
+                        ctx={ctx}
+                      />
+                    </>
+                  )}
                 </div>
               </ScrollArea>
             </div>
