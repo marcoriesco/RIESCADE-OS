@@ -350,7 +350,14 @@ export class DatabaseService {
     const db = this.ensureOpen()
 
     // System not in DB → needs first sync
-    const row = db.prepare('SELECT folder_mtime, file_count FROM systems WHERE name = ?').get(systemName) as any
+    const row = db.prepare(`
+      SELECT
+        folder_mtime,
+        file_count,
+        (SELECT COUNT(*) FROM games WHERE system = systems.name) AS game_count
+      FROM systems
+      WHERE name = ?
+    `).get(systemName) as any
     if (!row) return true
 
     // Folder doesn't exist → skip (will be filtered by SystemsParser)
@@ -359,7 +366,12 @@ export class DatabaseService {
     try {
       const currentMtime = statSync(systemPath).mtimeMs
       const currentFileCount = readdirSync(systemPath).length
-      return currentMtime !== (row.folder_mtime || 0) || currentFileCount !== (row.file_count || 0)
+      const hasStaleGamesInEmptyFolder = currentFileCount === 0 && row.game_count > 0
+      return (
+        currentMtime !== (row.folder_mtime || 0) ||
+        currentFileCount !== (row.file_count || 0) ||
+        hasStaleGamesInEmptyFolder
+      )
     } catch {
       return true
     }
@@ -462,13 +474,11 @@ export class DatabaseService {
           mergedGames.push(pg)
         }
       }
-    } else {
-      // No physical files found, use XML or existing DB games
-      if (!isIndexed) {
-        xmlGamesMap.forEach(g => mergedGames.push(g))
-      } else {
-        existingGamesMap.forEach(g => mergedGames.push(g))
-      }
+    } else if (!isIndexed) {
+      // A newly indexed system may still receive metadata from a legacy import.
+      // For an existing system, an available but empty directory is authoritative:
+      // stale database rows must be removed instead of resurrected.
+      xmlGamesMap.forEach(g => mergedGames.push(g))
     }
 
     // 8. Store in DB inside a transaction

@@ -100,10 +100,21 @@ export class RomsWatcherService {
       this.queueSystemSync(systemName)
     }
 
+    const handleDirectoryChange = (directoryPath: string) => {
+      const relativePath = directoryPath
+        .substring(romsPath.length)
+        .replace(/\\/g, '/')
+        .replace(/^\//, '')
+      const systemName = relativePath.split('/')[0]
+      if (systemName) this.queueSystemSync(systemName)
+    }
+
     this.watcher
       .on('add', handleChange)
       .on('change', handleChange)
       .on('unlink', handleChange)
+      .on('addDir', handleDirectoryChange)
+      .on('unlinkDir', handleDirectoryChange)
   }
 
   public stop(): void {

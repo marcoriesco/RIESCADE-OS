@@ -308,6 +308,12 @@ export class LibraryService {
 
       if (!needsSync) {
         const syncMetadata = dbService.getAllSystemsSyncMetadata()
+        const indexedGameCounts = new Map(
+          dbService.getSystemSyncInfo().map((system) => [
+            system.name.toLowerCase(),
+            system.gameCount
+          ])
+        )
         for (const sys of syncMetadata) {
           if (!sys.path || sys.path.startsWith('virtual://') || sys.name === 'collections') continue
           
@@ -334,9 +340,12 @@ export class LibraryService {
 
           const mtimeMatches = currentMtime === sys.folder_mtime
           const fileCountMatches = currentFileCount === sys.file_count
+          const hasStaleGamesInEmptyFolder =
+            currentFileCount === 0 &&
+            (indexedGameCounts.get(sys.name.toLowerCase()) ?? 0) > 0
 
-          if (!mtimeMatches || !fileCountMatches) {
-            console.log(`[SyncCheck] System '${sys.name}' changed: mtime matches: ${mtimeMatches} (${sys.folder_mtime} vs ${currentMtime}), fileCount matches: ${fileCountMatches} (${sys.file_count} vs ${currentFileCount})`)
+          if (!mtimeMatches || !fileCountMatches || hasStaleGamesInEmptyFolder) {
+            console.log(`[SyncCheck] System '${sys.name}' changed: mtime matches: ${mtimeMatches} (${sys.folder_mtime} vs ${currentMtime}), fileCount matches: ${fileCountMatches} (${sys.file_count} vs ${currentFileCount}), stale games in empty folder: ${hasStaleGamesInEmptyFolder}`)
             needsSync = true
             changedSystemsCount++
           }
