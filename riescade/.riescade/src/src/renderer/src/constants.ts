@@ -13,4 +13,3 @@ export const TOOL_APPS = [
 export const getSystemTheme = (sysName: string) => {
   return { icon: Gamepad2, color: "from-indigo-500 to-violet-600", bg: "radial-gradient(1200px at 50% 50%, #222222ff 0%, #030303ff 100%)" };
 };
-

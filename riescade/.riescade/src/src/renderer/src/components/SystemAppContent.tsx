@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState, useMemo, useCallback } from "react";
-import { Gamepad2, Heart, Loader2, Star, Play, ChevronRight, Maximize2, Minimize2, X, Search, Folder, ChevronLeft, HardDrive, ChevronDown, Check, MoreHorizontal, RefreshCw, BookOpen, Settings, Edit3, Save, CloudDownload } from "lucide-react";
+import { Gamepad2, Heart, Loader2, Star, Play, ChevronRight, Maximize2, Minimize2, X, Search, Folder, ChevronLeft, HardDrive, ChevronDown, Check, MoreHorizontal, RefreshCw, BookOpen, Settings, Edit3, Save, CloudDownload, User } from "lucide-react";
 import { System, Game, hasMultipleEmulators } from "../types";
 import { ScrollArea } from "./ScrollArea";
 import { OverlayScrollbarsComponentRef } from "overlayscrollbars-react";
@@ -121,6 +121,8 @@ export default function SystemAppContent({
   const setSearch = propSetSearch !== undefined ? propSetSearch : setLocalSearch;
 
   const [games, setGames] = useState<Game[]>([]);
+  const [appSession, setAppSession] = useState<Awaited<ReturnType<typeof window.api.getAppAuthSession>>>(null);
+  const [downloadingAssetId, setDownloadingAssetId] = useState<string | null>(null);
   const [selectedIdx, setSelectedIdx] = useState(0);
   const [filter, setFilter] = useState<"all" | "favorites">("all");
   const [loading, setLoading] = useState(true);
@@ -264,8 +266,32 @@ export default function SystemAppContent({
   const [gridMediaLoading, setGridMediaLoading] = useState(false);
   const [mediaRevision, setMediaRevision] = useState(0);
 
+  const loadGamesWithCatalog = useCallback(async (systemName: string): Promise<Game[]> => {
+    const localGames = (await window.api.getGames(systemName)) || [];
+    if (systemName.toLowerCase() !== "snes") return localGames;
 
-
+    const catalog = await window.api.listSnesDownloadCatalog();
+    const localNames = new Set(
+      localGames.map((game: Game) => game.path.split(/[\\/]/).pop()?.toLowerCase())
+    );
+    const missingGames: Game[] = catalog
+      .filter(asset => !asset.installed && !localNames.has(asset.download_name.toLowerCase()))
+      .map(asset => ({
+        id: `download-${asset.id}`,
+        name: asset.title,
+        path: asset.rom_path,
+        system: "snes",
+        cover: asset.cover ?? undefined,
+        cover3d: asset.cover3d ?? undefined,
+        fanart: asset.fanart ?? undefined,
+        logo: asset.logo ?? undefined,
+        downloadAssetId: asset.id,
+        downloadName: asset.download_name,
+        downloadSize: asset.file_size,
+        isRemoteMissing: true
+      }));
+    return [...localGames, ...missingGames];
+  }, []);
 
   const reloadLibrary = useCallback(async () => {
     if (system.name === 'collections') {
@@ -273,14 +299,20 @@ export default function SystemAppContent({
         const gameList = await window.api.getCollectionGames(activeCollection);
         setCollectionGames(gameList || []);
       } else {
-        const gameList = await window.api.getGames(system.name);
+        const gameList = await loadGamesWithCatalog(system.name);
         setGames(gameList || []);
       }
     } else {
-      const gameList = await window.api.getGames(system.name);
+      const gameList = await loadGamesWithCatalog(system.name);
       setGames(gameList || []);
     }
-  }, [system.name, activeCollection]);
+  }, [system.name, activeCollection, loadGamesWithCatalog]);
+
+  useEffect(() => {
+    void window.api.getAppAuthSession().then(setAppSession);
+    const unsubscribe = window.api.on("app-auth-changed", (_event, session) => setAppSession(session));
+    return unsubscribe;
+  }, []);
 
   const checkMediaAvailability = useCallback(() => {
     if (system && system.path && !system.path.startsWith('virtual://') && system.name !== 'collections') {
@@ -543,7 +575,7 @@ export default function SystemAppContent({
         });
       } else {
         setCollectionGames([]);
-        window.api.getGames(system.name).then((gameList: Game[]) => {
+        loadGamesWithCatalog(system.name).then((gameList: Game[]) => {
           setGames(gameList || []);
           setSelectedIdx(0);
           setLoading(false);
@@ -556,7 +588,7 @@ export default function SystemAppContent({
     } else {
       setActiveCollection(null);
       setCollectionGames([]);
-      window.api.getGames(system.name).then((gameList: Game[]) => {
+      loadGamesWithCatalog(system.name).then((gameList: Game[]) => {
         setGames(gameList || []);
         setSelectedIdx(0);
         setLoading(false);
@@ -566,7 +598,7 @@ export default function SystemAppContent({
         setLoading(false);
       });
     }
-  }, [system.name, activeCollection]);
+  }, [system.name, activeCollection, loadGamesWithCatalog]);
 
   const targetGamesForFiltering = useMemo(() => {
     const isColView = (system.name === 'collections' && activeCollection !== null);
@@ -1077,6 +1109,33 @@ export default function SystemAppContent({
     });
   };
 
+  const handleDownloadSelectedGame = async () => {
+    if (!selectedGame?.downloadAssetId || downloadingAssetId) return;
+    setDownloadingAssetId(selectedGame.downloadAssetId);
+    try {
+      const result = await window.api.downloadSnesAsset(selectedGame.downloadAssetId);
+      await window.api.preloadLibrary(true, "snes");
+      await reloadLibrary();
+      window.dispatchEvent(new CustomEvent("show-toast", {
+        detail: {
+          title: "Download concluído",
+          description: `${result.filename} já pode ser jogado.`,
+          type: "success"
+        }
+      }));
+    } catch (error) {
+      window.dispatchEvent(new CustomEvent("show-toast", {
+        detail: {
+          title: "Falha no download",
+          description: error instanceof Error ? error.message : String(error),
+          type: "error"
+        }
+      }));
+    } finally {
+      setDownloadingAssetId(null);
+    }
+  };
+
   const handleOpenMetadataSidebar = useCallback(() => {
     if (!selectedGame) return;
     const g = selectedGame as any;
@@ -1497,9 +1556,12 @@ export default function SystemAppContent({
                           <button
                             key={g.path}
                             onClick={() => setSelectedIdx(idx)}
-                            onDoubleClick={() => onLaunchGame(g, system)}
+                            onDoubleClick={() => {
+                              if (!g.isRemoteMissing) onLaunchGame(g, system);
+                            }}
                             onContextMenu={(e) => {
                               e.preventDefault();
+                              if (g.isRemoteMissing) return;
                               setSelectedIdx(idx);
                               setGameContextMenu({
                                 x: e.clientX,
@@ -1524,8 +1586,15 @@ export default function SystemAppContent({
                                       if (finalImage) missingMediaCache.add(finalImage);
                                       setFailedImages(prev => ({ ...prev, [g.path]: true }));
                                     }}
-                                    className="w-full h-full object-contain group-hover:scale-105 transition-all duration-300 animate-in fade-in duration-200" 
+                                    className={`w-full h-full object-contain group-hover:scale-105 transition-all duration-300 animate-in fade-in duration-200 ${
+                                      g.isRemoteMissing ? "grayscale opacity-45" : ""
+                                    }`}
                                   />
+                                  {g.isRemoteMissing && (
+                                    <div className="absolute top-2 right-2 rounded-md bg-black/70 px-2 py-1 text-[9px] font-bold uppercase text-white/80">
+                                      Não instalado
+                                    </div>
+                                  )}
                                   {/* Small clean controller icon and title overlay at top left */}
                                   <div className="absolute top-2 left-2 flex items-center gap-1.5 bg-black/55 backdrop-blur-[2px] px-2 py-0.5 rounded-md text-[9px] text-white/95 font-bold uppercase tracking-wider max-w-[90%] border border-white/5 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                                     <Gamepad2 className="w-2.5 h-2.5 text-white/90 shrink-0" />
@@ -2271,19 +2340,49 @@ export default function SystemAppContent({
                   </div>
                 )}
 
-                {/* Play Button */}
+                {/* Play / Download Button */}
                 <div className="flex flex-col gap-2 mt-auto pt-3">
-                  <button
-                    onClick={() => onLaunchGame(selectedGame, system)}
-                    className="w-[calc(100%-8px)] mx-auto hover:scale-[1.02] hover:brightness-110 hover:shadow-lg transition-all rounded-md py-3 text-base font-semibold flex items-center justify-center gap-2 cursor-pointer text-white outline outline-2 outline-offset-2"
-                    style={{
-                      background: 'linear-gradient(135deg, var(--accent-color) 0%, var(--accent-color-hover) 100%)',
-                      outlineColor: 'var(--accent-color)'
-                    }}
-                  >
-                    <Play className="w-6 h-6 fill-white text-white" />
-                    <span>Jogar</span>
-                  </button>
+                  {selectedGame.isRemoteMissing ? (
+                    appSession ? (
+                      <button
+                        onClick={() => void handleDownloadSelectedGame()}
+                        disabled={downloadingAssetId !== null}
+                        className="w-[calc(100%-8px)] mx-auto hover:scale-[1.02] transition-all rounded-md py-3 text-base font-semibold flex items-center justify-center gap-2 cursor-pointer text-white bg-fuchsia-600 hover:bg-fuchsia-500 disabled:opacity-50"
+                      >
+                        {downloadingAssetId === selectedGame.downloadAssetId ? (
+                          <Loader2 className="w-6 h-6 animate-spin" />
+                        ) : (
+                          <CloudDownload className="w-6 h-6" />
+                        )}
+                        <span>{downloadingAssetId ? "Baixando..." : "Baixar"}</span>
+                      </button>
+                    ) : (
+                      <>
+                        <p className="text-center text-xs text-amber-200/80">
+                          Entre na sua conta para baixar este jogo.
+                        </p>
+                        <button
+                          onClick={() => onOpenTool?.("settings", "conta")}
+                          className="w-[calc(100%-8px)] mx-auto rounded-md py-3 text-sm font-semibold flex items-center justify-center gap-2 cursor-pointer text-white bg-white/10 hover:bg-white/15 border border-white/10"
+                        >
+                          <User className="w-5 h-5" />
+                          <span>Ir para Minha conta</span>
+                        </button>
+                      </>
+                    )
+                  ) : (
+                    <button
+                      onClick={() => onLaunchGame(selectedGame, system)}
+                      className="w-[calc(100%-8px)] mx-auto hover:scale-[1.02] hover:brightness-110 hover:shadow-lg transition-all rounded-md py-3 text-base font-semibold flex items-center justify-center gap-2 cursor-pointer text-white outline outline-2 outline-offset-2"
+                      style={{
+                        background: 'linear-gradient(135deg, var(--accent-color) 0%, var(--accent-color-hover) 100%)',
+                        outlineColor: 'var(--accent-color)'
+                      }}
+                    >
+                      <Play className="w-6 h-6 fill-white text-white" />
+                      <span>Jogar</span>
+                    </button>
+                  )}
                 </div>
               </div>
             )}

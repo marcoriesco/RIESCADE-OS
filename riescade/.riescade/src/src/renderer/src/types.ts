@@ -65,6 +65,10 @@ export type Game = {
   kidgame?: boolean;
   isCollectionFolder?: boolean;
   gameCount?: number;
+  downloadAssetId?: string;
+  downloadName?: string;
+  downloadSize?: number | null;
+  isRemoteMissing?: boolean;
 };
 
 
@@ -97,4 +101,3 @@ export function hasMultipleEmulators(system?: System | null): boolean {
   });
   return count > 1;
 }
-
