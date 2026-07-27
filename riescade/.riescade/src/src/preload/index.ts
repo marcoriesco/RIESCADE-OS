@@ -113,6 +113,8 @@ const api = {
     ipcRenderer.invoke('app-list-download-catalog', platform),
   downloadAsset: (assetId: string) =>
     ipcRenderer.invoke('app-download-asset', assetId),
+  openSystemTorrent: (platform: string) =>
+    ipcRenderer.invoke('app-open-system-torrent', platform),
   getOverlayPath: (name: string) => ipcRenderer.invoke('get-overlay-path', name),
   getMusicFiles: (subfolder?: string) => ipcRenderer.invoke('get-music-files', subfolder),
   getMusicPath: () => ipcRenderer.invoke('get-music-path'),

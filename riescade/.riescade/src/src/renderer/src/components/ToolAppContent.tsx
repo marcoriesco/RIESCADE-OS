@@ -137,6 +137,18 @@ function DownloadsApp() {
           Sair
         </button>
       </div>
+      <button
+        onClick={() => {
+          setMessage("Abrindo o torrent completo do Super Nintendo...");
+          window.api.openSystemTorrent("snes").catch(error =>
+            setMessage(error instanceof Error ? error.message : String(error))
+          );
+        }}
+        className="mb-4 flex w-full items-center justify-center gap-2 rounded-lg border border-fuchsia-400/30 bg-fuchsia-500/10 px-4 py-3 text-sm font-semibold text-fuchsia-200 transition hover:bg-fuchsia-500/20"
+      >
+        <Download className="h-4 w-4" />
+        Baixar sistema completo via torrent
+      </button>
       {message && <div className="mb-4 rounded-lg border border-white/10 bg-white/5 p-3 text-sm">{message}</div>}
       <div className="space-y-2">
         {assets.map(asset => (

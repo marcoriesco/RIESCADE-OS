@@ -97,6 +97,7 @@ declare global {
         filename: string
         sha256: string
       }>
+      openSystemTorrent: (platform: string) => Promise<void>
       getOverlayPath: (name: string) => Promise<string>
       getCollectionsForGame: (systemName: string, gamePath: string) => Promise<string[]>
       toggleGameInCollection: (collectionName: string, systemName: string, gamePath: string, action: 'add' | 'remove') => Promise<boolean>

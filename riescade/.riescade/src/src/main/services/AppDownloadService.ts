@@ -1,14 +1,14 @@
 import { createHash } from 'crypto'
 import { createWriteStream, existsSync, mkdirSync, renameSync, unlinkSync } from 'fs'
 import { basename, join, parse } from 'path'
-import { BrowserWindow, ipcMain } from 'electron'
+import { BrowserWindow, ipcMain, shell } from 'electron'
 import { getRetroBatPath } from '../utils/paths'
 import { SettingsParser } from '../parsers/SettingsParser'
+import { SystemsParser } from '../parsers/SystemsParser'
 
 const API_BASE_URL = 'https://www.riescade.com.br'
 const PILOT_PLATFORM = 'snes'
 const MAX_SNES_DOWNLOAD_SIZE = 128 * 1024 * 1024
-const ALLOWED_EXTENSIONS = new Set(['.zip', '.sfc', '.smc'])
 const MEDIA_TYPES = [
   'cartdridge', 'cover', 'cover3d', 'coverback', 'fanart', 'logo',
   'manual', 'marquee', 'mix', 'screenshot', 'title', 'video'
@@ -59,11 +59,11 @@ function assertAccessToken(accessToken: unknown): string {
   return accessToken
 }
 
-function getSafeSnesFilename(filename: string): string {
+function getSafeRomFilename(filename: string, allowedExtensions: Set<string>, platform: string): string {
   const safeName = basename(filename).replace(/[\u0000-\u001f<>:"/\\|?*]/g, '_')
   const extension = safeName.slice(safeName.lastIndexOf('.')).toLowerCase()
-  if (!safeName || !ALLOWED_EXTENSIONS.has(extension)) {
-    throw new Error('O servidor informou um formato de arquivo SNES não permitido.')
+  if (!safeName || !allowedExtensions.has(extension)) {
+    throw new Error(`O servidor informou um formato de arquivo ${platform.toUpperCase()} não permitido.`)
   }
   return safeName
 }
@@ -79,7 +79,8 @@ function getSafeMediaFilename(filename: string): string {
 
 function assertAllowedDownloadUrl(value: string): URL {
   const url = new URL(value)
-  if (url.protocol !== 'https:' || !url.hostname.endsWith('.backblazeb2.com')) {
+  const isArchiveHost = url.hostname === 'archive.org' || url.hostname.endsWith('.archive.org')
+  if (url.protocol !== 'https:' || !isArchiveHost) {
     throw new Error('O servidor informou uma origem de download não autorizada.')
   }
   return url
@@ -92,6 +93,21 @@ async function readApiError(response: Response): Promise<string> {
 
 export class AppDownloadService {
   private readonly settings = new SettingsParser()
+  private readonly systems = new SystemsParser()
+
+  private getAllowedRomExtensions(platform: string): Set<string> {
+    const system = this.systems.parse().find(item => item.name.toLowerCase() === platform.toLowerCase())
+    const extensions = new Set(
+      String(system?.extension || '')
+        .split(/\s+/)
+        .map(extension => extension.trim().toLowerCase())
+        .filter(extension => extension.startsWith('.') && extension.length > 1)
+    )
+    if (extensions.size === 0) {
+      throw new Error(`Nenhuma extensão de jogo foi configurada para ${platform}.`)
+    }
+    return extensions
+  }
 
   private getMediaPreferences(): { mediaTypes: string[]; overwrite: boolean } {
     const enabled = this.settings.getSetting('Downloads.Media.Enabled', 'bool')
@@ -123,24 +139,59 @@ export class AppDownloadService {
       throw new Error('O catálogo SNES retornado pelo servidor é inválido.')
     }
     const romDirectory = join(getRetroBatPath(), 'roms', PILOT_PLATFORM)
-    return payload.assets.map((asset: Omit<AppCatalogAsset, 'installed' | 'rom_path' | 'cover' | 'cover3d' | 'fanart' | 'logo'>) => {
-      const filename = getSafeSnesFilename(asset.download_name)
+    const allowedExtensions = this.getAllowedRomExtensions(PILOT_PLATFORM)
+    const catalog: AppCatalogAsset[] = []
+
+    for (const asset of payload.assets as Array<Omit<AppCatalogAsset, 'installed' | 'rom_path' | 'cover' | 'cover3d' | 'fanart' | 'logo'>>) {
+      let filename: string
+      try {
+        filename = getSafeRomFilename(asset?.download_name, allowedExtensions, PILOT_PLATFORM)
+      } catch {
+        // The remote bucket/database may contain auxiliary files such as
+        // gamelist.xml. They are not downloadable games and must not make the
+        // entire platform catalog fail.
+        console.warn(
+          `[AppDownloadService] Ignoring incompatible SNES catalog entry: ${String(asset?.download_name || '(unnamed)')}`
+        )
+        continue
+      }
+
       const mediaName = parse(filename).name
       const media = (folder: string) => {
         const path = join(romDirectory, 'media', folder, `${mediaName}.webp`)
         return existsSync(path) ? path : null
       }
       const romPath = join(romDirectory, filename)
-      return {
+      catalog.push({
         ...asset,
+        download_name: filename,
         installed: existsSync(romPath),
         rom_path: romPath,
         cover: media('cover'),
         cover3d: media('cover3d'),
         fanart: media('fanart'),
         logo: media('logo')
-      }
+      })
+    }
+
+    return catalog
+  }
+
+  async openFullSystemTorrent(platform: string): Promise<void> {
+    if (platform !== PILOT_PLATFORM) {
+      throw new Error(`A plataforma ${platform} ainda não está disponível para download.`)
+    }
+    const response = await fetch(`${API_BASE_URL}/api/app/catalog`, {
+      headers: { 'User-Agent': 'RIESCADE-App' },
+      signal: AbortSignal.timeout(15_000)
     })
+    if (!response.ok) throw new Error(await readApiError(response))
+    const payload = await response.json()
+    if (payload?.platform !== platform || typeof payload?.torrentUrl !== 'string') {
+      throw new Error('O torrent desta plataforma ainda não está disponível.')
+    }
+    const torrentUrl = assertAllowedDownloadUrl(payload.torrentUrl)
+    await shell.openExternal(torrentUrl.toString())
   }
 
   async downloadAsset(
@@ -149,7 +200,7 @@ export class AppDownloadService {
     appVersion: string,
     window: BrowserWindow | null
   ): Promise<{ path: string; filename: string; sha256: string }> {
-    if (typeof assetId !== 'string' || !/^[a-f0-9-]{36}$/i.test(assetId)) {
+    if (typeof assetId !== 'string' || !/^[a-f0-9]{64}$/i.test(assetId)) {
       throw new Error('Arquivo SNES inválido.')
     }
 
@@ -181,7 +232,11 @@ export class AppDownloadService {
     }
 
     const downloadUrl = assertAllowedDownloadUrl(authorization.downloadUrl)
-    const filename = getSafeSnesFilename(authorization.asset.filename)
+    const filename = getSafeRomFilename(
+      authorization.asset.filename,
+      this.getAllowedRomExtensions(PILOT_PLATFORM),
+      PILOT_PLATFORM
+    )
     const expectedSize = authorization.asset.size
     const expectedSha256 = authorization.asset.sha256?.toLowerCase() || null
 
@@ -355,4 +410,9 @@ export function registerAppDownloadIpc(
   ipcMain.handle('app-download-asset', (_event, assetId: unknown) =>
     service.downloadAsset(getAccessToken(), assetId, appVersion, getMainWindow())
   )
+
+  ipcMain.handle('app-open-system-torrent', (_event, platform: unknown) => {
+    if (typeof platform !== 'string') throw new Error('Plataforma inválida.')
+    return service.openFullSystemTorrent(platform)
+  })
 }
