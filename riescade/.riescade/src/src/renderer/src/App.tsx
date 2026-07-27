@@ -514,6 +514,36 @@ export default function App() {
 
   const renderToasts = () => (
     <>
+      {appDownloadProgress && (
+        <Toast.Root
+          open
+          duration={Infinity}
+          className="toast-root glass-strong w-80 select-none overflow-hidden rounded-xl border border-white/10 p-3.5 shadow-2xl"
+        >
+          <div className="flex items-center gap-3">
+            <CloudDownload className="h-5 w-5 shrink-0 animate-pulse text-accent" />
+            <div className="min-w-0 flex-1">
+              <div className="flex items-center justify-between gap-3">
+                <Toast.Title className="truncate text-sm font-bold text-white">
+                  {appDownloadProgress.title}
+                </Toast.Title>
+                <span className="shrink-0 text-xs font-bold text-accent">
+                  {appDownloadProgress.percent}%
+                </span>
+              </div>
+              <Toast.Description className="mt-0.5 truncate text-[11px] text-white/50">
+                {appDownloadProgress.filename}
+              </Toast.Description>
+            </div>
+          </div>
+          <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-white/10">
+            <div
+              className="h-full rounded-full bg-[var(--accent-color)] transition-[width] duration-200"
+              style={{ width: `${appDownloadProgress.percent}%` }}
+            />
+          </div>
+        </Toast.Root>
+      )}
       {toasts.map((toast) => (
         <Toast.Root
           key={toast.id}
@@ -2064,24 +2094,6 @@ export default function App() {
       {showFps && (
         <div className="fixed top-3 right-3 z-[10001] pointer-events-none rounded-md border border-white/10 bg-black/70 px-2.5 py-1 font-mono text-xs font-bold text-emerald-400 shadow-lg backdrop-blur-md">
           FPS {fps}
-        </div>
-      )}
-
-      {appDownloadProgress && (
-        <div className="fixed top-10 left-1/2 z-[10020] w-[min(520px,calc(100vw-32px))] -translate-x-1/2 rounded-xl border border-fuchsia-400/25 bg-[#10121a]/95 p-4 shadow-2xl backdrop-blur-xl">
-          <div className="mb-2 flex items-center justify-between gap-4 text-white">
-            <div className="min-w-0">
-              <div className="truncate text-sm font-bold">{appDownloadProgress.title}</div>
-              <div className="truncate text-[10px] text-white/45">{appDownloadProgress.filename}</div>
-            </div>
-            <span className="text-sm font-bold text-fuchsia-300">{appDownloadProgress.percent}%</span>
-          </div>
-          <div className="h-2 overflow-hidden rounded-full bg-white/10">
-            <div
-              className="h-full rounded-full bg-gradient-to-r from-fuchsia-600 to-purple-400 transition-[width] duration-200"
-              style={{ width: `${appDownloadProgress.percent}%` }}
-            />
-          </div>
         </div>
       )}
 
