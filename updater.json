@@ -1,7 +1,7 @@
 {
-  "version": "2.3.1",
-  "releaseNotes": "Automated release for RIESCADE OS v2.3.1",
-  "zipUrl": "https://github.com/marcoriesco/RIESCADE-OS/releases/download/v2.3.1/RIESCADE_OS.7z",
-  "sha256": "5f16fbf123a7f727745291d5b0f571fb6a07554f44ab554d11c4c4adaddecc97",
-  "size": 1279931204
+  "version": "2.4.0",
+  "releaseNotes": "Automated release for RIESCADE OS v2.4.0",
+  "zipUrl": "https://github.com/marcoriesco/RIESCADE-OS/releases/download/v2.4.0/RIESCADE_OS.7z",
+  "sha256": "07f4a00bd8b9004c47f7f315f4de73adf465ecfb661b8d1cc6be751c682c5890",
+  "size": 1325904247
 }
