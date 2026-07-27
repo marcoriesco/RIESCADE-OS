@@ -62,10 +62,20 @@ interface EmulatorCatalogEntry {
   updateMode?: 'github-release' | 'release' | 'manual'
 }
 
-let emulatorCatalogCache: Record<string, EmulatorCatalogEntry> | null = null
+interface EmulatorCatalogPayload {
+  emulators?: Record<string, EmulatorCatalogEntry>
+}
 
-function getEmulatorCatalog(): Record<string, EmulatorCatalogEntry> {
-  if (emulatorCatalogCache) return emulatorCatalogCache
+const EMULATOR_CATALOG_URL = 'https://www.riescade.com.br/api/app/emulators/catalog'
+const REMOTE_CATALOG_TTL_MS = 15 * 60_000
+let localEmulatorCatalogCache: Record<string, EmulatorCatalogEntry> | null = null
+let remoteEmulatorCatalogCache: {
+  catalog: Record<string, EmulatorCatalogEntry>
+  fetchedAt: number
+} | null = null
+
+function getLocalEmulatorCatalog(): Record<string, EmulatorCatalogEntry> {
+  if (localEmulatorCatalogCache) return localEmulatorCatalogCache
   const catalogPath = join(getRiescadePath(), 'configs', 'emulators-catalog.json')
   let loadedCatalog: Record<string, EmulatorCatalogEntry> = {}
   try {
@@ -74,13 +84,98 @@ function getEmulatorCatalog(): Record<string, EmulatorCatalogEntry> {
   } catch (error) {
     console.warn(`[EmulatorInstaller] Could not load ${catalogPath}; using built-in paths.`, error)
   }
-  emulatorCatalogCache = loadedCatalog
+  localEmulatorCatalogCache = loadedCatalog
   return loadedCatalog
 }
 
-function getCatalogEntry(emulatorName: string): EmulatorCatalogEntry | undefined {
+function getCachedRemoteCatalog(): Record<string, EmulatorCatalogEntry> | null {
+  const cachePath = join(getRiescadePath(), 'configs', 'emulators-catalog.remote-cache.json')
+  try {
+    const parsed = JSON.parse(readFileSync(cachePath, 'utf8'))
+    if (
+      typeof parsed?.fetchedAt === 'number' &&
+      Date.now() - parsed.fetchedAt <= 24 * 60 * 60_000 &&
+      parsed?.catalog &&
+      typeof parsed.catalog === 'object'
+    ) {
+      return parsed.catalog
+    }
+  } catch {
+    // A remote cache is optional.
+  }
+  return null
+}
+
+async function getEmulatorCatalog(
+  accessToken?: string,
+  requireAuthorization = false
+): Promise<Record<string, EmulatorCatalogEntry>> {
+  if (
+    remoteEmulatorCatalogCache &&
+    Date.now() - remoteEmulatorCatalogCache.fetchedAt < REMOTE_CATALOG_TTL_MS
+  ) {
+    return remoteEmulatorCatalogCache.catalog
+  }
+  if (!accessToken) {
+    if (requireAuthorization) {
+      throw new Error('Entre com sua conta RIESCADE para instalar emuladores.')
+    }
+    return getLocalEmulatorCatalog()
+  }
+
+  try {
+    const response = await fetch(EMULATOR_CATALOG_URL, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        'User-Agent': 'RIESCADE-App'
+      },
+      signal: AbortSignal.timeout(15_000)
+    })
+    if (response.status === 401 || response.status === 403) {
+      throw new Error('Sua assinatura RIESCADE não permite instalar emuladores.')
+    }
+    if (!response.ok) {
+      throw new Error(`Falha ao carregar catálogo de emuladores (${response.status}).`)
+    }
+    const payload = await response.json() as EmulatorCatalogPayload
+    if (!payload.emulators || typeof payload.emulators !== 'object') {
+      throw new Error('O catálogo remoto de emuladores é inválido.')
+    }
+    const fetchedAt = Date.now()
+    remoteEmulatorCatalogCache = { catalog: payload.emulators, fetchedAt }
+    const cachePath = join(getRiescadePath(), 'configs', 'emulators-catalog.remote-cache.json')
+    try {
+      writeFileSync(
+        cachePath,
+        JSON.stringify({ fetchedAt, catalog: payload.emulators }),
+        'utf8'
+      )
+    } catch (cacheError) {
+      console.warn('[EmulatorInstaller] Could not persist remote catalog cache.', cacheError)
+    }
+    return payload.emulators
+  } catch (error) {
+    if (
+      error instanceof Error &&
+      (error.message.includes('assinatura') || error.message.includes('Entre com'))
+    ) {
+      throw error
+    }
+    const cached = getCachedRemoteCatalog()
+    if (cached) return cached
+    if (requireAuthorization) throw error
+    console.warn('[EmulatorInstaller] Remote catalog unavailable; using local fallback.', error)
+    return getLocalEmulatorCatalog()
+  }
+}
+
+async function getCatalogEntry(
+  emulatorName: string,
+  accessToken?: string,
+  requireAuthorization = false
+): Promise<EmulatorCatalogEntry | undefined> {
   const normalized = emulatorName.toLowerCase()
-  const catalog = getEmulatorCatalog()
+  const catalog = await getEmulatorCatalog(accessToken, requireAuthorization)
   if (catalog[normalized]) return catalog[normalized]
   return Object.values(catalog).find(entry =>
     entry.aliases?.some(alias => alias.toLowerCase() === normalized)
@@ -271,7 +366,11 @@ function getFolderContainingExe(extractDir: string, exeName: string): string {
 }
 
 export class EmulatorInstaller {
-  public static async checkStatus(emulatorName: string, sourceUrl?: string): Promise<EmulatorStatus> {
+  public static async checkStatus(
+    emulatorName: string,
+    sourceUrl?: string,
+    accessToken?: string
+  ): Promise<EmulatorStatus> {
     const retroBatPath = getRetroBatPath()
     const targetEmu = emulatorName.toLowerCase()
     if (NATIVE_LAUNCHERS.has(targetEmu)) {
@@ -283,9 +382,9 @@ export class EmulatorInstaller {
         updateAvailable: false
       }
     }
-    const catalogEntry = getCatalogEntry(targetEmu)
+    const catalogEntry = await getCatalogEntry(targetEmu, accessToken)
     const relExe = catalogEntry?.executable || EMULATOR_EXES[targetEmu] || EMULATOR_EXES[emulatorName]
-    sourceUrl = sourceUrl || catalogEntry?.source
+    sourceUrl = catalogEntry?.source || sourceUrl
     const fullExePath = relExe ? join(retroBatPath, 'emulators', relExe) : ''
     const installed = !!fullExePath && existsSync(fullExePath)
 
@@ -353,13 +452,14 @@ export class EmulatorInstaller {
   public static async downloadAndInstall(
     emulatorName: string,
     sourceUrl: string,
-    onProgress: (pct: number) => void
+    onProgress: (pct: number) => void,
+    accessToken?: string
   ): Promise<void> {
     const retroBatPath = getRetroBatPath()
     const targetEmu = emulatorName.toLowerCase()
-    const catalogEntry = getCatalogEntry(targetEmu)
+    const catalogEntry = await getCatalogEntry(targetEmu, accessToken, true)
     const relExe = catalogEntry?.executable || EMULATOR_EXES[targetEmu] || EMULATOR_EXES[emulatorName]
-    sourceUrl = sourceUrl || catalogEntry?.source || ''
+    sourceUrl = catalogEntry?.source || sourceUrl || ''
     if (!relExe) {
       throw new Error(`Emulator ${emulatorName} has no registered executable path.`)
     }

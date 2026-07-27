@@ -839,7 +839,11 @@ app.whenReady().then(() => {
     const systemObj = systems.find(s => s.name === systemName)
     const emulatorObj = systemObj?.emulators?.find(e => e.name === emulatorName)
     const sourceUrl = emulatorObj?.source
-    return EmulatorInstaller.checkStatus(emulatorName, sourceUrl)
+    return EmulatorInstaller.checkStatus(
+      emulatorName,
+      sourceUrl,
+      appAuthService.getSession() ? appAuthService.getAccessToken() : undefined
+    )
   })
 
   ipcMain.handle('download-install-emulator', async (event, emulatorName: string, systemName: string) => {
@@ -847,9 +851,14 @@ app.whenReady().then(() => {
     const emulatorObj = systemObj?.emulators?.find(e => e.name === emulatorName)
     // The centralized catalog is the primary source. A source declared by the
     // system remains supported for backwards compatibility.
-    return EmulatorInstaller.downloadAndInstall(emulatorName, emulatorObj?.source || '', (pct) => {
-      event.sender.send('emulator-download-progress', { emulatorName, pct })
-    })
+    return EmulatorInstaller.downloadAndInstall(
+      emulatorName,
+      emulatorObj?.source || '',
+      (pct) => {
+        event.sender.send('emulator-download-progress', { emulatorName, pct })
+      },
+      appAuthService.getAccessToken()
+    )
   })
 
   ipcMain.handle('launch-game', async (_, game: Game, system: System, saveStateSlot?: number, saveStatePath?: string) => {
