@@ -3,7 +3,7 @@ import { ChevronRight, Search, Folder, Star, User, Shield, Settings, Palette, Ga
 import { System, SettingsCtx } from "../types";
 import { TOOL_APPS, getSystemTheme } from "../constants";
 import {
-  SettingGroup, SettingToggle, SettingSelect, SettingSlider, SettingInput, SettingInfo
+  SettingGroup, SettingToggle, SettingSelect, SettingSlider, SettingInput, SettingInfo, UnderlineTabs
 } from "./SettingsComponents";
 import { EmulatorSettingsPanel } from "./EmulatorSettingsPanel";
 import { ScrollArea } from "./ScrollArea";
@@ -1489,32 +1489,15 @@ export default function ToolAppContent({
                     </div>
                   </div>
 
-                  <div className="mb-7 flex w-fit gap-1 rounded-xl border border-white/10 bg-black/20 p-1">
-                    <button
-                      type="button"
-                      onClick={() => setActiveDownloadsTab("games")}
-                      className={`flex items-center gap-2 rounded-lg px-4 py-2 text-xs font-semibold transition-colors ${
-                        activeDownloadsTab === "games"
-                          ? "bg-white/10 text-white"
-                          : "text-white/45 hover:bg-white/5 hover:text-white/75"
-                      }`}
-                    >
-                      <Gamepad2 className="h-4 w-4" />
-                      Games
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setActiveDownloadsTab("emulators")}
-                      className={`flex items-center gap-2 rounded-lg px-4 py-2 text-xs font-semibold transition-colors ${
-                        activeDownloadsTab === "emulators"
-                          ? "bg-white/10 text-white"
-                          : "text-white/45 hover:bg-white/5 hover:text-white/75"
-                      }`}
-                    >
-                      <Cpu className="h-4 w-4" />
-                      Emuladores
-                    </button>
-                  </div>
+                  <UnderlineTabs
+                    className="mb-7 w-full"
+                    tabs={[
+                      { id: "games", label: "Games", icon: Gamepad2 },
+                      { id: "emulators", label: "Emuladores", icon: Cpu }
+                    ]}
+                    value={activeDownloadsTab}
+                    onValueChange={(value) => setActiveDownloadsTab(value as typeof activeDownloadsTab)}
+                  />
 
                   {activeDownloadsTab === "games" && (
                     <>
