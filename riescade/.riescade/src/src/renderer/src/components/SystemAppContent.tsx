@@ -271,9 +271,25 @@ export default function SystemAppContent({
     if (systemName.toLowerCase() !== "snes") return localGames;
 
     const catalog = await window.api.listSnesDownloadCatalog();
+    const catalogByFilename = new Map(
+      catalog.map(asset => [asset.download_name.toLowerCase(), asset])
+    );
     const localNames = new Set(
       localGames.map((game: Game) => game.path.split(/[\\/]/).pop()?.toLowerCase())
     );
+    const reconciledLocalGames: Game[] = localGames.map((game: Game) => {
+      const filename = game.path.split(/[\\/]/).pop()?.toLowerCase();
+      const asset = filename ? catalogByFilename.get(filename) : undefined;
+      if (!asset || asset.installed) return game;
+
+      return {
+        ...game,
+        downloadAssetId: asset.id,
+        downloadName: asset.download_name,
+        downloadSize: asset.file_size,
+        isRemoteMissing: true
+      };
+    });
     const missingGames: Game[] = catalog
       .filter(asset => !asset.installed && !localNames.has(asset.download_name.toLowerCase()))
       .map(asset => ({
@@ -290,7 +306,7 @@ export default function SystemAppContent({
         downloadSize: asset.file_size,
         isRemoteMissing: true
       }));
-    return [...localGames, ...missingGames];
+    return [...reconciledLocalGames, ...missingGames];
   }, []);
 
   const reloadLibrary = useCallback(async () => {
