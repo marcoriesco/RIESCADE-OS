@@ -1,6 +1,5 @@
 # Dependencies
 node_modules/
-modern-frontend/node_modules/
 
 # Build artifacts
 dist/

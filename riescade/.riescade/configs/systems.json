@@ -925,7 +925,7 @@
     },
     {
       "name": "snes",
-      "fullname": "Super Nintendo Entertainment System",
+      "fullname": "Super Nintendo",
       "path": "~\\..\\roms\\snes",
       "extension": ".smc .fig .sfc .gd3 .gd7 .dx2 .bsx .swc .rom .wad .zip .7z",
       "platform": "snes",
@@ -6183,7 +6183,7 @@
     },
     {
       "name": "snesh",
-      "fullname": "Super Nintendo Entertainment System Hacks",
+      "fullname": "Super Nintendo Hacks",
       "path": "~\\..\\roms\\snesh",
       "extension": ".smc .fig .sfc .gd3 .gd7 .dx2 .bsx .swc .rom .wad .zip .7z",
       "platform": "snes",

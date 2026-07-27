@@ -482,8 +482,10 @@ export class LibraryService {
     
     const dbService = LibraryService.databaseService
     dbService.open()
-    
-    LibraryService.isPreloaded = true
+
+    // Opening the database is not the same as preloading/synchronizing the
+    // library. Marking it as preloaded here could make preloadAll() return
+    // early, leaving system windows with empty game lists cached forever.
   }
 
   public getSystems(): System[] {
@@ -711,15 +713,17 @@ export class LibraryService {
     }
 
     // ─── DB Mode: load from SQLite for physical systems ───
-    // Load from SQLite for physical systems
+    // A system window can request games before the desktop preload finishes.
+    // Always open SQLite before consulting or populating the game cache so an
+    // initialization race cannot cache an empty list for the whole session.
+    LibraryService.databaseService.open()
+
     if (LibraryService.cachedGames.has(nameLower)) {
       return LibraryService.cachedGames.get(nameLower)!
     }
     const settings = new SettingsParser()
     const showHidden = settings.getSetting('ShowHidden', 'bool') === true
-    const games = LibraryService.databaseService.isOpen()
-      ? LibraryService.databaseService.getGamesBySystem(systemName, showHidden)
-      : []
+    const games = LibraryService.databaseService.getGamesBySystem(systemName, showHidden)
     LibraryService.cachedGames.set(nameLower, games)
     LibraryService.fullyLoadedSystems.add(nameLower)
     return games

@@ -360,11 +360,11 @@
     "type": "bool"
   },
   "Window.tool-settings.X": {
-    "value": 275,
+    "value": 297,
     "type": "int"
   },
   "Window.tool-settings.Y": {
-    "value": 53,
+    "value": 41,
     "type": "int"
   },
   "Window.tool-settings.Width": {
@@ -946,5 +946,69 @@
   "Window.system-psp.Maximized": {
     "value": true,
     "type": "bool"
+  },
+  "Downloads.Media.Enabled": {
+    "value": true,
+    "type": "bool"
+  },
+  "Downloads.Media.Types.cartdridge": {
+    "value": true,
+    "type": "bool"
+  },
+  "Downloads.Media.Types.cover": {
+    "value": true,
+    "type": "bool"
+  },
+  "Downloads.Media.Types.cover3d": {
+    "value": true,
+    "type": "bool"
+  },
+  "Downloads.Media.Types.coverback": {
+    "value": true,
+    "type": "bool"
+  },
+  "Downloads.Media.Types.fanart": {
+    "value": true,
+    "type": "bool"
+  },
+  "Downloads.Media.Types.mix": {
+    "value": true,
+    "type": "bool"
+  },
+  "Downloads.Media.Types.marquee": {
+    "value": true,
+    "type": "bool"
+  },
+  "Downloads.Media.Types.manual": {
+    "value": true,
+    "type": "bool"
+  },
+  "Downloads.Media.Types.logo": {
+    "value": true,
+    "type": "bool"
+  },
+  "Downloads.Media.Types.screenshot": {
+    "value": true,
+    "type": "bool"
+  },
+  "Downloads.Media.Types.title": {
+    "value": true,
+    "type": "bool"
+  },
+  "Downloads.Media.Types.video": {
+    "value": true,
+    "type": "bool"
+  },
+  "Downloads.Emulators.InstallMissing": {
+    "value": true,
+    "type": "bool"
+  },
+  "Downloads.Emulators.CheckUpdates": {
+    "value": true,
+    "type": "bool"
+  },
+  "snes.emulator": {
+    "value": "snes9x",
+    "type": "string"
   }
 }

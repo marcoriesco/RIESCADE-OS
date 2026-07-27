@@ -1,5 +1,24 @@
 {
   "$schema": "riescade-system-settings-v1",
   "version": 1,
-  "systems": {}
+  "systems": {
+    "snes|libretro|snes9x": {
+      "system": "snes",
+      "emulator": "libretro",
+      "core": "snes9x",
+      "settings": {
+        "bezels": "none",
+        "videofilters": "none"
+      }
+    },
+    "snes|snes9x|": {
+      "system": "snes",
+      "emulator": "snes9x",
+      "core": "",
+      "settings": {
+        "snes9x_renderer": "3",
+        "snes9x_ratio": "stretch"
+      }
+    }
+  }
 }

@@ -270,7 +270,15 @@ export default function SystemAppContent({
     const localGames = (await window.api.getGames(systemName)) || [];
     if (systemName.toLowerCase() !== "snes") return localGames;
 
-    const catalog = await window.api.listDownloadCatalog("snes");
+    let catalog;
+    try {
+      catalog = await window.api.listDownloadCatalog("snes");
+    } catch (error) {
+      // The remote download catalog is optional enrichment. A malformed entry,
+      // network outage or server error must never hide locally indexed games.
+      console.warn("[SystemAppContent] SNES download catalog unavailable; showing local games.", error);
+      return localGames;
+    }
     const catalogByFilename = new Map(
       catalog.map(asset => [asset.download_name.toLowerCase(), asset])
     );
