@@ -109,9 +109,10 @@ const api = {
   getAppAuthSession: () => ipcRenderer.invoke('app-auth-get-session'),
   loginAppWithGoogle: () => ipcRenderer.invoke('app-auth-login'),
   logoutApp: () => ipcRenderer.invoke('app-auth-logout'),
-  listSnesDownloadCatalog: () => ipcRenderer.invoke('app-list-snes-catalog'),
-  downloadSnesAsset: (assetId: string) =>
-    ipcRenderer.invoke('app-download-snes-asset', assetId),
+  listDownloadCatalog: (platform: string) =>
+    ipcRenderer.invoke('app-list-download-catalog', platform),
+  downloadAsset: (assetId: string) =>
+    ipcRenderer.invoke('app-download-asset', assetId),
   getOverlayPath: (name: string) => ipcRenderer.invoke('get-overlay-path', name),
   getMusicFiles: (subfolder?: string) => ipcRenderer.invoke('get-music-files', subfolder),
   getMusicPath: () => ipcRenderer.invoke('get-music-path'),

@@ -4,7 +4,7 @@ import { basename, join, parse } from 'path'
 import { BrowserWindow, ipcMain } from 'electron'
 import { getRetroBatPath } from '../utils/paths'
 
-const API_BASE_URL = 'https://riescade.com.br'
+const API_BASE_URL = 'https://www.riescade.com.br'
 const PILOT_PLATFORM = 'snes'
 const MAX_SNES_DOWNLOAD_SIZE = 128 * 1024 * 1024
 const ALLOWED_EXTENSIONS = new Set(['.zip', '.sfc', '.smc'])
@@ -66,7 +66,10 @@ async function readApiError(response: Response): Promise<string> {
 }
 
 export class AppDownloadService {
-  async listSnesCatalog(): Promise<AppCatalogAsset[]> {
+  async listCatalog(platform: string): Promise<AppCatalogAsset[]> {
+    if (platform !== PILOT_PLATFORM) {
+      throw new Error(`A plataforma ${platform} ainda não está disponível para download.`)
+    }
     const response = await fetch(`${API_BASE_URL}/api/app/catalog`, {
       headers: {
         'User-Agent': 'RIESCADE-App'
@@ -100,7 +103,7 @@ export class AppDownloadService {
     })
   }
 
-  async downloadSnesAsset(
+  async downloadAsset(
     accessToken: unknown,
     assetId: unknown,
     appVersion: string,
@@ -229,9 +232,12 @@ export function registerAppDownloadIpc(
 ): void {
   const service = new AppDownloadService()
 
-  ipcMain.handle('app-list-snes-catalog', () => service.listSnesCatalog())
+  ipcMain.handle('app-list-download-catalog', (_event, platform: unknown) => {
+    if (typeof platform !== 'string') throw new Error('Plataforma inválida.')
+    return service.listCatalog(platform)
+  })
 
-  ipcMain.handle('app-download-snes-asset', (_event, assetId: unknown) =>
-    service.downloadSnesAsset(getAccessToken(), assetId, appVersion, getMainWindow())
+  ipcMain.handle('app-download-asset', (_event, assetId: unknown) =>
+    service.downloadAsset(getAccessToken(), assetId, appVersion, getMainWindow())
   )
 }

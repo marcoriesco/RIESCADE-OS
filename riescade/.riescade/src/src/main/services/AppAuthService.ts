@@ -3,7 +3,7 @@ import { existsSync, readFileSync, unlinkSync, writeFileSync } from 'fs'
 import { join, resolve } from 'path'
 import { app, BrowserWindow, ipcMain, safeStorage, shell } from 'electron'
 
-const API_BASE_URL = 'https://riescade.com.br'
+const API_BASE_URL = 'https://www.riescade.com.br'
 const AUTH_PROTOCOL = 'riescade'
 
 interface StoredAppSession {

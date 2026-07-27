@@ -45,7 +45,7 @@ function DownloadsApp() {
     try {
       const currentSession = await window.api.getAppAuthSession();
       setSession(currentSession);
-      if (currentSession) setAssets(await window.api.listSnesDownloadCatalog());
+      if (currentSession) setAssets(await window.api.listDownloadCatalog("snes"));
       else setAssets([]);
     } catch (error) {
       setMessage(error instanceof Error ? error.message : String(error));
@@ -77,7 +77,7 @@ function DownloadsApp() {
     setDownloading(asset.id);
     setMessage("");
     try {
-      const result = await window.api.downloadSnesAsset(asset.id);
+      const result = await window.api.downloadAsset(asset.id);
       setProgress(current => ({ ...current, [asset.id]: 100 }));
       setMessage(`${result.filename} foi instalado na pasta SNES.`);
     } catch (error) {

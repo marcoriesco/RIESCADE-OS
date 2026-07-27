@@ -270,7 +270,7 @@ export default function SystemAppContent({
     const localGames = (await window.api.getGames(systemName)) || [];
     if (systemName.toLowerCase() !== "snes") return localGames;
 
-    const catalog = await window.api.listSnesDownloadCatalog();
+    const catalog = await window.api.listDownloadCatalog("snes");
     const catalogByFilename = new Map(
       catalog.map(asset => [asset.download_name.toLowerCase(), asset])
     );
@@ -1129,7 +1129,7 @@ export default function SystemAppContent({
     if (!selectedGame?.downloadAssetId || downloadingAssetId) return;
     setDownloadingAssetId(selectedGame.downloadAssetId);
     try {
-      const result = await window.api.downloadSnesAsset(selectedGame.downloadAssetId);
+      const result = await window.api.downloadAsset(selectedGame.downloadAssetId);
       await window.api.preloadLibrary(true, "snes");
       await reloadLibrary();
       window.dispatchEvent(new CustomEvent("show-toast", {

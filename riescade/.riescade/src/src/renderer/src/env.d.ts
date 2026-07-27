@@ -79,7 +79,7 @@ declare global {
       } | null>
       loginAppWithGoogle: () => Promise<void>
       logoutApp: () => Promise<void>
-      listSnesDownloadCatalog: () => Promise<Array<{
+      listDownloadCatalog: (platform: string) => Promise<Array<{
         id: string
         title: string
         download_name: string
@@ -92,7 +92,7 @@ declare global {
         fanart: string | null
         logo: string | null
       }>>
-      downloadSnesAsset: (assetId: string) => Promise<{
+      downloadAsset: (assetId: string) => Promise<{
         path: string
         filename: string
         sha256: string
