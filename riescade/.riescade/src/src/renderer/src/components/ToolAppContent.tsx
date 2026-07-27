@@ -332,6 +332,7 @@ const SETTINGS_TABS = [
   { id: "personalizacao", nameKey: "personalization", icon: Palette },
   { id: "controles", nameKey: "controls", icon: Gamepad2 },
   { id: "audio", nameKey: "audio", icon: Volume2 },
+  { id: "downloads", nameKey: "downloads", icon: Download },
   { id: "scraper", nameKey: "scraper", icon: CloudDownload },
   { id: "avancado", nameKey: "advanced", icon: Cpu },
   { id: "sobre", nameKey: "about", icon: Info }
@@ -340,6 +341,7 @@ const SETTINGS_TABS = [
 const SETTINGS_GROUP_LABELS: Record<string, string> = {
   conta: "Geral",
   emuladores: "Emulação",
+  downloads: "Biblioteca",
   scraper: "Ferramentas"
 };
 
@@ -827,7 +829,12 @@ export default function ToolAppContent({
     }, [settings]);
 
     const isBoolOn = useCallback((name: string) => {
-      const defaultValue = (name === "RIESCADE.ShowDesktopIcons" || name === "RIESCADE.DynamicBackground") ? "true" : "false";
+      const defaultValue = (
+        name === "RIESCADE.ShowDesktopIcons" ||
+        name === "RIESCADE.DynamicBackground" ||
+        name === "Downloads.Media.Enabled" ||
+        name.startsWith("Downloads.Media.Types.")
+      ) ? "true" : "false";
       const v = getSetting(name, defaultValue);
       return v === "true" || v === "1";
     }, [getSetting]);
@@ -1440,6 +1447,50 @@ export default function ToolAppContent({
                   <SettingGroup label="Sons" />
                   <SettingToggle label="Sons de Navegação" name="EnableSounds" ctx={ctx} />
                   <SettingToggle label="Áudio na Prévia de Vídeo" name="VideoAudio" ctx={ctx} />
+                </div>
+              </ScrollArea>
+            </div>
+          )}
+
+          {/* ===== TAB: DOWNLOADS ===== */}
+          {activeSettingsTab === "downloads" && (
+            <div className="flex h-full flex-col overflow-hidden">
+              <ScrollArea className="min-h-0 flex-1">
+                <div className="settings-content space-y-2">
+                  <div className="mb-8">
+                    <h2 className="settings-page-title">Downloads</h2>
+                    <p className="settings-page-description">
+                      Escolha quais arquivos de mídia serão instalados junto com cada jogo.
+                    </p>
+                  </div>
+
+                  <SettingGroup label="Comportamento" />
+                  <SettingToggle
+                    label="Baixar mídias junto com a ROM"
+                    name="Downloads.Media.Enabled"
+                    desc="Quando ativado, instala automaticamente as mídias selecionadas após baixar o jogo."
+                    ctx={ctx}
+                  />
+                  <SettingToggle
+                    label="Substituir mídias existentes"
+                    name="Downloads.Media.Overwrite"
+                    desc="Atualiza arquivos de mídia que já estiverem presentes na biblioteca local."
+                    ctx={ctx}
+                  />
+
+                  <SettingGroup label="Tipos de mídia" />
+                  <SettingToggle label="Cartucho" name="Downloads.Media.Types.cartdridge" desc="Pasta media/cartdridge." ctx={ctx} />
+                  <SettingToggle label="Capa 2D" name="Downloads.Media.Types.cover" desc="Pasta media/cover." ctx={ctx} />
+                  <SettingToggle label="Capa 3D" name="Downloads.Media.Types.cover3d" desc="Pasta media/cover3d." ctx={ctx} />
+                  <SettingToggle label="Verso da capa" name="Downloads.Media.Types.coverback" desc="Pasta media/coverback." ctx={ctx} />
+                  <SettingToggle label="Fanart" name="Downloads.Media.Types.fanart" desc="Pasta media/fanart." ctx={ctx} />
+                  <SettingToggle label="Logo" name="Downloads.Media.Types.logo" desc="Pasta media/logo." ctx={ctx} />
+                  <SettingToggle label="Manual" name="Downloads.Media.Types.manual" desc="Pasta media/manual." ctx={ctx} />
+                  <SettingToggle label="Marquee" name="Downloads.Media.Types.marquee" desc="Pasta media/marquee." ctx={ctx} />
+                  <SettingToggle label="Mix" name="Downloads.Media.Types.mix" desc="Pasta media/mix." ctx={ctx} />
+                  <SettingToggle label="Captura de tela" name="Downloads.Media.Types.screenshot" desc="Pasta media/screenshot." ctx={ctx} />
+                  <SettingToggle label="Tela de título" name="Downloads.Media.Types.title" desc="Pasta media/title." ctx={ctx} />
+                  <SettingToggle label="Vídeo" name="Downloads.Media.Types.video" desc="Pasta media/video." ctx={ctx} />
                 </div>
               </ScrollArea>
             </div>
