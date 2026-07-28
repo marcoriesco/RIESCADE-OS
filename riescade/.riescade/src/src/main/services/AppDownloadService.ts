@@ -2,7 +2,7 @@ import { createHash } from 'crypto'
 import { copyFileSync, createWriteStream, existsSync, mkdirSync, mkdtempSync, readdirSync, renameSync, rmSync, unlinkSync, promises as fsPromises } from 'fs'
 import { basename, join, parse } from 'path'
 import { tmpdir } from 'os'
-import { execFile } from 'child_process'
+import extractZip from 'extract-zip'
 import { BrowserWindow, ipcMain, shell } from 'electron'
 import { getRetroBatPath } from '../utils/paths'
 import { SettingsParser } from '../parsers/SettingsParser'
@@ -19,6 +19,22 @@ const FULL_MEDIA_ARCHIVE_NAMES = new Set(['_media.zip', '_media.7z'])
 function isFullMediaArchive(filename: unknown): boolean {
   return typeof filename === 'string' &&
     FULL_MEDIA_ARCHIVE_NAMES.has(basename(filename).toLowerCase())
+}
+
+function assertSafeZipEntry(entry: { fileName: string; externalFileAttributes: number }): void {
+  const normalized = entry.fileName.replace(/\\/g, '/')
+  const mode = (entry.externalFileAttributes >> 16) & 0xffff
+  const isSymlink = (mode & 0xf000) === 0xa000
+  if (
+    !normalized
+    || normalized.includes('\0')
+    || normalized.startsWith('/')
+    || /^[a-z]:\//i.test(normalized)
+    || normalized.split('/').some(part => part === '..')
+    || isSymlink
+  ) {
+    throw new Error('O pacote contém um caminho ou link inseguro e não pode ser instalado.')
+  }
 }
 
 export interface AppCatalogAsset {
@@ -387,19 +403,6 @@ export class AppDownloadService {
     let destinationWasPrepared = false
 
     try {
-      const archiveEntries = await this.execFileOutput('tar', ['-tf', archivePath])
-      for (const rawEntry of archiveEntries.split(/\r?\n/)) {
-        const entry = rawEntry.trim().replace(/\\/g, '/')
-        if (!entry) continue
-        if (
-          entry.startsWith('/')
-          || /^[a-z]:\//i.test(entry)
-          || entry.split('/').some(part => part === '..')
-        ) {
-          throw new Error('O pacote contém um caminho inseguro e não pode ser instalado.')
-        }
-      }
-
       window?.webContents.send('app-download-progress', {
         id: downloadId,
         assetId: downloadId,
@@ -411,7 +414,10 @@ export class AppDownloadService {
         percent: 100,
         status: 'Extraindo arquivos do jogo...'
       })
-      await this.execFileOutput('tar', ['-xf', archivePath, '-C', extractionRoot])
+      await extractZip(archivePath, {
+        dir: extractionRoot,
+        onEntry: assertSafeZipEntry
+      })
 
       const entries = readdirSync(extractionRoot, { withFileTypes: true })
         .filter(entry => entry.name !== '__MACOSX')
@@ -449,15 +455,6 @@ export class AppDownloadService {
         rmSync(extractionRoot, { recursive: true, force: true, maxRetries: 5, retryDelay: 100 })
       }
     }
-  }
-
-  private execFileOutput(command: string, args: string[]): Promise<string> {
-    return new Promise((resolve, reject) => {
-      execFile(command, args, { windowsHide: true }, (error, stdout) => {
-        if (error) reject(error)
-        else resolve(stdout)
-      })
-    })
   }
 
   async getPlatformDownloadInfo(platform: string): Promise<PlatformDownloadInfo> {
@@ -629,21 +626,9 @@ export class AppDownloadService {
 
       sendProgress(100, 'Extraindo pacote de mídias...')
 
-      await new Promise<void>((resolve, reject) => {
-        execFile('tar', ['-xf', zipPath, '-C', extractDir], (err) => {
-          if (!err) return resolve()
-          execFile('powershell', [
-            '-NoProfile',
-            '-ExecutionPolicy', 'Bypass',
-            '-Command',
-            'Expand-Archive -LiteralPath $args[0] -DestinationPath $args[1] -Force',
-            zipPath,
-            extractDir
-          ], (psErr) => {
-            if (psErr) return reject(psErr)
-            resolve()
-          })
-        })
+      await extractZip(zipPath, {
+        dir: extractDir,
+        onEntry: assertSafeZipEntry
       })
 
       sendProgress(100, 'Organizando mídias na biblioteca...')
