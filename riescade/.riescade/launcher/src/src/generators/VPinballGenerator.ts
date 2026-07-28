@@ -14,7 +14,7 @@ export class VPinballGenerator extends BaseGenerator {
     const configPath = join(emulatorsDir, 'vpinball', 'VPinballX.ini');
 
     try {
-      const schemaPath = join(getConfigsPath(), 'emulator-schemas', 'vpinball.schema.json');
+      const schemaPath = join(getConfigsPath(), 'emulators', 'schemas', 'vpinball.schema.json');
       if (existsSync(schemaPath)) {
         const schema = JSON.parse(readFileSync(schemaPath, 'utf8'));
         for (const group of (schema.groups || [])) {

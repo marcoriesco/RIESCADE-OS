@@ -14,7 +14,7 @@ export class HatariGenerator extends BaseGenerator {
     const configPath = join(emulatorsDir, 'hatari', 'hatari.cfg');
 
     try {
-      const schemaPath = join(getConfigsPath(), 'emulator-schemas', 'hatari.schema.json');
+      const schemaPath = join(getConfigsPath(), 'emulators', 'schemas', 'hatari.schema.json');
       if (existsSync(schemaPath)) {
         const schema = JSON.parse(readFileSync(schemaPath, 'utf8'));
         for (const group of (schema.groups || [])) {

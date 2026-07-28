@@ -14,7 +14,7 @@ export class GemRBGenerator extends BaseGenerator {
     const configPath = join(emulatorsDir, 'gemrb', 'GemRB.cfg');
 
     try {
-      const schemaPath = join(getConfigsPath(), 'emulator-schemas', 'gemrb.schema.json');
+      const schemaPath = join(getConfigsPath(), 'emulators', 'schemas', 'gemrb.schema.json');
       if (existsSync(schemaPath)) {
         const schema = JSON.parse(readFileSync(schemaPath, 'utf8'));
         for (const group of (schema.groups || [])) {

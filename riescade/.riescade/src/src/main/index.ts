@@ -16,6 +16,7 @@ import { RomsWatcherService } from './services/RomsWatcherService'
 import { InputDeviceService } from './services/InputDeviceService'
 import { registerUpdaterIpc } from './services/UpdaterService'
 import { registerAppDownloadIpc } from './services/AppDownloadService'
+import { registerTorrentDownloadIpc } from './services/TorrentDownloadService'
 import {
   AppAuthService,
   findProtocolUrl,
@@ -635,6 +636,7 @@ app.whenReady().then(() => {
     app.getVersion(),
     () => appAuthService.getAccessToken()
   )
+  registerTorrentDownloadIpc(() => mainWindow)
 
   const initialProtocolUrl = findProtocolUrl(process.argv)
   if (initialProtocolUrl) {

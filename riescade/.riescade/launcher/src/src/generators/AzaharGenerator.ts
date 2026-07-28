@@ -14,7 +14,7 @@ export class AzaharGenerator extends BaseGenerator {
     const configPath = join(emulatorsDir, 'azahar', 'qt-config.ini');
 
     try {
-      const schemaPath = join(getConfigsPath(), 'emulator-schemas', 'azahar.schema.json');
+      const schemaPath = join(getConfigsPath(), 'emulators', 'schemas', 'azahar.schema.json');
       if (existsSync(schemaPath)) {
         const schema = JSON.parse(readFileSync(schemaPath, 'utf8'));
         for (const group of (schema.groups || [])) {

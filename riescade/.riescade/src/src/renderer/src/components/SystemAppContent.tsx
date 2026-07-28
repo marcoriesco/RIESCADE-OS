@@ -1,11 +1,11 @@
 import React, { useEffect, useRef, useState, useMemo, useCallback } from "react";
-import { Gamepad2, Heart, Loader2, Star, Play, ChevronRight, Maximize2, Minimize2, X, Search, Folder, ChevronLeft, HardDrive, ChevronDown, Check, MoreHorizontal, RefreshCw, BookOpen, Settings, Edit3, Save, CloudDownload, User } from "lucide-react";
+import { Gamepad2, Heart, Loader2, Star, Play, ChevronRight, Maximize2, Minimize2, X, Search, Folder, ChevronLeft, HardDrive, ChevronDown, Check, MoreHorizontal, RefreshCw, BookOpen, Settings, Edit3, Save, CloudDownload, User, CheckCircle2, AlertTriangle, Download } from "lucide-react";
 import { System, Game, hasMultipleEmulators } from "../types";
 import { ScrollArea } from "./ScrollArea";
 import { OverlayScrollbarsComponentRef } from "overlayscrollbars-react";
 import * as Select from "@radix-ui/react-select";
 import { EmulatorSettingsPanel } from "./EmulatorSettingsPanel";
-import { UnderlineTabs } from "./SettingsComponents";
+import { RadixTabs } from "./SettingsComponents";
 
 function RadixSelect({
   value,
@@ -101,6 +101,14 @@ function normalizeRating(value: unknown): number {
   return Math.min(1, Math.max(0, normalized));
 }
 
+function formatBytes(bytes: number): string {
+  if (!bytes || bytes <= 0) return '0 B';
+  const k = 1024;
+  const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  return `${parseFloat((bytes / Math.pow(k, i)).toFixed(2))} ${sizes[i]}`;
+}
+
 export default function SystemAppContent({
   system, systems = [], color, Icon, onLaunchGame, search: propSearch, setSearch: propSetSearch, onActiveGameArtChanged, onOpenTool, settings
 }: {
@@ -124,8 +132,19 @@ export default function SystemAppContent({
   const [appSession, setAppSession] = useState<Awaited<ReturnType<typeof window.api.getAppAuthSession>>>(null);
   const [downloadingAssetId, setDownloadingAssetId] = useState<string | null>(null);
   const [selectedIdx, setSelectedIdx] = useState(0);
-  const [filter, setFilter] = useState<"all" | "favorites">("all");
+  const [filter, setFilter] = useState<"all" | "favorites" | "downloads">("all");
   const [loading, setLoading] = useState(true);
+
+  // Platform full download modal & torrent progress states
+  const [showFullSystemTorrentModal, setShowFullSystemTorrentModal] = useState(false);
+  const [platformDownloadInfo, setPlatformDownloadInfo] = useState<any | null>(null);
+  const [platformInfoLoading, setPlatformInfoLoading] = useState(false);
+  const [platformInfoError, setPlatformInfoError] = useState<string | null>(null);
+  const [overwriteGamesOpt, setOverwriteGamesOpt] = useState(false);
+  const [overwriteMediaOpt, setOverwriteMediaOpt] = useState(false);
+  const [isStartingPlatformDownload, setIsStartingPlatformDownload] = useState(false);
+  const [activeTorrentTask, setActiveTorrentTask] = useState<any | null>(null);
+  const [isMinimizedTorrentWidget, setIsMinimizedTorrentWidget] = useState(false);
   
   const [displayLimit, setDisplayLimit] = useState(40);
   const gridContainerRef = useRef<OverlayScrollbarsComponentRef>(null);
@@ -268,15 +287,17 @@ export default function SystemAppContent({
 
   const loadGamesWithCatalog = useCallback(async (systemName: string): Promise<Game[]> => {
     const localGames = (await window.api.getGames(systemName)) || [];
-    if (systemName.toLowerCase() !== "snes") return localGames;
 
     let catalog;
     try {
-      catalog = await window.api.listDownloadCatalog("snes");
+      catalog = await window.api.listDownloadCatalog(systemName);
     } catch (error) {
       // The remote download catalog is optional enrichment. A malformed entry,
       // network outage or server error must never hide locally indexed games.
-      console.warn("[SystemAppContent] SNES download catalog unavailable; showing local games.", error);
+      console.warn(`[SystemAppContent] ${systemName} download catalog unavailable; showing local games.`, error);
+      return localGames;
+    }
+    if (!Array.isArray(catalog) || catalog.length === 0) {
       return localGames;
     }
     const catalogByFilename = new Map(
@@ -304,7 +325,7 @@ export default function SystemAppContent({
         id: `download-${asset.id}`,
         name: asset.title,
         path: asset.rom_path,
-        system: "snes",
+        system: systemName,
         cover: asset.cover ?? undefined,
         cover3d: asset.cover3d ?? undefined,
         fanart: asset.fanart ?? undefined,
@@ -337,6 +358,56 @@ export default function SystemAppContent({
     const unsubscribe = window.api.on("app-auth-changed", (_event, session) => setAppSession(session));
     return unsubscribe;
   }, []);
+
+  useEffect(() => {
+    const unsubTorrentProgress = window.api.on('torrent-download-progress', (_, data) => {
+      setActiveTorrentTask(data);
+      if (data.status === 'completed') {
+        window.dispatchEvent(new CustomEvent("show-toast", {
+          detail: {
+            title: "Download concluído!",
+            description: `Plataforma ${system.fullname} foi baixada e adicionada à biblioteca.`,
+            type: "success"
+          }
+        }));
+        setTimeout(() => setActiveTorrentTask(null), 5000);
+      } else if (data.status === 'error') {
+        window.dispatchEvent(new CustomEvent("show-toast", {
+          detail: {
+            title: "Falha no download da plataforma",
+            description: data.error || "Não foi possível concluir o download.",
+            type: "error"
+          }
+        }));
+      }
+    });
+
+    const unsubReindex = window.api.on('preload-library-required', async (_, platformName) => {
+      if (platformName === system.name) {
+        setLoading(true);
+        try {
+          await window.api.preloadLibrary(true, platformName);
+          await reloadLibrary();
+        } catch (e) {
+          console.error("Falha ao reindexar plataforma após download:", e);
+          window.dispatchEvent(new CustomEvent("show-toast", {
+            detail: {
+              title: "Falha ao atualizar a biblioteca",
+              description: e instanceof Error ? e.message : String(e),
+              type: "error"
+            }
+          }));
+        } finally {
+          setLoading(false);
+        }
+      }
+    });
+
+    return () => {
+      unsubTorrentProgress();
+      unsubReindex();
+    };
+  }, [system.name, system.fullname, reloadLibrary]);
 
   const checkMediaAvailability = useCallback(() => {
     if (system && system.path && !system.path.startsWith('virtual://') && system.name !== 'collections') {
@@ -688,12 +759,111 @@ export default function SystemAppContent({
     };
   }, [targetGamesForFiltering]);
 
+  const pendingDownloadsCount = useMemo(() => {
+    return targetGamesForFiltering.filter(g => !g.installed && (g.isRemoteMissing || !!g.downloadAssetId)).length;
+  }, [targetGamesForFiltering]);
+
+  const favoritesCount = useMemo(() => {
+    return targetGamesForFiltering.filter(g => g.favorite).length;
+  }, [targetGamesForFiltering]);
+
+  const handleOpenPlatformDownloadModal = async () => {
+    setShowPlatformMenu(false);
+    setPlatformInfoError(null);
+    setPlatformInfoLoading(true);
+    setShowFullSystemTorrentModal(true);
+    try {
+      const allSettings = await window.api.getSettings();
+      const initialGamesOverwrite = allSettings?.['Downloads.Games.Overwrite']?.value === true || allSettings?.['Downloads.OverwriteExisting']?.value === true;
+      const initialMediaOverwrite = allSettings?.['Downloads.Media.Overwrite']?.value === true;
+      setOverwriteGamesOpt(initialGamesOverwrite);
+      setOverwriteMediaOpt(initialMediaOverwrite);
+
+      const info = await window.api.getPlatformDownloadInfo(system.name);
+      setPlatformDownloadInfo(info);
+      setOverwriteGamesOpt(info.overwriteGames);
+      setOverwriteMediaOpt(info.overwriteMedia);
+    } catch (err: any) {
+      const message = err.message || "Erro ao consultar informações da plataforma.";
+      setPlatformInfoError(message);
+      window.dispatchEvent(new CustomEvent("show-toast", {
+        detail: {
+          title: "Download indisponível",
+          description: message,
+          type: "error"
+        }
+      }));
+    } finally {
+      setPlatformInfoLoading(false);
+    }
+  };
+
+  const handleConfirmPlatformDownload = async () => {
+    if (!platformDownloadInfo) return;
+    setIsStartingPlatformDownload(true);
+    try {
+      await window.api.saveSetting('Downloads.Games.Overwrite', overwriteGamesOpt, 'bool');
+      await window.api.saveSetting('Downloads.Media.Overwrite', overwriteMediaOpt, 'bool');
+
+      if (!platformDownloadInfo.torrentUrl) {
+        throw new Error(`O arquivo torrent de ${system.fullname} não está disponível no servidor.`);
+      }
+      const torrentSource = platformDownloadInfo.torrentUrl;
+      await window.api.startPlatformTorrent(system.name, torrentSource);
+
+      setShowFullSystemTorrentModal(false);
+      window.dispatchEvent(new CustomEvent("show-toast", {
+        detail: {
+          title: "Download Iniciado",
+          description: `Baixando a plataforma ${system.fullname} diretamente pelo RIESCADE OS.`,
+          type: "success"
+        }
+      }));
+    } catch (err: any) {
+      window.dispatchEvent(new CustomEvent("show-toast", {
+        detail: {
+          title: "Falha no download da plataforma",
+          description: err.message || String(err),
+          type: "error"
+        }
+      }));
+    } finally {
+      setIsStartingPlatformDownload(false);
+    }
+  };
+
+  const handleDownloadPlatformMedia = async () => {
+    setShowPlatformMenu(false);
+    try {
+      await window.api.downloadPlatformMedia(system.name);
+      window.dispatchEvent(new CustomEvent("show-toast", {
+        detail: {
+          title: "Mídias baixadas com sucesso!",
+          description: `O pacote de mídias do console ${system.fullname} foi instalado.`,
+          type: "success"
+        }
+      }));
+      void refreshMedia(true);
+    } catch (err: any) {
+      window.dispatchEvent(new CustomEvent("show-toast", {
+        detail: {
+          title: "Falha ao baixar mídias",
+          description: err.message || String(err),
+          type: "error"
+        }
+      }));
+    }
+  };
+
   // Apply filters including genre, release year, players, and rating dynamically
   const filteredGames = useMemo(() => {
     const res = targetGamesForFiltering.filter(g => {
       const gName = String(g.name || "");
       const matchSearch = gName.toLowerCase().includes(search.toLowerCase());
-      const matchFilter = filter === "all" || g.favorite;
+      const isPendingDownload = (!g.installed && (g.isRemoteMissing || !!g.downloadAssetId));
+      const matchFilter = filter === "all" ||
+        (filter === "favorites" && g.favorite) ||
+        (filter === "downloads" && isPendingDownload);
       
       const genre = g.genre || (g as any).Genre;
       const releasedate = g.releasedate || (g as any).ReleaseDate;
@@ -1137,8 +1307,8 @@ export default function SystemAppContent({
     if (!selectedGame?.downloadAssetId || downloadingAssetId) return;
     setDownloadingAssetId(selectedGame.downloadAssetId);
     try {
-      const result = await window.api.downloadAsset(selectedGame.downloadAssetId);
-      await window.api.preloadLibrary(true, "snes");
+      const result = await window.api.downloadAsset(system.name, selectedGame.downloadAssetId);
+      await window.api.preloadLibrary(true, system.name);
       await reloadLibrary();
       window.dispatchEvent(new CustomEvent("show-toast", {
         detail: {
@@ -1282,14 +1452,44 @@ export default function SystemAppContent({
             
             <button
               onClick={() => { setFilter("favorites"); setSelectedIdx(0); }}
-              className={`w-full flex items-center gap-2.5 px-3 py-[7px] rounded-md text-[13px] transition-all cursor-pointer relative ${
+              className={`w-full flex items-center justify-between px-3 py-[7px] rounded-md text-[13px] transition-all cursor-pointer relative ${
                 filter === "favorites" 
                   ? "bg-white/[0.08] text-white font-medium" 
                   : "text-white/50 hover:bg-white/[0.04] hover:text-white/80"
               }`}
             >
-              <Heart className={`w-4 h-4 shrink-0 ${filter === "favorites" ? "text-accent" : "opacity-60"}`} />
-              <span>Favoritos</span>
+              <div className="flex items-center gap-2.5">
+                <Heart className={`w-4 h-4 shrink-0 ${filter === "favorites" ? "text-accent" : "opacity-60"}`} />
+                <span>Favoritos</span>
+              </div>
+              {favoritesCount > 0 && (
+                <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${
+                  filter === "favorites" ? "bg-accent text-white" : "bg-white/10 text-white/70"
+                }`}>
+                  {favoritesCount}
+                </span>
+              )}
+            </button>
+
+            <button
+              onClick={() => { setFilter("downloads"); setSelectedIdx(0); }}
+              className={`w-full flex items-center justify-between px-3 py-[7px] rounded-md text-[13px] transition-all cursor-pointer relative ${
+                filter === "downloads"
+                  ? "bg-white/[0.08] text-white font-medium"
+                  : "text-white/50 hover:bg-white/[0.04] hover:text-white/80"
+              }`}
+            >
+              <div className="flex items-center gap-2.5">
+                <CloudDownload className={`w-4 h-4 shrink-0 ${filter === "downloads" ? "text-accent" : "opacity-60"}`} />
+                <span>Downloads</span>
+              </div>
+              {pendingDownloadsCount > 0 && (
+                <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${
+                  filter === "downloads" ? "bg-accent text-white" : "bg-white/10 text-white/70"
+                }`}>
+                  {pendingDownloadsCount}
+                </span>
+              )}
             </button>
           </div>
 
@@ -1472,7 +1672,7 @@ export default function SystemAppContent({
                             className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs hover:bg-white/10 text-left transition cursor-pointer text-white/80 hover:text-white"
                           >
                             <CloudDownload className="w-4 h-4 text-accent" />
-                            <span>Buscar metadados do sistema</span>
+                            <span>Scrape total do sistema</span>
                           </button>
 
                           <button
@@ -1484,6 +1684,49 @@ export default function SystemAppContent({
                           >
                             <RefreshCw className="w-4 h-4 text-cyan-400" />
                             <span>Recarregar mídias</span>
+                          </button>
+
+                          <button
+                            onClick={async () => {
+                              setShowPlatformMenu(false);
+                              setLoading(true);
+                              try {
+                                await window.api.preloadLibrary(true, system.name);
+                                await reloadLibrary();
+                              } finally {
+                                setLoading(false);
+                              }
+                            }}
+                            className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs hover:bg-white/10 text-left transition cursor-pointer text-white/80 hover:text-white"
+                          >
+                            <RefreshCw className="w-4 h-4 text-emerald-400" />
+                            <span>Recarregar jogos da pasta</span>
+                          </button>
+
+                          <div className="border-t border-white/10 my-1.5" />
+
+                          <div className="px-3 py-1 text-[10px] text-white/40 uppercase font-semibold tracking-wider mb-1">
+                            Downloads
+                          </div>
+
+                          <button
+                            onClick={() => {
+                              handleOpenPlatformDownloadModal();
+                            }}
+                            className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs hover:bg-white/10 text-left transition cursor-pointer text-white/80 hover:text-white"
+                          >
+                            <Download className="w-4 h-4 text-emerald-400" />
+                            <span>Baixar plataforma completa</span>
+                          </button>
+
+                          <button
+                            onClick={() => {
+                              handleDownloadPlatformMedia();
+                            }}
+                            className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs hover:bg-white/10 text-left transition cursor-pointer text-white/80 hover:text-white"
+                          >
+                            <Download className="w-4 h-4 text-accent" />
+                            <span>Baixar mídias completas</span>
                           </button>
                         </div>
                       </>
@@ -1882,7 +2125,7 @@ export default function SystemAppContent({
                 </div>
 
                 {/* Tab control (Segmented Control) */}
-                <UnderlineTabs
+                <RadixTabs
                   equalWidth
                   tabs={[
                     { id: "collections", label: "Coleções" },
@@ -2212,7 +2455,7 @@ export default function SystemAppContent({
                             className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs hover:bg-white/10 text-left transition cursor-pointer text-white/80 hover:text-white"
                           >
                             <CloudDownload className="w-4 h-4 text-cyan-400" />
-                            <span>Buscar metadados (Scrape)</span>
+                            <span>Scrape do jogo</span>
                           </button>
                         </div>
                       </>
@@ -2368,18 +2611,25 @@ export default function SystemAppContent({
                 <div className="flex flex-col gap-2 mt-auto pt-3">
                   {selectedGame.isRemoteMissing ? (
                     appSession ? (
-                      <button
-                        onClick={() => void handleDownloadSelectedGame()}
-                        disabled={downloadingAssetId !== null}
-                        className="w-[calc(100%-8px)] mx-auto hover:scale-[1.02] transition-all rounded-md py-3 text-base font-semibold flex items-center justify-center gap-2 cursor-pointer text-white bg-fuchsia-600 hover:bg-fuchsia-500 disabled:opacity-50"
-                      >
-                        {downloadingAssetId === selectedGame.downloadAssetId ? (
-                          <Loader2 className="w-6 h-6 animate-spin" />
-                        ) : (
-                          <CloudDownload className="w-6 h-6" />
-                        )}
-                        <span>{downloadingAssetId ? "Baixando..." : "Baixar"}</span>
-                      </button>
+                      <div className="flex flex-col items-center gap-1.5 w-full">
+                        <button
+                          onClick={() => void handleDownloadSelectedGame()}
+                          disabled={downloadingAssetId !== null}
+                          className="w-[calc(100%-8px)] mx-auto hover:scale-[1.02] transition-all rounded-md py-3 text-base font-semibold flex items-center justify-center gap-2 cursor-pointer text-white bg-fuchsia-600 hover:bg-fuchsia-500 disabled:opacity-50 shadow-lg"
+                        >
+                          {downloadingAssetId === selectedGame.downloadAssetId ? (
+                            <Loader2 className="w-6 h-6 animate-spin" />
+                          ) : (
+                            <CloudDownload className="w-6 h-6" />
+                          )}
+                          <span>{downloadingAssetId ? "Baixando..." : "Baixar"}</span>
+                        </button>
+                        {selectedGame.downloadSize && selectedGame.downloadSize > 0 ? (
+                          <span className="text-[11px] font-medium text-white/50 text-center">
+                            Tamanho: {formatBytes(selectedGame.downloadSize)}
+                          </span>
+                        ) : null}
+                      </div>
                     ) : (
                       <>
                         <p className="text-center text-xs text-amber-200/80">
@@ -2830,7 +3080,7 @@ export default function SystemAppContent({
               className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs hover:bg-white/10 text-left transition cursor-pointer text-white/80 hover:text-white"
             >
               <CloudDownload className="w-4 h-4 text-cyan-400" />
-              <span>Buscar metadados (Scrape)</span>
+              <span>Scrape do jogo</span>
             </button>
 
             {/* Change Emulator Submenu */}
@@ -2884,6 +3134,248 @@ export default function SystemAppContent({
             })()}
           </div>
         </>
+      )}
+
+      {/* Full Platform Download Modal */}
+      {showFullSystemTorrentModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-md p-4 animate-in fade-in duration-200">
+          <div className="w-full max-w-lg bg-[#141414] border border-white/10 rounded-2xl p-6 shadow-2xl text-left flex flex-col gap-5 text-white">
+            {/* Header */}
+            <div className="flex items-start justify-between border-b border-white/10 pb-4">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-accent/20 border border-accent/30 flex items-center justify-center text-accent">
+                  <CloudDownload className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="text-base font-bold text-white">Download {system.fullname}</h3>
+                  <p className="text-xs text-white/50">Plataforma Completa</p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowFullSystemTorrentModal(false)}
+                className="w-7 h-7 rounded-full flex items-center justify-center text-white/50 hover:text-white bg-white/5 hover:bg-white/10 transition cursor-pointer"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            {/* Content */}
+            {platformInfoLoading ? (
+              <div className="py-12 flex flex-col items-center justify-center gap-3 text-white/50 text-xs">
+                <Loader2 className="w-8 h-8 animate-spin text-accent" />
+                <span>Consultando informações da plataforma e espaço em disco...</span>
+              </div>
+            ) : platformInfoError ? (
+              <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-xl text-xs text-red-300">
+                {platformInfoError}
+              </div>
+            ) : platformDownloadInfo ? (
+              <div className="flex flex-col gap-4 text-xs">
+                {/* Overview grid */}
+                <div className="grid grid-cols-2 gap-3 bg-black/30 border border-white/5 p-3.5 rounded-xl">
+                  <div className="flex flex-col gap-0.5">
+                    <span className="text-[10px] text-white/40 uppercase font-semibold">Jogos Disponíveis</span>
+                    <span className="text-sm font-bold text-white/90">{platformDownloadInfo.gameCount} jogos</span>
+                  </div>
+                  <div className="flex flex-col gap-0.5">
+                    <span className="text-[10px] text-white/40 uppercase font-semibold">Tamanho do Download</span>
+                    <span className="text-sm font-bold text-accent">{formatBytes(platformDownloadInfo.downloadBytes)}</span>
+                  </div>
+                  <div className="flex flex-col gap-0.5">
+                    <span className="text-[10px] text-white/40 uppercase font-semibold">Espaço Necessário</span>
+                    <span className="text-sm font-bold text-white/90">{formatBytes(platformDownloadInfo.installedBytes)}</span>
+                  </div>
+                  <div className="flex flex-col gap-0.5">
+                    <span className="text-[10px] text-white/40 uppercase font-semibold">Espaço Livre Disponível</span>
+                    <span className={`text-sm font-bold ${platformDownloadInfo.hasEnoughSpace ? 'text-emerald-400' : 'text-red-400'}`}>
+                      {formatBytes(platformDownloadInfo.availableBytes)}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Disk Space Status Indicator */}
+                <div className={`flex items-center gap-3 p-3 rounded-xl border text-xs ${
+                  platformDownloadInfo.hasEnoughSpace
+                    ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-300'
+                    : 'bg-red-500/10 border-red-500/20 text-red-300'
+                }`}>
+                  {platformDownloadInfo.hasEnoughSpace ? (
+                    <>
+                      <CheckCircle2 className="w-5 h-5 shrink-0 text-emerald-400" />
+                      <div>
+                        <p className="font-semibold">Espaço em disco suficiente</p>
+                        <p className="text-[11px] text-emerald-300/70">
+                          {platformDownloadInfo.sameVolume
+                            ? 'O volume de destino possui espaço livre para o pico de download e extração.'
+                            : 'Os discos de destino possuem espaço livre suficiente.'}
+                        </p>
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <AlertTriangle className="w-5 h-5 shrink-0 text-red-400" />
+                      <div>
+                        <p className="font-semibold">Espaço em disco insuficiente</p>
+                        <p className="text-[11px] text-red-300/70">
+                          Libere espaço na unidade de destino para prosseguir com a instalação.
+                        </p>
+                      </div>
+                    </>
+                  )}
+                </div>
+
+                {/* Overwrite Settings Toggles */}
+                <div className="flex flex-col gap-2 bg-black/20 border border-white/5 p-3 rounded-xl">
+                  <span className="text-[10px] font-semibold uppercase text-white/40 tracking-wider">Regras de Sobrescrita</span>
+                  <label className="flex items-center justify-between cursor-pointer select-none text-xs">
+                    <span className="text-white/80">Substituir jogos locais existentes</span>
+                    <input
+                      type="checkbox"
+                      checked={overwriteGamesOpt}
+                      onChange={async (e) => {
+                        const val = e.target.checked;
+                        setOverwriteGamesOpt(val);
+                        await window.api.saveSetting('Downloads.Games.Overwrite', val, 'bool');
+                      }}
+                      className="w-4 h-4 accent-range cursor-pointer"
+                    />
+                  </label>
+                  <label className="flex items-center justify-between cursor-pointer select-none text-xs">
+                    <span className="text-white/80">Substituir mídias locais existentes</span>
+                    <input
+                      type="checkbox"
+                      checked={overwriteMediaOpt}
+                      onChange={async (e) => {
+                        const val = e.target.checked;
+                        setOverwriteMediaOpt(val);
+                        await window.api.saveSetting('Downloads.Media.Overwrite', val, 'bool');
+                      }}
+                      className="w-4 h-4 accent-range cursor-pointer"
+                    />
+                  </label>
+                  <p className="text-[10px] text-white/40 mt-1">
+                    {overwriteGamesOpt || overwriteMediaOpt
+                      ? 'Arquivos locais correspondentes serão sobrescritos durante a cópia.'
+                      : 'Arquivos locais existentes serão preservados; apenas itens ausentes serão adicionados.'}
+                  </p>
+                </div>
+
+                {/* Download Method Note */}
+                <p className="text-[11px] text-white/40 leading-relaxed">
+                  {platformDownloadInfo.downloadMethod === 'torrent-external'
+                    ? 'O download será iniciado abrindo o link/arquivo torrent no seu cliente torrent padrão.'
+                    : 'Os arquivos serão baixados temporariamente e adicionados automaticamente à biblioteca do RIESCADE.'}
+                </p>
+              </div>
+            ) : null}
+
+            {/* Modal Actions */}
+            <div className="flex items-center justify-end gap-3 border-t border-white/10 pt-4 mt-2">
+              <button
+                type="button"
+                onClick={() => setShowFullSystemTorrentModal(false)}
+                className="px-4 py-2 rounded-xl text-xs font-semibold text-white/70 hover:text-white hover:bg-white/5 transition cursor-pointer"
+              >
+                Cancelar
+              </button>
+              <button
+                type="button"
+                disabled={!platformDownloadInfo?.hasEnoughSpace || isStartingPlatformDownload || platformInfoLoading}
+                onClick={handleConfirmPlatformDownload}
+                className="px-5 py-2 rounded-xl text-xs font-bold bg-accent hover:bg-accent/80 text-white transition cursor-pointer disabled:opacity-50 flex items-center gap-2 shadow-lg"
+              >
+                {isStartingPlatformDownload ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    <span>Iniciando...</span>
+                  </>
+                ) : (
+                  <span>Baixar plataforma completa</span>
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Active Torrent Floating Progress Widget */}
+      {activeTorrentTask && (
+        <div className={`fixed bottom-6 right-6 z-50 bg-[#121212]/95 border border-white/10 rounded-2xl shadow-2xl p-4 text-white animate-in slide-in-from-bottom-5 duration-200 transition-all ${
+          isMinimizedTorrentWidget ? "w-72" : "w-96"
+        }`}>
+          <div className="flex items-center justify-between border-b border-white/10 pb-2.5 mb-3">
+            <div className="flex items-center gap-2.5 min-w-0 pr-2">
+              <CloudDownload className="w-4 h-4 text-accent shrink-0 animate-pulse" />
+              <span className="text-xs font-bold truncate">{activeTorrentTask.title || activeTorrentTask.platform?.toUpperCase()}</span>
+            </div>
+            <div className="flex items-center gap-1 shrink-0">
+              <button
+                type="button"
+                onClick={() => setIsMinimizedTorrentWidget(prev => !prev)}
+                className="p-1 text-white/50 hover:text-white hover:bg-white/10 rounded-md transition cursor-pointer"
+                title={isMinimizedTorrentWidget ? "Expandir" : "Minimizar"}
+              >
+                {isMinimizedTorrentWidget ? <Maximize2 className="w-3.5 h-3.5" /> : <Minimize2 className="w-3.5 h-3.5" />}
+              </button>
+              <button
+                type="button"
+                onClick={() => window.api.cancelPlatformTorrent(activeTorrentTask.taskId)}
+                className="p-1 text-white/50 hover:text-red-400 hover:bg-white/10 rounded-md transition cursor-pointer"
+                title="Cancelar Download"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-2 text-xs">
+            <div className="flex items-center justify-between text-[11px]">
+              <span className="text-white/60 capitalize font-medium">{activeTorrentTask.status === 'copying' ? 'Finalizando e organizando biblioteca...' : activeTorrentTask.status}</span>
+              <span className="font-bold text-accent">{activeTorrentTask.progress || 0}%</span>
+            </div>
+
+            {/* Progress Bar */}
+            <div className="w-full bg-black/40 h-2 rounded-full overflow-hidden border border-white/5">
+              <div
+                className="bg-accent h-full transition-all duration-300 rounded-full"
+                style={{ width: `${Math.min(100, Math.max(0, activeTorrentTask.progress || 0))}%` }}
+              />
+            </div>
+
+            {!isMinimizedTorrentWidget && (
+              <div className="flex flex-col gap-1.5 pt-1 text-[10px] text-white/50">
+                <div className="flex items-center justify-between">
+                  <span>{formatBytes(activeTorrentTask.downloadedBytes)} / {formatBytes(activeTorrentTask.totalBytes)}</span>
+                  <span>Peers: {activeTorrentTask.numPeers || 0}</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span>↓ {formatBytes(activeTorrentTask.downloadSpeed)}/s · ↑ {formatBytes(activeTorrentTask.uploadSpeed)}/s</span>
+                  <span>{activeTorrentTask.eta ? `Restante: ${Math.ceil(activeTorrentTask.eta / 60)} min` : 'Calculando...'}</span>
+                </div>
+                <div className="flex items-center justify-end gap-2 pt-2 border-t border-white/5 mt-1">
+                  {activeTorrentTask.status === 'paused' ? (
+                    <button
+                      type="button"
+                      onClick={() => window.api.resumePlatformTorrent(activeTorrentTask.taskId)}
+                      className="px-3 py-1 bg-white/10 hover:bg-white/20 text-white rounded-md transition cursor-pointer font-semibold"
+                    >
+                      Retomar
+                    </button>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={() => window.api.pausePlatformTorrent(activeTorrentTask.taskId)}
+                      className="px-3 py-1 bg-white/10 hover:bg-white/20 text-white rounded-md transition cursor-pointer font-semibold"
+                    >
+                      Pausar
+                    </button>
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
       )}
     </div>
     </div>

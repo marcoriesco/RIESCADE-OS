@@ -3,7 +3,7 @@ import { Search, Folder, Star, Edit3, X, ChevronLeft, ChevronRight, Filter, Hard
 import { ScrollArea } from "./ScrollArea";
 import * as Select from "@radix-ui/react-select";
 import { Check, ChevronDown } from "lucide-react";
-import { UnderlineTabs } from "./SettingsComponents";
+import { RadixTabs } from "./SettingsComponents";
 
 function RadixSelect({
   value,
@@ -577,7 +577,7 @@ export default function DatabaseApp() {
               </div>
 
               {/* Edit Section Tabs */}
-              <UnderlineTabs
+              <RadixTabs
                 className="px-4 shrink-0 bg-black/5"
                 equalWidth
                 tabs={[

@@ -9,7 +9,7 @@ const projectSrcDir = path.resolve(__dirname, '..');
 const esFeaturesPath = path.resolve(projectSrcDir, '..', '..', '..', 'es_features.cfg');
 const programCsPath = path.resolve(projectSrcDir, 'docs', 'emulatorlauncher_src', 'emulatorLauncher', 'Program.cs');
 const generatorsDir = path.resolve(projectSrcDir, 'docs', 'emulatorlauncher_src', 'emulatorLauncher', 'Generators');
-const schemaOutputDir = path.resolve(projectSrcDir, '..', 'configs', 'emulator-schemas');
+const schemaOutputDir = path.resolve(projectSrcDir, '..', 'configs', 'emulators', 'schemas');
 
 // Ensure output dir exists
 if (!fs.existsSync(schemaOutputDir)) {

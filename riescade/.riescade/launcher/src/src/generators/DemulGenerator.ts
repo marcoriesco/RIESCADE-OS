@@ -14,7 +14,7 @@ export class DemulGenerator extends BaseGenerator {
     const configPath = join(emulatorsDir, 'demul', 'Demul.ini');
 
     try {
-      const schemaPath = join(getConfigsPath(), 'emulator-schemas', 'demul.schema.json');
+      const schemaPath = join(getConfigsPath(), 'emulators', 'schemas', 'demul.schema.json');
       if (existsSync(schemaPath)) {
         const schema = JSON.parse(readFileSync(schemaPath, 'utf8'));
         for (const group of (schema.groups || [])) {

@@ -14,7 +14,7 @@ export class RaineGenerator extends BaseGenerator {
     const configPath = join(emulatorsDir, 'raine', 'raine32_sdl.cfg');
 
     try {
-      const schemaPath = join(getConfigsPath(), 'emulator-schemas', 'raine.schema.json');
+      const schemaPath = join(getConfigsPath(), 'emulators', 'schemas', 'raine.schema.json');
       if (existsSync(schemaPath)) {
         const schema = JSON.parse(readFileSync(schemaPath, 'utf8'));
         for (const group of (schema.groups || [])) {

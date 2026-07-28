@@ -4775,7 +4775,7 @@
     "snes9x_vsync": "auto",
     "snes9x_bilinear": "auto",
     "snes9x_scanlines": "auto",
-    "snes9x_renderer": "auto",
+    "snes9x_renderer": "3",
     "snes9x_showmenu": "auto",
     "snes9x_framerate": "auto",
     "snes9x_analog": "auto",

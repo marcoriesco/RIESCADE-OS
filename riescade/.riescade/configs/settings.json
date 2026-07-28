@@ -8,7 +8,7 @@
     "type": "bool"
   },
   "ScraperNotificationMode": {
-    "value": false,
+    "value": true,
     "type": "bool"
   },
   "ScreenScraperMotors": {
@@ -168,7 +168,7 @@
     "type": "int"
   },
   "Taskbar.Icons": {
-    "value": "tool:settings,system:switch,system:teknoparrot,system:snes,system:xbox360,system:arcade,system:ps2,system:ps3,system:ps4,system:Windows,system:pinballfx3",
+    "value": "tool:settings,system:switch,system:teknoparrot,system:megadrive,system:snes,system:xbox360,system:arcade,system:ps2,system:ps3,system:ps4,system:Windows",
     "type": "string"
   },
   "Window.system-switch.Maximized": {
@@ -280,15 +280,15 @@
     "type": "bool"
   },
   "Window.system-snes.X": {
-    "value": 380,
+    "value": 138,
     "type": "int"
   },
   "Window.system-snes.Y": {
-    "value": 90,
+    "value": 64,
     "type": "int"
   },
   "Window.system-snes.Width": {
-    "value": 1450,
+    "value": 1375,
     "type": "int"
   },
   "Window.system-snes.Height": {
@@ -572,15 +572,15 @@
     "type": "string"
   },
   "Window.system-xbox360.X": {
-    "value": 137,
+    "value": 1,
     "type": "int"
   },
   "Window.system-xbox360.Y": {
-    "value": 70,
+    "value": 199,
     "type": "int"
   },
   "Window.system-xbox360.Width": {
-    "value": 1721,
+    "value": 1298,
     "type": "int"
   },
   "Window.system-xbox360.Height": {
@@ -688,7 +688,7 @@
     "type": "bool"
   },
   "RIESCADE.PreferredMediaType.Windows": {
-    "value": "cover",
+    "value": "fanart",
     "type": "string"
   },
   "Window.system-hbmame.Maximized": {
@@ -1007,8 +1007,20 @@
     "value": true,
     "type": "bool"
   },
-  "snes.emulator": {
-    "value": "snes9x",
-    "type": "string"
+  "Window.system-megadrive.Maximized": {
+    "value": true,
+    "type": "bool"
+  },
+  "Downloads.NotificationMode": {
+    "value": false,
+    "type": "bool"
+  },
+  "Downloads.Games.Overwrite": {
+    "value": false,
+    "type": "bool"
+  },
+  "Downloads.Media.Overwrite": {
+    "value": false,
+    "type": "bool"
   }
 }

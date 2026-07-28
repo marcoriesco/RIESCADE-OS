@@ -14,7 +14,7 @@ export class FpinballGenerator extends BaseGenerator {
     const configPath = join(emulatorsDir, 'fpinball', 'DmdDevice.ini');
 
     try {
-      const schemaPath = join(getConfigsPath(), 'emulator-schemas', 'fpinball.schema.json');
+      const schemaPath = join(getConfigsPath(), 'emulators', 'schemas', 'fpinball.schema.json');
       if (existsSync(schemaPath)) {
         const schema = JSON.parse(readFileSync(schemaPath, 'utf8'));
         for (const group of (schema.groups || [])) {

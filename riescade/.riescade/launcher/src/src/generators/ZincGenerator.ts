@@ -14,7 +14,7 @@ export class ZincGenerator extends BaseGenerator {
     const configPath = join(emulatorsDir, 'zinc', 'zinc.cfg');
 
     try {
-      const schemaPath = join(getConfigsPath(), 'emulator-schemas', 'zinc.schema.json');
+      const schemaPath = join(getConfigsPath(), 'emulators', 'schemas', 'zinc.schema.json');
       if (existsSync(schemaPath)) {
         const schema = JSON.parse(readFileSync(schemaPath, 'utf8'));
         for (const group of (schema.groups || [])) {

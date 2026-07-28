@@ -3,7 +3,7 @@ const path = require('path');
 
 const projectSrcDir = path.resolve(__dirname, '..');
 const cfgPath = path.resolve(projectSrcDir, '..', '..', '..', 'es_features.cfg');
-const schemasDir = path.resolve(projectSrcDir, '..', 'configs', 'emulator-schemas');
+const schemasDir = path.resolve(projectSrcDir, '..', 'configs', 'emulators', 'schemas');
 
 const PORTUGUESE_LABELS = {
   'ratio': 'Proporção de Tela',

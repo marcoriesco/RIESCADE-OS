@@ -74,4 +74,5 @@ export interface Game {
   downloadName?: string
   downloadSize?: number | null
   isRemoteMissing?: boolean
+  installed?: boolean
 }

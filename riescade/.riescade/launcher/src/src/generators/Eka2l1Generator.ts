@@ -14,7 +14,7 @@ export class Eka2l1Generator extends BaseGenerator {
     const configPath = join(emulatorsDir, 'eka2l1', 'config.yml');
 
     try {
-      const schemaPath = join(getConfigsPath(), 'emulator-schemas', 'eka2l1.schema.json');
+      const schemaPath = join(getConfigsPath(), 'emulators', 'schemas', 'eka2l1.schema.json');
       if (existsSync(schemaPath)) {
         const schema = JSON.parse(readFileSync(schemaPath, 'utf8'));
         for (const group of (schema.groups || [])) {

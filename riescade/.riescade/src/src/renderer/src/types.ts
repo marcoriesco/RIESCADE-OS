@@ -69,6 +69,7 @@ export type Game = {
   downloadName?: string;
   downloadSize?: number | null;
   isRemoteMissing?: boolean;
+  installed?: boolean;
 };
 
 

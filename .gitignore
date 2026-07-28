@@ -59,6 +59,8 @@ riescade/.riescade/launcher/configs/teknoparrot-generated-hash.json
 roms
 bios
 emulators
+!riescade/.riescade/configs/emulators/
+!riescade/.riescade/configs/emulators/**
 emulators_release
 saves/
 screenshots/

@@ -53,7 +53,7 @@ function validateJsonFiles() {
 }
 
 function validateEmulatorSchemas() {
-  const schemasRoot = path.join(appRoot, 'configs', 'emulator-schemas');
+  const schemasRoot = path.join(appRoot, 'configs', 'emulators', 'schemas');
   const schemaIds = new Map();
 
   for (const fileName of fs.readdirSync(schemasRoot).filter(name => name.endsWith('.schema.json'))) {
@@ -97,14 +97,14 @@ function validateEmulatorSchemas() {
 }
 
 function validateGeneratorConfigLinks() {
-  const schemasRoot = path.join(appRoot, 'configs', 'emulator-schemas');
+  const schemasRoot = path.join(appRoot, 'configs', 'emulators', 'schemas');
   const generatorsRoot = path.join(launcherSource, 'generators');
   for (const fileName of fs.readdirSync(generatorsRoot).filter(name => name.endsWith('Generator.ts'))) {
     const source = fs.readFileSync(path.join(generatorsRoot, fileName), 'utf8');
-    if (/process\.cwd\(\).*emulator-schemas/.test(source)) {
+    if (/process\.cwd\(\).*emulators.*schemas/.test(source)) {
       fail(`Gerador usa diretório de trabalho para localizar schema: ${fileName}.`);
     }
-    for (const match of source.matchAll(/emulator-schemas',\s*'([^']+\.schema\.json)'/g)) {
+    for (const match of source.matchAll(/emulators',\s*'schemas',\s*'([^']+\.schema\.json)'/g)) {
       if (!fs.existsSync(path.join(schemasRoot, match[1]))) {
         fail(`Gerador referencia schema inexistente: ${fileName} -> ${match[1]}.`);
       }
@@ -204,42 +204,6 @@ function validateScraperSources() {
   }
 }
 
-function validateEmulatorCatalog() {
-  const systemsPath = path.join(appRoot, 'configs', 'systems.json');
-  const catalogPath = path.join(appRoot, 'configs', 'emulators-catalog.json');
-  const systems = JSON.parse(fs.readFileSync(systemsPath, 'utf8'));
-  const catalogDocument = JSON.parse(fs.readFileSync(catalogPath, 'utf8'));
-  const catalog = catalogDocument.emulators || {};
-  const referenced = new Set();
-
-  for (const system of systems.systems || []) {
-    for (const emulator of system.emulators || []) {
-      referenced.add(String(emulator.name || '').toLowerCase());
-    }
-  }
-
-  for (const id of [...referenced].sort()) {
-    const entry = catalog[id];
-    if (!entry) {
-      fail(`Emulador referenciado sem entrada no catálogo: ${id}.`);
-      continue;
-    }
-    if (!entry.installDir) fail(`Emulador ${id} sem installDir no catálogo.`);
-    if (!['github-release', 'release', 'manual'].includes(entry.updateMode)) {
-      fail(`Emulador ${id} possui updateMode inválido: ${entry.updateMode}.`);
-    }
-    if (entry.updateMode !== 'manual' && !entry.executable) {
-      fail(`Emulador atualizável ${id} não possui executável canônico.`);
-    }
-    if (entry.updateMode === 'github-release') {
-      if (entry.provider !== 'github' || !/^https:\/\/github\.com\/[^/]+\/[^/]+\/releases\/?$/.test(entry.source || '')) {
-        fail(`Emulador ${id} não possui fonte GitHub Releases válida.`);
-      }
-      if (!entry.assetPattern) fail(`Emulador ${id} não possui assetPattern para Windows.`);
-    }
-  }
-}
-
 function validateReleaseContract() {
   const releasePath = path.join(appRoot, 'src', 'scripts', 'release.js');
   const releaseSource = fs.readFileSync(releasePath, 'utf8');
@@ -266,7 +230,6 @@ validateGeneratorRegistry();
 validateGeneratorConfigLinks();
 validateTeknoParrotControls();
 validateScraperSources();
-validateEmulatorCatalog();
 validateReleaseContract();
 
 if (errors.length) {

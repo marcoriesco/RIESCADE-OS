@@ -19,6 +19,14 @@
         "snes9x_renderer": "3",
         "snes9x_ratio": "stretch"
       }
+    },
+    "xbox360|xenia-canary|": {
+      "system": "xbox360",
+      "emulator": "xenia-canary",
+      "core": "",
+      "settings": {
+        "gpu": "vulkan"
+      }
     }
   }
 }

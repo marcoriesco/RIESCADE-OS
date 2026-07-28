@@ -117,7 +117,11 @@ RIESCADE OS/
     ├── videos/
     └── .riescade/
         ├── configs/
-        │   ├── emulator-schemas/      # Opções exibidas no frontend
+        │   ├── emulators/             # Catálogo e configurações dos emuladores
+        │   │   ├── schemas/           # Opções exibidas no frontend
+        │   │   ├── global.json
+        │   │   ├── games.json
+        │   │   └── systems.json
         │   ├── settings.json          # Configurações padrão
         │   └── systems.json           # Cadastro dos sistemas e ROMs
         ├── launcher/
@@ -209,7 +213,7 @@ A rotina de release preserva os binários e configurações necessários, exclui
 
 ## Emuladores, shaders e molduras
 
-O catálogo `riescade/.riescade/configs/emulators-catalog.json` centraliza executável, pasta de instalação, fonte oficial e arquivos que devem ser preservados durante uma atualização. Downloads são preparados em uma pasta temporária, validados e só então substituem a instalação; em caso de falha, a versão anterior é restaurada.
+O catálogo de instalação dos emuladores fica exclusivamente no servidor RIESCADE. O aplicativo mantém apenas um cache temporário em `riescade/.riescade/state/emulators-catalog.remote-cache.json`. Downloads são preparados em uma pasta temporária, validados e só então substituem a instalação; em caso de falha, a versão anterior é restaurada.
 
 Para cores Libretro, shaders podem ser colocados em `riescade/shaders`, `riescade/system/shaders` ou `emulators/retroarch/shaders`. Todas as molduras ficam exclusivamente em `riescade/decorations` e não são incluídas por padrão na distribuição.
 

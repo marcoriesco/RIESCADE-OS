@@ -14,7 +14,7 @@ export class ForceEngineGenerator extends BaseGenerator {
     const configPath = join(emulatorsDir, 'theforceengine', 'settings.ini');
 
     try {
-      const schemaPath = join(getConfigsPath(), 'emulator-schemas', 'theforceengine.schema.json');
+      const schemaPath = join(getConfigsPath(), 'emulators', 'schemas', 'theforceengine.schema.json');
       if (existsSync(schemaPath)) {
         const schema = JSON.parse(readFileSync(schemaPath, 'utf8'));
         for (const group of (schema.groups || [])) {

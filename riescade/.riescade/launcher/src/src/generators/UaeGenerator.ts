@@ -14,7 +14,7 @@ export class UaeGenerator extends BaseGenerator {
     const configPath = join(emulatorsDir, 'winuae', 'winuae.ini');
 
     try {
-      const schemaPath = join(getConfigsPath(), 'emulator-schemas', 'winuae.schema.json');
+      const schemaPath = join(getConfigsPath(), 'emulators', 'schemas', 'winuae.schema.json');
       if (existsSync(schemaPath)) {
         const schema = JSON.parse(readFileSync(schemaPath, 'utf8'));
         for (const group of (schema.groups || [])) {

@@ -1,6 +1,6 @@
 import { existsSync, readFileSync, writeFileSync, mkdirSync, readdirSync, statSync, copyFileSync, unlinkSync, rmdirSync, renameSync, rmSync, mkdtempSync } from 'fs'
 import { join, dirname, basename } from 'path'
-import { getRetroBatPath, getRiescadePath } from '../utils/paths'
+import { getRetroBatPath, getStatePath } from '../utils/paths'
 import https from 'https'
 import { exec } from 'child_process'
 import { tmpdir } from 'os'
@@ -68,28 +68,13 @@ interface EmulatorCatalogPayload {
 
 const EMULATOR_CATALOG_URL = 'https://www.riescade.com.br/api/app/emulators/catalog'
 const REMOTE_CATALOG_TTL_MS = 15 * 60_000
-let localEmulatorCatalogCache: Record<string, EmulatorCatalogEntry> | null = null
 let remoteEmulatorCatalogCache: {
   catalog: Record<string, EmulatorCatalogEntry>
   fetchedAt: number
 } | null = null
 
-function getLocalEmulatorCatalog(): Record<string, EmulatorCatalogEntry> {
-  if (localEmulatorCatalogCache) return localEmulatorCatalogCache
-  const catalogPath = join(getRiescadePath(), 'configs', 'emulators-catalog.json')
-  let loadedCatalog: Record<string, EmulatorCatalogEntry> = {}
-  try {
-    const parsed = JSON.parse(readFileSync(catalogPath, 'utf8'))
-    loadedCatalog = parsed.emulators || {}
-  } catch (error) {
-    console.warn(`[EmulatorInstaller] Could not load ${catalogPath}; using built-in paths.`, error)
-  }
-  localEmulatorCatalogCache = loadedCatalog
-  return loadedCatalog
-}
-
 function getCachedRemoteCatalog(): Record<string, EmulatorCatalogEntry> | null {
-  const cachePath = join(getRiescadePath(), 'configs', 'emulators-catalog.remote-cache.json')
+  const cachePath = getRemoteCatalogCachePath()
   try {
     const parsed = JSON.parse(readFileSync(cachePath, 'utf8'))
     if (
@@ -106,6 +91,13 @@ function getCachedRemoteCatalog(): Record<string, EmulatorCatalogEntry> | null {
   return null
 }
 
+function getRemoteCatalogCachePath(): string {
+  const statePath = getStatePath()
+  const cachePath = join(statePath, 'emulators-catalog.remote-cache.json')
+  mkdirSync(statePath, { recursive: true })
+  return cachePath
+}
+
 async function getEmulatorCatalog(
   accessToken?: string,
   requireAuthorization = false
@@ -120,7 +112,7 @@ async function getEmulatorCatalog(
     if (requireAuthorization) {
       throw new Error('Entre com sua conta RIESCADE para instalar emuladores.')
     }
-    return getLocalEmulatorCatalog()
+    return getCachedRemoteCatalog() || {}
   }
 
   try {
@@ -143,7 +135,7 @@ async function getEmulatorCatalog(
     }
     const fetchedAt = Date.now()
     remoteEmulatorCatalogCache = { catalog: payload.emulators, fetchedAt }
-    const cachePath = join(getRiescadePath(), 'configs', 'emulators-catalog.remote-cache.json')
+    const cachePath = getRemoteCatalogCachePath()
     try {
       writeFileSync(
         cachePath,
@@ -164,8 +156,8 @@ async function getEmulatorCatalog(
     const cached = getCachedRemoteCatalog()
     if (cached) return cached
     if (requireAuthorization) throw error
-    console.warn('[EmulatorInstaller] Remote catalog unavailable; using local fallback.', error)
-    return getLocalEmulatorCatalog()
+    console.warn('[EmulatorInstaller] Remote catalog unavailable and no valid cache was found.', error)
+    return {}
   }
 }
 

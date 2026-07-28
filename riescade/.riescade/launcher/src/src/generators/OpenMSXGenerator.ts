@@ -14,7 +14,7 @@ export class OpenMSXGenerator extends BaseGenerator {
     const configPath = join(emulatorsDir, 'openmsx', 'settings.xml');
 
     try {
-      const schemaPath = join(getConfigsPath(), 'emulator-schemas', 'openmsx.schema.json');
+      const schemaPath = join(getConfigsPath(), 'emulators', 'schemas', 'openmsx.schema.json');
       if (existsSync(schemaPath)) {
         const schema = JSON.parse(readFileSync(schemaPath, 'utf8'));
         for (const group of (schema.groups || [])) {

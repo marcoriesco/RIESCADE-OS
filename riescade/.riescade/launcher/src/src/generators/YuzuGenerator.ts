@@ -14,7 +14,7 @@ export class YuzuGenerator extends BaseGenerator {
     const configPath = join(emulatorsDir, 'yuzu', 'qt-config.ini');
 
     try {
-      const schemaPath = join(getConfigsPath(), 'emulator-schemas', 'yuzu.schema.json');
+      const schemaPath = join(getConfigsPath(), 'emulators', 'schemas', 'yuzu.schema.json');
       if (existsSync(schemaPath)) {
         const schema = JSON.parse(readFileSync(schemaPath, 'utf8'));
         for (const group of (schema.groups || [])) {

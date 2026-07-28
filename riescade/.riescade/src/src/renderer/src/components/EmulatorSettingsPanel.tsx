@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react'
-import { Search, RotateCcw, Link2, ChevronRight, Monitor, Cpu, Volume2, Settings, Gamepad2, Wrench, Palette, Share2, Cog, X } from 'lucide-react'
-import { SettingGroup, SettingToggle, SettingSelect, SettingSlider, SettingInput } from './SettingsComponents'
+import { Search, RotateCcw, Link2, ChevronRight, X } from 'lucide-react'
+import { SettingGroup, SettingToggle, SettingSelect, SettingSlider, SettingInput, RadixTabs } from './SettingsComponents'
 import type { SettingsCtx } from '../types'
 import { useI18n } from '../i18n'
+import { localizeEmulatorSchemaText } from '../emulatorSchemaI18n'
 
 // Schema types matching backend EmulatorSchemaService
 interface SchemaOption {
@@ -38,18 +39,6 @@ interface EmulatorSchema {
 }
 
 // Icon mapping
-const ICON_MAP: Record<string, React.ReactNode> = {
-  monitor: <Monitor className="w-4 h-4" />,
-  cpu: <Cpu className="w-4 h-4" />,
-  volume2: <Volume2 className="w-4 h-4" />,
-  settings: <Settings className="w-4 h-4" />,
-  gamepad2: <Gamepad2 className="w-4 h-4" />,
-  wrench: <Wrench className="w-4 h-4" />,
-  palette: <Palette className="w-4 h-4" />,
-  share2: <Share2 className="w-4 h-4" />,
-  cog: <Cog className="w-4 h-4" />,
-}
-
 interface EmulatorSettingsPanelProps {
   emulatorId: string
   emulatorSettings: any
@@ -73,7 +62,7 @@ export const EmulatorSettingsPanel: React.FC<EmulatorSettingsPanelProps> = ({
   scopeContext,
   onOverridesChange
 }) => {
-  const { t } = useI18n()
+  const { t, resolvedLanguage } = useI18n()
   const [schema, setSchema] = useState<EmulatorSchema | null>(null)
   const [resolvedSettings, setResolvedSettings] = useState<Record<string, { value: any; source: string }>>({})
   const [loading, setLoading] = useState(true)
@@ -222,17 +211,33 @@ export const EmulatorSettingsPanel: React.FC<EmulatorSettingsPanelProps> = ({
     return String(optionCore).toLowerCase() === activeCore
   }, [scope, activeCore])
 
+  const localizedGroups = useMemo(() => {
+    if (!schema) return []
+    return schema.groups.map(group => ({
+      ...group,
+      title: localizeEmulatorSchemaText(group.title, resolvedLanguage) || group.title,
+      options: group.options.map(option => ({
+        ...option,
+        label: localizeEmulatorSchemaText(option.label, resolvedLanguage) || option.label,
+        description: localizeEmulatorSchemaText(option.description, resolvedLanguage),
+        values: option.values?.map(value => ({
+          ...value,
+          label: localizeEmulatorSchemaText(value.label, resolvedLanguage) || value.label
+        }))
+      }))
+    }))
+  }, [schema, resolvedLanguage])
+
   // Filter options by search
   const filteredGroups = useMemo(() => {
-    if (!schema) return []
     if (!searchQuery.trim()) {
-      return schema.groups
+      return localizedGroups
         .map(group => ({ ...group, options: group.options.filter(isOptionVisibleForContext) }))
         .filter(group => group.options.length > 0)
     }
 
     const q = searchQuery.toLowerCase()
-    return schema.groups
+    return localizedGroups
       .map(group => ({
         ...group,
         options: group.options.filter(opt => isOptionVisibleForContext(opt) && (
@@ -242,7 +247,7 @@ export const EmulatorSettingsPanel: React.FC<EmulatorSettingsPanelProps> = ({
         ))
       }))
       .filter(group => group.options.length > 0)
-  }, [schema, searchQuery, isOptionVisibleForContext])
+  }, [localizedGroups, searchQuery, isOptionVisibleForContext])
 
   // Handle reset individual setting
   const handleResetSetting = useCallback(async (configKey: string) => {
@@ -293,7 +298,7 @@ export const EmulatorSettingsPanel: React.FC<EmulatorSettingsPanelProps> = ({
     return null
   }
 
-  const sortedGroups = schema.groups
+  const sortedGroups = localizedGroups
     .map(group => ({ ...group, options: group.options.filter(isOptionVisibleForContext) }))
     .filter(group => group.options.length > 0)
     .sort((a, b) => a.order - b.order)
@@ -304,14 +309,14 @@ export const EmulatorSettingsPanel: React.FC<EmulatorSettingsPanelProps> = ({
         <div className="flex items-center justify-between rounded-lg border border-accent/20 bg-accent/5 px-3 py-2">
           <div>
             <div className="text-xs font-semibold text-white">
-              {scope === 'game' ? 'Configuração deste jogo' : `Configuração do sistema ${scopeContext?.system || ''}`}
+              {scope === 'game' ? t('gameConfiguration') : `${t('systemConfiguration')} ${scopeContext?.system || ''}`}
             </div>
             <div className="text-[10px] text-white/45">
-              Valores em AUTO continuam herdando das configurações anteriores.
+              {t('autoInheritanceHint')}
             </div>
           </div>
           <span className="rounded-md border border-accent/25 bg-accent/10 px-2 py-1 text-[10px] font-semibold uppercase text-accent">
-            {scope === 'game' ? 'Jogo' : 'Sistema'}
+            {scope === 'game' ? t('game') : t('system')}
           </span>
         </div>
       )}
@@ -339,26 +344,15 @@ export const EmulatorSettingsPanel: React.FC<EmulatorSettingsPanelProps> = ({
 
       {/* Group tabs - only show when not searching */}
       {!searchQuery.trim() && sortedGroups.length > 1 && (
-        <div className="flex gap-1.5 flex-wrap">
-          {sortedGroups.map(group => {
-            const isActive = activeGroupId === group.id
-            const groupIcon = ICON_MAP[group.icon || 'settings']
-            return (
-              <button
-                key={group.id}
-                onClick={() => setActiveGroupId(group.id)}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-all ${
-                  isActive
-                    ? 'bg-accent/10 text-accent border border-accent/30'
-                    : 'bg-white/5 text-white/50 border border-white/5 hover:bg-white/10 hover:text-white/70'
-                }`}
-              >
-                {groupIcon}
-                {group.title}
-              </button>
-            )
-          })}
-        </div>
+        <RadixTabs
+          className="w-full"
+          tabs={sortedGroups.map(group => ({
+            id: group.id,
+            label: group.title
+          }))}
+          value={activeGroupId || sortedGroups[0]?.id || ''}
+          onValueChange={setActiveGroupId}
+        />
       )}
 
       {/* Settings content */}
@@ -381,14 +375,14 @@ export const EmulatorSettingsPanel: React.FC<EmulatorSettingsPanelProps> = ({
                     {isInherited && (
                       <span className="flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-medium bg-blue-500/15 text-blue-400 border border-blue-500/20">
                         <Link2 className="w-3 h-3" />
-                        {source === 'system' ? 'Sistema' : source === 'emulator' ? 'Emulador' : source === 'game' ? 'Jogo' : t('global')}
+                        {source === 'system' ? t('system') : source === 'emulator' ? t('emulator') : source === 'game' ? t('game') : t('global')}
                       </span>
                     )}
                     {isOverridden && (
                       <button
                         onClick={() => handleResetSetting(option.configKey)}
                         className="flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-medium bg-amber-500/15 text-amber-400 border border-amber-500/20 hover:bg-amber-500/25 transition-all cursor-pointer"
-                        title="Usar configuração herdada"
+                        title={t('useInheritedSetting')}
                       >
                         <RotateCcw className="w-3 h-3" />
                         {t('reset')}
@@ -445,7 +439,7 @@ export const EmulatorSettingsPanel: React.FC<EmulatorSettingsPanelProps> = ({
       {searchQuery.trim() && filteredGroups.length === 0 && (
         <div className="text-center py-12">
           <Search className="w-8 h-8 text-white/20 mx-auto mb-3" />
-          <p className="text-sm text-white/40">Nenhuma configuração encontrada para "{searchQuery}"</p>
+          <p className="text-sm text-white/40">{t('noSettingFound')} "{searchQuery}"</p>
         </div>
       )}
 
@@ -457,7 +451,7 @@ export const EmulatorSettingsPanel: React.FC<EmulatorSettingsPanelProps> = ({
             className="flex items-center gap-2 px-4 py-2.5 rounded-lg bg-red-500/10 text-red-400 border border-red-500/15 hover:bg-red-500/20 hover:border-red-500/25 transition-all text-sm font-medium w-full justify-center"
           >
             <RotateCcw className="w-4 h-4" />
-            {t('resetAll')} ({overrideCount} {overrideCount === 1 ? 'override' : 'overrides'})
+            {t('resetAll')} ({overrideCount} {overrideCount === 1 ? t('override') : t('overrides')})
           </button>
         </div>
       )}

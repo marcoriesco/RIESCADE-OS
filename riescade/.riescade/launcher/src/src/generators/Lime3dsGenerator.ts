@@ -14,7 +14,7 @@ export class Lime3dsGenerator extends BaseGenerator {
     const configPath = join(emulatorsDir, 'lime3ds', 'qt-config.ini');
 
     try {
-      const schemaPath = join(getConfigsPath(), 'emulator-schemas', 'lime3ds.schema.json');
+      const schemaPath = join(getConfigsPath(), 'emulators', 'schemas', 'lime3ds.schema.json');
       if (existsSync(schemaPath)) {
         const schema = JSON.parse(readFileSync(schemaPath, 'utf8'));
         for (const group of (schema.groups || [])) {

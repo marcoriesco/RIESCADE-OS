@@ -14,7 +14,7 @@ export class PlayGenerator extends BaseGenerator {
     const configPath = join(emulatorsDir, 'play', 'config.xml');
 
     try {
-      const schemaPath = join(getConfigsPath(), 'emulator-schemas', 'play.schema.json');
+      const schemaPath = join(getConfigsPath(), 'emulators', 'schemas', 'play.schema.json');
       if (existsSync(schemaPath)) {
         const schema = JSON.parse(readFileSync(schemaPath, 'utf8'));
         for (const group of (schema.groups || [])) {

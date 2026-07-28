@@ -97,18 +97,14 @@ export class Config {
       }
     }
     // Load Emulator Settings
-    const currentEmulatorFile = join(configsDir, 'emulator-settings.json');
-    const legacyEmulatorFile = join(configsDir, 'emulator.json');
-    const legacyMigrationPending = existsSync(legacyEmulatorFile)
-      && !existsSync(join(configsDir, 'emulator.json.migrated'));
-    const emulatorFile = legacyMigrationPending
-      ? legacyEmulatorFile
-      : (existsSync(currentEmulatorFile) ? currentEmulatorFile : legacyEmulatorFile);
+    const emulatorsDir = join(configsDir, 'emulators');
+    const currentEmulatorFile = join(emulatorsDir, 'global.json');
+    const emulatorFile = currentEmulatorFile;
     if (existsSync(emulatorFile)) {
       try {
         const raw = readFileSync(emulatorFile, 'utf8');
         this.emulatorConfig = JSON.parse(raw);
-        Logger.debug(`Loaded ${emulatorFile.endsWith('emulator-settings.json') ? 'emulator-settings.json' : 'legacy emulator.json'} (${Object.keys(this.emulatorConfig).length} entries)`);
+        Logger.debug(`Loaded emulator settings from ${emulatorFile} (${Object.keys(this.emulatorConfig).length} entries)`);
       } catch (err) {
         Logger.error(`Failed to parse emulator settings`, err);
       }
@@ -116,8 +112,10 @@ export class Config {
       Logger.warn(`Emulator settings not found at ${emulatorFile}`);
     }
 
-    this.systemConfig = this.readScopedSettings(join(configsDir, 'system-settings.json'), 'systems');
-    this.gameConfig = this.readScopedSettings(join(configsDir, 'game-settings.json'), 'games');
+    const scopedSystemsFile = join(emulatorsDir, 'systems.json');
+    const gamesFile = join(emulatorsDir, 'games.json');
+    this.systemConfig = this.readScopedSettings(scopedSystemsFile, 'systems');
+    this.gameConfig = this.readScopedSettings(gamesFile, 'games');
 
     // Load emulator schemas for inheritance resolution
     this.loadSchemas();
@@ -225,7 +223,7 @@ export class Config {
   }
 
   private static loadSchemas(): void {
-    const schemasDir = join(getConfigsPath(), 'emulator-schemas');
+    const schemasDir = join(getConfigsPath(), 'emulators', 'schemas');
     if (!existsSync(schemasDir)) return;
 
     try {
@@ -270,7 +268,7 @@ export class Config {
 
       Logger.debug(`Loaded inheritance mappings for ${Object.keys(this.inheritanceMap).length} emulators`);
     } catch (err) {
-      Logger.error(`Failed to read emulator-schemas directory`, err);
+      Logger.error(`Failed to read emulator schemas directory`, err);
     }
   }
 

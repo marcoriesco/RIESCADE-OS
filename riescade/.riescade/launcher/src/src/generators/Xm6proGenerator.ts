@@ -14,7 +14,7 @@ export class Xm6proGenerator extends BaseGenerator {
     const configPath = join(emulatorsDir, 'xm6pro', 'XM6.ini');
 
     try {
-      const schemaPath = join(getConfigsPath(), 'emulator-schemas', 'xm6pro.schema.json');
+      const schemaPath = join(getConfigsPath(), 'emulators', 'schemas', 'xm6pro.schema.json');
       if (existsSync(schemaPath)) {
         const schema = JSON.parse(readFileSync(schemaPath, 'utf8'));
         for (const group of (schema.groups || [])) {

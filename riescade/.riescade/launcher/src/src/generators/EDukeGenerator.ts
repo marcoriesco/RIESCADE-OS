@@ -14,7 +14,7 @@ export class EDukeGenerator extends BaseGenerator {
     const configPath = join(emulatorsDir, 'eduke32', 'eduke32.cfg');
 
     try {
-      const schemaPath = join(getConfigsPath(), 'emulator-schemas', 'eduke32.schema.json');
+      const schemaPath = join(getConfigsPath(), 'emulators', 'schemas', 'eduke32.schema.json');
       if (existsSync(schemaPath)) {
         const schema = JSON.parse(readFileSync(schemaPath, 'utf8'));
         for (const group of (schema.groups || [])) {

@@ -14,7 +14,7 @@ export class MandarineGenerator extends BaseGenerator {
     const configPath = join(emulatorsDir, 'mandarine', 'qt-config.ini');
 
     try {
-      const schemaPath = join(getConfigsPath(), 'emulator-schemas', 'mandarine.schema.json');
+      const schemaPath = join(getConfigsPath(), 'emulators', 'schemas', 'mandarine.schema.json');
       if (existsSync(schemaPath)) {
         const schema = JSON.parse(readFileSync(schemaPath, 'utf8'));
         for (const group of (schema.groups || [])) {

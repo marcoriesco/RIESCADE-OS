@@ -92,12 +92,35 @@ declare global {
         fanart: string | null
         logo: string | null
       }>>
-      downloadAsset: (assetId: string) => Promise<{
+      downloadAsset: (platform: string, assetId: string) => Promise<{
         path: string
         filename: string
         sha256: string
       }>
       openSystemTorrent: (platform: string) => Promise<void>
+      getPlatformDownloadInfo: (platform: string) => Promise<{
+        platform: string
+        gameCount: number
+        downloadBytes: number
+        installedBytes: number
+        availableBytes: number
+        tempAvailableBytes: number
+        romsPath: string
+        tempPath: string
+        sameVolume: boolean
+        hasEnoughSpace: boolean
+        overwriteGames: boolean
+        overwriteMedia: boolean
+        downloadMethod: 'managed' | 'torrent-external' | 'direct'
+        torrentUrl?: string
+      }>
+      startPlatformTorrent: (platform: string, torrentSource: string) => Promise<string>
+      pausePlatformTorrent: (taskId: string) => Promise<void>
+      resumePlatformTorrent: (taskId: string) => Promise<void>
+      cancelPlatformTorrent: (taskId: string) => Promise<void>
+      downloadPlatform: (platform: string) => Promise<void>
+      downloadPlatformMedia: (platform: string) => Promise<void>
+      cancelDownload: (id: string) => Promise<boolean>
       getOverlayPath: (name: string) => Promise<string>
       getCollectionsForGame: (systemName: string, gamePath: string) => Promise<string[]>
       toggleGameInCollection: (collectionName: string, systemName: string, gamePath: string, action: 'add' | 'remove') => Promise<boolean>

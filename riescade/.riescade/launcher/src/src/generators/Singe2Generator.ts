@@ -14,7 +14,7 @@ export class Singe2Generator extends BaseGenerator {
     const configPath = join(emulatorsDir, 'singe2', 'controls.cfg');
 
     try {
-      const schemaPath = join(getConfigsPath(), 'emulator-schemas', 'singe2.schema.json');
+      const schemaPath = join(getConfigsPath(), 'emulators', 'schemas', 'singe2.schema.json');
       if (existsSync(schemaPath)) {
         const schema = JSON.parse(readFileSync(schemaPath, 'utf8'));
         for (const group of (schema.groups || [])) {

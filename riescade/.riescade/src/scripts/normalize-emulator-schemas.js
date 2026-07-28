@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 const appRoot = path.resolve(__dirname, '..', '..');
-const schemasRoot = path.join(appRoot, 'configs', 'emulator-schemas');
+const schemasRoot = path.join(appRoot, 'configs', 'emulators', 'schemas');
 
 let changedFiles = 0;
 let addedOptions = 0;

@@ -31,7 +31,11 @@ const ptBR: Messages = {
   accountDescription: 'Gerencie suas informações pessoais e configurações de conta.',
   online: 'Online', loadingSettings: 'Carregando configurações...', searchSetting: 'Buscar configuração...',
   reset: 'Resetar', global: 'Global', resetAll: 'Resetar Todas as Configurações',
-  version: 'Versão', engine: 'Motor', system: 'Sistema'
+  version: 'Versão', engine: 'Motor', system: 'Sistema', emulator: 'Emulador', game: 'Jogo',
+  gameConfiguration: 'Configuração deste jogo', systemConfiguration: 'Configuração do sistema',
+  autoInheritanceHint: 'Valores em Automático continuam herdando das configurações anteriores.',
+  useInheritedSetting: 'Usar configuração herdada', noSettingFound: 'Nenhuma configuração encontrada para',
+  override: 'alteração', overrides: 'alterações'
 }
 
 const en: Messages = {
@@ -46,7 +50,11 @@ const en: Messages = {
   username: 'Username', edit: 'Edit', show: 'Show', accountStatus: 'Account Status',
   accountOk: 'Your account is in good standing', accountDescription: 'Manage your personal information and account settings.',
   online: 'Online', loadingSettings: 'Loading settings...', searchSetting: 'Search settings...',
-  reset: 'Reset', global: 'Global', resetAll: 'Reset All Settings', version: 'Version', engine: 'Engine', system: 'System'
+  reset: 'Reset', global: 'Global', resetAll: 'Reset All Settings', version: 'Version', engine: 'Engine', system: 'System',
+  emulator: 'Emulator', game: 'Game', gameConfiguration: 'Configuration for this game',
+  systemConfiguration: 'System configuration', autoInheritanceHint: 'Automatic values continue to inherit previous settings.',
+  useInheritedSetting: 'Use inherited setting', noSettingFound: 'No setting found for',
+  override: 'override', overrides: 'overrides'
 }
 
 const translations: Record<Language, Messages> = {

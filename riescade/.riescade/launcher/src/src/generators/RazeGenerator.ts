@@ -14,7 +14,7 @@ export class RazeGenerator extends BaseGenerator {
     const configPath = join(emulatorsDir, 'raze', 'raze_portable.ini');
 
     try {
-      const schemaPath = join(getConfigsPath(), 'emulator-schemas', 'raze.schema.json');
+      const schemaPath = join(getConfigsPath(), 'emulators', 'schemas', 'raze.schema.json');
       if (existsSync(schemaPath)) {
         const schema = JSON.parse(readFileSync(schemaPath, 'utf8'));
         for (const group of (schema.groups || [])) {

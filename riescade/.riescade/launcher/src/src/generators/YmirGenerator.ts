@@ -14,7 +14,7 @@ export class YmirGenerator extends BaseGenerator {
     const configPath = join(emulatorsDir, 'ymir', 'Ymir.toml');
 
     try {
-      const schemaPath = join(getConfigsPath(), 'emulator-schemas', 'ymir.schema.json');
+      const schemaPath = join(getConfigsPath(), 'emulators', 'schemas', 'ymir.schema.json');
       if (existsSync(schemaPath)) {
         const schema = JSON.parse(readFileSync(schemaPath, 'utf8'));
         for (const group of (schema.groups || [])) {

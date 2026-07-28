@@ -1,4 +1,4 @@
-import { existsSync, readFileSync, renameSync, writeFileSync } from 'fs'
+import { existsSync, mkdirSync, readFileSync, renameSync, writeFileSync } from 'fs'
 import { join } from 'path'
 import { getRiescadePath } from '../utils/paths'
 import { EmulatorParser } from './EmulatorParser'
@@ -29,7 +29,12 @@ interface ScopeDocument {
 
 export class ScopedSettingsParser {
   private getPath(scope: SettingsScope): string {
-    return join(getRiescadePath(), 'configs', scope === 'system' ? 'system-settings.json' : 'game-settings.json')
+    const configsPath = join(getRiescadePath(), 'configs')
+    const emulatorsPath = join(configsPath, 'emulators')
+    const filename = scope === 'system' ? 'systems.json' : 'games.json'
+    const currentPath = join(emulatorsPath, filename)
+    mkdirSync(emulatorsPath, { recursive: true })
+    return currentPath
   }
 
   private collectionName(scope: SettingsScope): 'systems' | 'games' {

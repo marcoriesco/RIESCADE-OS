@@ -14,7 +14,7 @@ export class KegaFusionGenerator extends BaseGenerator {
     const configPath = join(emulatorsDir, 'kega-fusion', 'Fusion.ini');
 
     try {
-      const schemaPath = join(getConfigsPath(), 'emulator-schemas', 'kega-fusion.schema.json');
+      const schemaPath = join(getConfigsPath(), 'emulators', 'schemas', 'kega-fusion.schema.json');
       if (existsSync(schemaPath)) {
         const schema = JSON.parse(readFileSync(schemaPath, 'utf8'));
         for (const group of (schema.groups || [])) {

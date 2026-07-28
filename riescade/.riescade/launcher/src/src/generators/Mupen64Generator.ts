@@ -14,7 +14,7 @@ export class Mupen64Generator extends BaseGenerator {
     const configPath = join(emulatorsDir, 'mupen64', 'mupen64plus.cfg');
 
     try {
-      const schemaPath = join(getConfigsPath(), 'emulator-schemas', 'mupen64.schema.json');
+      const schemaPath = join(getConfigsPath(), 'emulators', 'schemas', 'mupen64.schema.json');
       if (existsSync(schemaPath)) {
         const schema = JSON.parse(readFileSync(schemaPath, 'utf8'));
         for (const group of (schema.groups || [])) {

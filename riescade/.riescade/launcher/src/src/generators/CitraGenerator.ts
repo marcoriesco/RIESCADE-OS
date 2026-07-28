@@ -14,7 +14,7 @@ export class CitraGenerator extends BaseGenerator {
     const configPath = join(emulatorsDir, 'citra', 'qt-config.ini');
 
     try {
-      const schemaPath = join(getConfigsPath(), 'emulator-schemas', 'citra.schema.json');
+      const schemaPath = join(getConfigsPath(), 'emulators', 'schemas', 'citra.schema.json');
       if (existsSync(schemaPath)) {
         const schema = JSON.parse(readFileSync(schemaPath, 'utf8'));
         for (const group of (schema.groups || [])) {

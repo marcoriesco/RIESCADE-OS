@@ -3,7 +3,7 @@ import { ChevronRight, Search, Folder, Star, User, Shield, Settings, Palette, Ga
 import { System, SettingsCtx } from "../types";
 import { TOOL_APPS, getSystemTheme } from "../constants";
 import {
-  SettingGroup, SettingToggle, SettingSelect, SettingSlider, SettingInput, SettingInfo, UnderlineTabs
+  SettingGroup, SettingToggle, SettingSelect, SettingSlider, SettingInput, SettingInfo, RadixTabs
 } from "./SettingsComponents";
 import { EmulatorSettingsPanel } from "./EmulatorSettingsPanel";
 import { ScrollArea } from "./ScrollArea";
@@ -77,7 +77,7 @@ function DownloadsApp() {
     setDownloading(asset.id);
     setMessage("");
     try {
-      const result = await window.api.downloadAsset(asset.id);
+      const result = await window.api.downloadAsset("snes", asset.id);
       setProgress(current => ({ ...current, [asset.id]: 100 }));
       setMessage(`${result.filename} foi instalado na pasta SNES.`);
     } catch (error) {
@@ -160,13 +160,18 @@ function DownloadsApp() {
               <div className="truncate font-semibold">{asset.title}</div>
               <div className="text-xs text-white/45">{formatBytes(asset.file_size)}</div>
             </div>
-            <button
-              disabled={downloading !== null}
-              onClick={() => void download(asset)}
-              className="min-w-28 rounded-lg bg-fuchsia-600 px-4 py-2 text-sm font-semibold hover:bg-fuchsia-500 disabled:opacity-50"
-            >
-              {downloading === asset.id ? `${progress[asset.id] ?? 0}%` : "Baixar"}
-            </button>
+            <div className="flex flex-col items-center gap-1">
+              <button
+                disabled={downloading !== null}
+                onClick={() => void download(asset)}
+                className="min-w-28 rounded-lg bg-fuchsia-600 px-4 py-2 text-sm font-semibold hover:bg-fuchsia-500 disabled:opacity-50"
+              >
+                {downloading === asset.id ? `${progress[asset.id] ?? 0}%` : "Baixar"}
+              </button>
+              {asset.file_size ? (
+                <span className="text-[10px] text-white/50">{formatBytes(asset.file_size)}</span>
+              ) : null}
+            </div>
           </div>
         ))}
       </div>
@@ -1489,7 +1494,7 @@ export default function ToolAppContent({
                     </div>
                   </div>
 
-                  <UnderlineTabs
+                  <RadixTabs
                     className="mb-7 w-full"
                     tabs={[
                       { id: "games", label: "Games", icon: Gamepad2 },

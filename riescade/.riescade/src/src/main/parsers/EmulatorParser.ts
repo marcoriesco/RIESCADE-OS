@@ -1,4 +1,4 @@
-import { readFileSync, writeFileSync, existsSync, copyFileSync, renameSync } from 'fs'
+import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'fs'
 import { join } from 'path'
 import { getRiescadePath } from '../utils/paths'
 
@@ -94,32 +94,9 @@ export class EmulatorParser {
 
   private getEmulatorJsonPath(): string {
     const configsPath = join(getRiescadePath(), 'configs')
-    const currentPath = join(configsPath, 'emulator-settings.json')
-    const legacyPath = join(configsPath, 'emulator.json')
-    const migratedBackupPath = join(configsPath, 'emulator.json.migrated')
-
-    // Existing installations may still have the old filename. Import it once,
-    // preserving the original as a recoverable migration backup.
-    if (existsSync(legacyPath) && !existsSync(migratedBackupPath)) {
-      if (!existsSync(currentPath)) {
-        copyFileSync(legacyPath, currentPath)
-      } else {
-        try {
-          const defaults = JSON.parse(readFileSync(currentPath, 'utf-8'))
-          const legacy = JSON.parse(readFileSync(legacyPath, 'utf-8'))
-          const merged = { ...defaults, ...legacy }
-          if (defaults._global || legacy.global || legacy._global) {
-            merged._global = { ...(defaults._global || {}), ...(legacy.global || {}), ...(legacy._global || {}) }
-            delete merged.global
-          }
-          writeFileSync(currentPath, JSON.stringify(merged, null, 2), 'utf-8')
-        } catch (error) {
-          console.error('Failed to merge legacy emulator settings:', error)
-          return legacyPath
-        }
-      }
-      renameSync(legacyPath, migratedBackupPath)
-    }
+    const emulatorsPath = join(configsPath, 'emulators')
+    const currentPath = join(emulatorsPath, 'global.json')
+    mkdirSync(emulatorsPath, { recursive: true })
 
     return currentPath
   }
@@ -132,7 +109,7 @@ export class EmulatorParser {
       const content = readFileSync(filePath, 'utf-8')
       return JSON.parse(content)
     } catch (error) {
-      console.error('Error parsing emulator-settings.json:', error)
+      console.error('Error parsing emulator global settings:', error)
       return {}
     }
   }

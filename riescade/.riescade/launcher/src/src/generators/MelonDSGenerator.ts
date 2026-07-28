@@ -14,7 +14,7 @@ export class MelonDSGenerator extends BaseGenerator {
     const configPath = join(emulatorsDir, 'melonds', 'melonDS.toml');
 
     try {
-      const schemaPath = join(getConfigsPath(), 'emulator-schemas', 'melonds.schema.json');
+      const schemaPath = join(getConfigsPath(), 'emulators', 'schemas', 'melonds.schema.json');
       if (existsSync(schemaPath)) {
         const schema = JSON.parse(readFileSync(schemaPath, 'utf8'));
         for (const group of (schema.groups || [])) {

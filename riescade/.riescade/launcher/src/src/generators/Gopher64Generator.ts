@@ -14,7 +14,7 @@ export class Gopher64Generator extends BaseGenerator {
     const configPath = join(emulatorsDir, 'gopher64', 'config.json');
 
     try {
-      const schemaPath = join(getConfigsPath(), 'emulator-schemas', 'gopher64.schema.json');
+      const schemaPath = join(getConfigsPath(), 'emulators', 'schemas', 'gopher64.schema.json');
       if (existsSync(schemaPath)) {
         const schema = JSON.parse(readFileSync(schemaPath, 'utf8'));
         for (const group of (schema.groups || [])) {

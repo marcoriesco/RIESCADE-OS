@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { RefreshCw, Copy, Download, Sliders, CheckCircle, Circle, Wrench, Bug, Info, ChevronRight, Check, Crosshair, MousePointer, Target, ChevronDown, Gamepad2, Activity } from "lucide-react";
 import * as Select from "@radix-ui/react-select";
 import { SettingsCtx } from "../../types";
-import { SettingGroup, SettingToggle, SettingSelect, UnderlineTabs } from "../SettingsComponents";
+import { SettingGroup, SettingToggle, SettingSelect, RadixTabs } from "../SettingsComponents";
 import { ScrollArea } from "../ScrollArea";
 
 const WIZARD_STEPS = [
@@ -348,7 +348,7 @@ function SettingsControlsComponent({ ctx }: SettingsControlsProps) {
       </div>
 
       {/* Main 3 Navigation Tabs */}
-      <UnderlineTabs
+      <RadixTabs
         className="shrink-0 w-full max-w-[784px] mx-auto"
         tabs={[
           { id: 'controles', label: 'Controles & Joysticks', icon: Gamepad2 },
@@ -449,7 +449,7 @@ function SettingsControlsComponent({ ctx }: SettingsControlsProps) {
                   <div className="p-5 bg-gradient-to-br from-white/5 to-white/[0.02] border border-white/10 rounded-xl space-y-4 shadow-lg flex flex-col justify-between">
                     
                     {/* Device Sub-tab navigation */}
-                    <UnderlineTabs
+                    <RadixTabs
                       tabs={[
                         { id: 'configuracoes', label: 'Ajustes Rápidos', icon: Sliders },
                         { id: 'testes', label: 'Teste em Tempo Real', icon: CheckCircle },

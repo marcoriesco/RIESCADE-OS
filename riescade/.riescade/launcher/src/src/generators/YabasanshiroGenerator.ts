@@ -14,7 +14,7 @@ export class YabasanshiroGenerator extends BaseGenerator {
     const configPath = join(emulatorsDir, 'yabasanshiro', 'yabause.ini');
 
     try {
-      const schemaPath = join(getConfigsPath(), 'emulator-schemas', 'yabasanshiro.schema.json');
+      const schemaPath = join(getConfigsPath(), 'emulators', 'schemas', 'yabasanshiro.schema.json');
       if (existsSync(schemaPath)) {
         const schema = JSON.parse(readFileSync(schemaPath, 'utf8'));
         for (const group of (schema.groups || [])) {

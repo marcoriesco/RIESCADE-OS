@@ -14,7 +14,7 @@ export class SudachiGenerator extends BaseGenerator {
     const configPath = join(emulatorsDir, 'sudachi', 'qt-config.ini');
 
     try {
-      const schemaPath = join(getConfigsPath(), 'emulator-schemas', 'sudachi.schema.json');
+      const schemaPath = join(getConfigsPath(), 'emulators', 'schemas', 'sudachi.schema.json');
       if (existsSync(schemaPath)) {
         const schema = JSON.parse(readFileSync(schemaPath, 'utf8'));
         for (const group of (schema.groups || [])) {

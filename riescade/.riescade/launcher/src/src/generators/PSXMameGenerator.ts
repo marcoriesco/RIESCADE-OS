@@ -14,7 +14,7 @@ export class PSXMameGenerator extends BaseGenerator {
     const configPath = join(emulatorsDir, 'psxmame', 'ui.ini');
 
     try {
-      const schemaPath = join(getConfigsPath(), 'emulator-schemas', 'psxmame.schema.json');
+      const schemaPath = join(getConfigsPath(), 'emulators', 'schemas', 'psxmame.schema.json');
       if (existsSync(schemaPath)) {
         const schema = JSON.parse(readFileSync(schemaPath, 'utf8'));
         for (const group of (schema.groups || [])) {

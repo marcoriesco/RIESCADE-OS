@@ -14,7 +14,7 @@ export class SSFGenerator extends BaseGenerator {
     const configPath = join(emulatorsDir, 'ssf', 'Setting.ini');
 
     try {
-      const schemaPath = join(getConfigsPath(), 'emulator-schemas', 'ssf.schema.json');
+      const schemaPath = join(getConfigsPath(), 'emulators', 'schemas', 'ssf.schema.json');
       if (existsSync(schemaPath)) {
         const schema = JSON.parse(readFileSync(schemaPath, 'utf8'));
         for (const group of (schema.groups || [])) {

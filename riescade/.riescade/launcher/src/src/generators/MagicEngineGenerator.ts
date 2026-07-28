@@ -14,7 +14,7 @@ export class MagicEngineGenerator extends BaseGenerator {
     const configPath = join(emulatorsDir, 'magicengine', 'pce.ini');
 
     try {
-      const schemaPath = join(getConfigsPath(), 'emulator-schemas', 'magicengine.schema.json');
+      const schemaPath = join(getConfigsPath(), 'emulators', 'schemas', 'magicengine.schema.json');
       if (existsSync(schemaPath)) {
         const schema = JSON.parse(readFileSync(schemaPath, 'utf8'));
         for (const group of (schema.groups || [])) {

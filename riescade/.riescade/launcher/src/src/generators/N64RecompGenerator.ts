@@ -14,7 +14,7 @@ export class N64RecompGenerator extends BaseGenerator {
     const configPath = join(emulatorsDir, 'n64recomplauncher', 'settings.json');
 
     try {
-      const schemaPath = join(getConfigsPath(), 'emulator-schemas', 'n64recomplauncher.schema.json');
+      const schemaPath = join(getConfigsPath(), 'emulators', 'schemas', 'n64recomplauncher.schema.json');
       if (existsSync(schemaPath)) {
         const schema = JSON.parse(readFileSync(schemaPath, 'utf8'));
         for (const group of (schema.groups || [])) {

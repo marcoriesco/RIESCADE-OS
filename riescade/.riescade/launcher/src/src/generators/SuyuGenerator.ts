@@ -14,7 +14,7 @@ export class SuyuGenerator extends BaseGenerator {
     const configPath = join(emulatorsDir, 'suyu', 'qt-config.ini');
 
     try {
-      const schemaPath = join(getConfigsPath(), 'emulator-schemas', 'suyu.schema.json');
+      const schemaPath = join(getConfigsPath(), 'emulators', 'schemas', 'suyu.schema.json');
       if (existsSync(schemaPath)) {
         const schema = JSON.parse(readFileSync(schemaPath, 'utf8'));
         for (const group of (schema.groups || [])) {

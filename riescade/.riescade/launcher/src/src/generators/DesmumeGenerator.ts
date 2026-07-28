@@ -14,7 +14,7 @@ export class DesmumeGenerator extends BaseGenerator {
     const configPath = join(emulatorsDir, 'desmume', 'desmume.ini');
 
     try {
-      const schemaPath = join(getConfigsPath(), 'emulator-schemas', 'desmume.schema.json');
+      const schemaPath = join(getConfigsPath(), 'emulators', 'schemas', 'desmume.schema.json');
       if (existsSync(schemaPath)) {
         const schema = JSON.parse(readFileSync(schemaPath, 'utf8'));
         for (const group of (schema.groups || [])) {

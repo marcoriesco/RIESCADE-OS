@@ -14,7 +14,7 @@ export class DevilutionXGenerator extends BaseGenerator {
     const configPath = join(emulatorsDir, 'devilutionx', 'diablo.ini');
 
     try {
-      const schemaPath = join(getConfigsPath(), 'emulator-schemas', 'devilutionx.schema.json');
+      const schemaPath = join(getConfigsPath(), 'emulators', 'schemas', 'devilutionx.schema.json');
       if (existsSync(schemaPath)) {
         const schema = JSON.parse(readFileSync(schemaPath, 'utf8'));
         for (const group of (schema.groups || [])) {

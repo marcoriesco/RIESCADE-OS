@@ -14,7 +14,7 @@ export class PhoenixGenerator extends BaseGenerator {
     const configPath = join(emulatorsDir, 'phoenix', 'phoenix.config.xml');
 
     try {
-      const schemaPath = join(getConfigsPath(), 'emulator-schemas', 'phoenix.schema.json');
+      const schemaPath = join(getConfigsPath(), 'emulators', 'schemas', 'phoenix.schema.json');
       if (existsSync(schemaPath)) {
         const schema = JSON.parse(readFileSync(schemaPath, 'utf8'));
         for (const group of (schema.groups || [])) {

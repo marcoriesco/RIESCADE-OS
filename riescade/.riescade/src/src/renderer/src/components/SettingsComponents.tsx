@@ -2,6 +2,7 @@ import React from "react";
 import { SettingsCtx } from "../types";
 import { ChevronDown, Check } from "lucide-react";
 import * as Select from "@radix-ui/react-select";
+import * as Tabs from "@radix-ui/react-tabs";
 
 export type UnderlineTab = {
   id: string;
@@ -9,7 +10,7 @@ export type UnderlineTab = {
   icon?: React.ComponentType<{ className?: string }>;
 };
 
-export const UnderlineTabs = ({
+export const RadixTabs = ({
   tabs,
   value,
   onValueChange,
@@ -22,34 +23,33 @@ export const UnderlineTabs = ({
   equalWidth?: boolean;
   className?: string;
 }) => (
-  <div
-    role="tablist"
-    className={`flex items-end gap-6 border-b border-white/[0.08] overflow-x-auto scrollbar-none select-none ${className}`}
-  >
-    {tabs.map((tab) => {
-      const Icon = tab.icon;
-      const active = value === tab.id;
-      return (
-        <button
-          key={tab.id}
-          type="button"
-          role="tab"
-          aria-selected={active}
-          onClick={() => onValueChange(tab.id)}
-          className={`relative flex min-h-10 items-center justify-center gap-2 px-0.5 pb-3 pt-2 text-[13px] font-medium whitespace-nowrap cursor-pointer transition-colors ${
-            equalWidth ? "flex-1" : "shrink-0"
-          } ${
-            active
-              ? "text-white after:absolute after:inset-x-0 after:bottom-[-1px] after:h-0.5 after:rounded-full after:bg-accent"
-              : "text-white/45 hover:text-white/75"
-          }`}
-        >
-          {Icon && <Icon className={`h-4 w-4 ${active ? "text-accent" : "opacity-70"}`} />}
-          <span>{tab.label}</span>
-        </button>
-      );
-    })}
-  </div>
+  <Tabs.Root value={value} onValueChange={onValueChange}>
+    <Tabs.List
+      aria-label="Navegação por abas"
+      className={`flex items-end gap-6 border-b border-white/[0.08] overflow-x-auto scrollbar-none select-none ${className}`}
+    >
+      {tabs.map((tab) => {
+        const Icon = tab.icon;
+        const active = value === tab.id;
+        return (
+          <Tabs.Trigger
+            key={tab.id}
+            value={tab.id}
+            className={`relative flex min-h-10 items-center justify-center gap-2 px-0.5 pb-3 pt-2 text-[13px] font-medium whitespace-nowrap cursor-pointer transition-colors outline-none focus-visible:text-white focus-visible:ring-2 focus-visible:ring-accent/60 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent ${
+              equalWidth ? "flex-1" : "shrink-0"
+            } ${
+              active
+                ? "text-white after:absolute after:inset-x-0 after:bottom-[-1px] after:h-0.5 after:rounded-full after:bg-accent"
+                : "text-white/45 hover:text-white/75"
+            }`}
+          >
+            {Icon && <Icon className={`h-4 w-4 ${active ? "text-accent" : "opacity-70"}`} />}
+            <span>{tab.label}</span>
+          </Tabs.Trigger>
+        );
+      })}
+    </Tabs.List>
+  </Tabs.Root>
 );
 
 export const SettingGroup = ({ label }: { label: string }) => (

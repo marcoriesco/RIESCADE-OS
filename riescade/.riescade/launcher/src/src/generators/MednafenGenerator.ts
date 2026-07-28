@@ -14,7 +14,7 @@ export class MednafenGenerator extends BaseGenerator {
     const configPath = join(emulatorsDir, 'mednafen', 'mednafen.cfg');
 
     try {
-      const schemaPath = join(getConfigsPath(), 'emulator-schemas', 'mednafen.schema.json');
+      const schemaPath = join(getConfigsPath(), 'emulators', 'schemas', 'mednafen.schema.json');
       if (existsSync(schemaPath)) {
         const schema = JSON.parse(readFileSync(schemaPath, 'utf8'));
         for (const group of (schema.groups || [])) {

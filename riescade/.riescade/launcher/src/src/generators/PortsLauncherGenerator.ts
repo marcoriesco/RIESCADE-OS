@@ -14,7 +14,7 @@ export class PortsLauncherGenerator extends BaseGenerator {
     const configPath = join(emulatorsDir, 'portslauncher', 'padToKey.xml');
 
     try {
-      const schemaPath = join(getConfigsPath(), 'emulator-schemas', 'portslauncher.schema.json');
+      const schemaPath = join(getConfigsPath(), 'emulators', 'schemas', 'portslauncher.schema.json');
       if (existsSync(schemaPath)) {
         const schema = JSON.parse(readFileSync(schemaPath, 'utf8'));
         for (const group of (schema.groups || [])) {

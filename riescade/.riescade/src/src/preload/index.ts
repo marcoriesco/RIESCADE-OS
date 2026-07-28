@@ -17,7 +17,9 @@ const allowedEventChannels = new Set([
   'scrape-finished',
   'scrape-manual-search-required',
   'secondary-display-state',
-  'display-layout-changed'
+  'display-layout-changed',
+  'torrent-download-progress',
+  'preload-library-required'
 ])
 
 // Simplified API - all config is done through EmulationStation
@@ -111,10 +113,23 @@ const api = {
   logoutApp: () => ipcRenderer.invoke('app-auth-logout'),
   listDownloadCatalog: (platform: string) =>
     ipcRenderer.invoke('app-list-download-catalog', platform),
-  downloadAsset: (assetId: string) =>
-    ipcRenderer.invoke('app-download-asset', assetId),
+  downloadAsset: (platform: string, assetId: string) =>
+    ipcRenderer.invoke('app-download-asset', platform, assetId),
   openSystemTorrent: (platform: string) =>
     ipcRenderer.invoke('app-open-system-torrent', platform),
+  getPlatformDownloadInfo: (platform: string) =>
+    ipcRenderer.invoke('app-get-platform-download-info', platform),
+  startPlatformTorrent: (platform: string, torrentSource: string) =>
+    ipcRenderer.invoke('app-start-platform-torrent', platform, torrentSource),
+  pausePlatformTorrent: (taskId: string) =>
+    ipcRenderer.invoke('app-pause-platform-torrent', taskId),
+  resumePlatformTorrent: (taskId: string) =>
+    ipcRenderer.invoke('app-resume-platform-torrent', taskId),
+  cancelPlatformTorrent: (taskId: string) =>
+    ipcRenderer.invoke('app-cancel-platform-torrent', taskId),
+  downloadPlatformMedia: (platform: string) =>
+    ipcRenderer.invoke('app-download-platform-media', platform),
+  cancelDownload: (id: string) => ipcRenderer.invoke('app-cancel-download', id),
   getOverlayPath: (name: string) => ipcRenderer.invoke('get-overlay-path', name),
   getMusicFiles: (subfolder?: string) => ipcRenderer.invoke('get-music-files', subfolder),
   getMusicPath: () => ipcRenderer.invoke('get-music-path'),

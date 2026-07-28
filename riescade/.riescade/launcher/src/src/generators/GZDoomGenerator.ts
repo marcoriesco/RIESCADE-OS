@@ -14,7 +14,7 @@ export class GZDoomGenerator extends BaseGenerator {
     const configPath = join(emulatorsDir, 'gzdoom', 'gzdoom_portable.ini');
 
     try {
-      const schemaPath = join(getConfigsPath(), 'emulator-schemas', 'gzdoom.schema.json');
+      const schemaPath = join(getConfigsPath(), 'emulators', 'schemas', 'gzdoom.schema.json');
       if (existsSync(schemaPath)) {
         const schema = JSON.parse(readFileSync(schemaPath, 'utf8'));
         for (const group of (schema.groups || [])) {

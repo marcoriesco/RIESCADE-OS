@@ -14,7 +14,7 @@ export class Simple64Generator extends BaseGenerator {
     const configPath = join(emulatorsDir, 'simple64', 'simple64-gui.ini');
 
     try {
-      const schemaPath = join(getConfigsPath(), 'emulator-schemas', 'simple64.schema.json');
+      const schemaPath = join(getConfigsPath(), 'emulators', 'schemas', 'simple64.schema.json');
       if (existsSync(schemaPath)) {
         const schema = JSON.parse(readFileSync(schemaPath, 'utf8'));
         for (const group of (schema.groups || [])) {

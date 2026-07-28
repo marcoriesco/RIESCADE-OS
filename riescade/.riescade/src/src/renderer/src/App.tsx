@@ -447,9 +447,14 @@ export default function App() {
   const [installerProgress, setInstallerProgress] = useState(0);
   const [installerError, setInstallerError] = useState('');
   const [appDownloadProgress, setAppDownloadProgress] = useState<{
+    id?: string;
     title: string;
     filename: string;
     percent: number;
+    downloadedBytes?: number;
+    totalBytes?: number;
+    status?: string;
+    speed?: number;
   } | null>(null);
   const [isUpdatePrompt, setIsUpdatePrompt] = useState(false);
   type ToastType = "favorite" | "controller" | "success" | "error" | "info" | "collection" | "scraper" | "volume" | "music";
@@ -493,24 +498,66 @@ export default function App() {
     return () => window.removeEventListener('show-toast', handleShowToast);
   }, []);
 
+  const lastDownloadProgressRef = useRef<{ downloadedBytes: number; timestamp: number } | null>(null);
+
   useEffect(() => {
     let hideTimer: number | null = null;
     const unsubscribe = window.api.on("app-download-progress", (_event, data: any) => {
+      const now = Date.now();
+      const downloaded = Number(data?.downloadedBytes) || 0;
+      const total = Number(data?.totalBytes) || 0;
+      const percent = Math.max(0, Math.min(100, Number(data?.percent) || 0));
+      const id = String(data?.id || data?.assetId || "");
+
+      let speed = 0;
+      const prev = lastDownloadProgressRef.current;
+      if (prev && prev.downloadedBytes > 0 && downloaded > prev.downloadedBytes && now > prev.timestamp) {
+        const timeDiff = (now - prev.timestamp) / 1000;
+        const bytesDiff = downloaded - prev.downloadedBytes;
+        if (timeDiff > 0 && bytesDiff >= 0) {
+          speed = bytesDiff / timeDiff;
+        }
+      }
+      lastDownloadProgressRef.current = { downloadedBytes: downloaded, timestamp: now };
+
       setAppDownloadProgress({
-        title: data?.title || data?.filename || "Jogo",
+        id,
+        title: data?.title || data?.filename || "Download",
         filename: data?.filename || "",
-        percent: Math.max(0, Math.min(100, Number(data?.percent) || 0))
+        percent,
+        downloadedBytes: downloaded,
+        totalBytes: total,
+        status: data?.status,
+        speed
       });
-      if (Number(data?.percent) >= 100) {
+
+      if (percent >= 100) {
         if (hideTimer !== null) window.clearTimeout(hideTimer);
-        hideTimer = window.setTimeout(() => setAppDownloadProgress(null), 3500);
+        hideTimer = window.setTimeout(() => {
+          setAppDownloadProgress(null);
+          lastDownloadProgressRef.current = null;
+        }, 3500);
       }
     });
+
     return () => {
       unsubscribe();
       if (hideTimer !== null) window.clearTimeout(hideTimer);
     };
   }, []);
+
+  const formatToastBytes = (bytes?: number): string => {
+    if (!bytes || bytes <= 0 || !Number.isFinite(bytes)) return '0 B';
+    const k = 1024;
+    const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
+    const i = Math.min(Math.floor(Math.log(bytes) / Math.log(k)), sizes.length - 1);
+    return `${parseFloat((bytes / Math.pow(k, i)).toFixed(1))} ${sizes[i]}`;
+  };
+
+  const formatToastSpeed = (bytesPerSec?: number): string => {
+    if (!bytesPerSec || bytesPerSec <= 0 || !Number.isFinite(bytesPerSec)) return '0 B/s';
+    return `${formatToastBytes(bytesPerSec)}/s`;
+  };
 
   const renderToasts = () => (
     <>
@@ -518,29 +565,63 @@ export default function App() {
         <Toast.Root
           open
           duration={Infinity}
-          className="toast-root glass-strong w-80 select-none overflow-hidden rounded-xl border border-white/10 p-3.5 shadow-2xl"
+          className="toast-root glass-strong w-96 select-none overflow-hidden rounded-2xl border border-white/10 p-4 shadow-2xl backdrop-blur-xl bg-[#121212]/95 text-white"
         >
-          <div className="flex items-center gap-3">
-            <CloudDownload className="h-5 w-5 shrink-0 animate-pulse text-accent" />
-            <div className="min-w-0 flex-1">
-              <div className="flex items-center justify-between gap-3">
-                <Toast.Title className="truncate text-sm font-bold text-white">
+          <div className="flex items-start justify-between gap-3">
+            <div className="flex items-center gap-2.5 min-w-0 flex-1">
+              <CloudDownload className="h-5 w-5 shrink-0 animate-pulse text-accent" />
+              <div className="min-w-0 flex-1">
+                <Toast.Title className="truncate text-xs font-bold text-white">
                   {appDownloadProgress.title}
                 </Toast.Title>
-                <span className="shrink-0 text-xs font-bold text-accent">
+                {appDownloadProgress.filename && (
+                  <Toast.Description className="truncate text-[11px] text-white/50">
+                    {appDownloadProgress.filename}
+                  </Toast.Description>
+                )}
+              </div>
+            </div>
+
+            <button
+              type="button"
+              onClick={() => {
+                if (appDownloadProgress.id) {
+                  window.api.cancelDownload?.(appDownloadProgress.id);
+                }
+                setAppDownloadProgress(null);
+              }}
+              className="p-1 text-white/40 hover:text-red-400 hover:bg-white/10 rounded-lg transition cursor-pointer shrink-0"
+              title="Cancelar Download"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+
+          <div className="mt-3 flex flex-col gap-1.5">
+            <div className="flex items-center justify-between text-[11px]">
+              <span className="font-semibold text-white/70">
+                {appDownloadProgress.totalBytes && appDownloadProgress.totalBytes > 0
+                  ? `${formatToastBytes(appDownloadProgress.downloadedBytes)} / ${formatToastBytes(appDownloadProgress.totalBytes)}`
+                  : appDownloadProgress.status || 'Baixando...'}
+              </span>
+              <div className="flex items-center gap-2">
+                {appDownloadProgress.speed && appDownloadProgress.speed > 0 ? (
+                  <span className="text-[10px] text-white/50 font-mono">
+                    ↓ {formatToastSpeed(appDownloadProgress.speed)}
+                  </span>
+                ) : null}
+                <span className="font-bold text-accent">
                   {appDownloadProgress.percent}%
                 </span>
               </div>
-              <Toast.Description className="mt-0.5 truncate text-[11px] text-white/50">
-                {appDownloadProgress.filename}
-              </Toast.Description>
             </div>
-          </div>
-          <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-white/10">
-            <div
-              className="h-full rounded-full bg-[var(--accent-color)] transition-[width] duration-200"
-              style={{ width: `${appDownloadProgress.percent}%` }}
-            />
+
+            <div className="h-2 w-full overflow-hidden rounded-full bg-black/40 border border-white/5">
+              <div
+                className="h-full rounded-full bg-accent transition-[width] duration-200"
+                style={{ width: `${appDownloadProgress.percent}%` }}
+              />
+            </div>
           </div>
         </Toast.Root>
       )}

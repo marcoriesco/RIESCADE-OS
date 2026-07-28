@@ -14,7 +14,7 @@ export class DosBoxStagingGenerator extends BaseGenerator {
     const configPath = join(emulatorsDir, 'dosbox-staging', 'dosbox-staging.conf');
 
     try {
-      const schemaPath = join(getConfigsPath(), 'emulator-schemas', 'dosbox-staging.schema.json');
+      const schemaPath = join(getConfigsPath(), 'emulators', 'schemas', 'dosbox-staging.schema.json');
       if (existsSync(schemaPath)) {
         const schema = JSON.parse(readFileSync(schemaPath, 'utf8'));
         for (const group of (schema.groups || [])) {

@@ -130,7 +130,7 @@
         },
         {
           "id": "tp_rpcs3_gpuapi",
-          "label": "Vídeo",
+          "label": "RPCS3 Vídeo",
           "type": "select",
           "default": "auto",
           "configKey": "tp_rpcs3_gpuapi",

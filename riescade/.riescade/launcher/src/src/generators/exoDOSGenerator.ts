@@ -14,7 +14,7 @@ export class exoDOSGenerator extends BaseGenerator {
     const configPath = join(emulatorsDir, 'exodos', 'options.conf');
 
     try {
-      const schemaPath = join(getConfigsPath(), 'emulator-schemas', 'exodos.schema.json');
+      const schemaPath = join(getConfigsPath(), 'emulators', 'schemas', 'exodos.schema.json');
       if (existsSync(schemaPath)) {
         const schema = JSON.parse(readFileSync(schemaPath, 'utf8'));
         for (const group of (schema.groups || [])) {

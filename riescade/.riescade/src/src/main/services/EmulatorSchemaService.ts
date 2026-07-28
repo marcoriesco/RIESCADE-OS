@@ -53,7 +53,11 @@ export class EmulatorSchemaService {
   private loaded = false
 
   private getSchemasDir(): string {
-    return join(getRiescadePath(), 'configs', 'emulator-schemas')
+    const configsPath = join(getRiescadePath(), 'configs')
+    const emulatorsPath = join(configsPath, 'emulators')
+    const schemasPath = join(emulatorsPath, 'schemas')
+    mkdirSync(emulatorsPath, { recursive: true })
+    return schemasPath
   }
 
   public loadAll(): void {

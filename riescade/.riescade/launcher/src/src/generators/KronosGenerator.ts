@@ -14,7 +14,7 @@ export class KronosGenerator extends BaseGenerator {
     const configPath = join(emulatorsDir, 'kronos', 'kronos.ini');
 
     try {
-      const schemaPath = join(getConfigsPath(), 'emulator-schemas', 'kronos.schema.json');
+      const schemaPath = join(getConfigsPath(), 'emulators', 'schemas', 'kronos.schema.json');
       if (existsSync(schemaPath)) {
         const schema = JSON.parse(readFileSync(schemaPath, 'utf8'));
         for (const group of (schema.groups || [])) {
