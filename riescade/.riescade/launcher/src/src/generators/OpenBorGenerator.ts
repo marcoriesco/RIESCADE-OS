@@ -1,5 +1,5 @@
-import { existsSync, readFileSync } from 'fs';
-import { join } from 'path';
+import { existsSync, readFileSync, readdirSync } from 'fs';
+import { basename, join } from 'path';
 import { BaseGenerator } from './BaseGenerator.js';
 import { getEmulatorsPath, getConfigsPath } from '../utils/paths.js';
 import { Logger } from '../utils/logger.js';
@@ -34,7 +34,26 @@ export class OpenBorGenerator extends BaseGenerator {
 
   public getLaunchCommand(): { executable: string; args: string[] } {
     const emulatorsDir = getEmulatorsPath();
-    const exePath = join(emulatorsDir, 'openbor', 'OpenBOR.exe');
+    let exePath = join(emulatorsDir, 'openbor', 'OpenBOR.exe');
+
+    if (this.core === 'openbor-specific-version') {
+      const version = basename(this.rom).match(/\[(\d{1,4})\](?=\.[^.]+$)/)?.[1];
+      if (version) {
+        const versionDirectory = join(emulatorsDir, 'openbor', version);
+        const preferredExecutable = join(versionDirectory, 'OpenBOR.exe');
+        if (existsSync(preferredExecutable)) {
+          exePath = preferredExecutable;
+        } else if (existsSync(versionDirectory)) {
+          const executable = readdirSync(versionDirectory)
+            .find(file => file.toLowerCase().endsWith('.exe'));
+          if (executable) exePath = join(versionDirectory, executable);
+        }
+      } else {
+        Logger.warn(
+          `OpenBorGenerator: The ROM name must end with [version] to use openbor-specific-version: ${this.rom}`
+        );
+      }
+    }
 
     if (!existsSync(exePath)) {
       Logger.warn(`OpenBorGenerator: Executable not found at ${exePath}.`);

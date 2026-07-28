@@ -179,7 +179,10 @@ export class AppDownloadService {
 
       let filename: string
       try {
-        filename = getSafeRomFilename(asset?.download_name, allowedExtensions, platform)
+        const assetAllowedExtensions = asset?.install_mode === 'extract'
+          ? new Set(['.zip'])
+          : allowedExtensions
+        filename = getSafeRomFilename(asset?.download_name, assetAllowedExtensions, platform)
       } catch {
         // The remote bucket/database may contain auxiliary files such as
         // gamelist.xml. They are not downloadable games and must not make the
@@ -277,14 +280,16 @@ export class AppDownloadService {
     }
 
     const downloadUrl = assertAllowedDownloadUrl(authorization.downloadUrl)
+    const installMode = authorization.asset.install_mode === 'extract' ? 'extract' : 'file'
     const filename = getSafeRomFilename(
       authorization.asset.filename,
-      this.getAllowedRomExtensions(assetPlatform),
+      installMode === 'extract'
+        ? new Set(['.zip'])
+        : this.getAllowedRomExtensions(assetPlatform),
       assetPlatform
     )
     const expectedSize = authorization.asset.size
     const expectedSha256 = authorization.asset.sha256?.toLowerCase() || null
-    const installMode = authorization.asset.install_mode === 'extract' ? 'extract' : 'file'
     const installName = basename(
       authorization.asset.install_name?.trim() || parse(filename).name
     ).replace(/[\u0000-\u001f<>:"/\\|?*]/g, '_')

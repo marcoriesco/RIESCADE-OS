@@ -5,6 +5,7 @@ import { getEmulatorsPath, getConfigsPath, getRetroBatPath } from '../utils/path
 import { Logger } from '../utils/logger.js';
 import { Config, InputConfig, InputItem } from '../config.js';
 import { resolveLibretroVisuals } from '../utils/libretroVisuals.js';
+import { resolveScummVmMarker } from '../utils/scummvm.js';
 
 interface LibretroCoreOptionMapping {
   configKey: string;
@@ -155,7 +156,10 @@ export class LibRetroGenerator extends BaseGenerator {
     if (selectedSlot !== undefined && Number(selectedSlot) >= 0) {
       launchArgs.push('--entryslot', selectedSlot);
     }
-    launchArgs.push(this.rom);
+    const launchRom = this.core.toLowerCase() === 'scummvm'
+      ? resolveScummVmMarker(this.rom).markerPath
+      : this.rom;
+    launchArgs.push(launchRom);
     if (this.shaderPreset) {
       launchArgs.push('--set-shader', this.shaderPreset);
     }

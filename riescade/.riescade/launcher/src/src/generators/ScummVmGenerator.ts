@@ -1,10 +1,11 @@
 import { existsSync, readFileSync } from 'fs';
-import { join } from 'path';
+import { dirname, join } from 'path';
 import { BaseGenerator } from './BaseGenerator.js';
 import { getEmulatorsPath } from '../utils/paths.js';
 import { Logger } from '../utils/logger.js';
 import { Config } from '../config.js';
 import { updateIniSetting } from '../utils/ini.js';
+import { resolveScummVmMarker } from '../utils/scummvm.js';
 
 export class ScummVmGenerator extends BaseGenerator {
   public configure(): void {
@@ -27,7 +28,10 @@ export class ScummVmGenerator extends BaseGenerator {
       commandArgs.push('--fullscreen');
     }
 
-    commandArgs.push(this.rom);
+    const marker = resolveScummVmMarker(this.rom);
+    commandArgs.push(`--path=${dirname(marker.markerPath)}`);
+    commandArgs.push(marker.target);
+    Logger.info(`ScummVmGenerator: Using ${marker.markerPath} with target "${marker.target}".`);
 
     return {
       executable: exePath,

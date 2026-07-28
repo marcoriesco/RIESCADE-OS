@@ -970,5 +970,9 @@
   "Downloads.Media.Overwrite": {
     "value": false,
     "type": "bool"
+  },
+  "Window.system-touhou.Maximized": {
+    "value": true,
+    "type": "bool"
   }
 }
