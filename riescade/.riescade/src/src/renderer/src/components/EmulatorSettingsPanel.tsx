@@ -19,6 +19,7 @@ interface SchemaOption {
   max?: number
   step?: number
   suffix?: string
+  incompleteValues?: boolean
 }
 
 interface SchemaGroup {
@@ -208,7 +209,10 @@ export const EmulatorSettingsPanel: React.FC<EmulatorSettingsPanelProps> = ({
     const optionCore = (option as any).core
     if (!optionCore) return true
     if (activeCore === 'auto' || activeCore === 'all') return scope === 'emulator'
-    return String(optionCore).toLowerCase() === activeCore
+    const normalizedOptionCore = String(optionCore).toLowerCase()
+    if (normalizedOptionCore === activeCore) return true
+    return normalizedOptionCore === 'mupen64plus'
+      && (activeCore === 'mupen64plus_next' || activeCore === 'mupen64plus_next_gles3')
   }, [scope, activeCore])
 
   const localizedGroups = useMemo(() => {
@@ -392,7 +396,7 @@ export const EmulatorSettingsPanel: React.FC<EmulatorSettingsPanelProps> = ({
                 )}
 
                 {/* Render the appropriate control */}
-                {option.type === 'select' && option.values && (
+                {option.type === 'select' && option.values && !option.incompleteValues && (
                   <SettingSelect
                     label={option.label}
                     name={option.configKey}
@@ -400,6 +404,14 @@ export const EmulatorSettingsPanel: React.FC<EmulatorSettingsPanelProps> = ({
                     options={option.values}
                     ctx={schemaCtx}
                   />
+                )}
+                {option.type === 'select' && option.incompleteValues && (
+                  <div className="rounded-lg border border-amber-500/15 bg-amber-500/5 px-4 py-3">
+                    <div className="text-sm font-medium text-white/75">{option.label}</div>
+                    <div className="mt-1 text-xs leading-relaxed text-amber-200/55">
+                      Valores ainda não catalogados para esta versão do core. Ajuste pelo menu interno do RetroArch.
+                    </div>
+                  </div>
                 )}
                 {option.type === 'toggle' && (
                   <SettingToggle

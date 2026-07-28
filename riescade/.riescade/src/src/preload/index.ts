@@ -111,6 +111,8 @@ const api = {
   getAppAuthSession: () => ipcRenderer.invoke('app-auth-get-session'),
   loginAppWithGoogle: () => ipcRenderer.invoke('app-auth-login'),
   logoutApp: () => ipcRenderer.invoke('app-auth-logout'),
+  getAppSubscription: () => ipcRenderer.invoke('app-subscription-get'),
+  manageAppSubscription: () => ipcRenderer.invoke('app-subscription-manage'),
   listDownloadCatalog: (platform: string) =>
     ipcRenderer.invoke('app-list-download-catalog', platform),
   downloadAsset: (platform: string, assetId: string) =>

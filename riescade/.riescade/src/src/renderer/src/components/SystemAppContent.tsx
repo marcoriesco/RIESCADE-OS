@@ -134,6 +134,7 @@ export default function SystemAppContent({
   const [selectedIdx, setSelectedIdx] = useState(0);
   const [filter, setFilter] = useState<"all" | "favorites" | "downloads">("all");
   const [loading, setLoading] = useState(true);
+  const [platformInstallMode, setPlatformInstallMode] = useState<'file' | 'extract'>('file');
 
   // Platform full download modal & torrent progress states
   const [showFullSystemTorrentModal, setShowFullSystemTorrentModal] = useState(false);
@@ -292,17 +293,25 @@ export default function SystemAppContent({
     try {
       catalog = await window.api.listDownloadCatalog(systemName);
     } catch (error) {
+      setPlatformInstallMode('file');
       // The remote download catalog is optional enrichment. A malformed entry,
       // network outage or server error must never hide locally indexed games.
       console.warn(`[SystemAppContent] ${systemName} download catalog unavailable; showing local games.`, error);
       return localGames;
     }
+    setPlatformInstallMode(
+      Array.isArray(catalog) && catalog.some(asset => asset.install_mode === 'extract')
+        ? 'extract'
+        : 'file'
+    );
     if (!Array.isArray(catalog) || catalog.length === 0) {
       return localGames;
     }
-    const catalogByFilename = new Map(
-      catalog.map(asset => [asset.download_name.toLowerCase(), asset])
-    );
+    const catalogByFilename = new Map<string, typeof catalog[number]>();
+    for (const asset of catalog) {
+      catalogByFilename.set(asset.download_name.toLowerCase(), asset);
+      catalogByFilename.set(asset.install_name.toLowerCase(), asset);
+    }
     const localNames = new Set(
       localGames.map((game: Game) => game.path.split(/[\\/]/).pop()?.toLowerCase())
     );
@@ -316,11 +325,17 @@ export default function SystemAppContent({
         downloadAssetId: asset.id,
         downloadName: asset.download_name,
         downloadSize: asset.file_size,
+        downloadInstallMode: asset.install_mode,
+        downloadInstallName: asset.install_name,
         isRemoteMissing: true
       };
     });
     const missingGames: Game[] = catalog
-      .filter(asset => !asset.installed && !localNames.has(asset.download_name.toLowerCase()))
+      .filter(asset =>
+        !asset.installed
+        && !localNames.has(asset.download_name.toLowerCase())
+        && !localNames.has(asset.install_name.toLowerCase())
+      )
       .map(asset => ({
         id: `download-${asset.id}`,
         name: asset.title,
@@ -333,6 +348,8 @@ export default function SystemAppContent({
         downloadAssetId: asset.id,
         downloadName: asset.download_name,
         downloadSize: asset.file_size,
+        downloadInstallMode: asset.install_mode,
+        downloadInstallName: asset.install_name,
         isRemoteMissing: true
       }));
     return [...reconciledLocalGames, ...missingGames];
@@ -1709,15 +1726,17 @@ export default function SystemAppContent({
                             Downloads
                           </div>
 
-                          <button
-                            onClick={() => {
-                              handleOpenPlatformDownloadModal();
-                            }}
-                            className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs hover:bg-white/10 text-left transition cursor-pointer text-white/80 hover:text-white"
-                          >
-                            <Download className="w-4 h-4 text-emerald-400" />
-                            <span>Baixar plataforma completa</span>
-                          </button>
+                          {platformInstallMode !== 'extract' && (
+                            <button
+                              onClick={() => {
+                                handleOpenPlatformDownloadModal();
+                              }}
+                              className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs hover:bg-white/10 text-left transition cursor-pointer text-white/80 hover:text-white"
+                            >
+                              <Download className="w-4 h-4 text-emerald-400" />
+                              <span>Baixar plataforma completa</span>
+                            </button>
+                          )}
 
                           <button
                             onClick={() => {
@@ -2629,6 +2648,11 @@ export default function SystemAppContent({
                             Tamanho: {formatBytes(selectedGame.downloadSize)}
                           </span>
                         ) : null}
+                        {selectedGame.downloadInstallMode === 'extract' && (
+                          <span className="rounded-full border border-cyan-400/20 bg-cyan-400/10 px-2 py-1 text-[10px] font-semibold text-cyan-200/80">
+                            O pacote será descompactado automaticamente
+                          </span>
+                        )}
                       </div>
                     ) : (
                       <>
@@ -3137,7 +3161,7 @@ export default function SystemAppContent({
       )}
 
       {/* Full Platform Download Modal */}
-      {showFullSystemTorrentModal && (
+      {showFullSystemTorrentModal && platformInstallMode !== 'extract' && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-md p-4 animate-in fade-in duration-200">
           <div className="w-full max-w-lg bg-[#141414] border border-white/10 rounded-2xl p-6 shadow-2xl text-left flex flex-col gap-5 text-white">
             {/* Header */}

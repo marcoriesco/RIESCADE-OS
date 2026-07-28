@@ -842,6 +842,7 @@ export class LibraryService {
   public scanPhysicalGames(systemPath: string, extensions: string[], systemName: string): Game[] {
     const games: Game[] = []
     const extSet = new Set(extensions.map(e => e.toLowerCase().trim()))
+    const gameDirectoryExtension = '.game'
 
     // Common MAME / NeoGeo BIOS and support device zip files to exclude from the playable list
     const ARCADE_ASSETS = new Set([
@@ -876,8 +877,8 @@ export class LibraryService {
           const stem = (file.includes('.') ? file.substring(0, file.lastIndexOf('.')) : file).toLowerCase()
 
           if (stat.isDirectory()) {
-            if (extSet.has(ext)) {
-              // Folder matches a valid system extension. Treat folder as a game and block internal scan.
+            if (ext === gameDirectoryExtension) {
+              // A .game folder is a game in every system and must not be scanned recursively.
               const relPath = './' + relative(systemPath, fullPath).replace(/\\/g, '/')
               const displayName = file.substring(0, file.length - ext.length)
 

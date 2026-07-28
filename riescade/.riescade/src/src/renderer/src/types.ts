@@ -68,6 +68,8 @@ export type Game = {
   downloadAssetId?: string;
   downloadName?: string;
   downloadSize?: number | null;
+  downloadInstallMode?: 'file' | 'extract';
+  downloadInstallName?: string;
   isRemoteMissing?: boolean;
   installed?: boolean;
 };

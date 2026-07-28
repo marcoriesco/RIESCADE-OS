@@ -1,5 +1,5 @@
 import { createHash } from 'crypto'
-import { copyFileSync, createWriteStream, existsSync, mkdirSync, readdirSync, renameSync, rmSync, unlinkSync, promises as fsPromises } from 'fs'
+import { copyFileSync, createWriteStream, existsSync, mkdirSync, mkdtempSync, readdirSync, renameSync, rmSync, unlinkSync, promises as fsPromises } from 'fs'
 import { basename, join, parse } from 'path'
 import { tmpdir } from 'os'
 import { execFile } from 'child_process'
@@ -14,9 +14,6 @@ const MEDIA_TYPES = [
   'manual', 'marquee', 'mix', 'screenshot', 'title', 'video'
 ] as const
 const MEDIA_TYPE_SET = new Set<string>(MEDIA_TYPES)
-const ALLOWED_MEDIA_EXTENSIONS = new Set([
-  '.webp', '.png', '.jpg', '.jpeg', '.gif', '.mp4', '.mkv', '.avi', '.pdf'
-])
 const FULL_MEDIA_ARCHIVE_NAMES = new Set(['_media.zip', '_media.7z'])
 
 function isFullMediaArchive(filename: unknown): boolean {
@@ -36,6 +33,8 @@ export interface AppCatalogAsset {
   cover3d: string | null
   fanart: string | null
   logo: string | null
+  install_mode: 'file' | 'extract'
+  install_name: string
 }
 
 export interface PlatformDownloadInfo {
@@ -63,15 +62,11 @@ interface AuthorizedDownload {
     filename: string
     size: number | null
     sha256: string | null
+    install_mode?: 'file' | 'extract'
+    install_name?: string
   }
   downloadUrl: string
   expiresAt: string
-  media?: Array<{
-    type: string
-    filename: string
-    size: number | null
-    downloadUrl: string
-  }>
 }
 
 function assertAccessToken(accessToken: unknown): string {
@@ -86,15 +81,6 @@ function getSafeRomFilename(filename: string, allowedExtensions: Set<string>, pl
   const extension = safeName.slice(safeName.lastIndexOf('.')).toLowerCase()
   if (!safeName || !allowedExtensions.has(extension)) {
     throw new Error(`O servidor informou um formato de arquivo ${platform.toUpperCase()} não permitido.`)
-  }
-  return safeName
-}
-
-function getSafeMediaFilename(filename: string): string {
-  const safeName = basename(filename).replace(/[\u0000-\u001f<>:"/\\|?*]/g, '_')
-  const extension = safeName.slice(safeName.lastIndexOf('.')).toLowerCase()
-  if (!safeName || !ALLOWED_MEDIA_EXTENSIONS.has(extension)) {
-    throw new Error('O servidor informou um formato de mídia não permitido.')
   }
   return safeName
 }
@@ -142,21 +128,9 @@ export class AppDownloadService {
     return extensions
   }
 
-  private getMediaPreferences(): { mediaTypes: string[]; overwrite: boolean } {
-    const enabled = this.settings.getSetting('Downloads.Media.Enabled', 'bool')
-    const mediaTypes = enabled === false
-      ? []
-      : MEDIA_TYPES.filter(type =>
-          this.settings.getSetting(`Downloads.Media.Types.${type}`, 'bool') !== false
-        )
-    return {
-      mediaTypes,
-      overwrite: this.settings.getSetting('Downloads.Media.Overwrite', 'bool') === true
-    }
-  }
-
   async listCatalog(platform: string): Promise<AppCatalogAsset[]> {
-    const response = await fetch(`${API_BASE_URL}/api/app/catalog?platform=${encodeURIComponent(platform)}`, {
+    const normalizedPlatform = platform.toLowerCase()
+    const response = await fetch(`${API_BASE_URL}/api/app/catalog?platform=${encodeURIComponent(normalizedPlatform)}`, {
       headers: {
         'User-Agent': 'RIESCADE-App'
       },
@@ -165,7 +139,17 @@ export class AppDownloadService {
 
     if (!response.ok) throw new Error(await readApiError(response))
     const payload = await response.json()
-    if ((payload?.platform && payload.platform !== platform) || !Array.isArray(payload?.assets)) {
+    const responsePlatform = payload?.platform
+    if (
+      (
+        responsePlatform !== undefined
+        && (
+          typeof responsePlatform !== 'string'
+          || responsePlatform.toLowerCase() !== normalizedPlatform
+        )
+      )
+      || !Array.isArray(payload?.assets)
+    ) {
       throw new Error(`O catálogo ${platform.toUpperCase()} retornado pelo servidor é inválido.`)
     }
     const romDirectory = join(getRetroBatPath(), 'roms', platform)
@@ -191,11 +175,17 @@ export class AppDownloadService {
       }
 
       const mediaName = parse(filename).name
+      const installMode = asset.install_mode === 'extract' ? 'extract' : 'file'
+      const installName = typeof asset.install_name === 'string' && asset.install_name.trim()
+        ? basename(asset.install_name)
+        : mediaName
       const media = (folder: string) => {
         const path = join(romDirectory, 'media', folder, `${mediaName}.webp`)
         return existsSync(path) ? path : null
       }
-      const romPath = join(romDirectory, filename)
+      const romPath = installMode === 'extract'
+        ? join(romDirectory, installName)
+        : join(romDirectory, filename)
       catalog.push({
         ...asset,
         download_name: filename,
@@ -205,6 +195,9 @@ export class AppDownloadService {
         cover3d: media('cover3d'),
         fanart: media('fanart'),
         logo: media('logo')
+        ,
+        install_mode: installMode,
+        install_name: installName
       })
     }
 
@@ -238,8 +231,8 @@ export class AppDownloadService {
     if (typeof platform !== 'string' || !/^[a-z0-9_-]{1,64}$/i.test(platform)) {
       throw new Error('Plataforma inválida.')
     }
+    const normalizedPlatform = platform.toLowerCase()
 
-    const mediaPreferences = this.getMediaPreferences()
     const authorizationResponse = await fetch(
       `${API_BASE_URL}/api/app/downloads/${encodeURIComponent(assetId)}`,
       {
@@ -251,8 +244,7 @@ export class AppDownloadService {
         },
         body: JSON.stringify({
           clientVersion: appVersion,
-          platform,
-          mediaTypes: mediaPreferences.mediaTypes
+          platform: normalizedPlatform
         }),
         signal: AbortSignal.timeout(15_000)
       }
@@ -276,6 +268,11 @@ export class AppDownloadService {
     )
     const expectedSize = authorization.asset.size
     const expectedSha256 = authorization.asset.sha256?.toLowerCase() || null
+    const installMode = authorization.asset.install_mode === 'extract' ? 'extract' : 'file'
+    const installName = basename(
+      authorization.asset.install_name?.trim() || parse(filename).name
+    ).replace(/[\u0000-\u001f<>:"/\\|?*]/g, '_')
+    if (!installName) throw new Error('O servidor informou uma pasta de instalação inválida.')
 
     if (expectedSize !== null && !Number.isSafeInteger(expectedSize)) {
       throw new Error('O servidor informou um tamanho de arquivo inválido.')
@@ -350,69 +347,17 @@ export class AppDownloadService {
           throw new Error('A verificação de integridade SHA-256 falhou.')
         }
 
-        for (const media of authorization.media ?? []) {
-          if (!MEDIA_TYPE_SET.has(media.type)) continue
-          const mediaFilename = getSafeMediaFilename(media.filename)
-          const mediaDirectory = join(romDirectory, 'media', media.type)
-          mkdirSync(mediaDirectory, { recursive: true })
-          const mediaDestination = join(mediaDirectory, mediaFilename)
-          if (existsSync(mediaDestination) && !mediaPreferences.overwrite) continue
-
-          const mediaUrl = assertAllowedDownloadUrl(media.downloadUrl)
-          const mediaResponse = await fetch(mediaUrl, {
-            headers: { 'User-Agent': 'RIESCADE-App' }
-          })
-          if (!mediaResponse.ok || !mediaResponse.body) {
-            throw new Error(`Falha no download da mídia ${media.type} (${mediaResponse.status}).`)
-          }
-
-          const mediaContentLength = Number(mediaResponse.headers.get('content-length') || 0)
-          if (media.size !== null && mediaContentLength > 0 && mediaContentLength !== media.size) {
-            throw new Error(`O tamanho da mídia ${media.type} não corresponde ao catálogo.`)
-          }
-
-          const mediaPartial = `${mediaDestination}.part`
-          if (existsSync(mediaPartial)) unlinkSync(mediaPartial)
-          const mediaStream = createWriteStream(mediaPartial, { flags: 'wx' })
-          let mediaDownloadedBytes = 0
-          try {
-            for await (const chunk of mediaResponse.body as any) {
-              const buffer = Buffer.from(chunk)
-              mediaDownloadedBytes += buffer.length
-              if (!mediaStream.write(buffer)) {
-                await new Promise<void>(resolve => mediaStream.once('drain', resolve))
-              }
-
-              const mediaTotal = media.size || mediaContentLength
-              window?.webContents.send('app-download-progress', {
-                id: downloadId,
-                assetId: downloadId,
-                platform: assetPlatform,
-                title: `${authorization.asset.title} · ${media.type}`,
-                filename: mediaFilename,
-                downloadedBytes: mediaDownloadedBytes,
-                totalBytes: mediaTotal,
-                percent: mediaTotal > 0
-                  ? Math.round((mediaDownloadedBytes / mediaTotal) * 100)
-                  : 0
-              })
-            }
-
-            mediaStream.end()
-            await new Promise<void>((resolve, reject) => {
-              mediaStream.once('finish', resolve)
-              mediaStream.once('error', reject)
-            })
-            if (media.size !== null && mediaDownloadedBytes !== media.size) {
-              throw new Error(`A mídia ${media.type} foi baixada incompleta.`)
-            }
-            if (existsSync(mediaDestination)) unlinkSync(mediaDestination)
-            renameSync(mediaPartial, mediaDestination)
-          } catch (error) {
-            mediaStream.destroy()
-            if (existsSync(mediaPartial)) unlinkSync(mediaPartial)
-            throw error
-          }
+        if (installMode === 'extract') {
+          const installedPath = await this.installExtractedGame(
+            partialPath,
+            romDirectory,
+            installName,
+            downloadId,
+            assetPlatform,
+            authorization.asset.title,
+            window
+          )
+          return { path: installedPath, filename: installName, sha256: actualSha256 }
         }
 
         if (existsSync(destinationPath)) unlinkSync(destinationPath)
@@ -426,6 +371,93 @@ export class AppDownloadService {
     } finally {
       this.activeControllers.delete(downloadId)
     }
+  }
+
+  private async installExtractedGame(
+    archivePath: string,
+    romDirectory: string,
+    installName: string,
+    downloadId: string,
+    platform: string,
+    title: string,
+    window: BrowserWindow | null
+  ): Promise<string> {
+    const extractionRoot = mkdtempSync(join(tmpdir(), `riescade-game-${downloadId}-`))
+    const destinationPath = join(romDirectory, installName)
+    let destinationWasPrepared = false
+
+    try {
+      const archiveEntries = await this.execFileOutput('tar', ['-tf', archivePath])
+      for (const rawEntry of archiveEntries.split(/\r?\n/)) {
+        const entry = rawEntry.trim().replace(/\\/g, '/')
+        if (!entry) continue
+        if (
+          entry.startsWith('/')
+          || /^[a-z]:\//i.test(entry)
+          || entry.split('/').some(part => part === '..')
+        ) {
+          throw new Error('O pacote contém um caminho inseguro e não pode ser instalado.')
+        }
+      }
+
+      window?.webContents.send('app-download-progress', {
+        id: downloadId,
+        assetId: downloadId,
+        platform,
+        title,
+        filename: basename(archivePath),
+        downloadedBytes: 0,
+        totalBytes: 0,
+        percent: 100,
+        status: 'Extraindo arquivos do jogo...'
+      })
+      await this.execFileOutput('tar', ['-xf', archivePath, '-C', extractionRoot])
+
+      const entries = readdirSync(extractionRoot, { withFileTypes: true })
+        .filter(entry => entry.name !== '__MACOSX')
+      const sourceRoot = entries.length === 1
+        && entries[0].isDirectory()
+        && entries[0].name.toLowerCase() === installName.toLowerCase()
+        ? join(extractionRoot, entries[0].name)
+        : extractionRoot
+
+      const overwrite = this.settings.getSetting('Downloads.Games.Overwrite', 'bool') === true
+        || this.settings.getSetting('Downloads.OverwriteExisting', 'bool') === true
+      if (existsSync(destinationPath)) {
+        if (!overwrite) {
+          throw new Error(`A pasta do jogo ${installName} já existe. Ative a substituição de jogos para reinstalar.`)
+        }
+        rmSync(destinationPath, { recursive: true, force: true, maxRetries: 5, retryDelay: 100 })
+      }
+
+      destinationWasPrepared = true
+      await fsPromises.cp(sourceRoot, destinationPath, {
+        recursive: true,
+        force: false,
+        errorOnExist: true
+      })
+      unlinkSync(archivePath)
+      return destinationPath
+    } catch (error) {
+      if (destinationWasPrepared && existsSync(destinationPath)) {
+        rmSync(destinationPath, { recursive: true, force: true, maxRetries: 5, retryDelay: 100 })
+      }
+      if (existsSync(archivePath)) unlinkSync(archivePath)
+      throw error
+    } finally {
+      if (existsSync(extractionRoot)) {
+        rmSync(extractionRoot, { recursive: true, force: true, maxRetries: 5, retryDelay: 100 })
+      }
+    }
+  }
+
+  private execFileOutput(command: string, args: string[]): Promise<string> {
+    return new Promise((resolve, reject) => {
+      execFile(command, args, { windowsHide: true }, (error, stdout) => {
+        if (error) reject(error)
+        else resolve(stdout)
+      })
+    })
   }
 
   async getPlatformDownloadInfo(platform: string): Promise<PlatformDownloadInfo> {

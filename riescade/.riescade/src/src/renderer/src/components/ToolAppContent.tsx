@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useMemo, useCallback } from "react";
-import { ChevronRight, Search, Folder, Star, User, Shield, Settings, Palette, Gamepad2, Volume2, Cpu, Info, Database, Trash2, Edit3, X, ChevronLeft, Filter, HardDrive, RefreshCw, Eye, EyeOff, Check, ChevronDown, Save, Trophy, Loader2, Sliders, CheckCircle, Circle, Wrench, Bug, Copy, Download, Activity, CloudDownload } from "lucide-react";
+import { ChevronRight, Search, Folder, Star, User, Shield, Settings, Palette, Gamepad2, Volume2, Cpu, Info, Database, Trash2, Edit3, X, ChevronLeft, Filter, HardDrive, RefreshCw, Eye, EyeOff, Check, ChevronDown, Save, Trophy, Loader2, Sliders, CheckCircle, Circle, Wrench, Bug, Copy, Download, Activity, CloudDownload, CreditCard, ExternalLink } from "lucide-react";
 import { System, SettingsCtx } from "../types";
 import { TOOL_APPS, getSystemTheme } from "../constants";
 import {
@@ -17,6 +17,8 @@ type AppSession = {
   expiresAt: string;
   user: { id: string; email?: string; name?: string | null };
 };
+
+type AppSubscription = Awaited<ReturnType<typeof window.api.getAppSubscription>>;
 
 type SnesCatalogAsset = {
   id: string;
@@ -181,11 +183,30 @@ function DownloadsApp() {
 
 function AccountSettings() {
   const [session, setSession] = useState<AppSession | null>(null);
+  const [subscription, setSubscription] = useState<AppSubscription>(null);
   const [busy, setBusy] = useState(true);
+  const [portalBusy, setPortalBusy] = useState(false);
   const [message, setMessage] = useState("");
+  const subscriptionPrice = subscription?.amount != null && subscription.currency
+    ? new Intl.NumberFormat("pt-BR", {
+        style: "currency",
+        currency: subscription.currency.toUpperCase()
+      }).format(subscription.amount / 100)
+    : null;
+  const subscriptionPeriod = subscription?.interval === "year"
+    ? "ano"
+    : subscription?.interval === "month"
+      ? "mês"
+      : subscription?.interval === "week"
+        ? "semana"
+        : subscription?.interval === "day"
+          ? "dia"
+          : null;
 
   const refresh = useCallback(async () => {
-    setSession(await window.api.getAppAuthSession());
+    const nextSession = await window.api.getAppAuthSession();
+    setSession(nextSession);
+    setSubscription(nextSession ? await window.api.getAppSubscription() : null);
     setBusy(false);
   }, []);
 
@@ -195,6 +216,13 @@ function AccountSettings() {
       setSession(nextSession);
       setBusy(false);
       setMessage("");
+      if (nextSession) {
+        void window.api.getAppSubscription().then(setSubscription).catch(error => {
+          setMessage(error instanceof Error ? error.message : String(error));
+        });
+      } else {
+        setSubscription(null);
+      }
     });
     const unsubscribeError = window.api.on("app-auth-error", (_event, error: string) => {
       setMessage(error);
@@ -235,11 +263,110 @@ function AccountSettings() {
                 </div>
               </div>
             </div>
+            <div>
+              <h3 className="settings-section-title mb-3">Assinatura</h3>
+              <div className="rounded-xl border border-white/10 bg-white/[0.035] p-5">
+                <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
+                  <div className="flex items-start gap-3">
+                    <div className="rounded-lg border border-accent/20 bg-accent/10 p-2.5">
+                      <CreditCard className="h-5 w-5 text-accent" />
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <h4 className="text-sm font-bold text-white">RIESCADE</h4>
+                        <span className={`rounded-full border px-2 py-0.5 text-[10px] font-bold ${
+                          subscription?.status === "active" || subscription?.status === "trialing"
+                            ? "border-emerald-400/20 bg-emerald-400/10 text-emerald-300"
+                            : "border-white/10 bg-white/5 text-white/50"
+                        }`}>
+                          {subscription?.status === "active"
+                            ? "Ativa"
+                            : subscription?.status === "trialing"
+                              ? "Período de teste"
+                              : subscription
+                                ? "Inativa"
+                                : "Sem assinatura"}
+                        </span>
+                      </div>
+                      {subscription ? (
+                        <p className="mt-1 text-xs text-white/45">
+                          Downloads, mídias, emuladores e atualizações incluídos.
+                        </p>
+                      ) : (
+                        <p className="mt-1 text-xs text-white/45">
+                          Assine para acessar downloads, mídias, emuladores e atualizações.
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                  {subscription ? (
+                    <button
+                      type="button"
+                      disabled={portalBusy}
+                      onClick={async () => {
+                        setPortalBusy(true);
+                        setMessage("");
+                        try {
+                          await window.api.manageAppSubscription();
+                        } catch (error) {
+                          setMessage(error instanceof Error ? error.message : String(error));
+                        } finally {
+                          setPortalBusy(false);
+                        }
+                      }}
+                      className="inline-flex items-center justify-center gap-2 rounded-lg bg-accent px-4 py-2.5 text-xs font-bold text-white hover:brightness-110 disabled:opacity-50"
+                    >
+                      {portalBusy ? <Loader2 className="h-4 w-4 animate-spin" /> : <ExternalLink className="h-4 w-4" />}
+                      Gerenciar assinatura
+                    </button>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={() => window.open("https://www.riescade.com.br/dashboard", "_blank")}
+                      className="inline-flex items-center justify-center gap-2 rounded-lg bg-accent px-4 py-2.5 text-xs font-bold text-white hover:brightness-110"
+                    >
+                      <ExternalLink className="h-4 w-4" />
+                      Conhecer planos
+                    </button>
+                  )}
+                </div>
+                {subscription ? (
+                  <div className="mt-5 grid gap-3 border-t border-white/8 pt-4 sm:grid-cols-3">
+                    <div>
+                      <div className="text-[10px] font-semibold uppercase tracking-wide text-white/35">Plano</div>
+                      <div className="mt-1 text-xs font-semibold text-white/80">
+                        {subscription.plan_name || "RIESCADE"}
+                      </div>
+                    </div>
+                    <div>
+                      <div className="text-[10px] font-semibold uppercase tracking-wide text-white/35">Valor</div>
+                      <div className="mt-1 text-xs font-semibold text-white/80">
+                        {subscriptionPrice
+                          ? `${subscriptionPrice}${subscriptionPeriod ? ` / ${subscriptionPeriod}` : ""}`
+                          : "Consulte no portal"}
+                      </div>
+                    </div>
+                    <div>
+                      <div className="text-[10px] font-semibold uppercase tracking-wide text-white/35">
+                        {subscription.cancel_at_period_end ? "Término do acesso" : "Próxima renovação"}
+                      </div>
+                      <div className="mt-1 text-xs font-semibold text-white/80">
+                        {subscription.end_date
+                          ? new Date(subscription.end_date).toLocaleDateString("pt-BR")
+                          : "Consulte no portal"}
+                      </div>
+                    </div>
+                  </div>
+                ) : null}
+              </div>
+            </div>
+            {message && <p className="text-xs text-amber-200/80">{message}</p>}
             <button
               onClick={async () => {
                 setBusy(true);
                 await window.api.logoutApp();
                 setSession(null);
+                setSubscription(null);
                 setBusy(false);
               }}
               className="rounded-lg border border-white/10 bg-white/5 px-4 py-2.5 text-xs font-semibold text-white/70 hover:bg-white/10"
@@ -673,7 +800,7 @@ export default function ToolAppContent({
 }) {
   const { t, setLanguage } = useI18n();
   const [activeSettingsTab, setActiveSettingsTab] = useState("conta");
-  const [activeDownloadsTab, setActiveDownloadsTab] = useState<"games" | "emulators">("games");
+  const [activeDownloadsTab, setActiveDownloadsTab] = useState<"games" | "media" | "emulators">("games");
   const [activeEmuSubmenu, setActiveEmuSubmenu] = useState<string>("global");
   const [emuMenuOpen, setEmuMenuOpen] = useState(false);
   const [settingsNavSearch, setSettingsNavSearch] = useState("");
@@ -850,10 +977,8 @@ export default function ToolAppContent({
       const defaultValue = (
         name === "RIESCADE.ShowDesktopIcons" ||
         name === "RIESCADE.DynamicBackground" ||
-        name === "Downloads.Media.Enabled" ||
         name === "Downloads.Emulators.InstallMissing" ||
-        name === "Downloads.Emulators.CheckUpdates" ||
-        name.startsWith("Downloads.Media.Types.")
+        name === "Downloads.Emulators.CheckUpdates"
       ) ? "true" : "false";
       const v = getSetting(name, defaultValue);
       return v === "true" || v === "1";
@@ -1480,7 +1605,7 @@ export default function ToolAppContent({
                   <div className="mb-8">
                     <h2 className="settings-page-title">Downloads</h2>
                     <p className="settings-page-description">
-                      Configure o download de games, mídias e emuladores.
+                      Configure o comportamento dos downloads de games, mídias completas e emuladores.
                     </p>
                   </div>
 
@@ -1498,6 +1623,7 @@ export default function ToolAppContent({
                     className="mb-7 w-full"
                     tabs={[
                       { id: "games", label: "Games", icon: Gamepad2 },
+                      { id: "media", label: "Mídias", icon: Download },
                       { id: "emulators", label: "Emuladores", icon: Cpu }
                     ]}
                     value={activeDownloadsTab}
@@ -1508,31 +1634,32 @@ export default function ToolAppContent({
                     <>
                       <SettingGroup label="Comportamento" />
                       <SettingToggle
-                        label="Baixar mídias junto com a ROM"
-                        name="Downloads.Media.Enabled"
-                        desc="Quando ativado, instala automaticamente as mídias selecionadas após baixar o jogo."
+                        label="Substituir games existentes"
+                        name="Downloads.Games.Overwrite"
+                        desc="Permite reinstalar um game quando o arquivo ou a pasta .game já existir."
                         ctx={ctx}
                       />
                       <SettingToggle
-                        label="Substituir mídias existentes"
-                        name="Downloads.Media.Overwrite"
-                        desc="Atualiza arquivos de mídia que já estiverem presentes na biblioteca local."
+                        label="Exibir downloads como notificações"
+                        name="Downloads.NotificationMode"
+                        desc="Mostra o andamento dos downloads na área de notificações."
                         ctx={ctx}
                       />
+                    </>
+                  )}
 
-                      <SettingGroup label="Tipos de mídia" />
-                      <SettingToggle label="Cartucho" name="Downloads.Media.Types.cartdridge" desc="Pasta media/cartdridge." ctx={ctx} />
-                      <SettingToggle label="Capa 2D" name="Downloads.Media.Types.cover" desc="Pasta media/cover." ctx={ctx} />
-                      <SettingToggle label="Capa 3D" name="Downloads.Media.Types.cover3d" desc="Pasta media/cover3d." ctx={ctx} />
-                      <SettingToggle label="Verso da capa" name="Downloads.Media.Types.coverback" desc="Pasta media/coverback." ctx={ctx} />
-                      <SettingToggle label="Fanart" name="Downloads.Media.Types.fanart" desc="Pasta media/fanart." ctx={ctx} />
-                      <SettingToggle label="Logo" name="Downloads.Media.Types.logo" desc="Pasta media/logo." ctx={ctx} />
-                      <SettingToggle label="Manual" name="Downloads.Media.Types.manual" desc="Pasta media/manual." ctx={ctx} />
-                      <SettingToggle label="Marquee" name="Downloads.Media.Types.marquee" desc="Pasta media/marquee." ctx={ctx} />
-                      <SettingToggle label="Mix" name="Downloads.Media.Types.mix" desc="Pasta media/mix." ctx={ctx} />
-                      <SettingToggle label="Captura de tela" name="Downloads.Media.Types.screenshot" desc="Pasta media/screenshot." ctx={ctx} />
-                      <SettingToggle label="Tela de título" name="Downloads.Media.Types.title" desc="Pasta media/title." ctx={ctx} />
-                      <SettingToggle label="Vídeo" name="Downloads.Media.Types.video" desc="Pasta media/video." ctx={ctx} />
+                  {activeDownloadsTab === "media" && (
+                    <>
+                      <SettingGroup label="Mídias completas" />
+                      <SettingToggle
+                        label="Substituir mídias existentes"
+                        name="Downloads.Media.Overwrite"
+                        desc="Sobrescreve arquivos existentes ao usar Baixar mídias completas."
+                        ctx={ctx}
+                      />
+                      <p className="max-w-xl text-xs leading-relaxed text-white/45">
+                        As mídias são instaladas somente pelo download completo disponível no menu de cada sistema.
+                      </p>
                     </>
                   )}
 

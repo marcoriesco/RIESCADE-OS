@@ -79,6 +79,21 @@ declare global {
       } | null>
       loginAppWithGoogle: () => Promise<void>
       logoutApp: () => Promise<void>
+      getAppSubscription: () => Promise<{
+        status: string
+        plan_name?: string | null
+        amount?: number | null
+        currency?: string | null
+        interval?: string | null
+        interval_count?: number | null
+        cancel_at_period_end?: boolean
+        price_id: string | null
+        start_date: string | null
+        end_date: string | null
+        trial_end: string | null
+        updated_at: string | null
+      } | null>
+      manageAppSubscription: () => Promise<void>
       listDownloadCatalog: (platform: string) => Promise<Array<{
         id: string
         title: string
@@ -91,6 +106,8 @@ declare global {
         cover3d: string | null
         fanart: string | null
         logo: string | null
+        install_mode: 'file' | 'extract'
+        install_name: string
       }>>
       downloadAsset: (platform: string, assetId: string) => Promise<{
         path: string

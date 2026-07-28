@@ -22,6 +22,21 @@ interface PendingAuthorization {
   createdAt: number
 }
 
+export interface AppSubscription {
+  status: string
+  plan_name?: string | null
+  amount?: number | null
+  currency?: string | null
+  interval?: string | null
+  interval_count?: number | null
+  cancel_at_period_end?: boolean
+  price_id: string | null
+  start_date: string | null
+  end_date: string | null
+  trial_end: string | null
+  updated_at: string | null
+}
+
 function randomUrlSafe(bytes = 32): string {
   return randomBytes(bytes).toString('base64url')
 }
@@ -170,6 +185,39 @@ export class AppAuthService {
     }).catch(() => undefined)
   }
 
+  async getSubscription(): Promise<AppSubscription | null> {
+    const response = await fetch(`${API_BASE_URL}/api/app/subscription`, {
+      headers: {
+        Authorization: `Bearer ${this.getAccessToken()}`,
+        'User-Agent': 'RIESCADE-App'
+      },
+      signal: AbortSignal.timeout(15_000)
+    })
+    if (!response.ok) throw new Error(await readApiError(response))
+    const payload = (await response.json()) as { subscription?: AppSubscription | null }
+    return payload.subscription ?? null
+  }
+
+  async openSubscriptionPortal(): Promise<void> {
+    const response = await fetch(`${API_BASE_URL}/api/app/subscription/portal`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${this.getAccessToken()}`,
+        'User-Agent': 'RIESCADE-App'
+      },
+      signal: AbortSignal.timeout(15_000)
+    })
+    if (!response.ok) throw new Error(await readApiError(response))
+    const payload = (await response.json()) as { url?: string }
+    const url = new URL(payload.url || '')
+    if (url.protocol !== 'https:' || !url.hostname.endsWith('.stripe.com')) {
+      throw new Error('O servidor retornou um endereço de gerenciamento inválido.')
+    }
+    void shell.openExternal(url.toString()).catch(error => {
+      console.error('Não foi possível abrir o portal da assinatura:', error)
+    })
+  }
+
   private clearLocalSession(): void {
     this.session = null
     const path = sessionFilePath()
@@ -199,4 +247,6 @@ export function registerAppAuthIpc(service: AppAuthService): void {
   ipcMain.handle('app-auth-get-session', () => service.getSession())
   ipcMain.handle('app-auth-login', () => service.beginLogin())
   ipcMain.handle('app-auth-logout', () => service.logout())
+  ipcMain.handle('app-subscription-get', () => service.getSubscription())
+  ipcMain.handle('app-subscription-manage', () => service.openSubscriptionPortal())
 }

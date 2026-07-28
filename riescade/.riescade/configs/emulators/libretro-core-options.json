@@ -1,0 +1,7394 @@
+{
+  "$schema": "riescade-libretro-core-options-v1",
+  "generatedFrom": "LibRetro.CoreOptions.cs",
+  "cores": {
+    "81": [
+      {
+        "configKey": "81_highres",
+        "targetKey": "81_highres",
+        "kind": "BindBoolFeatureAuto",
+        "values": [
+          "WRX",
+          "none",
+          "auto"
+        ]
+      },
+      {
+        "configKey": "81_video_presets",
+        "targetKey": "81_video_presets",
+        "kind": "BindFeature",
+        "values": [
+          "clean"
+        ]
+      },
+      {
+        "configKey": "81_chroma_81",
+        "targetKey": "81_chroma_81",
+        "kind": "BindBoolFeatureAuto",
+        "values": [
+          "enabled",
+          "disabled",
+          "auto"
+        ]
+      },
+      {
+        "configKey": "81_sound",
+        "targetKey": "81_sound",
+        "kind": "BindFeature",
+        "values": [
+          "auto"
+        ]
+      },
+      {
+        "configKey": "81_fast_load",
+        "targetKey": "81_fast_load",
+        "kind": "BindBoolFeatureOn",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      }
+    ],
+    "a5200": [
+      {
+        "configKey": "a5200_mix_frames",
+        "targetKey": "a5200_mix_frames",
+        "kind": "BindFeature",
+        "values": [
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "a5200_low_pass_filter",
+        "targetKey": "a5200_low_pass_filter",
+        "kind": "BindFeature",
+        "values": [
+          "auto"
+        ]
+      },
+      {
+        "configKey": "a5200_input_hack",
+        "targetKey": "a5200_input_hack",
+        "kind": "BindFeature",
+        "values": [
+          "disabled"
+        ]
+      }
+    ],
+    "amiarcadia": [
+      {
+        "configKey": "amiarcadia_machine",
+        "targetKey": "amiarcadia_machine",
+        "kind": "BindFeature",
+        "values": [
+          "auto"
+        ]
+      },
+      {
+        "configKey": "amiarcadia_region",
+        "targetKey": "amiarcadia_region",
+        "kind": "BindFeature",
+        "values": [
+          "PAL"
+        ]
+      },
+      {
+        "configKey": "amiarcadia_demultiplex",
+        "targetKey": "amiarcadia_demultiplex",
+        "kind": "BindBoolFeatureOn",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      }
+    ],
+    "atari800": [
+      {
+        "configKey": "atari800_resolution",
+        "targetKey": "atari800_resolution",
+        "kind": "BindFeature",
+        "values": [
+          "336x240"
+        ]
+      },
+      {
+        "configKey": "atari800_ntscpal",
+        "targetKey": "atari800_ntscpal",
+        "kind": "BindFeature",
+        "values": [
+          "NTSC"
+        ]
+      },
+      {
+        "configKey": "atari800_artifacting",
+        "targetKey": "atari800_artifacting_mode",
+        "kind": "BindFeature",
+        "values": [
+          "none"
+        ]
+      },
+      {
+        "configKey": "atari800_system",
+        "targetKey": "atari800_system",
+        "kind": "BindFeature",
+        "values": [
+          "800XL (64K)"
+        ]
+      },
+      {
+        "configKey": "atari800_sioaccel",
+        "targetKey": "atari800_sioaccel",
+        "kind": "BindBoolFeature",
+        "values": [
+          "disabled",
+          "enabled"
+        ]
+      },
+      {
+        "configKey": "a800_paddle",
+        "targetKey": "paddle_active",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      }
+    ],
+    "azahar": [
+      {
+        "configKey": "azaharlr_resolution_factor",
+        "targetKey": "citra_resolution_factor",
+        "kind": "BindFeature",
+        "values": [
+          "1"
+        ]
+      },
+      {
+        "configKey": "azaharlr_layout_option",
+        "targetKey": "citra_layout_option",
+        "kind": "BindFeature",
+        "values": [
+          "default"
+        ]
+      },
+      {
+        "configKey": "azaharls_swap_screen",
+        "targetKey": "citra_swap_screen",
+        "kind": "BindBoolFeature",
+        "values": [
+          "Bottom",
+          "Top"
+        ]
+      },
+      {
+        "configKey": "azaharlr_use_hw_shaders",
+        "targetKey": "citra_use_hw_shader",
+        "kind": "BindBoolFeature",
+        "values": [
+          "disabled",
+          "enabled"
+        ]
+      },
+      {
+        "configKey": "azaharlr_texture_filter",
+        "targetKey": "citra_texture_filter",
+        "kind": "BindFeature",
+        "values": [
+          "none"
+        ]
+      },
+      {
+        "configKey": "azaharlr_custom_textures",
+        "targetKey": "citra_custom_textures",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "azaharlr_audio_emulation",
+        "targetKey": "citra_audio_emulation",
+        "kind": "BindFeature",
+        "values": [
+          "hle"
+        ]
+      },
+      {
+        "configKey": "azaharlr_region_value",
+        "targetKey": "citra_region_value",
+        "kind": "BindFeature",
+        "values": [
+          "Auto"
+        ]
+      },
+      {
+        "configKey": "azaharlr_language",
+        "targetKey": "citra_language_value",
+        "kind": "BindFeature",
+        "values": [
+          "English"
+        ]
+      },
+      {
+        "configKey": "azaharlr_is_new_3ds",
+        "targetKey": "citra_is_new_3ds",
+        "kind": "BindFeature",
+        "values": [
+          "New 3DS"
+        ]
+      },
+      {
+        "configKey": "azaharlr_use_virtual_sd",
+        "targetKey": "citra_use_virtual_sd",
+        "kind": "BindBoolFeature",
+        "values": [
+          "disabled",
+          "enabled"
+        ]
+      },
+      {
+        "configKey": "azaharlr_graphics_api",
+        "targetKey": "citra_graphics_api",
+        "kind": "BindFeature",
+        "values": [
+          "OpenGL"
+        ]
+      },
+      {
+        "configKey": "azaharlr_mouse_touchscreen",
+        "targetKey": "citra_enable_mouse_touchscreen",
+        "kind": "BindBoolFeature",
+        "values": [
+          "disabled",
+          "enabled"
+        ]
+      },
+      {
+        "configKey": "azaharlr_analog_function",
+        "targetKey": "citra_analog_function",
+        "kind": "BindFeature",
+        "values": [
+          "c_stick_and_touchscreen"
+        ]
+      },
+      {
+        "configKey": "azaharlr_enable_touch_pointer_timeout",
+        "targetKey": "citra_enable_touch_pointer_timeout",
+        "kind": "BindBoolFeatureOn",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "azaharlr_enable_motion",
+        "targetKey": "citra_enable_motion",
+        "kind": "BindBoolFeatureOn",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "azaharlr_analog_deadzone",
+        "targetKey": "citra_analog_deadzone",
+        "kind": "BindFeatureSlider",
+        "values": [
+          "15"
+        ]
+      }
+    ],
+    "b2": [
+      {
+        "configKey": "b2_model",
+        "targetKey": "b2_model",
+        "kind": "BindFeature",
+        "values": [
+          "B/Acorn 1770"
+        ]
+      }
+    ],
+    "bennugd": [
+      {
+        "configKey": "bennugd_force_frame_limiter",
+        "targetKey": "bennugd_force_frame_limiter",
+        "kind": "BindBoolFeature",
+        "values": [
+          "true",
+          "false"
+        ]
+      },
+      {
+        "configKey": "bennugd_override_scaling",
+        "targetKey": "bennugd_override_scaling",
+        "kind": "BindFeature",
+        "values": [
+          "off"
+        ]
+      }
+    ],
+    "bk": [
+      {
+        "configKey": "bk_model",
+        "targetKey": "bk_model",
+        "kind": "BindFeature",
+        "values": [
+          "BK-0010"
+        ]
+      },
+      {
+        "configKey": "bk_peripheral",
+        "targetKey": "bk_peripheral",
+        "kind": "BindFeature",
+        "values": [
+          "none"
+        ]
+      },
+      {
+        "configKey": "bk_doublespeed",
+        "targetKey": "bk_doublespeed",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "bk_aspect_ratio",
+        "targetKey": "bk_aspect_ratio",
+        "kind": "BindFeature",
+        "values": [
+          "1:1"
+        ]
+      },
+      {
+        "configKey": "bk_color",
+        "targetKey": "bk_color",
+        "kind": "BindBoolFeatureOn",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "bk_keyboard_type",
+        "targetKey": "bk_keyboard_type",
+        "kind": "BindFeature",
+        "values": [
+          "poll"
+        ]
+      },
+      {
+        "configKey": "bk_layout",
+        "targetKey": "bk_layout",
+        "kind": "BindFeature",
+        "values": [
+          "qwerty"
+        ]
+      }
+    ],
+    "bluemsx": [
+      {
+        "configKey": "bluemsx_vdp_synctype",
+        "targetKey": "bluemsx_vdp_synctype",
+        "kind": "BindFeature",
+        "values": [
+          "Auto"
+        ]
+      },
+      {
+        "configKey": "bluemsx_msxtype",
+        "targetKey": "bluemsx_msxtype",
+        "kind": "BindFeature",
+        "values": [
+          "auto"
+        ]
+      },
+      {
+        "configKey": "bluemsx_nospritelimits",
+        "targetKey": "bluemsx_nospritelimits",
+        "kind": "BindBoolFeature",
+        "values": [
+          "ON",
+          "OFF"
+        ]
+      }
+    ],
+    "boom3": [
+      {
+        "configKey": "boom3_resolution",
+        "targetKey": "doom_resolution",
+        "kind": "BindFeature",
+        "values": [
+          "960x544"
+        ]
+      },
+      {
+        "configKey": "boom3_fps",
+        "targetKey": "doom_fps",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "boom3_invert_axis",
+        "targetKey": "doom_invert_y_axis",
+        "kind": "BindBoolFeatureOn",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      }
+    ],
+    "bsnes": [
+      {
+        "configKey": "bsnes_hotfixes",
+        "targetKey": "bsnes_hotfixes",
+        "kind": "BindBoolFeature",
+        "values": [
+          "ON",
+          "OFF"
+        ]
+      },
+      {
+        "configKey": "bsnes_cpu_fastmath",
+        "targetKey": "bsnes_cpu_fastmath",
+        "kind": "BindBoolFeature",
+        "values": [
+          "ON",
+          "OFF"
+        ]
+      },
+      {
+        "configKey": "bsnes_aspect_ratio",
+        "targetKey": "bsnes_aspect_ratio",
+        "kind": "BindFeature",
+        "values": [
+          "Auto"
+        ]
+      },
+      {
+        "configKey": "bsnes_ppu_no_sprite_limit",
+        "targetKey": "bsnes_ppu_no_sprite_limit",
+        "kind": "BindBoolFeature",
+        "values": [
+          "ON",
+          "OFF"
+        ]
+      },
+      {
+        "configKey": "bsnes_blur_emulation",
+        "targetKey": "bsnes_blur_emulation",
+        "kind": "BindBoolFeature",
+        "values": [
+          "ON",
+          "OFF"
+        ]
+      },
+      {
+        "configKey": "bsnes_video_filter",
+        "targetKey": "bsnes_video_filter",
+        "kind": "BindFeature",
+        "values": [
+          "None"
+        ]
+      },
+      {
+        "configKey": "bsnes_mode7_scale",
+        "targetKey": "bsnes_mode7_scale",
+        "kind": "BindFeature",
+        "values": [
+          "auto"
+        ]
+      },
+      {
+        "configKey": "bsnes_mode7_perspective",
+        "targetKey": "bsnes_mode7_perspective",
+        "kind": "BindBoolFeature",
+        "values": [
+          "OFF",
+          "ON"
+        ]
+      },
+      {
+        "configKey": "bsnes_mode7_supersample",
+        "targetKey": "bsnes_mode7_supersample",
+        "kind": "BindBoolFeature",
+        "values": [
+          "ON",
+          "OFF"
+        ]
+      },
+      {
+        "configKey": "bsnes_run_ahead_frames",
+        "targetKey": "bsnes_run_ahead_frames",
+        "kind": "BindFeature",
+        "values": [
+          "auto"
+        ]
+      }
+    ],
+    "bsnesjg": [
+      {
+        "configKey": "bsnes_jg_aspect",
+        "targetKey": "bsnes_jg_aspect",
+        "kind": "BindFeature",
+        "values": [
+          "Auto"
+        ]
+      },
+      {
+        "configKey": "bsnes_jg_rsqual",
+        "targetKey": "bsnes_jg_rsqual",
+        "kind": "BindFeature",
+        "values": [
+          "fast"
+        ]
+      },
+      {
+        "configKey": "bsnes_jg_runahead",
+        "targetKey": "bsnes_jg_runahead",
+        "kind": "BindFeatureSlider",
+        "values": [
+          "0"
+        ]
+      },
+      {
+        "configKey": "bsnes_jg_hotfixes",
+        "targetKey": "bsnes_jg_hotfixes",
+        "kind": "BindBoolFeature",
+        "values": [
+          "on",
+          "off"
+        ]
+      }
+    ],
+    "bsneshdbeta": [
+      {
+        "configKey": "bsnes_hotfixes",
+        "targetKey": "bsnes_hotfixes",
+        "kind": "BindBoolFeature",
+        "values": [
+          "ON",
+          "OFF"
+        ]
+      },
+      {
+        "configKey": "bsnes_cpu_fastmath",
+        "targetKey": "bsnes_cpu_fastmath",
+        "kind": "BindBoolFeature",
+        "values": [
+          "ON",
+          "OFF"
+        ]
+      },
+      {
+        "configKey": "bsnes_ppu_show_overscan",
+        "targetKey": "bsnes_ppu_show_overscan",
+        "kind": "BindBoolFeature",
+        "values": [
+          "ON",
+          "OFF"
+        ]
+      },
+      {
+        "configKey": "bsnes_ppu_no_sprite_limit",
+        "targetKey": "bsnes_ppu_no_sprite_limit",
+        "kind": "BindBoolFeature",
+        "values": [
+          "ON",
+          "OFF"
+        ]
+      },
+      {
+        "configKey": "bsnes_mode7_scale",
+        "targetKey": "bsnes_mode7_scale",
+        "kind": "BindFeature",
+        "values": [
+          "auto"
+        ]
+      },
+      {
+        "configKey": "bsnes_blur_emulation",
+        "targetKey": "bsnes_blur_emulation",
+        "kind": "BindBoolFeature",
+        "values": [
+          "ON",
+          "OFF"
+        ]
+      },
+      {
+        "configKey": "bsnes_mode7_perspective",
+        "targetKey": "bsnes_mode7_perspective",
+        "kind": "BindBoolFeature",
+        "values": [
+          "OFF",
+          "ON"
+        ]
+      },
+      {
+        "configKey": "bsnes_mode7_supersample",
+        "targetKey": "bsnes_mode7_supersample",
+        "kind": "BindBoolFeature",
+        "values": [
+          "ON",
+          "OFF"
+        ]
+      },
+      {
+        "configKey": "bsnes_run_ahead_frames",
+        "targetKey": "bsnes_run_ahead_frames",
+        "kind": "BindFeature",
+        "values": [
+          "auto"
+        ]
+      }
+    ],
+    "cannonball": [
+      {
+        "configKey": "cannonball_video_hires",
+        "targetKey": "cannonball_video_hires",
+        "kind": "BindBoolFeatureOn",
+        "values": [
+          "ON",
+          "OFF"
+        ]
+      },
+      {
+        "configKey": "cannonball_video_widescreen",
+        "targetKey": "cannonball_video_widescreen",
+        "kind": "BindBoolFeatureOn",
+        "values": [
+          "ON",
+          "OFF"
+        ]
+      },
+      {
+        "configKey": "cannonball_analog",
+        "targetKey": "cannonball_analog",
+        "kind": "BindBoolFeatureOn",
+        "values": [
+          "ON",
+          "OFF"
+        ]
+      },
+      {
+        "configKey": "cannonball_gear",
+        "targetKey": "cannonball_gear",
+        "kind": "BindFeature",
+        "values": [
+          "Automatic"
+        ]
+      }
+    ],
+    "cap32": [
+      {
+        "configKey": "cap32_gfx_colors",
+        "targetKey": "cap32_gfx_colors",
+        "kind": "BindFeature",
+        "values": [
+          "16bit"
+        ]
+      },
+      {
+        "configKey": "cap32_scr_tube",
+        "targetKey": "cap32_scr_tube",
+        "kind": "BindFeature",
+        "values": [
+          "color"
+        ]
+      },
+      {
+        "configKey": "cap32_scr_intensity",
+        "targetKey": "cap32_scr_intensity",
+        "kind": "BindFeatureSlider",
+        "values": [
+          "8"
+        ]
+      },
+      {
+        "configKey": "cap32_floppy_sound",
+        "targetKey": "cap32_floppy_sound",
+        "kind": "BindBoolFeature",
+        "values": [
+          "disabled",
+          "enabled"
+        ]
+      },
+      {
+        "configKey": "cap32_model",
+        "targetKey": "cap32_model",
+        "kind": "BindFeature",
+        "values": [
+          "6128"
+        ]
+      },
+      {
+        "configKey": "cap32_ram",
+        "targetKey": "cap32_ram",
+        "kind": "BindFeature",
+        "values": [
+          "128"
+        ]
+      },
+      {
+        "configKey": "cap32_lang_layout",
+        "targetKey": "cap32_lang_layout",
+        "kind": "BindFeature",
+        "values": [
+          "english"
+        ]
+      },
+      {
+        "configKey": "cap32_combokey",
+        "targetKey": "cap32_combokey",
+        "kind": "BindFeature",
+        "values": [
+          "y"
+        ]
+      },
+      {
+        "configKey": "cap32_keyboard_transparency",
+        "targetKey": "cap32_keyboard_transparency",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "cap32_lightgun_input",
+        "targetKey": "cap32_lightgun_input",
+        "kind": "BindFeature",
+        "values": [
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "cap32_lightgun_show",
+        "targetKey": "cap32_lightgun_show",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      }
+    ],
+    "citra": [
+      {
+        "configKey": "citralr_resolution_factor",
+        "targetKey": "citra_resolution_factor",
+        "kind": "BindFeature",
+        "values": [
+          "1x (Native)"
+        ]
+      },
+      {
+        "configKey": "citra_swap_screen",
+        "targetKey": "citra_swap_screen",
+        "kind": "BindBoolFeature",
+        "values": [
+          "Bottom",
+          "Top"
+        ]
+      },
+      {
+        "configKey": "citralr_texture_filter",
+        "targetKey": "citra_texture_filter",
+        "kind": "BindFeature",
+        "values": [
+          "none"
+        ]
+      },
+      {
+        "configKey": "citra_custom_textures",
+        "targetKey": "citra_custom_textures",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "citra_region_value",
+        "targetKey": "citra_region_value",
+        "kind": "BindFeature",
+        "values": [
+          "Auto"
+        ]
+      },
+      {
+        "configKey": "citra_use_virtual_sd",
+        "targetKey": "citra_use_virtual_sd",
+        "kind": "BindBoolFeature",
+        "values": [
+          "disabled",
+          "enabled"
+        ]
+      },
+      {
+        "configKey": "citra_analog_function",
+        "targetKey": "citra_analog_function",
+        "kind": "BindFeature",
+        "values": [
+          "C-Stick and Touchscreen Pointer"
+        ]
+      }
+    ],
+    "craft": [
+      {
+        "configKey": "craft_resolution",
+        "targetKey": "craft_resolution",
+        "kind": "BindFeature",
+        "values": [
+          "640x480"
+        ]
+      },
+      {
+        "configKey": "craft_field_of_view",
+        "targetKey": "craft_field_of_view",
+        "kind": "BindFeatureSlider",
+        "values": [
+          "65"
+        ]
+      },
+      {
+        "configKey": "craft_draw_distance",
+        "targetKey": "craft_draw_distance",
+        "kind": "BindFeatureSlider",
+        "values": [
+          "10"
+        ]
+      },
+      {
+        "configKey": "craft_show_info_text",
+        "targetKey": "craft_show_info_text",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "craft_inverted_aim",
+        "targetKey": "craft_inverted_aim",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      }
+    ],
+    "desmume": [
+      {
+        "configKey": "desmume_internal_resolution",
+        "targetKey": "desmume_internal_resolution",
+        "kind": "BindFeature",
+        "values": [
+          "256x192"
+        ]
+      },
+      {
+        "configKey": "desmume_screens_layout",
+        "targetKey": "desmume_screens_layout",
+        "kind": "BindFeature",
+        "values": [
+          "top/bottom"
+        ]
+      },
+      {
+        "configKey": "desmume_hybrid_layout_ratio",
+        "targetKey": "desmume_hybrid_layout_ratio",
+        "kind": "BindFeature",
+        "values": [
+          "3:1"
+        ]
+      },
+      {
+        "configKey": "desmume_hybrid_showboth_screens",
+        "targetKey": "desmume_hybrid_showboth_screens",
+        "kind": "BindFeature",
+        "values": [
+          "enabled"
+        ]
+      },
+      {
+        "configKey": "desmume_screens_gap",
+        "targetKey": "desmume_screens_gap",
+        "kind": "BindFeature",
+        "values": [
+          "auto"
+        ]
+      },
+      {
+        "configKey": "desmume_gfx_texture_scaling",
+        "targetKey": "desmume_gfx_texture_scaling",
+        "kind": "BindFeature",
+        "values": [
+          "1"
+        ]
+      },
+      {
+        "configKey": "desmume_gfx_multisampling",
+        "targetKey": "desmume_gfx_multisampling",
+        "kind": "BindFeature",
+        "values": [
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "desmume_color_depth",
+        "targetKey": "desmume_color_depth",
+        "kind": "BindFeature",
+        "values": [
+          "16-bit"
+        ]
+      },
+      {
+        "configKey": "desmume_gfx_texture_smoothing",
+        "targetKey": "desmume_gfx_texture_smoothing",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "desmume_firmware_language",
+        "targetKey": "desmume_firmware_language",
+        "kind": "BindFeature",
+        "values": [
+          "Auto"
+        ]
+      },
+      {
+        "configKey": "desmume_use_external_bios",
+        "targetKey": "desmume_use_external_bios",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "desmume_boot_into_bios",
+        "targetKey": "desmume_boot_into_bios",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "desmume_cpu_mode",
+        "targetKey": "desmume_cpu_mode",
+        "kind": "BindFeature",
+        "values": [
+          "interpreter"
+        ]
+      },
+      {
+        "configKey": "desmume_opengl_mode",
+        "targetKey": "desmume_opengl_mode",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      }
+    ],
+    "desmume2015": [
+      {
+        "configKey": "desmume_internal_resolution",
+        "targetKey": "desmume_internal_resolution",
+        "kind": "BindFeature",
+        "values": [
+          "256x192"
+        ]
+      },
+      {
+        "configKey": "desmume_screens_layout",
+        "targetKey": "desmume_screens_layout",
+        "kind": "BindFeature",
+        "values": [
+          "top/bottom"
+        ]
+      },
+      {
+        "configKey": "desmume_hybrid_showboth_screens",
+        "targetKey": "desmume_hybrid_showboth_screens",
+        "kind": "BindFeature",
+        "values": [
+          "enabled"
+        ]
+      },
+      {
+        "configKey": "desmume_screens_gap",
+        "targetKey": "desmume_screens_gap",
+        "kind": "BindFeature",
+        "values": [
+          "auto"
+        ]
+      },
+      {
+        "configKey": "desmume_firmware_language",
+        "targetKey": "desmume_firmware_language",
+        "kind": "BindFeature",
+        "values": [
+          "Auto"
+        ]
+      },
+      {
+        "configKey": "desmume_cpu_mode",
+        "targetKey": "desmume_cpu_mode",
+        "kind": "BindFeature",
+        "values": [
+          "interpreter"
+        ]
+      }
+    ],
+    "dolphin": [
+      {
+        "configKey": "dolphin_efb_scale",
+        "targetKey": "dolphin_efb_scale",
+        "kind": "BindFeature",
+        "values": [
+          "1"
+        ]
+      },
+      {
+        "configKey": "dolphin_aspect_ratio",
+        "targetKey": "dolphin_aspect_ratio",
+        "kind": "BindFeature",
+        "values": [
+          "0"
+        ]
+      },
+      {
+        "configKey": "dolphin_wait_for_shaders",
+        "targetKey": "dolphin_wait_for_shaders",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "dolphin_shader_compilation_mode",
+        "targetKey": "dolphin_shader_compilation_mode",
+        "kind": "BindFeature",
+        "values": [
+          "0"
+        ]
+      },
+      {
+        "configKey": "enable_hdr",
+        "targetKey": "dolphin_enhance_hdr_output",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "dolphin_gpu_texture_decoding",
+        "targetKey": "dolphin_gpu_texture_decoding",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "VertexRounding",
+        "targetKey": "dolphin_vertex_rounding",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "VISkip",
+        "targetKey": "dolphin_vi_skip",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "dolphin_xfbtotexture",
+        "targetKey": "dolphin_xfb_to_texture_enable",
+        "kind": "BindBoolFeatureOn",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "dolphin_anti_aliasing",
+        "targetKey": "dolphin_anti_aliasing",
+        "kind": "BindFeature",
+        "values": [
+          "0"
+        ]
+      },
+      {
+        "configKey": "dolphin_max_anisotropy",
+        "targetKey": "dolphin_max_anisotropy",
+        "kind": "BindFeature",
+        "values": [
+          "0"
+        ]
+      },
+      {
+        "configKey": "dolphin_force_texture_filtering_mode",
+        "targetKey": "dolphin_force_texture_filtering_mode",
+        "kind": "BindFeature",
+        "values": [
+          "0"
+        ]
+      },
+      {
+        "configKey": "manual_texture_sampling",
+        "targetKey": "dolphin_fast_texture_sampling",
+        "kind": "BindBoolFeature",
+        "values": [
+          "disabled",
+          "enabled"
+        ]
+      },
+      {
+        "configKey": "dolphin_widescreen_hack",
+        "targetKey": "dolphin_widescreen_hack",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "dolphin_crop_overscan",
+        "targetKey": "dolphin_crop_overscan",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "dolphin_load_custom_textures",
+        "targetKey": "dolphin_load_custom_textures",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "dolphin_cache_custom_textures",
+        "targetKey": "dolphin_cache_custom_textures",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "dolphin_language",
+        "targetKey": "dolphin_language",
+        "kind": "BindFeature",
+        "values": [
+          "1"
+        ]
+      },
+      {
+        "configKey": "dolphin_cheats_enabled",
+        "targetKey": "dolphin_cheats_enabled",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "dolphin_cputhread",
+        "targetKey": "dolphin_main_cpu_thread",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "dolphin_cpu_core",
+        "targetKey": "dolphin_cpu_core",
+        "kind": "BindFeature",
+        "values": [
+          "1"
+        ]
+      },
+      {
+        "configKey": "enable_mmu",
+        "targetKey": "dolphin_main_mmu",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "dolphin_osd_enabled",
+        "targetKey": "dolphin_osd_enabled",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "skip_bios",
+        "targetKey": "dolphin_skip_gc_bios",
+        "kind": "BindBoolFeatureOn",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "dolphin_enable_rumble",
+        "targetKey": "dolphin_enable_rumble",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "dolphin_widescreen",
+        "targetKey": "dolphin_widescreen",
+        "kind": "BindBoolFeatureOn",
+        "values": [
+          "disabled",
+          "enabled"
+        ]
+      },
+      {
+        "configKey": "dolphin_progressive_scan",
+        "targetKey": "dolphin_progressive_scan",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "dolphin_pal60",
+        "targetKey": "dolphin_pal60",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "dolphin_sensor_bar_position",
+        "targetKey": "dolphin_sensor_bar_position",
+        "kind": "BindFeature",
+        "values": [
+          "0"
+        ]
+      },
+      {
+        "configKey": "dolphin_ir_mode",
+        "targetKey": "dolphin_ir_mode",
+        "kind": "BindFeature",
+        "values": [
+          "auto"
+        ]
+      },
+      {
+        "configKey": "dolphin_ir_modifier",
+        "targetKey": "dolphin_ir_modifier",
+        "kind": "BindFeature",
+        "values": [
+          "None"
+        ]
+      },
+      {
+        "configKey": "dolphin_swing_modifier",
+        "targetKey": "dolphin_swing_modifier",
+        "kind": "BindFeature",
+        "values": [
+          "Disabled"
+        ]
+      },
+      {
+        "configKey": "dolphin_nowiimotescan",
+        "targetKey": "dolphin_wiimote_continuous_scanning",
+        "kind": "BindBoolFeature",
+        "values": [
+          "disabled",
+          "enabled"
+        ]
+      },
+      {
+        "configKey": "dolphin_bt_pass",
+        "targetKey": "dolphin_bluetooth_passthrough",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      }
+    ],
+    "dosboxpure": [
+      {
+        "configKey": "dosbox_pure_aspect_correction",
+        "targetKey": "dosbox_pure_aspect_correction",
+        "kind": "BindFeature",
+        "values": [
+          "true"
+        ]
+      },
+      {
+        "configKey": "dosbox_pure_force60fps",
+        "targetKey": "dosbox_pure_force60fps",
+        "kind": "BindFeature",
+        "values": [
+          "false"
+        ]
+      },
+      {
+        "configKey": "dosbox_pure_machine",
+        "targetKey": "dosbox_pure_machine",
+        "kind": "BindFeature",
+        "values": [
+          "svga"
+        ]
+      },
+      {
+        "configKey": "dosbox_pure_svga",
+        "targetKey": "dosbox_pure_svga",
+        "kind": "BindFeature",
+        "values": [
+          "svga_s3"
+        ]
+      },
+      {
+        "configKey": "dosbox_pure_svgamem",
+        "targetKey": "dosbox_pure_svgamem",
+        "kind": "BindFeature",
+        "values": [
+          "2"
+        ]
+      },
+      {
+        "configKey": "cga",
+        "targetKey": "dosbox_pure_cga",
+        "kind": "BindFeature",
+        "values": [
+          "early_auto"
+        ]
+      },
+      {
+        "configKey": "hercules",
+        "targetKey": "dosbox_pure_hercules",
+        "kind": "BindFeature",
+        "values": [
+          "white"
+        ]
+      },
+      {
+        "configKey": "dosbox_pure_voodoo",
+        "targetKey": "dosbox_pure_voodoo",
+        "kind": "BindFeature",
+        "values": [
+          "8mb"
+        ]
+      },
+      {
+        "configKey": "dosbox_pure_voodoo_perf",
+        "targetKey": "dosbox_pure_voodoo_perf",
+        "kind": "BindFeature",
+        "values": [
+          "4"
+        ]
+      },
+      {
+        "configKey": "dosbox_pure_voodoo_scale",
+        "targetKey": "dosbox_pure_voodoo_scale",
+        "kind": "BindFeature",
+        "values": [
+          "1"
+        ]
+      },
+      {
+        "configKey": "dosbox_pure_overscan",
+        "targetKey": "dosbox_pure_overscan",
+        "kind": "BindFeature",
+        "values": [
+          "0"
+        ]
+      },
+      {
+        "configKey": "dosbox_pure_sblaster_type",
+        "targetKey": "dosbox_pure_sblaster_type",
+        "kind": "BindFeature",
+        "values": [
+          "sb16"
+        ]
+      },
+      {
+        "configKey": "dosbox_sblaster_conf",
+        "targetKey": "dosbox_pure_sblaster_conf",
+        "kind": "BindFeature",
+        "values": [
+          "A220 I7 D1 H5"
+        ]
+      },
+      {
+        "configKey": "dosbox_pure_sblaster_adlib_emu",
+        "targetKey": "dosbox_pure_sblaster_adlib_emu",
+        "kind": "BindFeature",
+        "values": [
+          "default"
+        ]
+      },
+      {
+        "configKey": "dosbox_pure_sblaster_adlib_mode",
+        "targetKey": "dosbox_pure_sblaster_adlib_mode",
+        "kind": "BindFeature",
+        "values": [
+          "auto"
+        ]
+      },
+      {
+        "configKey": "midi",
+        "targetKey": "dosbox_pure_midi",
+        "kind": "BindFeature",
+        "values": [
+          "scummvm/extra/Roland_SC-55.sf2"
+        ]
+      },
+      {
+        "configKey": "dosbox_pure_gus",
+        "targetKey": "dosbox_pure_gus",
+        "kind": "BindBoolFeature",
+        "values": [
+          "true",
+          "false"
+        ]
+      },
+      {
+        "configKey": "dosbox_pure_tandysound",
+        "targetKey": "dosbox_pure_tandysound",
+        "kind": "BindBoolFeature",
+        "values": [
+          "on",
+          "off"
+        ]
+      },
+      {
+        "configKey": "dosbox_pure_conf",
+        "targetKey": "dosbox_pure_conf",
+        "kind": "BindFeature",
+        "values": [
+          "false"
+        ]
+      },
+      {
+        "configKey": "dosbox_pure_cpu_type",
+        "targetKey": "dosbox_pure_cpu_type",
+        "kind": "BindFeature",
+        "values": [
+          "auto"
+        ]
+      },
+      {
+        "configKey": "dosbox_pure_cycles",
+        "targetKey": "dosbox_pure_cycles",
+        "kind": "BindFeature",
+        "values": [
+          "auto"
+        ]
+      },
+      {
+        "configKey": "dosbox_pure_cpu_core",
+        "targetKey": "dosbox_pure_cpu_core",
+        "kind": "BindFeature",
+        "values": [
+          "auto"
+        ]
+      },
+      {
+        "configKey": "dosbox_pure_memory_size",
+        "targetKey": "dosbox_pure_memory_size",
+        "kind": "BindFeature",
+        "values": [
+          "16"
+        ]
+      },
+      {
+        "configKey": "dosbox_pure_bootos_ramdisk",
+        "targetKey": "dosbox_pure_bootos_ramdisk",
+        "kind": "BindFeature",
+        "values": [
+          "false"
+        ]
+      },
+      {
+        "configKey": "dosbox_pure_bootos_forcenormal",
+        "targetKey": "dosbox_pure_bootos_forcenormal",
+        "kind": "BindBoolFeature",
+        "values": [
+          "true",
+          "false"
+        ]
+      },
+      {
+        "configKey": "dosbox_pure_perfstats",
+        "targetKey": "dosbox_pure_perfstats",
+        "kind": "BindFeature",
+        "values": [
+          "none"
+        ]
+      },
+      {
+        "configKey": "dosbox_pure_on_screen_keyboard",
+        "targetKey": "dosbox_pure_on_screen_keyboard",
+        "kind": "BindFeature",
+        "values": [
+          "keyboard"
+        ]
+      },
+      {
+        "configKey": "menu_time",
+        "targetKey": "dosbox_pure_menu_time",
+        "kind": "BindFeature",
+        "values": [
+          "5"
+        ]
+      },
+      {
+        "configKey": "keyboard_layout",
+        "targetKey": "dosbox_pure_keyboard_layout",
+        "kind": "BindFeature",
+        "values": [
+          "us"
+        ]
+      },
+      {
+        "configKey": "dosbox_pure_auto_mapping",
+        "targetKey": "dosbox_pure_auto_mapping",
+        "kind": "BindFeature",
+        "values": [
+          "true"
+        ]
+      }
+    ],
+    "doublecherrygb": [
+      {
+        "configKey": "dcgb_emulated_gameboys",
+        "targetKey": "dcgb_emulated_gameboys",
+        "kind": "BindFeature",
+        "values": [
+          "2"
+        ]
+      },
+      {
+        "configKey": "dcgb_screen_placement",
+        "targetKey": "dcgb_screen_placement",
+        "kind": "BindFeature",
+        "values": [
+          "splitscreen"
+        ]
+      },
+      {
+        "configKey": "dcgb_audio_output",
+        "targetKey": "dcgb_audio_output",
+        "kind": "BindFeature",
+        "values": [
+          "Game Boy #1"
+        ]
+      },
+      {
+        "configKey": "dcgb_multiplayer_linked_devive",
+        "targetKey": "dcgb_multiplayer_linked_devive",
+        "kind": "BindFeature",
+        "values": [
+          "auto"
+        ]
+      }
+    ],
+    "doukutsurs": [
+      {
+        "configKey": "drs_internal_upscale_factor",
+        "targetKey": "d-rs_internal_upscale_factor",
+        "kind": "BindFeature",
+        "values": [
+          "2x (CS+, default)"
+        ]
+      },
+      {
+        "configKey": "drs_screen_ratio",
+        "targetKey": "d-rs_screen_ratio",
+        "kind": "BindFeature",
+        "values": [
+          "4:3 (original)"
+        ]
+      },
+      {
+        "configKey": "drs_show_fps",
+        "targetKey": "d-rs_show_fps",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      }
+    ],
+    "ecwolf": [
+      {
+        "configKey": "ecwolf_resolution",
+        "targetKey": "ecwolf-resolution",
+        "kind": "BindFeature",
+        "values": [
+          "320x200"
+        ]
+      },
+      {
+        "configKey": "ecwolf_ratio",
+        "targetKey": "ecwolf-aspect",
+        "kind": "BindFeature",
+        "values": [
+          "auto"
+        ]
+      },
+      {
+        "configKey": "ecwolf_fps",
+        "targetKey": "ecwolf-fps",
+        "kind": "BindFeature",
+        "values": [
+          "35"
+        ]
+      },
+      {
+        "configKey": "ecwolf_palette",
+        "targetKey": "ecwolf-palette",
+        "kind": "BindFeature",
+        "values": [
+          "rgb565"
+        ]
+      },
+      {
+        "configKey": "ecwolf_run",
+        "targetKey": "ecwolf-alwaysrun",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      }
+    ],
+    "emuscv": [
+      {
+        "configKey": "emuscv_console",
+        "targetKey": "emuscv_console",
+        "kind": "BindFeature",
+        "values": [
+          "AUTO"
+        ]
+      },
+      {
+        "configKey": "emuscv_checkbios",
+        "targetKey": "emuscv_checkbios",
+        "kind": "BindBoolFeature",
+        "values": [
+          "NO",
+          "YES"
+        ]
+      },
+      {
+        "configKey": "emuscv_langage",
+        "targetKey": "emuscv_langage",
+        "kind": "BindFeature",
+        "values": [
+          "AUTO"
+        ]
+      },
+      {
+        "configKey": "emuscv_resolution",
+        "targetKey": "emuscv_resolution",
+        "kind": "BindFeature",
+        "values": [
+          "AUTO"
+        ]
+      },
+      {
+        "configKey": "emuscv_fps",
+        "targetKey": "emuscv_fps",
+        "kind": "BindFeature",
+        "values": [
+          "AUTO"
+        ]
+      },
+      {
+        "configKey": "emuscv_display",
+        "targetKey": "emuscv_display",
+        "kind": "BindFeature",
+        "values": [
+          "AUTO"
+        ]
+      },
+      {
+        "configKey": "emuscv_pixelaspect",
+        "targetKey": "emuscv_pixelaspect",
+        "kind": "BindFeature",
+        "values": [
+          "AUTO"
+        ]
+      },
+      {
+        "configKey": "emuscv_palette",
+        "targetKey": "emuscv_palette",
+        "kind": "BindFeature",
+        "values": [
+          "AUTO"
+        ]
+      }
+    ],
+    "ep128emucore": [
+      {
+        "configKey": "ep128emu_useh",
+        "targetKey": "ep128emu_useh",
+        "kind": "BindBoolFeature",
+        "values": [
+          "1",
+          "0"
+        ]
+      }
+    ],
+    "fbalpha": [
+      {
+        "configKey": "fba_vertical_mode",
+        "targetKey": "fba-vertical-mode",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "fba_frame_skipping",
+        "targetKey": "fba-frameskip",
+        "kind": "BindFeatureSlider",
+        "values": [
+          "0"
+        ]
+      },
+      {
+        "configKey": "fba_samplerate",
+        "targetKey": "fba-samplerate",
+        "kind": "BindFeature",
+        "values": [
+          "44100"
+        ]
+      },
+      {
+        "configKey": "fba_cpu_overclock",
+        "targetKey": "fba-cpu-speed-adjust",
+        "kind": "BindFeatureSlider",
+        "values": [
+          "100"
+        ]
+      },
+      {
+        "configKey": "fba_highscore",
+        "targetKey": "fba-hiscores",
+        "kind": "BindBoolFeatureOn",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      }
+    ],
+    "fbalpha2012": [
+      {
+        "configKey": "fba2012_vertical_mode",
+        "targetKey": "fbneo-vertical-mode",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "fba2012_frame_skipping",
+        "targetKey": "fbneo-frameskip",
+        "kind": "BindFeatureSlider",
+        "values": [
+          "0"
+        ]
+      },
+      {
+        "configKey": "fba2012_samplerate",
+        "targetKey": "fbneo-samplerate",
+        "kind": "BindFeature",
+        "values": [
+          "44100"
+        ]
+      },
+      {
+        "configKey": "fba2012_diagkey",
+        "targetKey": "fbneo-diagnostic-input",
+        "kind": "BindFeature",
+        "values": [
+          "None"
+        ]
+      },
+      {
+        "configKey": "fba2012_neogeo_mode",
+        "targetKey": "fbneo-neogeo-mode",
+        "kind": "BindFeature",
+        "values": [
+          "UNIBIOS"
+        ]
+      },
+      {
+        "configKey": "fba2012_hiscore",
+        "targetKey": "fbneo-hiscores",
+        "kind": "BindBoolFeatureOn",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "fba2012_cpu_overclock",
+        "targetKey": "fbneo-cpu-speed-adjust",
+        "kind": "BindFeatureSlider",
+        "values": [
+          "100"
+        ]
+      }
+    ],
+    "fbalpha2012cps1": [
+      {
+        "configKey": "fba2012cps1_auto_rotate",
+        "targetKey": "fba2012cps1_auto_rotate",
+        "kind": "BindBoolFeatureOn",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "fba2012cps1_frameskip",
+        "targetKey": "fba2012cps1_frameskip",
+        "kind": "BindBoolFeature",
+        "values": [
+          "auto",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "fba2012cps1_lowpass_range",
+        "targetKey": "fba2012cps1_lowpass_range",
+        "kind": "BindFeature",
+        "values": [
+          "auto"
+        ]
+      },
+      {
+        "configKey": "fba2012cps1_cpu_speed_adjust",
+        "targetKey": "fba2012cps1_cpu_speed_adjust",
+        "kind": "BindFeatureSlider",
+        "values": [
+          "100"
+        ]
+      },
+      {
+        "configKey": "fba2012cps1_hiscores",
+        "targetKey": "fba2012cps1_hiscores",
+        "kind": "BindBoolFeatureOn",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "fba2012cps1_diagnostics",
+        "targetKey": "fba2012cps1_diagnostics",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      }
+    ],
+    "fbalpha2012cps2": [
+      {
+        "configKey": "fba2012cps2_auto_rotate",
+        "targetKey": "fba2012cps2_auto_rotate",
+        "kind": "BindBoolFeatureOn",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "fba2012cps2_frameskip",
+        "targetKey": "fba2012cps2_frameskip",
+        "kind": "BindBoolFeature",
+        "values": [
+          "auto",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "fba2012cps2_lowpass_range",
+        "targetKey": "fba2012cps2_lowpass_range",
+        "kind": "BindFeature",
+        "values": [
+          "auto"
+        ]
+      },
+      {
+        "configKey": "fba2012cps2_cpu_speed_adjust",
+        "targetKey": "fba2012cps2_cpu_speed_adjust",
+        "kind": "BindFeatureSlider",
+        "values": [
+          "100"
+        ]
+      },
+      {
+        "configKey": "fba2012cps2_hiscores",
+        "targetKey": "fba2012cps2_hiscores",
+        "kind": "BindBoolFeatureOn",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "fba2012cps2_controls",
+        "targetKey": "fba2012cps2_controls",
+        "kind": "BindFeature",
+        "values": [
+          "gamepad"
+        ]
+      }
+    ],
+    "fbalpha2012cps3": [
+      {
+        "configKey": "fbalpha2012_cps3_frameskip",
+        "targetKey": "fbalpha2012_cps3_frameskip",
+        "kind": "BindFeatureSlider",
+        "values": [
+          "0"
+        ]
+      },
+      {
+        "configKey": "fbalpha2012_cps3_samplerate",
+        "targetKey": "fbalpha2012_cps3_samplerate",
+        "kind": "BindFeature",
+        "values": [
+          "44100"
+        ]
+      },
+      {
+        "configKey": "fbalpha2012_cps3_cpu_speed_adjust",
+        "targetKey": "fbalpha2012_cps3_cpu_speed_adjust",
+        "kind": "BindFeatureSlider",
+        "values": [
+          "100"
+        ]
+      },
+      {
+        "configKey": "fbalpha2012_cps3_hiscores",
+        "targetKey": "fbalpha2012_cps3_hiscores",
+        "kind": "BindBoolFeatureOn",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "fbalpha2012_cps3_diagnostic_input",
+        "targetKey": "fbalpha2012_cps3_diagnostic_input",
+        "kind": "BindFeature",
+        "values": [
+          "None"
+        ]
+      },
+      {
+        "configKey": "fbalpha2012_cps3_controls_p1",
+        "targetKey": "fbalpha2012_cps3_controls_p1",
+        "kind": "BindFeature",
+        "values": [
+          "gamepad"
+        ]
+      },
+      {
+        "configKey": "fbalpha2012_cps3_lr_controls_p1",
+        "targetKey": "fbalpha2012_cps3_lr_controls_p1",
+        "kind": "BindFeature",
+        "values": [
+          "normal"
+        ]
+      },
+      {
+        "configKey": "fbalpha2012_cps3_controls_p2",
+        "targetKey": "fbalpha2012_cps3_controls_p2",
+        "kind": "BindFeature",
+        "values": [
+          "gamepad"
+        ]
+      },
+      {
+        "configKey": "fbalpha2012_cps3_lr_controls_p2",
+        "targetKey": "fbalpha2012_cps3_lr_controls_p2",
+        "kind": "BindFeature",
+        "values": [
+          "normal"
+        ]
+      }
+    ],
+    "fbalpha2012neogeo": [
+      {
+        "configKey": "fbalpha2012_neogeo_frameskip",
+        "targetKey": "fbalpha2012_neogeo_frameskip",
+        "kind": "BindBoolFeature",
+        "values": [
+          "Auto",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "fbalpha2012_neogeo_lowpass_filter",
+        "targetKey": "fbalpha2012_neogeo_lowpass_filter",
+        "kind": "BindFeature",
+        "values": [
+          "auto"
+        ]
+      },
+      {
+        "configKey": "fba2012ng_diagkey",
+        "targetKey": "fbalpha2012_neogeo_diagnostic_input",
+        "kind": "BindFeature",
+        "values": [
+          "None"
+        ]
+      },
+      {
+        "configKey": "fba2012ng_neogeo_mode",
+        "targetKey": "fbalpha2012_neogeo_neogeo_mode",
+        "kind": "BindFeature",
+        "values": [
+          "UNIBIOS"
+        ]
+      },
+      {
+        "configKey": "fbalpha2012_neogeo_cpu_speed_adjust",
+        "targetKey": "fbalpha2012_neogeo_cpu_speed_adjust",
+        "kind": "BindFeatureSlider",
+        "values": [
+          "100"
+        ]
+      }
+    ],
+    "fbneo": [
+      {
+        "configKey": "fbneo-vertical-mode",
+        "targetKey": "fbneo-vertical-mode",
+        "kind": "BindFeature",
+        "values": [
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "fbneo_samplerate",
+        "targetKey": "fbneo-samplerate",
+        "kind": "BindFeature",
+        "values": [
+          "44100"
+        ]
+      },
+      {
+        "configKey": "fbneo_lowpass_filter",
+        "targetKey": "fbneo-lowpass-filter",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "fbneo_diagkey",
+        "targetKey": "fbneo-diagnostic-input",
+        "kind": "BindFeature",
+        "values": [
+          "Start + L + R"
+        ]
+      },
+      {
+        "configKey": "fbneo_hiscore",
+        "targetKey": "fbneo-hiscores",
+        "kind": "BindBoolFeatureOn",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "fbneo_neogeo_mode",
+        "targetKey": "fbneo-neogeo-mode",
+        "kind": "BindFeature",
+        "values": [
+          "UNIBIOS"
+        ]
+      }
+    ],
+    "fceumm": [
+      {
+        "configKey": "fceumm_aspect",
+        "targetKey": "fceumm_aspect",
+        "kind": "BindFeature",
+        "values": [
+          "8:7 PAR"
+        ]
+      },
+      {
+        "configKey": "fceumm_ntsc_filter",
+        "targetKey": "fceumm_ntsc_filter",
+        "kind": "BindFeature",
+        "values": [
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "fceumm_nospritelimit",
+        "targetKey": "fceumm_nospritelimit",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "fceumm_palette",
+        "targetKey": "fceumm_palette",
+        "kind": "BindFeature",
+        "values": [
+          "default"
+        ]
+      },
+      {
+        "configKey": "fceumm_sndquality",
+        "targetKey": "fceumm_sndquality",
+        "kind": "BindFeature",
+        "values": [
+          "Low"
+        ]
+      },
+      {
+        "configKey": "fceumm_region",
+        "targetKey": "fceumm_region",
+        "kind": "BindFeature",
+        "values": [
+          "Auto"
+        ]
+      },
+      {
+        "configKey": "fceumm_overclocking",
+        "targetKey": "fceumm_overclocking",
+        "kind": "BindFeature",
+        "values": [
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "nes_turbo_enable",
+        "targetKey": "fceumm_turbo_enable",
+        "kind": "BindBoolFeature",
+        "values": [
+          "Both",
+          "None"
+        ]
+      },
+      {
+        "configKey": "gun_input",
+        "targetKey": "fceumm_zapper_mode",
+        "kind": "BindFeature",
+        "values": [
+          "clightgun"
+        ]
+      },
+      {
+        "configKey": "fceumm_show_crosshair",
+        "targetKey": "fceumm_show_crosshair",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      }
+    ],
+    "flycast": [
+      {
+        "configKey": "internal_resolution",
+        "targetKey": "reicast_internal_resolution",
+        "kind": "BindFeature",
+        "values": [
+          "640x480"
+        ]
+      },
+      {
+        "configKey": "cable_type",
+        "targetKey": "reicast_cable_type",
+        "kind": "BindFeature",
+        "values": [
+          "TV (Composite)"
+        ]
+      },
+      {
+        "configKey": "reicast_pvr2_filtering",
+        "targetKey": "reicast_pvr2_filtering",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "reicast_screen_rotation",
+        "targetKey": "reicast_screen_rotation",
+        "kind": "BindBoolFeature",
+        "values": [
+          "vertical",
+          "horizontal"
+        ]
+      },
+      {
+        "configKey": "reicast_threaded_rendering",
+        "targetKey": "reicast_threaded_rendering",
+        "kind": "BindBoolFeatureOn",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "reicast_frame_skipping",
+        "targetKey": "reicast_frame_skipping",
+        "kind": "BindFeature",
+        "values": [
+          "auto"
+        ]
+      },
+      {
+        "configKey": "widescreen_cheats",
+        "targetKey": "reicast_widescreen_cheats",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "widescreen_hack",
+        "targetKey": "reicast_widescreen_hack",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "texture_upscaling",
+        "targetKey": "reicast_texupscale",
+        "kind": "BindFeatureSlider",
+        "values": [
+          "1"
+        ]
+      },
+      {
+        "configKey": "anisotropic_filtering",
+        "targetKey": "reicast_anisotropic_filtering",
+        "kind": "BindFeature",
+        "values": [
+          "4"
+        ]
+      },
+      {
+        "configKey": "reicast_texture_filtering",
+        "targetKey": "reicast_texture_filtering",
+        "kind": "BindFeature",
+        "values": [
+          "0"
+        ]
+      },
+      {
+        "configKey": "reicast_mipmapping",
+        "targetKey": "reicast_mipmapping",
+        "kind": "BindBoolFeatureOn",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "reicast_enable_rttb",
+        "targetKey": "reicast_enable_rttb",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "reicast_fog",
+        "targetKey": "reicast_fog",
+        "kind": "BindBoolFeature",
+        "values": [
+          "disabled",
+          "enabled"
+        ]
+      },
+      {
+        "configKey": "reicast_alpha_sorting",
+        "targetKey": "reicast_alpha_sorting",
+        "kind": "BindFeature",
+        "values": [
+          "per-triangle (normal)"
+        ]
+      },
+      {
+        "configKey": "reicast_custom_textures",
+        "targetKey": "reicast_custom_textures",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "reicast_enable_dsp",
+        "targetKey": "reicast_enable_dsp",
+        "kind": "BindBoolFeatureOn",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "reicast_broadcast",
+        "targetKey": "reicast_broadcast",
+        "kind": "BindFeature",
+        "values": [
+          "NTSC"
+        ]
+      },
+      {
+        "configKey": "reicast_region",
+        "targetKey": "reicast_region",
+        "kind": "BindFeature",
+        "values": [
+          "Default"
+        ]
+      },
+      {
+        "configKey": "reicast_language",
+        "targetKey": "reicast_language",
+        "kind": "BindFeature",
+        "values": [
+          "English"
+        ]
+      },
+      {
+        "configKey": "reicast_per_content_vmus",
+        "targetKey": "reicast_per_content_vmus",
+        "kind": "BindFeature",
+        "values": [
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "reicast_hle_bios",
+        "targetKey": "reicast_hle_bios",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "reicast_allow_service_buttons",
+        "targetKey": "reicast_allow_service_buttons",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "reicast_force_freeplay",
+        "targetKey": "reicast_force_freeplay",
+        "kind": "BindBoolFeatureOn",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "reicast_digital_triggers",
+        "targetKey": "reicast_digital_triggers",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "reicast_analog_stick_deadzone",
+        "targetKey": "reicast_analog_stick_deadzone",
+        "kind": "BindFeature",
+        "values": [
+          "auto"
+        ]
+      },
+      {
+        "configKey": "reicast_trigger_deadzone",
+        "targetKey": "reicast_trigger_deadzone",
+        "kind": "BindFeature",
+        "values": [
+          "auto"
+        ]
+      },
+      {
+        "configKey": "reicast_lightgun1_crosshair",
+        "targetKey": "reicast_lightgun1_crosshair",
+        "kind": "BindFeature",
+        "values": [
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "reicast_lightgun2_crosshair",
+        "targetKey": "reicast_lightgun2_crosshair",
+        "kind": "BindFeature",
+        "values": [
+          "disabled"
+        ]
+      }
+    ],
+    "freej2me": [
+      {
+        "configKey": "freej2me_resolution",
+        "targetKey": "freej2me_resolution",
+        "kind": "BindFeature",
+        "values": [
+          "240x320"
+        ]
+      },
+      {
+        "configKey": "freej2me_rotate",
+        "targetKey": "freej2me_rotate",
+        "kind": "BindFeature",
+        "values": [
+          "0"
+        ]
+      },
+      {
+        "configKey": "freej2me_analogasentirekeypad",
+        "targetKey": "freej2me_analogasentirekeypad",
+        "kind": "BindBoolFeature",
+        "values": [
+          "on",
+          "off"
+        ]
+      }
+    ],
+    "frodo": [
+      {
+        "configKey": "frodo_resolution",
+        "targetKey": "frodo_resolution",
+        "kind": "BindFeature",
+        "values": [
+          "384x288"
+        ]
+      }
+    ],
+    "fuse": [
+      {
+        "configKey": "fuse_machine",
+        "targetKey": "fuse_machine",
+        "kind": "BindFeature",
+        "values": [
+          "Spectrum 128K"
+        ]
+      }
+    ],
+    "gambatte": [
+      {
+        "configKey": "gambatte_gbc_color_correction",
+        "targetKey": "gambatte_gbc_color_correction",
+        "kind": "BindFeature",
+        "values": [
+          "GBC only"
+        ]
+      },
+      {
+        "configKey": "gambatte_gb_internal_palette",
+        "targetKey": "gambatte_gb_internal_palette",
+        "kind": "BindFeature",
+        "values": [
+          "auto"
+        ]
+      },
+      {
+        "configKey": "gambatte_gb_colorization",
+        "targetKey": "gambatte_gb_colorization",
+        "kind": "BindFeature",
+        "values": [
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "gambatte_mix_frames",
+        "targetKey": "gambatte_mix_frames",
+        "kind": "BindFeature",
+        "values": [
+          "lcd_ghosting"
+        ]
+      },
+      {
+        "configKey": "gambatte_gb_bootloader",
+        "targetKey": "gambatte_gb_bootloader",
+        "kind": "BindBoolFeatureOn",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "gambatte_gb_hwmode",
+        "targetKey": "gambatte_gb_hwmode",
+        "kind": "BindFeature",
+        "values": [
+          "auto"
+        ]
+      }
+    ],
+    "geargrafx": [
+      {
+        "configKey": "geargrafx_aspect_ratio",
+        "targetKey": "geargrafx_aspect_ratio",
+        "kind": "BindFeature",
+        "values": [
+          "1:1 PAR"
+        ]
+      },
+      {
+        "configKey": "geargrafx_console_type",
+        "targetKey": "geargrafx_console_type",
+        "kind": "BindFeature",
+        "values": [
+          "Auto"
+        ]
+      },
+      {
+        "configKey": "geargrafx_cdrom_type",
+        "targetKey": "geargrafx_cdrom_type",
+        "kind": "BindFeature",
+        "values": [
+          "Auto"
+        ]
+      },
+      {
+        "configKey": "geargrafx_cdrom_bios",
+        "targetKey": "geargrafx_cdrom_bios",
+        "kind": "BindFeature",
+        "values": [
+          "Auto"
+        ]
+      },
+      {
+        "configKey": "geargrafx_no_sprite_limit",
+        "targetKey": "geargrafx_no_sprite_limit",
+        "kind": "BindBoolFeature",
+        "values": [
+          "Enabled",
+          "Disabled"
+        ]
+      },
+      {
+        "configKey": "geargrafx_turbotap",
+        "targetKey": "geargrafx_turbotap",
+        "kind": "BindBoolFeature",
+        "values": [
+          "Enabled",
+          "Disabled"
+        ]
+      }
+    ],
+    "gearsystem": [
+      {
+        "configKey": "gearsystem_lightgun_crosshair",
+        "targetKey": "gearsystem_lightgun_crosshair",
+        "kind": "BindBoolFeature",
+        "values": [
+          "Enabled",
+          "Disabled"
+        ]
+      }
+    ],
+    "genesisplusgx": [
+      {
+        "configKey": "genesis_plus_gx_overscan",
+        "targetKey": "genesis_plus_gx_overscan",
+        "kind": "BindFeature",
+        "values": [
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "render",
+        "targetKey": "genesis_plus_gx_render",
+        "kind": "BindFeature",
+        "values": [
+          "single field"
+        ]
+      },
+      {
+        "configKey": "ntsc_filter",
+        "targetKey": "genesis_plus_gx_blargg_ntsc_filter",
+        "kind": "BindFeature",
+        "values": [
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "genesis_plus_gx_region",
+        "targetKey": "genesis_plus_gx_region_detect",
+        "kind": "BindFeature",
+        "values": [
+          "auto"
+        ]
+      },
+      {
+        "configKey": "genesis_plus_gx_vdp_mode",
+        "targetKey": "genesis_plus_gx_vdp_mode",
+        "kind": "BindFeature",
+        "values": [
+          "auto"
+        ]
+      },
+      {
+        "configKey": "gen_addr_error",
+        "targetKey": "genesis_plus_gx_addr_error",
+        "kind": "BindBoolFeatureOn",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "genesis_plus_gx_force_dtack",
+        "targetKey": "genesis_plus_gx_force_dtack",
+        "kind": "BindBoolFeatureOn",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "genesis_plus_gx_overclock",
+        "targetKey": "genesis_plus_gx_overclock",
+        "kind": "BindFeatureSlider",
+        "values": [
+          "100"
+        ]
+      },
+      {
+        "configKey": "genesis_plus_gx_no_sprite_limit",
+        "targetKey": "genesis_plus_gx_no_sprite_limit",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "genesis_plus_gx_bios",
+        "targetKey": "genesis_plus_gx_bios",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "gen_lcd_filter",
+        "targetKey": "genesis_plus_gx_lcd_filter",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "genesis_plus_gx_left_border",
+        "targetKey": "genesis_plus_gx_left_border",
+        "kind": "BindFeature",
+        "values": [
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "gen_ym2413",
+        "targetKey": "genesis_plus_gx_ym2413",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "ym2612",
+        "targetKey": "genesis_plus_gx_ym2612",
+        "kind": "BindFeature",
+        "values": [
+          "mame (ym2612)"
+        ]
+      },
+      {
+        "configKey": "genesis_plus_gx_add_on",
+        "targetKey": "genesis_plus_gx_add_on",
+        "kind": "BindFeature",
+        "values": [
+          "auto"
+        ]
+      },
+      {
+        "configKey": "lock_on",
+        "targetKey": "genesis_plus_gx_lock_on",
+        "kind": "BindFeature",
+        "values": [
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "gun_input",
+        "targetKey": "genesis_plus_gx_gun_input",
+        "kind": "BindFeature",
+        "values": [
+          "lightgun"
+        ]
+      },
+      {
+        "configKey": "gen_gun_cursor",
+        "targetKey": "genesis_plus_gx_gun_cursor",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      }
+    ],
+    "genesisplusgxwide": [
+      {
+        "configKey": "gen_h40_extra_columns",
+        "targetKey": "genesis_plus_gx_wide_h40_extra_columns",
+        "kind": "BindFeatureSlider",
+        "values": [
+          "10"
+        ]
+      }
+    ],
+    "geolith": [
+      {
+        "configKey": "geolith_aspect",
+        "targetKey": "geolith_aspect",
+        "kind": "BindFeature",
+        "values": [
+          "1:1"
+        ]
+      },
+      {
+        "configKey": "geolith_sprlimit",
+        "targetKey": "geolith_sprlimit",
+        "kind": "BindFeature",
+        "values": [
+          "96"
+        ]
+      },
+      {
+        "configKey": "geolith_system_type",
+        "targetKey": "geolith_system_type",
+        "kind": "BindFeature",
+        "values": [
+          "aes"
+        ]
+      },
+      {
+        "configKey": "geolith_region",
+        "targetKey": "geolith_region",
+        "kind": "BindFeature",
+        "values": [
+          "us"
+        ]
+      },
+      {
+        "configKey": "geolith_freeplay",
+        "targetKey": "geolith_freeplay",
+        "kind": "BindBoolFeature",
+        "values": [
+          "on",
+          "off"
+        ]
+      },
+      {
+        "configKey": "geolith_oc",
+        "targetKey": "geolith_oc",
+        "kind": "BindBoolFeature",
+        "values": [
+          "on",
+          "off"
+        ]
+      },
+      {
+        "configKey": "geolith_settingmode",
+        "targetKey": "geolith_settingmode",
+        "kind": "BindBoolFeature",
+        "values": [
+          "on",
+          "off"
+        ]
+      },
+      {
+        "configKey": "geolith_4player",
+        "targetKey": "geolith_4player",
+        "kind": "BindBoolFeature",
+        "values": [
+          "on",
+          "off"
+        ]
+      }
+    ],
+    "gong": [
+      {
+        "configKey": "gong_player2",
+        "targetKey": "gong_player2",
+        "kind": "BindFeature",
+        "values": [
+          "CPU"
+        ]
+      }
+    ],
+    "gpsp": [
+      {
+        "configKey": "gpsp_sprlim",
+        "targetKey": "gpsp_sprlim",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "gpsp_color_correction",
+        "targetKey": "gpsp_color_correction",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "gpsp_frame_mixing",
+        "targetKey": "gpsp_frame_mixing",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "gpsp_bios",
+        "targetKey": "gpsp_bios",
+        "kind": "BindFeature",
+        "values": [
+          "auto"
+        ]
+      },
+      {
+        "configKey": "gpsp_boot_mode",
+        "targetKey": "gpsp_boot_mode",
+        "kind": "BindBoolFeature",
+        "values": [
+          "bios",
+          "game"
+        ]
+      },
+      {
+        "configKey": "gpsp_drc",
+        "targetKey": "gpsp_drc",
+        "kind": "BindBoolFeatureOn",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      }
+    ],
+    "handy": [
+      {
+        "configKey": "handy_rot",
+        "targetKey": "handy_rot",
+        "kind": "BindFeature",
+        "values": [
+          "Auto"
+        ]
+      },
+      {
+        "configKey": "handy_gfx_colors",
+        "targetKey": "handy_gfx_colors",
+        "kind": "BindFeature",
+        "values": [
+          "16bit"
+        ]
+      },
+      {
+        "configKey": "handy_lcd_ghosting",
+        "targetKey": "handy_lcd_ghosting",
+        "kind": "BindFeature",
+        "values": [
+          "disabled"
+        ]
+      }
+    ],
+    "hatari": [
+      {
+        "configKey": "hatari_video_crop_overscan",
+        "targetKey": "hatari_video_crop_overscan",
+        "kind": "BindBoolFeatureOn",
+        "values": [
+          "true",
+          "false"
+        ]
+      },
+      {
+        "configKey": "hatari_machinetype",
+        "targetKey": "hatari_machinetype",
+        "kind": "BindFeature",
+        "values": [
+          "st"
+        ]
+      },
+      {
+        "configKey": "hatari_ramsize",
+        "targetKey": "hatari_ramsize",
+        "kind": "BindFeature",
+        "values": [
+          "1"
+        ]
+      },
+      {
+        "configKey": "hatari_fastboot",
+        "targetKey": "hatari_fastboot",
+        "kind": "BindBoolFeature",
+        "values": [
+          "true",
+          "false"
+        ]
+      },
+      {
+        "configKey": "hatari_twojoy",
+        "targetKey": "hatari_twojoy",
+        "kind": "BindBoolFeatureOn",
+        "values": [
+          "true",
+          "false"
+        ]
+      },
+      {
+        "configKey": "hatari_led_status_display",
+        "targetKey": "hatari_led_status_display",
+        "kind": "BindBoolFeatureOn",
+        "values": [
+          "true",
+          "false"
+        ]
+      }
+    ],
+    "hatarib": [
+      {
+        "configKey": "hatarib_aspect",
+        "targetKey": "hatarib_aspect",
+        "kind": "BindFeature",
+        "values": [
+          "0"
+        ]
+      },
+      {
+        "configKey": "hatarib_monitor",
+        "targetKey": "hatarib_monitor",
+        "kind": "BindFeature",
+        "values": [
+          "1"
+        ]
+      },
+      {
+        "configKey": "hatarib_samplerate",
+        "targetKey": "hatarib_samplerate",
+        "kind": "BindFeature",
+        "values": [
+          "48000"
+        ]
+      },
+      {
+        "configKey": "hatarib_lpf",
+        "targetKey": "hatarib_lpf",
+        "kind": "BindFeature",
+        "values": [
+          "3"
+        ]
+      },
+      {
+        "configKey": "hatarib_machine",
+        "targetKey": "hatarib_machine",
+        "kind": "BindFeature",
+        "values": [
+          "0"
+        ]
+      },
+      {
+        "configKey": "hatarib_tos",
+        "targetKey": "hatarib_tos",
+        "kind": "BindFeature",
+        "values": [
+          "auto"
+        ]
+      },
+      {
+        "configKey": "hatarib_memory",
+        "targetKey": "hatarib_memory",
+        "kind": "BindFeature",
+        "values": [
+          "1024"
+        ]
+      },
+      {
+        "configKey": "hatarib_cpu_clock",
+        "targetKey": "hatarib_cpu_clock",
+        "kind": "BindFeature",
+        "values": [
+          "-1"
+        ]
+      },
+      {
+        "configKey": "hatarib_fast_floppy",
+        "targetKey": "hatarib_fast_floppy",
+        "kind": "BindBoolFeatureOn",
+        "values": [
+          "1",
+          "0"
+        ]
+      },
+      {
+        "configKey": "hatarib_emutos_framerate",
+        "targetKey": "hatarib_emutos_framerate",
+        "kind": "BindFeature",
+        "values": [
+          "-1"
+        ]
+      },
+      {
+        "configKey": "hatarib_emutos_region",
+        "targetKey": "hatarib_emutos_region",
+        "kind": "BindFeature",
+        "values": [
+          "-1"
+        ]
+      },
+      {
+        "configKey": "hatarib_cycle_exact",
+        "targetKey": "hatarib_cycle_exact",
+        "kind": "BindBoolFeatureOn",
+        "values": [
+          "1",
+          "0"
+        ]
+      },
+      {
+        "configKey": "hatarib_mouse_port",
+        "targetKey": "hatarib_mouse_port",
+        "kind": "BindBoolFeatureOn",
+        "values": [
+          "1",
+          "0"
+        ]
+      },
+      {
+        "configKey": "hatarib_statusbar",
+        "targetKey": "hatarib_statusbar",
+        "kind": "BindFeature",
+        "values": [
+          "1"
+        ]
+      }
+    ],
+    "jollycv": [
+      {
+        "configKey": "jollycv_aspect",
+        "targetKey": "jollycv_aspect",
+        "kind": "BindFeature",
+        "values": [
+          "Auto"
+        ]
+      },
+      {
+        "configKey": "jollycv_tmspalette",
+        "targetKey": "jollycv_tmspalette",
+        "kind": "BindFeature",
+        "values": [
+          "TeaTime"
+        ]
+      }
+    ],
+    "kronos": [
+      {
+        "configKey": "kronos_resolution_mode",
+        "targetKey": "kronos_resolution_mode",
+        "kind": "BindFeature",
+        "values": [
+          "original"
+        ]
+      },
+      {
+        "configKey": "kronos_videoformattype",
+        "targetKey": "kronos_videoformattype",
+        "kind": "BindFeature",
+        "values": [
+          "auto"
+        ]
+      },
+      {
+        "configKey": "kronos_skipframe",
+        "targetKey": "kronos_skipframe",
+        "kind": "BindFeatureSlider",
+        "values": [
+          "0"
+        ]
+      },
+      {
+        "configKey": "kronos_force_downsampling",
+        "targetKey": "kronos_force_downsampling",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "kronos_bandingmode",
+        "targetKey": "kronos_bandingmode",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "kronos_language_id",
+        "targetKey": "kronos_language_id",
+        "kind": "BindFeature",
+        "values": [
+          "English"
+        ]
+      },
+      {
+        "configKey": "kronos_addon_cartridge",
+        "targetKey": "kronos_addon_cartridge",
+        "kind": "BindFeature",
+        "values": [
+          "512K_backup_ram"
+        ]
+      },
+      {
+        "configKey": "kronos_stv_favorite_region",
+        "targetKey": "kronos_stv_favorite_region",
+        "kind": "BindFeature",
+        "values": [
+          "EU"
+        ]
+      },
+      {
+        "configKey": "kronos_service_enabled",
+        "targetKey": "kronos_service_enabled",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "kronos_use_beetle_saves",
+        "targetKey": "kronos_use_beetle_saves",
+        "kind": "BindBoolFeatureOn",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      }
+    ],
+    "m2000": [
+      {
+        "configKey": "m2000_keyboard_mapping",
+        "targetKey": "m2000_keyboard_mapping",
+        "kind": "BindFeature",
+        "values": [
+          "symbolic"
+        ]
+      }
+    ],
+    "mame": [
+      {
+        "configKey": "internal_resolution",
+        "targetKey": "mame_altres",
+        "kind": "BindFeature",
+        "values": [
+          "640x480"
+        ]
+      },
+      {
+        "configKey": "alternate_renderer",
+        "targetKey": "mame_alternate_renderer",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "mame_rotation_mode",
+        "targetKey": "mame_rotation_mode",
+        "kind": "BindFeature",
+        "values": [
+          "internal"
+        ]
+      },
+      {
+        "configKey": "autosave",
+        "targetKey": "mame_auto_save",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "mame_thread_mode",
+        "targetKey": "mame_thread_mode",
+        "kind": "BindBoolFeatureOn",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "mame_throttle",
+        "targetKey": "mame_throttle",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "boot_to_bios",
+        "targetKey": "mame_boot_to_bios",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "boot_to_osd",
+        "targetKey": "mame_boot_to_osd",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "mame_read_config",
+        "targetKey": "mame_read_config",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "cheats_enable",
+        "targetKey": "mame_cheats_enable",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "mame_mame_4way_enable",
+        "targetKey": "mame_mame_4way_enable",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "mame_buttons_profiles",
+        "targetKey": "mame_buttons_profiles",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "mame_mouse_enable",
+        "targetKey": "mame_mouse_enable",
+        "kind": "BindBoolFeatureOn",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "lightgun_mode",
+        "targetKey": "mame_lightgun_mode",
+        "kind": "BindFeature",
+        "values": [
+          "lightgun"
+        ]
+      }
+    ],
+    "mame2003": [
+      {
+        "configKey": "mame2003_tate_mode",
+        "targetKey": "mame2003_tate_mode",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "mame2003_frameskip",
+        "targetKey": "mame2003_frameskip",
+        "kind": "BindFeature",
+        "values": [
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "mame2003_sample_rate",
+        "targetKey": "mame2003_sample_rate",
+        "kind": "BindFeature",
+        "values": [
+          "44100"
+        ]
+      },
+      {
+        "configKey": "mame2003_display_setup",
+        "targetKey": "mame2003_display_setup",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "mame2003_input_interface",
+        "targetKey": "mame2003_input_interface",
+        "kind": "BindFeature",
+        "values": [
+          "retropad"
+        ]
+      },
+      {
+        "configKey": "mame2003_mame_remapping",
+        "targetKey": "mame2003_mame_remapping",
+        "kind": "BindBoolFeatureOn",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      }
+    ],
+    "mame2003plus": [
+      {
+        "configKey": "mame2003-plus_tate_mode",
+        "targetKey": "mame2003-plus_tate_mode",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "mame2003-plus_frameskip",
+        "targetKey": "mame2003-plus_frameskip",
+        "kind": "BindFeature",
+        "values": [
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "mame2003-plus_sample_rate",
+        "targetKey": "mame2003-plus_sample_rate",
+        "kind": "BindFeature",
+        "values": [
+          "44100"
+        ]
+      },
+      {
+        "configKey": "mame2003-plus_display_setup",
+        "targetKey": "mame2003-plus_display_setup",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "mame2003-plus_input_interface",
+        "targetKey": "mame2003-plus_input_interface",
+        "kind": "BindFeature",
+        "values": [
+          "retropad"
+        ]
+      },
+      {
+        "configKey": "mame2003-plus_mame_remapping",
+        "targetKey": "mame2003-plus_mame_remapping",
+        "kind": "BindBoolFeatureOn",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "mame2003-plus_xy_device",
+        "targetKey": "mame2003-plus_xy_device",
+        "kind": "BindFeature",
+        "values": [
+          "mouse"
+        ]
+      }
+    ],
+    "mame2010": [
+      {
+        "configKey": "mame_current_frame_skip",
+        "targetKey": "mame_current_frame_skip",
+        "kind": "BindFeature",
+        "values": [
+          "0"
+        ]
+      },
+      {
+        "configKey": "mame_current_sample_rate",
+        "targetKey": "mame_current_sample_rate",
+        "kind": "BindFeature",
+        "values": [
+          "44100Hz"
+        ]
+      },
+      {
+        "configKey": "mame_current_xy_type",
+        "targetKey": "mame_current_xy_type",
+        "kind": "BindFeature",
+        "values": [
+          "auto"
+        ]
+      }
+    ],
+    "mame2014": [
+      {
+        "configKey": "mame2014_alternate_renderer",
+        "targetKey": "mame2014_alternate_renderer",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "autosave",
+        "targetKey": "mame2014_auto_save",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "mame2014_throttle",
+        "targetKey": "mame2014_throttle",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "mame2014_boot_to_osd",
+        "targetKey": "mame2014_boot_to_osd",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "mame2014_cheats_enable",
+        "targetKey": "mame2014_cheats_enable",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "mame2014_read_config",
+        "targetKey": "mame2014_read_config",
+        "kind": "BindFeature",
+        "values": [
+          "auto"
+        ]
+      },
+      {
+        "configKey": "mame2014_mouse_enable",
+        "targetKey": "mame2014_mouse_enable",
+        "kind": "BindBoolFeatureOn",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      }
+    ],
+    "mame2016": [
+      {
+        "configKey": "mame2016_alternate_renderer",
+        "targetKey": "mame2016_alternate_renderer",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "autosave",
+        "targetKey": "mame2016_auto_save",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "mame2016_throttle",
+        "targetKey": "mame2016_throttle",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "mame2016_boot_to_bios",
+        "targetKey": "mame2016_boot_to_bios",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "mame2016_boot_to_osd",
+        "targetKey": "mame2016_boot_to_osd",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "mame2016_cheats_enable",
+        "targetKey": "mame2016_cheats_enable",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "mame2016_read_config",
+        "targetKey": "mame2016_read_config",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "mame2016_mouse_enable",
+        "targetKey": "mame2016_mouse_enable",
+        "kind": "BindBoolFeature",
+        "values": [
+          "disabled",
+          "enabled"
+        ]
+      }
+    ],
+    "mednafenpce": [
+      {
+        "configKey": "pce_h_overscan",
+        "targetKey": "pce_h_overscan",
+        "kind": "BindFeature",
+        "values": [
+          "auto"
+        ]
+      },
+      {
+        "configKey": "pce_palette",
+        "targetKey": "pce_palette",
+        "kind": "BindFeature",
+        "values": [
+          "Composite"
+        ]
+      },
+      {
+        "configKey": "pce_nospritelimit",
+        "targetKey": "pce_nospritelimit",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "pce_scaling",
+        "targetKey": "pce_scaling",
+        "kind": "BindFeature",
+        "values": [
+          "auto"
+        ]
+      },
+      {
+        "configKey": "pce_hires_blend",
+        "targetKey": "pce_hires_blend",
+        "kind": "BindFeature",
+        "values": [
+          "auto"
+        ]
+      },
+      {
+        "configKey": "pce_psgrevision",
+        "targetKey": "pce_psgrevision",
+        "kind": "BindFeature",
+        "values": [
+          "auto"
+        ]
+      },
+      {
+        "configKey": "pce_resamp_quality",
+        "targetKey": "pce_resamp_quality",
+        "kind": "BindFeatureSlider",
+        "values": [
+          "3"
+        ]
+      },
+      {
+        "configKey": "pceadpcvolume",
+        "targetKey": "pce_adpcmvolume",
+        "kind": "BindFeatureSlider",
+        "values": [
+          "100"
+        ]
+      },
+      {
+        "configKey": "pcecddavolume",
+        "targetKey": "pce_cddavolume",
+        "kind": "BindFeatureSlider",
+        "values": [
+          "100"
+        ]
+      },
+      {
+        "configKey": "pcecdpsvolume",
+        "targetKey": "pce_cdpsgvolume",
+        "kind": "BindFeatureSlider",
+        "values": [
+          "100"
+        ]
+      },
+      {
+        "configKey": "pce_ocmultiplier",
+        "targetKey": "pce_ocmultiplier",
+        "kind": "BindFeature",
+        "values": [
+          "1"
+        ]
+      },
+      {
+        "configKey": "pce_adpcmextraprec",
+        "targetKey": "pce_adpcmextraprec",
+        "kind": "BindFeature",
+        "values": [
+          "12-bit"
+        ]
+      },
+      {
+        "configKey": "pce_cdbios",
+        "targetKey": "pce_cdbios",
+        "kind": "BindFeature",
+        "values": [
+          "System Card 3"
+        ]
+      },
+      {
+        "configKey": "pce_cdimagecache",
+        "targetKey": "pce_cdimagecache",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "pce_cdspeed",
+        "targetKey": "pce_cdspeed",
+        "kind": "BindFeature",
+        "values": [
+          "1"
+        ]
+      },
+      {
+        "configKey": "pce_multitap",
+        "targetKey": "pce_multitap",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      }
+    ],
+    "mednafenpcefast": [
+      {
+        "configKey": "pce_fast_nospritelimit",
+        "targetKey": "pce_fast_nospritelimit",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "pceadpcvolume",
+        "targetKey": "pce_fast_adpcmvolume",
+        "kind": "BindFeatureSlider",
+        "values": [
+          "100"
+        ]
+      },
+      {
+        "configKey": "pcecddavolume",
+        "targetKey": "pce_fast_cddavolume",
+        "kind": "BindFeatureSlider",
+        "values": [
+          "100"
+        ]
+      },
+      {
+        "configKey": "pcecdpsvolume",
+        "targetKey": "pce_fast_cdpsgvolume",
+        "kind": "BindFeatureSlider",
+        "values": [
+          "100"
+        ]
+      }
+    ],
+    "mednafenpcfx": [
+      {
+        "configKey": "pcfx_nospritelimit",
+        "targetKey": "pcfx_nospritelimit",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      }
+    ],
+    "mednafenpsxhw": [
+      {
+        "configKey": "internal_resolution",
+        "targetKey": "beetle_psx_hw_internal_resolution",
+        "kind": "BindFeature",
+        "values": [
+          "1x(native)"
+        ]
+      },
+      {
+        "configKey": "pal_video_timing_override",
+        "targetKey": "beetle_psx_hw_pal_video_timing_override",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "widescreen_hack",
+        "targetKey": "beetle_psx_hw_widescreen_hack",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "widescreen_hack_aspect_ratio",
+        "targetKey": "beetle_psx_hw_widescreen_hack_aspect_ratio",
+        "kind": "BindFeature",
+        "values": [
+          "16:9"
+        ]
+      },
+      {
+        "configKey": "msaa",
+        "targetKey": "beetle_psx_hw_msaa",
+        "kind": "BindFeature",
+        "values": [
+          "1x"
+        ]
+      },
+      {
+        "configKey": "texture_filtering",
+        "targetKey": "beetle_psx_hw_filter",
+        "kind": "BindFeature",
+        "values": [
+          "nearest"
+        ]
+      },
+      {
+        "configKey": "dither_mode",
+        "targetKey": "beetle_psx_hw_dither_mode",
+        "kind": "BindFeature",
+        "values": [
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "skip_bios",
+        "targetKey": "beetle_psx_hw_skip_bios",
+        "kind": "BindBoolFeatureOn",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "beetle_psx_hw_enable_memcard1",
+        "targetKey": "beetle_psx_hw_enable_memcard1",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "beetle_psx_hw_shared_memory_cards",
+        "targetKey": "beetle_psx_hw_shared_memory_cards",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "beetle_psx_hw_cd_access_method",
+        "targetKey": "beetle_psx_hw_cd_access_method",
+        "kind": "BindFeature",
+        "values": [
+          "async"
+        ]
+      },
+      {
+        "configKey": "beetle_psx_hw_cpu_freq_scale",
+        "targetKey": "beetle_psx_hw_cpu_freq_scale",
+        "kind": "BindFeature",
+        "values": [
+          "100%"
+        ]
+      },
+      {
+        "configKey": "beetle_psx_hw_gte_overclock",
+        "targetKey": "beetle_psx_hw_gte_overclock",
+        "kind": "BindFeature",
+        "values": [
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "mednafen_psx_renderer",
+        "targetKey": "beetle_psx_hw_renderer",
+        "kind": "BindFeature",
+        "values": [
+          "hardware"
+        ]
+      },
+      {
+        "configKey": "analog_toggle",
+        "targetKey": "beetle_psx_hw_analog_toggle",
+        "kind": "BindFeature",
+        "values": [
+          "enabled"
+        ]
+      },
+      {
+        "configKey": "beetle_psx_hw_analog_toggle_combo",
+        "targetKey": "beetle_psx_hw_analog_toggle_combo",
+        "kind": "BindFeature",
+        "values": [
+          "l1+r1+start"
+        ]
+      },
+      {
+        "configKey": "gun_input_mode",
+        "targetKey": "beetle_psx_hw_gun_input_mode",
+        "kind": "BindFeature",
+        "values": [
+          "lightgun"
+        ]
+      },
+      {
+        "configKey": "gun_cursor",
+        "targetKey": "beetle_psx_hw_gun_cursor",
+        "kind": "BindFeature",
+        "values": [
+          "cross"
+        ]
+      }
+    ],
+    "mednafensaturn": [
+      {
+        "configKey": "beetle_saturn_region",
+        "targetKey": "beetle_saturn_region",
+        "kind": "BindFeature",
+        "values": [
+          "Auto Detect"
+        ]
+      },
+      {
+        "configKey": "beetle_saturn_cdimagecache",
+        "targetKey": "beetle_saturn_cdimagecache",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "beetle_saturn_autortc_lang",
+        "targetKey": "beetle_saturn_autortc_lang",
+        "kind": "BindFeature",
+        "values": [
+          "english"
+        ]
+      },
+      {
+        "configKey": "beetle_saturn_cart",
+        "targetKey": "beetle_saturn_cart",
+        "kind": "BindFeature",
+        "values": [
+          "Auto Detect"
+        ]
+      },
+      {
+        "configKey": "beetle_saturn_shared_int",
+        "targetKey": "beetle_saturn_shared_int",
+        "kind": "BindBoolFeatureOn",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "beetle_saturn_shared_ext",
+        "targetKey": "beetle_saturn_shared_ext",
+        "kind": "BindBoolFeatureOn",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "beetle_saturn_midsync",
+        "targetKey": "beetle_saturn_midsync",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "beetle_saturn_mouse_sensitivity",
+        "targetKey": "beetle_saturn_mouse_sensitivity",
+        "kind": "BindFeature",
+        "values": [
+          "auto"
+        ]
+      },
+      {
+        "configKey": "beetle_saturn_multitap_port1",
+        "targetKey": "beetle_saturn_multitap_port1",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "beetle_saturn_multitap_port2",
+        "targetKey": "beetle_saturn_multitap_port2",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "beetle_saturn_virtuagun_crosshair",
+        "targetKey": "beetle_saturn_virtuagun_crosshair",
+        "kind": "BindFeature",
+        "values": [
+          "Cross"
+        ]
+      }
+    ],
+    "mednafensupergrafx": [
+      {
+        "configKey": "sgxadpcvolume",
+        "targetKey": "sgx_adpcmvolume",
+        "kind": "BindFeatureSlider",
+        "values": [
+          "100"
+        ]
+      },
+      {
+        "configKey": "sgxcddavolume",
+        "targetKey": "sgx_cddavolume",
+        "kind": "BindFeatureSlider",
+        "values": [
+          "100"
+        ]
+      },
+      {
+        "configKey": "sgxcdpsvolume",
+        "targetKey": "sgx_cdpsgvolume",
+        "kind": "BindFeatureSlider",
+        "values": [
+          "100"
+        ]
+      }
+    ],
+    "mednafenwswan": [
+      {
+        "configKey": "mednafen_wswan_rotate",
+        "targetKey": "wswan_rotate_display",
+        "kind": "BindFeature",
+        "values": [
+          "manual"
+        ]
+      }
+    ],
+    "melonds": [
+      {
+        "configKey": "melonds_opengl_resolution",
+        "targetKey": "melonds_opengl_resolution",
+        "kind": "BindFeature",
+        "values": [
+          "1x native (256x192)"
+        ]
+      },
+      {
+        "configKey": "melonds_screen_layout",
+        "targetKey": "melonds_screen_layout",
+        "kind": "BindFeature",
+        "values": [
+          "Top/Bottom"
+        ]
+      },
+      {
+        "configKey": "melonds_screengap",
+        "targetKey": "melonds_screen_gap",
+        "kind": "BindFeatureSlider",
+        "values": [
+          "0"
+        ]
+      },
+      {
+        "configKey": "melonds_hybrid_ratio",
+        "targetKey": "melonds_hybrid_ratio",
+        "kind": "BindFeature",
+        "values": [
+          "3"
+        ]
+      },
+      {
+        "configKey": "melonds_hybrid_small_screen",
+        "targetKey": "melonds_hybrid_small_screen",
+        "kind": "BindFeature",
+        "values": [
+          "Bottom"
+        ]
+      },
+      {
+        "configKey": "nds_console",
+        "targetKey": "melonds_console_mode",
+        "kind": "BindFeature",
+        "values": [
+          "DS"
+        ]
+      },
+      {
+        "configKey": "nds_boot",
+        "targetKey": "melonds_boot_directly",
+        "kind": "BindBoolFeature",
+        "values": [
+          "disabled",
+          "enabled"
+        ]
+      },
+      {
+        "configKey": "melonds_touch_mode",
+        "targetKey": "melonds_touch_mode",
+        "kind": "BindFeature",
+        "values": [
+          "Joystick"
+        ]
+      },
+      {
+        "configKey": "melonds_opengl_renderer",
+        "targetKey": "melonds_opengl_renderer",
+        "kind": "BindBoolFeature",
+        "values": [
+          "disabled",
+          "enabled"
+        ]
+      },
+      {
+        "configKey": "melonds_mic_input",
+        "targetKey": "melonds_mic_input",
+        "kind": "BindFeature",
+        "values": [
+          "Blow Noise"
+        ]
+      }
+    ],
+    "melondsds": [
+      {
+        "configKey": "melondsds_resolution",
+        "targetKey": "melonds_opengl_resolution",
+        "kind": "BindFeature",
+        "values": [
+          "1"
+        ]
+      },
+      {
+        "configKey": "melondsds_screen_layout1",
+        "targetKey": "melonds_screen_layout1",
+        "kind": "BindFeature",
+        "values": [
+          "top-bottom"
+        ]
+      },
+      {
+        "configKey": "melondsds_screen_layout2",
+        "targetKey": "melonds_screen_layout2",
+        "kind": "BindFeature",
+        "values": [
+          "right-left"
+        ]
+      },
+      {
+        "configKey": "melondsds_hybrid_ratio",
+        "targetKey": "melonds_hybrid_ratio",
+        "kind": "BindFeature",
+        "values": [
+          "3"
+        ]
+      },
+      {
+        "configKey": "melondsds_hybrid_smallscreen",
+        "targetKey": "melonds_hybrid_small_screen",
+        "kind": "BindFeature",
+        "values": [
+          "both"
+        ]
+      },
+      {
+        "configKey": "melonds_screengap",
+        "targetKey": "melonds_screen_gap",
+        "kind": "BindFeatureSlider",
+        "values": [
+          "0"
+        ]
+      },
+      {
+        "configKey": "melondsds_polygon",
+        "targetKey": "melonds_opengl_better_polygons",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "melondsds_filter",
+        "targetKey": "melonds_opengl_filtering",
+        "kind": "BindFeature",
+        "values": [
+          "nearest"
+        ]
+      },
+      {
+        "configKey": "melonds_threaded_renderer",
+        "targetKey": "melonds_threaded_renderer",
+        "kind": "BindBoolFeatureOn",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "melondsds_audio_depth",
+        "targetKey": "melonds_audio_bitdepth",
+        "kind": "BindFeature",
+        "values": [
+          "auto"
+        ]
+      },
+      {
+        "configKey": "melondsds_audio_interpolation",
+        "targetKey": "melonds_audio_interpolation",
+        "kind": "BindFeature",
+        "values": [
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "melondsds_console",
+        "targetKey": "melonds_console_mode",
+        "kind": "BindFeature",
+        "values": [
+          "ds"
+        ]
+      },
+      {
+        "configKey": "melondsds_boot",
+        "targetKey": "melonds_boot_mode",
+        "kind": "BindBoolFeature",
+        "values": [
+          "native",
+          "direct"
+        ]
+      },
+      {
+        "configKey": "melondsds_language",
+        "targetKey": "melonds_firmware_language",
+        "kind": "BindFeature",
+        "values": [
+          "auto"
+        ]
+      },
+      {
+        "configKey": "melondsds_bios",
+        "targetKey": "melonds_sysfile_mode",
+        "kind": "BindBoolFeature",
+        "values": [
+          "builtin",
+          "native"
+        ]
+      },
+      {
+        "configKey": "melondsds_jit",
+        "targetKey": "melonds_jit_enable",
+        "kind": "BindBoolFeatureOn",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "melonds_show_current_layout",
+        "targetKey": "melonds_show_current_layout",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "melondsds_renderer",
+        "targetKey": "melonds_render_mode",
+        "kind": "BindBoolFeatureOn",
+        "values": [
+          "opengl",
+          "software"
+        ]
+      },
+      {
+        "configKey": "melondsds_cursor_mode",
+        "targetKey": "melonds_show_cursor",
+        "kind": "BindFeature",
+        "values": [
+          "touching"
+        ]
+      },
+      {
+        "configKey": "melondsds_touch_mode",
+        "targetKey": "melonds_touch_mode",
+        "kind": "BindFeature",
+        "values": [
+          "auto"
+        ]
+      },
+      {
+        "configKey": "melonds_mic_input",
+        "targetKey": "melonds_mic_input",
+        "kind": "BindFeature",
+        "values": [
+          "blow"
+        ]
+      }
+    ],
+    "mesen": [
+      {
+        "configKey": "mesen_aspect_ratio",
+        "targetKey": "mesen_aspect_ratio",
+        "kind": "BindFeature",
+        "values": [
+          "Auto"
+        ]
+      },
+      {
+        "configKey": "mesen_nospritelimit",
+        "targetKey": "mesen_nospritelimit",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "ntsc_filter",
+        "targetKey": "mesen_ntsc_filter",
+        "kind": "BindFeature",
+        "values": [
+          "Disabled"
+        ]
+      },
+      {
+        "configKey": "palette",
+        "targetKey": "mesen_palette",
+        "kind": "BindFeature",
+        "values": [
+          "Default"
+        ]
+      },
+      {
+        "configKey": "hd_packs",
+        "targetKey": "mesen_hdpacks",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "fake_stereo",
+        "targetKey": "mesen_fake_stereo",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "mesen_region",
+        "targetKey": "mesen_region",
+        "kind": "BindFeature",
+        "values": [
+          "Auto"
+        ]
+      },
+      {
+        "configKey": "mesen_overclock",
+        "targetKey": "mesen_overclock",
+        "kind": "BindFeature",
+        "values": [
+          "None"
+        ]
+      },
+      {
+        "configKey": "rotate_buttons",
+        "targetKey": "mesen_shift_buttons_clockwise",
+        "kind": "BindBoolFeature",
+        "values": [
+          "disabled",
+          "enabled"
+        ]
+      },
+      {
+        "configKey": "mesen_nes_turbo",
+        "targetKey": "mesen_controllerturbospeed",
+        "kind": "BindFeature",
+        "values": [
+          "Disabled"
+        ]
+      },
+      {
+        "configKey": "mesen_fdsautoinsertdisk",
+        "targetKey": "mesen_fdsautoinsertdisk",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "mesen_fdsfastforwardload",
+        "targetKey": "mesen_fdsfastforwardload",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      }
+    ],
+    "mgba": [
+      {
+        "configKey": "mgba_audio_low_pass_filter",
+        "targetKey": "mgba_audio_low_pass_filter",
+        "kind": "BindFeature",
+        "values": [
+          "auto"
+        ]
+      },
+      {
+        "configKey": "mgba_interframe_blending",
+        "targetKey": "mgba_interframe_blending",
+        "kind": "BindFeature",
+        "values": [
+          "OFF"
+        ]
+      },
+      {
+        "configKey": "mgba_gb_colors",
+        "targetKey": "mgba_gb_colors",
+        "kind": "BindFeature",
+        "values": [
+          "Grayscale"
+        ]
+      },
+      {
+        "configKey": "mgba_sgb_borders",
+        "targetKey": "mgba_sgb_borders",
+        "kind": "BindBoolFeatureOn",
+        "values": [
+          "ON",
+          "OFF"
+        ]
+      },
+      {
+        "configKey": "mgba_gb_model",
+        "targetKey": "mgba_gb_model",
+        "kind": "BindFeature",
+        "values": [
+          "Autodetect"
+        ]
+      },
+      {
+        "configKey": "mgba_color_correction",
+        "targetKey": "mgba_color_correction",
+        "kind": "BindFeature",
+        "values": [
+          "OFF"
+        ]
+      },
+      {
+        "configKey": "mgba_skip_bios",
+        "targetKey": "mgba_skip_bios",
+        "kind": "BindBoolFeature",
+        "values": [
+          "ON",
+          "OFF"
+        ]
+      },
+      {
+        "configKey": "mgba_force_gbp",
+        "targetKey": "mgba_force_gbp",
+        "kind": "BindBoolFeature",
+        "values": [
+          "ON",
+          "OFF"
+        ]
+      }
+    ],
+    "mrboom": [
+      {
+        "configKey": "mrboom_aspect",
+        "targetKey": "mrboom-aspect",
+        "kind": "BindFeature",
+        "values": [
+          "Native"
+        ]
+      },
+      {
+        "configKey": "mrboom_levelselect",
+        "targetKey": "mrboom-levelselect",
+        "kind": "BindFeature",
+        "values": [
+          "Normal"
+        ]
+      },
+      {
+        "configKey": "mrboom_teammode",
+        "targetKey": "mrboom-teammode",
+        "kind": "BindFeature",
+        "values": [
+          "Selfie"
+        ]
+      }
+    ],
+    "mupen64plus": [
+      {
+        "configKey": "43screensize",
+        "targetKey": "mupen64plus-43screensize",
+        "kind": "BindFeature",
+        "values": [
+          "640x480"
+        ]
+      },
+      {
+        "configKey": "mupen64plus_framerate",
+        "targetKey": "mupen64plus-Framerate",
+        "kind": "BindBoolFeature",
+        "values": [
+          "Fullspeed",
+          "Original"
+        ]
+      },
+      {
+        "configKey": "169screensize",
+        "targetKey": "mupen64plus-169screensize",
+        "kind": "BindFeature",
+        "values": [
+          "960x540"
+        ]
+      },
+      {
+        "configKey": "MultiSampling",
+        "targetKey": "mupen64plus-MultiSampling",
+        "kind": "BindFeature",
+        "values": [
+          "0"
+        ]
+      },
+      {
+        "configKey": "Texture_Enhancement",
+        "targetKey": "mupen64plus-txEnhancementMode",
+        "kind": "BindFeature",
+        "values": [
+          "None"
+        ]
+      },
+      {
+        "configKey": "Texture_filter",
+        "targetKey": "mupen64plus-txFilterMode",
+        "kind": "BindFeature",
+        "values": [
+          "None"
+        ]
+      },
+      {
+        "configKey": "BilinearMode",
+        "targetKey": "mupen64plus-BilinearMode",
+        "kind": "BindFeature",
+        "values": [
+          "3point"
+        ]
+      },
+      {
+        "configKey": "mupen64plus-EnableTexCoordBounds",
+        "targetKey": "mupen64plus-EnableTexCoordBounds",
+        "kind": "BindBoolFeature",
+        "values": [
+          "True",
+          "False"
+        ]
+      },
+      {
+        "configKey": "mupen64plus-EnableNativeResTexrects",
+        "targetKey": "mupen64plus-EnableNativeResTexrects",
+        "kind": "BindFeature",
+        "values": [
+          "Disabled"
+        ]
+      },
+      {
+        "configKey": "mupen64plus-cpucore",
+        "targetKey": "mupen64plus-cpucore",
+        "kind": "BindFeature",
+        "values": [
+          "pure_interpreter"
+        ]
+      },
+      {
+        "configKey": "RDP_Plugin",
+        "targetKey": "mupen64plus-rdp-plugin",
+        "kind": "BindBoolFeature",
+        "values": [
+          "parallel",
+          "gliden64"
+        ]
+      },
+      {
+        "configKey": "mupen64plus-parallel-rdp-upscaling",
+        "targetKey": "mupen64plus-parallel-rdp-upscaling",
+        "kind": "BindFeature",
+        "values": [
+          "1x"
+        ]
+      },
+      {
+        "configKey": "mupen64plus-parallel-rdp-downscaling",
+        "targetKey": "mupen64plus-parallel-rdp-downscaling",
+        "kind": "BindFeature",
+        "values": [
+          "disable"
+        ]
+      },
+      {
+        "configKey": "mupen64plus-parallel-rdp-vi-aa",
+        "targetKey": "mupen64plus-parallel-rdp-vi-aa",
+        "kind": "BindBoolFeatureOn",
+        "values": [
+          "True",
+          "False"
+        ]
+      },
+      {
+        "configKey": "mupen64plus-parallel-rdp-vi-bilinear",
+        "targetKey": "mupen64plus-parallel-rdp-vi-bilinear",
+        "kind": "BindBoolFeatureOn",
+        "values": [
+          "True",
+          "False"
+        ]
+      },
+      {
+        "configKey": "mupen64plus-parallel-rdp-deinterlace-method",
+        "targetKey": "mupen64plus-parallel-rdp-deinterlace-method",
+        "kind": "BindFeature",
+        "values": [
+          "Bob"
+        ]
+      },
+      {
+        "configKey": "mupen64plus-parallel-rdp-dither-filter",
+        "targetKey": "mupen64plus-parallel-rdp-dither-filter",
+        "kind": "BindBoolFeatureOn",
+        "values": [
+          "True",
+          "False"
+        ]
+      },
+      {
+        "configKey": "mupen64plus-parallel-rdp-gamma-dither",
+        "targetKey": "mupen64plus-parallel-rdp-gamma-dither",
+        "kind": "BindBoolFeatureOn",
+        "values": [
+          "True",
+          "False"
+        ]
+      },
+      {
+        "configKey": "mupen64plus-parallel-rdp-divot-filter",
+        "targetKey": "mupen64plus-parallel-rdp-divot-filter",
+        "kind": "BindBoolFeatureOn",
+        "values": [
+          "True",
+          "False"
+        ]
+      },
+      {
+        "configKey": "mupen64plus-parallel-rdp-native-texture-lod",
+        "targetKey": "mupen64plus-parallel-rdp-native-texture-lod",
+        "kind": "BindBoolFeature",
+        "values": [
+          "True",
+          "False"
+        ]
+      },
+      {
+        "configKey": "mupen64plus-parallel-rdp-overscan",
+        "targetKey": "mupen64plus-parallel-rdp-overscan",
+        "kind": "BindFeatureSlider",
+        "values": [
+          "0"
+        ]
+      },
+      {
+        "configKey": "mupen64plus-pak1",
+        "targetKey": "mupen64plus-pak1",
+        "kind": "BindFeature",
+        "values": [
+          "memory"
+        ]
+      },
+      {
+        "configKey": "mupen64plus-pak2",
+        "targetKey": "mupen64plus-pak2",
+        "kind": "BindFeature",
+        "values": [
+          "none"
+        ]
+      },
+      {
+        "configKey": "mupen64plus-pak3",
+        "targetKey": "mupen64plus-pak3",
+        "kind": "BindFeature",
+        "values": [
+          "none"
+        ]
+      },
+      {
+        "configKey": "mupen64plus-pak4",
+        "targetKey": "mupen64plus-pak4",
+        "kind": "BindFeature",
+        "values": [
+          "none"
+        ]
+      }
+    ],
+    "neocd": [
+      {
+        "configKey": "neocd_region",
+        "targetKey": "neocd_region",
+        "kind": "BindFeature",
+        "values": [
+          "USA"
+        ]
+      },
+      {
+        "configKey": "neocd_bios",
+        "targetKey": "neocd_bios",
+        "kind": "BindFeature",
+        "values": [
+          "neocd_z.rom (CDZ)"
+        ]
+      },
+      {
+        "configKey": "neocd_cdspeedhack",
+        "targetKey": "neocd_cdspeedhack",
+        "kind": "BindBoolFeature",
+        "values": [
+          "On",
+          "Off"
+        ]
+      },
+      {
+        "configKey": "neocd_loadskip",
+        "targetKey": "neocd_loadskip",
+        "kind": "BindBoolFeatureOn",
+        "values": [
+          "On",
+          "Off"
+        ]
+      }
+    ],
+    "nestopia": [
+      {
+        "configKey": "nestopia_blargg_ntsc_filter",
+        "targetKey": "nestopia_blargg_ntsc_filter",
+        "kind": "BindFeature",
+        "values": [
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "nestopia_nospritelimit",
+        "targetKey": "nestopia_nospritelimit",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "nestopia_palette",
+        "targetKey": "nestopia_palette",
+        "kind": "BindFeature",
+        "values": [
+          "consumer"
+        ]
+      },
+      {
+        "configKey": "nestopia_favored_system",
+        "targetKey": "nestopia_favored_system",
+        "kind": "BindFeature",
+        "values": [
+          "auto"
+        ]
+      },
+      {
+        "configKey": "nestopia_overclock",
+        "targetKey": "nestopia_overclock",
+        "kind": "BindFeature",
+        "values": [
+          "1x"
+        ]
+      },
+      {
+        "configKey": "rotate_buttons",
+        "targetKey": "nestopia_button_shift",
+        "kind": "BindBoolFeature",
+        "values": [
+          "disabled",
+          "enabled"
+        ]
+      },
+      {
+        "configKey": "nestopia_select_adapter",
+        "targetKey": "nestopia_select_adapter",
+        "kind": "BindFeature",
+        "values": [
+          "auto"
+        ]
+      },
+      {
+        "configKey": "nestopia_show_crosshair",
+        "targetKey": "nestopia_show_crosshair",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      }
+    ],
+    "noods": [
+      {
+        "configKey": "noods_screenArrangement",
+        "targetKey": "noods_screenArrangement",
+        "kind": "BindFeature",
+        "values": [
+          "Automatic"
+        ]
+      },
+      {
+        "configKey": "noods_screenSizing",
+        "targetKey": "noods_screenSizing",
+        "kind": "BindFeature",
+        "values": [
+          "Even"
+        ]
+      },
+      {
+        "configKey": "noods_screenRotation",
+        "targetKey": "noods_screenRotation",
+        "kind": "BindFeature",
+        "values": [
+          "Normal"
+        ]
+      },
+      {
+        "configKey": "noods_screenGap",
+        "targetKey": "noods_screenGap",
+        "kind": "BindFeature",
+        "values": [
+          "None"
+        ]
+      },
+      {
+        "configKey": "noods_fpsLimiter",
+        "targetKey": "noods_fpsLimiter",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "noods_highRes3D",
+        "targetKey": "noods_highRes3D",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "noods_screenFilter",
+        "targetKey": "noods_screenFilter",
+        "kind": "BindFeature",
+        "values": [
+          "Nearest"
+        ]
+      },
+      {
+        "configKey": "noods_dsiMode",
+        "targetKey": "noods_dsiMode",
+        "kind": "BindFeature",
+        "values": [
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "noods_directBoot",
+        "targetKey": "noods_directBoot",
+        "kind": "BindBoolFeature",
+        "values": [
+          "disabled",
+          "enabled"
+        ]
+      },
+      {
+        "configKey": "noods_touchCursor",
+        "targetKey": "noods_touchCursor",
+        "kind": "BindBoolFeatureOn",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "noods_touchMode",
+        "targetKey": "noods_touchMode",
+        "kind": "BindFeature",
+        "values": [
+          "Auto"
+        ]
+      },
+      {
+        "configKey": "noods_micInputMode",
+        "targetKey": "noods_micInputMode",
+        "kind": "BindFeature",
+        "values": [
+          "Silence"
+        ]
+      },
+      {
+        "configKey": "noods_micButtonMode",
+        "targetKey": "noods_micButtonMode",
+        "kind": "BindFeature",
+        "values": [
+          "Toggle"
+        ]
+      },
+      {
+        "configKey": "noods_swapScreenMode",
+        "targetKey": "noods_swapScreenMode",
+        "kind": "BindFeature",
+        "values": [
+          "Toggle"
+        ]
+      }
+    ],
+    "np2kai": [
+      {
+        "configKey": "np2kai_model",
+        "targetKey": "np2kai_model",
+        "kind": "BindFeature",
+        "values": [
+          "PC-9801VX"
+        ]
+      },
+      {
+        "configKey": "np2kai_joymode",
+        "targetKey": "np2kai_joymode",
+        "kind": "BindFeature",
+        "values": [
+          "OFF"
+        ]
+      }
+    ],
+    "o2em": [
+      {
+        "configKey": "o2em_crop_overscan",
+        "targetKey": "o2em_crop_overscan",
+        "kind": "BindBoolFeatureOn",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "o2em_mix_frames",
+        "targetKey": "o2em_mix_frames",
+        "kind": "BindFeature",
+        "values": [
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "o2em_region",
+        "targetKey": "o2em_region",
+        "kind": "BindFeature",
+        "values": [
+          "auto"
+        ]
+      },
+      {
+        "configKey": "o2em_bios",
+        "targetKey": "o2em_bios",
+        "kind": "BindFeature",
+        "values": [
+          "auto"
+        ]
+      },
+      {
+        "configKey": "o2em_low_pass_range",
+        "targetKey": "o2em_low_pass_range",
+        "kind": "BindFeature",
+        "values": [
+          "auto"
+        ]
+      },
+      {
+        "configKey": "o2em_swap_gamepads",
+        "targetKey": "o2em_swap_gamepads",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      }
+    ],
+    "openlara": [
+      {
+        "configKey": "openlara_resolution",
+        "targetKey": "openlara_resolution",
+        "kind": "BindFeature",
+        "values": [
+          "320x240"
+        ]
+      },
+      {
+        "configKey": "openlara_framerate",
+        "targetKey": "openlara_framerate",
+        "kind": "BindFeature",
+        "values": [
+          "60fps"
+        ]
+      }
+    ],
+    "opera": [
+      {
+        "configKey": "high_resolution",
+        "targetKey": "opera_high_resolution",
+        "kind": "BindBoolFeatureOn",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "opera_region",
+        "targetKey": "opera_region",
+        "kind": "BindFeature",
+        "values": [
+          "ntsc"
+        ]
+      },
+      {
+        "configKey": "opera_bios",
+        "targetKey": "opera_bios",
+        "kind": "BindFeature",
+        "values": [
+          "panafz1.bin"
+        ]
+      },
+      {
+        "configKey": "cpu_overclock",
+        "targetKey": "opera_cpu_overclock",
+        "kind": "BindFeature",
+        "values": [
+          "1.0x (12.50Mhz)"
+        ]
+      },
+      {
+        "configKey": "opera_dsp_threaded",
+        "targetKey": "opera_dsp_threaded",
+        "kind": "BindBoolFeatureOn",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "opera_madam_matrix_engine",
+        "targetKey": "opera_madam_matrix_engine",
+        "kind": "BindFeature",
+        "values": [
+          "hardware"
+        ]
+      },
+      {
+        "configKey": "active_devices",
+        "targetKey": "opera_active_devices",
+        "kind": "BindFeature",
+        "values": [
+          "1"
+        ]
+      }
+    ],
+    "paralleln64": [
+      {
+        "configKey": "parallel_resolution",
+        "targetKey": "parallel-n64-screensize",
+        "kind": "BindFeature",
+        "values": [
+          "640x480"
+        ]
+      },
+      {
+        "configKey": "parallel_aspect",
+        "targetKey": "parallel-n64-aspectratiohint",
+        "kind": "BindBoolFeature",
+        "values": [
+          "widescreen",
+          "normal"
+        ]
+      },
+      {
+        "configKey": "parallel_framerate",
+        "targetKey": "parallel-n64-framerate",
+        "kind": "BindBoolFeature",
+        "values": [
+          "fullspeed",
+          "original"
+        ]
+      },
+      {
+        "configKey": "parallel_gfx_plugin",
+        "targetKey": "parallel-n64-gfxplugin",
+        "kind": "BindFeature",
+        "values": [
+          "auto"
+        ]
+      },
+      {
+        "configKey": "parallel_gfx_accuracy",
+        "targetKey": "parallel-n64-gfxplugin-accuracy",
+        "kind": "BindFeature",
+        "values": [
+          "veryhigh"
+        ]
+      },
+      {
+        "configKey": "parallel_upscaling",
+        "targetKey": "parallel-n64-parallel-rdp-upscaling",
+        "kind": "BindFeature",
+        "values": [
+          "1x"
+        ]
+      },
+      {
+        "configKey": "parallel_downsampling",
+        "targetKey": "parallel-n64-parallel-rdp-downscaling",
+        "kind": "BindFeature",
+        "values": [
+          "disable"
+        ]
+      },
+      {
+        "configKey": "parallel_vi_aa",
+        "targetKey": "parallel-n64-parallel-rdp-vi-aa",
+        "kind": "BindBoolFeatureOn",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "parallel_vi_bilinear",
+        "targetKey": "parallel-n64-parallel-rdp-vi-bilinear",
+        "kind": "BindBoolFeatureOn",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "parallel_gamma_dither",
+        "targetKey": "parallel-n64-parallel-rdp-gamma-dither",
+        "kind": "BindBoolFeatureOn",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "parallel_rdp_dither",
+        "targetKey": "parallel-n64-parallel-rdp-dither-filter",
+        "kind": "BindBoolFeatureOn",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "parallel_divot_filter",
+        "targetKey": "parallel-n64-parallel-rdp-divot-filter",
+        "kind": "BindBoolFeatureOn",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "parallel_filtering",
+        "targetKey": "parallel-n64-filtering",
+        "kind": "BindFeature",
+        "values": [
+          "automatic"
+        ]
+      },
+      {
+        "configKey": "parallel_dithering",
+        "targetKey": "parallel-n64-dithering",
+        "kind": "BindBoolFeatureOn",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "parallel_cpucore",
+        "targetKey": "parallel-n64-cpucore",
+        "kind": "BindFeature",
+        "values": [
+          "dynamic_recompiler"
+        ]
+      },
+      {
+        "configKey": "parallel_stick_deadzone",
+        "targetKey": "parallel-n64-astick-deadzone",
+        "kind": "BindFeatureSlider",
+        "values": [
+          "15"
+        ]
+      },
+      {
+        "configKey": "parallel_stick_sensitivity",
+        "targetKey": "parallel-n64-astick-sensitivity",
+        "kind": "BindFeatureSlider",
+        "values": [
+          "100"
+        ]
+      },
+      {
+        "configKey": "parallel_pak1",
+        "targetKey": "parallel-n64-pak1",
+        "kind": "BindFeature",
+        "values": [
+          "none"
+        ]
+      },
+      {
+        "configKey": "parallel_pak2",
+        "targetKey": "parallel-n64-pak2",
+        "kind": "BindFeature",
+        "values": [
+          "none"
+        ]
+      },
+      {
+        "configKey": "parallel_pak3",
+        "targetKey": "parallel-n64-pak3",
+        "kind": "BindFeature",
+        "values": [
+          "none"
+        ]
+      },
+      {
+        "configKey": "parallel_pak4",
+        "targetKey": "parallel-n64-pak4",
+        "kind": "BindFeature",
+        "values": [
+          "none"
+        ]
+      }
+    ],
+    "pcsx2": [
+      {
+        "configKey": "lrps2_upscale_multiplier",
+        "targetKey": "pcsx2_upscale_multiplier",
+        "kind": "BindFeatureSlider",
+        "values": [
+          "1x Native (PS2)"
+        ]
+      },
+      {
+        "configKey": "lrps2_widescreen_hint",
+        "targetKey": "pcsx2_widescreen_hint",
+        "kind": "BindFeature",
+        "values": [
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "lrps2_nointerlacing_hint",
+        "targetKey": "pcsx2_nointerlacing_hint",
+        "kind": "BindBoolFeatureOn",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "lrps2_deinterlace_mode",
+        "targetKey": "pcsx2_deinterlace_mode",
+        "kind": "BindFeature",
+        "values": [
+          "Automatic"
+        ]
+      },
+      {
+        "configKey": "lrps2_texture_filtering",
+        "targetKey": "pcsx2_texture_filtering",
+        "kind": "BindFeature",
+        "values": [
+          "Bilinear (PS2)"
+        ]
+      },
+      {
+        "configKey": "lrps2_trilinear_filtering",
+        "targetKey": "pcsx2_trilinear_filtering",
+        "kind": "BindFeature",
+        "values": [
+          "Automatic"
+        ]
+      },
+      {
+        "configKey": "lrps2_anisotropic_filtering",
+        "targetKey": "pcsx2_anisotropic_filtering",
+        "kind": "BindFeature",
+        "values": [
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "lrps2_dithering",
+        "targetKey": "pcsx2_dithering",
+        "kind": "BindFeature",
+        "values": [
+          "Unscaled"
+        ]
+      },
+      {
+        "configKey": "lrps2_blending_accuracy",
+        "targetKey": "pcsx2_blending_accuracy",
+        "kind": "BindFeature",
+        "values": [
+          "Basic"
+        ]
+      },
+      {
+        "configKey": "lrps2_pcrtc_antiblur",
+        "targetKey": "pcsx2_pcrtc_antiblur",
+        "kind": "BindBoolFeatureOn",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "lrps2_pgs_ssaa",
+        "targetKey": "pcsx2_pgs_ssaa",
+        "kind": "BindFeature",
+        "values": [
+          "Native"
+        ]
+      },
+      {
+        "configKey": "lrps2_pgs_high_res_scanout",
+        "targetKey": "pcsx2_pgs_high_res_scanout",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "lrps2_fastboot",
+        "targetKey": "pcsx2_fastboot",
+        "kind": "BindBoolFeatureOn",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "pcsx2_shared_memory_cards",
+        "targetKey": "pcsx2_shared_memory_cards",
+        "kind": "BindBoolFeatureOn",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "lrps2_game_enhancements_hint",
+        "targetKey": "pcsx2_game_enhancements_hint",
+        "kind": "BindBoolFeatureOn",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "lrps2_fastcdvd",
+        "targetKey": "pcsx2_fastcdvd",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "lrps2_enable_cheats",
+        "targetKey": "pcsx2_enable_cheats",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "lrps2_uncapped_framerate_hint",
+        "targetKey": "pcsx2_uncapped_framerate_hint",
+        "kind": "BindFeature",
+        "values": [
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "lrps2_renderer",
+        "targetKey": "pcsx2_renderer",
+        "kind": "BindFeature",
+        "values": [
+          "Auto"
+        ]
+      }
+    ],
+    "pcsxrearmed": [
+      {
+        "configKey": "pcsx_rearmed_dithering",
+        "targetKey": "pcsx_rearmed_dithering",
+        "kind": "BindBoolFeature",
+        "values": [
+          "disabled",
+          "enabled"
+        ]
+      },
+      {
+        "configKey": "pcsx_rearmed_spu_interpolation",
+        "targetKey": "pcsx_rearmed_spu_interpolation",
+        "kind": "BindFeature",
+        "values": [
+          "simple"
+        ]
+      },
+      {
+        "configKey": "pcsx_rearmed_region",
+        "targetKey": "pcsx_rearmed_region",
+        "kind": "BindFeature",
+        "values": [
+          "auto"
+        ]
+      },
+      {
+        "configKey": "pcsx_rearmed_show_bios_bootlogo",
+        "targetKey": "pcsx_rearmed_show_bios_bootlogo",
+        "kind": "BindBoolFeatureOn",
+        "values": [
+          "disabled",
+          "enabled"
+        ]
+      },
+      {
+        "configKey": "pcsx_rearmed_memcard2",
+        "targetKey": "pcsx_rearmed_memcard2",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "pcsx_rearmed_psxclock",
+        "targetKey": "pcsx_rearmed_psxclock",
+        "kind": "BindFeatureSlider",
+        "values": [
+          "57"
+        ]
+      },
+      {
+        "configKey": "pcsx_rearmed_icache_emulation",
+        "targetKey": "pcsx_rearmed_icache_emulation",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "display_internal_fps",
+        "targetKey": "pcsx_rearmed_display_fps_v2",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "pcsx_rearmed_vibration",
+        "targetKey": "pcsx_rearmed_vibration",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "pcsx_rearmed_crosshair1",
+        "targetKey": "pcsx_rearmed_crosshair1",
+        "kind": "BindFeature",
+        "values": [
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "pcsx_rearmed_crosshair2",
+        "targetKey": "pcsx_rearmed_crosshair2",
+        "kind": "BindFeature",
+        "values": [
+          "disabled"
+        ]
+      }
+    ],
+    "picodrive": [
+      {
+        "configKey": "core_aspect",
+        "targetKey": "picodrive_aspect",
+        "kind": "BindFeature",
+        "values": [
+          "PAR"
+        ]
+      },
+      {
+        "configKey": "renderer",
+        "targetKey": "picodrive_renderer",
+        "kind": "BindFeature",
+        "values": [
+          "accurate"
+        ]
+      },
+      {
+        "configKey": "picodrive_nospritelimit",
+        "targetKey": "picodrive_sprlim",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "dynamic_recompiler",
+        "targetKey": "picodrive_drc",
+        "kind": "BindBoolFeatureOn",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "region",
+        "targetKey": "picodrive_region",
+        "kind": "BindFeature",
+        "values": [
+          "Auto"
+        ]
+      },
+      {
+        "configKey": "overclk68k",
+        "targetKey": "picodrive_overclk68k",
+        "kind": "BindFeature",
+        "values": [
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "picodrive_smsfm",
+        "targetKey": "picodrive_smsfm",
+        "kind": "BindBoolFeature",
+        "values": [
+          "on",
+          "off"
+        ]
+      },
+      {
+        "configKey": "picodrive_smsmapper",
+        "targetKey": "picodrive_smsmapper",
+        "kind": "BindFeature",
+        "values": [
+          "Auto"
+        ]
+      },
+      {
+        "configKey": "md_3buttons",
+        "targetKey": "picodrive_input1",
+        "kind": "BindBoolFeature",
+        "values": [
+          "3 button pad",
+          "6 button pad"
+        ]
+      }
+    ],
+    "pokemini": [
+      {
+        "configKey": "pokemini_video_scale",
+        "targetKey": "pokemini_video_scale",
+        "kind": "BindFeature",
+        "values": [
+          "4x"
+        ]
+      },
+      {
+        "configKey": "pokemini_60hz_mode",
+        "targetKey": "pokemini_60hz_mode",
+        "kind": "BindBoolFeatureOn",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "pokemini_palette",
+        "targetKey": "pokemini_palette",
+        "kind": "BindFeature",
+        "values": [
+          "Default"
+        ]
+      },
+      {
+        "configKey": "pokemini_lcdbright",
+        "targetKey": "pokemini_lcdbright",
+        "kind": "BindFeatureSlider",
+        "values": [
+          "0"
+        ]
+      },
+      {
+        "configKey": "pokemini_lcdcontrast",
+        "targetKey": "pokemini_lcdcontrast",
+        "kind": "BindFeatureSlider",
+        "values": [
+          "64"
+        ]
+      },
+      {
+        "configKey": "pokemini_lowpass_filter",
+        "targetKey": "pokemini_lowpass_filter",
+        "kind": "BindFeature",
+        "values": [
+          "auto"
+        ]
+      }
+    ],
+    "potator": [
+      {
+        "configKey": "potator_ghosting",
+        "targetKey": "potator_lcd_ghosting",
+        "kind": "BindFeatureSlider",
+        "values": [
+          "0"
+        ]
+      },
+      {
+        "configKey": "potator_palette",
+        "targetKey": "potator_palette",
+        "kind": "BindFeature",
+        "values": [
+          "default"
+        ]
+      }
+    ],
+    "ppsspp": [
+      {
+        "configKey": "ppsspp_internal_resolution",
+        "targetKey": "ppsspp_internal_resolution",
+        "kind": "BindFeature",
+        "values": [
+          "480x272"
+        ]
+      },
+      {
+        "configKey": "ppsspp_frameskip",
+        "targetKey": "ppsspp_frameskip",
+        "kind": "BindFeature",
+        "values": [
+          "auto"
+        ]
+      },
+      {
+        "configKey": "ppsspp_frameskiptype",
+        "targetKey": "ppsspp_frameskiptype",
+        "kind": "BindFeature",
+        "values": [
+          "auto"
+        ]
+      },
+      {
+        "configKey": "ppsspp_texture_anisotropic_filtering",
+        "targetKey": "ppsspp_texture_anisotropic_filtering",
+        "kind": "BindFeature",
+        "values": [
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "ppsspp_texture_filtering",
+        "targetKey": "ppsspp_texture_filtering",
+        "kind": "BindFeature",
+        "values": [
+          "Auto"
+        ]
+      },
+      {
+        "configKey": "ppsspp_texture_scaling_type",
+        "targetKey": "ppsspp_texture_scaling_type",
+        "kind": "BindFeature",
+        "values": [
+          "xbrz"
+        ]
+      },
+      {
+        "configKey": "ppsspp_texture_scaling_level",
+        "targetKey": "ppsspp_texture_scaling_level",
+        "kind": "BindFeature",
+        "values": [
+          "auto"
+        ]
+      },
+      {
+        "configKey": "ppsspp_texture_deposterize",
+        "targetKey": "ppsspp_texture_deposterize",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "ppsspp_inflight_frames",
+        "targetKey": "ppsspp_inflight_frames",
+        "kind": "BindFeature",
+        "values": [
+          "Up to 2"
+        ]
+      },
+      {
+        "configKey": "ppsspp_texture_replacement",
+        "targetKey": "ppsspp_texture_replacement",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "ppsspp_language",
+        "targetKey": "ppsspp_language",
+        "kind": "BindFeature",
+        "values": [
+          "Automatic"
+        ]
+      },
+      {
+        "configKey": "ppsspp_cpu_core",
+        "targetKey": "ppsspp_cpu_core",
+        "kind": "BindFeature",
+        "values": [
+          "JIT"
+        ]
+      },
+      {
+        "configKey": "ppsspp_cheats",
+        "targetKey": "ppsspp_cheats",
+        "kind": "BindFeature",
+        "values": [
+          "auto"
+        ]
+      },
+      {
+        "configKey": "ppsspp_io_timing_method",
+        "targetKey": "ppsspp_io_timing_method",
+        "kind": "BindFeature",
+        "values": [
+          "Fast"
+        ]
+      },
+      {
+        "configKey": "ppsspp_ignore_bad_memory_access",
+        "targetKey": "ppsspp_ignore_bad_memory_access",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "ppsspp_button_preference",
+        "targetKey": "ppsspp_button_preference",
+        "kind": "BindFeature",
+        "values": [
+          "Cross"
+        ]
+      }
+    ],
+    "prboom": [
+      {
+        "configKey": "prboom_resolution",
+        "targetKey": "prboom-resolution",
+        "kind": "BindFeature",
+        "values": [
+          "320x200"
+        ]
+      },
+      {
+        "configKey": "prboom_recursive",
+        "targetKey": "prboom-find_recursive_on",
+        "kind": "BindBoolFeatureOn",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "prboom_mouse",
+        "targetKey": "prboom-mouse_on",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      }
+    ],
+    "prosystem": [
+      {
+        "configKey": "prosystem_color_depth",
+        "targetKey": "prosystem_color_depth",
+        "kind": "BindFeature",
+        "values": [
+          "16bit"
+        ]
+      },
+      {
+        "configKey": "prosystem_low_pass_filter",
+        "targetKey": "prosystem_low_pass_filter",
+        "kind": "BindFeature",
+        "values": [
+          "auto"
+        ]
+      },
+      {
+        "configKey": "dual_stick_hack",
+        "targetKey": "prosystem_gamepad_dual_stick_hack",
+        "kind": "BindBoolFeature",
+        "values": [
+          "disabled",
+          "enabled"
+        ]
+      }
+    ],
+    "puae": [
+      {
+        "configKey": "video_resolution",
+        "targetKey": "puae_video_resolution",
+        "kind": "BindFeature",
+        "values": [
+          "auto"
+        ]
+      },
+      {
+        "configKey": "video_standard",
+        "targetKey": "puae_video_standard",
+        "kind": "BindFeature",
+        "values": [
+          "PAL auto"
+        ]
+      },
+      {
+        "configKey": "puae_crop",
+        "targetKey": "puae_crop",
+        "kind": "BindFeature",
+        "values": [
+          "auto"
+        ]
+      },
+      {
+        "configKey": "puae_crop_mode",
+        "targetKey": "puae_crop_mode",
+        "kind": "BindFeature",
+        "values": [
+          "both"
+        ]
+      },
+      {
+        "configKey": "puae_gfx_colors",
+        "targetKey": "puae_gfx_colors",
+        "kind": "BindFeature",
+        "values": [
+          "16bit"
+        ]
+      },
+      {
+        "configKey": "cpu_compatibility",
+        "targetKey": "puae_cpu_compatibility",
+        "kind": "BindFeature",
+        "values": [
+          "normal"
+        ]
+      },
+      {
+        "configKey": "cpu_multiplier",
+        "targetKey": "puae_cpu_multiplier",
+        "kind": "BindFeature",
+        "values": [
+          "0"
+        ]
+      },
+      {
+        "configKey": "puae_kickstart",
+        "targetKey": "puae_kickstart",
+        "kind": "BindFeature",
+        "values": [
+          "auto"
+        ]
+      },
+      {
+        "configKey": "puae_analogmouse",
+        "targetKey": "puae_analogmouse",
+        "kind": "BindFeature",
+        "values": [
+          "both"
+        ]
+      },
+      {
+        "configKey": "puae_mouse_speed",
+        "targetKey": "puae_mouse_speed",
+        "kind": "BindFeatureSlider",
+        "values": [
+          "100"
+        ]
+      },
+      {
+        "configKey": "puae_analogmouse_deadzone",
+        "targetKey": "puae_analogmouse_deadzone",
+        "kind": "BindFeatureSlider",
+        "values": [
+          "20"
+        ]
+      },
+      {
+        "configKey": "puae_keyboard_pass_through",
+        "targetKey": "puae_physical_keyboard_pass_through",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "puae_joyport_order",
+        "targetKey": "puae_joyport_order",
+        "kind": "BindFeature",
+        "values": [
+          "1234"
+        ]
+      },
+      {
+        "configKey": "puae_joyport",
+        "targetKey": "puae_joyport",
+        "kind": "BindFeature",
+        "values": [
+          "joystick"
+        ]
+      },
+      {
+        "configKey": "model",
+        "targetKey": "puae_model",
+        "kind": "BindFeature",
+        "values": [
+          "auto"
+        ]
+      },
+      {
+        "configKey": "floppy_speed",
+        "targetKey": "puae_floppy_speed",
+        "kind": "BindFeature",
+        "values": [
+          "100"
+        ]
+      },
+      {
+        "configKey": "whdload",
+        "targetKey": "puae_use_whdload_prefs",
+        "kind": "BindFeature",
+        "values": [
+          "config"
+        ]
+      },
+      {
+        "configKey": "pad_options",
+        "targetKey": "puae_retropad_options",
+        "kind": "BindFeature",
+        "values": [
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "puae_cd_speed",
+        "targetKey": "puae_cd_speed",
+        "kind": "BindFeature",
+        "values": [
+          "100"
+        ]
+      },
+      {
+        "configKey": "puae_cd_delay",
+        "targetKey": "puae_cd_startup_delayed_insert",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "pad32_options",
+        "targetKey": "puae_cd32pad_options",
+        "kind": "BindFeature",
+        "values": [
+          "disabled"
+        ]
+      }
+    ],
+    "px68k": [
+      {
+        "configKey": "px68k_frameskip",
+        "targetKey": "px68k_frameskip",
+        "kind": "BindFeature",
+        "values": [
+          "Full Frame"
+        ]
+      },
+      {
+        "configKey": "px68k_cpuspeed",
+        "targetKey": "px68k_cpuspeed",
+        "kind": "BindFeature",
+        "values": [
+          "10Mhz"
+        ]
+      },
+      {
+        "configKey": "px68k_ramsize",
+        "targetKey": "px68k_ramsize",
+        "kind": "BindFeature",
+        "values": [
+          "2MB"
+        ]
+      },
+      {
+        "configKey": "px68k_joytype",
+        "targetKey": "px68k_joytype1",
+        "kind": "BindFeature",
+        "values": [
+          "Default (2 Buttons)"
+        ]
+      },
+      {
+        "configKey": "px68k_joy_mouse",
+        "targetKey": "px68k_joy_mouse",
+        "kind": "BindFeature",
+        "values": [
+          "Mouse"
+        ]
+      },
+      {
+        "configKey": "px68k_joy1_select",
+        "targetKey": "px68k_joy1_select",
+        "kind": "BindFeature",
+        "values": [
+          "Default"
+        ]
+      }
+    ],
+    "quasi88": [
+      {
+        "configKey": "q88_sound_board",
+        "targetKey": "q88_sound_board",
+        "kind": "BindFeature",
+        "values": [
+          "OPNA"
+        ]
+      },
+      {
+        "configKey": "q88_basic_mode",
+        "targetKey": "q88_basic_mode",
+        "kind": "BindFeature",
+        "values": [
+          "N88 V2"
+        ]
+      },
+      {
+        "configKey": "q88_cpu_clock",
+        "targetKey": "q88_cpu_clock",
+        "kind": "BindFeature",
+        "values": [
+          "4"
+        ]
+      },
+      {
+        "configKey": "q88_pcg-8100",
+        "targetKey": "q88_pcg-8100",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      }
+    ],
+    "race": [
+      {
+        "configKey": "race_language",
+        "targetKey": "race_language",
+        "kind": "BindFeature",
+        "values": [
+          "english"
+        ]
+      }
+    ],
+    "samecdi": [
+      {
+        "configKey": "samecdi_resolution",
+        "targetKey": "same_cdi_altres",
+        "kind": "BindFeature",
+        "values": [
+          "640x480"
+        ]
+      },
+      {
+        "configKey": "same_cdi_throttle",
+        "targetKey": "same_cdi_throttle",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      }
+    ],
+    "sameboy": [
+      {
+        "configKey": "sameboy_model",
+        "targetKey": "sameboy_model",
+        "kind": "BindFeature",
+        "values": [
+          "auto"
+        ]
+      },
+      {
+        "configKey": "sameboy_rtc",
+        "targetKey": "sameboy_rtc",
+        "kind": "BindFeature",
+        "values": [
+          "sync to system clock"
+        ]
+      },
+      {
+        "configKey": "sameboy_screen_layout",
+        "targetKey": "sameboy_screen_layout",
+        "kind": "BindFeature",
+        "values": [
+          "left-right"
+        ]
+      },
+      {
+        "configKey": "sameboy_mono_palette",
+        "targetKey": "sameboy_mono_palette",
+        "kind": "BindFeature",
+        "values": [
+          "greyscale"
+        ]
+      },
+      {
+        "configKey": "sameboy_audio_output",
+        "targetKey": "sameboy_audio_output",
+        "kind": "BindFeature",
+        "values": [
+          "Game Boy #1"
+        ]
+      },
+      {
+        "configKey": "sameboy_color_correction_mode",
+        "targetKey": "sameboy_color_correction_mode",
+        "kind": "BindFeature",
+        "values": [
+          "emulate hardware"
+        ]
+      }
+    ],
+    "sameduck": [
+      {
+        "configKey": "sameduck_colorcorrect",
+        "targetKey": "sameduck_color_correction_mode",
+        "kind": "BindFeature",
+        "values": [
+          "emulate hardware"
+        ]
+      },
+      {
+        "configKey": "sameduck_rumble",
+        "targetKey": "sameduck_rumble",
+        "kind": "BindBoolFeature",
+        "values": [
+          "never",
+          "all games"
+        ]
+      }
+    ],
+    "scummvm": [
+      {
+        "configKey": "scummvm_pointer_device",
+        "targetKey": "scummvm_pointer_device",
+        "kind": "BindFeature",
+        "values": [
+          "mouse"
+        ]
+      },
+      {
+        "configKey": "scummvm_analog_response",
+        "targetKey": "scummvm_analog_response",
+        "kind": "BindFeature",
+        "values": [
+          "linear"
+        ]
+      }
+    ],
+    "snes9x": [
+      {
+        "configKey": "snes9x_region",
+        "targetKey": "snes9x_region",
+        "kind": "BindFeature",
+        "values": [
+          "auto"
+        ]
+      },
+      {
+        "configKey": "snes9x_overscan",
+        "targetKey": "snes9x_overscan",
+        "kind": "BindFeature",
+        "values": [
+          "auto"
+        ]
+      },
+      {
+        "configKey": "snes9x_blargg",
+        "targetKey": "snes9x_blargg",
+        "kind": "BindFeature",
+        "values": [
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "snes9x_hires_blend",
+        "targetKey": "snes9x_hires_blend",
+        "kind": "BindFeature",
+        "values": [
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "snes9x_audio_interpolation",
+        "targetKey": "snes9x_audio_interpolation",
+        "kind": "BindFeature",
+        "values": [
+          "none"
+        ]
+      },
+      {
+        "configKey": "snes9x_overclock_cycles",
+        "targetKey": "snes9x_overclock_cycles",
+        "kind": "BindFeature",
+        "values": [
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "snes9x_overclock_superfx",
+        "targetKey": "snes9x_overclock_superfx",
+        "kind": "BindFeature",
+        "values": [
+          "100%"
+        ]
+      },
+      {
+        "configKey": "snes9x_block_invalid_vram_access",
+        "targetKey": "snes9x_block_invalid_vram_access",
+        "kind": "BindBoolFeatureOn",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "snes9x_echo_buffer_hack",
+        "targetKey": "snes9x_echo_buffer_hack",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "snes9x_lightgun_mode",
+        "targetKey": "snes9x_lightgun_mode",
+        "kind": "BindFeature",
+        "values": [
+          "Lightgun"
+        ]
+      }
+    ],
+    "snes9x2005": [
+      {
+        "configKey": "snes9x_2005_region",
+        "targetKey": "snes9x_2005_region",
+        "kind": "BindFeature",
+        "values": [
+          "auto"
+        ]
+      },
+      {
+        "configKey": "snes9x_2005_frameskip",
+        "targetKey": "snes9x_2005_frameskip",
+        "kind": "BindBoolFeature",
+        "values": [
+          "auto",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "snes9x_2005_reduce_sprite_flicker",
+        "targetKey": "snes9x_2005_reduce_sprite_flicker",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      }
+    ],
+    "stella": [
+      {
+        "configKey": "stella_crop_hoverscan",
+        "targetKey": "stella_crop_hoverscan",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "stella_palette",
+        "targetKey": "stella_palette",
+        "kind": "BindFeature",
+        "values": [
+          "standard"
+        ]
+      },
+      {
+        "configKey": "stella_filter",
+        "targetKey": "stella_filter",
+        "kind": "BindFeature",
+        "values": [
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "stella_phosphor",
+        "targetKey": "stella_phosphor",
+        "kind": "BindBoolFeatureAuto",
+        "values": [
+          "on",
+          "off",
+          "auto"
+        ]
+      },
+      {
+        "configKey": "stella_console",
+        "targetKey": "stella_console",
+        "kind": "BindFeature",
+        "values": [
+          "auto"
+        ]
+      },
+      {
+        "configKey": "stella_lightgun_crosshair",
+        "targetKey": "stella_lightgun_crosshair",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      }
+    ],
+    "stella2014": [
+      {
+        "configKey": "stella2014_color_depth",
+        "targetKey": "stella2014_color_depth",
+        "kind": "BindFeature",
+        "values": [
+          "16bit"
+        ]
+      },
+      {
+        "configKey": "stella2014_mix_frames",
+        "targetKey": "stella2014_mix_frames",
+        "kind": "BindFeature",
+        "values": [
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "stella2014_low_pass_filter",
+        "targetKey": "stella2014_low_pass_filter",
+        "kind": "BindFeature",
+        "values": [
+          "auto"
+        ]
+      }
+    ],
+    "supermodel": [
+      {
+        "configKey": "supermodel_resolution",
+        "targetKey": "supermodel_resolution",
+        "kind": "BindFeature",
+        "values": [
+          "native"
+        ]
+      },
+      {
+        "configKey": "supermodel_vsync",
+        "targetKey": "supermodel_vsync",
+        "kind": "BindBoolFeatureOn",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "supermodel_wide_screen",
+        "targetKey": "supermodel_wide_screen",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "supermodel_service_buttons",
+        "targetKey": "supermodel_service_buttons",
+        "kind": "BindFeature",
+        "values": [
+          "sticks"
+        ]
+      },
+      {
+        "configKey": "supermodel_analog_sensitivity",
+        "targetKey": "supermodel_analog_sensitivity",
+        "kind": "BindFeatureSlider",
+        "values": [
+          "100"
+        ]
+      },
+      {
+        "configKey": "supermodel_crosshairs",
+        "targetKey": "supermodel_crosshairs",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "supermodel_force_feedback",
+        "targetKey": "supermodel_force_feedback",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      }
+    ],
+    "swanstation": [
+      {
+        "configKey": "internal_resolution",
+        "targetKey": "swanstation_GPU_ResolutionScale",
+        "kind": "BindFeature",
+        "values": [
+          "1"
+        ]
+      },
+      {
+        "configKey": "force_ntsc_timings",
+        "targetKey": "swanstation_GPU_ForceNTSCTimings",
+        "kind": "BindBoolFeature",
+        "values": [
+          "true",
+          "false"
+        ]
+      },
+      {
+        "configKey": "widescreen_hack",
+        "targetKey": "swanstation_GPU_WidescreenHack",
+        "kind": "BindBoolFeature",
+        "values": [
+          "true",
+          "false"
+        ]
+      },
+      {
+        "configKey": "swanstation_aspectratio",
+        "targetKey": "swanstation_Display_AspectRatio",
+        "kind": "BindFeature",
+        "values": [
+          "Native"
+        ]
+      },
+      {
+        "configKey": "swanstation_cropmode",
+        "targetKey": "swanstation_Display_CropMode",
+        "kind": "BindFeature",
+        "values": [
+          "Overscan"
+        ]
+      },
+      {
+        "configKey": "msaa",
+        "targetKey": "swanstation_GPU_MSAA",
+        "kind": "BindFeature",
+        "values": [
+          "1"
+        ]
+      },
+      {
+        "configKey": "swanstation_texturefilter",
+        "targetKey": "swanstation_GPU_TextureFilter",
+        "kind": "BindFeature",
+        "values": [
+          "Nearest"
+        ]
+      },
+      {
+        "configKey": "scaled_dithering",
+        "targetKey": "swanstation_GPU_ScaledDithering",
+        "kind": "BindBoolFeatureOn",
+        "values": [
+          "true",
+          "false"
+        ]
+      },
+      {
+        "configKey": "truecolor",
+        "targetKey": "swanstation_GPU_TrueColor",
+        "kind": "BindBoolFeature",
+        "values": [
+          "true",
+          "false"
+        ]
+      },
+      {
+        "configKey": "swanstation_region",
+        "targetKey": "swanstation_Console_Region",
+        "kind": "BindFeature",
+        "values": [
+          "Auto"
+        ]
+      },
+      {
+        "configKey": "skip_bios",
+        "targetKey": "swanstation_BIOS_PatchFastBoot",
+        "kind": "BindBoolFeatureOn",
+        "values": [
+          "true",
+          "false"
+        ]
+      },
+      {
+        "configKey": "swanstation_cpucore",
+        "targetKey": "swanstation_CPU_ExecutionMode",
+        "kind": "BindFeature",
+        "values": [
+          "Interpreter"
+        ]
+      },
+      {
+        "configKey": "swanstation_memcard1",
+        "targetKey": "swanstation_MemoryCards_Card1Type",
+        "kind": "BindFeature",
+        "values": [
+          "Libretro"
+        ]
+      },
+      {
+        "configKey": "swanstation_memcard2",
+        "targetKey": "swanstation_MemoryCards_Card2Type",
+        "kind": "BindFeature",
+        "values": [
+          "None"
+        ]
+      },
+      {
+        "configKey": "swanstation_GPU",
+        "targetKey": "swanstation_GPU_Renderer",
+        "kind": "BindFeature",
+        "values": [
+          "Auto"
+        ]
+      },
+      {
+        "configKey": "swanstation_Controller_AnalogCombo",
+        "targetKey": "swanstation_Controller_AnalogCombo",
+        "kind": "BindFeature",
+        "values": [
+          "4"
+        ]
+      }
+    ],
+    "tgbdual": [
+      {
+        "configKey": "tgbdual_screen_placement",
+        "targetKey": "tgbdual_screen_placement",
+        "kind": "BindFeature",
+        "values": [
+          "left-right"
+        ]
+      }
+    ],
+    "tyrquake": [
+      {
+        "configKey": "quake_resolution",
+        "targetKey": "tyrquake_resolution",
+        "kind": "BindFeature",
+        "values": [
+          "320x200"
+        ]
+      },
+      {
+        "configKey": "quake_invert_y_axis",
+        "targetKey": "tyrquake_invert_y_axis",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "quake_analog_deadzone",
+        "targetKey": "tyrquake_analog_deadzone",
+        "kind": "BindFeatureSlider",
+        "values": [
+          "15"
+        ]
+      },
+      {
+        "configKey": "quake_rumble",
+        "targetKey": "tyrquake_rumble",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      }
+    ],
+    "vecx": [
+      {
+        "configKey": "vecx_res_multi",
+        "targetKey": "vecx_res_multi",
+        "kind": "BindFeature",
+        "values": [
+          "1"
+        ]
+      },
+      {
+        "configKey": "vecx_use_hw",
+        "targetKey": "vecx_use_hw",
+        "kind": "BindBoolFeature",
+        "values": [
+          "Hardware",
+          "Software"
+        ]
+      }
+    ],
+    "vicex128": [
+      {
+        "configKey": "vice_c128_model",
+        "targetKey": "vice_c128_model",
+        "kind": "BindFeature",
+        "values": [
+          "C128 NTSC"
+        ]
+      },
+      {
+        "configKey": "vice_c128_ram_expansion_unit",
+        "targetKey": "vice_c128_ram_expansion_unit",
+        "kind": "BindFeature",
+        "values": [
+          "none"
+        ]
+      },
+      {
+        "configKey": "warp_boost",
+        "targetKey": "vice_warp_boost",
+        "kind": "BindBoolFeatureOn",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "vice_drive_true_emulation",
+        "targetKey": "vice_drive_true_emulation",
+        "kind": "BindBoolFeatureOn",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "vice_aspect_ratio",
+        "targetKey": "vice_aspect_ratio",
+        "kind": "BindFeature",
+        "values": [
+          "auto"
+        ]
+      },
+      {
+        "configKey": "vice_crop",
+        "targetKey": "vice_crop",
+        "kind": "BindFeature",
+        "values": [
+          "auto"
+        ]
+      },
+      {
+        "configKey": "vice_crop_mode",
+        "targetKey": "vice_crop_mode",
+        "kind": "BindFeature",
+        "values": [
+          "both"
+        ]
+      },
+      {
+        "configKey": "vice_external_palette",
+        "targetKey": "vice_external_palette",
+        "kind": "BindFeature",
+        "values": [
+          "colodore"
+        ]
+      },
+      {
+        "configKey": "vice_gfx_colors",
+        "targetKey": "vice_gfx_colors",
+        "kind": "BindFeature",
+        "values": [
+          "16bit"
+        ]
+      },
+      {
+        "configKey": "vice_joyport",
+        "targetKey": "vice_joyport",
+        "kind": "BindFeature",
+        "values": [
+          "2"
+        ]
+      },
+      {
+        "configKey": "vice_joyport_type",
+        "targetKey": "vice_joyport_type",
+        "kind": "BindFeature",
+        "values": [
+          "1"
+        ]
+      },
+      {
+        "configKey": "vice_retropad_options",
+        "targetKey": "vice_retropad_options",
+        "kind": "BindFeature",
+        "values": [
+          "disabled"
+        ]
+      }
+    ],
+    "vicex64": [
+      {
+        "configKey": "c64_model",
+        "targetKey": "vice_c64_model",
+        "kind": "BindFeature",
+        "values": [
+          "C64 NTSC auto"
+        ]
+      },
+      {
+        "configKey": "vice_ram_expansion_unit",
+        "targetKey": "vice_ram_expansion_unit",
+        "kind": "BindFeature",
+        "values": [
+          "none"
+        ]
+      },
+      {
+        "configKey": "warp_boost",
+        "targetKey": "vice_warp_boost",
+        "kind": "BindBoolFeatureOn",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "vice_drive_true_emulation",
+        "targetKey": "vice_drive_true_emulation",
+        "kind": "BindBoolFeatureOn",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "vice_aspect_ratio",
+        "targetKey": "vice_aspect_ratio",
+        "kind": "BindFeature",
+        "values": [
+          "auto"
+        ]
+      },
+      {
+        "configKey": "vice_crop",
+        "targetKey": "vice_crop",
+        "kind": "BindFeature",
+        "values": [
+          "auto"
+        ]
+      },
+      {
+        "configKey": "vice_crop_mode",
+        "targetKey": "vice_crop_mode",
+        "kind": "BindFeature",
+        "values": [
+          "both"
+        ]
+      },
+      {
+        "configKey": "vice_external_palette",
+        "targetKey": "vice_external_palette",
+        "kind": "BindFeature",
+        "values": [
+          "colodore"
+        ]
+      },
+      {
+        "configKey": "vice_gfx_colors",
+        "targetKey": "vice_gfx_colors",
+        "kind": "BindFeature",
+        "values": [
+          "16bit"
+        ]
+      },
+      {
+        "configKey": "vice_joyport",
+        "targetKey": "vice_joyport",
+        "kind": "BindFeature",
+        "values": [
+          "2"
+        ]
+      },
+      {
+        "configKey": "vice_joyport_type",
+        "targetKey": "vice_joyport_type",
+        "kind": "BindFeature",
+        "values": [
+          "1"
+        ]
+      },
+      {
+        "configKey": "vice_retropad_options",
+        "targetKey": "vice_retropad_options",
+        "kind": "BindFeature",
+        "values": [
+          "disabled"
+        ]
+      }
+    ],
+    "vicexpet": [
+      {
+        "configKey": "vice_pet_model",
+        "targetKey": "vice_pet_model",
+        "kind": "BindFeature",
+        "values": [
+          "8032"
+        ]
+      },
+      {
+        "configKey": "vice_drive_true_emulation",
+        "targetKey": "vice_drive_true_emulation",
+        "kind": "BindBoolFeatureOn",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "vice_crop",
+        "targetKey": "vice_crop",
+        "kind": "BindFeature",
+        "values": [
+          "auto"
+        ]
+      },
+      {
+        "configKey": "vice_crop_mode",
+        "targetKey": "vice_crop_mode",
+        "kind": "BindFeature",
+        "values": [
+          "both"
+        ]
+      },
+      {
+        "configKey": "vice_pet_external_palette",
+        "targetKey": "vice_pet_external_palette",
+        "kind": "BindFeature",
+        "values": [
+          "default"
+        ]
+      }
+    ],
+    "vicexplus4": [
+      {
+        "configKey": "vice_plus4_model",
+        "targetKey": "vice_plus4_model",
+        "kind": "BindFeature",
+        "values": [
+          "auto"
+        ]
+      },
+      {
+        "configKey": "vice_drive_true_emulation",
+        "targetKey": "vice_drive_true_emulation",
+        "kind": "BindBoolFeatureOn",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "vice_aspect_ratio",
+        "targetKey": "vice_aspect_ratio",
+        "kind": "BindFeature",
+        "values": [
+          "auto"
+        ]
+      },
+      {
+        "configKey": "vice_crop",
+        "targetKey": "vice_crop",
+        "kind": "BindFeature",
+        "values": [
+          "auto"
+        ]
+      },
+      {
+        "configKey": "vice_crop_mode",
+        "targetKey": "vice_crop_mode",
+        "kind": "BindFeature",
+        "values": [
+          "both"
+        ]
+      },
+      {
+        "configKey": "vice_plus4_external_palette",
+        "targetKey": "vice_plus4_external_palette",
+        "kind": "BindFeature",
+        "values": [
+          "colodore_ted"
+        ]
+      },
+      {
+        "configKey": "vice_gfx_colors",
+        "targetKey": "vice_gfx_colors",
+        "kind": "BindFeature",
+        "values": [
+          "16bit"
+        ]
+      },
+      {
+        "configKey": "vice_joyport",
+        "targetKey": "vice_joyport",
+        "kind": "BindFeature",
+        "values": [
+          "2"
+        ]
+      },
+      {
+        "configKey": "vice_joyport_type",
+        "targetKey": "vice_joyport_type",
+        "kind": "BindFeature",
+        "values": [
+          "1"
+        ]
+      },
+      {
+        "configKey": "vice_retropad_options",
+        "targetKey": "vice_retropad_options",
+        "kind": "BindFeature",
+        "values": [
+          "disabled"
+        ]
+      }
+    ],
+    "vicexvic": [
+      {
+        "configKey": "vic20_model",
+        "targetKey": "vice_vic20_model",
+        "kind": "BindFeature",
+        "values": [
+          "VIC20 NTSC auto"
+        ]
+      },
+      {
+        "configKey": "vic20_memexpansion",
+        "targetKey": "vice_vic20_memory_expansions",
+        "kind": "BindFeature",
+        "values": [
+          "none"
+        ]
+      },
+      {
+        "configKey": "vice_drive_true_emulation",
+        "targetKey": "vice_drive_true_emulation",
+        "kind": "BindBoolFeatureOn",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "vice_aspect_ratio",
+        "targetKey": "vice_aspect_ratio",
+        "kind": "BindFeature",
+        "values": [
+          "auto"
+        ]
+      },
+      {
+        "configKey": "vice_crop",
+        "targetKey": "vice_crop",
+        "kind": "BindFeature",
+        "values": [
+          "auto"
+        ]
+      },
+      {
+        "configKey": "vice_crop_mode",
+        "targetKey": "vice_crop_mode",
+        "kind": "BindFeature",
+        "values": [
+          "both"
+        ]
+      },
+      {
+        "configKey": "vic20_palette",
+        "targetKey": "vice_vic20_external_palette",
+        "kind": "BindFeature",
+        "values": [
+          "colodore_vic"
+        ]
+      },
+      {
+        "configKey": "vice_gfx_colors",
+        "targetKey": "vice_gfx_colors",
+        "kind": "BindFeature",
+        "values": [
+          "16bit"
+        ]
+      },
+      {
+        "configKey": "vice_joyport",
+        "targetKey": "vice_joyport",
+        "kind": "BindFeature",
+        "values": [
+          "2"
+        ]
+      },
+      {
+        "configKey": "vice_joyport_type",
+        "targetKey": "vice_joyport_type",
+        "kind": "BindFeature",
+        "values": [
+          "1"
+        ]
+      },
+      {
+        "configKey": "vice_retropad_options",
+        "targetKey": "vice_retropad_options",
+        "kind": "BindFeature",
+        "values": [
+          "disabled"
+        ]
+      }
+    ],
+    "virtualjaguar": [
+      {
+        "configKey": "usefastblitter",
+        "targetKey": "virtualjaguar_usefastblitter",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "vj_pal",
+        "targetKey": "virtualjaguar_pal",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "bios_vj",
+        "targetKey": "virtualjaguar_bios",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "doom_res_hack",
+        "targetKey": "virtualjaguar_doom_res_hack",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      }
+    ],
+    "vitaquake2": [
+      {
+        "configKey": "vitaquakeii_resolution",
+        "targetKey": "vitaquakeii_resolution",
+        "kind": "BindFeature",
+        "values": [
+          "960x544"
+        ]
+      },
+      {
+        "configKey": "vitaquakeii_gl_texture_filtering",
+        "targetKey": "vitaquakeii_gl_texture_filtering",
+        "kind": "BindFeature",
+        "values": [
+          "nearest_hq"
+        ]
+      },
+      {
+        "configKey": "vitaquakeii_gl_shadows",
+        "targetKey": "vitaquakeii_gl_shadows",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "vitaquakeii_hand",
+        "targetKey": "vitaquakeii_hand",
+        "kind": "BindFeature",
+        "values": [
+          "right"
+        ]
+      },
+      {
+        "configKey": "vitaquakeii_xhair",
+        "targetKey": "vitaquakeii_xhair",
+        "kind": "BindFeature",
+        "values": [
+          "cross"
+        ]
+      },
+      {
+        "configKey": "vitaquakeii_renderer",
+        "targetKey": "vitaquakeii_renderer",
+        "kind": "BindFeature",
+        "values": [
+          "opengl"
+        ]
+      },
+      {
+        "configKey": "vitaquakeii_fps",
+        "targetKey": "vitaquakeii_fps",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "vitaquakeii_invert_y_axis",
+        "targetKey": "vitaquakeii_invert_y_axis",
+        "kind": "BindBoolFeatureOn",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "vitaquakeii_analog_deadzone",
+        "targetKey": "vitaquakeii_analog_deadzone",
+        "kind": "BindFeatureSlider",
+        "values": [
+          "15"
+        ]
+      },
+      {
+        "configKey": "vitaquakeii_mouse_sensitivity",
+        "targetKey": "vitaquakeii_mouse_sensitivity",
+        "kind": "BindFeatureSlider",
+        "values": [
+          "3.0"
+        ]
+      },
+      {
+        "configKey": "vitaquakeii_rumble",
+        "targetKey": "vitaquakeii_rumble",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "vitaquakeii_aimfix",
+        "targetKey": "vitaquakeii_aimfix",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      }
+    ],
+    "x1": [
+      {
+        "configKey": "x1_resolute",
+        "targetKey": "X1_RESOLUTE",
+        "kind": "BindFeature",
+        "values": [
+          "LOW"
+        ]
+      },
+      {
+        "configKey": "x1_romtype",
+        "targetKey": "X1_ROMTYPE",
+        "kind": "BindFeature",
+        "values": [
+          "X1"
+        ]
+      },
+      {
+        "configKey": "x1_keymode",
+        "targetKey": "X1_KEY_MODE",
+        "kind": "BindFeature",
+        "values": [
+          "Keyboard"
+        ]
+      }
+    ],
+    "yabasanshiro": [
+      {
+        "configKey": "yabasanshiro_resolution_mode",
+        "targetKey": "yabasanshiro_resolution_mode",
+        "kind": "BindFeature",
+        "values": [
+          "original"
+        ]
+      },
+      {
+        "configKey": "yabasanshiro_frameskip",
+        "targetKey": "yabasanshiro_frameskip",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      {
+        "configKey": "yabasanshiro_system_language",
+        "targetKey": "yabasanshiro_system_language",
+        "kind": "BindFeature",
+        "values": [
+          "english"
+        ]
+      },
+      {
+        "configKey": "yabasanshiro_addon_cart",
+        "targetKey": "yabasanshiro_addon_cart",
+        "kind": "BindFeature",
+        "values": [
+          "4M_extended_ram"
+        ]
+      },
+      {
+        "configKey": "yabasanshiro_force_hle_bios",
+        "targetKey": "yabasanshiro_force_hle_bios",
+        "kind": "BindBoolFeature",
+        "values": [
+          "enabled",
+          "disabled"
+        ]
+      }
+    ]
+  }
+}

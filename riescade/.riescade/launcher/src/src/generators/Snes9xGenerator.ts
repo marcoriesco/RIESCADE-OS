@@ -47,6 +47,8 @@ export class Snes9xGenerator extends BaseGenerator {
       writeBool('snes9x_showmenu', 'Display\\Win', 'HideMenu', 'FALSE', 'TRUE');
       writeBool('snes9x_framerate', 'Display', 'FrameRate', 'ON', 'OFF');
       writeBool('snes9x_dinput', 'Controls', 'UseDirectInput');
+      writeBool('fullscreen', 'Display\\Win', 'Fullscreen:Enabled');
+      writeBool('fullscreen', 'Display\\Win', 'FullscreenOnOpen');
 
       const ratio = setting('snes9x_ratio');
       if (ratio !== 'auto') {

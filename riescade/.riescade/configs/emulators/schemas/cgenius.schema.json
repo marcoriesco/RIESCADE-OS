@@ -181,11 +181,11 @@
           "configKey": "cgenius_hud"
         },
         {
-          "id": "cgenius_fps",
+          "id": "cgenius_showfps",
           "label": "SHOW FPS",
           "type": "toggle",
           "default": "auto",
-          "configKey": "cgenius_fps"
+          "configKey": "cgenius_showfps"
         }
       ]
     },

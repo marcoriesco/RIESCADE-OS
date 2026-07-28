@@ -38433,6 +38433,7 @@
           "type": "select",
           "default": "auto",
           "configKey": "craft_resolution",
+          "core": "craft",
           "values": [
             {
               "label": "AUTO",
@@ -38531,6 +38532,7 @@
           "type": "select",
           "default": "auto",
           "configKey": "craft_field_of_view",
+          "core": "craft",
           "values": [
             {
               "label": "AUTO",
@@ -38545,6 +38547,7 @@
           "type": "select",
           "default": "auto",
           "configKey": "craft_draw_distance",
+          "core": "craft",
           "values": [
             {
               "label": "AUTO",
@@ -38558,7 +38561,8 @@
           "description": "Show game information in the upper left corner of Craft.",
           "type": "toggle",
           "default": "auto",
-          "configKey": "craft_show_info_text"
+          "configKey": "craft_show_info_text",
+          "core": "craft"
         },
         {
           "id": "craft_inverted_aim",
@@ -38566,7 +38570,8 @@
           "description": "Invert up and down crosshair aiming controls.",
           "type": "toggle",
           "default": "auto",
-          "configKey": "craft_inverted_aim"
+          "configKey": "craft_inverted_aim",
+          "core": "craft"
         },
         {
           "id": "gong_player2",
@@ -38575,6 +38580,7 @@
           "type": "select",
           "default": "auto",
           "configKey": "gong_player2",
+          "core": "gong",
           "values": [
             {
               "label": "AUTO",
@@ -38597,6 +38603,7 @@
           "type": "select",
           "default": "auto",
           "configKey": "mrboom_aspect",
+          "core": "mrboom",
           "values": [
             {
               "label": "AUTO",
@@ -38623,6 +38630,7 @@
           "type": "select",
           "default": "auto",
           "configKey": "mrboom_levelselect",
+          "core": "mrboom",
           "values": [
             {
               "label": "AUTO",
@@ -38673,6 +38681,7 @@
           "type": "select",
           "default": "auto",
           "configKey": "mrboom_teammode",
+          "core": "mrboom",
           "values": [
             {
               "label": "AUTO",

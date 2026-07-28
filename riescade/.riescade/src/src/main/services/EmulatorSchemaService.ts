@@ -16,6 +16,7 @@ export interface SchemaOption {
   step?: number
   suffix?: string
   dynamicSource?: 'libretro-shaders' | 'libretro-decorations' | 'libretro-video-filters'
+  incompleteValues?: boolean
 }
 
 export interface SchemaGroup {
@@ -99,6 +100,7 @@ export class EmulatorSchemaService {
     if (!schema) return null
     const hydrated = JSON.parse(JSON.stringify(schema)) as EmulatorSchema
     this.hydrateDynamicResources(hydrated)
+    if (hydrated.id === 'libretro') this.hydrateInstalledLibretroCores(hydrated)
     return hydrated
   }
 
@@ -110,12 +112,37 @@ export class EmulatorSchemaService {
     }
     for (const group of schema.groups) {
       for (const option of group.options) {
-        if (!option.dynamicSource) continue
-        option.values = [
-          { label: 'AUTO', value: 'auto' },
-          { label: 'Desativado', value: 'none' },
-          ...(dynamicValues[option.dynamicSource] || [])
-        ]
+        if (option.dynamicSource) {
+          option.values = [
+            { label: 'AUTO', value: 'auto' },
+            { label: 'Desativado', value: 'none' },
+            ...(dynamicValues[option.dynamicSource] || [])
+          ]
+        } else if (
+          option.type === 'select'
+          && option.configKey !== 'retroarch_core'
+          && option.values?.every(value => value.value === 'auto')
+        ) {
+          option.incompleteValues = true
+        }
+      }
+    }
+  }
+
+  private hydrateInstalledLibretroCores(schema: EmulatorSchema): void {
+    const coresDir = join(getEmulatorsPath(), 'retroarch', 'cores')
+    if (!existsSync(coresDir)) return
+    const installed = new Set(
+      readdirSync(coresDir)
+        .filter(file => file.toLowerCase().endsWith('_libretro.dll'))
+        .map(file => file.replace(/_libretro\.dll$/i, '').toLowerCase())
+    )
+    for (const group of schema.groups) {
+      for (const option of group.options) {
+        if (option.configKey !== 'retroarch_core' || !option.values) continue
+        option.values = option.values.filter(value =>
+          value.value === 'auto' || installed.has(String(value.value).toLowerCase())
+        )
       }
     }
   }
