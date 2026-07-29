@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "catalogVersion": "2026.07.29-2138d804ce2e",
+  "generatedAt": "2026-07-29T13:13:57.217Z",
+  "platformCount": 7,
+  "gameCount": 1548,
+  "databaseSize": 892928,
+  "databaseSha256": "2138d804ce2e67490704b4d9a2e3b71a9f7ce4f744c2f2640c656ec04efbf77a",
+  "platforms": [
+    {
+      "id": "bigfish",
+      "gameCount": 14
+    },
+    {
+      "id": "gog",
+      "gameCount": 1
+    },
+    {
+      "id": "megadrive",
+      "gameCount": 699
+    },
+    {
+      "id": "scummvm",
+      "gameCount": 35
+    },
+    {
+      "id": "snes",
+      "gameCount": 772
+    },
+    {
+      "id": "touhou",
+      "gameCount": 25
+    },
+    {
+      "id": "windows",
+      "gameCount": 2
+    }
+  ]
+}

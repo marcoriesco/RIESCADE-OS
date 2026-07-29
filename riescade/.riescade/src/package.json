@@ -17,7 +17,11 @@
     "release": "node scripts/release.js",
     "preview": "electron-vite preview",
     "convert-webp": "node scripts/convert-webp.js",
-    "convert-shaders": "node scripts/convert-shader-profiles.js"
+    "convert-shaders": "node scripts/convert-shader-profiles.js",
+    "catalog:download": "node scripts/archive-catalog/download.js",
+    "catalog:build": "node scripts/archive-catalog/electron-node.js build.js",
+    "catalog:validate": "node scripts/archive-catalog/electron-node.js validate.js",
+    "catalog:prepare": "node scripts/archive-catalog/prepare.js"
   },
   "dependencies": {
     "@electron-toolkit/preload": "^3.0.0",
@@ -89,6 +93,15 @@
     "asarUnpack": [
       "node_modules/better-sqlite3/**/*.node"
     ],
-    "extraResources": []
+    "extraResources": [
+      {
+        "from": "src/main/resources/game-catalog",
+        "to": "game-catalog",
+        "filter": [
+          "archive-catalog.sqlite",
+          "catalog-manifest.json"
+        ]
+      }
+    ]
   }
 }

@@ -17,6 +17,7 @@ import { InputDeviceService } from './services/InputDeviceService'
 import { registerUpdaterIpc } from './services/UpdaterService'
 import { registerAppDownloadIpc } from './services/AppDownloadService'
 import { registerTorrentDownloadIpc } from './services/TorrentDownloadService'
+import { archiveCatalogService } from './services/ArchiveCatalogService'
 import {
   AppAuthService,
   findProtocolUrl,
@@ -597,6 +598,11 @@ function createWindow(): void {
 
 
 app.whenReady().then(() => {
+  try {
+    archiveCatalogService.initialize()
+  } catch (error) {
+    console.error('[ArchiveCatalog] Não foi possível inicializar o catálogo local.', error)
+  }
   appAuthService.loadStoredSession()
   const handleDisplayChange = () => {
     applyConfiguredDisplayPreference()
@@ -1925,6 +1931,10 @@ app.whenReady().then(() => {
   app.on('activate', function () {
     if (BrowserWindow.getAllWindows().length === 0) createWindow()
   })
+})
+
+app.on('will-quit', () => {
+  archiveCatalogService.close()
 })
 
 app.on('window-all-closed', () => {

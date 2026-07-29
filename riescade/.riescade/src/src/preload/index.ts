@@ -117,6 +117,7 @@ const api = {
     ipcRenderer.invoke('app-list-download-catalog', platform),
   downloadAsset: (platform: string, assetId: string) =>
     ipcRenderer.invoke('app-download-asset', platform, assetId),
+  downloadBiosPack: () => ipcRenderer.invoke('app-download-bios-pack'),
   downloadRomsetAsset: (platform: string, filename: string) =>
     ipcRenderer.invoke('app-download-romset-asset', platform, filename),
   getRomsetUpdateInfo: (platform: string) =>

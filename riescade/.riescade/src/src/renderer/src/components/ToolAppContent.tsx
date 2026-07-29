@@ -801,6 +801,8 @@ export default function ToolAppContent({
   const { t, setLanguage } = useI18n();
   const [activeSettingsTab, setActiveSettingsTab] = useState("conta");
   const [activeDownloadsTab, setActiveDownloadsTab] = useState<"games" | "media" | "emulators">("games");
+  const [biosPackDownloading, setBiosPackDownloading] = useState(false);
+  const [biosPackMessage, setBiosPackMessage] = useState("");
   const [activeEmuSubmenu, setActiveEmuSubmenu] = useState<string>("global");
   const [emuMenuOpen, setEmuMenuOpen] = useState(false);
   const [settingsNavSearch, setSettingsNavSearch] = useState("");
@@ -1632,6 +1634,58 @@ export default function ToolAppContent({
 
                   <RadixTabContent value="games">
                     <>
+                      <SettingGroup label="Pack de BIOS" />
+                      <div className="mb-5 max-w-xl rounded-xl border border-fuchsia-400/20 bg-fuchsia-400/10 p-4">
+                        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                          <div className="min-w-0">
+                            <p className="text-sm font-semibold text-white">
+                              Pack de BIOS RIESCADE
+                            </p>
+                            <p className="mt-1 text-xs leading-relaxed text-white/55">
+                              Baixa o arquivo oficial bios.zip e instala seu conteúdo diretamente na pasta bios.
+                            </p>
+                          </div>
+                          <button
+                            type="button"
+                            disabled={biosPackDownloading}
+                            onClick={async () => {
+                              setBiosPackDownloading(true);
+                              setBiosPackMessage("");
+                              try {
+                                await window.api.downloadBiosPack();
+                                setBiosPackMessage("Pack de BIOS instalado com sucesso.");
+                              } catch (error) {
+                                setBiosPackMessage(
+                                  error instanceof Error ? error.message : String(error)
+                                );
+                              } finally {
+                                setBiosPackDownloading(false);
+                              }
+                            }}
+                            className="inline-flex shrink-0 items-center justify-center gap-2 rounded-lg bg-fuchsia-600 px-4 py-2.5 text-xs font-semibold text-white transition hover:bg-fuchsia-500 disabled:cursor-wait disabled:opacity-60"
+                          >
+                            {biosPackDownloading ? (
+                              <Loader2 className="h-4 w-4 animate-spin" />
+                            ) : (
+                              <CloudDownload className="h-4 w-4" />
+                            )}
+                            {biosPackDownloading ? "Baixando..." : "Baixar BIOS"}
+                          </button>
+                        </div>
+                        {biosPackMessage && (
+                          <p
+                            className={`mt-3 text-xs ${
+                              biosPackMessage.includes("sucesso")
+                                ? "text-emerald-300"
+                                : "text-rose-300"
+                            }`}
+                            role="status"
+                          >
+                            {biosPackMessage}
+                          </p>
+                        )}
+                      </div>
+
                       <SettingGroup label="Comportamento" />
                       <SettingToggle
                         label="Substituir games existentes"

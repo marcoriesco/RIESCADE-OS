@@ -975,22 +975,27 @@ export default function SystemAppContent({
     setIsStartingPlatformDownload(true);
     try {
       await window.api.saveSetting('Downloads.Games.Overwrite', overwriteGamesOpt, 'bool');
-      await window.api.saveSetting('Downloads.Media.Overwrite', overwriteMediaOpt, 'bool');
-
-      if (!platformDownloadInfo.torrentUrl) {
-        throw new Error(`O arquivo torrent de ${system.fullname} não está disponível no servidor.`);
-      }
-      const torrentSource = platformDownloadInfo.torrentUrl;
-      await window.api.startPlatformTorrent(system.name, torrentSource);
-
       setShowFullSystemTorrentModal(false);
       window.dispatchEvent(new CustomEvent("show-toast", {
         detail: {
           title: "Download Iniciado",
-          description: `Baixando a plataforma ${system.fullname} diretamente pelo RIESCADE OS.`,
+          description: `Baixando os jogos de ${system.fullname} pelo Google Drive.`,
           type: "success"
         }
       }));
+
+      const result = await window.api.downloadPlatform(system.name);
+      window.dispatchEvent(new CustomEvent("show-toast", {
+        detail: {
+          title: result.failed > 0 ? "Plataforma concluída com avisos" : "Plataforma instalada",
+          description:
+            `${result.downloaded} jogos baixados, ${result.skipped} preservados` +
+            (result.failed > 0 ? ` e ${result.failed} com falha.` : "."),
+          type: result.failed > 0 ? "warning" : "success"
+        }
+      }));
+      const refreshedGames = await loadGamesWithCatalog(system.name);
+      setGames(refreshedGames);
     } catch (err: any) {
       window.dispatchEvent(new CustomEvent("show-toast", {
         detail: {
@@ -3393,8 +3398,10 @@ export default function SystemAppContent({
                 {/* Overview grid */}
                 <div className="grid grid-cols-2 gap-3 bg-black/30 border border-white/5 p-3.5 rounded-xl">
                   <div className="flex flex-col gap-0.5">
-                    <span className="text-[10px] text-white/40 uppercase font-semibold">Jogos Disponíveis</span>
-                    <span className="text-sm font-bold text-white/90">{platformDownloadInfo.gameCount} jogos</span>
+                    <span className="text-[10px] text-white/40 uppercase font-semibold">Jogos para baixar</span>
+                    <span className="text-sm font-bold text-white/90">
+                      {platformDownloadInfo.gameCount} de {platformDownloadInfo.totalGameCount}
+                    </span>
                   </div>
                   <div className="flex flex-col gap-0.5">
                     <span className="text-[10px] text-white/40 uppercase font-semibold">Tamanho do Download</span>
@@ -3455,35 +3462,22 @@ export default function SystemAppContent({
                         const val = e.target.checked;
                         setOverwriteGamesOpt(val);
                         await window.api.saveSetting('Downloads.Games.Overwrite', val, 'bool');
-                      }}
-                      className="w-4 h-4 accent-range cursor-pointer"
-                    />
-                  </label>
-                  <label className="flex items-center justify-between cursor-pointer select-none text-xs">
-                    <span className="text-white/80">Substituir mídias locais existentes</span>
-                    <input
-                      type="checkbox"
-                      checked={overwriteMediaOpt}
-                      onChange={async (e) => {
-                        const val = e.target.checked;
-                        setOverwriteMediaOpt(val);
-                        await window.api.saveSetting('Downloads.Media.Overwrite', val, 'bool');
+                        const refreshedInfo = await window.api.getPlatformDownloadInfo(system.name);
+                        setPlatformDownloadInfo(refreshedInfo);
                       }}
                       className="w-4 h-4 accent-range cursor-pointer"
                     />
                   </label>
                   <p className="text-[10px] text-white/40 mt-1">
-                    {overwriteGamesOpt || overwriteMediaOpt
-                      ? 'Arquivos locais correspondentes serão sobrescritos durante a cópia.'
-                      : 'Arquivos locais existentes serão preservados; apenas itens ausentes serão adicionados.'}
+                    {overwriteGamesOpt
+                      ? 'Todos os jogos serão baixados novamente e os arquivos locais correspondentes serão substituídos.'
+                      : `${platformDownloadInfo.installedGameCount} jogos já instalados serão preservados; apenas os ausentes serão baixados.`}
                   </p>
                 </div>
 
                 {/* Download Method Note */}
                 <p className="text-[11px] text-white/40 leading-relaxed">
-                  {platformDownloadInfo.downloadMethod === 'torrent-external'
-                    ? 'O download será iniciado abrindo o link/arquivo torrent no seu cliente torrent padrão.'
-                    : 'Os arquivos serão baixados temporariamente e adicionados automaticamente à biblioteca do RIESCADE.'}
+                  Os jogos serão baixados em uma fila pelo Google Drive e adicionados automaticamente à biblioteca do RIESCADE. O pacote _media.zip não faz parte desta fila.
                 </p>
               </div>
             ) : null}

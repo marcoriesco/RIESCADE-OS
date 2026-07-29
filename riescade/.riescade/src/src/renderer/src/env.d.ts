@@ -115,6 +115,11 @@ declare global {
         filename: string
         sha256: string
       }>
+      downloadBiosPack: () => Promise<{
+        path: string
+        filename: string
+        sha256: string
+      }>
       downloadRomsetAsset: (platform: string, filename: string) => Promise<{
         path: string
         filename: string
@@ -150,6 +155,8 @@ declare global {
       getPlatformDownloadInfo: (platform: string) => Promise<{
         platform: string
         gameCount: number
+        totalGameCount: number
+        installedGameCount: number
         downloadBytes: number
         installedBytes: number
         availableBytes: number
@@ -160,14 +167,17 @@ declare global {
         hasEnoughSpace: boolean
         overwriteGames: boolean
         overwriteMedia: boolean
-        downloadMethod: 'managed' | 'torrent-external' | 'direct'
-        torrentUrl?: string
+        downloadMethod: 'managed'
       }>
       startPlatformTorrent: (platform: string, torrentSource: string) => Promise<string>
       pausePlatformTorrent: (taskId: string) => Promise<void>
       resumePlatformTorrent: (taskId: string) => Promise<void>
       cancelPlatformTorrent: (taskId: string) => Promise<void>
-      downloadPlatform: (platform: string) => Promise<void>
+      downloadPlatform: (platform: string) => Promise<{
+        downloaded: number
+        failed: number
+        skipped: number
+      }>
       downloadPlatformMedia: (platform: string) => Promise<void>
       cancelDownload: (id: string) => Promise<boolean>
       getOverlayPath: (name: string) => Promise<string>

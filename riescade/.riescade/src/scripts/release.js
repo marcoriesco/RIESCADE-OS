@@ -94,6 +94,13 @@ async function run() {
     console.error('\x1b[31mError: the repository has uncommitted changes. Commit or stash them before creating a release.\x1b[0m');
     process.exit(1);
   }
+
+  // Build and validate the offline Archive.org catalog before changing the
+  // release version. A network or integrity failure must abort the release
+  // without leaving a partially generated application package.
+  console.log('🗂️ Preparing offline Archive.org catalog...');
+  execSync('npm run catalog:prepare', { stdio: 'inherit', cwd: path.join(__dirname, '..') });
+  console.log('✅ Offline catalog generated and validated.');
   
   // 1. Update version in package.json
   console.log('📝 Updating version in package.json...');
@@ -299,7 +306,9 @@ async function run() {
   console.log('🐙 Staging and committing version changes...');
   const releaseFiles = [
     path.relative(projectRoot, packageJsonPath),
-    path.relative(projectRoot, updaterJsonPath)
+    path.relative(projectRoot, updaterJsonPath),
+    path.relative(projectRoot, path.join(__dirname, '..', 'src', 'main', 'resources', 'game-catalog', 'archive-catalog.sqlite')),
+    path.relative(projectRoot, path.join(__dirname, '..', 'src', 'main', 'resources', 'game-catalog', 'catalog-manifest.json'))
   ];
   if (fs.existsSync(versionInfoPath)) releaseFiles.push(path.relative(projectRoot, versionInfoPath));
   execSync(`git add -- ${releaseFiles.map(file => `"${file}"`).join(' ')}`, { stdio: 'inherit', cwd: projectRoot });
