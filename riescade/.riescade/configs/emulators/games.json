@@ -20,6 +20,16 @@
         "fullscreen": "true",
         "ppsspp_resolution": "4"
       }
+    },
+    "arcade|./area51.zip": {
+      "system": "arcade",
+      "rom": "./area51.zip",
+      "emulator": "libretro",
+      "core": "mame",
+      "settings": {
+        "menu_driver": "xmb",
+        "video_vsync": "false"
+      }
     }
   }
 }

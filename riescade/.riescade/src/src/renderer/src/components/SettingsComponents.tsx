@@ -15,13 +15,15 @@ export const RadixTabs = ({
   value,
   onValueChange,
   equalWidth = false,
-  className = ""
+  className = "",
+  children
 }: {
   tabs: UnderlineTab[];
   value: string;
   onValueChange: (value: string) => void;
   equalWidth?: boolean;
   className?: string;
+  children: React.ReactNode;
 }) => (
   <Tabs.Root value={value} onValueChange={onValueChange}>
     <Tabs.List
@@ -49,7 +51,22 @@ export const RadixTabs = ({
         );
       })}
     </Tabs.List>
+    {children}
   </Tabs.Root>
+);
+
+export const RadixTabContent = ({
+  value,
+  className = "",
+  children
+}: {
+  value: string;
+  className?: string;
+  children: React.ReactNode;
+}) => (
+  <Tabs.Content value={value} className={`outline-none ${className}`}>
+    {children}
+  </Tabs.Content>
 );
 
 export const SettingGroup = ({ label }: { label: string }) => (

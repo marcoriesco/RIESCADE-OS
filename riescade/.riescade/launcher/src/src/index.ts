@@ -1,5 +1,5 @@
 import { spawn } from 'child_process';
-import { dirname, parse, join } from 'path';
+import { dirname, join } from 'path';
 import { Logger } from './utils/logger.js';
 import { Config } from './config.js';
 import { LaunchArgs, ControllerInfo } from './types.js';
@@ -30,8 +30,7 @@ import { RedreamGenerator } from './generators/RedreamGenerator.js';
 import { Shadps4Generator } from './generators/Shadps4Generator.js';
 import { Vita3kGenerator } from './generators/Vita3kGenerator.js';
 import { WindowsGenerator } from './generators/WindowsGenerator.js';
-import { findFreeDriveLetter, mountSquashfs, unmountSquashfs, resolveRomInDrive } from './utils/squashfs.js';
-import { getRetroBatPath, getRiescadePath } from './utils/paths.js';
+import { getRiescadePath } from './utils/paths.js';
 import { AltirraGenerator } from './generators/AltirraGenerator.js';
 import { ExeLauncherGenerator } from './generators/ExeLauncherGenerator.js';
 import { AmigaForeverGenerator } from './generators/AmigaForeverGenerator.js';
@@ -774,24 +773,7 @@ async function main() {
   // Load configuration files
   Config.load();
 
-  let mountProcess: any = null;
-  let virtualDrive = '';
-
   try {
-    if (parsedArgs.rom && (parsedArgs.rom.toLowerCase().endsWith('.squashfs') || parsedArgs.rom.toLowerCase().endsWith('.wsquashfs'))) {
-      virtualDrive = findFreeDriveLetter();
-      const retroBatPath = getRetroBatPath();
-      const gameName = parse(parsedArgs.rom).name;
-      const overlayDir = join(retroBatPath, 'riescade', 'saves', parsedArgs.system, 'squashfs-overlays', gameName);
-      const workDir = join(retroBatPath, 'riescade', 'saves', parsedArgs.system, 'squashfs-work', gameName);
-
-      mountProcess = await mountSquashfs(parsedArgs.rom, virtualDrive, overlayDir, workDir);
-      const resolved = resolveRomInDrive(virtualDrive, parsedArgs.system);
-
-      Logger.info(`Launcher: Mounted SquashFS, resolved ROM path to: ${resolved}`);
-      parsedArgs.rom = resolved;
-    }
-
     // Instantiate correct generator
     const generator = getGenerator(parsedArgs);
 
@@ -856,9 +838,6 @@ async function main() {
           psMonitor.kill();
         } catch (e) {}
       }
-      if (mountProcess) {
-        unmountSquashfs(mountProcess);
-      }
       generator.cleanup();
       process.exit(code ?? 0);
     });
@@ -870,20 +849,12 @@ async function main() {
           psMonitor.kill();
         } catch (e) {}
       }
-      if (mountProcess) {
-        unmountSquashfs(mountProcess);
-      }
       generator.cleanup();
       process.exit(1);
     });
 
   } catch (err) {
     Logger.error(`Launcher: Error during configuration or execution:`, err);
-    if (mountProcess) {
-      try {
-        unmountSquashfs(mountProcess);
-      } catch (e) {}
-    }
     process.exit(1);
   }
 }

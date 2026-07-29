@@ -73,6 +73,9 @@ export interface Game {
   downloadAssetId?: string
   downloadName?: string
   downloadSize?: number | null
+  downloadInstallMode?: 'file' | 'extract'
+  downloadInstallName?: string
+  romsetVersion?: string
   isRemoteMissing?: boolean
   installed?: boolean
 }

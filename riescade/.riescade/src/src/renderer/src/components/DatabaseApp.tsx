@@ -3,7 +3,7 @@ import { Search, Folder, Star, Edit3, X, ChevronLeft, ChevronRight, Filter, Hard
 import { ScrollArea } from "./ScrollArea";
 import * as Select from "@radix-ui/react-select";
 import { Check, ChevronDown } from "lucide-react";
-import { RadixTabs } from "./SettingsComponents";
+import { RadixTabs, RadixTabContent } from "./SettingsComponents";
 
 function RadixSelect({
   value,
@@ -588,12 +588,12 @@ export default function DatabaseApp() {
                 ].map(tab => ({ id: tab.id, label: tab.name }))}
                 value={editTab}
                 onValueChange={(value) => setEditTab(value as typeof editTab)}
-              />
+              >
 
               {/* Edit Form Fields */}
               <div className="flex-1 overflow-y-auto p-5 space-y-4">
                 {/* BASICS TAB */}
-                {editTab === "basics" && (
+                <RadixTabContent value="basics">
                   <div className="space-y-3 text-xs">
                     <div className="flex flex-col gap-1">
                       <label className="text-white/40 font-semibold uppercase tracking-wider text-[9px]">Nome do Jogo</label>
@@ -652,10 +652,10 @@ export default function DatabaseApp() {
                       </label>
                     </div>
                   </div>
-                )}
+                </RadixTabContent>
 
                 {/* EMULATION TAB */}
-                {editTab === "emulation" && (
+                <RadixTabContent value="emulation">
                   <div className="space-y-3 text-xs">
                     <div className="grid grid-cols-2 gap-3">
                       <div className="flex flex-col gap-1">
@@ -678,10 +678,10 @@ export default function DatabaseApp() {
                       </div>
                     </div>
                   </div>
-                )}
+                </RadixTabContent>
 
                 {/* FILES TAB */}
-                {editTab === "files" && (
+                <RadixTabContent value="files">
                   <div className="space-y-3 text-xs">
                     <div className="flex flex-col gap-1">
                       <label className="text-white/40 font-semibold uppercase tracking-wider text-[9px]">Caminho Relativo da ROM</label>
@@ -718,10 +718,10 @@ export default function DatabaseApp() {
                       </div>
                     </div>
                   </div>
-                )}
+                </RadixTabContent>
 
                 {/* MEDIA TAB */}
-                {editTab === "media" && (
+                <RadixTabContent value="media">
                   <div className="space-y-3 text-xs">
                     {[
                       { field: "image", name: "Capa do Jogo (Image/Cover)" },
@@ -747,8 +747,9 @@ export default function DatabaseApp() {
                       </div>
                     ))}
                   </div>
-                )}
+                </RadixTabContent>
               </div>
+              </RadixTabs>
 
               {/* Footer Actions */}
               <div className="p-4 border-t border-white/5 bg-black/10 flex items-center justify-between shrink-0 font-semibold text-xs select-none">

@@ -108,12 +108,44 @@ declare global {
         logo: string | null
         install_mode: 'file' | 'extract'
         install_name: string
+        romset_version: string | null
       }>>
       downloadAsset: (platform: string, assetId: string) => Promise<{
         path: string
         filename: string
         sha256: string
       }>
+      downloadRomsetAsset: (platform: string, filename: string) => Promise<{
+        path: string
+        filename: string
+        sha256: string
+      }>
+      getRomsetUpdateInfo: (platform: string) => Promise<{
+        version: string
+        supportsDownloads: boolean
+        supportsFullPlatformDownload: boolean
+      } | null>
+      listRomsetCatalog: (
+        platform: string,
+        search?: string,
+        offset?: number,
+        limit?: number
+      ) => Promise<Array<{
+        id: string
+        title: string
+        download_name: string
+        file_size: number | null
+        sha256: string | null
+        installed: boolean
+        rom_path: string
+        cover: string | null
+        cover3d: string | null
+        fanart: string | null
+        logo: string | null
+        install_mode: 'file' | 'extract'
+        install_name: string
+        romset_version: string | null
+      }>>
       openSystemTorrent: (platform: string) => Promise<void>
       getPlatformDownloadInfo: (platform: string) => Promise<{
         platform: string
@@ -152,7 +184,11 @@ declare global {
       getMusicFiles: (subfolder?: string) => Promise<string[]>
       getMusicPath: () => Promise<string>
       testScreenScraper: (ssid: string, sspassword: string) => Promise<any>
-      startScrape: (options?: { systemName?: string; gamePath?: string }) => Promise<boolean>
+      startScrape: (options?: {
+        systemName?: string
+        gamePath?: string
+        remoteGame?: { name: string; path: string }
+      }) => Promise<boolean>
       cancelScrape: () => Promise<boolean>
       submitManualScrapeQuery: (query: string) => Promise<boolean>
       cancelManualScrape: () => Promise<boolean>

@@ -117,6 +117,12 @@ const api = {
     ipcRenderer.invoke('app-list-download-catalog', platform),
   downloadAsset: (platform: string, assetId: string) =>
     ipcRenderer.invoke('app-download-asset', platform, assetId),
+  downloadRomsetAsset: (platform: string, filename: string) =>
+    ipcRenderer.invoke('app-download-romset-asset', platform, filename),
+  getRomsetUpdateInfo: (platform: string) =>
+    ipcRenderer.invoke('app-get-romset-update-info', platform),
+  listRomsetCatalog: (platform: string, search = '', offset = 0, limit = 500) =>
+    ipcRenderer.invoke('app-list-romset-catalog', platform, search, offset, limit),
   openSystemTorrent: (platform: string) =>
     ipcRenderer.invoke('app-open-system-torrent', platform),
   getPlatformDownloadInfo: (platform: string) =>
@@ -135,7 +141,11 @@ const api = {
   getOverlayPath: (name: string) => ipcRenderer.invoke('get-overlay-path', name),
   getMusicFiles: (subfolder?: string) => ipcRenderer.invoke('get-music-files', subfolder),
   getMusicPath: () => ipcRenderer.invoke('get-music-path'),
-  startScrape: (options?: { systemName?: string; gamePath?: string }) => ipcRenderer.invoke('start-scrape', options),
+  startScrape: (options?: {
+    systemName?: string
+    gamePath?: string
+    remoteGame?: { name: string; path: string }
+  }) => ipcRenderer.invoke('start-scrape', options),
   cancelScrape: () => ipcRenderer.invoke('cancel-scrape'),
   submitManualScrapeQuery: (query: string) => ipcRenderer.invoke('submit-manual-scrape-query', query),
   cancelManualScrape: () => ipcRenderer.invoke('cancel-manual-scrape'),

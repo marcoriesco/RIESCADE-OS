@@ -70,6 +70,7 @@ export type Game = {
   downloadSize?: number | null;
   downloadInstallMode?: 'file' | 'extract';
   downloadInstallName?: string;
+  romsetVersion?: string;
   isRemoteMissing?: boolean;
   installed?: boolean;
 };

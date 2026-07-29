@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { RefreshCw, Copy, Download, Sliders, CheckCircle, Circle, Wrench, Bug, Info, ChevronRight, Check, Crosshair, MousePointer, Target, ChevronDown, Gamepad2, Activity } from "lucide-react";
 import * as Select from "@radix-ui/react-select";
 import { SettingsCtx } from "../../types";
-import { SettingGroup, SettingToggle, SettingSelect, RadixTabs } from "../SettingsComponents";
+import { SettingGroup, SettingToggle, SettingSelect, RadixTabs, RadixTabContent } from "../SettingsComponents";
 import { ScrollArea } from "../ScrollArea";
 
 const WIZARD_STEPS = [
@@ -357,14 +357,14 @@ function SettingsControlsComponent({ ctx }: SettingsControlsProps) {
         ]}
         value={mainControlTab}
         onValueChange={(value) => setMainControlTab(value as typeof mainControlTab)}
-      />
+      >
 
       {/* Grid content */}
       <ScrollArea className="flex-1 min-h-0">
         <div className="w-full max-w-[880px] mx-auto px-12 pb-12 space-y-6 pt-5">
           
           {/* TAB 1: Controles & Joysticks */}
-          {mainControlTab === 'controles' && (
+          <RadixTabContent value="controles">
             <>
               {/* Connected Controllers Section */}
               <div className="space-y-3">
@@ -459,10 +459,10 @@ function SettingsControlsComponent({ ctx }: SettingsControlsProps) {
                       ]}
                       value={activeControlSubTab}
                       onValueChange={(value) => setActiveControlSubTab(value as typeof activeControlSubTab)}
-                    />
+                    >
 
                     {/* Sub-tab 1: Quick Settings */}
-                    {activeControlSubTab === "configuracoes" && (
+                    <RadixTabContent value="configuracoes">
                       <div className="space-y-4">
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                           {/* Player Slot Assignment */}
@@ -544,10 +544,10 @@ function SettingsControlsComponent({ ctx }: SettingsControlsProps) {
                           </div>
                         </div>
                       </div>
-                    )}
+                    </RadixTabContent>
 
                     {/* Sub-tab 2: Realtime Test */}
-                    {activeControlSubTab === "testes" && (
+                    <RadixTabContent value="testes">
                       <div className="p-4 bg-white/2 border border-white/5 rounded-xl flex flex-col md:flex-row items-stretch gap-6 text-left">
                         <div className="flex-1 min-w-0 space-y-4 pr-0 md:pr-4 md:border-r border-white/5">
                           <div className="flex justify-between items-center">
@@ -577,10 +577,10 @@ function SettingsControlsComponent({ ctx }: SettingsControlsProps) {
                           </div>
                         </div>
                       </div>
-                    )}
+                    </RadixTabContent>
 
                     {/* Sub-tab 3: Calibration */}
-                    {activeControlSubTab === "calibracao" && (
+                    <RadixTabContent value="calibracao">
                       <div className="p-4 bg-white/2 border border-white/5 rounded-xl space-y-4">
                         <div className="space-y-1 text-left">
                           <h4 className="text-xs font-bold text-white">Módulos de Calibração</h4>
@@ -611,10 +611,10 @@ function SettingsControlsComponent({ ctx }: SettingsControlsProps) {
                           {calibratingSticks ? 'Calibrando centro...' : 'Iniciar Calibração Completa'}
                         </button>
                       </div>
-                    )}
+                    </RadixTabContent>
 
                     {/* Sub-tab 4: Mapping Wizard */}
-                    {activeControlSubTab === "mapeamento" && (
+                    <RadixTabContent value="mapeamento">
                       <div className="p-4 bg-white/2 border border-white/5 rounded-xl space-y-4 text-left">
                         <div className="flex items-center justify-between border-b border-white/5 pb-3">
                           <div>
@@ -659,10 +659,10 @@ function SettingsControlsComponent({ ctx }: SettingsControlsProps) {
                           </div>
                         )}
                       </div>
-                    )}
+                    </RadixTabContent>
 
                     {/* Sub-tab 5: Technical Info */}
-                    {activeControlSubTab === "informacoes" && (
+                    <RadixTabContent value="informacoes">
                       <div className="p-4 bg-white/2 border border-white/5 rounded-xl space-y-3 text-left">
                         <h4 className="text-xs font-bold text-white mb-2">Informações Técnicas do Dispositivo</h4>
                         <div className="space-y-1 font-mono text-xs text-white/70">
@@ -671,7 +671,8 @@ function SettingsControlsComponent({ ctx }: SettingsControlsProps) {
                           <p><span className="text-white/40">Tipo:</span> {activeController.type}</p>
                         </div>
                       </div>
-                    )}
+                    </RadixTabContent>
+                    </RadixTabs>
                   </div>
                 );
               })()}
@@ -683,10 +684,10 @@ function SettingsControlsComponent({ ctx }: SettingsControlsProps) {
                 <SettingToggle label="Mostrar Atividade do Controle" name="ShowControllerActivity" ctx={ctx} />
               </div>
             </>
-          )}
+          </RadixTabContent>
 
           {/* TAB 2: Lightguns & Mouse */}
-          {mainControlTab === 'lightgun' && (
+          <RadixTabContent value="lightgun">
             <div className="space-y-6 text-left">
               <section className="space-y-4">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
@@ -898,10 +899,10 @@ function SettingsControlsComponent({ ctx }: SettingsControlsProps) {
                 </div>
               </section>
             </div>
-          )}
+          </RadixTabContent>
 
           {/* TAB 3: Diagnóstico */}
-          {mainControlTab === 'opcoes' && (
+          <RadixTabContent value="opcoes">
             <div className="space-y-6">
               <section className="space-y-4 text-left">
                 <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
@@ -950,10 +951,11 @@ function SettingsControlsComponent({ ctx }: SettingsControlsProps) {
                 <SettingToggle label="Mostrar Atividade do Controle" name="ShowControllerActivity" ctx={ctx} />
               </section>
             </div>
-          )}
+          </RadixTabContent>
 
         </div>
       </ScrollArea>
+      </RadixTabs>
     </div>
   );
 }

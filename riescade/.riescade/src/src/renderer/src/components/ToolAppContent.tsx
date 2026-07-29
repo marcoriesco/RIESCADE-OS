@@ -3,7 +3,7 @@ import { ChevronRight, Search, Folder, Star, User, Shield, Settings, Palette, Ga
 import { System, SettingsCtx } from "../types";
 import { TOOL_APPS, getSystemTheme } from "../constants";
 import {
-  SettingGroup, SettingToggle, SettingSelect, SettingSlider, SettingInput, SettingInfo, RadixTabs
+  SettingGroup, SettingToggle, SettingSelect, SettingSlider, SettingInput, SettingInfo, RadixTabs, RadixTabContent
 } from "./SettingsComponents";
 import { EmulatorSettingsPanel } from "./EmulatorSettingsPanel";
 import { ScrollArea } from "./ScrollArea";
@@ -1628,9 +1628,9 @@ export default function ToolAppContent({
                     ]}
                     value={activeDownloadsTab}
                     onValueChange={(value) => setActiveDownloadsTab(value as typeof activeDownloadsTab)}
-                  />
+                  >
 
-                  {activeDownloadsTab === "games" && (
+                  <RadixTabContent value="games">
                     <>
                       <SettingGroup label="Comportamento" />
                       <SettingToggle
@@ -1646,9 +1646,9 @@ export default function ToolAppContent({
                         ctx={ctx}
                       />
                     </>
-                  )}
+                  </RadixTabContent>
 
-                  {activeDownloadsTab === "media" && (
+                  <RadixTabContent value="media">
                     <>
                       <SettingGroup label="Mídias completas" />
                       <SettingToggle
@@ -1661,9 +1661,9 @@ export default function ToolAppContent({
                         As mídias são instaladas somente pelo download completo disponível no menu de cada sistema.
                       </p>
                     </>
-                  )}
+                  </RadixTabContent>
 
-                  {activeDownloadsTab === "emulators" && (
+                  <RadixTabContent value="emulators">
                     <>
                       <SettingGroup label="Instalação e atualizações" />
                       <SettingToggle
@@ -1679,7 +1679,8 @@ export default function ToolAppContent({
                         ctx={ctx}
                       />
                     </>
-                  )}
+                  </RadixTabContent>
+                  </RadixTabs>
                 </div>
               </ScrollArea>
             </div>

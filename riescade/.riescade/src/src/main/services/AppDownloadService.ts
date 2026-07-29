@@ -51,6 +51,7 @@ export interface AppCatalogAsset {
   logo: string | null
   install_mode: 'file' | 'extract'
   install_name: string
+  romset_version: string | null
 }
 
 export interface PlatformDownloadInfo {
@@ -80,6 +81,7 @@ interface AuthorizedDownload {
     sha256: string | null
     install_mode?: 'file' | 'extract'
     install_name?: string
+    romset_version?: string | null
   }
   downloadUrl: string
   expiresAt: string
@@ -242,18 +244,28 @@ export class AppDownloadService {
     platform: unknown,
     assetId: unknown,
     appVersion: string,
-    window: BrowserWindow | null
+    window: BrowserWindow | null,
+    romsetFilename?: unknown
   ): Promise<{ path: string; filename: string; sha256: string }> {
-    if (typeof assetId !== 'string' || !/^[a-f0-9]{64}$/i.test(assetId)) {
+    if (
+      romsetFilename === undefined &&
+      (typeof assetId !== 'string' || !/^[a-f0-9]{64}$/i.test(assetId))
+    ) {
       throw new Error('Identificador de arquivo inválido.')
     }
     if (typeof platform !== 'string' || !/^[a-z0-9_-]{1,64}$/i.test(platform)) {
       throw new Error('Plataforma inválida.')
     }
     const normalizedPlatform = platform.toLowerCase()
+    const isRomsetUpdate = romsetFilename !== undefined
+    const safeRomsetFilename = isRomsetUpdate
+      ? getSafeRomFilename(String(romsetFilename), new Set(['.zip']), normalizedPlatform)
+      : null
 
     const authorizationResponse = await fetch(
-      `${API_BASE_URL}/api/app/downloads/${encodeURIComponent(assetId)}`,
+      isRomsetUpdate
+        ? `${API_BASE_URL}/api/app/romset-updates`
+        : `${API_BASE_URL}/api/app/downloads/${encodeURIComponent(String(assetId))}`,
       {
         method: 'POST',
         headers: {
@@ -263,7 +275,8 @@ export class AppDownloadService {
         },
         body: JSON.stringify({
           clientVersion: appVersion,
-          platform: normalizedPlatform
+          platform: normalizedPlatform,
+          ...(safeRomsetFilename ? { filename: safeRomsetFilename } : {})
         }),
         signal: AbortSignal.timeout(15_000)
       }
@@ -309,7 +322,7 @@ export class AppDownloadService {
 
     if (existsSync(partialPath)) unlinkSync(partialPath)
 
-    const downloadId = String(assetId)
+    const downloadId = authorization.asset.id
     const controller = new AbortController()
     this.activeControllers.set(downloadId, controller)
 
@@ -392,6 +405,110 @@ export class AppDownloadService {
     } finally {
       this.activeControllers.delete(downloadId)
     }
+  }
+
+  async downloadRomsetAsset(
+    accessToken: unknown,
+    platform: unknown,
+    filename: unknown,
+    appVersion: string,
+    window: BrowserWindow | null
+  ): Promise<{ path: string; filename: string; sha256: string }> {
+    return this.downloadAsset(
+      accessToken,
+      platform,
+      null,
+      appVersion,
+      window,
+      filename
+    )
+  }
+
+  async getRomsetUpdateInfo(platform: unknown): Promise<{
+    version: string
+    supportsDownloads: boolean
+    supportsFullPlatformDownload: boolean
+  } | null> {
+    if (typeof platform !== 'string' || !/^[a-z0-9_-]{1,64}$/i.test(platform)) {
+      throw new Error('Plataforma inválida.')
+    }
+    const response = await fetch(
+      `${API_BASE_URL}/api/app/catalog?platform=${encodeURIComponent(platform.toLowerCase())}`,
+      {
+        headers: { 'User-Agent': 'RIESCADE-App' },
+        signal: AbortSignal.timeout(15_000)
+      }
+    )
+    if (!response.ok) throw new Error(await readApiError(response))
+    const payload = await response.json()
+    if (!payload?.supportsRomsetUpdate) return null
+    if (typeof payload?.romsetVersion !== 'string' || !payload.romsetVersion.trim()) {
+      throw new Error('O servidor não informou a versão do romset.')
+    }
+    return {
+      version: payload.romsetVersion.trim(),
+      supportsDownloads: payload.supportsRomsetDownloads === true,
+      supportsFullPlatformDownload: payload.supportsFullPlatformDownload === true
+    }
+  }
+
+  async listRomsetCatalog(
+    platform: unknown,
+    search: unknown = '',
+    offset: unknown = 0,
+    limit: unknown = 500
+  ): Promise<AppCatalogAsset[]> {
+    if (typeof platform !== 'string' || !/^[a-z0-9_-]{1,64}$/i.test(platform)) {
+      throw new Error('Plataforma inválida.')
+    }
+    const safeSearch = typeof search === 'string' ? search.slice(0, 128) : ''
+    const safeOffset = Number.isSafeInteger(offset) ? Number(offset) : 0
+    const safeLimit = Number.isSafeInteger(limit) ? Math.min(1000, Math.max(1, Number(limit))) : 500
+    const response = await fetch(
+      `${API_BASE_URL}/api/app/romset-catalog?platform=${encodeURIComponent(platform.toLowerCase())}` +
+      `&search=${encodeURIComponent(safeSearch)}&offset=${safeOffset}&limit=${safeLimit}`,
+      {
+        headers: { 'User-Agent': 'RIESCADE-App' },
+        signal: AbortSignal.timeout(30_000)
+      }
+    )
+    if (!response.ok) throw new Error(await readApiError(response))
+    const payload = await response.json()
+    if (!Array.isArray(payload?.assets) || typeof payload?.version !== 'string') {
+      throw new Error('O catálogo do romset retornado pelo servidor é inválido.')
+    }
+
+    const romDirectory = join(getRetroBatPath(), 'roms', platform)
+    return payload.assets.flatMap((asset: any) => {
+      try {
+        const filename = getSafeRomFilename(asset?.download_name, new Set(['.zip']), platform)
+        if (typeof asset?.id !== 'string' || !/^[a-f0-9]{64}$/i.test(asset.id)) return []
+        const mediaName = parse(filename).name
+        const media = (folder: string) => {
+          const path = join(romDirectory, 'media', folder, `${mediaName}.webp`)
+          return existsSync(path) ? path : null
+        }
+        const romPath = join(romDirectory, filename)
+        return [{
+          id: asset.id,
+          title: typeof asset.title === 'string' && asset.title.trim() ? asset.title : mediaName,
+          download_name: filename,
+          file_size: Number.isSafeInteger(asset.file_size) ? asset.file_size : null,
+          sha256: null,
+          installed: existsSync(romPath),
+          rom_path: romPath,
+          cover: media('cover'),
+          cover3d: media('cover3d'),
+          fanart: media('fanart'),
+          logo: media('logo'),
+          install_mode: 'file' as const,
+          install_name: mediaName,
+          romset_version: payload.version
+        }]
+      } catch {
+        return []
+      }
+    })
   }
 
   private async installExtractedGame(
@@ -734,6 +851,17 @@ export function registerAppDownloadIpc(
 
   ipcMain.handle('app-download-asset', (_event, platform: unknown, assetId: unknown) =>
     service.downloadAsset(getAccessToken(), platform, assetId, appVersion, getMainWindow())
+  )
+  ipcMain.handle('app-download-romset-asset', (_event, platform: unknown, filename: unknown) =>
+    service.downloadRomsetAsset(getAccessToken(), platform, filename, appVersion, getMainWindow())
+  )
+  ipcMain.handle('app-get-romset-update-info', (_event, platform: unknown) =>
+    service.getRomsetUpdateInfo(platform)
+  )
+  ipcMain.handle(
+    'app-list-romset-catalog',
+    (_event, platform: unknown, search: unknown, offset: unknown, limit: unknown) =>
+      service.listRomsetCatalog(platform, search, offset, limit)
   )
 
   ipcMain.handle('app-open-system-torrent', (_event, platform: unknown) => {

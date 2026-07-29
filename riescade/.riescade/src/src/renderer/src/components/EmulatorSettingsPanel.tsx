@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react'
 import { Search, RotateCcw, Link2, ChevronRight, X } from 'lucide-react'
-import { SettingGroup, SettingToggle, SettingSelect, SettingSlider, SettingInput, RadixTabs } from './SettingsComponents'
+import { SettingGroup, SettingToggle, SettingSelect, SettingSlider, SettingInput, RadixTabs, RadixTabContent } from './SettingsComponents'
 import type { SettingsCtx } from '../types'
 import { useI18n } from '../i18n'
 import { localizeEmulatorSchemaText } from '../emulatorSchemaI18n'
@@ -307,6 +307,62 @@ export const EmulatorSettingsPanel: React.FC<EmulatorSettingsPanelProps> = ({
     .filter(group => group.options.length > 0)
     .sort((a, b) => a.order - b.order)
 
+  const renderGroup = (group: SchemaGroup) => (
+    <div className="space-y-2">
+      <SettingGroup label={group.title} />
+      {group.options.map(option => {
+        const source = getValueSource(option.configKey)
+        const isInherited = source !== scope && source !== 'default'
+        const isOverridden = source === scope
+
+        return (
+          <div key={option.id} className="relative group/setting">
+            {(option.inheritsGlobal || scope !== 'emulator') && (
+              <div className="absolute right-2 top-2 z-10 flex items-center gap-1.5">
+                {isInherited && (
+                  <span className="flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-medium bg-blue-500/15 text-blue-400 border border-blue-500/20">
+                    <Link2 className="w-3 h-3" />
+                    {source === 'system' ? t('system') : source === 'emulator' ? t('emulator') : source === 'game' ? t('game') : t('global')}
+                  </span>
+                )}
+                {isOverridden && (
+                  <button
+                    onClick={() => handleResetSetting(option.configKey)}
+                    className="flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-medium bg-amber-500/15 text-amber-400 border border-amber-500/20 hover:bg-amber-500/25 transition-all cursor-pointer"
+                    title={t('useInheritedSetting')}
+                  >
+                    <RotateCcw className="w-3 h-3" />
+                    {t('reset')}
+                  </button>
+                )}
+              </div>
+            )}
+            {option.type === 'select' && option.values && !option.incompleteValues && (
+              <SettingSelect label={option.label} name={option.configKey} desc={option.description} options={option.values} ctx={schemaCtx} />
+            )}
+            {option.type === 'select' && option.incompleteValues && (
+              <div className="rounded-lg border border-amber-500/15 bg-amber-500/5 px-4 py-3">
+                <div className="text-sm font-medium text-white/75">{option.label}</div>
+                <div className="mt-1 text-xs leading-relaxed text-amber-200/55">
+                  Valores ainda não catalogados para esta versão do core. Ajuste pelo menu interno do RetroArch.
+                </div>
+              </div>
+            )}
+            {option.type === 'toggle' && (
+              <SettingToggle label={option.label} name={option.configKey} desc={option.description} ctx={schemaCtx} />
+            )}
+            {option.type === 'slider' && (
+              <SettingSlider label={option.label} name={option.configKey} desc={option.description} min={option.min || 0} max={option.max || 100} step={option.step || 1} ctx={schemaCtx} />
+            )}
+            {option.type === 'input' && (
+              <SettingInput label={option.label} name={option.configKey} desc={option.description} ctx={schemaCtx} />
+            )}
+          </div>
+        )
+      })}
+    </div>
+  )
+
   return (
     <div className="space-y-5 animate-in fade-in duration-200">
       {scope !== 'emulator' && (
@@ -356,11 +412,17 @@ export const EmulatorSettingsPanel: React.FC<EmulatorSettingsPanelProps> = ({
           }))}
           value={activeGroupId || sortedGroups[0]?.id || ''}
           onValueChange={setActiveGroupId}
-        />
+        >
+          {sortedGroups.map(group => (
+            <RadixTabContent key={group.id} value={group.id}>
+              {renderGroup(group)}
+            </RadixTabContent>
+          ))}
+        </RadixTabs>
       )}
 
-      {/* Settings content */}
-      {(searchQuery.trim() ? filteredGroups : sortedGroups.filter(g => g.id === activeGroupId)).map(group => {
+      {/* Search results and schemas that only have one group do not need tab navigation. */}
+      {(searchQuery.trim() ? filteredGroups : sortedGroups.length <= 1 ? sortedGroups : []).map(group => {
         const visibleOptions = group.options
 
         return (

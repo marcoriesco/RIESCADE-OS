@@ -212,7 +212,11 @@ export class ScraperService {
     }
   }
 
-  public async scrape(options?: { systemName?: string; gamePath?: string }, sender?: WebContents): Promise<void> {
+  public async scrape(options?: {
+    systemName?: string
+    gamePath?: string
+    remoteGame?: { name: string; path: string }
+  }, sender?: WebContents): Promise<void> {
     if (this.isRunning) return
     this.isRunning = true
     this.isCancelled = false
@@ -342,17 +346,22 @@ export class ScraperService {
       interface ScrapeJob {
         system: typeof physicalSystems[0]
         game: Game
+        remote?: boolean
       }
       const jobs: ScrapeJob[] = []
 
       for (const sys of physicalSystems) {
         const games = this.libraryService.getGames(sys.name)
+        let targetWasFound = false
         for (const game of games) {
           if (game.isCollectionFolder) continue
 
           // Target a single game path if specified
           if (options?.gamePath && game.path !== options.gamePath) {
             continue
+          }
+          if (options?.gamePath && game.path === options.gamePath) {
+            targetWasFound = true
           }
 
           // Evaluate filters
@@ -405,6 +414,24 @@ export class ScraperService {
             jobs.push({ system: sys, game })
           }
         }
+
+        if (
+          options?.remoteGame &&
+          options.gamePath === options.remoteGame.path &&
+          options.systemName === sys.name &&
+          !targetWasFound
+        ) {
+          jobs.push({
+            system: sys,
+            game: {
+              id: `remote-${sys.name}-${basename(options.remoteGame.path)}`,
+              name: options.remoteGame.name,
+              path: options.remoteGame.path,
+              system: sys.name
+            },
+            remote: true
+          })
+        }
       }
 
       if (jobs.length === 0) {
@@ -421,7 +448,7 @@ export class ScraperService {
           return
         }
 
-        const { system, game } = jobs[i]
+        const { system, game, remote } = jobs[i]
         const romName = basename(game.path)
         const romNameNoExt = romName.replace(/\.[^/.]+$/, '')
         const systemId = SYSTEM_TO_SCREENSCRAPER_PLATFORM[system.name.toLowerCase()] || 
@@ -653,8 +680,10 @@ export class ScraperService {
           await handleMediaDownload(scrapeVideos, ['video-normalized', 'video'], 'video', ['video'], true)
 
           // Apply updates to game list
-          const updatedGame = { ...game, ...updatedFields }
-          this.libraryService.updateGame(system.name, updatedGame)
+          if (!remote) {
+            const updatedGame = { ...game, ...updatedFields }
+            this.libraryService.updateGame(system.name, updatedGame)
+          }
           successCount++
 
         } catch (e: any) {

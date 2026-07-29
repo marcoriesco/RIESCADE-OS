@@ -1,11 +1,31 @@
 import React, { useEffect, useRef, useState, useMemo, useCallback } from "react";
-import { Gamepad2, Heart, Loader2, Star, Play, ChevronRight, Maximize2, Minimize2, X, Search, Folder, ChevronLeft, HardDrive, ChevronDown, Check, MoreHorizontal, RefreshCw, BookOpen, Settings, Edit3, Save, CloudDownload, User, CheckCircle2, AlertTriangle, Download } from "lucide-react";
+import { Gamepad2, Heart, Loader2, Star, Play, ChevronRight, Maximize2, X, Search, Folder, ChevronLeft, HardDrive, ChevronDown, Check, MoreHorizontal, RefreshCw, BookOpen, Settings, Edit3, Save, CloudDownload, User, CheckCircle2, AlertTriangle, Download } from "lucide-react";
 import { System, Game, hasMultipleEmulators } from "../types";
 import { ScrollArea } from "./ScrollArea";
 import { OverlayScrollbarsComponentRef } from "overlayscrollbars-react";
 import * as Select from "@radix-ui/react-select";
+import * as Toast from "@radix-ui/react-toast";
 import { EmulatorSettingsPanel } from "./EmulatorSettingsPanel";
-import { RadixTabs } from "./SettingsComponents";
+import { RadixTabs, RadixTabContent } from "./SettingsComponents";
+import { OperationProgressCard } from "./OperationProgressCard";
+
+function ProgressSurface({
+  notification,
+  children
+}: {
+  notification: boolean;
+  children: React.ReactNode;
+}) {
+  if (notification) {
+    return <Toast.Root open duration={Infinity} className="toast-root">{children}</Toast.Root>;
+  }
+
+  return (
+    <div className="fixed inset-0 z-[999] flex items-center justify-center bg-black/65 p-4 backdrop-blur-md animate-in fade-in duration-200">
+      {children}
+    </div>
+  );
+}
 
 function RadixSelect({
   value,
@@ -135,6 +155,13 @@ export default function SystemAppContent({
   const [filter, setFilter] = useState<"all" | "favorites" | "downloads">("all");
   const [loading, setLoading] = useState(true);
   const [platformInstallMode, setPlatformInstallMode] = useState<'file' | 'extract'>('file');
+  const [romsetVersion, setRomsetVersion] = useState<string | null>(null);
+  const [isUpdatingRomset, setIsUpdatingRomset] = useState(false);
+  const [fullPlatformDownloadAvailable, setFullPlatformDownloadAvailable] = useState(true);
+  const [romsetCatalogOffset, setRomsetCatalogOffset] = useState(1000);
+  const [romsetCatalogHasMore, setRomsetCatalogHasMore] = useState(true);
+  const [romsetCatalogLoading, setRomsetCatalogLoading] = useState(false);
+  const romsetCatalogLoadingRef = useRef(false);
 
   // Platform full download modal & torrent progress states
   const [showFullSystemTorrentModal, setShowFullSystemTorrentModal] = useState(false);
@@ -145,7 +172,6 @@ export default function SystemAppContent({
   const [overwriteMediaOpt, setOverwriteMediaOpt] = useState(false);
   const [isStartingPlatformDownload, setIsStartingPlatformDownload] = useState(false);
   const [activeTorrentTask, setActiveTorrentTask] = useState<any | null>(null);
-  const [isMinimizedTorrentWidget, setIsMinimizedTorrentWidget] = useState(false);
   
   const [displayLimit, setDisplayLimit] = useState(40);
   const gridContainerRef = useRef<OverlayScrollbarsComponentRef>(null);
@@ -230,6 +256,7 @@ export default function SystemAppContent({
   const [scrapeNotificationMode, setScrapeNotificationMode] = useState(false);
   const scrapeNotificationModeRef = useRef(false);
   const scrapeSessionActiveRef = useRef(false);
+  const lastScrapeTotalRef = useRef(1);
   const [showManualSearchModal, setShowManualSearchModal] = useState(false);
   const [manualSearchQuery, setManualSearchQuery] = useState("");
   const [manualSearchData, setManualSearchData] = useState<{
@@ -288,16 +315,39 @@ export default function SystemAppContent({
 
   const loadGamesWithCatalog = useCallback(async (systemName: string): Promise<Game[]> => {
     const localGames = (await window.api.getGames(systemName)) || [];
+    let resolvedRomsetVersion: string | null = null;
+
+    try {
+      const romsetInfo = await window.api.getRomsetUpdateInfo(systemName);
+      resolvedRomsetVersion = romsetInfo?.version || null;
+      setFullPlatformDownloadAvailable(romsetInfo?.supportsFullPlatformDownload ?? true);
+    } catch (error) {
+      console.warn(`[SystemAppContent] ${systemName} romset update info unavailable.`, error);
+    }
+    setRomsetVersion(resolvedRomsetVersion);
 
     let catalog;
     try {
       catalog = await window.api.listDownloadCatalog(systemName);
+      if (resolvedRomsetVersion) {
+        const romsetCatalog = await window.api.listRomsetCatalog(systemName, '', 0, 1000);
+        const existingNames = new Set(
+          catalog.map(asset => asset.download_name.toLowerCase())
+        );
+        catalog = [
+          ...catalog,
+          ...romsetCatalog.filter(asset => !existingNames.has(asset.download_name.toLowerCase()))
+        ];
+      }
     } catch (error) {
       setPlatformInstallMode('file');
       // The remote download catalog is optional enrichment. A malformed entry,
       // network outage or server error must never hide locally indexed games.
       console.warn(`[SystemAppContent] ${systemName} download catalog unavailable; showing local games.`, error);
-      return localGames;
+      return localGames.map((game: Game) => ({
+        ...game,
+        romsetVersion: resolvedRomsetVersion || undefined
+      }));
     }
     setPlatformInstallMode(
       Array.isArray(catalog) && catalog.some(asset => asset.install_mode === 'extract')
@@ -305,7 +355,10 @@ export default function SystemAppContent({
         : 'file'
     );
     if (!Array.isArray(catalog) || catalog.length === 0) {
-      return localGames;
+      return localGames.map((game: Game) => ({
+        ...game,
+        romsetVersion: resolvedRomsetVersion || undefined
+      }));
     }
     const catalogByFilename = new Map<string, typeof catalog[number]>();
     for (const asset of catalog) {
@@ -318,7 +371,12 @@ export default function SystemAppContent({
     const reconciledLocalGames: Game[] = localGames.map((game: Game) => {
       const filename = game.path.split(/[\\/]/).pop()?.toLowerCase();
       const asset = filename ? catalogByFilename.get(filename) : undefined;
-      if (!asset || asset.installed) return game;
+      if (!asset) {
+        return {
+          ...game,
+          romsetVersion: resolvedRomsetVersion || undefined
+        };
+      }
 
       return {
         ...game,
@@ -327,7 +385,8 @@ export default function SystemAppContent({
         downloadSize: asset.file_size,
         downloadInstallMode: asset.install_mode,
         downloadInstallName: asset.install_name,
-        isRemoteMissing: true
+        romsetVersion: asset.romset_version || resolvedRomsetVersion || undefined,
+        isRemoteMissing: false
       };
     });
     const missingGames: Game[] = catalog
@@ -350,6 +409,7 @@ export default function SystemAppContent({
         downloadSize: asset.file_size,
         downloadInstallMode: asset.install_mode,
         downloadInstallName: asset.install_name,
+        romsetVersion: asset.romset_version || resolvedRomsetVersion || undefined,
         isRemoteMissing: true
       }));
     return [...reconciledLocalGames, ...missingGames];
@@ -369,6 +429,100 @@ export default function SystemAppContent({
       setGames(gameList || []);
     }
   }, [system.name, activeCollection, loadGamesWithCatalog]);
+
+  useEffect(() => {
+    const query = search.trim();
+    if (!romsetVersion || query.length < 2 || system.name === 'collections') return;
+
+    const timeout = window.setTimeout(() => {
+      void window.api.listRomsetCatalog(system.name, query, 0, 200)
+        .then(assets => {
+          setGames(current => {
+            const knownPaths = new Set(current.map(game => game.path.toLowerCase()));
+            const additions: Game[] = assets
+              .filter(asset => !asset.installed && !knownPaths.has(asset.rom_path.toLowerCase()))
+              .map(asset => ({
+                id: `romset-${asset.id}`,
+                name: asset.title,
+                path: asset.rom_path,
+                system: system.name,
+                cover: asset.cover ?? undefined,
+                cover3d: asset.cover3d ?? undefined,
+                fanart: asset.fanart ?? undefined,
+                logo: asset.logo ?? undefined,
+                downloadAssetId: asset.id,
+                downloadName: asset.download_name,
+                downloadSize: asset.file_size,
+                downloadInstallMode: 'file',
+                downloadInstallName: asset.install_name,
+                romsetVersion: asset.romset_version || romsetVersion,
+                isRemoteMissing: true
+              }));
+            return additions.length > 0 ? [...current, ...additions] : current;
+          });
+        })
+        .catch(error => {
+          console.warn(`[SystemAppContent] Falha na busca remota do romset ${system.name}.`, error);
+        });
+    }, 350);
+
+    return () => window.clearTimeout(timeout);
+  }, [search, romsetVersion, system.name]);
+
+  useEffect(() => {
+    setRomsetCatalogOffset(1000);
+    setRomsetCatalogHasMore(true);
+  }, [system.name, romsetVersion]);
+
+  const handleLoadMoreRomsetGames = async () => {
+    if (!romsetVersion || romsetCatalogLoadingRef.current || !romsetCatalogHasMore) return;
+    romsetCatalogLoadingRef.current = true;
+    setRomsetCatalogLoading(true);
+    try {
+      const assets = await window.api.listRomsetCatalog(
+        system.name,
+        '',
+        romsetCatalogOffset,
+        1000
+      );
+      setGames(current => {
+        const knownPaths = new Set(current.map(game => game.path.toLowerCase()));
+        const additions: Game[] = assets
+          .filter(asset => !asset.installed && !knownPaths.has(asset.rom_path.toLowerCase()))
+          .map(asset => ({
+            id: `romset-${asset.id}`,
+            name: asset.title,
+            path: asset.rom_path,
+            system: system.name,
+            cover: asset.cover ?? undefined,
+            cover3d: asset.cover3d ?? undefined,
+            fanart: asset.fanart ?? undefined,
+            logo: asset.logo ?? undefined,
+            downloadAssetId: asset.id,
+            downloadName: asset.download_name,
+            downloadSize: asset.file_size,
+            downloadInstallMode: 'file',
+            downloadInstallName: asset.install_name,
+            romsetVersion: asset.romset_version || romsetVersion,
+            isRemoteMissing: true
+          }));
+        return additions.length > 0 ? [...current, ...additions] : current;
+      });
+      setRomsetCatalogOffset(current => current + assets.length);
+      setRomsetCatalogHasMore(assets.length === 1000);
+    } catch (error) {
+      window.dispatchEvent(new CustomEvent("show-toast", {
+        detail: {
+          title: "Falha ao carregar mais jogos",
+          description: error instanceof Error ? error.message : String(error),
+          type: "error"
+        }
+      }));
+    } finally {
+      romsetCatalogLoadingRef.current = false;
+      setRomsetCatalogLoading(false);
+    }
+  };
 
   useEffect(() => {
     void window.api.getAppAuthSession().then(setAppSession);
@@ -504,6 +658,7 @@ export default function SystemAppContent({
       setIsScraping(true);
       setIsCancellingScrape(false);
       setScrapeProgress(progress);
+      lastScrapeTotalRef.current = progress.total || 1;
     })
 
     const unsubFinished = window.api.on('scrape-finished', (_, result) => {
@@ -777,7 +932,7 @@ export default function SystemAppContent({
   }, [targetGamesForFiltering]);
 
   const pendingDownloadsCount = useMemo(() => {
-    return targetGamesForFiltering.filter(g => !g.installed && (g.isRemoteMissing || !!g.downloadAssetId)).length;
+    return targetGamesForFiltering.filter(g => g.isRemoteMissing === true).length;
   }, [targetGamesForFiltering]);
 
   const favoritesCount = useMemo(() => {
@@ -872,12 +1027,82 @@ export default function SystemAppContent({
     }
   };
 
+  const handleUpdateRomsetPlatform = async () => {
+    if (!romsetVersion || isUpdatingRomset || !appSession) return;
+
+    const installedAssets = Array.from(new Map(
+      games
+        .filter(game =>
+          !game.isRemoteMissing &&
+          game.romsetVersion === romsetVersion &&
+          game.path.toLowerCase().endsWith('.zip')
+        )
+        .map(game => [game.path.split(/[\\/]/).pop()!.toLowerCase(), game])
+    ).values());
+
+    if (installedAssets.length === 0) {
+      window.dispatchEvent(new CustomEvent("show-toast", {
+        detail: {
+          title: "Nenhum jogo compatível",
+          description: `Não encontramos jogos instalados correspondentes ao romset ${romsetVersion}.`,
+          type: "warning"
+        }
+      }));
+      return;
+    }
+
+    if (!window.confirm(
+      `Atualizar ${installedAssets.length} jogo(s) instalado(s) de ${system.fullname} para o romset ${romsetVersion}?`
+    )) return;
+
+    setShowPlatformMenu(false);
+    setIsUpdatingRomset(true);
+    let updated = 0;
+    const failures: string[] = [];
+
+    try {
+      for (const game of installedAssets) {
+        try {
+          const filename = game.path.split(/[\\/]/).pop()!;
+          setDownloadingAssetId(`romset:${filename.toLowerCase()}`);
+          await window.api.downloadRomsetAsset(system.name, filename);
+          updated += 1;
+        } catch {
+          failures.push(game.name);
+        }
+      }
+
+      await window.api.preloadLibrary(true, system.name);
+      await reloadLibrary();
+      window.dispatchEvent(new CustomEvent("show-toast", {
+        detail: {
+          title: failures.length === 0 ? "Romset atualizado" : "Atualização concluída parcialmente",
+          description: failures.length === 0
+            ? `${updated} jogo(s) atualizado(s) para ${romsetVersion}.`
+            : `${updated} atualizado(s) e ${failures.length} com falha.`,
+          type: failures.length === 0 ? "success" : "warning"
+        }
+      }));
+    } catch (error) {
+      window.dispatchEvent(new CustomEvent("show-toast", {
+        detail: {
+          title: "Falha ao atualizar o romset",
+          description: error instanceof Error ? error.message : String(error),
+          type: "error"
+        }
+      }));
+    } finally {
+      setDownloadingAssetId(null);
+      setIsUpdatingRomset(false);
+    }
+  };
+
   // Apply filters including genre, release year, players, and rating dynamically
   const filteredGames = useMemo(() => {
     const res = targetGamesForFiltering.filter(g => {
       const gName = String(g.name || "");
       const matchSearch = gName.toLowerCase().includes(search.toLowerCase());
-      const isPendingDownload = (!g.installed && (g.isRemoteMissing || !!g.downloadAssetId));
+      const isPendingDownload = g.isRemoteMissing === true;
       const matchFilter = filter === "all" ||
         (filter === "favorites" && g.favorite) ||
         (filter === "downloads" && isPendingDownload);
@@ -911,6 +1136,12 @@ export default function SystemAppContent({
     });
     return res;
   }, [targetGamesForFiltering, search, filter, selectedGenre, selectedYear, selectedPlayers, selectedMinRating]);
+
+  const installedGamesCount = useMemo(
+    () => targetGamesForFiltering.filter(game => game.isRemoteMissing !== true).length,
+    [targetGamesForFiltering]
+  );
+  const downloadableGamesCount = targetGamesForFiltering.length - installedGamesCount;
 
 
 
@@ -946,6 +1177,14 @@ export default function SystemAppContent({
               const next = Math.min(filteredGames.length, prev + 40);
               return next;
             });
+            if (
+              filter === "downloads" &&
+              romsetVersion &&
+              romsetCatalogHasMore &&
+              displayLimit >= filteredGames.length
+            ) {
+              void handleLoadMoreRomsetGames();
+            }
           }
         };
 
@@ -957,7 +1196,14 @@ export default function SystemAppContent({
 
       tryAttach();
     }
-  }, [filteredGames.length]);
+  }, [
+    filteredGames.length,
+    filter,
+    romsetVersion,
+    romsetCatalogHasMore,
+    displayLimit,
+    handleLoadMoreRomsetGames
+  ]);
 
   const selectedGame = filteredGames[selectedIdx];
 
@@ -1320,17 +1566,27 @@ export default function SystemAppContent({
     });
   };
 
-  const handleDownloadSelectedGame = async () => {
-    if (!selectedGame?.downloadAssetId || downloadingAssetId) return;
-    setDownloadingAssetId(selectedGame.downloadAssetId);
+  const handleDownloadSelectedGame = async (isUpdate = false) => {
+    if (!selectedGame || downloadingAssetId) return;
+    const filename = selectedGame.path.split(/[\\/]/).pop() || "";
+    if (!isUpdate && !selectedGame.downloadAssetId) return;
+    if (isUpdate && !filename.toLowerCase().endsWith('.zip')) return;
+    const operationId = isUpdate
+      ? `romset:${filename.toLowerCase()}`
+      : selectedGame.downloadAssetId!;
+    setDownloadingAssetId(operationId);
     try {
-      const result = await window.api.downloadAsset(system.name, selectedGame.downloadAssetId);
+      const result = isUpdate || selectedGame.romsetVersion
+        ? await window.api.downloadRomsetAsset(system.name, filename)
+        : await window.api.downloadAsset(system.name, selectedGame.downloadAssetId!);
       await window.api.preloadLibrary(true, system.name);
       await reloadLibrary();
       window.dispatchEvent(new CustomEvent("show-toast", {
         detail: {
-          title: "Download concluído",
-          description: `${result.filename} já pode ser jogado.`,
+          title: isUpdate ? "Jogo atualizado" : "Download concluído",
+          description: isUpdate
+            ? `${result.filename} foi atualizado para ${selectedGame.romsetVersion}.`
+            : `${result.filename} já pode ser jogado.`,
           type: "success"
         }
       }));
@@ -1618,7 +1874,11 @@ export default function SystemAppContent({
                     {system.name === 'collections' && activeCollection !== null ? `${system.fullname} > ${activeCollection}` : system.fullname}
                   </h2>
                 </div>
-                <span className="text-md @3xl:text-md text-white/40">{filteredGames.length} {system.name === 'collections' && activeCollection === null ? 'coleções encontradas' : 'jogos encontrados'}</span>
+                <span className="text-md @3xl:text-md text-white/40">
+                  {system.name === 'collections' && activeCollection === null
+                    ? `${filteredGames.length} coleções encontradas`
+                    : `${installedGamesCount.toLocaleString("pt-BR")} jogos instalados / ${downloadableGamesCount.toLocaleString("pt-BR")} jogos para download`}
+                </span>
               </div>
 
               {/* Media Switcher & Platform Options */}
@@ -1726,7 +1986,21 @@ export default function SystemAppContent({
                             Downloads
                           </div>
 
-                          {platformInstallMode !== 'extract' && (
+                          {romsetVersion && (
+                            <button
+                              onClick={() => void handleUpdateRomsetPlatform()}
+                              disabled={isUpdatingRomset || !appSession}
+                              className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs hover:bg-white/10 text-left transition cursor-pointer text-white/80 hover:text-white disabled:opacity-40 disabled:cursor-not-allowed"
+                              title={!appSession ? "Entre na sua conta para atualizar o romset" : undefined}
+                            >
+                              {isUpdatingRomset
+                                ? <Loader2 className="w-4 h-4 text-cyan-400 animate-spin" />
+                                : <RefreshCw className="w-4 h-4 text-cyan-400" />}
+                              <span>Atualizar plataforma ({romsetVersion})</span>
+                            </button>
+                          )}
+
+                          {platformInstallMode !== 'extract' && fullPlatformDownloadAvailable && (
                             <button
                               onClick={() => {
                                 handleOpenPlatformDownloadModal();
@@ -1763,7 +2037,13 @@ export default function SystemAppContent({
                   <Loader2 className="w-8 h-8 text-accent animate-spin" />
                 </div>
               )}
-              
+              {romsetCatalogLoading && (
+                <div className="absolute bottom-5 right-8 z-40 flex items-center gap-2 rounded-xl border border-white/10 bg-[#111]/90 px-3 py-2 text-xs text-white/70 shadow-xl">
+                  <Loader2 className="h-4 w-4 animate-spin text-cyan-400" />
+                  <span>Carregando mais jogos...</span>
+                </div>
+              )}
+
               <ScrollArea 
                 ref={handleScrollAreaRef}
                 className="h-full w-full px-6 py-4"
@@ -2152,11 +2432,11 @@ export default function SystemAppContent({
                   ]}
                   value={sidebarTab}
                   onValueChange={(value) => setSidebarTab(value as typeof sidebarTab)}
-                />
+                >
 
                 {/* Tab contents */}
                 <div className="flex-1 overflow-y-auto pr-1">
-                  {sidebarTab === "collections" ? (
+                  <RadixTabContent value="collections">
                     <div className="flex flex-col gap-2">
                       {allCollections.map(col => {
                         const isAdded = gameCollections.includes(col);
@@ -2191,8 +2471,9 @@ export default function SystemAppContent({
                         );
                       })}
                     </div>
-                  ) : (
-                    /* Save states list */
+                  </RadixTabContent>
+                  <RadixTabContent value="saves">
+                    {/* Save states list */}
                     <div className="flex flex-col gap-2">
                       {saveStates.length === 0 ? (
                         <div className="text-xs text-white/30 italic py-4 text-center">
@@ -2225,11 +2506,11 @@ export default function SystemAppContent({
                         ))
                       )}
                     </div>
-                  )}
+                  </RadixTabContent>
                 </div>
 
                 {/* Footer action for creating collection */}
-                {sidebarTab === "collections" && (
+                <RadixTabContent value="collections">
                   <div className="flex gap-2 mt-auto pt-3 border-t border-white/5">
                     <input
                       type="text"
@@ -2252,7 +2533,8 @@ export default function SystemAppContent({
                       +
                     </button>
                   </div>
-                )}
+                </RadixTabContent>
+                </RadixTabs>
               </div>
             ) : selectedGame.isCollectionFolder ? (
               /* Collection Folder details */
@@ -2469,7 +2751,18 @@ export default function SystemAppContent({
                           <button
                             onClick={() => {
                               setShowContextMenu(false);
-                              window.api.startScrape({ systemName: system.name, gamePath: selectedGame.path });
+                              window.api.startScrape({
+                                systemName: system.name,
+                                gamePath: selectedGame.path,
+                                ...(selectedGame.isRemoteMissing
+                                  ? {
+                                      remoteGame: {
+                                        name: selectedGame.name,
+                                        path: selectedGame.path
+                                      }
+                                    }
+                                  : {})
+                              });
                             }}
                             className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs hover:bg-white/10 text-left transition cursor-pointer text-white/80 hover:text-white"
                           >
@@ -2669,17 +2962,32 @@ export default function SystemAppContent({
                       </>
                     )
                   ) : (
-                    <button
-                      onClick={() => onLaunchGame(selectedGame, system)}
-                      className="w-[calc(100%-8px)] mx-auto hover:scale-[1.02] hover:brightness-110 hover:shadow-lg transition-all rounded-md py-3 text-base font-semibold flex items-center justify-center gap-2 cursor-pointer text-white outline outline-2 outline-offset-2"
-                      style={{
-                        background: 'linear-gradient(135deg, var(--accent-color) 0%, var(--accent-color-hover) 100%)',
-                        outlineColor: 'var(--accent-color)'
-                      }}
-                    >
-                      <Play className="w-6 h-6 fill-white text-white" />
-                      <span>Jogar</span>
-                    </button>
+                    <>
+                      {selectedGame.romsetVersion && selectedGame.path.toLowerCase().endsWith('.zip') && (
+                        <button
+                          onClick={() => void handleDownloadSelectedGame(true)}
+                          disabled={downloadingAssetId !== null || !appSession}
+                          className="w-[calc(100%-8px)] mx-auto rounded-md py-2.5 text-sm font-semibold flex items-center justify-center gap-2 cursor-pointer text-cyan-100 bg-cyan-500/15 hover:bg-cyan-500/25 border border-cyan-400/20 disabled:opacity-50 disabled:cursor-not-allowed"
+                          title={!appSession ? "Entre na sua conta para atualizar este jogo" : undefined}
+                        >
+                          {downloadingAssetId === `romset:${selectedGame.path.split(/[\\/]/).pop()?.toLowerCase()}`
+                            ? <Loader2 className="w-5 h-5 animate-spin" />
+                            : <RefreshCw className="w-5 h-5" />}
+                          <span>Atualizar jogo ({selectedGame.romsetVersion})</span>
+                        </button>
+                      )}
+                      <button
+                        onClick={() => onLaunchGame(selectedGame, system)}
+                        className="w-[calc(100%-8px)] mx-auto hover:scale-[1.02] hover:brightness-110 hover:shadow-lg transition-all rounded-md py-3 text-base font-semibold flex items-center justify-center gap-2 cursor-pointer text-white outline outline-2 outline-offset-2"
+                        style={{
+                          background: 'linear-gradient(135deg, var(--accent-color) 0%, var(--accent-color-hover) 100%)',
+                          outlineColor: 'var(--accent-color)'
+                        }}
+                      >
+                        <Play className="w-6 h-6 fill-white text-white" />
+                        <span>Jogar</span>
+                      </button>
+                    </>
                   )}
                 </div>
               </div>
@@ -2723,149 +3031,35 @@ export default function SystemAppContent({
         </div>
       )}
 
-      {/* Compact, non-blocking scraper notification */}
-      {isScraping && scrapeProgress && scrapeNotificationMode && (
-        <div className="fixed left-1/2 top-6 z-[999] w-80 max-w-[calc(100vw-32px)] -translate-x-1/2 select-none text-white">
-          <div className="toast-root glass-strong overflow-hidden rounded-xl border border-white/10 p-3.5 shadow-2xl animate-in fade-in slide-in-from-top-2 duration-200">
-            <div className="flex items-center gap-3">
-              <div className="shrink-0">
-                <CloudDownload className="h-5 w-5 animate-pulse text-accent" />
-              </div>
-              <div className="min-w-0 flex-1">
-                <div className="flex items-center justify-between gap-2">
-                  <p className="truncate text-sm font-bold text-white">
-                    Scraper · {scrapeProgress.systemName}
-                  </p>
-                  <span className="shrink-0 text-[10px] font-bold text-accent">
-                    {scrapeProgress.current} / {scrapeProgress.total}
-                  </span>
-                </div>
-                <p className="mt-0.5 truncate text-[12px] text-white/50" title={scrapeProgress.gameName}>
-                  {scrapeProgress.gameName}
-                </p>
-              </div>
-              {!preferScrapeNotification && (
-                <button
-                  type="button"
-                  onClick={() => setScrapeDisplayAsNotification(false)}
-                  className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md text-white/45 transition hover:bg-white/10 hover:text-white cursor-pointer"
-                  title="Expandir progresso"
-                >
-                  <Maximize2 className="h-3.5 w-3.5" />
-                </button>
-              )}
-              <button
-                type="button"
-                disabled={isCancellingScrape}
-                onClick={() => {
-                  setIsCancellingScrape(true);
-                  window.api.cancelScrape();
-                }}
-                className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md text-white/45 transition hover:bg-red-500/15 hover:text-red-300 disabled:opacity-40 cursor-pointer"
-                title={isCancellingScrape ? "Cancelando..." : "Cancelar scraper"}
-              >
-                {isCancellingScrape ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <X className="h-3.5 w-3.5" />}
-              </button>
-            </div>
-            <div className="mt-3 h-1 w-full overflow-hidden rounded-full bg-white/10">
-              <div
-                className="h-full rounded-full bg-accent transition-all duration-300"
-                style={{ width: `${scrapeProgress.total > 0 ? (scrapeProgress.current / scrapeProgress.total) * 100 : 0}%` }}
-              />
-            </div>
-            <div className="mt-2 flex items-center justify-between text-[9px] font-semibold">
-              <span className="text-emerald-400">{scrapeProgress.successCount} sucessos</span>
-              <span className="text-red-400">{scrapeProgress.failCount} falhas</span>
-              <span className="text-white/30">
-                {scrapeProgress.motors ?? 1} {(scrapeProgress.motors ?? 1) === 1 ? "motor" : "motores"}
-              </span>
-            </div>
-          </div>
-        </div>
+      {isScraping && scrapeProgress && (
+        <ProgressSurface notification={scrapeNotificationMode}>
+          <OperationProgressCard
+            mode={scrapeProgress.total > 1 ? "batch" : "single"}
+            presentation={scrapeNotificationMode ? "notification" : "modal"}
+            icon={<Loader2 className="animate-spin" />}
+            title={scrapeProgress.total > 1 ? `Scraping ${scrapeProgress.systemName}` : "Scraping"}
+            source={`ScreenScraper.fr · ${scrapeProgress.motors ?? 1} ${(scrapeProgress.motors ?? 1) === 1 ? "motor" : "motores"}`}
+            subtitle={
+              scrapeProgress.total > 1
+                ? `${scrapeProgress.total} jogos · ${scrapeProgress.successCount} concluídos`
+                : scrapeProgress.systemName
+            }
+            currentItem={scrapeProgress.gameName}
+            percent={scrapeProgress.total > 0 ? (scrapeProgress.current / scrapeProgress.total) * 100 : 0}
+            status={scrapeProgress.total > 1 ? undefined : "Buscando metadados..."}
+            completed={scrapeProgress.successCount}
+            failed={scrapeProgress.failCount}
+            total={scrapeProgress.total}
+            cancelling={isCancellingScrape}
+            onPresentationChange={() => setScrapeDisplayAsNotification(!scrapeNotificationMode)}
+            onClose={() => {
+              setIsCancellingScrape(true);
+              window.api.cancelScrape();
+            }}
+          />
+        </ProgressSurface>
       )}
 
-      {/* Scraper Progress Overlay Modal */}
-      {isScraping && scrapeProgress && !scrapeNotificationMode && (
-        <div className="fixed inset-0 bg-black/75 backdrop-blur-md flex items-center justify-center z-[999] select-none text-white transition-opacity duration-300">
-          <div className="bg-[#0f0f12] border border-white/10 p-6 rounded-2xl w-[460px] flex flex-col gap-4 shadow-2xl relative animate-in fade-in zoom-in duration-200">
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-lg bg-accent/15 flex items-center justify-center">
-                <Loader2 className="w-4 h-4 text-accent animate-spin" />
-              </div>
-              <div>
-                <h3 className="text-sm font-bold text-white tracking-wide">Buscando metadados...</h3>
-                <p className="text-[10px] text-white/40 uppercase tracking-widest font-semibold mt-0.5">
-                  ScreenScraper.fr · {scrapeProgress.motors ?? 1} {(scrapeProgress.motors ?? 1) === 1 ? "motor" : "motores"}
-                </p>
-              </div>
-              <button
-                type="button"
-                onClick={() => setScrapeDisplayAsNotification(true)}
-                className="ml-auto flex h-8 w-8 items-center justify-center rounded-lg border border-white/5 bg-white/5 text-white/50 transition hover:border-accent-focus hover:bg-accent-light hover:text-accent cursor-pointer"
-                title="Continuar em modo notificação"
-              >
-                <Minimize2 className="h-4 w-4" />
-              </button>
-            </div>
-
-            <div className="bg-white/5 border border-white/5 rounded-xl p-3.5 flex flex-col gap-2">
-              <div className="flex justify-between items-start gap-3">
-                <div className="min-w-0">
-                  <p className="text-[10px] text-white/40 font-bold uppercase tracking-wider">Sistema</p>
-                  <p className="text-xs font-semibold text-white/90 truncate mt-0.5">{`${scrapeProgress.systemName}`}</p>
-                </div>
-                <div className="text-right shrink-0">
-                  <p className="text-[10px] text-white/40 font-bold uppercase tracking-wider">Progresso</p>
-                  <p className="text-xs font-bold text-accent mt-0.5">{`${scrapeProgress.current} / ${scrapeProgress.total}`}</p>
-                </div>
-              </div>
-
-              <div className="min-w-0 mt-1">
-                <p className="text-[10px] text-white/40 font-bold uppercase tracking-wider">Jogo Atual</p>
-                <p className="text-xs font-semibold text-white/90 truncate mt-0.5" title={`${scrapeProgress.gameName}`}>{`${scrapeProgress.gameName}`}</p>
-              </div>
-
-              {/* Progress Bar */}
-              <div className="w-full bg-white/5 rounded-full h-1.5 overflow-hidden mt-2 relative">
-                <div 
-                  className="bg-accent h-full rounded-full transition-all duration-300"
-                  style={{ width: `${(scrapeProgress.current / scrapeProgress.total) * 100}%` }}
-                />
-              </div>
-            </div>
-
-            {/* Counters */}
-            <div className="grid grid-cols-2 gap-2 text-center">
-              <div className="bg-emerald-500/10 border border-emerald-500/10 rounded-xl py-2 px-3">
-                <p className="text-[9px] text-emerald-400 font-bold uppercase tracking-wider">Sucessos</p>
-                <p className="text-base font-bold text-emerald-400 mt-0.5">{`${scrapeProgress.successCount}`}</p>
-              </div>
-              <div className="bg-red-500/10 border border-red-500/10 rounded-xl py-2 px-3">
-                <p className="text-[9px] text-red-400 font-bold uppercase tracking-wider">Falhas</p>
-                <p className="text-base font-bold text-red-400 mt-0.5">{`${scrapeProgress.failCount}`}</p>
-              </div>
-            </div>
-
-            <button
-              disabled={isCancellingScrape}
-              onClick={() => {
-                setIsCancellingScrape(true);
-                window.api.cancelScrape();
-              }}
-              className="w-full mt-2 py-2.5 px-4 bg-white/5 hover:bg-red-500/20 hover:text-red-300 text-white/70 border border-white/10 hover:border-red-500/20 rounded-xl text-xs font-semibold tracking-wide transition-all cursor-pointer flex items-center justify-center gap-1.5"
-            >
-              {isCancellingScrape ? (
-                <>
-                  <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                  <span>Cancelando...</span>
-                </>
-              ) : (
-                <span>Cancelar Operação</span>
-              )}
-            </button>
-          </div>
-        </div>
-      )}
 
       {/* Scraper Manual Search Input Modal */}
       {showManualSearchModal && manualSearchData && (
@@ -2951,7 +3145,7 @@ export default function SystemAppContent({
               </p>
             </div>
 
-            {scrapeFinishedData.success && (
+            {scrapeFinishedData.success && lastScrapeTotalRef.current > 1 && (
               <div className="bg-white/5 border border-white/5 rounded-xl p-3.5 grid grid-cols-2 gap-2 text-center">
                 <div>
                   <p className="text-[10px] text-white/40 font-bold uppercase tracking-wider">Sucessos</p>
@@ -3325,82 +3519,56 @@ export default function SystemAppContent({
 
       {/* Active Torrent Floating Progress Widget */}
       {activeTorrentTask && (
-        <div className={`fixed bottom-6 right-6 z-50 bg-[#121212]/95 border border-white/10 rounded-2xl shadow-2xl p-4 text-white animate-in slide-in-from-bottom-5 duration-200 transition-all ${
-          isMinimizedTorrentWidget ? "w-72" : "w-96"
-        }`}>
-          <div className="flex items-center justify-between border-b border-white/10 pb-2.5 mb-3">
-            <div className="flex items-center gap-2.5 min-w-0 pr-2">
-              <CloudDownload className="w-4 h-4 text-accent shrink-0 animate-pulse" />
-              <span className="text-xs font-bold truncate">{activeTorrentTask.title || activeTorrentTask.platform?.toUpperCase()}</span>
-            </div>
-            <div className="flex items-center gap-1 shrink-0">
+        <Toast.Root open duration={Infinity} className="toast-root">
+          <OperationProgressCard
+            mode="batch"
+            icon={<CloudDownload className="h-12 w-12 animate-pulse" />}
+            title={`Baixando ${activeTorrentTask.title || activeTorrentTask.platform?.toUpperCase() || "plataforma"}`}
+            subtitle={activeTorrentTask.status === "copying" ? "Organizando biblioteca" : "Download por torrent"}
+            currentItem={activeTorrentTask.currentFile || undefined}
+            percent={activeTorrentTask.progress || 0}
+            status={
+              activeTorrentTask.status === "copying"
+                ? "Finalizando e organizando biblioteca..."
+                : `↓ ${formatBytes(activeTorrentTask.downloadSpeed)}/s · ↑ ${formatBytes(activeTorrentTask.uploadSpeed)}/s`
+            }
+            metrics={[
+              {
+                value: formatBytes(activeTorrentTask.downloadedBytes),
+                label: "baixados",
+                icon: <HardDrive className="h-7 w-7 shrink-0 text-emerald-400" />
+              },
+              {
+                value: activeTorrentTask.numPeers || 0,
+                label: "peers",
+                icon: <Gamepad2 className="h-7 w-7 shrink-0 text-cyan-400" />
+              },
+              {
+                value: activeTorrentTask.eta ? `${Math.ceil(activeTorrentTask.eta / 60)} min` : "—",
+                label: "restantes",
+                icon: <RefreshCw className="h-7 w-7 shrink-0 text-white/45" />
+              }
+            ]}
+            actions={
               <button
                 type="button"
-                onClick={() => setIsMinimizedTorrentWidget(prev => !prev)}
-                className="p-1 text-white/50 hover:text-white hover:bg-white/10 rounded-md transition cursor-pointer"
-                title={isMinimizedTorrentWidget ? "Expandir" : "Minimizar"}
+                onClick={() => {
+                  if (activeTorrentTask.status === "paused") {
+                    window.api.resumePlatformTorrent(activeTorrentTask.taskId);
+                  } else {
+                    window.api.pausePlatformTorrent(activeTorrentTask.taskId);
+                  }
+                }}
+                className="rounded-lg bg-white/10 px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-white/15 cursor-pointer"
               >
-                {isMinimizedTorrentWidget ? <Maximize2 className="w-3.5 h-3.5" /> : <Minimize2 className="w-3.5 h-3.5" />}
+                {activeTorrentTask.status === "paused" ? "Retomar" : "Pausar"}
               </button>
-              <button
-                type="button"
-                onClick={() => window.api.cancelPlatformTorrent(activeTorrentTask.taskId)}
-                className="p-1 text-white/50 hover:text-red-400 hover:bg-white/10 rounded-md transition cursor-pointer"
-                title="Cancelar Download"
-              >
-                <X className="w-3.5 h-3.5" />
-              </button>
-            </div>
-          </div>
-
-          <div className="flex flex-col gap-2 text-xs">
-            <div className="flex items-center justify-between text-[11px]">
-              <span className="text-white/60 capitalize font-medium">{activeTorrentTask.status === 'copying' ? 'Finalizando e organizando biblioteca...' : activeTorrentTask.status}</span>
-              <span className="font-bold text-accent">{activeTorrentTask.progress || 0}%</span>
-            </div>
-
-            {/* Progress Bar */}
-            <div className="w-full bg-black/40 h-2 rounded-full overflow-hidden border border-white/5">
-              <div
-                className="bg-accent h-full transition-all duration-300 rounded-full"
-                style={{ width: `${Math.min(100, Math.max(0, activeTorrentTask.progress || 0))}%` }}
-              />
-            </div>
-
-            {!isMinimizedTorrentWidget && (
-              <div className="flex flex-col gap-1.5 pt-1 text-[10px] text-white/50">
-                <div className="flex items-center justify-between">
-                  <span>{formatBytes(activeTorrentTask.downloadedBytes)} / {formatBytes(activeTorrentTask.totalBytes)}</span>
-                  <span>Peers: {activeTorrentTask.numPeers || 0}</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span>↓ {formatBytes(activeTorrentTask.downloadSpeed)}/s · ↑ {formatBytes(activeTorrentTask.uploadSpeed)}/s</span>
-                  <span>{activeTorrentTask.eta ? `Restante: ${Math.ceil(activeTorrentTask.eta / 60)} min` : 'Calculando...'}</span>
-                </div>
-                <div className="flex items-center justify-end gap-2 pt-2 border-t border-white/5 mt-1">
-                  {activeTorrentTask.status === 'paused' ? (
-                    <button
-                      type="button"
-                      onClick={() => window.api.resumePlatformTorrent(activeTorrentTask.taskId)}
-                      className="px-3 py-1 bg-white/10 hover:bg-white/20 text-white rounded-md transition cursor-pointer font-semibold"
-                    >
-                      Retomar
-                    </button>
-                  ) : (
-                    <button
-                      type="button"
-                      onClick={() => window.api.pausePlatformTorrent(activeTorrentTask.taskId)}
-                      className="px-3 py-1 bg-white/10 hover:bg-white/20 text-white rounded-md transition cursor-pointer font-semibold"
-                    >
-                      Pausar
-                    </button>
-                  )}
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
+            }
+            onClose={() => window.api.cancelPlatformTorrent(activeTorrentTask.taskId)}
+          />
+        </Toast.Root>
       )}
+
     </div>
     </div>
   );

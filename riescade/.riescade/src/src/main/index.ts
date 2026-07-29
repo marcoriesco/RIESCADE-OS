@@ -1533,7 +1533,14 @@ app.whenReady().then(() => {
     return getMusicPath()
   })
 
-  ipcMain.handle('start-scrape', async (event, options?: { systemName?: string; gamePath?: string }) => {
+  ipcMain.handle('start-scrape', async (
+    event,
+    options?: {
+      systemName?: string
+      gamePath?: string
+      remoteGame?: { name: string; path: string }
+    }
+  ) => {
     if (scraperService.isActive()) return false
     void scraperService.scrape(options, event.sender)
     return true

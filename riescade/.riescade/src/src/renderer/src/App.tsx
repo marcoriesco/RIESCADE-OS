@@ -12,6 +12,7 @@ import SystemAppContent from "./components/SystemAppContent";
 import ToolAppContent from "./components/ToolAppContent";
 import { ScrollArea } from "./components/ScrollArea";
 import VirtualWindow from "./components/VirtualWindow";
+import { OperationProgressCard } from "./components/OperationProgressCard";
 import defaultBg from '../../main/resources/default.webp';
 import defaultVideo from '../../main/resources/default.mp4';
 import riescadeLogo from '../../main/resources/riescade.webp';
@@ -315,7 +316,8 @@ export default function App() {
           detail: {
             title: "Volume do Sistema",
             description: `${masterVolume}%`,
-            type: "volume"
+            type: "volume",
+            toastKey: "system-volume"
           }
         }));
       }
@@ -459,15 +461,22 @@ export default function App() {
   const [isUpdatePrompt, setIsUpdatePrompt] = useState(false);
   type ToastType = "favorite" | "controller" | "success" | "error" | "info" | "collection" | "scraper" | "volume" | "music";
   const [toasts, setToasts] = useState<{ id: string; title: string; description: string; type?: ToastType; favorite?: boolean; open: boolean }[]>([]);
+  const toastTimersRef = useRef<Map<string, number>>(new Map());
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
 
   useEffect(() => {
     const handleShowToast = (e: Event) => {
       const detail = (e as CustomEvent).detail;
-      const id = Math.random().toString(36).substring(2, 9);
+      const stableKey = detail.toastKey || (detail.type === "volume" ? "system-volume" : "");
+      const id = stableKey ? `toast-${stableKey}` : Math.random().toString(36).substring(2, 9);
       
       setToasts((prev) => {
+        const stableIdx = stableKey ? prev.findIndex((t) => t.id === id) : -1;
+        if (stableIdx !== -1) {
+          return prev.map((t, idx) => idx === stableIdx ? { ...t, ...detail, open: true } : t);
+        }
+
         // Suppress only the exact same event; simultaneous controllers must keep separate notifications.
         const existingIdx = prev.findIndex((t) =>
           t.open && t.title === detail.title && t.description === detail.description
@@ -480,8 +489,12 @@ export default function App() {
         return [...prev, { id, ...detail, open: true }];
       });
       
-      // Auto-dismiss after 3 seconds, independent of window focus/blur/hover
-      setTimeout(() => {
+      const previousTimer = toastTimersRef.current.get(id);
+      if (previousTimer !== undefined) window.clearTimeout(previousTimer);
+
+      // Auto-dismiss after the last update, independent of window focus/blur/hover.
+      const timer = window.setTimeout(() => {
+        toastTimersRef.current.delete(id);
         setToasts((prev) => {
           const exists = prev.find((t) => t.id === id);
           if (exists && exists.open) {
@@ -493,9 +506,14 @@ export default function App() {
           return prev;
         });
       }, 3000);
+      toastTimersRef.current.set(id, timer);
     };
     window.addEventListener('show-toast', handleShowToast);
-    return () => window.removeEventListener('show-toast', handleShowToast);
+    return () => {
+      window.removeEventListener('show-toast', handleShowToast);
+      toastTimersRef.current.forEach((timer) => window.clearTimeout(timer));
+      toastTimersRef.current.clear();
+    };
   }, []);
 
   const lastDownloadProgressRef = useRef<{ downloadedBytes: number; timestamp: number } | null>(null);
@@ -565,64 +583,29 @@ export default function App() {
         <Toast.Root
           open
           duration={Infinity}
-          className="toast-root glass-strong w-96 select-none overflow-hidden rounded-2xl border border-white/10 p-4 shadow-2xl backdrop-blur-xl bg-[#121212]/95 text-white"
+          className="toast-root"
         >
-          <div className="flex items-start justify-between gap-3">
-            <div className="flex items-center gap-2.5 min-w-0 flex-1">
-              <CloudDownload className="h-5 w-5 shrink-0 animate-pulse text-accent" />
-              <div className="min-w-0 flex-1">
-                <Toast.Title className="truncate text-xs font-bold text-white">
-                  {appDownloadProgress.title}
-                </Toast.Title>
-                {appDownloadProgress.filename && (
-                  <Toast.Description className="truncate text-[11px] text-white/50">
-                    {appDownloadProgress.filename}
-                  </Toast.Description>
-                )}
-              </div>
-            </div>
-
-            <button
-              type="button"
-              onClick={() => {
-                if (appDownloadProgress.id) {
-                  window.api.cancelDownload?.(appDownloadProgress.id);
-                }
-                setAppDownloadProgress(null);
-              }}
-              className="p-1 text-white/40 hover:text-red-400 hover:bg-white/10 rounded-lg transition cursor-pointer shrink-0"
-              title="Cancelar Download"
-            >
-              <X className="w-4 h-4" />
-            </button>
-          </div>
-
-          <div className="mt-3 flex flex-col gap-1.5">
-            <div className="flex items-center justify-between text-[11px]">
-              <span className="font-semibold text-white/70">
-                {appDownloadProgress.totalBytes && appDownloadProgress.totalBytes > 0
-                  ? `${formatToastBytes(appDownloadProgress.downloadedBytes)} / ${formatToastBytes(appDownloadProgress.totalBytes)}`
-                  : appDownloadProgress.status || 'Baixando...'}
-              </span>
-              <div className="flex items-center gap-2">
-                {appDownloadProgress.speed && appDownloadProgress.speed > 0 ? (
-                  <span className="text-[10px] text-white/50 font-mono">
-                    ↓ {formatToastSpeed(appDownloadProgress.speed)}
-                  </span>
-                ) : null}
-                <span className="font-bold text-accent">
-                  {appDownloadProgress.percent}%
-                </span>
-              </div>
-            </div>
-
-            <div className="h-2 w-full overflow-hidden rounded-full bg-black/40 border border-white/5">
-              <div
-                className="h-full rounded-full bg-accent transition-[width] duration-200"
-                style={{ width: `${appDownloadProgress.percent}%` }}
-              />
-            </div>
-          </div>
+          <OperationProgressCard
+            icon={<CloudDownload className="h-11 w-11 animate-pulse" />}
+            title="Baixando jogo"
+            subtitle={appDownloadProgress.title}
+            currentItem={appDownloadProgress.filename}
+            percent={appDownloadProgress.percent}
+            status={
+              appDownloadProgress.totalBytes && appDownloadProgress.totalBytes > 0
+                ? `${formatToastBytes(appDownloadProgress.downloadedBytes)} / ${formatToastBytes(appDownloadProgress.totalBytes)}` +
+                  (appDownloadProgress.speed && appDownloadProgress.speed > 0
+                    ? ` · ${formatToastSpeed(appDownloadProgress.speed)}`
+                    : "")
+                : appDownloadProgress.status || "Baixando..."
+            }
+            onClose={() => {
+              if (appDownloadProgress.id) {
+                window.api.cancelDownload?.(appDownloadProgress.id);
+              }
+              setAppDownloadProgress(null);
+            }}
+          />
         </Toast.Root>
       )}
       {toasts.map((toast) => (

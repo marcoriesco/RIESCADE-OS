@@ -1,5 +1,5 @@
-import { existsSync, readFileSync, readdirSync } from 'fs';
-import { basename, join } from 'path';
+import { copyFileSync, existsSync, mkdirSync, readFileSync, readdirSync, unlinkSync } from 'fs';
+import { basename, dirname, extname, join } from 'path';
 import { BaseGenerator } from './BaseGenerator.js';
 import { getEmulatorsPath, getConfigsPath } from '../utils/paths.js';
 import { Logger } from '../utils/logger.js';
@@ -7,6 +7,8 @@ import { Config } from '../config.js';
 import { updateIniSetting } from '../utils/ini.js';
 
 export class OpenBorGenerator extends BaseGenerator {
+  private stagedPakPath: string | null = null;
+
   public configure(): void {
     Logger.info(`OpenBorGenerator: Configuring openbor`);
     
@@ -55,22 +57,53 @@ export class OpenBorGenerator extends BaseGenerator {
       }
     }
 
+    if (extname(this.rom).toLowerCase() === '.exe') {
+      exePath = this.rom;
+    }
+
     if (!existsSync(exePath)) {
-      Logger.warn(`OpenBorGenerator: Executable not found at ${exePath}.`);
+      throw new Error(`OpenBorGenerator: Executável não encontrado em ${exePath}.`);
     }
 
-    const commandArgs: string[] = [];
-    
-    const fullscreen = Config.getEmulatorSetting('openbor', 'fullscreen', 'true') === 'true';
-    if (fullscreen) {
-      commandArgs.push('--fullscreen');
+    const executableHeader = readFileSync(exePath).subarray(0, 2);
+    if (executableHeader[0] !== 0x4d || executableHeader[1] !== 0x5a) {
+      throw new Error(
+        `OpenBorGenerator: O arquivo ${exePath} está corrompido ou não é um executável Windows válido.`
+      );
     }
 
-    commandArgs.push(this.rom);
+    if (extname(this.rom).toLowerCase() === '.pak') {
+      const paksDirectory = join(dirname(exePath), 'Paks');
+      mkdirSync(paksDirectory, { recursive: true });
+
+      for (const file of readdirSync(paksDirectory, { withFileTypes: true })) {
+        if (file.isFile() && file.name.toLowerCase().endsWith('.pak')) {
+          unlinkSync(join(paksDirectory, file.name));
+        }
+      }
+
+      this.stagedPakPath = join(paksDirectory, basename(this.rom));
+      copyFileSync(this.rom, this.stagedPakPath);
+      Logger.info(`OpenBorGenerator: Staged PAK at ${this.stagedPakPath}.`);
+    }
 
     return {
       executable: exePath,
-      args: commandArgs,
+      args: [],
     };
+  }
+
+  public cleanup(): void {
+    if (!this.stagedPakPath) return;
+    try {
+      if (existsSync(this.stagedPakPath)) {
+        unlinkSync(this.stagedPakPath);
+        Logger.info(`OpenBorGenerator: Removed staged PAK ${this.stagedPakPath}.`);
+      }
+    } catch (error) {
+      Logger.error(`OpenBorGenerator: Failed to remove staged PAK ${this.stagedPakPath}.`, error);
+    } finally {
+      this.stagedPakPath = null;
+    }
   }
 }

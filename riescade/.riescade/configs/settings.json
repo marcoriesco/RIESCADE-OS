@@ -544,7 +544,7 @@
     "type": "bool"
   },
   "Window.system-arcade.X": {
-    "value": 960,
+    "value": 494,
     "type": "int"
   },
   "Window.system-arcade.Y": {
@@ -972,6 +972,22 @@
     "type": "bool"
   },
   "Window.system-touhou.Maximized": {
+    "value": true,
+    "type": "bool"
+  },
+  "Window.system-scummvm.Maximized": {
+    "value": true,
+    "type": "bool"
+  },
+  "Window.system-openbor.Maximized": {
+    "value": true,
+    "type": "bool"
+  },
+  "RIESCADE.PreferredMediaType.openbor": {
+    "value": "cover",
+    "type": "string"
+  },
+  "Window.system-mame.Maximized": {
     "value": true,
     "type": "bool"
   }
