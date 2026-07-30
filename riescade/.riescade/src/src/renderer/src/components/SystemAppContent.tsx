@@ -1,13 +1,16 @@
 import React, { useEffect, useRef, useState, useMemo, useCallback } from "react";
-import { Gamepad2, Heart, Loader2, Star, Play, ChevronRight, Maximize2, X, Search, Folder, ChevronLeft, HardDrive, ChevronDown, Check, MoreHorizontal, RefreshCw, BookOpen, Settings, Edit3, Save, CloudDownload, User, CheckCircle2, AlertTriangle, Download } from "lucide-react";
+import { Gamepad2, Heart, Loader2, Star, Play, ChevronRight, Maximize2, X, Search, Folder, ChevronLeft, HardDrive, ChevronDown, Check, MoreHorizontal, RefreshCw, BookOpen, Settings, Edit3, Save, CloudDownload, User, CheckCircle2, AlertTriangle, Download, Radio, ShieldCheck, Wifi } from "lucide-react";
 import { System, Game, hasMultipleEmulators } from "../types";
 import { ScrollArea } from "./ScrollArea";
 import { OverlayScrollbarsComponentRef } from "overlayscrollbars-react";
 import * as Select from "@radix-ui/react-select";
 import * as Toast from "@radix-ui/react-toast";
+import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { EmulatorSettingsPanel } from "./EmulatorSettingsPanel";
 import { RadixTabs, RadixTabContent } from "./SettingsComponents";
 import { OperationProgressCard } from "./OperationProgressCard";
+import { AppButton } from "./ui/AppButton";
+import { AppDialog } from "./ui/AppDialog";
 
 function ProgressSurface({
   notification,
@@ -154,6 +157,7 @@ export default function SystemAppContent({
   const [selectedIdx, setSelectedIdx] = useState(0);
   const [filter, setFilter] = useState<"all" | "favorites" | "downloads">("all");
   const [loading, setLoading] = useState(true);
+  const [downloadCatalogLoading, setDownloadCatalogLoading] = useState(false);
   const [platformInstallMode, setPlatformInstallMode] = useState<'file' | 'extract'>('file');
   const [romsetVersion, setRomsetVersion] = useState<string | null>(null);
   const [isUpdatingRomset, setIsUpdatingRomset] = useState(false);
@@ -162,6 +166,16 @@ export default function SystemAppContent({
   const [romsetCatalogHasMore, setRomsetCatalogHasMore] = useState(true);
   const [romsetCatalogLoading, setRomsetCatalogLoading] = useState(false);
   const romsetCatalogLoadingRef = useRef(false);
+  const [netplayGame, setNetplayGame] = useState<Game | null>(null);
+  const [netplayEligibility, setNetplayEligibility] = useState<Awaited<ReturnType<typeof window.api.getNetplayEligibility>> | null>(null);
+  const [netplayChecking, setNetplayChecking] = useState(false);
+  const [netplayLaunching, setNetplayLaunching] = useState(false);
+  const [netplayError, setNetplayError] = useState("");
+  const [netplayNickname, setNetplayNickname] = useState("RIESCADE Player");
+  const [netplayPort, setNetplayPort] = useState("55435");
+  const [netplayAnnounce, setNetplayAnnounce] = useState(true);
+  const [netplayPassword, setNetplayPassword] = useState("");
+  const [netplaySpectatorPassword, setNetplaySpectatorPassword] = useState("");
 
   // Platform full download modal & torrent progress states
   const [showFullSystemTorrentModal, setShowFullSystemTorrentModal] = useState(false);
@@ -171,6 +185,17 @@ export default function SystemAppContent({
   const [overwriteGamesOpt, setOverwriteGamesOpt] = useState(false);
   const [overwriteMediaOpt, setOverwriteMediaOpt] = useState(false);
   const [isStartingPlatformDownload, setIsStartingPlatformDownload] = useState(false);
+  const [platformBatchNotification, setPlatformBatchNotification] = useState(false);
+  const [isCancellingPlatformDownload, setIsCancellingPlatformDownload] = useState(false);
+  const [platformBatchProgress, setPlatformBatchProgress] = useState<{
+    id: string;
+    filename: string;
+    percent: number;
+    completed: number;
+    failed: number;
+    total: number;
+    status?: string;
+  } | null>(null);
   const [activeTorrentTask, setActiveTorrentTask] = useState<any | null>(null);
   
   const [displayLimit, setDisplayLimit] = useState(40);
@@ -313,8 +338,13 @@ export default function SystemAppContent({
   const [gridMediaLoading, setGridMediaLoading] = useState(false);
   const [mediaRevision, setMediaRevision] = useState(0);
 
-  const loadGamesWithCatalog = useCallback(async (systemName: string): Promise<Game[]> => {
+  const loadGamesWithCatalog = useCallback(async (
+    systemName: string,
+    onLocalLoaded?: (games: Game[]) => void
+  ): Promise<Game[]> => {
     const localGames = (await window.api.getGames(systemName)) || [];
+    onLocalLoaded?.(localGames);
+    setDownloadCatalogLoading(true);
     let resolvedRomsetVersion: string | null = null;
 
     try {
@@ -344,6 +374,7 @@ export default function SystemAppContent({
       // The remote download catalog is optional enrichment. A malformed entry,
       // network outage or server error must never hide locally indexed games.
       console.warn(`[SystemAppContent] ${systemName} download catalog unavailable; showing local games.`, error);
+      setDownloadCatalogLoading(false);
       return localGames.map((game: Game) => ({
         ...game,
         romsetVersion: resolvedRomsetVersion || undefined
@@ -355,6 +386,7 @@ export default function SystemAppContent({
         : 'file'
     );
     if (!Array.isArray(catalog) || catalog.length === 0) {
+      setDownloadCatalogLoading(false);
       return localGames.map((game: Game) => ({
         ...game,
         romsetVersion: resolvedRomsetVersion || undefined
@@ -404,6 +436,7 @@ export default function SystemAppContent({
         cover3d: asset.cover3d ?? undefined,
         fanart: asset.fanart ?? undefined,
         logo: asset.logo ?? undefined,
+        video: asset.video ?? undefined,
         downloadAssetId: asset.id,
         downloadName: asset.download_name,
         downloadSize: asset.file_size,
@@ -412,6 +445,7 @@ export default function SystemAppContent({
         romsetVersion: asset.romset_version || resolvedRomsetVersion || undefined,
         isRemoteMissing: true
       }));
+    setDownloadCatalogLoading(false);
     return [...reconciledLocalGames, ...missingGames];
   }, []);
 
@@ -450,6 +484,7 @@ export default function SystemAppContent({
                 cover3d: asset.cover3d ?? undefined,
                 fanart: asset.fanart ?? undefined,
                 logo: asset.logo ?? undefined,
+                video: asset.video ?? undefined,
                 downloadAssetId: asset.id,
                 downloadName: asset.download_name,
                 downloadSize: asset.file_size,
@@ -498,6 +533,7 @@ export default function SystemAppContent({
             cover3d: asset.cover3d ?? undefined,
             fanart: asset.fanart ?? undefined,
             logo: asset.logo ?? undefined,
+            video: asset.video ?? undefined,
             downloadAssetId: asset.id,
             downloadName: asset.download_name,
             downloadSize: asset.file_size,
@@ -531,6 +567,22 @@ export default function SystemAppContent({
   }, []);
 
   useEffect(() => {
+    const unsubPlatformProgress = window.api.on('app-download-progress', (_, data) => {
+      if (
+        data?.mode !== 'batch' ||
+        String(data?.platform || '').toLowerCase() !== system.name.toLowerCase()
+      ) return;
+      setPlatformBatchProgress({
+        id: String(data.id || `platform-${system.name.toLowerCase()}`),
+        filename: String(data.filename || ''),
+        percent: Number(data.percent) || 0,
+        completed: Number(data.completed) || 0,
+        failed: Number(data.failed) || 0,
+        total: Number(data.total) || 0,
+        status: typeof data.status === 'string' ? data.status : undefined
+      });
+    });
+
     const unsubTorrentProgress = window.api.on('torrent-download-progress', (_, data) => {
       setActiveTorrentTask(data);
       if (data.status === 'completed') {
@@ -575,6 +627,7 @@ export default function SystemAppContent({
     });
 
     return () => {
+      unsubPlatformProgress();
       unsubTorrentProgress();
       unsubReindex();
     };
@@ -842,7 +895,11 @@ export default function SystemAppContent({
         });
       } else {
         setCollectionGames([]);
-        loadGamesWithCatalog(system.name).then((gameList: Game[]) => {
+        loadGamesWithCatalog(system.name, (localGames) => {
+          setGames(localGames);
+          setSelectedIdx(0);
+          setLoading(false);
+        }).then((gameList: Game[]) => {
           setGames(gameList || []);
           setSelectedIdx(0);
           setLoading(false);
@@ -855,7 +912,11 @@ export default function SystemAppContent({
     } else {
       setActiveCollection(null);
       setCollectionGames([]);
-      loadGamesWithCatalog(system.name).then((gameList: Game[]) => {
+      loadGamesWithCatalog(system.name, (localGames) => {
+        setGames(localGames);
+        setSelectedIdx(0);
+        setLoading(false);
+      }).then((gameList: Game[]) => {
         setGames(gameList || []);
         setSelectedIdx(0);
         setLoading(false);
@@ -935,6 +996,15 @@ export default function SystemAppContent({
     return targetGamesForFiltering.filter(g => g.isRemoteMissing === true).length;
   }, [targetGamesForFiltering]);
 
+  const localInstalledGameCount = useMemo(() => {
+    const paths = new Set(
+      games
+        .filter(game => game.isRemoteMissing !== true && Boolean(game.path))
+        .map(game => game.path.toLowerCase())
+    );
+    return paths.size;
+  }, [games]);
+
   const favoritesCount = useMemo(() => {
     return targetGamesForFiltering.filter(g => g.favorite).length;
   }, [targetGamesForFiltering]);
@@ -973,18 +1043,29 @@ export default function SystemAppContent({
   const handleConfirmPlatformDownload = async () => {
     if (!platformDownloadInfo) return;
     setIsStartingPlatformDownload(true);
+    setIsCancellingPlatformDownload(false);
+    setPlatformBatchNotification(false);
+    setPlatformBatchProgress({
+      id: `platform-${system.name.toLowerCase()}`,
+      filename: '',
+      percent: 0,
+      completed: 0,
+      failed: 0,
+      total: platformDownloadInfo.gameCount,
+      status: 'Preparando fila de downloads...'
+    });
     try {
       await window.api.saveSetting('Downloads.Games.Overwrite', overwriteGamesOpt, 'bool');
       setShowFullSystemTorrentModal(false);
-      window.dispatchEvent(new CustomEvent("show-toast", {
-        detail: {
-          title: "Download Iniciado",
-          description: `Baixando os jogos de ${system.fullname} pelo Google Drive.`,
-          type: "success"
-        }
-      }));
 
       const result = await window.api.downloadPlatform(system.name);
+      setPlatformBatchProgress(current => current ? {
+        ...current,
+        percent: 100,
+        completed: result.downloaded,
+        failed: result.failed,
+        status: 'Download da plataforma concluído.'
+      } : null);
       window.dispatchEvent(new CustomEvent("show-toast", {
         detail: {
           title: result.failed > 0 ? "Plataforma concluída com avisos" : "Plataforma instalada",
@@ -996,16 +1077,33 @@ export default function SystemAppContent({
       }));
       const refreshedGames = await loadGamesWithCatalog(system.name);
       setGames(refreshedGames);
+      window.setTimeout(() => setPlatformBatchProgress(null), 2500);
     } catch (err: any) {
-      window.dispatchEvent(new CustomEvent("show-toast", {
-        detail: {
-          title: "Falha no download da plataforma",
-          description: err.message || String(err),
-          type: "error"
+      const message = err.message || String(err);
+      setPlatformBatchProgress(null);
+      if (/cancel/i.test(message)) {
+        try {
+          await window.api.preloadLibrary(true, system.name);
+          const refreshedGames = await loadGamesWithCatalog(system.name);
+          setGames(refreshedGames);
+        } catch (refreshError) {
+          console.error(
+            `[SystemAppContent] Falha ao atualizar ${system.name} após cancelar o download em lote.`,
+            refreshError
+          );
         }
-      }));
+      } else {
+        window.dispatchEvent(new CustomEvent("show-toast", {
+          detail: {
+            title: "Falha no download da plataforma",
+            description: message,
+            type: "error"
+          }
+        }));
+      }
     } finally {
       setIsStartingPlatformDownload(false);
+      setIsCancellingPlatformDownload(false);
     }
   };
 
@@ -1211,6 +1309,75 @@ export default function SystemAppContent({
   ]);
 
   const selectedGame = filteredGames[selectedIdx];
+
+  const resolveGameSystem = useCallback((game: Game): System => {
+    if (system.name === "collections" || system.path.startsWith("virtual://")) {
+      return systems.find(item => item.name.toLowerCase() === game.system.toLowerCase()) || system;
+    }
+    return system;
+  }, [system, systems]);
+
+  const usesRetroArch = useCallback((game?: Game | null): boolean => {
+    if (!game || game.isRemoteMissing) return false;
+    const gameSystem = resolveGameSystem(game);
+    let emulator = game.emulator;
+    if (!emulator || emulator === "auto") {
+      emulator = settings?.[`${gameSystem.name}.emulator`]?.value;
+    }
+    if (!emulator || emulator === "auto") emulator = gameSystem.emulators?.[0]?.name;
+    return String(emulator || "").toLowerCase() === "libretro"
+      || String(emulator || "").toLowerCase() === "retroarch";
+  }, [resolveGameSystem, settings]);
+
+  const openNetplay = useCallback(async (game: Game) => {
+    const gameSystem = resolveGameSystem(game);
+    const settingValue = (name: string, fallback = "") => {
+      const value = settings?.[name]?.value;
+      return value === undefined || value === null || value === "" ? fallback : String(value);
+    };
+    setNetplayNickname(settingValue("global.netplay.nickname", "RIESCADE Player"));
+    setNetplayPort(settingValue("global.netplay.port", "55435"));
+    setNetplayPassword(settingValue("global.netplay.password"));
+    setNetplaySpectatorPassword(settingValue("global.netplay.spectatepassword"));
+    setNetplayAnnounce(settingValue("global.netplay_public_announce", "true") !== "false");
+    setNetplayGame(game);
+    setNetplayEligibility(null);
+    setNetplayError("");
+    setNetplayChecking(true);
+    try {
+      const result = await window.api.getNetplayEligibility(game, gameSystem);
+      setNetplayEligibility(result);
+      if (!result.eligible && result.reason) setNetplayError(result.reason);
+    } catch (reason) {
+      setNetplayError(reason instanceof Error ? reason.message : String(reason));
+    } finally {
+      setNetplayChecking(false);
+    }
+  }, [resolveGameSystem, settings]);
+
+  const createNetplayRoom = useCallback(async () => {
+    if (!netplayGame || !netplayEligibility?.eligible) return;
+    const gameSystem = resolveGameSystem(netplayGame);
+    setNetplayLaunching(true);
+    setNetplayError("");
+    try {
+      const launchPromise = window.api.launchNetplay(netplayGame, gameSystem, {
+        mode: "host",
+        port: Number(netplayPort),
+        nickname: netplayNickname,
+        password: netplayPassword || undefined,
+        spectatorPassword: netplaySpectatorPassword || undefined,
+        announce: netplayAnnounce,
+        useRelay: true
+      });
+      setNetplayGame(null);
+      await launchPromise;
+    } catch (reason) {
+      setNetplayError(reason instanceof Error ? reason.message : String(reason));
+    } finally {
+      setNetplayLaunching(false);
+    }
+  }, [netplayAnnounce, netplayEligibility, netplayGame, netplayNickname, netplayPassword, netplayPort, netplaySpectatorPassword, resolveGameSystem]);
 
   // Reset image error, fullscreen video, context menu and sidebar when switching games
   useEffect(() => {
@@ -1758,10 +1925,14 @@ export default function SystemAppContent({
               }`}
             >
               <div className="flex items-center gap-2.5">
-                <CloudDownload className={`w-4 h-4 shrink-0 ${filter === "downloads" ? "text-accent" : "opacity-60"}`} />
+                {downloadCatalogLoading ? (
+                  <Loader2 className={`w-4 h-4 shrink-0 animate-spin ${filter === "downloads" ? "text-accent" : "opacity-60"}`} />
+                ) : (
+                  <CloudDownload className={`w-4 h-4 shrink-0 ${filter === "downloads" ? "text-accent" : "opacity-60"}`} />
+                )}
                 <span>Downloads</span>
               </div>
-              {pendingDownloadsCount > 0 && (
+              {!downloadCatalogLoading && pendingDownloadsCount > 0 && (
                 <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${
                   filter === "downloads" ? "bg-accent text-white" : "bg-white/10 text-white/70"
                 }`}>
@@ -1880,9 +2051,19 @@ export default function SystemAppContent({
                   </h2>
                 </div>
                 <span className="text-md @3xl:text-md text-white/40">
-                  {system.name === 'collections' && activeCollection === null
-                    ? `${filteredGames.length} coleções encontradas`
-                    : `${installedGamesCount.toLocaleString("pt-BR")} jogos instalados / ${downloadableGamesCount.toLocaleString("pt-BR")} jogos para download`}
+                  {system.name === 'collections' && activeCollection === null ? (
+                    `${filteredGames.length} coleções encontradas`
+                  ) : downloadCatalogLoading ? (
+                    <span className="inline-flex items-center gap-1.5">
+                      <span>{installedGamesCount.toLocaleString("pt-BR")} jogos instalados /</span>
+                      <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                      <span>Carregando jogos para Download</span>
+                    </span>
+                  ) : downloadableGamesCount === 0 ? (
+                    `${installedGamesCount.toLocaleString("pt-BR")} jogos instalados`
+                  ) : (
+                    `${installedGamesCount.toLocaleString("pt-BR")} jogos instalados / ${downloadableGamesCount.toLocaleString("pt-BR")} jogos para download`
+                  )}
                 </span>
               </div>
 
@@ -2192,7 +2373,7 @@ export default function SystemAppContent({
 
         {/* Right Details Panel */}
         {selectedGame && (
-          <ScrollArea className="w-[20vw] min-w-[250px] bg-black/50 p-6 select-none overflow-hidden">
+          <ScrollArea className="w-[20vw] min-w-[250px] bg-black/50 p-6 pt-14 select-none overflow-hidden">
             {showMetadataSidebar ? (
               /* Metadata Editor Sidebar */
               <div key="metadata-sidebar" className="flex flex-col gap-4 h-full animate-slide-in-right">
@@ -2673,22 +2854,40 @@ export default function SystemAppContent({
                   </div>
                   
                   {/* Dropdown Menu Container */}
-                  <div className="relative shrink-0">
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setShowContextMenu(prev => !prev);
-                      }}
+                  <DropdownMenu.Root open={showContextMenu} onOpenChange={setShowContextMenu}>
+                    <DropdownMenu.Trigger asChild>
+                      <button
                       className={`text-white/60 hover:text-white transition cursor-pointer flex items-center justify-center p-1.5 rounded-lg border border-white/5 hover:bg-white/10 ${showContextMenu ? "text-white bg-white/10" : "bg-[#1a1a1a]"}`}
                       title="Opções"
+                      aria-label="Opções do jogo"
                     >
                       <MoreHorizontal className="w-4 h-4" />
-                    </button>
-                    
-                    {showContextMenu && (
-                      <>
-                        <div className="fixed inset-0 z-40" onClick={() => setShowContextMenu(false)} />
-                        <div className="absolute right-0 mt-2 w-56 bg-[#0d0d0d]/95 backdrop-blur-md border border-white/10 rounded-xl shadow-2xl p-2 z-50 text-white animate-in fade-in slide-in-from-top-2 duration-150 text-left">
+                      </button>
+                    </DropdownMenu.Trigger>
+
+                    <DropdownMenu.Portal>
+                      <DropdownMenu.Content
+                        align="end"
+                        sideOffset={8}
+                        className="z-[10000] w-56 rounded-xl border border-white/10 bg-[#0d0d0d]/95 p-2 text-left text-white shadow-2xl backdrop-blur-md data-[state=open]:animate-in data-[state=open]:fade-in data-[state=open]:slide-in-from-top-2"
+                      >
+                          <div className="px-3 py-1 text-[10px] text-white/40 uppercase font-semibold tracking-wider mb-1.5">
+                            Jogar
+                          </div>
+
+                          <button
+                            onClick={() => {
+                              setShowContextMenu(false);
+                              onLaunchGame(selectedGame, system);
+                            }}
+                            className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs hover:bg-white/10 text-left transition cursor-pointer text-white/80 hover:text-white"
+                          >
+                            <Play className="w-4 h-4 text-emerald-400 drop-shadow-[0_0_7px_rgba(52,211,153,0.7)]" />
+                            <span>Jogar</span>
+                          </button>
+
+                          <div className="my-1.5 border-t border-white/5" />
+
                           <div className="px-3 py-1 text-[10px] text-white/40 uppercase font-semibold tracking-wider mb-1.5">
                             Gerenciar jogo
                           </div>
@@ -2700,7 +2899,7 @@ export default function SystemAppContent({
                             }}
                             className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs hover:bg-white/10 text-left transition cursor-pointer text-white/80 hover:text-white"
                           >
-                            <Settings className="w-4 h-4 text-accent" />
+                            <Settings className="w-4 h-4 text-accent drop-shadow-[0_0_7px_var(--accent-color)]" />
                             <span>Configurações deste jogo</span>
                           </button>
                           
@@ -2712,7 +2911,7 @@ export default function SystemAppContent({
                             }}
                             className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs hover:bg-white/10 text-left transition cursor-pointer text-white/80 hover:text-white"
                           >
-                            <HardDrive className="w-4 h-4 text-accent" />
+                            <HardDrive className="w-4 h-4 text-accent drop-shadow-[0_0_7px_var(--accent-color)]" />
                             <span>Save states</span>
                           </button>
                           
@@ -2724,7 +2923,7 @@ export default function SystemAppContent({
                             }}
                             className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs hover:bg-white/10 text-left transition cursor-pointer text-white/80 hover:text-white"
                           >
-                            <Folder className="w-4 h-4 text-cyan-400" />
+                            <Folder className="w-4 h-4 text-cyan-400 drop-shadow-[0_0_7px_rgba(34,211,238,0.7)]" />
                             <span>Adicionar à coleção</span>
                           </button>
                           
@@ -2735,9 +2934,15 @@ export default function SystemAppContent({
                             }}
                             className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs hover:bg-white/10 text-left transition cursor-pointer text-white/80 hover:text-white"
                           >
-                            <Heart className={`w-4 h-4 ${selectedGame.favorite ? "fill-red-500 text-red-500" : "text-red-500 opacity-60"}`} />
+                            <Heart className={`w-4 h-4 drop-shadow-[0_0_7px_rgba(239,68,68,0.7)] ${selectedGame.favorite ? "fill-red-500 text-red-500" : "text-red-500 opacity-60"}`} />
                             <span>{selectedGame.favorite ? "Remover dos Favoritos" : "Favoritar"}</span>
                           </button>
+
+                          <div className="my-1.5 border-t border-white/5" />
+
+                          <div className="px-3 py-1 text-[10px] text-white/40 uppercase font-semibold tracking-wider mb-1.5">
+                            Metadados
+                          </div>
 
                           <button
                             onClick={() => {
@@ -2746,12 +2951,9 @@ export default function SystemAppContent({
                             }}
                             className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs hover:bg-white/10 text-left transition cursor-pointer text-white/80 hover:text-white"
                           >
-                            <Edit3 className="w-4 h-4 text-emerald-400" />
+                            <Edit3 className="w-4 h-4 text-emerald-400 drop-shadow-[0_0_7px_rgba(52,211,153,0.7)]" />
                             <span>Editar metadados</span>
                           </button>
-
-                          {/* Separator */}
-                          <div className="my-1 border-t border-white/5" />
 
                           <button
                             onClick={() => {
@@ -2771,13 +2973,12 @@ export default function SystemAppContent({
                             }}
                             className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs hover:bg-white/10 text-left transition cursor-pointer text-white/80 hover:text-white"
                           >
-                            <CloudDownload className="w-4 h-4 text-cyan-400" />
+                            <CloudDownload className="w-4 h-4 text-cyan-400 drop-shadow-[0_0_7px_rgba(34,211,238,0.7)]" />
                             <span>Scrape do jogo</span>
                           </button>
-                        </div>
-                      </>
-                    )}
-                  </div>
+                      </DropdownMenu.Content>
+                    </DropdownMenu.Portal>
+                  </DropdownMenu.Root>
                 </div>
 
                 {/* Favoritar & Avaliação Row */}
@@ -2981,6 +3182,15 @@ export default function SystemAppContent({
                           <span>Atualizar jogo ({selectedGame.romsetVersion})</span>
                         </button>
                       )}
+                      {usesRetroArch(selectedGame) && (
+                        <button
+                          onClick={() => void openNetplay(selectedGame)}
+                          className="w-[calc(100%-8px)] mx-auto rounded-md border border-fuchsia-400/20 bg-fuchsia-500/10 py-2.5 text-sm font-semibold text-fuchsia-100 transition hover:border-fuchsia-400/35 hover:bg-fuchsia-500/20 flex items-center justify-center gap-2 cursor-pointer"
+                        >
+                          <Radio className="w-5 h-5" />
+                          <span>Jogar online</span>
+                        </button>
+                      )}
                       <button
                         onClick={() => onLaunchGame(selectedGame, system)}
                         className="w-[calc(100%-8px)] mx-auto hover:scale-[1.02] hover:brightness-110 hover:shadow-lg transition-all rounded-md py-3 text-base font-semibold flex items-center justify-center gap-2 cursor-pointer text-white outline outline-2 outline-offset-2"
@@ -3000,6 +3210,156 @@ export default function SystemAppContent({
           </ScrollArea>
         )}
       </div>
+
+      {netplayGame && (
+        <div className="fixed inset-0 z-[1000] flex items-center justify-center bg-black/70 p-5 backdrop-blur-md">
+          <button
+            type="button"
+            className="absolute inset-0 cursor-default"
+            onClick={() => !netplayLaunching && setNetplayGame(null)}
+            aria-label="Fechar"
+          />
+          <div className="glass-strong relative w-full max-w-[520px] overflow-hidden rounded-2xl border border-white/10 shadow-2xl animate-in fade-in zoom-in-95 duration-200">
+            <div className="flex items-center gap-4 border-b border-white/10 px-6 py-5">
+              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-fuchsia-400/20 bg-fuchsia-500/10 text-fuchsia-300">
+                <Radio className="h-5 w-5" />
+              </div>
+              <div className="min-w-0 flex-1">
+                <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-fuchsia-300/65">Criar sala online</p>
+                <h2 className="mt-1 truncate text-base font-bold text-white">{netplayGame.name}</h2>
+                <p className="mt-0.5 truncate text-xs text-white/40">{resolveGameSystem(netplayGame).fullname}</p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setNetplayGame(null)}
+                disabled={netplayLaunching}
+                className="rounded-lg p-2 text-white/40 transition hover:bg-white/10 hover:text-white disabled:opacity-40"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+
+            <div className="space-y-4 px-6 py-5">
+              {netplayChecking ? (
+                <div className="flex min-h-28 flex-col items-center justify-center rounded-xl border border-white/10 bg-black/15">
+                  <Loader2 className="mb-2 h-5 w-5 animate-spin text-fuchsia-300" />
+                  <p className="text-xs font-semibold text-white/75">Verificando jogo e core...</p>
+                </div>
+              ) : netplayEligibility?.eligible ? (
+                <>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="rounded-xl border border-white/10 bg-black/15 p-3.5">
+                      <p className="text-[9px] font-bold uppercase tracking-widest text-white/35">Core do RetroArch</p>
+                      <p className="mt-1.5 truncate text-xs font-semibold text-white/85">{netplayEligibility.core}</p>
+                    </div>
+                    <div className="rounded-xl border border-white/10 bg-black/15 p-3.5">
+                      <p className="text-[9px] font-bold uppercase tracking-widest text-white/35">CRC do conteúdo</p>
+                      <p className="mt-1.5 truncate font-mono text-xs font-semibold text-white/85">
+                        {netplayEligibility.contentCrc || "Não identificado"}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-2 rounded-xl border border-emerald-400/15 bg-emerald-400/5 px-3.5 py-3 text-xs text-emerald-200/85">
+                    <ShieldCheck className="h-4 w-4 shrink-0 text-emerald-300" />
+                    Jogo e core prontos para hospedar uma sala
+                  </div>
+
+                  <div className="grid grid-cols-[1fr_120px] gap-3">
+                    <label className="space-y-1.5">
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-white/40">Seu apelido</span>
+                      <input
+                        value={netplayNickname}
+                        onChange={event => setNetplayNickname(event.target.value)}
+                        maxLength={32}
+                        className="w-full rounded-xl border border-white/10 bg-black/20 px-3.5 py-2.5 text-xs text-white outline-none transition focus:border-fuchsia-400/40"
+                      />
+                    </label>
+                    <label className="space-y-1.5">
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-white/40">Porta</span>
+                      <input
+                        value={netplayPort}
+                        onChange={event => setNetplayPort(event.target.value.replace(/\D/g, "").slice(0, 5))}
+                        inputMode="numeric"
+                        className="w-full rounded-xl border border-white/10 bg-black/20 px-3.5 py-2.5 text-xs text-white outline-none transition focus:border-fuchsia-400/40"
+                      />
+                    </label>
+                  </div>
+
+                  <label className="flex cursor-pointer items-center justify-between rounded-xl border border-white/10 bg-black/15 px-3.5 py-3">
+                    <span className="flex items-center gap-2.5">
+                      <Wifi className="h-4 w-4 text-fuchsia-300" />
+                      <span>
+                        <span className="block text-xs font-semibold text-white/85">Exibir na lista pública</span>
+                        <span className="mt-0.5 block text-[10px] text-white/35">Permite que outros jogadores encontrem a sala</span>
+                      </span>
+                    </span>
+                    <input
+                      type="checkbox"
+                      checked={netplayAnnounce}
+                      onChange={event => setNetplayAnnounce(event.target.checked)}
+                      className="h-4 w-4 accent-fuchsia-500"
+                    />
+                  </label>
+
+                  <div className="grid grid-cols-2 gap-3">
+                    <label className="space-y-1.5">
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-white/40">Senha da sala</span>
+                      <input
+                        type="password"
+                        value={netplayPassword}
+                        onChange={event => setNetplayPassword(event.target.value)}
+                        maxLength={64}
+                        placeholder="Sem senha"
+                        className="w-full rounded-xl border border-white/10 bg-black/20 px-3.5 py-2.5 text-xs text-white outline-none transition placeholder:text-white/20 focus:border-fuchsia-400/40"
+                      />
+                    </label>
+                    <label className="space-y-1.5">
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-white/40">Senha de espectador</span>
+                      <input
+                        type="password"
+                        value={netplaySpectatorPassword}
+                        onChange={event => setNetplaySpectatorPassword(event.target.value)}
+                        maxLength={64}
+                        placeholder="Sem senha"
+                        className="w-full rounded-xl border border-white/10 bg-black/20 px-3.5 py-2.5 text-xs text-white outline-none transition placeholder:text-white/20 focus:border-fuchsia-400/40"
+                      />
+                    </label>
+                  </div>
+                </>
+              ) : (
+                <div className="rounded-xl border border-red-400/20 bg-red-400/5 p-4">
+                  <p className="text-xs font-bold text-red-300">Não foi possível criar a sala</p>
+                  <p className="mt-1.5 text-xs leading-relaxed text-white/50">{netplayError || "Este jogo não é compatível com o modo online."}</p>
+                </div>
+              )}
+              {netplayError && netplayEligibility?.eligible && (
+                <p className="rounded-lg border border-red-400/15 bg-red-400/5 px-3 py-2 text-xs text-red-200">{netplayError}</p>
+              )}
+            </div>
+
+            <div className="flex justify-end gap-2 border-t border-white/10 px-6 py-4">
+              <button
+                type="button"
+                onClick={() => setNetplayGame(null)}
+                disabled={netplayLaunching}
+                className="rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-xs font-semibold text-white/65 transition hover:bg-white/10 hover:text-white disabled:opacity-40"
+              >
+                Cancelar
+              </button>
+              <button
+                type="button"
+                onClick={() => void createNetplayRoom()}
+                disabled={!netplayEligibility?.eligible || netplayChecking || netplayLaunching || !netplayNickname.trim()}
+                className="flex min-w-32 items-center justify-center gap-2 rounded-xl bg-fuchsia-600 px-4 py-2.5 text-xs font-bold text-white shadow-lg shadow-fuchsia-950/30 transition hover:bg-fuchsia-500 disabled:cursor-not-allowed disabled:opacity-40"
+              >
+                {netplayLaunching ? <Loader2 className="h-4 w-4 animate-spin" /> : <Radio className="h-4 w-4" />}
+                Criar sala
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Full Window PDF Manual Overlay */}
       {showPdfViewer && pdfUrl && (
@@ -3034,6 +3394,31 @@ export default function SystemAppContent({
             className="max-w-[95%] max-h-[90%] rounded-md border border-white/10 shadow-2xl" 
           />
         </div>
+      )}
+
+      {platformBatchProgress && (
+        <ProgressSurface notification={platformBatchNotification}>
+          <OperationProgressCard
+            mode="batch"
+            presentation={platformBatchNotification ? "notification" : "modal"}
+            icon={<CloudDownload className="animate-pulse" />}
+            title={`Baixando ${system.fullname}`}
+            source="Google Drive · download em lote"
+            subtitle={`${platformBatchProgress.total} jogos na fila`}
+            currentItem={platformBatchProgress.filename || undefined}
+            percent={platformBatchProgress.percent}
+            status={platformBatchProgress.status || "Baixando jogo atual..."}
+            completed={platformBatchProgress.completed}
+            failed={platformBatchProgress.failed}
+            total={platformBatchProgress.total}
+            cancelling={isCancellingPlatformDownload}
+            onPresentationChange={() => setPlatformBatchNotification(current => !current)}
+            onClose={() => {
+              setIsCancellingPlatformDownload(true);
+              void window.api.cancelDownload(platformBatchProgress.id);
+            }}
+          />
+        </ProgressSurface>
       )}
 
       {isScraping && scrapeProgress && (
@@ -3258,6 +3643,20 @@ export default function SystemAppContent({
               <Play className="w-4 h-4 text-emerald-400 fill-emerald-400/20" />
               <span>Jogar</span>
             </button>
+
+            {usesRetroArch(gameContextMenu.game) && (
+              <button
+                onClick={() => {
+                  const menuGame = games[gameContextMenu.index] || gameContextMenu.game;
+                  setGameContextMenu(null);
+                  void openNetplay(menuGame);
+                }}
+                className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs hover:bg-fuchsia-500/10 text-left transition cursor-pointer text-white/80 hover:text-white"
+              >
+                <Radio className="w-4 h-4 text-fuchsia-400" />
+                <span>Jogar online</span>
+              </button>
+            )}
             
             <button
               onClick={() => {
@@ -3361,28 +3760,35 @@ export default function SystemAppContent({
 
       {/* Full Platform Download Modal */}
       {showFullSystemTorrentModal && platformInstallMode !== 'extract' && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-md p-4 animate-in fade-in duration-200">
-          <div className="w-full max-w-lg bg-[#141414] border border-white/10 rounded-2xl p-6 shadow-2xl text-left flex flex-col gap-5 text-white">
-            {/* Header */}
-            <div className="flex items-start justify-between border-b border-white/10 pb-4">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-accent/20 border border-accent/30 flex items-center justify-center text-accent">
-                  <CloudDownload className="w-5 h-5" />
-                </div>
-                <div>
-                  <h3 className="text-base font-bold text-white">Download {system.fullname}</h3>
-                  <p className="text-xs text-white/50">Plataforma Completa</p>
-                </div>
-              </div>
-              <button
-                type="button"
-                onClick={() => setShowFullSystemTorrentModal(false)}
-                className="w-7 h-7 rounded-full flex items-center justify-center text-white/50 hover:text-white bg-white/5 hover:bg-white/10 transition cursor-pointer"
+        <AppDialog
+          open
+          onOpenChange={setShowFullSystemTorrentModal}
+          title={`Download ${system.fullname}`}
+          description="Plataforma completa"
+          icon={<CloudDownload />}
+          size="md"
+          footer={
+            <>
+              <AppButton variant="ghost" onClick={() => setShowFullSystemTorrentModal(false)}>
+                Cancelar
+              </AppButton>
+              <AppButton
+                disabled={!platformDownloadInfo?.hasEnoughSpace || isStartingPlatformDownload || platformInfoLoading}
+                onClick={handleConfirmPlatformDownload}
               >
-                <X className="w-4 h-4" />
-              </button>
-            </div>
-
+                {isStartingPlatformDownload ? (
+                  <>
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                    Iniciando...
+                  </>
+                ) : (
+                  "Baixar plataforma completa"
+                )}
+              </AppButton>
+            </>
+          }
+        >
+          <div className="flex flex-col gap-5 text-left text-white">
             {/* Content */}
             {platformInfoLoading ? (
               <div className="py-12 flex flex-col items-center justify-center gap-3 text-white/50 text-xs">
@@ -3471,7 +3877,7 @@ export default function SystemAppContent({
                   <p className="text-[10px] text-white/40 mt-1">
                     {overwriteGamesOpt
                       ? 'Todos os jogos serão baixados novamente e os arquivos locais correspondentes serão substituídos.'
-                      : `${platformDownloadInfo.installedGameCount} jogos já instalados serão preservados; apenas os ausentes serão baixados.`}
+                      : `${localInstalledGameCount} jogos locais serão preservados; ${platformDownloadInfo.installedGameCount} correspondem ao catálogo e apenas os ${platformDownloadInfo.gameCount} ausentes serão baixados.`}
                   </p>
                 </div>
 
@@ -3482,33 +3888,8 @@ export default function SystemAppContent({
               </div>
             ) : null}
 
-            {/* Modal Actions */}
-            <div className="flex items-center justify-end gap-3 border-t border-white/10 pt-4 mt-2">
-              <button
-                type="button"
-                onClick={() => setShowFullSystemTorrentModal(false)}
-                className="px-4 py-2 rounded-xl text-xs font-semibold text-white/70 hover:text-white hover:bg-white/5 transition cursor-pointer"
-              >
-                Cancelar
-              </button>
-              <button
-                type="button"
-                disabled={!platformDownloadInfo?.hasEnoughSpace || isStartingPlatformDownload || platformInfoLoading}
-                onClick={handleConfirmPlatformDownload}
-                className="px-5 py-2 rounded-xl text-xs font-bold bg-accent hover:bg-accent/80 text-white transition cursor-pointer disabled:opacity-50 flex items-center gap-2 shadow-lg"
-              >
-                {isStartingPlatformDownload ? (
-                  <>
-                    <Loader2 className="w-4 h-4 animate-spin" />
-                    <span>Iniciando...</span>
-                  </>
-                ) : (
-                  <span>Baixar plataforma completa</span>
-                )}
-              </button>
-            </div>
           </div>
-        </div>
+        </AppDialog>
       )}
 
       {/* Active Torrent Floating Progress Widget */}

@@ -75,7 +75,7 @@ export function OperationProgressCard({
 
 
   return (
-    <div className="w-[min(390px,calc(100vw-24px))] select-none rounded-xl border border-white/10 bg-[#111017]/95 p-4 text-white shadow-[0_18px_55px_rgba(0,0,0,.55),0_0_35px_color-mix(in_srgb,var(--accent-color)_10%,transparent)] backdrop-blur-2xl">
+    <div className="glass-strong w-[min(390px,calc(100vw-24px))] select-none rounded-xl border border-white/10 p-4 text-white shadow-2xl">
       <div className="flex items-start gap-3">
         <div className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center text-accent drop-shadow-[0_0_12px_var(--accent-color)] [&>svg]:h-full [&>svg]:w-full">
           {icon}

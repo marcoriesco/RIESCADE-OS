@@ -1,18 +1,22 @@
 import React, { useCallback, useEffect, useRef, useState, useMemo } from "react";
 import {
-  Search, Power, X, Minus, Square, Gamepad2, Monitor,
+  Search, Power, X, Gamepad2, Monitor,
   Folder, Grid3x3, Wifi, Volume2, Battery, Loader2,
   MoreHorizontal, Menu, Heart, Download, Check, AlertTriangle, Play, Settings, Info, CloudDownload, Music2
 } from "lucide-react";
 import * as Toast from '@radix-ui/react-toast';
 import * as Tooltip from '@radix-ui/react-tooltip';
+import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import { System, Game, WinState, hasMultipleEmulators } from "./types";
 import { TOOL_APPS, getSystemTheme } from "./constants";
 import SystemAppContent from "./components/SystemAppContent";
 import ToolAppContent from "./components/ToolAppContent";
 import { ScrollArea } from "./components/ScrollArea";
 import VirtualWindow from "./components/VirtualWindow";
+import { WindowChrome } from "./components/WindowChrome";
 import { OperationProgressCard } from "./components/OperationProgressCard";
+import { AppButton } from "./components/ui/AppButton";
+import { AppDialog } from "./components/ui/AppDialog";
 import defaultBg from '../../main/resources/default.webp';
 import defaultVideo from '../../main/resources/default.mp4';
 import riescadeLogo from '../../main/resources/riescade.webp';
@@ -408,6 +412,12 @@ export default function App() {
     return ["tool:all"];
   }, [settings]);
 
+  useEffect(() => {
+    const enabled = settings["RIESCADE.ColorActiveWindowBorder"]?.value !== false &&
+      settings["RIESCADE.ColorActiveWindowBorder"]?.value !== "false";
+    document.documentElement.dataset.colorActiveBorders = String(enabled);
+  }, [settings]);
+
   const getTaskbarIcons = useCallback(() => {
     const raw = settings["Taskbar.Icons"]?.value;
     if (raw !== undefined) {
@@ -457,6 +467,7 @@ export default function App() {
     totalBytes?: number;
     status?: string;
     speed?: number;
+    operationTitle?: string;
   } | null>(null);
   const [isUpdatePrompt, setIsUpdatePrompt] = useState(false);
   type ToastType = "favorite" | "controller" | "success" | "error" | "info" | "collection" | "scraper" | "volume" | "music";
@@ -521,11 +532,27 @@ export default function App() {
   useEffect(() => {
     let hideTimer: number | null = null;
     const unsubscribe = window.api.on("app-download-progress", (_event, data: any) => {
+      if (data?.mode === "batch") return;
       const now = Date.now();
       const downloaded = Number(data?.downloadedBytes) || 0;
       const total = Number(data?.totalBytes) || 0;
       const percent = Math.max(0, Math.min(100, Number(data?.percent) || 0));
       const id = String(data?.id || data?.assetId || "");
+      const operationStatus = String(data?.status || "").toLowerCase();
+      const operationTitle =
+        data?.operation === "media"
+          ? operationStatus.includes("extra") || operationStatus.includes("organiz")
+            ? "Instalando mídias"
+            : "Baixando mídias"
+          : data?.operation === "bios"
+            ? operationStatus.includes("extra")
+              ? "Instalando pack de BIOS"
+              : "Baixando pack de BIOS"
+            : data?.operation === "romset-update"
+              ? "Atualizando jogo"
+              : data?.operation === "game-install"
+                ? "Instalando jogo"
+                : "Baixando jogo";
 
       let speed = 0;
       const prev = lastDownloadProgressRef.current;
@@ -546,7 +573,8 @@ export default function App() {
         downloadedBytes: downloaded,
         totalBytes: total,
         status: data?.status,
-        speed
+        speed,
+        operationTitle
       });
 
       if (percent >= 100) {
@@ -587,7 +615,7 @@ export default function App() {
         >
           <OperationProgressCard
             icon={<CloudDownload className="h-11 w-11 animate-pulse" />}
-            title="Baixando jogo"
+            title={appDownloadProgress.operationTitle || "Baixando jogo"}
             subtitle={appDownloadProgress.title}
             currentItem={appDownloadProgress.filename}
             percent={appDownloadProgress.percent}
@@ -978,24 +1006,29 @@ export default function App() {
     };
 
     return (
-      <div className="relative flex items-center gap-2 w-full min-w-0">
+      <div className="relative flex items-center gap-2 w-full h-full min-w-0">
         <div className="relative order-2 ml-auto flex items-center no-drag shrink-0" onMouseDown={(e) => e.stopPropagation()}>
-          <button 
-            onClick={(e) => { 
-              e.stopPropagation(); 
-              setOpenMenuSystemId(isMenuOpen ? null : systemName); 
-            }}
-            className={`relative flex h-8 w-10 cursor-pointer items-center justify-center rounded text-white/65 transition hover:bg-white/10 hover:text-white ${isMenuOpen ? "bg-white/10 text-white" : ""}`}
-            title="Menu da plataforma"
+          <DropdownMenu.Root
+            open={isMenuOpen}
+            onOpenChange={(open) => setOpenMenuSystemId(open ? systemName : null)}
           >
-            <Menu className="h-[18px] w-[18px]" />
-            <span className="absolute right-[7px] top-[6px] h-1.5 w-1.5 rounded-full border border-[#111] bg-emerald-400 shadow-[0_0_6px_rgba(52,211,153,0.65)]" />
-          </button>
-          
-          {isMenuOpen && (
-            <>
-              <div className="fixed inset-0 z-40" onClick={() => setOpenMenuSystemId(null)} />
-              <div className="absolute right-0 top-9 w-64 bg-[#0d0d0d]/95 backdrop-blur-md border border-white/10 rounded-xl shadow-2xl p-2 z-50 text-white animate-in fade-in slide-in-from-top-2 duration-150">
+            <DropdownMenu.Trigger asChild>
+              <button
+                className={`relative flex h-9 w-10 cursor-pointer items-center justify-center text-white/65 transition hover:bg-white/10 hover:text-white ${isMenuOpen ? "bg-white/10 text-white" : ""}`}
+                title="Menu da plataforma"
+                aria-label="Menu da plataforma"
+              >
+                <Menu className="h-[18px] w-[18px]" />
+                <span className="absolute right-[8px] top-[10px] h-1.5 w-1.5 rounded-full border border-[#111] bg-emerald-400 shadow-[0_0_6px_rgba(52,211,153,0.65)]" />
+              </button>
+            </DropdownMenu.Trigger>
+
+            <DropdownMenu.Portal>
+              <DropdownMenu.Content
+                align="end"
+                sideOffset={0}
+                className="z-[10000] w-64 rounded-xl border border-white/10 bg-[#0d0d0d]/95 p-2 text-white shadow-2xl backdrop-blur-md data-[state=open]:animate-in data-[state=open]:fade-in data-[state=open]:slide-in-from-top-2"
+              >
                 <button 
                   onClick={() => { handleToggleDesktop(); setOpenMenuSystemId(null); }}
                   className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs hover:bg-white/10 text-left transition"
@@ -1100,17 +1133,17 @@ export default function App() {
                     );
                   })()
                 )}
-              </div>
-            </>
-          )}
+              </DropdownMenu.Content>
+            </DropdownMenu.Portal>
+          </DropdownMenu.Root>
         </div>
         
-        <div className="order-1 flex items-center gap-2 min-w-0 truncate pr-4">
+        {/* <div className="order-1 flex items-center gap-2 min-w-0 truncate pr-4">
           {SystemIcon && <SystemIcon className="w-4 h-4 text-accent shrink-0" />}
           <span className="text-sm font-bold text-white/95 truncate tracking-wide">
             {system?.fullname || (matchingTool ? matchingTool.name : systemName.toUpperCase())}
           </span>
-        </div>
+        </div> */}
       </div>
     );
   };
@@ -1927,33 +1960,12 @@ export default function App() {
           </div>
         </div>
 
-        {/* Window Controls Overlay (top-right) */}
-        <div 
-          className="absolute top-0 right-0 z-20 flex items-center h-8"
-          style={{ WebkitAppRegion: 'no-drag' } as any}
-        >
-          <button 
-            onClick={() => window.api.minimizeWindow()} 
-            className="w-11 h-8 hover:bg-white/10 flex items-center justify-center text-white/60 hover:text-white transition cursor-pointer"
-            title="Minimizar"
-          >
-            <Minus className="w-4 h-4" />
-          </button>
-          <button 
-            onClick={() => window.api.maximizeWindow()} 
-            className="w-11 h-8 hover:bg-white/10 flex items-center justify-center text-white/60 hover:text-white transition cursor-pointer"
-            title="Maximizar"
-          >
-            <Square className="w-3 h-3" />
-          </button>
-          <button 
-            onClick={() => window.api.closeWindow()} 
-            className="w-11 h-8 hover:bg-red-600 flex items-center justify-center text-white/60 hover:text-white transition cursor-pointer"
-            title="Fechar"
-          >
-            <X className="w-4 h-4" />
-          </button>
-        </div>
+        <WindowChrome
+          nativeDrag
+          onMinimize={() => window.api.minimizeWindow()}
+          onMaximize={() => window.api.maximizeWindow()}
+          onClose={() => window.api.closeWindow()}
+        />
 
         {/* Content - fills entire window, sidebar merges with titlebar */}
         <div className="flex-1 overflow-hidden relative z-0">
@@ -2026,33 +2038,12 @@ export default function App() {
             style={{ WebkitAppRegion: 'drag' } as any}
           />
 
-          {/* Window Controls Overlay (top-right) */}
-          <div 
-            className="absolute top-0 right-0 z-20 flex items-center h-8"
-            style={{ WebkitAppRegion: 'no-drag' } as any}
-          >
-            <button 
-              onClick={() => window.api.minimizeWindow()} 
-              className="w-11 h-8 hover:bg-white/10 flex items-center justify-center text-white/60 hover:text-white transition cursor-pointer"
-              title="Minimizar"
-            >
-              <Minus className="w-4 h-4" />
-            </button>
-            <button 
-              onClick={() => window.api.maximizeWindow()} 
-              className="w-11 h-8 hover:bg-white/10 flex items-center justify-center text-white/60 hover:text-white transition cursor-pointer"
-              title="Maximizar"
-            >
-              <Square className="w-3 h-3" />
-            </button>
-            <button 
-              onClick={() => window.api.closeWindow()} 
-              className="w-11 h-8 hover:bg-red-600 flex items-center justify-center text-white/60 hover:text-white transition cursor-pointer"
-              title="Fechar"
-            >
-              <X className="w-4 h-4" />
-            </button>
-          </div>
+          <WindowChrome
+            nativeDrag
+            onMinimize={() => window.api.minimizeWindow()}
+            onMaximize={() => window.api.maximizeWindow()}
+            onClose={() => window.api.closeWindow()}
+          />
 
           {/* Content - fills entire window, sidebar merges with titlebar */}
           <div className="flex-1 overflow-hidden relative z-0">
@@ -2107,33 +2098,12 @@ export default function App() {
           style={{ WebkitAppRegion: 'drag' } as any}
         />
 
-        {/* Window Controls Overlay (top-right) */}
-        <div 
-          className="absolute top-0 right-0 z-20 flex items-center h-8"
-          style={{ WebkitAppRegion: 'no-drag' } as any}
-        >
-          <button 
-            onClick={() => window.api.minimizeWindow()} 
-            className="w-11 h-8 hover:bg-white/10 flex items-center justify-center text-white/60 hover:text-white transition cursor-pointer"
-            title="Minimizar"
-          >
-            <Minus className="w-4 h-4" />
-          </button>
-          <button 
-            onClick={() => window.api.maximizeWindow()} 
-            className="w-11 h-8 hover:bg-white/10 flex items-center justify-center text-white/60 hover:text-white transition cursor-pointer"
-            title="Maximizar"
-          >
-            <Square className="w-3 h-3" />
-          </button>
-          <button 
-            onClick={() => window.api.closeWindow()} 
-            className="w-11 h-8 hover:bg-red-600 flex items-center justify-center text-white/60 hover:text-white transition cursor-pointer"
-            title="Fechar"
-          >
-            <X className="w-4 h-4" />
-          </button>
-        </div>
+        <WindowChrome
+          nativeDrag
+          onMinimize={() => window.api.minimizeWindow()}
+          onMaximize={() => window.api.maximizeWindow()}
+          onClose={() => window.api.closeWindow()}
+        />
 
         {/* Content - fills entire window, sidebar merges with titlebar */}
         <div className="flex-1 overflow-hidden relative z-0">
@@ -2223,6 +2193,7 @@ export default function App() {
               isMaximized={win.isMaximized}
               zIndex={win.zIndex}
               active={active}
+              colorActiveBorder={settings["RIESCADE.ColorActiveWindowBorder"]?.value !== "false"}
               headerLeft={win.type === 'system' ? renderSystemMenu(win.appId) : undefined}
               onFocus={focusVirtualWindow}
               onClose={closeVirtualWindow}
@@ -2326,7 +2297,7 @@ export default function App() {
         onClick={(e) => { e.stopPropagation(); setLauncherOpen(false); }}
       >
         <div
-          className={`start-menu-card glass-strong rounded-3xl w-[760px] max-w-[90%] h-[78%] p-6 flex flex-col ${
+          className={`start-menu-card glass-strong-dock rounded-3xl w-[760px] max-w-[90%] h-[78%] p-6 flex flex-col ${
             launcherOpen ? "open" : ""
           }`}
           onClick={(e) => e.stopPropagation()}
@@ -2361,8 +2332,16 @@ export default function App() {
                     const ToolIcon = app.icon;
                     return (
                       <div key={app.id} className="relative group">
-                        <button
+                        <div
+                          role="button"
+                          tabIndex={0}
                           onClick={() => openApp("tool", app.id)}
+                          onKeyDown={(e) => {
+                            if (e.key === "Enter" || e.key === " ") {
+                              e.preventDefault();
+                              openApp("tool", app.id);
+                            }
+                          }}
                           onContextMenu={(e) => {
                             e.preventDefault();
                             e.stopPropagation();
@@ -2385,7 +2364,7 @@ export default function App() {
                             <ToolIcon className="w-6 h-6 text-white" />
                           </div>
                           <span className="text-xs text-white/90 text-center leading-tight">{app.name}</span>
-                        </button>
+                        </div>
                       </div>
                     );
                   })}
@@ -2400,8 +2379,16 @@ export default function App() {
                     const SysIcon = theme.icon;
                     return (
                       <div key={sys.name} className="relative group">
-                        <button
+                        <div
+                          role="button"
+                          tabIndex={0}
                           onClick={() => openApp("system", sys.name)}
+                          onKeyDown={(e) => {
+                            if (e.key === "Enter" || e.key === " ") {
+                              e.preventDefault();
+                              openApp("system", sys.name);
+                            }
+                          }}
                           onContextMenu={(e) => {
                             e.preventDefault();
                             e.stopPropagation();
@@ -2430,7 +2417,7 @@ export default function App() {
                             )}
                           </div>
                           <span className="text-xs text-white/90 text-center leading-tight truncate w-full">{sys.fullname}</span>
-                        </button>
+                        </div>
                       </div>
                     );
                   })}
@@ -2557,7 +2544,7 @@ export default function App() {
               onMouseEnter={() => setTaskbarHidden(false)}
               onClick={(e) => e.stopPropagation()}
             >
-          <div className="glass-strong rounded-2xl px-3 py-2 flex items-center gap-2 shadow-2xl">
+          <div className="glass-strong-dock rounded-2xl px-3 py-2 flex items-center gap-2 shadow-2xl">
             
             {/* Start Menu button */}
             <Tooltip.Root>
@@ -2996,40 +2983,33 @@ export default function App() {
         </div>
       )}
 
-      {/* Confirmation Modal to Exit the System */}
-      {showExitConfirm && (
-        <div className="fixed inset-0 z-[9999] bg-black/65 backdrop-blur-md flex items-center justify-center select-none" onClick={() => setShowExitConfirm(false)}>
-          <div 
-            className="glass-strong rounded-3xl p-7 max-w-sm w-full mx-4 shadow-2xl border border-white/10 flex flex-col items-center select-none text-center animate-in zoom-in-95 duration-200"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="w-12 h-12 rounded-full bg-red-500/20 flex items-center justify-center mb-4">
-              <Power className="w-6 h-6 text-red-500" />
-            </div>
-            <h3 className="text-lg font-bold text-white mb-2 tracking-wide">Sair do RIESCADE OS</h3>
-            <p className="text-xs text-white/60 mb-6 leading-relaxed">
-              Deseja realmente sair do RIESCADE OS?
-            </p>
-            <div className="flex gap-3 w-full">
-              <button
-                onClick={() => setShowExitConfirm(false)}
-                className="flex-1 py-2 px-4 rounded-xl bg-white/5 hover:bg-white/10 text-white font-medium text-xs transition cursor-pointer"
-              >
-                Não
-              </button>
-              <button
-                onClick={() => {
-                  setShowExitConfirm(false);
-                  window.api.executeCommand("exit-frontend");
-                }}
-                className="flex-1 py-2 px-4 rounded-xl bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white font-medium text-xs shadow-lg transition cursor-pointer"
-              >
-                Sim
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      <AppDialog
+        open={showExitConfirm}
+        onOpenChange={setShowExitConfirm}
+        title="Sair do RIESCADE OS"
+        description="Deseja realmente sair do RIESCADE OS?"
+        icon={<Power />}
+        size="sm"
+        footer={
+          <>
+            <AppButton variant="ghost" onClick={() => setShowExitConfirm(false)}>
+              Não
+            </AppButton>
+            <AppButton
+              onClick={() => {
+                setShowExitConfirm(false);
+                window.api.executeCommand("exit-frontend");
+              }}
+            >
+              Sim
+            </AppButton>
+          </>
+        }
+      >
+        <p className="text-sm leading-relaxed text-white/55">
+          Jogos ou operações em andamento serão encerrados junto com o aplicativo.
+        </p>
+      </AppDialog>
 
       {/* App Version Info bottom right */}
       <div className="absolute bottom-2 right-2 z-30 pointer-events-none select-none text-right">

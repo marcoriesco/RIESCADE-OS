@@ -1,9 +1,9 @@
 import { createHash } from 'crypto'
 import { copyFileSync, createWriteStream, existsSync, mkdirSync, mkdtempSync, readdirSync, renameSync, rmSync, unlinkSync, promises as fsPromises } from 'fs'
-import { basename, join, parse } from 'path'
+import { basename, dirname, join, parse } from 'path'
 import { tmpdir } from 'os'
 import extractZip from 'extract-zip'
-import { BrowserWindow, ipcMain, shell } from 'electron'
+import { app, BrowserWindow, ipcMain, shell } from 'electron'
 import { getRetroBatPath } from '../utils/paths'
 import { SettingsParser } from '../parsers/SettingsParser'
 import { SystemsParser } from '../parsers/SystemsParser'
@@ -16,6 +16,7 @@ const MEDIA_TYPES = [
 ] as const
 const MEDIA_TYPE_SET = new Set<string>(MEDIA_TYPES)
 const FULL_MEDIA_ARCHIVE_NAMES = new Set(['_media.zip', '_media.7z'])
+const ROMSET_PLATFORMS = new Set(['mame', 'fbneo'])
 
 function isFullMediaArchive(filename: unknown): boolean {
   return typeof filename === 'string' &&
@@ -51,6 +52,7 @@ export interface AppCatalogAsset {
   cover3d: string | null
   fanart: string | null
   logo: string | null
+  video: string | null
   install_mode: 'file' | 'extract'
   install_name: string
   romset_version: string | null
@@ -89,6 +91,26 @@ interface AuthorizedDownload {
   }
   downloadUrl: string
   expiresAt: string
+}
+
+interface CachedPlatformCatalog {
+  etag: string | null
+  revision: string | null
+  assets: any[]
+  total: number
+  romsetVersion: string | null
+  supportsRomsetUpdate: boolean
+  supportsRomsetDownloads: boolean
+  supportsFullPlatformDownload: boolean
+  savedAt: number
+}
+
+interface BatchDownloadProgress {
+  id: string
+  current: number
+  total: number
+  completed: number
+  failed: number
 }
 
 function assertAccessToken(accessToken: unknown): string {
@@ -199,15 +221,144 @@ export class AppDownloadService {
   private readonly settings = new SettingsParser()
   private readonly systems = new SystemsParser()
   private readonly activeControllers = new Map<string, AbortController>()
+  private readonly cancelledDownloads = new Set<string>()
+  private readonly catalogCache = new Map<string, CachedPlatformCatalog>()
+  private readonly catalogCacheWrites = new Map<string, Promise<void>>()
+  private readonly catalogCacheMaxAgeMs = 60_000
+
+  private catalogCachePath(platform: string): string {
+    return join(app.getPath('userData'), 'download-catalog', `${platform}.json`)
+  }
+
+  private async readCatalogCache(platform: string): Promise<CachedPlatformCatalog | null> {
+    const memory = this.catalogCache.get(platform)
+    if (memory) return memory
+    try {
+      const parsed = JSON.parse(
+        await fsPromises.readFile(this.catalogCachePath(platform), 'utf8')
+      ) as CachedPlatformCatalog
+      if (!Array.isArray(parsed.assets) || !Number.isSafeInteger(parsed.total)) return null
+      this.catalogCache.set(platform, parsed)
+      return parsed
+    } catch {
+      return null
+    }
+  }
+
+  private async writeCatalogCache(
+    platform: string,
+    catalog: CachedPlatformCatalog
+  ): Promise<void> {
+    this.catalogCache.set(platform, catalog)
+    const path = this.catalogCachePath(platform)
+    const previousWrite = this.catalogCacheWrites.get(platform) ?? Promise.resolve()
+    const currentWrite = previousWrite
+      .catch(() => undefined)
+      .then(async () => {
+        await fsPromises.mkdir(dirname(path), { recursive: true })
+        const temporaryPath =
+          `${path}.${process.pid}.${Date.now()}.${Math.random().toString(16).slice(2)}.new`
+        try {
+          await fsPromises.writeFile(temporaryPath, JSON.stringify(catalog), 'utf8')
+          await fsPromises.rm(path, { force: true })
+          await fsPromises.rename(temporaryPath, path)
+        } finally {
+          await fsPromises.rm(temporaryPath, { force: true }).catch(() => undefined)
+        }
+      })
+    this.catalogCacheWrites.set(platform, currentWrite)
+    try {
+      await currentWrite
+    } finally {
+      if (this.catalogCacheWrites.get(platform) === currentWrite) {
+        this.catalogCacheWrites.delete(platform)
+      }
+    }
+  }
+
+  private readDirectoryNames(path: string): Set<string> {
+    try {
+      return new Set(
+        readdirSync(path, { withFileTypes: true })
+          .filter(entry => entry.isFile() || entry.isDirectory())
+          .map(entry => entry.name.toLowerCase())
+      )
+    } catch {
+      return new Set()
+    }
+  }
+
+  private enrichCatalog(
+    platform: string,
+    assets: any[]
+  ): AppCatalogAsset[] {
+    const romDirectory = join(getRetroBatPath(), 'roms', platform)
+    const allowedExtensions = this.getAllowedRomExtensions(platform)
+    const installedNames = this.readDirectoryNames(romDirectory)
+    const mediaNames = new Map<string, Set<string>>()
+    for (const folder of ['cover', 'cover3d', 'fanart', 'logo', 'video']) {
+      mediaNames.set(folder, this.readDirectoryNames(join(romDirectory, 'media', folder)))
+    }
+    const catalog: AppCatalogAsset[] = []
+
+    for (const asset of assets) {
+      if (isFullMediaArchive(asset?.download_name)) continue
+      try {
+        const assetAllowedExtensions = asset?.install_mode === 'extract'
+          ? new Set(['.zip'])
+          : allowedExtensions
+        const filename = getSafeRomFilename(
+          asset?.download_name,
+          assetAllowedExtensions,
+          platform
+        )
+        const mediaName = parse(filename).name
+        const installMode = asset.install_mode === 'extract' ? 'extract' : 'file'
+        const installName = typeof asset.install_name === 'string' && asset.install_name.trim()
+          ? basename(asset.install_name)
+          : mediaName
+        const media = (folder: string) => {
+          const filename = `${mediaName}.webp`
+          return mediaNames.get(folder)?.has(filename.toLowerCase())
+            ? join(romDirectory, 'media', folder, filename)
+            : null
+        }
+        const videoExtension = ['.mp4', '.webm', '.mkv', '.avi'].find(extension =>
+          mediaNames.get('video')?.has(`${mediaName}${extension}`.toLowerCase())
+        )
+        const installedKey = installMode === 'extract' ? installName : filename
+        catalog.push({
+          ...asset,
+          download_name: filename,
+          installed: installedNames.has(installedKey.toLowerCase()),
+          rom_path: join(romDirectory, installedKey),
+          cover: media('cover'),
+          cover3d: media('cover3d'),
+          fanart: media('fanart'),
+          logo: media('logo'),
+          video: videoExtension
+            ? join(romDirectory, 'media', 'video', `${mediaName}${videoExtension}`)
+            : null,
+          install_mode: installMode,
+          install_name: installName
+        })
+      } catch {
+        console.warn(
+          `[AppDownloadService] Ignoring incompatible ${platform.toUpperCase()} catalog entry: ${String(asset?.download_name || '(unnamed)')}`
+        )
+      }
+    }
+    return catalog
+  }
 
   cancelDownload(id: string): boolean {
+    this.cancelledDownloads.add(id)
     const controller = this.activeControllers.get(id)
     if (controller) {
       controller.abort()
       this.activeControllers.delete(id)
-      return true
     }
-    return false
+    return Boolean(controller) || id.startsWith('platform-')
   }
 
   private getAllowedRomExtensions(platform: string): Set<string> {
@@ -226,75 +377,80 @@ export class AppDownloadService {
 
   async listCatalog(accessToken: unknown, platform: string): Promise<AppCatalogAsset[]> {
     const normalizedPlatform = platform.toLowerCase()
-    const response = await fetch(
-      `${API_BASE_URL}/api/app/catalog?platform=${encodeURIComponent(normalizedPlatform)}`,
-      {
-        headers: {
-          Authorization: `Bearer ${assertAccessToken(accessToken)}`,
-          'User-Agent': 'RIESCADE-App'
-        },
-        signal: AbortSignal.timeout(30_000)
-      }
-    )
-    if (!response.ok) throw new Error(await readApiError(response))
-    const payload = await response.json()
-    if (!Array.isArray(payload?.assets)) {
-      throw new Error('O catálogo retornado pelo servidor é inválido.')
+    const token = assertAccessToken(accessToken)
+    let cached = await this.readCatalogCache(normalizedPlatform)
+    if (cached && Date.now() - cached.savedAt < this.catalogCacheMaxAgeMs) {
+      return this.enrichCatalog(normalizedPlatform, cached.assets)
     }
-    const assets = payload.assets
-    const romDirectory = join(getRetroBatPath(), 'roms', platform)
-    const allowedExtensions = this.getAllowedRomExtensions(platform)
-    const catalog: AppCatalogAsset[] = []
 
-    for (const asset of assets) {
-      if (isFullMediaArchive(asset?.download_name)) {
-        continue
+    try {
+      const firstResponse = await fetch(
+        `${API_BASE_URL}/api/app/catalog?platform=${encodeURIComponent(normalizedPlatform)}&offset=0&limit=500`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'User-Agent': 'RIESCADE-App',
+            ...(cached?.etag ? { 'If-None-Match': cached.etag } : {})
+          },
+          signal: AbortSignal.timeout(30_000)
+        }
+      )
+      if (firstResponse.status === 304 && cached) {
+        cached = { ...cached, savedAt: Date.now() }
+        await this.writeCatalogCache(normalizedPlatform, cached)
+        return this.enrichCatalog(normalizedPlatform, cached.assets)
+      }
+      if (!firstResponse.ok) throw new Error(await readApiError(firstResponse))
+      const firstPayload = await firstResponse.json()
+      if (!Array.isArray(firstPayload?.assets) || !Number.isSafeInteger(firstPayload?.total)) {
+        throw new Error('O catálogo retornado pelo servidor é inválido.')
       }
 
-      let filename: string
-      try {
-        const assetAllowedExtensions = asset?.install_mode === 'extract'
-          ? new Set(['.zip'])
-          : allowedExtensions
-        filename = getSafeRomFilename(asset?.download_name, assetAllowedExtensions, platform)
-      } catch {
-        // The remote bucket/database may contain auxiliary files such as
-        // gamelist.xml. They are not downloadable games and must not make the
-        // entire platform catalog fail.
-        console.warn(
-          `[AppDownloadService] Ignoring incompatible ${platform.toUpperCase()} catalog entry: ${String(asset?.download_name || '(unnamed)')}`
+      const assets = [...firstPayload.assets]
+      const total = firstPayload.total
+      for (let offset = 500; offset < total; offset += 500) {
+        const response = await fetch(
+          `${API_BASE_URL}/api/app/catalog?platform=${encodeURIComponent(normalizedPlatform)}&offset=${offset}&limit=500`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              'User-Agent': 'RIESCADE-App'
+            },
+            signal: AbortSignal.timeout(30_000)
+          }
         )
-        continue
+        if (!response.ok) throw new Error(await readApiError(response))
+        const payload = await response.json()
+        if (!Array.isArray(payload?.assets)) {
+          throw new Error('Uma página do catálogo retornou dados inválidos.')
+        }
+        assets.push(...payload.assets)
       }
 
-      const mediaName = parse(filename).name
-      const installMode = asset.install_mode === 'extract' ? 'extract' : 'file'
-      const installName = typeof asset.install_name === 'string' && asset.install_name.trim()
-        ? basename(asset.install_name)
-        : mediaName
-      const media = (folder: string) => {
-        const path = join(romDirectory, 'media', folder, `${mediaName}.webp`)
-        return existsSync(path) ? path : null
+      cached = {
+        etag: firstResponse.headers.get('etag'),
+        revision: typeof firstPayload.revision === 'string' ? firstPayload.revision : null,
+        assets,
+        total,
+        romsetVersion:
+          typeof firstPayload.romsetVersion === 'string' ? firstPayload.romsetVersion : null,
+        supportsRomsetUpdate: firstPayload.supportsRomsetUpdate === true,
+        supportsRomsetDownloads: firstPayload.supportsRomsetDownloads === true,
+        supportsFullPlatformDownload: firstPayload.supportsFullPlatformDownload === true,
+        savedAt: Date.now()
       }
-      const romPath = installMode === 'extract'
-        ? join(romDirectory, installName)
-        : join(romDirectory, filename)
-      catalog.push({
-        ...asset,
-        download_name: filename,
-        installed: existsSync(romPath),
-        rom_path: romPath,
-        cover: media('cover'),
-        cover3d: media('cover3d'),
-        fanart: media('fanart'),
-        logo: media('logo')
-        ,
-        install_mode: installMode,
-        install_name: installName
-      })
+      await this.writeCatalogCache(normalizedPlatform, cached)
+      return this.enrichCatalog(normalizedPlatform, assets)
+    } catch (error) {
+      if (cached) {
+        console.warn(
+          `[AppDownloadService] Using cached ${normalizedPlatform.toUpperCase()} catalog after refresh failure.`,
+          error
+        )
+        return this.enrichCatalog(normalizedPlatform, cached.assets)
+      }
+      throw error
     }
-
-    return catalog
   }
 
   async downloadBiosPack(
@@ -402,6 +558,7 @@ export class AppDownloadService {
             id: downloadId,
             assetId: downloadId,
             platform: 'bios',
+            operation: 'bios',
             title: 'Pack de BIOS RIESCADE',
             filename: 'bios.zip',
             downloadedBytes,
@@ -428,6 +585,7 @@ export class AppDownloadService {
         id: downloadId,
         assetId: downloadId,
         platform: 'bios',
+        operation: 'bios',
         title: 'Pack de BIOS RIESCADE',
         filename: 'bios.zip',
         downloadedBytes,
@@ -485,7 +643,8 @@ export class AppDownloadService {
     appVersion: string,
     window: BrowserWindow | null,
     romsetFilename?: unknown,
-    fullPlatformDownload = false
+    fullPlatformDownload = false,
+    batchProgress?: BatchDownloadProgress
   ): Promise<{ path: string; filename: string; sha256: string }> {
     if (
       romsetFilename === undefined &&
@@ -497,6 +656,9 @@ export class AppDownloadService {
       throw new Error('Plataforma inválida.')
     }
     const normalizedPlatform = platform.toLowerCase()
+    if (batchProgress && this.cancelledDownloads.has(batchProgress.id)) {
+      throw new Error('Download da plataforma cancelado.')
+    }
     const isRomsetUpdate = romsetFilename !== undefined
     const safeRomsetFilename = isRomsetUpdate
       ? getSafeRomFilename(String(romsetFilename), new Set(['.zip']), normalizedPlatform)
@@ -550,6 +712,9 @@ export class AppDownloadService {
       authorization.asset.install_name?.trim() || parse(filename).name
     ).replace(/[\u0000-\u001f<>:"/\\|?*]/g, '_')
     if (!installName) throw new Error('O servidor informou uma pasta de instalação inválida.')
+    if (batchProgress && this.cancelledDownloads.has(batchProgress.id)) {
+      throw new Error('Download da plataforma cancelado.')
+    }
 
     if (expectedSize !== null && !Number.isSafeInteger(expectedSize)) {
       throw new Error('O servidor informou um tamanho de arquivo inválido.')
@@ -568,7 +733,7 @@ export class AppDownloadService {
 
     if (existsSync(partialPath)) unlinkSync(partialPath)
 
-    const downloadId = authorization.asset.id
+    const downloadId = batchProgress?.id ?? authorization.asset.id
     const controller = new AbortController()
     this.activeControllers.set(downloadId, controller)
 
@@ -602,15 +767,33 @@ export class AppDownloadService {
           }
 
           const totalBytes = expectedSize || contentLength
+          const itemPercent = totalBytes > 0
+            ? Math.round((downloadedBytes / totalBytes) * 100)
+            : 0
           window?.webContents.send('app-download-progress', {
             id: downloadId,
-            assetId: downloadId,
+            assetId: authorization.asset.id,
             platform: assetPlatform,
+            operation: batchProgress
+              ? 'platform'
+              : isRomsetUpdate
+                ? 'romset-update'
+                : 'game',
             title: authorization.asset.title,
             filename,
             downloadedBytes,
             totalBytes,
-            percent: totalBytes > 0 ? Math.round((downloadedBytes / totalBytes) * 100) : 0
+            percent: batchProgress
+              ? ((batchProgress.current - 1) + itemPercent / 100) / batchProgress.total * 100
+              : itemPercent,
+            ...(batchProgress ? {
+              mode: 'batch',
+              current: batchProgress.current,
+              total: batchProgress.total,
+              completed: batchProgress.completed + (itemPercent >= 100 ? 1 : 0),
+              failed: batchProgress.failed,
+              itemPercent
+            } : {})
           })
         }
 
@@ -684,26 +867,20 @@ export class AppDownloadService {
     if (typeof platform !== 'string' || !/^[a-z0-9_-]{1,64}$/i.test(platform)) {
       throw new Error('Plataforma inválida.')
     }
-    const response = await fetch(
-      `${API_BASE_URL}/api/app/catalog?platform=${encodeURIComponent(platform.toLowerCase())}`,
-      {
-        headers: {
-          Authorization: `Bearer ${assertAccessToken(accessToken)}`,
-          'User-Agent': 'RIESCADE-App'
-        },
-        signal: AbortSignal.timeout(15_000)
-      }
-    )
-    if (!response.ok) throw new Error(await readApiError(response))
-    const payload = await response.json()
-    if (!payload?.supportsRomsetUpdate) return null
-    if (typeof payload?.romsetVersion !== 'string' || !payload.romsetVersion.trim()) {
+    const normalizedPlatform = platform.toLowerCase()
+    if (!ROMSET_PLATFORMS.has(normalizedPlatform)) {
+      return null
+    }
+    await this.listCatalog(accessToken, normalizedPlatform)
+    const catalog = this.catalogCache.get(normalizedPlatform)
+    if (!catalog?.supportsRomsetUpdate) return null
+    if (!catalog.romsetVersion?.trim()) {
       throw new Error('O servidor não informou a versão do romset.')
     }
     return {
-      version: payload.romsetVersion.trim(),
-      supportsDownloads: payload.supportsRomsetDownloads === true,
-      supportsFullPlatformDownload: payload.supportsFullPlatformDownload === true
+      version: catalog.romsetVersion.trim(),
+      supportsDownloads: catalog.supportsRomsetDownloads,
+      supportsFullPlatformDownload: catalog.supportsFullPlatformDownload
     }
   }
 
@@ -748,6 +925,9 @@ export class AppDownloadService {
           const path = join(romDirectory, 'media', folder, `${mediaName}.webp`)
           return existsSync(path) ? path : null
         }
+        const video = ['.mp4', '.webm', '.mkv', '.avi']
+          .map(extension => join(romDirectory, 'media', 'video', `${mediaName}${extension}`))
+          .find(existsSync) ?? null
         const romPath = join(romDirectory, filename)
         return [{
           id: asset.id,
@@ -764,6 +944,7 @@ export class AppDownloadService {
           cover3d: media('cover3d'),
           fanart: media('fanart'),
           logo: media('logo'),
+          video,
           install_mode: 'file' as const,
           install_name: mediaName,
           romset_version: payload.version
@@ -792,6 +973,7 @@ export class AppDownloadService {
         id: downloadId,
         assetId: downloadId,
         platform,
+        operation: 'game-install',
         title,
         filename: basename(archivePath),
         downloadedBytes: 0,
@@ -943,11 +1125,18 @@ export class AppDownloadService {
       ? catalog
       : catalog.filter(asset => !asset.installed)
     const skipped = catalog.length - pendingAssets.length
+    const batchId = `platform-${normalizedPlatform}`
+    this.cancelledDownloads.delete(batchId)
     let downloaded = 0
     let failed = 0
 
-    for (const asset of pendingAssets) {
-      try {
+    try {
+      for (let index = 0; index < pendingAssets.length; index += 1) {
+        if (this.cancelledDownloads.has(batchId)) {
+          throw new Error('Download da plataforma cancelado.')
+        }
+        const asset = pendingAssets[index]
+        try {
         await this.downloadAsset(
           accessToken,
           normalizedPlatform,
@@ -955,37 +1144,57 @@ export class AppDownloadService {
           appVersion,
           window,
           undefined,
-          true
+          true,
+          {
+            id: batchId,
+            current: index + 1,
+            total: pendingAssets.length,
+            completed: downloaded,
+            failed
+          }
         )
         downloaded += 1
-      } catch (error: any) {
-        if (error?.name === 'AbortError' || /abort|cancel/i.test(String(error?.message || ''))) {
-          throw new Error('Download da plataforma cancelado.')
+        } catch (error: any) {
+          if (
+            this.cancelledDownloads.has(batchId) ||
+            error?.name === 'AbortError' ||
+            /abort|cancel/i.test(String(error?.message || ''))
+          ) {
+            throw new Error('Download da plataforma cancelado.')
+          }
+          failed += 1
+          console.error(
+            `[AppDownloadService] Failed to download ${normalizedPlatform}/${asset.download_name}:`,
+            error
+          )
         }
-        failed += 1
-        console.error(
-          `[AppDownloadService] Failed to download ${normalizedPlatform}/${asset.download_name}:`,
-          error
-        )
+
+        window?.webContents.send('app-download-progress', {
+          id: batchId,
+          assetId: asset.id,
+          mode: 'batch',
+          platform: normalizedPlatform,
+          operation: 'platform',
+          title: `Plataforma ${normalizedPlatform.toUpperCase()}`,
+          filename: asset.download_name,
+          downloadedBytes: 0,
+          totalBytes: 0,
+          current: index + 1,
+          total: pendingAssets.length,
+          completed: downloaded,
+          failed,
+          percent: pendingAssets.length > 0
+            ? ((downloaded + failed) / pendingAssets.length) * 100
+            : 100,
+          status: `${downloaded + failed} de ${pendingAssets.length} jogos processados`
+        })
       }
 
-      window?.webContents.send('app-download-progress', {
-        id: `platform-${normalizedPlatform}`,
-        assetId: `platform-${normalizedPlatform}`,
-        platform: normalizedPlatform,
-        title: `Plataforma ${normalizedPlatform.toUpperCase()}`,
-        filename: asset.download_name,
-        downloadedBytes: 0,
-        totalBytes: 0,
-        percent:
-          pendingAssets.length > 0
-            ? Math.round(((downloaded + failed) / pendingAssets.length) * 100)
-            : 100,
-        status: `${downloaded + failed} de ${pendingAssets.length} jogos processados`
-      })
+      return { downloaded, failed, skipped }
+    } finally {
+      this.cancelledDownloads.delete(batchId)
+      this.activeControllers.delete(batchId)
     }
-
-    return { downloaded, failed, skipped }
   }
 
   async downloadPlatformMedia(
@@ -1007,6 +1216,7 @@ export class AppDownloadService {
       },
       body: JSON.stringify({
         platform: normalizedPlatform,
+        operation: 'media',
         clientVersion: appVersion
       }),
       signal: AbortSignal.timeout(15_000)

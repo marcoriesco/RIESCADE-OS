@@ -166,6 +166,18 @@ export class EmulatorParser {
       }
     }
 
+    // Materialize inherited aliases even when the emulator has never saved an
+    // explicit "auto" value (for example forcefullscreen -> fullscreen).
+    for (const [emulatorKey, globalKey] of Object.entries(GLOBAL_KEY_MAP)) {
+      if (
+        !result[emulatorKey]
+        && globalConfig[globalKey] !== undefined
+        && globalConfig[globalKey] !== 'auto'
+      ) {
+        result[emulatorKey] = { value: globalConfig[globalKey], source: 'global' }
+      }
+    }
+
     return result
   }
 

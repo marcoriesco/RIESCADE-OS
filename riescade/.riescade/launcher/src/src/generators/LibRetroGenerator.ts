@@ -124,6 +124,7 @@ export class LibRetroGenerator extends BaseGenerator {
 
       // Map controllers
       this.mapControllers(cfg);
+      this.configureNetplay(cfg);
 
       this.applyCoreOptions(cfg);
       this.writeCfg(this.retroarchCfgPath, cfg);
@@ -156,6 +157,7 @@ export class LibRetroGenerator extends BaseGenerator {
     if (selectedSlot !== undefined && Number(selectedSlot) >= 0) {
       launchArgs.push('--entryslot', selectedSlot);
     }
+    launchArgs.push(...this.getNetplayLaunchArgs());
     const launchRom = this.core.toLowerCase() === 'scummvm'
       ? resolveScummVmMarker(this.rom).markerPath
       : this.rom;
@@ -168,6 +170,59 @@ export class LibRetroGenerator extends BaseGenerator {
       executable,
       args: launchArgs,
     };
+  }
+
+  private configureNetplay(cfg: Record<string, string>): void {
+    const mode = this.args.rawArgs['-netplaymode'];
+    if (!mode) return;
+
+    const port = this.args.rawArgs['-netplayport'] || '55435';
+    const nickname = this.args.rawArgs['-netplaynick'] || 'RIESCADE Player';
+    const playerPassword = this.args.rawArgs['-netplaypassword'] || '';
+    const spectatorPassword = this.args.rawArgs['-netplayspectatepassword'] || '';
+    const announce = this.args.rawArgs['-netplayannounce'] !== 'false';
+    const useRelay = this.args.rawArgs['-netplayrelay'] !== 'false';
+
+    cfg['netplay_nickname'] = nickname;
+    cfg['netplay_ip_port'] = port;
+    cfg['netplay_public_announce'] = announce ? 'true' : 'false';
+    cfg['netplay_use_mitm_server'] = useRelay && announce ? 'true' : 'false';
+    cfg['netplay_start_as_spectator'] = mode === 'spectator' ? 'true' : 'false';
+    cfg['netplay_spectator_mode_enable'] = mode === 'spectator' || Boolean(spectatorPassword) ? 'true' : 'false';
+
+    if (playerPassword) cfg['netplay_password'] = playerPassword;
+    else delete cfg['netplay_password'];
+    if (spectatorPassword) cfg['netplay_spectate_password'] = spectatorPassword;
+    else delete cfg['netplay_spectate_password'];
+
+    if (mode === 'client' || mode === 'spectator') {
+      cfg['netplay_ip_address'] = this.args.rawArgs['-netplayip'] || '';
+      cfg['netplay_mode'] = 'true';
+    } else {
+      cfg['netplay_mode'] = 'false';
+    }
+    Logger.info(`LibRetroGenerator: Netplay configured as ${mode} on port ${port}`);
+  }
+
+  private getNetplayLaunchArgs(): string[] {
+    const mode = this.args.rawArgs['-netplaymode'];
+    if (!mode) return [];
+
+    const result: string[] = [];
+    if (mode === 'host') {
+      result.push('--host');
+    } else if (mode === 'client' || mode === 'spectator') {
+      const host = this.args.rawArgs['-netplayip'];
+      if (!host) {
+        Logger.warn('LibRetroGenerator: Netplay client launch ignored because host is missing.');
+        return [];
+      }
+      result.push('--connect', host, '--port', this.args.rawArgs['-netplayport'] || '55435');
+    }
+
+    const session = this.args.rawArgs['-netplaysession'];
+    if (session) result.push('--mitm-session', session);
+    return result;
   }
 
   private readCfg(filePath: string): Record<string, string> {

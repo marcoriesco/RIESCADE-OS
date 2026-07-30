@@ -4,6 +4,8 @@ import { ScrollArea } from "./ScrollArea";
 import * as Select from "@radix-ui/react-select";
 import { Check, ChevronDown } from "lucide-react";
 import { RadixTabs, RadixTabContent } from "./SettingsComponents";
+import { AppButton } from "./ui/AppButton";
+import { AppDialog } from "./ui/AppDialog";
 
 function RadixSelect({
   value,
@@ -783,58 +785,56 @@ export default function DatabaseApp() {
           </div>
         )}
 
-        {/* DELETE CONFIRMATION MODAL */}
-        {deleteConfirmGame && (
-          <div className="absolute inset-0 bg-[#000000bb] backdrop-blur-sm z-50 flex items-center justify-center p-4">
-            <div className="w-[380px] bg-[#121620] border border-white/10 rounded-md p-6 space-y-4 shadow-2xl">
-              <div className="space-y-1">
-                <h3 className="font-bold text-sm text-red-400">Excluir Jogo</h3>
-                <p className="text-xs text-white/50 leading-relaxed">
-                  Você tem certeza de que deseja remover <span className="font-bold text-white/90">{deleteConfirmGame.name}</span> da sua biblioteca?
-                </p>
-              </div>
-
-              <div className="bg-black/20 p-3.5 border border-white/5 rounded-md text-xs space-y-2">
-                <label className="flex items-center gap-2 cursor-pointer select-none">
-                  <input
-                    type="checkbox"
-                    checked={deletePhysicalFile}
-                    onChange={(e) => setDeletePhysicalFile(e.target.checked)}
-                    className="accent-red-500"
-                  />
-                  <span className="font-semibold text-white/80">Excluir arquivo ROM físico</span>
-                </label>
-                <p className="text-xs text-white/40 leading-normal pl-5">
-                  Se desmarcado, o jogo será apenas removido da interface (banco de dados), mas o arquivo em disco continuará intacto.
-                </p>
-              </div>
-
-              <div className="flex items-center justify-end gap-2 text-xs font-semibold select-none pt-2">
-                <button
-                  onClick={() => { setDeleteConfirmGame(null); setDeletePhysicalFile(false); }}
-                  disabled={isDeleting}
-                  className="px-4 py-2 border border-white/10 hover:bg-white/5 disabled:opacity-30 disabled:cursor-not-allowed rounded-md transition cursor-pointer text-white/70"
-                >
-                  Cancelar
-                </button>
-                <button
-                  onClick={handleDeleteGame}
-                  disabled={isDeleting}
-                  className="px-5 py-2 bg-red-600 hover:bg-red-700 disabled:bg-red-600/50 disabled:cursor-not-allowed rounded-md transition cursor-pointer text-white flex items-center gap-1.5"
-                >
-                  {isDeleting ? (
-                    <>
-                      <RefreshCw className="w-3.5 h-3.5 animate-spin" />
-                      <span>Excluindo...</span>
-                    </>
-                  ) : (
-                    <span>Excluir</span>
-                  )}
-                </button>
-              </div>
-            </div>
+        <AppDialog
+          open={Boolean(deleteConfirmGame)}
+          onOpenChange={(open) => {
+            if (!open && !isDeleting) {
+              setDeleteConfirmGame(null);
+              setDeletePhysicalFile(false);
+            }
+          }}
+          title="Excluir jogo"
+          description={
+            deleteConfirmGame
+              ? <>Você tem certeza de que deseja remover <strong className="text-white/90">{deleteConfirmGame.name}</strong> da sua biblioteca?</>
+              : undefined
+          }
+          icon={<Trash2 />}
+          size="sm"
+          footer={
+            <>
+              <AppButton
+                variant="ghost"
+                disabled={isDeleting}
+                onClick={() => {
+                  setDeleteConfirmGame(null);
+                  setDeletePhysicalFile(false);
+                }}
+              >
+                Cancelar
+              </AppButton>
+              <AppButton disabled={isDeleting} onClick={handleDeleteGame}>
+                {isDeleting && <RefreshCw className="h-3.5 w-3.5 animate-spin" />}
+                {isDeleting ? "Excluindo..." : "Excluir"}
+              </AppButton>
+            </>
+          }
+        >
+          <div className="space-y-2 rounded-lg border border-white/5 bg-black/20 p-3.5 text-xs">
+            <label className="flex cursor-pointer select-none items-center gap-2">
+              <input
+                type="checkbox"
+                checked={deletePhysicalFile}
+                onChange={(e) => setDeletePhysicalFile(e.target.checked)}
+                className="accent-range"
+              />
+              <span className="font-semibold text-white/80">Excluir arquivo ROM físico</span>
+            </label>
+            <p className="pl-5 text-xs leading-normal text-white/40">
+              Se desmarcado, o jogo será apenas removido da interface, mas o arquivo em disco continuará intacto.
+            </p>
           </div>
-        )}
+        </AppDialog>
 
       </main>
     </div>

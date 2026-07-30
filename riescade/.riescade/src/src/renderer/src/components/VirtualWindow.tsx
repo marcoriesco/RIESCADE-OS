@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useCallback } from 'react';
-import { X, Minus, Square } from 'lucide-react';
+import { WindowChrome } from './WindowChrome';
 
 interface VirtualWindowProps {
   id: string;
@@ -15,6 +15,7 @@ interface VirtualWindowProps {
   isMaximized: boolean;
   zIndex: number;
   active: boolean;
+  colorActiveBorder?: boolean;
   headerLeft?: React.ReactNode;
   onFocus: (id: string) => void;
   onClose: (id: string) => void;
@@ -39,6 +40,7 @@ function VirtualWindow({
   isMaximized,
   zIndex,
   active,
+  colorActiveBorder = true,
   headerLeft,
   onFocus,
   onClose,
@@ -500,7 +502,11 @@ function VirtualWindow({
         className={`window-frame tool-window-${appId} absolute border border-white/10 shadow-2xl flex flex-col overflow-hidden glass-strong ${
           isMaximized ? 'rounded-none border-none' : 'rounded-2xl'
         } ${
-          active ? 'active-window border-accent/40 ring-1 ring-accent/25' : 'inactive-window opacity-95'
+          active
+            ? colorActiveBorder
+              ? 'active-window border-accent/40 ring-1 ring-accent/25'
+              : 'active-window border-white/15'
+            : 'inactive-window opacity-95'
         } ${isMinimized ? 'minimized' : ''}`}
         style={{
           zIndex,
@@ -508,46 +514,15 @@ function VirtualWindow({
           left: 0
         }}
       >
-        {/* Title bar */}
-        <div
-          onMouseDown={handleDragStart}
+        <WindowChrome
+          onMinimize={handleMinimize}
+          onMaximize={handleMaximize}
+          onClose={handleClose}
+          onDragStart={handleDragStart}
           onDoubleClick={handleMaximizeDoubleClick}
-          className="h-10 px-4 pr-0 bg-black/40 flex items-center justify-between select-none shrink-0"
-        >
-          <div className={`flex items-center gap-2 w-full h-full min-w-0 ${headerLeft ? "pr-0" : "pr-4"}`}>
-            {headerLeft || (
-              <div className="flex items-center gap-2 min-w-0 truncate">
-                {IconComponent && <IconComponent className="w-4 h-4 text-accent shrink-0" />}
-                <span className="text-sm font-bold text-white/95 truncate tracking-wide">{title}</span>
-              </div>
-            )}
-          </div>
-
-          {/* Window control buttons */}
-          <div className="flex items-center h-full shrink-0">
-            <button
-              onClick={handleMinimize}
-              className="win-control-btn w-12 h-full hover:bg-white/10 flex items-center justify-center text-white/60 hover:text-white transition"
-              title="Minimizar"
-            >
-              <Minus className="w-4 h-4" />
-            </button>
-            <button
-              onClick={handleMaximize}
-              className="win-control-btn w-12 h-full hover:bg-white/10 flex items-center justify-center text-white/60 hover:text-white transition"
-              title={isMaximized ? "Restaurar" : "Maximizar"}
-            >
-              <Square className="w-3 h-3" />
-            </button>
-            <button
-              onClick={handleClose}
-              className="win-control-btn w-12 h-full hover:bg-red-500/80 flex items-center justify-center text-white/60 hover:text-white transition"
-              title="Fechar"
-            >
-              <X className="w-4.5 h-4.5" />
-            </button>
-          </div>
-        </div>
+          isMaximized={isMaximized}
+          leftContent={headerLeft}
+        />
 
         {/* Content wrapper */}
         <div className="tool-window-content flex-1 min-h-0 relative z-0">

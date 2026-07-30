@@ -39,6 +39,15 @@
       "order": 1,
       "options": [
         {
+          "id": "forcefullscreen",
+          "label": "Tela Cheia",
+          "description": "Inicia o RetroArch em tela cheia. Em AUTO, utiliza a configuração global.",
+          "type": "toggle",
+          "default": "auto",
+          "configKey": "forcefullscreen",
+          "inheritsGlobal": "fullscreen"
+        },
+        {
           "id": "menu_driver",
           "label": "Menu do RetroArch",
           "description": "Interface exibida ao abrir o menu interno do RetroArch.",
@@ -37906,15 +37915,6 @@
               "value": "auto"
             }
           ]
-        },
-        {
-          "id": "forcefullscreen",
-          "label": "Desativar Tela Cheia",
-          "description": "Configuração para desativar tela cheia.",
-          "type": "toggle",
-          "default": "auto",
-          "configKey": "forcefullscreen",
-          "inheritsGlobal": "fullscreen"
         },
         {
           "id": "RotateScreen",

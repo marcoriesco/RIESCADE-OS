@@ -19,7 +19,7 @@ type Messages = Record<string, string>
 const ptBR: Messages = {
   settings: 'Configurações', account: 'Minha Conta', interface: 'Interface',
   emulators: 'Emuladores', personalization: 'Personalização', controls: 'Controles',
-  audio: 'Áudio', downloads: 'Downloads', scraper: 'Scraper', advanced: 'Avançado', about: 'Sobre',
+  audio: 'Áudio', netplay: 'Netplay', downloads: 'Downloads', scraper: 'Scraper', advanced: 'Avançado', about: 'Sobre',
   interfaceDescription: 'Aparência, ícones do desktop/taskbar, tema e idioma.',
   language: 'Idioma', languageDescription: 'Idioma usado nos menus e mensagens do RIESCADE.',
   languageGroup: 'Idioma e região', automaticWindows: 'Automático (Windows)',
@@ -40,7 +40,7 @@ const ptBR: Messages = {
 
 const en: Messages = {
   settings: 'Settings', account: 'My Account', interface: 'Interface', emulators: 'Emulators',
-  personalization: 'Personalization', controls: 'Controls', audio: 'Audio', downloads: 'Downloads', scraper: 'Scraper',
+  personalization: 'Personalization', controls: 'Controls', audio: 'Audio', netplay: 'Netplay', downloads: 'Downloads', scraper: 'Scraper',
   advanced: 'Advanced', about: 'About', interfaceDescription: 'Appearance, desktop/taskbar icons, theme and language.',
   language: 'Language', languageDescription: 'Language used in RIESCADE menus and messages.',
   languageGroup: 'Language and region', automaticWindows: 'Automatic (Windows)',

@@ -31,6 +31,9 @@ const api = {
   updateGame: (systemName: string, gameData: any) => ipcRenderer.invoke('update-game', systemName, gameData),
   deleteGame: (systemName: string, gamePath: string, deletePhysical: boolean) => ipcRenderer.invoke('delete-game', systemName, gamePath, deletePhysical),
   launchGame: (game: any, system: any, saveStateSlot?: number, saveStatePath?: string) => ipcRenderer.invoke('launch-game', game, system, saveStateSlot, saveStatePath),
+  getNetplayEligibility: (game: any, system: any) => ipcRenderer.invoke('netplay-get-eligibility', game, system),
+  listNetplayRooms: () => ipcRenderer.invoke('netplay-list-rooms'),
+  launchNetplay: (game: any, system: any, options: any) => ipcRenderer.invoke('netplay-launch', game, system, options),
   checkEmulatorStatus: (emulatorName: string, systemName: string) => ipcRenderer.invoke('check-emulator-status', emulatorName, systemName),
   downloadAndInstallEmulator: (emulatorName: string, systemName: string) => ipcRenderer.invoke('download-install-emulator', emulatorName, systemName),
   scanSaveStates: (systemName: string, gamePath: string) => ipcRenderer.invoke('scan-save-states', systemName, gamePath),
@@ -128,6 +131,8 @@ const api = {
     ipcRenderer.invoke('app-open-system-torrent', platform),
   getPlatformDownloadInfo: (platform: string) =>
     ipcRenderer.invoke('app-get-platform-download-info', platform),
+  downloadPlatform: (platform: string) =>
+    ipcRenderer.invoke('app-download-platform', platform),
   startPlatformTorrent: (platform: string, torrentSource: string) =>
     ipcRenderer.invoke('app-start-platform-torrent', platform, torrentSource),
   pausePlatformTorrent: (taskId: string) =>

@@ -4,6 +4,7 @@ import { exec } from 'child_process'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import { LibraryService } from './services/LibraryService'
 import { LauncherService } from './services/LauncherService'
+import { NetplayService } from './services/NetplayService'
 import { EmulatorInstaller } from './services/EmulatorInstaller'
 import { SettingsParser } from './parsers/SettingsParser'
 import { EmulatorParser } from './parsers/EmulatorParser'
@@ -24,7 +25,7 @@ import {
   registerAppAuthIpc,
   registerRiescadeProtocol
 } from './services/AppAuthService'
-import { Game, System } from '../shared/types'
+import { Game, NetplayLaunchOptions, System } from '../shared/types'
 import { ControllerManager } from './services/ControllerManager'
 import { watch, FSWatcher, readFileSync, existsSync, writeFileSync, mkdirSync, statSync, promises as fsPromises } from 'fs'
 import { getRetroBatPath, getConfigPath, getResourcesPath, getRiescadePath, getDatabasePath, getMusicPath } from './utils/paths'
@@ -33,6 +34,7 @@ import { SYSTEM_TO_SCREENSCRAPER_PLATFORM } from './services/ScraperService'
 
 const libraryService = new LibraryService()
 const launcherService = new LauncherService()
+const netplayService = new NetplayService()
 const settingsParser = new SettingsParser()
 const systemService = new SystemService(libraryService)
 const scraperService = new ScraperService(libraryService)
@@ -912,6 +914,45 @@ app.whenReady().then(() => {
       })
     }
     
+    return result
+  })
+
+  ipcMain.handle('netplay-get-eligibility', async (_, game: Game, system: System) => {
+    const targetSystem = system.name === 'collections'
+      ? libraryService.getSystems().find(item => item.name.toLowerCase() === game.system.toLowerCase()) || system
+      : system
+    return netplayService.getEligibility(game, targetSystem)
+  })
+
+  ipcMain.handle('netplay-list-rooms', async () => {
+    return netplayService.listRooms(
+      libraryService.getSystems(),
+      systemName => libraryService.getGames(systemName)
+    )
+  })
+
+  ipcMain.handle('netplay-launch', async (_, game: Game, system: System, options: NetplayLaunchOptions) => {
+    const requestedSystemName = system.name === 'collections' ? game.system : system.name
+    const targetSystem = libraryService.getSystems().find(item => item.name.toLowerCase() === requestedSystemName.toLowerCase())
+    if (!targetSystem) throw new Error('A plataforma local desta sala não foi encontrada.')
+    const localGame = libraryService.getGames(targetSystem.name).find(item => item.path === game.path)
+    if (!localGame) throw new Error('O jogo local desta sala não foi encontrado.')
+    const eligibility = await netplayService.getEligibility(localGame, targetSystem)
+    if (!eligibility.eligible) {
+      throw new Error(eligibility.reason || 'Este jogo não é compatível com o modo online.')
+    }
+    const safeOptions = netplayService.validateLaunchOptions(options)
+    const result = await launcherService.launch(
+      { ...localGame, emulator: 'libretro', core: eligibility.core },
+      targetSystem,
+      ControllerManager.getInstance().getConnected(),
+      undefined,
+      safeOptions
+    )
+    if (mainWindow && !mainWindow.isDestroyed()) {
+      if (mainWindow.isMinimized()) mainWindow.restore()
+      mainWindow.focus()
+    }
     return result
   })
 

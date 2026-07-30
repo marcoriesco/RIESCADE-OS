@@ -10,6 +10,26 @@ declare global {
       updateGame: (systemName: string, gameData: any) => Promise<void>
       deleteGame: (systemName: string, gamePath: string, deletePhysical: boolean) => Promise<void>
       launchGame: (game: any, system: any, saveStateSlot?: number, saveStatePath?: string) => Promise<any>
+      getNetplayEligibility: (game: any, system: any) => Promise<{
+        eligible: boolean
+        reason?: string
+        emulator: string
+        core: string
+        coreInstalled: boolean
+        contentCrc: string | null
+      }>
+      listNetplayRooms: () => Promise<any[]>
+      launchNetplay: (game: any, system: any, options: {
+        mode: 'host' | 'client' | 'spectator'
+        port: number
+        nickname: string
+        host?: string
+        session?: string
+        password?: string
+        spectatorPassword?: string
+        announce: boolean
+        useRelay: boolean
+      }) => Promise<any>
       checkEmulatorStatus: (emulatorName: string, systemName: string) => Promise<any>
       downloadAndInstallEmulator: (emulatorName: string, systemName: string) => Promise<any>
       scanSaveStates: (systemName: string, gamePath: string) => Promise<any[]>
@@ -106,6 +126,7 @@ declare global {
         cover3d: string | null
         fanart: string | null
         logo: string | null
+        video: string | null
         install_mode: 'file' | 'extract'
         install_name: string
         romset_version: string | null
@@ -147,6 +168,7 @@ declare global {
         cover3d: string | null
         fanart: string | null
         logo: string | null
+        video: string | null
         install_mode: 'file' | 'extract'
         install_name: string
         romset_version: string | null

@@ -79,3 +79,24 @@ export interface Game {
   isRemoteMissing?: boolean
   installed?: boolean
 }
+
+export interface NetplayLaunchOptions {
+  mode: 'host' | 'client' | 'spectator'
+  port: number
+  nickname: string
+  host?: string
+  session?: string
+  password?: string
+  spectatorPassword?: string
+  announce: boolean
+  useRelay: boolean
+}
+
+export interface NetplayEligibility {
+  eligible: boolean
+  reason?: string
+  emulator: string
+  core: string
+  coreInstalled: boolean
+  contentCrc: string | null
+}

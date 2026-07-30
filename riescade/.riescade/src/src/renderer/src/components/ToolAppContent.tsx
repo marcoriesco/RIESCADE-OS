@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useMemo, useCallback } from "react";
-import { ChevronRight, Search, Folder, Star, User, Shield, Settings, Palette, Gamepad2, Volume2, Cpu, Info, Database, Trash2, Edit3, X, ChevronLeft, Filter, HardDrive, RefreshCw, Eye, EyeOff, Check, ChevronDown, Save, Trophy, Loader2, Sliders, CheckCircle, Circle, Wrench, Bug, Copy, Download, Activity, CloudDownload, CreditCard, ExternalLink } from "lucide-react";
+import { ChevronRight, Search, Folder, Star, User, Shield, Settings, Palette, Gamepad2, Volume2, Cpu, Info, Database, Trash2, Edit3, X, ChevronLeft, Filter, HardDrive, RefreshCw, Eye, EyeOff, Check, ChevronDown, Save, Trophy, Loader2, Sliders, CheckCircle, Circle, Wrench, Bug, Copy, Download, Activity, CloudDownload, CreditCard, ExternalLink, Radio } from "lucide-react";
 import { System, SettingsCtx } from "../types";
 import { TOOL_APPS, getSystemTheme } from "../constants";
 import {
@@ -12,6 +12,7 @@ import { SUPPORTED_LANGUAGES, useI18n } from "../i18n";
 
 const DatabaseApp = React.lazy(() => import("./DatabaseApp"));
 const SettingsControls = React.lazy(() => import("./settings/SettingsControls"));
+const OnlineGamesApp = React.lazy(() => import("./OnlineGamesApp"));
 
 type AppSession = {
   expiresAt: string;
@@ -187,21 +188,6 @@ function AccountSettings() {
   const [busy, setBusy] = useState(true);
   const [portalBusy, setPortalBusy] = useState(false);
   const [message, setMessage] = useState("");
-  const subscriptionPrice = subscription?.amount != null && subscription.currency
-    ? new Intl.NumberFormat("pt-BR", {
-        style: "currency",
-        currency: subscription.currency.toUpperCase()
-      }).format(subscription.amount / 100)
-    : null;
-  const subscriptionPeriod = subscription?.interval === "year"
-    ? "ano"
-    : subscription?.interval === "month"
-      ? "mês"
-      : subscription?.interval === "week"
-        ? "semana"
-        : subscription?.interval === "day"
-          ? "dia"
-          : null;
 
   const refresh = useCallback(async () => {
     const nextSession = await window.api.getAppAuthSession();
@@ -268,9 +254,7 @@ function AccountSettings() {
               <div className="rounded-xl border border-white/10 bg-white/[0.035] p-5">
                 <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
                   <div className="flex items-start gap-3">
-                    <div className="rounded-lg border border-accent/20 bg-accent/10 p-2.5">
-                      <CreditCard className="h-5 w-5 text-accent" />
-                    </div>
+                      <CreditCard className="h-6 w-6 text-accent" />
                     <div>
                       <div className="flex items-center gap-2">
                         <h4 className="text-sm font-bold text-white">RIESCADE</h4>
@@ -335,25 +319,23 @@ function AccountSettings() {
                     <div>
                       <div className="text-[10px] font-semibold uppercase tracking-wide text-white/35">Plano</div>
                       <div className="mt-1 text-xs font-semibold text-white/80">
-                        {subscription.plan_name || "RIESCADE"}
+                        RIESCADE MEMBRO
                       </div>
                     </div>
                     <div>
-                      <div className="text-[10px] font-semibold uppercase tracking-wide text-white/35">Valor</div>
+                      <div className="text-[10px] font-semibold uppercase tracking-wide text-white/35">Data da assinatura</div>
                       <div className="mt-1 text-xs font-semibold text-white/80">
-                        {subscriptionPrice
-                          ? `${subscriptionPrice}${subscriptionPeriod ? ` / ${subscriptionPeriod}` : ""}`
-                          : "Consulte no portal"}
+                        {subscription.start_date
+                          ? new Date(subscription.start_date).toLocaleDateString("pt-BR")
+                          : "Não informada"}
                       </div>
                     </div>
                     <div>
-                      <div className="text-[10px] font-semibold uppercase tracking-wide text-white/35">
-                        {subscription.cancel_at_period_end ? "Término do acesso" : "Próxima renovação"}
-                      </div>
+                      <div className="text-[10px] font-semibold uppercase tracking-wide text-white/35">Data de renovação</div>
                       <div className="mt-1 text-xs font-semibold text-white/80">
                         {subscription.end_date
                           ? new Date(subscription.end_date).toLocaleDateString("pt-BR")
-                          : "Consulte no portal"}
+                          : "Não informada"}
                       </div>
                     </div>
                   </div>
@@ -472,12 +454,13 @@ function RadixSelect({
 const SETTINGS_TABS = [
   { id: "conta", nameKey: "account", icon: User },
   { id: "interface", nameKey: "interface", icon: Sliders },
-  { id: "emuladores", nameKey: "emulators", icon: Gamepad2 },
   { id: "personalizacao", nameKey: "personalization", icon: Palette },
+  { id: "emuladores", nameKey: "emulators", icon: Gamepad2 },
   { id: "controles", nameKey: "controls", icon: Gamepad2 },
   { id: "audio", nameKey: "audio", icon: Volume2 },
-  { id: "downloads", nameKey: "downloads", icon: Download },
+  { id: "netplay", nameKey: "netplay", icon: Radio },
   { id: "scraper", nameKey: "scraper", icon: CloudDownload },
+  { id: "downloads", nameKey: "downloads", icon: Download },
   { id: "avancado", nameKey: "advanced", icon: Cpu },
   { id: "sobre", nameKey: "about", icon: Info }
 ];
@@ -485,8 +468,8 @@ const SETTINGS_TABS = [
 const SETTINGS_GROUP_LABELS: Record<string, string> = {
   conta: "Geral",
   emuladores: "Emulação",
-  downloads: "Biblioteca",
-  scraper: "Ferramentas"
+  scraper: "Biblioteca",
+  avancado: "Ferramentas"
 };
 
 const EMULATOR_NAMES: Record<string, string> = {
@@ -979,8 +962,11 @@ export default function ToolAppContent({
       const defaultValue = (
         name === "RIESCADE.ShowDesktopIcons" ||
         name === "RIESCADE.DynamicBackground" ||
+        name === "RIESCADE.ColorActiveWindowBorder" ||
         name === "Downloads.Emulators.InstallMissing" ||
-        name === "Downloads.Emulators.CheckUpdates"
+        name === "Downloads.Emulators.CheckUpdates" ||
+        name === "global.netplay_public_announce" ||
+        name === "global.netplay.spectator"
       ) ? "true" : "false";
       const v = getSetting(name, defaultValue);
       return v === "true" || v === "1";
@@ -1290,7 +1276,8 @@ export default function ToolAppContent({
                   </div>
 
                   {/* Icons List */}
-                  {filteredToggleItems.map(item => {
+                  <div className="min-h-[260px] max-h-[420px] overflow-y-auto space-y-2 pr-1">
+                    {filteredToggleItems.map(item => {
                     const ItemIcon = item.icon;
                     const isDesk = desktopIcons.includes(item.key);
                     const isTask = taskbarIcons.includes(item.key);
@@ -1336,7 +1323,8 @@ export default function ToolAppContent({
                         </div>
                       </div>
                     );
-                  })}
+                    })}
+                  </div>
                 </div>
               </ScrollArea>
             </div>
@@ -1417,6 +1405,13 @@ export default function ToolAppContent({
                       </div>
                     </div>
                   </div>
+
+                  <SettingToggle
+                    label="Colorir borda da janela ativa"
+                    name="RIESCADE.ColorActiveWindowBorder"
+                    desc="Usa a cor de destaque na borda da janela que estiver em foco."
+                    ctx={ctx}
+                  />
 
                   <SettingGroup label="Área de Trabalho" />
                   
@@ -1599,6 +1594,76 @@ export default function ToolAppContent({
             </div>
           )}
 
+          {/* ===== TAB: NETPLAY ===== */}
+          {activeSettingsTab === "netplay" && (
+            <div className="flex h-full flex-col overflow-hidden">
+              <ScrollArea className="min-h-0 flex-1">
+                <div className="settings-content space-y-2">
+                  <div className="mb-8">
+                    <h2 className="settings-page-title">Netplay</h2>
+                    <p className="settings-page-description">
+                      Valores padrão usados pelo RetroArch ao criar ou entrar em salas online.
+                    </p>
+                  </div>
+
+                  <div className="mb-6 flex items-start gap-3 rounded-xl border border-fuchsia-400/15 bg-fuchsia-400/[0.07] p-4">
+                    <Radio className="mt-0.5 h-5 w-5 shrink-0 text-fuchsia-300" />
+                    <div>
+                      <p className="text-sm font-semibold text-white">Configurações das salas</p>
+                      <p className="mt-1 text-xs leading-relaxed text-white/50">
+                        Estes valores serão preenchidos automaticamente no modal “Jogar online” e ainda poderão ser alterados antes de abrir uma sala.
+                      </p>
+                    </div>
+                  </div>
+
+                  <SettingGroup label="Identidade e conexão" />
+                  <SettingInput
+                    label="Apelido"
+                    name="global.netplay.nickname"
+                    desc="Nome exibido para os outros jogadores no lobby do RetroArch."
+                    ctx={ctx}
+                  />
+                  <SettingInput
+                    label="Porta"
+                    name="global.netplay.port"
+                    desc="Porta TCP usada ao hospedar uma sala. O padrão do RetroArch é 55435."
+                    ctx={ctx}
+                  />
+
+                  <SettingGroup label="Privacidade" />
+                  <SettingToggle
+                    label="Exibir salas na lista pública"
+                    name="global.netplay_public_announce"
+                    desc="Permite que outros jogadores encontrem as salas criadas neste computador."
+                    ctx={ctx}
+                  />
+                  <SettingInput
+                    label="Senha para jogadores"
+                    name="global.netplay.password"
+                    desc="Deixe em branco para permitir a entrada sem senha."
+                    isPassword
+                    ctx={ctx}
+                  />
+                  <SettingInput
+                    label="Senha para espectadores"
+                    name="global.netplay.spectatepassword"
+                    desc="Senha separada para quem entrar apenas para assistir."
+                    isPassword
+                    ctx={ctx}
+                  />
+
+                  <SettingGroup label="Espectadores" />
+                  <SettingToggle
+                    label="Permitir espectadores"
+                    name="global.netplay.spectator"
+                    desc="Permite conexões que assistem à partida sem controlar o jogo."
+                    ctx={ctx}
+                  />
+                </div>
+              </ScrollArea>
+            </div>
+          )}
+
           {/* ===== TAB: DOWNLOADS ===== */}
           {activeSettingsTab === "downloads" && (
             <div className="flex h-full flex-col overflow-hidden">
@@ -1635,11 +1700,11 @@ export default function ToolAppContent({
                   <RadixTabContent value="games">
                     <>
                       <SettingGroup label="Pack de BIOS" />
-                      <div className="mb-5 max-w-xl rounded-xl border border-fuchsia-400/20 bg-fuchsia-400/10 p-4">
+                      <div className="mb-5">
                         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                           <div className="min-w-0">
                             <p className="text-sm font-semibold text-white">
-                              Pack de BIOS RIESCADE
+                              Download do Pack BIOS completo do RIESCADE OS
                             </p>
                             <p className="mt-1 text-xs leading-relaxed text-white/55">
                               Baixa o arquivo oficial bios.zip e instala seu conteúdo diretamente na pasta bios.
@@ -1662,7 +1727,7 @@ export default function ToolAppContent({
                                 setBiosPackDownloading(false);
                               }
                             }}
-                            className="inline-flex shrink-0 items-center justify-center gap-2 rounded-lg bg-fuchsia-600 px-4 py-2.5 text-xs font-semibold text-white transition hover:bg-fuchsia-500 disabled:cursor-wait disabled:opacity-60"
+                            className="inline-flex shrink-0 items-center justify-center gap-2 rounded-lg bg-accent px-4 py-2.5 text-xs font-semibold text-white transition hover:bg-accent-hover disabled:cursor-wait disabled:opacity-60 cursor-pointer"
                           >
                             {biosPackDownloading ? (
                               <Loader2 className="h-4 w-4 animate-spin" />
@@ -1890,14 +1955,16 @@ export default function ToolAppContent({
                     <h2 className="settings-page-title">Emuladores</h2>
                     <p className="settings-page-description">{dispName} — {dispDesc}</p>
                   </div>
-                  <EmulatorSettingsPanel
-                    emulatorId={activeEmuSubmenu}
-                    emulatorSettings={emulatorSettings}
-                    globalSettings={emulatorSettings?.['global']}
-                    onSaveEmulatorSetting={onSaveEmulatorSetting || (() => {})}
-                    initialGroup={initialGroup}
-                    initialCore={initialCore}
-                  />
+                  <div className="pb-6">
+                    <EmulatorSettingsPanel
+                      emulatorId={activeEmuSubmenu}
+                      emulatorSettings={emulatorSettings}
+                      globalSettings={emulatorSettings?.['global']}
+                      onSaveEmulatorSetting={onSaveEmulatorSetting || (() => {})}
+                      initialGroup={initialGroup}
+                      initialCore={initialCore}
+                    />
+                  </div>
                 </div>
               </ScrollArea>
             </div>
@@ -2389,6 +2456,10 @@ export default function ToolAppContent({
 
   if (appId === "database") {
     return <DatabaseApp />;
+  }
+
+  if (appId === "online") {
+    return <OnlineGamesApp />;
   }
 
   if (appId === "downloads") {

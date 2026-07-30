@@ -1,5 +1,5 @@
 import {
-  Settings as SettingsIcon, Gamepad2, Database, Heart, Folder
+  Settings as SettingsIcon, Gamepad2, Database, Heart, Folder, Radio
 } from "lucide-react";
 
 export const TOOL_APPS = [
@@ -8,6 +8,7 @@ export const TOOL_APPS = [
   { id: "all",          name: "Todos os Jogos",  icon: Gamepad2,     color: "from-blue-500 to-indigo-600",   initialSize: { w: 1024, h: 680 } },
   { id: "favorites",    name: "Favoritos",      icon: Heart,        color: "from-rose-500 to-pink-600",     initialSize: { w: 1024, h: 680 } },
   { id: "collections",  name: "Coleções",       icon: Folder,       color: "from-amber-500 to-orange-600",  initialSize: { w: 1024, h: 680 } },
+  { id: "online",       name: "Jogos Online",   icon: Radio,        color: "from-fuchsia-500 to-violet-600", initialSize: { w: 1024, h: 680 } },
 ];
 
 export const getSystemTheme = (sysName: string) => {

@@ -168,27 +168,27 @@
     "type": "int"
   },
   "Taskbar.Icons": {
-    "value": "tool:settings,system:switch,system:teknoparrot,system:megadrive,system:snes,system:xbox360,system:arcade,system:ps2,system:ps3,system:ps4,system:Windows",
+    "value": "tool:settings,tool:online,system:switch,system:teknoparrot,system:megadrive,system:snes,system:xbox360,system:arcade,system:ps2,system:ps3,system:ps4,system:Windows",
     "type": "string"
   },
   "Window.system-switch.Maximized": {
-    "value": true,
+    "value": false,
     "type": "bool"
   },
   "Window.system-switch.X": {
-    "value": 96,
+    "value": 30,
     "type": "int"
   },
   "Window.system-switch.Y": {
-    "value": 46,
+    "value": 21,
     "type": "int"
   },
   "Window.system-switch.Width": {
-    "value": 1710,
+    "value": 1860,
     "type": "int"
   },
   "Window.system-switch.Height": {
-    "value": 941,
+    "value": 918,
     "type": "int"
   },
   "Window.system-teknoparrot.Maximized": {
@@ -196,11 +196,11 @@
     "type": "bool"
   },
   "Window.system-teknoparrot.X": {
-    "value": 62,
+    "value": 149,
     "type": "int"
   },
   "Window.system-teknoparrot.Y": {
-    "value": 41,
+    "value": 42,
     "type": "int"
   },
   "Window.system-teknoparrot.Width": {
@@ -208,7 +208,7 @@
     "type": "int"
   },
   "Window.system-teknoparrot.Height": {
-    "value": 922,
+    "value": 933,
     "type": "int"
   },
   "Window.system-cps1.Maximized": {
@@ -280,11 +280,11 @@
     "type": "bool"
   },
   "Window.system-snes.X": {
-    "value": 138,
+    "value": 28,
     "type": "int"
   },
   "Window.system-snes.Y": {
-    "value": 64,
+    "value": 104,
     "type": "int"
   },
   "Window.system-snes.Width": {
@@ -360,11 +360,11 @@
     "type": "bool"
   },
   "Window.tool-settings.X": {
-    "value": 297,
+    "value": 335,
     "type": "int"
   },
   "Window.tool-settings.Y": {
-    "value": 41,
+    "value": 28,
     "type": "int"
   },
   "Window.tool-settings.Width": {
@@ -372,7 +372,7 @@
     "type": "int"
   },
   "Window.tool-settings.Height": {
-    "value": 871,
+    "value": 917,
     "type": "int"
   },
   "Window.tool-collections.Maximized": {
@@ -404,7 +404,7 @@
     "type": "bool"
   },
   "RIESCADE.AccentColor": {
-    "value": "#9f0043",
+    "value": "#8b5cf6",
     "type": "string"
   },
   "Window.system-2ship.Maximized": {
@@ -536,7 +536,7 @@
     "type": "bool"
   },
   "Window.system-xbox360.Maximized": {
-    "value": true,
+    "value": false,
     "type": "bool"
   },
   "Window.system-atomiswave.Maximized": {
@@ -572,11 +572,11 @@
     "type": "string"
   },
   "Window.system-xbox360.X": {
-    "value": 1,
+    "value": 266,
     "type": "int"
   },
   "Window.system-xbox360.Y": {
-    "value": 199,
+    "value": 85,
     "type": "int"
   },
   "Window.system-xbox360.Width": {
@@ -812,19 +812,19 @@
     "type": "string"
   },
   "Window.system-ps2.X": {
-    "value": 125,
+    "value": 23,
     "type": "int"
   },
   "Window.system-ps2.Y": {
-    "value": 70,
+    "value": 22,
     "type": "int"
   },
   "Window.system-ps2.Width": {
-    "value": 1365,
+    "value": 1878,
     "type": "int"
   },
   "Window.system-ps2.Height": {
-    "value": 874,
+    "value": 929,
     "type": "int"
   },
   "Window.system-opengoal.Maximized": {
@@ -956,11 +956,11 @@
     "type": "bool"
   },
   "Window.system-megadrive.Maximized": {
-    "value": true,
+    "value": false,
     "type": "bool"
   },
   "Downloads.NotificationMode": {
-    "value": true,
+    "value": false,
     "type": "bool"
   },
   "Downloads.Games.Overwrite": {
@@ -990,5 +990,41 @@
   "Window.system-mame.Maximized": {
     "value": true,
     "type": "bool"
+  },
+  "Window.tool-online.X": {
+    "value": 405,
+    "type": "int"
+  },
+  "Window.tool-online.Y": {
+    "value": 60,
+    "type": "int"
+  },
+  "Window.tool-online.Width": {
+    "value": 1179,
+    "type": "int"
+  },
+  "Window.tool-online.Height": {
+    "value": 810,
+    "type": "int"
+  },
+  "RIESCADE.ColorActiveWindowBorder": {
+    "value": true,
+    "type": "bool"
+  },
+  "Window.system-megadrive.X": {
+    "value": 21,
+    "type": "int"
+  },
+  "Window.system-megadrive.Y": {
+    "value": 20,
+    "type": "int"
+  },
+  "Window.system-megadrive.Width": {
+    "value": 1877,
+    "type": "int"
+  },
+  "Window.system-megadrive.Height": {
+    "value": 964,
+    "type": "int"
   }
 }

@@ -2,7 +2,7 @@ import { exec } from 'child_process'
 import { writeFileSync, existsSync, mkdirSync, readFileSync, unlinkSync, statSync, openSync, readSync, closeSync } from 'fs'
 import { join, resolve, dirname, relative, isAbsolute } from 'path'
 import { tmpdir } from 'os'
-import { Game, System } from '../../shared/types'
+import { Game, NetplayLaunchOptions, System } from '../../shared/types'
 import { getRetroBatPath, getRiescadePath } from '../utils/paths'
 import { SettingsParser } from '../parsers/SettingsParser'
 import { ControllerManager, ControllerInfo } from './ControllerManager'
@@ -10,7 +10,7 @@ import { ControllerManager, ControllerInfo } from './ControllerManager'
 // import { TeknoParrotAutoConfig } from './emulators/TeknoParrotAutoConfig'
 
 export class LauncherService {
-  public launch(game: Game, system: System, activeControllers: ControllerInfo[] = [], saveStateSlot?: number, netplayOptions?: any, saveStatePath?: string): Promise<void> {
+  public launch(game: Game, system: System, activeControllers: ControllerInfo[] = [], saveStateSlot?: number, netplayOptions?: NetplayLaunchOptions, saveStatePath?: string): Promise<void> {
     return new Promise((resolvePromise, reject) => {
       const { BrowserWindow, app } = require('electron')
       const sendLauncherStatus = (status: 'loading' | 'running' | 'closed') => {
@@ -356,20 +356,22 @@ export class LauncherService {
       // 3. Resolve Netplay arguments
       let netplayArgs: string[] = []
       if (netplayOptions) {
-        const mode = netplayOptions.netPlayMode === 'host' ? 'host' : (netplayOptions.netPlayMode === 'spectator' ? 'client' : 'client')
-        const nick = settingsParser.getSetting('global.netplay.nickname', 'string') || 'RIESCADE Player'
+        const mode = netplayOptions.mode === 'host' ? 'host' : 'client'
+        const nick = netplayOptions.nickname || settingsParser.getSetting('global.netplay.nickname', 'string') || 'RIESCADE Player'
         netplayArgs.push(
           '-netplaymode', mode,
           '-netplayport', String(netplayOptions.port),
-          '-netplaynick', `"${nick}"`
+          '-netplaynick', `"${nick}"`,
+          '-netplayannounce', String(netplayOptions.announce),
+          '-netplayrelay', String(netplayOptions.useRelay)
         )
-        if (netplayOptions.ip && mode !== 'host') {
-          netplayArgs.push('-netplayip', netplayOptions.ip)
+        if (netplayOptions.host && mode !== 'host') {
+          netplayArgs.push('-netplayip', netplayOptions.host)
         }
         if (netplayOptions.session) {
           netplayArgs.push('-netplaysession', netplayOptions.session)
         }
-        if (netplayOptions.netPlayMode === 'spectator') {
+        if (netplayOptions.mode === 'spectator') {
           netplayArgs.push('-netplayspectate')
         }
         if (netplayOptions.password) {

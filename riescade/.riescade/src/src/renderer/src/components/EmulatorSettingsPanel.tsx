@@ -405,7 +405,7 @@ export const EmulatorSettingsPanel: React.FC<EmulatorSettingsPanelProps> = ({
       {/* Group tabs - only show when not searching */}
       {!searchQuery.trim() && sortedGroups.length > 1 && (
         <RadixTabs
-          className="w-full"
+          className="mb-5 w-full"
           tabs={sortedGroups.map(group => ({
             id: group.id,
             label: group.title
